@@ -69,6 +69,76 @@ class: $tTracer
 name: "$t_tracer_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for accessing System Resource Management features"
+desc: "Handle for accessing System Resource Management features of a device"
 class: $tSysman
 name: "$t_sysman_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device power domain"
+class: $tSysmanPower
+name: "$t_sysman_pwr_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device frequency domain"
+class: $tSysmanFrequency
+name: "$t_sysman_freq_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device engine group"
+class: $tSysmanEngine
+name: "$t_sysman_engine_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device standby control"
+class: $tSysmanStandby
+name: "$t_sysman_standby_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device firmware"
+class: $tSysmanFirmware
+name: "$t_sysman_firmware_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device memory module"
+class: $tSysmanMemory
+name: "$t_sysman_mem_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device connectivity switch"
+class: $tSysmanLinkSwitch
+name: "$t_sysman_link_switch_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device connectivity port"
+class: $tSysmanLinkPort
+name: "$t_sysman_link_port_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device temperature sensor"
+class: $tSysmanTemperature
+name: "$t_sysman_temp_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device power supply"
+class: $tSysmanPsu
+name: "$t_sysman_psu_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device fan"
+class: $tSysmanFan
+name: "$t_sysman_fan_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device LED"
+class: $tSysmanLed
+name: "$t_sysman_led_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device RAS error set"
+class: $tSysmanRas
+name: "$t_sysman_ras_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device diagnostics test suite"
+class: $tSysmanDiagnostics
+name: "$t_sysman_diag_handle_t"

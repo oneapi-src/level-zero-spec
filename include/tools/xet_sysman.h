@@ -75,13 +75,8 @@ typedef enum _xet_optimization_mode_t
 /// @brief Device properties
 typedef struct _xet_sysman_properties_t
 {
-    xe_device_type_t type;                          ///< [out] generic device type
-    uint32_t vendorId;                              ///< [out] vendorId from PCI configuration
-    uint32_t deviceId;                              ///< [out] deviceId from PCI configuration
-    xe_device_uuid_t uuid;                          ///< [out] Device UUID
+    xe_device_properties_t core;                    ///< [out] Core device properties
     uint32_t numSubdevices;                         ///< [out] Number of sub-devices
-    xe_bool_t isSubdevice;                          ///< [out] If this handle refers to a sub-device.
-    uint32_t subdeviceId;                           ///< [out] sub-device id. Only valid if isSubdevice is true.
     int8_t serialNumber[XET_STRING_PROPERTY_SIZE];  ///< [out] Manufacturing serial number (NULL terminated string value)
     int8_t boardNumber[XET_STRING_PROPERTY_SIZE];   ///< [out] Manufacturing board number (NULL terminated string value)
     int8_t brandName[XET_STRING_PROPERTY_SIZE];     ///< [out] Brand name of the device (NULL terminated string value)
@@ -170,6 +165,228 @@ xetSysmanDeviceReset(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI address
+typedef struct _xet_pci_address_t
+{
+    uint32_t domain;                                ///< [out] BDF domain
+    uint32_t bus;                                   ///< [out] BDF bus
+    uint32_t device;                                ///< [out] BDF device
+    uint32_t function;                              ///< [out] BDF function
+
+} xet_pci_address_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI speed
+typedef struct _xet_pci_speed_t
+{
+    uint32_t gen;                                   ///< [out] The link generation
+    uint32_t width;                                 ///< [out] The number of lanes
+    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
+    uint32_t maxPacketSize;                         ///< [out] Maximum packet size in bytes.
+
+} xet_pci_speed_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Static PCI properties
+typedef struct _xet_pci_properties_t
+{
+    xet_pci_address_t address;                      ///< [out] The BDF address
+    xe_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling SMI handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    uint32_t numBars;                               ///< [out] The number of configured bars
+    xet_pci_speed_t maxSpeed;                       ///< [out] Fastest port configuration supported by the device.
+
+} xet_pci_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Dynamic PCI state
+typedef struct _xet_pci_state_t
+{
+    xet_pci_speed_t speed;                          ///< [out] The current port configure speed
+
+} xet_pci_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI bar types
+typedef enum _xet_pci_bar_type_t
+{
+    XET_PCI_BAR_TYPE_CONFIG = 0,                    ///< PCI configuration space
+    XET_PCI_BAR_TYPE_MMIO,                          ///< MMIO registers
+    XET_PCI_BAR_TYPE_VRAM,                          ///< VRAM aperture
+    XET_PCI_BAR_TYPE_ROM,                           ///< ROM aperture
+    XET_PCI_BAR_TYPE_VGA_IO,                        ///< Legacy VGA IO ports
+    XET_PCI_BAR_TYPE_VGA_MEM,                       ///< Legacy VGA memory
+    XET_PCI_BAR_TYPE_INDIRECT_IO,                   ///< Indirect IO port access
+    XET_PCI_BAR_TYPE_INDIRECT_MEM,                  ///< Indirect memory access
+    XET_PCI_BAR_TYPE_OTHER,                         ///< Other type of PCI bar
+
+} xet_pci_bar_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Properties of a pci bar
+typedef struct _xet_pci_bar_properties_t
+{
+    xet_pci_bar_type_t type;                        ///< [out] The type of bar
+    uint64_t base;                                  ///< [out] Base address of the bar.
+    uint64_t size;                                  ///< [out] Size of the bar.
+
+} xet_pci_bar_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI throughput
+/// 
+/// @details
+///     - Percent throughput is calculated by taking two snapshots (s1, s2) and
+///       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
+///       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
+///       s1.timestamp))
+typedef struct _xet_pci_throughput_t
+{
+    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                    ///< was made.
+                                                    ///< No assumption should be made about the absolute value of the timestamp.
+                                                    ///< It should only be used to calculate delta time between two snapshots
+                                                    ///< of the same structure.
+                                                    ///< Never take the delta of this timestamp with the timestamp from a
+                                                    ///< different structure.
+    uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
+    uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
+                                                    ///< replays)
+    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
+                                                    ///< configuration
+
+} xet_pci_throughput_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI stats counters
+/// 
+/// @details
+///     - Percent replays is calculated by taking two snapshots (s1, s2) and
+///       using the equation: %replay = 10^6 * (s2.replayCounter -
+///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
+typedef struct _xet_pci_stats_t
+{
+    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                    ///< was made.
+                                                    ///< No assumption should be made about the absolute value of the timestamp.
+                                                    ///< It should only be used to calculate delta time between two snapshots
+                                                    ///< of the same structure.
+                                                    ///< Never take the delta of this timestamp with the timestamp from a
+                                                    ///< different structure.
+    uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
+    uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
+
+} xet_pci_stats_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get PCI properties - address, max speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current PCI state - current speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get properties of a bar
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetBarProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::xet_pci_properties_t.numBars -
+                                                    ///< 1]).
+    xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get PCI throughput
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThroughput
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetThroughput(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get PCI stats
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pStats
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetStats(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Power domains
 typedef enum _xet_power_domain_t
 {
@@ -184,7 +401,7 @@ typedef struct _xet_power_properties_t
     xet_power_domain_t type;                        ///< [out] The type of power domain
     xe_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     xe_bool_t canControl;                           ///< [out] Software can change the power limits.
     uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
 
@@ -272,7 +489,7 @@ typedef struct _xet_power_peak_limit_t
 } xet_power_peak_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of power domains
+/// @brief Get handle of power domains
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -287,9 +504,17 @@ typedef struct _xet_power_peak_limit_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanPowerGetCount(
+xetSysmanPowerGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of power domains.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_pwr_handle_t* phPower                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -304,14 +529,12 @@ xetSysmanPowerGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPower
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanPowerGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                    ///< - 1]).
+    xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     xet_power_properties_t* pProperties             ///< [in] Structure that will contain property data.
     );
 
@@ -327,14 +550,12 @@ xetSysmanPowerGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPower
 ///         + nullptr == pEnergy
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanPowerGetEnergyCounter(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                    ///< - 1]).
+    xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     xet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
                                                     ///< timestamp when the last counter value was measured.
     );
@@ -351,14 +572,12 @@ xetSysmanPowerGetEnergyCounter(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPower
 ///         + nullptr == pThreshold
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanPowerGetEnergyThreshold(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                    ///< - 1]).
+    xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
     );
 
@@ -374,14 +593,12 @@ xetSysmanPowerGetEnergyThreshold(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPower
 ///         + nullptr == pThreshold
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanPowerSetEnergyThreshold(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                    ///< - 1]).
+    xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
     );
 
@@ -397,13 +614,11 @@ xetSysmanPowerSetEnergyThreshold(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPower
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanPowerGetLimits(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                    ///< - 1]).
+    xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     xet_power_sustained_limit_t* pSustained,        ///< [in][optional] The sustained power limit.
     xet_power_burst_limit_t* pBurst,                ///< [in][optional] The burst power limit.
     xet_power_peak_limit_t* pPeak                   ///< [in][optional] The peak power limit.
@@ -421,13 +636,11 @@ xetSysmanPowerGetLimits(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPower
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanPowerSetLimits(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                    ///< - 1]).
+    xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     const xet_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
     const xet_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
     const xet_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
@@ -455,7 +668,7 @@ typedef struct _xet_freq_properties_t
     xet_freq_domain_t type;                         ///< [out] The type of frequency domain (GPU, memory, ...)
     xe_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     xe_bool_t canControl;                           ///< [out] Indicates if software can control the frequency of this domain
     xe_bool_t canOverclock;                         ///< [out] Indicates if software can overclock this frequency domain
     double min;                                     ///< [out] The minimum clock frequency in units of MHz
@@ -531,7 +744,7 @@ typedef struct _xet_freq_throttle_time_t
 } xet_freq_throttle_time_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of frequency domains
+/// @brief Get handle of frequency domains
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -546,9 +759,17 @@ typedef struct _xet_freq_throttle_time_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanFrequencyGetCount(
+xetSysmanFrequencyGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of frequency domains.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -563,14 +784,12 @@ xetSysmanFrequencyGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFrequency
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanFrequencyGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                    ///< [::xetSysmanFrequencyGetCount() - 1]).
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     xet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
     );
 
@@ -586,14 +805,12 @@ xetSysmanFrequencyGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFrequency
 ///         + nullptr == pLimits
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanFrequencyGetRange(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                    ///< [::xetSysmanFrequencyGetCount() - 1]).
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     xet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
                                                     ///< specified domain.
     );
@@ -610,14 +827,12 @@ xetSysmanFrequencyGetRange(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFrequency
 ///         + nullptr == pLimits
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanFrequencySetRange(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                    ///< [::xetSysmanFrequencyGetCount() - 1]).
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     const xet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
                                                     ///< specified domain.
     );
@@ -635,14 +850,12 @@ xetSysmanFrequencySetRange(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFrequency
 ///         + nullptr == pState
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanFrequencyGetState(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                    ///< [::xetSysmanFrequencyGetCount() - 1]).
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     xet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
     );
 
@@ -658,14 +871,12 @@ xetSysmanFrequencyGetState(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFrequency
 ///         + nullptr == pThrottleTime
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanFrequencyGetThrottleTime(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                    ///< [::xetSysmanFrequencyGetCount() - 1]).
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     xet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
                                                     ///< specified domain.
     );
@@ -687,12 +898,12 @@ typedef struct _xet_engine_properties_t
     xet_engine_group_t type;                        ///< [out] The engine group
     xe_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
 
 } xet_engine_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Engine counters
+/// @brief Engine activity counters
 /// 
 /// @details
 ///     - Percent utilization is calculated by taking two snapshots (s1, s2) and
@@ -713,8 +924,7 @@ typedef struct _xet_engine_stats_t
 } xet_engine_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of engine groups that can be monitored on this
-///        device/sub-device
+/// @brief Get handle of engine groups
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -729,9 +939,17 @@ typedef struct _xet_engine_stats_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanEngineGetCount(
+xetSysmanEngineGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of engine groups.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_engine_handle_t* phEngine            ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -746,14 +964,12 @@ xetSysmanEngineGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hEngine
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanEngineGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
-                                                    ///< - 1]).
+    xet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
     xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
     );
 
@@ -769,19 +985,243 @@ xetSysmanEngineGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hEngine
 ///         + nullptr == pStats
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanEngineGetActivity(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
-                                                    ///< - 1]).
+    xet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
     xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Memory resource types
+/// @brief Standby hardware components
+typedef enum _xet_standby_type_t
+{
+    XET_STANDBY_TYPE_GLOBAL = 0,                    ///< Control the overall standby policy of the device/sub-device
+
+} xet_standby_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Standby hardware component properties
+typedef struct _xet_standby_properties_t
+{
+    xet_standby_type_t type;                        ///< [out] Which standby hardware component this controls
+    xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling SMI handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+
+} xet_standby_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Standby promotion modes
+typedef enum _xet_standby_promo_mode_t
+{
+    XET_STANDBY_PROMO_MODE_DEFAULT = 0,             ///< Best compromise between performance and energy savings.
+    XET_STANDBY_PROMO_MODE_NEVER,                   ///< The device/component will never shutdown. This can improve performance
+                                                    ///< but uses more energy.
+
+} xet_standby_promo_mode_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of standby controls
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCount
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanStandbyGet(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_standby_handle_t* phStandby          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get standby hardware component properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hStandby
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanStandbyGetProperties(
+    xet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
+    xet_standby_properties_t* pProperties           ///< [in] Will contain the standby hardware properties.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the current standby promotion mode
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hStandby
+///         + nullptr == pMode
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanStandbyGetMode(
+    xet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
+    xet_standby_promo_mode_t* pMode                 ///< [in] Will contain the current standby mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set standby promotion mode
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hStandby
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanStandbySetMode(
+    xet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
+    xet_standby_promo_mode_t mode                   ///< [in] New standby mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Firmware properties
+typedef struct _xet_firmware_properties_t
+{
+    xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling SMI handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    xe_bool_t canControl;                           ///< [out] Indicates if software can flash the firmware
+    int8_t name[XET_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
+    int8_t version[XET_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
+
+} xet_firmware_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of firmwares
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCount
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareGet(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_firmware_handle_t* phFirmware        ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get firmware properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFirmware
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareGetProperties(
+    xet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
+    xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get firmware checksum
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFirmware
+///         + nullptr == pChecksum
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareGetChecksum(
+    xet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
+    uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Flash a new firmware image
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFirmware
+///         + nullptr == pImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareFlash(
+    xet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
+    void* pImage,                                   ///< [in] Image of the new firmware to flash.
+    uint32_t size                                   ///< [in] Size of the flash image.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Memory module types
 typedef enum _xet_mem_type_t
 {
     XET_MEM_TYPE_HBM = 0,                           ///< HBM memory
@@ -801,7 +1241,7 @@ typedef struct _xet_mem_properties_t
     xet_mem_type_t type;                            ///< [out] The memory type
     xe_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     uint64_t size;                                  ///< [out] Physical memory size in bytes
 
 } xet_mem_properties_t;
@@ -842,8 +1282,7 @@ typedef struct _xet_mem_alloc_t
 } xet_mem_alloc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of memory modules that can be monitored on this
-///        device/sub-device
+/// @brief Get handle of memory modules
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -858,9 +1297,17 @@ typedef struct _xet_mem_alloc_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanMemoryGetCount(
+xetSysmanMemoryGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of memory modules.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_mem_handle_t* phMemory               ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -875,14 +1322,12 @@ xetSysmanMemoryGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hMemory
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanMemoryGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t memIndex,                              ///< [in] The index of the memory module (0 ...
-                                                    ///< [::xetSysmanMemoryGetCount() - 1]).
+    xet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
     xet_mem_properties_t* pProperties               ///< [in] Will contain memory properties.
     );
 
@@ -898,14 +1343,12 @@ xetSysmanMemoryGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hMemory
 ///         + nullptr == pBandwidth
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanMemoryGetBandwidth(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t memIndex,                              ///< [in] The index of the memory module (0 ...
-                                                    ///< [::xetSysmanMemoryGetCount() - 1]).
+    xet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
     xet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
     );
 
@@ -921,135 +1364,35 @@ xetSysmanMemoryGetBandwidth(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hMemory
 ///         + nullptr == pAllocated
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanMemoryGetAllocated(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t memIndex,                              ///< [in] The index of the memory module (0 ...
-                                                    ///< [::xetSysmanMemoryGetCount() - 1]).
+    xet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
     xet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief PCI address
-typedef struct _xet_pci_address_t
+/// @brief Connectivity switch properties
+typedef struct _xet_link_switch_properties_t
 {
-    uint32_t domain;                                ///< [out] BDF domain
-    uint32_t bus;                                   ///< [out] BDF bus
-    uint32_t device;                                ///< [out] BDF device
-    uint32_t function;                              ///< [out] BDF function
+    xe_bool_t onSubdevice;                          ///< [out] True if the switch is located on a sub-device; false means that
+                                                    ///< the switch is on the device of the calling SMI handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
 
-} xet_pci_address_t;
+} xet_link_switch_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief PCI speed
-typedef struct _xet_pci_speed_t
+/// @brief Connectivity switch state
+typedef struct _xet_link_switch_state_t
 {
-    uint32_t gen;                                   ///< [out] The link generation
-    uint32_t width;                                 ///< [out] The number of lanes
-    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
-    uint32_t maxPacketSize;                         ///< [out] Maximum packet size in bytes.
+    xe_bool_t enabled;                              ///< [out] Indicates if the switch is enabled/disabled
 
-} xet_pci_speed_t;
+} xet_link_switch_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Static PCI properties
-typedef struct _xet_pci_properties_t
-{
-    xet_pci_address_t address;                      ///< [out] The BDF address
-    xe_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
-    uint32_t numBars;                               ///< [out] The number of configured bars
-    xet_pci_speed_t maxSpeed;                       ///< [out] Fastest port configuration supported by the device.
-
-} xet_pci_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Dynamic PCI state
-typedef struct _xet_pci_state_t
-{
-    xet_pci_speed_t speed;                          ///< [out] The current port configure speed
-
-} xet_pci_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief PCI bar types
-typedef enum _xet_pci_bar_type_t
-{
-    XET_PCI_BAR_TYPE_CONFIG = 0,                    ///< PCI configuration space
-    XET_PCI_BAR_TYPE_MMIO,                          ///< MMIO registers
-    XET_PCI_BAR_TYPE_VRAM,                          ///< VRAM aperture
-    XET_PCI_BAR_TYPE_ROM,                           ///< ROM aperture
-    XET_PCI_BAR_TYPE_VGA_IO,                        ///< Legacy VGA IO ports
-    XET_PCI_BAR_TYPE_VGA_MEM,                       ///< Legacy VGA memory
-    XET_PCI_BAR_TYPE_INDIRECT_IO,                   ///< Indirect IO port access
-    XET_PCI_BAR_TYPE_INDIRECT_MEM,                  ///< Indirect memory access
-    XET_PCI_BAR_TYPE_OTHER,                         ///< Other type of PCI bar
-
-} xet_pci_bar_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Properties of a pci bar
-typedef struct _xet_pci_bar_properties_t
-{
-    xet_pci_bar_type_t type;                        ///< [out] The type of bar
-    uint64_t base;                                  ///< [out] Base address of the bar.
-    uint64_t size;                                  ///< [out] Size of the bar.
-
-} xet_pci_bar_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief PCI throughput
-/// 
-/// @details
-///     - Percent throughput is calculated by taking two snapshots (s1, s2) and
-///       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
-///       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
-///       s1.timestamp))
-typedef struct _xet_pci_throughput_t
-{
-    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
-                                                    ///< was made.
-                                                    ///< No assumption should be made about the absolute value of the timestamp.
-                                                    ///< It should only be used to calculate delta time between two snapshots
-                                                    ///< of the same structure.
-                                                    ///< Never take the delta of this timestamp with the timestamp from a
-                                                    ///< different structure.
-    uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
-    uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
-                                                    ///< replays)
-    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
-                                                    ///< configuration
-
-} xet_pci_throughput_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief PCI stats counters
-/// 
-/// @details
-///     - Percent replays is calculated by taking two snapshots (s1, s2) and
-///       using the equation: %replay = 10^6 * (s2.replayCounter -
-///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
-typedef struct _xet_pci_stats_t
-{
-    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
-                                                    ///< was made.
-                                                    ///< No assumption should be made about the absolute value of the timestamp.
-                                                    ///< It should only be used to calculate delta time between two snapshots
-                                                    ///< of the same structure.
-                                                    ///< Never take the delta of this timestamp with the timestamp from a
-                                                    ///< different structure.
-    uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
-    uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
-
-} xet_pci_stats_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of PCI end-points that can be monitored on this
-///        device/sub-device
+/// @brief Get handle of connectivity switches
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1064,13 +1407,21 @@ typedef struct _xet_pci_stats_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanPciGetCount(
+xetSysmanLinkSwitchGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of PCI end-points.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_link_switch_handle_t* phSwitch       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get PCI properties - address, max speed
+/// @brief Get connectivity switch properties
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1081,19 +1432,17 @@ xetSysmanPciGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hSwitch
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanPciGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                    ///< 1]).
-    xet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
+xetSysmanLinkSwitchGetProperties(
+    xet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
+    xet_link_switch_properties_t* pProperties       ///< [in] Will contain the Switch properties.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current PCI state - current speed
+/// @brief Get connectivity switch state
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1104,19 +1453,17 @@ xetSysmanPciGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hSwitch
 ///         + nullptr == pState
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanPciGetState(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                    ///< 1]).
-    xet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
+xetSysmanLinkSwitchGetState(
+    xet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
+    xet_link_switch_state_t* pState                 ///< [in] Will contain the current state of the switch (enabled/disabled).
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get properties of a bar
+/// @brief Set connectivity switch state
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1127,120 +1474,45 @@ xetSysmanPciGetState(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pProperties
+///         + nullptr == hSwitch
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanPciGetBarProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                    ///< 1]).
-    uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::xet_pci_properties_t.numBars -
-                                                    ///< 1]).
-    xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
+xetSysmanLinkSwitchSetState(
+    xet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
+    xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get PCI throughput
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pThroughput
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanPciGetThroughput(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                    ///< 1]).
-    xet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get PCI stats
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pStats
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanPciGetStats(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                    ///< 1]).
-    xet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Switch properties
-typedef struct _xet_switch_properties_t
-{
-    uint32_t numPorts;                              ///< [out] The number of ports
-    xe_bool_t onSubdevice;                          ///< [out] True if the switch is located on a sub-device; false means that
-                                                    ///< the switch is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
-
-} xet_switch_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Switch state
-typedef struct _xet_switch_state_t
-{
-    xe_bool_t enabled;                              ///< [out] Indicates if the switch is enabled/disabled
-
-} xet_switch_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Switch port speed
-typedef struct _xet_switch_port_speed_t
+/// @brief Connectivity port speed
+typedef struct _xet_link_port_speed_t
 {
     uint32_t bitRate;                               ///< [out] Bits/sec that the link is operating at
     uint32_t width;                                 ///< [out] The number of lanes
     uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
 
-} xet_switch_port_speed_t;
+} xet_link_port_speed_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Switch Port properties
-typedef struct _xet_switch_port_properties_t
+/// @brief Connectivity port properties
+typedef struct _xet_link_port_properties_t
 {
-    xet_switch_port_speed_t maxSpeed;               ///< [out] Maximum bandwidth supported by the port
+    uint32_t portNum;                               ///< [out] The port number on the switch
+    xet_link_port_speed_t maxSpeed;                 ///< [out] Maximum bandwidth supported by the port
 
-} xet_switch_port_properties_t;
+} xet_link_port_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Switch Port state
-typedef struct _xet_switch_port_state_t
+/// @brief Connectivity port state
+typedef struct _xet_link_port_state_t
 {
     xe_bool_t isConnected;                          ///< [out] Indicates if the port is connected to a remote Switch
-    xe_device_uuid_t remoteDeviceUuid;              ///< [out] If connected is true, this gives the device UUID where the port
-                                                    ///< connects
-    uint32_t remoteDeviceSwitchIndex;               ///< [out] If connected is true, this gives the switch index on the remote
-                                                    ///< device where the port connects
-    uint32_t remoteSwitchPortIndex;                 ///< [out] If connected is true, this gives the port index on the remote
-                                                    ///< switch
-    xet_switch_port_speed_t rxSpeed;                ///< [out] Current maximum receive speed
-    xet_switch_port_speed_t txSpeed;                ///< [out] Current maximum transmit speed
+    xet_link_port_speed_t rxSpeed;                  ///< [out] Current maximum receive speed
+    xet_link_port_speed_t txSpeed;                  ///< [out] Current maximum transmit speed
 
-} xet_switch_port_state_t;
+} xet_link_port_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Switch Port throughput
+/// @brief Connectivity port throughput
 /// 
 /// @details
 ///     - Percent throughput is calculated by taking two snapshots (s1, s2) and
@@ -1249,7 +1521,7 @@ typedef struct _xet_switch_port_state_t
 ///       (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))
 ///     -     %tx_bandwidth = 10^6 * (s2.txCounter - s1.txCounter) /
 ///       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
-typedef struct _xet_switch_port_throughput_t
+typedef struct _xet_link_port_throughput_t
 {
     uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
                                                     ///< was made.
@@ -1264,16 +1536,16 @@ typedef struct _xet_switch_port_throughput_t
     uint32_t txMaxBandwidth;                        ///< [out] The current maximum bandwidth in bytes/sec for transmitting
                                                     ///< packets
 
-} xet_switch_port_throughput_t;
+} xet_link_port_throughput_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Switch Port stats counters
+/// @brief Connectivity port stats counters
 /// 
 /// @details
 ///     - Percent replays is calculated by taking two snapshots (s1, s2) and
 ///       using the equation: %replay = 10^6 * (s2.replayCounter -
 ///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
-typedef struct _xet_switch_port_stats_t
+typedef struct _xet_link_port_stats_t
 {
     uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
                                                     ///< was made.
@@ -1285,11 +1557,10 @@ typedef struct _xet_switch_port_stats_t
     uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
     uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
 
-} xet_switch_port_stats_t;
+} xet_link_port_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of high-speed switches that can be monitored on this
-///        device/sub-device
+/// @brief Get handle of connectivity ports in a switch
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1300,17 +1571,25 @@ typedef struct _xet_switch_port_stats_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hSysmanLinkSwitch
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanSwitchGetCount(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of high-speed switches.
+xetSysmanLinkSwitchGetPorts(
+    xet_sysman_link_switch_handle_t hSysmanLinkSwitch,  ///< [in] SMI handle of the connectivity switch.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_link_port_handle_t* phPort           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Switch properties
+/// @brief Get connectivity port properties
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1321,19 +1600,17 @@ xetSysmanSwitchGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPort
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanSwitchGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                    ///< 1]).
-    xet_switch_properties_t* pProperties            ///< [in] Will contain the Switch properties.
+xetSysmanLinkPortGetProperties(
+    xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+    xet_link_port_properties_t* pProperties         ///< [in] Will contain properties of the Switch Port
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Switch state
+/// @brief Get connectivity port state
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1344,19 +1621,17 @@ xetSysmanSwitchGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPort
 ///         + nullptr == pState
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanSwitchGetState(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                    ///< 1]).
-    xet_switch_state_t* pState                      ///< [in] Will contain the current state of the switch (enabled/disabled).
+xetSysmanLinkPortGetState(
+    xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+    xet_link_port_state_t* pState                   ///< [in] Will contain the current state of the Switch Port
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set Switch state
+/// @brief Get connectivity port throughput
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1367,93 +1642,17 @@ xetSysmanSwitchGetState(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanSwitchSetState(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                    ///< 1]).
-    xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Switch Port properties
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pProperties
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanSwitchPortGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                    ///< 1]).
-    uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                    ///< - 1]).
-    xet_switch_port_properties_t* pProperties       ///< [in] Will contain properties of the Switch Port
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Switch Port state
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pState
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanSwitchPortGetState(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                    ///< 1]).
-    uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                    ///< - 1]).
-    xet_switch_port_state_t* pState                 ///< [in] Will contain the current state of the Switch Port
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Switch Port throughput
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPort
 ///         + nullptr == pThroughput
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanSwitchPortGetThroughput(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                    ///< 1]).
-    uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                    ///< - 1]).
-    xet_switch_port_throughput_t* pThroughput       ///< [in] Will contain the Switch port throughput counters.
+xetSysmanLinkPortGetThroughput(
+    xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+    xet_link_port_throughput_t* pThroughput         ///< [in] Will contain the Switch port throughput counters.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Switch Port stats
+/// @brief Get connectivity port stats
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1464,17 +1663,36 @@ xetSysmanSwitchPortGetThroughput(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPort
 ///         + nullptr == pStats
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanSwitchPortGetStats(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                    ///< 1]).
-    uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                    ///< - 1]).
-    xet_switch_port_stats_t* pStats                 ///< [in] Will contain the Switch port stats.
+xetSysmanLinkPortGetStats(
+    xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+    xet_link_port_stats_t* pStats                   ///< [in] Will contain the Switch port stats.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Check if two connectivity ports are physically connected
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hPort
+///         + nullptr == hRemotePort
+///         + nullptr == pConnected
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanLinkPortIsConnected(
+    xet_sysman_link_port_handle_t hPort,            ///< [in] Handle of the local connectivity port.
+    xet_sysman_link_port_handle_t hRemotePort,      ///< [in] Handle of the remote connectivity port.
+    xe_bool_t* pConnected                           ///< [in] Will indicate connected to the remote port.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1494,13 +1712,12 @@ typedef struct _xet_temp_properties_t
     xet_temp_sensors_t type;                        ///< [out] Which part of the device the temperature sensor measures
     xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
 
 } xet_temp_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of temperature sensors that can be monitored on this
-///        device/sub-device
+/// @brief Get handle of temperature sensors
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1515,9 +1732,17 @@ typedef struct _xet_temp_properties_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanTemperatureGetCount(
+xetSysmanTemperatureGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of temperature sensors.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_temp_handle_t* phTemperature         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1532,14 +1757,12 @@ xetSysmanTemperatureGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hTemperature
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanTemperatureGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t tempIndex,                             ///< [in] The index of the temperature sensor (0 ...
-                                                    ///< [::xetSysmanTemperatureGetCount() - 1]).
+    xet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
     xet_temp_properties_t* pProperties              ///< [in] Will contain the temperature sensor properties.
     );
 
@@ -1555,238 +1778,13 @@ xetSysmanTemperatureGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hTemperature
 ///         + nullptr == pTemperature
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanTemperatureGet(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t tempIndex,                             ///< [in] The index of the temperature sensor (0 ...
-                                                    ///< [::xetSysmanTemperatureGetCount() - 1]).
+xetSysmanTemperatureRead(
+    xet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
     uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Standby hardware components
-typedef enum _xet_stby_type_t
-{
-    XET_STBY_TYPE_GLOBAL = 0,                       ///< Control the overall standby policy of the device/sub-device
-
-} xet_stby_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Standby hardware component properties
-typedef struct _xet_stby_properties_t
-{
-    xet_stby_type_t type;                           ///< [out] Which standby hardware component this controls
-    xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
-
-} xet_stby_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Standby promotion modes
-typedef enum _xet_stby_promo_mode_t
-{
-    XET_STBY_PROMO_MODE_DEFAULT = 0,                ///< Best compromise between performance and energy savings.
-    XET_STBY_PROMO_MODE_NEVER,                      ///< The device/component will never shutdown. This can improve performance
-                                                    ///< but uses more energy.
-
-} xet_stby_promo_mode_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of standby hardware components that can be controlled
-///        on this device/sub-device
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanStandbyGetCount(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of standby hardware components.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get standby hardware component properties
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pProperties
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanStandbyGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t stbyIndex,                             ///< [in] The index of the standby hardware component (0 ...
-                                                    ///< [::xetSysmanStandbyGetCount() - 1]).
-    xet_stby_properties_t* pProperties              ///< [in] Will contain the standby hardware properties.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the current standby promotion mode
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pMode
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanStandbyGetMode(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t stbyIndex,                             ///< [in] The index of the standby hardware component (0 ...
-                                                    ///< [::xetSysmanStandbyGetCount() - 1]).
-    xet_stby_promo_mode_t* pMode                    ///< [in] Will contain the current standby mode.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set standby promotion mode
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanStandbySetMode(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t stbyIndex,                             ///< [in] The index of the standby hardware component (0 ...
-                                                    ///< [::xetSysmanStandbyGetCount() - 1]).
-    xet_stby_promo_mode_t mode                      ///< [in] New standby mode.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Firmware properties
-typedef struct _xet_firmware_properties_t
-{
-    xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
-    xe_bool_t canControl;                           ///< [out] Indicates if software can flash the firmware
-    int8_t name[XET_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
-    int8_t version[XET_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
-
-} xet_firmware_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of firmwares on this device/sub-device
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanFirmwareGetCount(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of firmwares.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get firmware properties
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pProperties
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanFirmwareGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ... [::xetSysmanFirmwareGetCount() -
-                                                    ///< 1]).
-    xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get firmware checksum
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pChecksum
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanFirmwareGetChecksum(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ... [::xetSysmanFirmwareGetCount() -
-                                                    ///< 1]).
-    uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Flash a new firmware image
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pImage
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanFirmwareFlash(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ... [::xetSysmanFirmwareGetCount() -
-                                                    ///< 1]).
-    void* pImage,                                   ///< [in] Image of the new firmware to flash.
-    uint32_t size                                   ///< [in] Size of the flash image.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1805,7 +1803,7 @@ typedef struct _xet_psu_properties_t
 {
     xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     xe_bool_t canControl;                           ///< [out] Indicates if software can control the PSU
     xe_bool_t haveFan;                              ///< [out] True if the power supply has a fan
     uint32_t ampLimit;                              ///< [out] The maximum electrical current in amperes that can be drawn
@@ -1824,7 +1822,7 @@ typedef struct _xet_psu_state_t
 } xet_psu_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of PSU attached this device/sub-device
+/// @brief Get handle of power supplies
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1839,9 +1837,17 @@ typedef struct _xet_psu_state_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanPsuGetCount(
+xetSysmanPsuGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of PSUs.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_psu_handle_t* phPsu                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1856,14 +1862,12 @@ xetSysmanPsuGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPsu
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanPsuGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ... [::xetSysmanPsuGetCount() -
-                                                    ///< 1]).
+    xet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
     xet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
     );
 
@@ -1879,14 +1883,12 @@ xetSysmanPsuGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hPsu
 ///         + nullptr == pState
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanPsuGetState(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ... [::xetSysmanPsuGetCount() -
-                                                    ///< 1]).
+    xet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
     xet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
     );
 
@@ -1932,7 +1934,7 @@ typedef struct _xet_fan_properties_t
 {
     xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     xe_bool_t canControl;                           ///< [out] Indicates if software can control the fan speed
     uint32_t maxSpeed;                              ///< [out] The maximum RPM of the fan
     uint32_t maxPoints;                             ///< [out] The maximum number of points in the fan temp/speed table
@@ -1962,7 +1964,7 @@ typedef struct _xet_fan_state_t
 } xet_fan_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of fans attached this device/sub-device
+/// @brief Get handle of fans
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1977,9 +1979,17 @@ typedef struct _xet_fan_state_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanFanGetCount(
+xetSysmanFanGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of fans.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_fan_handle_t* phFan                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1994,13 +2004,12 @@ xetSysmanFanGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFan
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanFanGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+    xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     xet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
     );
 
@@ -2016,13 +2025,12 @@ xetSysmanFanGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFan
 ///         + nullptr == pConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanFanGetConfig(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+    xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     xet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
     );
 
@@ -2038,13 +2046,12 @@ xetSysmanFanGetConfig(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFan
 ///         + nullptr == pConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanFanSetConfig(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+    xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     const xet_fan_config_t* pConfig                 ///< [in] New fan configuration.
     );
 
@@ -2060,13 +2067,12 @@ xetSysmanFanSetConfig(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFan
 ///         + nullptr == pState
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanFanGetState(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+    xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     xet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
     xet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
     );
@@ -2077,7 +2083,7 @@ typedef struct _xet_led_properties_t
 {
     xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     xe_bool_t canControl;                           ///< [out] Indicates if software can control the LED
     xe_bool_t haveRGB;                              ///< [out] Indicates if the LED is RGB capable
 
@@ -2095,7 +2101,7 @@ typedef struct _xet_led_state_t
 } xet_led_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of PSU attached this device/sub-device
+/// @brief Get handle of LEDs
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2110,9 +2116,17 @@ typedef struct _xet_led_state_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanLedGetCount(
+xetSysmanLedGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of LEDs.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_led_handle_t* phLed                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2127,13 +2141,12 @@ xetSysmanLedGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hLed
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanLedGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xetSysmanLedGetCount() - 1]).
+    xet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
     xet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
     );
 
@@ -2149,13 +2162,12 @@ xetSysmanLedGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hLed
 ///         + nullptr == pState
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanLedGetState(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xetSysmanLedGetCount() - 1]).
+    xet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
     xet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
     );
 
@@ -2171,13 +2183,12 @@ xetSysmanLedGetState(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hLed
 ///         + nullptr == pState
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanLedSetState(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xetSysmanLedGetCount() - 1]).
+    xet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
     const xet_led_state_t* pState                   ///< [in] New state of the LED.
     );
 
@@ -2197,7 +2208,7 @@ typedef struct _xet_ras_properties_t
     xet_ras_error_type_t type;                      ///< [out] The type of RAS error
     xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     xe_bool_t supported;                            ///< [out] True if RAS is supported on this device
     xe_bool_t enabled;                              ///< [out] True if RAS is enabled on this device
 
@@ -2226,7 +2237,7 @@ typedef struct _xet_ras_details_t
 } xet_ras_details_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of RAS error sets on this device/sub-device
+/// @brief Get handle of RAS error sets
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2241,9 +2252,17 @@ typedef struct _xet_ras_details_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanRasGetCount(
+xetSysmanRasGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of RAS errors sets.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_ras_handle_t* phRas                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2258,14 +2277,12 @@ xetSysmanRasGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hRas
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanRasGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    uint32_t rasIndex,                              ///< [in] The index of the RAS error set (0 ... [::xetSysmanRasGetCount() -
-                                                    ///< 1]).
+    xet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
     xet_ras_properties_t* pProperties               ///< [in] Structure describing RAS properties
     );
 
@@ -2284,7 +2301,7 @@ xetSysmanRasGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hRas
 ///         + nullptr == pTotalErrors
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + This device does not support RAS.
@@ -2292,9 +2309,7 @@ xetSysmanRasGetProperties(
 ///         + Don't have permissions to clear error counters.
 xe_result_t __xecall
 xetSysmanRasGetErrors(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    uint32_t rasIndex,                              ///< [in] The index of the RAS error set (0 ... [::xetSysmanRasGetCount() -
-                                                    ///< 1]).
+    xet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
     xe_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
     uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
     xet_ras_details_t* pDetails                     ///< [in][optional] Breakdown of where errors have occurred
@@ -2443,7 +2458,7 @@ xetSysmanEventsListen(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Diagnostic type
+/// @brief Diagnostic test suite type
 typedef enum _xet_diag_type_t
 {
     XET_DIAG_TYPE_SCAN = 0,                         ///< Run SCAN diagnostics
@@ -2491,7 +2506,7 @@ typedef struct _xet_diag_properties_t
     xet_diag_type_t type;                           ///< [out] The type of diagnostics test suite
     xe_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
-    xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     const char* name;                               ///< [out] Name of the diagnostics test suite
     uint32_t numTests;                              ///< [out] The number of tests in the test suite
     const xet_diag_test_t* pTests;                  ///< [out] Array of tests (size ::xet_diag_properties_t.numTests), sorted
@@ -2500,8 +2515,7 @@ typedef struct _xet_diag_properties_t
 } xet_diag_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of diagnostic test suites that can be run on this
-///        device/sub-device
+/// @brief Get handle of diagnostics test suites
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2516,9 +2530,17 @@ typedef struct _xet_diag_properties_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanDiagnosticsGetCount(
+xetSysmanDiagnosticsGet(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of diagnostic test suites.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    xet_sysman_diag_handle_t* phDiagnostics         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2533,14 +2555,12 @@ xetSysmanDiagnosticsGetCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hDiagnostics
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanDiagnosticsGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    uint32_t testIndex,                             ///< [in] The index of a diagnostics test (0 ...
-                                                    ///< [::xetSysmanDiagnosticsGetCount() - 1]).
+    xet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
     xet_diag_properties_t* pProperties              ///< [in] Structure describing the properties of a diagnostics test suite
     );
 
@@ -2555,14 +2575,12 @@ xetSysmanDiagnosticsGetProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hDiagnostics
 ///         + nullptr == pResult
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanDiagnosticsRunTests(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
-    uint32_t testIndex,                             ///< [in] The index of a diagnostics test (0 ...
-                                                    ///< [::xetSysmanDiagnosticsGetCount() - 1]).
+    xet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
     uint32_t start,                                 ///< [in] The index of the first test to run. Set to
                                                     ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
     uint32_t end,                                   ///< [in] The index of the last test to run. Set to

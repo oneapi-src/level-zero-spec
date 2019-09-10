@@ -90,10 +90,94 @@ namespace xet
     using tracer_handle_t = _tracer_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for accessing System Resource Management features
+    /// @brief Handle for accessing System Resource Management features of a device
     class Sysman;
     struct _sysman_handle_t;
     using sysman_handle_t = _sysman_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device power domain
+    class SysmanPower;
+    struct _sysman_pwr_handle_t;
+    using sysman_pwr_handle_t = _sysman_pwr_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device frequency domain
+    class SysmanFrequency;
+    struct _sysman_freq_handle_t;
+    using sysman_freq_handle_t = _sysman_freq_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device engine group
+    class SysmanEngine;
+    struct _sysman_engine_handle_t;
+    using sysman_engine_handle_t = _sysman_engine_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device standby control
+    class SysmanStandby;
+    struct _sysman_standby_handle_t;
+    using sysman_standby_handle_t = _sysman_standby_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device firmware
+    class SysmanFirmware;
+    struct _sysman_firmware_handle_t;
+    using sysman_firmware_handle_t = _sysman_firmware_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device memory module
+    class SysmanMemory;
+    struct _sysman_mem_handle_t;
+    using sysman_mem_handle_t = _sysman_mem_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device connectivity switch
+    class SysmanLinkSwitch;
+    struct _sysman_link_switch_handle_t;
+    using sysman_link_switch_handle_t = _sysman_link_switch_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device connectivity port
+    class SysmanLinkPort;
+    struct _sysman_link_port_handle_t;
+    using sysman_link_port_handle_t = _sysman_link_port_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device temperature sensor
+    class SysmanTemperature;
+    struct _sysman_temp_handle_t;
+    using sysman_temp_handle_t = _sysman_temp_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device power supply
+    class SysmanPsu;
+    struct _sysman_psu_handle_t;
+    using sysman_psu_handle_t = _sysman_psu_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device fan
+    class SysmanFan;
+    struct _sysman_fan_handle_t;
+    using sysman_fan_handle_t = _sysman_fan_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device LED
+    class SysmanLed;
+    struct _sysman_led_handle_t;
+    using sysman_led_handle_t = _sysman_led_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device RAS error set
+    class SysmanRas;
+    struct _sysman_ras_handle_t;
+    using sysman_ras_handle_t = _sysman_ras_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device diagnostics test suite
+    class SysmanDiagnostics;
+    struct _sysman_diag_handle_t;
+    using sysman_diag_handle_t = _sysman_diag_handle_t*;
 
 } // namespace xet
 

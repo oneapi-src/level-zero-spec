@@ -791,592 +791,10 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetCount
-    xe_result_t __xecall
-    xetSysmanPowerGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of power domains.
-        )
-    {
-        auto pfnPowerGetCount = context.xetDdiTable.Sysman.pfnPowerGetCount;
-
-        if( nullptr == pfnPowerGetCount )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPowerGetCount( hSysman, pCount );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetProperties
-    xe_result_t __xecall
-    xetSysmanPowerGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_properties_t* pProperties             ///< [in] Structure that will contain property data.
-        )
-    {
-        auto pfnPowerGetProperties = context.xetDdiTable.Sysman.pfnPowerGetProperties;
-
-        if( nullptr == pfnPowerGetProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPowerGetProperties( hSysman, pwrIndex, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetEnergyCounter
-    xe_result_t __xecall
-    xetSysmanPowerGetEnergyCounter(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
-                                                        ///< timestamp when the last counter value was measured.
-        )
-    {
-        auto pfnPowerGetEnergyCounter = context.xetDdiTable.Sysman.pfnPowerGetEnergyCounter;
-
-        if( nullptr == pfnPowerGetEnergyCounter )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pEnergy )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPowerGetEnergyCounter( hSysman, pwrIndex, pEnergy );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetEnergyThreshold
-    xe_result_t __xecall
-    xetSysmanPowerGetEnergyThreshold(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
-        )
-    {
-        auto pfnPowerGetEnergyThreshold = context.xetDdiTable.Sysman.pfnPowerGetEnergyThreshold;
-
-        if( nullptr == pfnPowerGetEnergyThreshold )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pThreshold )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPowerGetEnergyThreshold( hSysman, pwrIndex, pThreshold );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerSetEnergyThreshold
-    xe_result_t __xecall
-    xetSysmanPowerSetEnergyThreshold(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
-        )
-    {
-        auto pfnPowerSetEnergyThreshold = context.xetDdiTable.Sysman.pfnPowerSetEnergyThreshold;
-
-        if( nullptr == pfnPowerSetEnergyThreshold )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pThreshold )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPowerSetEnergyThreshold( hSysman, pwrIndex, pThreshold );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetLimits
-    xe_result_t __xecall
-    xetSysmanPowerGetLimits(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_sustained_limit_t* pSustained,        ///< [in][optional] The sustained power limit.
-        xet_power_burst_limit_t* pBurst,                ///< [in][optional] The burst power limit.
-        xet_power_peak_limit_t* pPeak                   ///< [in][optional] The peak power limit.
-        )
-    {
-        auto pfnPowerGetLimits = context.xetDdiTable.Sysman.pfnPowerGetLimits;
-
-        if( nullptr == pfnPowerGetLimits )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPowerGetLimits( hSysman, pwrIndex, pSustained, pBurst, pPeak );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerSetLimits
-    xe_result_t __xecall
-    xetSysmanPowerSetLimits(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        const xet_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
-        const xet_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
-        const xet_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
-        )
-    {
-        auto pfnPowerSetLimits = context.xetDdiTable.Sysman.pfnPowerSetLimits;
-
-        if( nullptr == pfnPowerSetLimits )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPowerSetLimits( hSysman, pwrIndex, pSustained, pBurst, pPeak );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetCount
-    xe_result_t __xecall
-    xetSysmanFrequencyGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of frequency domains.
-        )
-    {
-        auto pfnFrequencyGetCount = context.xetDdiTable.Sysman.pfnFrequencyGetCount;
-
-        if( nullptr == pfnFrequencyGetCount )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFrequencyGetCount( hSysman, pCount );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetProperties
-    xe_result_t __xecall
-    xetSysmanFrequencyGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        xet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
-        )
-    {
-        auto pfnFrequencyGetProperties = context.xetDdiTable.Sysman.pfnFrequencyGetProperties;
-
-        if( nullptr == pfnFrequencyGetProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFrequencyGetProperties( hSysman, freqIndex, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetRange
-    xe_result_t __xecall
-    xetSysmanFrequencyGetRange(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        xet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        auto pfnFrequencyGetRange = context.xetDdiTable.Sysman.pfnFrequencyGetRange;
-
-        if( nullptr == pfnFrequencyGetRange )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pLimits )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFrequencyGetRange( hSysman, freqIndex, pLimits );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencySetRange
-    xe_result_t __xecall
-    xetSysmanFrequencySetRange(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        const xet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        auto pfnFrequencySetRange = context.xetDdiTable.Sysman.pfnFrequencySetRange;
-
-        if( nullptr == pfnFrequencySetRange )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pLimits )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFrequencySetRange( hSysman, freqIndex, pLimits );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetState
-    xe_result_t __xecall
-    xetSysmanFrequencyGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        xet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
-        )
-    {
-        auto pfnFrequencyGetState = context.xetDdiTable.Sysman.pfnFrequencyGetState;
-
-        if( nullptr == pfnFrequencyGetState )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pState )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFrequencyGetState( hSysman, freqIndex, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetThrottleTime
-    xe_result_t __xecall
-    xetSysmanFrequencyGetThrottleTime(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        xet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
-                                                        ///< specified domain.
-        )
-    {
-        auto pfnFrequencyGetThrottleTime = context.xetDdiTable.Sysman.pfnFrequencyGetThrottleTime;
-
-        if( nullptr == pfnFrequencyGetThrottleTime )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pThrottleTime )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFrequencyGetThrottleTime( hSysman, freqIndex, pThrottleTime );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanEngineGetCount
-    xe_result_t __xecall
-    xetSysmanEngineGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of engine groups.
-        )
-    {
-        auto pfnEngineGetCount = context.xetDdiTable.Sysman.pfnEngineGetCount;
-
-        if( nullptr == pfnEngineGetCount )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnEngineGetCount( hSysman, pCount );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanEngineGetProperties
-    xe_result_t __xecall
-    xetSysmanEngineGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
-                                                        ///< - 1]).
-        xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
-        )
-    {
-        auto pfnEngineGetProperties = context.xetDdiTable.Sysman.pfnEngineGetProperties;
-
-        if( nullptr == pfnEngineGetProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnEngineGetProperties( hSysman, engineIndex, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanEngineGetActivity
-    xe_result_t __xecall
-    xetSysmanEngineGetActivity(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
-                                                        ///< - 1]).
-        xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
-        )
-    {
-        auto pfnEngineGetActivity = context.xetDdiTable.Sysman.pfnEngineGetActivity;
-
-        if( nullptr == pfnEngineGetActivity )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pStats )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnEngineGetActivity( hSysman, engineIndex, pStats );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanMemoryGetCount
-    xe_result_t __xecall
-    xetSysmanMemoryGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of memory modules.
-        )
-    {
-        auto pfnMemoryGetCount = context.xetDdiTable.Sysman.pfnMemoryGetCount;
-
-        if( nullptr == pfnMemoryGetCount )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnMemoryGetCount( hSysman, pCount );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanMemoryGetProperties
-    xe_result_t __xecall
-    xetSysmanMemoryGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t memIndex,                              ///< [in] The index of the memory module (0 ...
-                                                        ///< [::xetSysmanMemoryGetCount() - 1]).
-        xet_mem_properties_t* pProperties               ///< [in] Will contain memory properties.
-        )
-    {
-        auto pfnMemoryGetProperties = context.xetDdiTable.Sysman.pfnMemoryGetProperties;
-
-        if( nullptr == pfnMemoryGetProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnMemoryGetProperties( hSysman, memIndex, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanMemoryGetBandwidth
-    xe_result_t __xecall
-    xetSysmanMemoryGetBandwidth(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t memIndex,                              ///< [in] The index of the memory module (0 ...
-                                                        ///< [::xetSysmanMemoryGetCount() - 1]).
-        xet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
-        )
-    {
-        auto pfnMemoryGetBandwidth = context.xetDdiTable.Sysman.pfnMemoryGetBandwidth;
-
-        if( nullptr == pfnMemoryGetBandwidth )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pBandwidth )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnMemoryGetBandwidth( hSysman, memIndex, pBandwidth );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanMemoryGetAllocated
-    xe_result_t __xecall
-    xetSysmanMemoryGetAllocated(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t memIndex,                              ///< [in] The index of the memory module (0 ...
-                                                        ///< [::xetSysmanMemoryGetCount() - 1]).
-        xet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
-        )
-    {
-        auto pfnMemoryGetAllocated = context.xetDdiTable.Sysman.pfnMemoryGetAllocated;
-
-        if( nullptr == pfnMemoryGetAllocated )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pAllocated )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnMemoryGetAllocated( hSysman, memIndex, pAllocated );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPciGetCount
-    xe_result_t __xecall
-    xetSysmanPciGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of PCI end-points.
-        )
-    {
-        auto pfnPciGetCount = context.xetDdiTable.Sysman.pfnPciGetCount;
-
-        if( nullptr == pfnPciGetCount )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPciGetCount( hSysman, pCount );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPciGetProperties
     xe_result_t __xecall
     xetSysmanPciGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         xet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
         )
     {
@@ -1395,7 +813,7 @@ namespace layer
 
         }
 
-        return pfnPciGetProperties( hSysman, pciIndex, pProperties );
+        return pfnPciGetProperties( hSysman, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1403,8 +821,6 @@ namespace layer
     xe_result_t __xecall
     xetSysmanPciGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         xet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
         )
     {
@@ -1423,7 +839,7 @@ namespace layer
 
         }
 
-        return pfnPciGetState( hSysman, pciIndex, pState );
+        return pfnPciGetState( hSysman, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1431,8 +847,6 @@ namespace layer
     xe_result_t __xecall
     xetSysmanPciGetBarProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::xet_pci_properties_t.numBars -
                                                         ///< 1]).
         xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
@@ -1453,7 +867,7 @@ namespace layer
 
         }
 
-        return pfnPciGetBarProperties( hSysman, pciIndex, barIndex, pProperties );
+        return pfnPciGetBarProperties( hSysman, barIndex, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1461,8 +875,6 @@ namespace layer
     xe_result_t __xecall
     xetSysmanPciGetThroughput(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         xet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
         )
     {
@@ -1481,7 +893,7 @@ namespace layer
 
         }
 
-        return pfnPciGetThroughput( hSysman, pciIndex, pThroughput );
+        return pfnPciGetThroughput( hSysman, pThroughput );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1489,8 +901,6 @@ namespace layer
     xe_result_t __xecall
     xetSysmanPciGetStats(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         xet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
         )
     {
@@ -1509,20 +919,28 @@ namespace layer
 
         }
 
-        return pfnPciGetStats( hSysman, pciIndex, pStats );
+        return pfnPciGetStats( hSysman, pStats );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchGetCount
+    /// @brief Intercept function for xetSysmanPowerGet
     xe_result_t __xecall
-    xetSysmanSwitchGetCount(
+    xetSysmanPowerGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of high-speed switches.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_pwr_handle_t* phPower                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
-        auto pfnSwitchGetCount = context.xetDdiTable.Sysman.pfnSwitchGetCount;
+        auto pfnPowerGet = context.xetDdiTable.Sysman.pfnPowerGet;
 
-        if( nullptr == pfnSwitchGetCount )
+        if( nullptr == pfnPowerGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1535,27 +953,25 @@ namespace layer
 
         }
 
-        return pfnSwitchGetCount( hSysman, pCount );
+        return pfnPowerGet( hSysman, pCount, phPower );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchGetProperties
+    /// @brief Intercept function for xetSysmanPowerGetProperties
     xe_result_t __xecall
-    xetSysmanSwitchGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        xet_switch_properties_t* pProperties            ///< [in] Will contain the Switch properties.
+    xetSysmanPowerGetProperties(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_properties_t* pProperties             ///< [in] Structure that will contain property data.
         )
     {
-        auto pfnSwitchGetProperties = context.xetDdiTable.Sysman.pfnSwitchGetProperties;
+        auto pfnGetProperties = context.xetDdiTable.SysmanPower.pfnGetProperties;
 
-        if( nullptr == pfnSwitchGetProperties )
+        if( nullptr == pfnGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hPower )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pProperties )
@@ -1563,82 +979,188 @@ namespace layer
 
         }
 
-        return pfnSwitchGetProperties( hSysman, switchIndex, pProperties );
+        return pfnGetProperties( hPower, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchGetState
+    /// @brief Intercept function for xetSysmanPowerGetEnergyCounter
     xe_result_t __xecall
-    xetSysmanSwitchGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        xet_switch_state_t* pState                      ///< [in] Will contain the current state of the switch (enabled/disabled).
+    xetSysmanPowerGetEnergyCounter(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
+                                                        ///< timestamp when the last counter value was measured.
         )
     {
-        auto pfnSwitchGetState = context.xetDdiTable.Sysman.pfnSwitchGetState;
+        auto pfnGetEnergyCounter = context.xetDdiTable.SysmanPower.pfnGetEnergyCounter;
 
-        if( nullptr == pfnSwitchGetState )
+        if( nullptr == pfnGetEnergyCounter )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hPower )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pState )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSwitchGetState( hSysman, switchIndex, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchSetState
-    xe_result_t __xecall
-    xetSysmanSwitchSetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
-        )
-    {
-        auto pfnSwitchSetState = context.xetDdiTable.Sysman.pfnSwitchSetState;
-
-        if( nullptr == pfnSwitchSetState )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
+            if( nullptr == pEnergy )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSwitchSetState( hSysman, switchIndex, enable );
+        return pfnGetEnergyCounter( hPower, pEnergy );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchPortGetProperties
+    /// @brief Intercept function for xetSysmanPowerGetEnergyThreshold
     xe_result_t __xecall
-    xetSysmanSwitchPortGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                        ///< - 1]).
-        xet_switch_port_properties_t* pProperties       ///< [in] Will contain properties of the Switch Port
+    xetSysmanPowerGetEnergyThreshold(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
         )
     {
-        auto pfnSwitchPortGetProperties = context.xetDdiTable.Sysman.pfnSwitchPortGetProperties;
+        auto pfnGetEnergyThreshold = context.xetDdiTable.SysmanPower.pfnGetEnergyThreshold;
 
-        if( nullptr == pfnSwitchPortGetProperties )
+        if( nullptr == pfnGetEnergyThreshold )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pThreshold )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetEnergyThreshold( hPower, pThreshold );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerSetEnergyThreshold
+    xe_result_t __xecall
+    xetSysmanPowerSetEnergyThreshold(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        auto pfnSetEnergyThreshold = context.xetDdiTable.SysmanPower.pfnSetEnergyThreshold;
+
+        if( nullptr == pfnSetEnergyThreshold )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pThreshold )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetEnergyThreshold( hPower, pThreshold );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerGetLimits
+    xe_result_t __xecall
+    xetSysmanPowerGetLimits(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_sustained_limit_t* pSustained,        ///< [in][optional] The sustained power limit.
+        xet_power_burst_limit_t* pBurst,                ///< [in][optional] The burst power limit.
+        xet_power_peak_limit_t* pPeak                   ///< [in][optional] The peak power limit.
+        )
+    {
+        auto pfnGetLimits = context.xetDdiTable.SysmanPower.pfnGetLimits;
+
+        if( nullptr == pfnGetLimits )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetLimits( hPower, pSustained, pBurst, pPeak );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerSetLimits
+    xe_result_t __xecall
+    xetSysmanPowerSetLimits(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        const xet_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
+        const xet_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
+        const xet_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
+        )
+    {
+        auto pfnSetLimits = context.xetDdiTable.SysmanPower.pfnSetLimits;
+
+        if( nullptr == pfnSetLimits )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetLimits( hPower, pSustained, pBurst, pPeak );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGet
+    xe_result_t __xecall
+    xetSysmanFrequencyGet(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnFrequencyGet = context.xetDdiTable.Sysman.pfnFrequencyGet;
+
+        if( nullptr == pfnFrequencyGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnFrequencyGet( hSysman, pCount, phFrequency );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetProperties
+    xe_result_t __xecall
+    xetSysmanFrequencyGetProperties(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
+        )
+    {
+        auto pfnGetProperties = context.xetDdiTable.SysmanFrequency.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pProperties )
@@ -1646,29 +1168,79 @@ namespace layer
 
         }
 
-        return pfnSwitchPortGetProperties( hSysman, switchIndex, portIndex, pProperties );
+        return pfnGetProperties( hFrequency, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchPortGetState
+    /// @brief Intercept function for xetSysmanFrequencyGetRange
     xe_result_t __xecall
-    xetSysmanSwitchPortGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                        ///< - 1]).
-        xet_switch_port_state_t* pState                 ///< [in] Will contain the current state of the Switch Port
+    xetSysmanFrequencyGetRange(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
+                                                        ///< specified domain.
         )
     {
-        auto pfnSwitchPortGetState = context.xetDdiTable.Sysman.pfnSwitchPortGetState;
+        auto pfnGetRange = context.xetDdiTable.SysmanFrequency.pfnGetRange;
 
-        if( nullptr == pfnSwitchPortGetState )
+        if( nullptr == pfnGetRange )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pLimits )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetRange( hFrequency, pLimits );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetRange
+    xe_result_t __xecall
+    xetSysmanFrequencySetRange(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        const xet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        auto pfnSetRange = context.xetDdiTable.SysmanFrequency.pfnSetRange;
+
+        if( nullptr == pfnSetRange )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pLimits )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetRange( hFrequency, pLimits );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetState
+    xe_result_t __xecall
+    xetSysmanFrequencyGetState(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
+        )
+    {
+        auto pfnGetState = context.xetDdiTable.SysmanFrequency.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pState )
@@ -1676,59 +1248,112 @@ namespace layer
 
         }
 
-        return pfnSwitchPortGetState( hSysman, switchIndex, portIndex, pState );
+        return pfnGetState( hFrequency, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchPortGetThroughput
+    /// @brief Intercept function for xetSysmanFrequencyGetThrottleTime
     xe_result_t __xecall
-    xetSysmanSwitchPortGetThroughput(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                        ///< - 1]).
-        xet_switch_port_throughput_t* pThroughput       ///< [in] Will contain the Switch port throughput counters.
+    xetSysmanFrequencyGetThrottleTime(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                        ///< specified domain.
         )
     {
-        auto pfnSwitchPortGetThroughput = context.xetDdiTable.Sysman.pfnSwitchPortGetThroughput;
+        auto pfnGetThrottleTime = context.xetDdiTable.SysmanFrequency.pfnGetThrottleTime;
 
-        if( nullptr == pfnSwitchPortGetThroughput )
+        if( nullptr == pfnGetThrottleTime )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hFrequency )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pThroughput )
+            if( nullptr == pThrottleTime )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSwitchPortGetThroughput( hSysman, switchIndex, portIndex, pThroughput );
+        return pfnGetThrottleTime( hFrequency, pThrottleTime );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchPortGetStats
+    /// @brief Intercept function for xetSysmanEngineGet
     xe_result_t __xecall
-    xetSysmanSwitchPortGetStats(
+    xetSysmanEngineGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                        ///< - 1]).
-        xet_switch_port_stats_t* pStats                 ///< [in] Will contain the Switch port stats.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_engine_handle_t* phEngine            ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
-        auto pfnSwitchPortGetStats = context.xetDdiTable.Sysman.pfnSwitchPortGetStats;
+        auto pfnEngineGet = context.xetDdiTable.Sysman.pfnEngineGet;
 
-        if( nullptr == pfnSwitchPortGetStats )
+        if( nullptr == pfnEngineGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnEngineGet( hSysman, pCount, phEngine );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanEngineGetProperties
+    xe_result_t __xecall
+    xetSysmanEngineGetProperties(
+        xet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
+        xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
+        )
+    {
+        auto pfnGetProperties = context.xetDdiTable.SysmanEngine.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hEngine )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hEngine, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanEngineGetActivity
+    xe_result_t __xecall
+    xetSysmanEngineGetActivity(
+        xet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
+        xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
+        )
+    {
+        auto pfnGetActivity = context.xetDdiTable.SysmanEngine.pfnGetActivity;
+
+        if( nullptr == pfnGetActivity )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hEngine )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pStats )
@@ -1736,20 +1361,28 @@ namespace layer
 
         }
 
-        return pfnSwitchPortGetStats( hSysman, switchIndex, portIndex, pStats );
+        return pfnGetActivity( hEngine, pStats );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanTemperatureGetCount
+    /// @brief Intercept function for xetSysmanStandbyGet
     xe_result_t __xecall
-    xetSysmanTemperatureGetCount(
+    xetSysmanStandbyGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of temperature sensors.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_standby_handle_t* phStandby          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
-        auto pfnTemperatureGetCount = context.xetDdiTable.Sysman.pfnTemperatureGetCount;
+        auto pfnStandbyGet = context.xetDdiTable.Sysman.pfnStandbyGet;
 
-        if( nullptr == pfnTemperatureGetCount )
+        if( nullptr == pfnStandbyGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1762,27 +1395,25 @@ namespace layer
 
         }
 
-        return pfnTemperatureGetCount( hSysman, pCount );
+        return pfnStandbyGet( hSysman, pCount, phStandby );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanTemperatureGetProperties
+    /// @brief Intercept function for xetSysmanStandbyGetProperties
     xe_result_t __xecall
-    xetSysmanTemperatureGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t tempIndex,                             ///< [in] The index of the temperature sensor (0 ...
-                                                        ///< [::xetSysmanTemperatureGetCount() - 1]).
-        xet_temp_properties_t* pProperties              ///< [in] Will contain the temperature sensor properties.
+    xetSysmanStandbyGetProperties(
+        xet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
+        xet_standby_properties_t* pProperties           ///< [in] Will contain the standby hardware properties.
         )
     {
-        auto pfnTemperatureGetProperties = context.xetDdiTable.Sysman.pfnTemperatureGetProperties;
+        auto pfnGetProperties = context.xetDdiTable.SysmanStandby.pfnGetProperties;
 
-        if( nullptr == pfnTemperatureGetProperties )
+        if( nullptr == pfnGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hStandby )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pProperties )
@@ -1790,7 +1421,558 @@ namespace layer
 
         }
 
-        return pfnTemperatureGetProperties( hSysman, tempIndex, pProperties );
+        return pfnGetProperties( hStandby, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanStandbyGetMode
+    xe_result_t __xecall
+    xetSysmanStandbyGetMode(
+        xet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
+        xet_standby_promo_mode_t* pMode                 ///< [in] Will contain the current standby mode.
+        )
+    {
+        auto pfnGetMode = context.xetDdiTable.SysmanStandby.pfnGetMode;
+
+        if( nullptr == pfnGetMode )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hStandby )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pMode )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetMode( hStandby, pMode );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanStandbySetMode
+    xe_result_t __xecall
+    xetSysmanStandbySetMode(
+        xet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
+        xet_standby_promo_mode_t mode                   ///< [in] New standby mode.
+        )
+    {
+        auto pfnSetMode = context.xetDdiTable.SysmanStandby.pfnSetMode;
+
+        if( nullptr == pfnSetMode )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hStandby )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetMode( hStandby, mode );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFirmwareGet
+    xe_result_t __xecall
+    xetSysmanFirmwareGet(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_firmware_handle_t* phFirmware        ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnFirmwareGet = context.xetDdiTable.Sysman.pfnFirmwareGet;
+
+        if( nullptr == pfnFirmwareGet )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnFirmwareGet( hSysman, pCount, phFirmware );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFirmwareGetProperties
+    xe_result_t __xecall
+    xetSysmanFirmwareGetProperties(
+        xet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
+        xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
+        )
+    {
+        auto pfnGetProperties = context.xetDdiTable.SysmanFirmware.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFirmware )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hFirmware, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFirmwareGetChecksum
+    xe_result_t __xecall
+    xetSysmanFirmwareGetChecksum(
+        xet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
+        uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
+        )
+    {
+        auto pfnGetChecksum = context.xetDdiTable.SysmanFirmware.pfnGetChecksum;
+
+        if( nullptr == pfnGetChecksum )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFirmware )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pChecksum )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetChecksum( hFirmware, pChecksum );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFirmwareFlash
+    xe_result_t __xecall
+    xetSysmanFirmwareFlash(
+        xet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
+        void* pImage,                                   ///< [in] Image of the new firmware to flash.
+        uint32_t size                                   ///< [in] Size of the flash image.
+        )
+    {
+        auto pfnFlash = context.xetDdiTable.SysmanFirmware.pfnFlash;
+
+        if( nullptr == pfnFlash )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFirmware )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pImage )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnFlash( hFirmware, pImage, size );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanMemoryGet
+    xe_result_t __xecall
+    xetSysmanMemoryGet(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_mem_handle_t* phMemory               ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnMemoryGet = context.xetDdiTable.Sysman.pfnMemoryGet;
+
+        if( nullptr == pfnMemoryGet )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnMemoryGet( hSysman, pCount, phMemory );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanMemoryGetProperties
+    xe_result_t __xecall
+    xetSysmanMemoryGetProperties(
+        xet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+        xet_mem_properties_t* pProperties               ///< [in] Will contain memory properties.
+        )
+    {
+        auto pfnGetProperties = context.xetDdiTable.SysmanMemory.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMemory )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hMemory, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanMemoryGetBandwidth
+    xe_result_t __xecall
+    xetSysmanMemoryGetBandwidth(
+        xet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+        xet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
+        )
+    {
+        auto pfnGetBandwidth = context.xetDdiTable.SysmanMemory.pfnGetBandwidth;
+
+        if( nullptr == pfnGetBandwidth )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMemory )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pBandwidth )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetBandwidth( hMemory, pBandwidth );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanMemoryGetAllocated
+    xe_result_t __xecall
+    xetSysmanMemoryGetAllocated(
+        xet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+        xet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
+        )
+    {
+        auto pfnGetAllocated = context.xetDdiTable.SysmanMemory.pfnGetAllocated;
+
+        if( nullptr == pfnGetAllocated )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMemory )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pAllocated )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetAllocated( hMemory, pAllocated );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkSwitchGet
+    xe_result_t __xecall
+    xetSysmanLinkSwitchGet(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_link_switch_handle_t* phSwitch       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnLinkSwitchGet = context.xetDdiTable.Sysman.pfnLinkSwitchGet;
+
+        if( nullptr == pfnLinkSwitchGet )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnLinkSwitchGet( hSysman, pCount, phSwitch );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkSwitchGetProperties
+    xe_result_t __xecall
+    xetSysmanLinkSwitchGetProperties(
+        xet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
+        xet_link_switch_properties_t* pProperties       ///< [in] Will contain the Switch properties.
+        )
+    {
+        auto pfnGetProperties = context.xetDdiTable.SysmanLinkSwitch.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSwitch )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hSwitch, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkSwitchGetState
+    xe_result_t __xecall
+    xetSysmanLinkSwitchGetState(
+        xet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
+        xet_link_switch_state_t* pState                 ///< [in] Will contain the current state of the switch (enabled/disabled).
+        )
+    {
+        auto pfnGetState = context.xetDdiTable.SysmanLinkSwitch.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSwitch )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pState )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetState( hSwitch, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkSwitchSetState
+    xe_result_t __xecall
+    xetSysmanLinkSwitchSetState(
+        xet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
+        xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
+        )
+    {
+        auto pfnSetState = context.xetDdiTable.SysmanLinkSwitch.pfnSetState;
+
+        if( nullptr == pfnSetState )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSwitch )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetState( hSwitch, enable );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkSwitchGetPorts
+    xe_result_t __xecall
+    xetSysmanLinkSwitchGetPorts(
+        xet_sysman_link_switch_handle_t hSysmanLinkSwitch,  ///< [in] SMI handle of the connectivity switch.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_link_port_handle_t* phPort           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnGetPorts = context.xetDdiTable.SysmanLinkSwitch.pfnGetPorts;
+
+        if( nullptr == pfnGetPorts )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysmanLinkSwitch )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetPorts( hSysmanLinkSwitch, pCount, phPort );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkPortGetProperties
+    xe_result_t __xecall
+    xetSysmanLinkPortGetProperties(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+        xet_link_port_properties_t* pProperties         ///< [in] Will contain properties of the Switch Port
+        )
+    {
+        auto pfnGetProperties = context.xetDdiTable.SysmanLinkPort.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hPort, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkPortGetState
+    xe_result_t __xecall
+    xetSysmanLinkPortGetState(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+        xet_link_port_state_t* pState                   ///< [in] Will contain the current state of the Switch Port
+        )
+    {
+        auto pfnGetState = context.xetDdiTable.SysmanLinkPort.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pState )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetState( hPort, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkPortGetThroughput
+    xe_result_t __xecall
+    xetSysmanLinkPortGetThroughput(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+        xet_link_port_throughput_t* pThroughput         ///< [in] Will contain the Switch port throughput counters.
+        )
+    {
+        auto pfnGetThroughput = context.xetDdiTable.SysmanLinkPort.pfnGetThroughput;
+
+        if( nullptr == pfnGetThroughput )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pThroughput )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetThroughput( hPort, pThroughput );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkPortGetStats
+    xe_result_t __xecall
+    xetSysmanLinkPortGetStats(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+        xet_link_port_stats_t* pStats                   ///< [in] Will contain the Switch port stats.
+        )
+    {
+        auto pfnGetStats = context.xetDdiTable.SysmanLinkPort.pfnGetStats;
+
+        if( nullptr == pfnGetStats )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pStats )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetStats( hPort, pStats );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkPortIsConnected
+    xe_result_t __xecall
+    xetSysmanLinkPortIsConnected(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle of the local connectivity port.
+        xet_sysman_link_port_handle_t hRemotePort,      ///< [in] Handle of the remote connectivity port.
+        xe_bool_t* pConnected                           ///< [in] Will indicate connected to the remote port.
+        )
+    {
+        auto pfnIsConnected = context.xetDdiTable.SysmanLinkPort.pfnIsConnected;
+
+        if( nullptr == pfnIsConnected )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == hRemotePort )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pConnected )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnIsConnected( hPort, hRemotePort, pConnected );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1798,9 +1980,15 @@ namespace layer
     xe_result_t __xecall
     xetSysmanTemperatureGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t tempIndex,                             ///< [in] The index of the temperature sensor (0 ...
-                                                        ///< [::xetSysmanTemperatureGetCount() - 1]).
-        uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_temp_handle_t* phTemperature         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         auto pfnTemperatureGet = context.xetDdiTable.Sysman.pfnTemperatureGet;
@@ -1813,25 +2001,85 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnTemperatureGet( hSysman, pCount, phTemperature );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanTemperatureGetProperties
+    xe_result_t __xecall
+    xetSysmanTemperatureGetProperties(
+        xet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        xet_temp_properties_t* pProperties              ///< [in] Will contain the temperature sensor properties.
+        )
+    {
+        auto pfnGetProperties = context.xetDdiTable.SysmanTemperature.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hTemperature, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanTemperatureRead
+    xe_result_t __xecall
+    xetSysmanTemperatureRead(
+        xet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+        )
+    {
+        auto pfnRead = context.xetDdiTable.SysmanTemperature.pfnRead;
+
+        if( nullptr == pfnRead )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
             if( nullptr == pTemperature )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnTemperatureGet( hSysman, tempIndex, pTemperature );
+        return pfnRead( hTemperature, pTemperature );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanStandbyGetCount
+    /// @brief Intercept function for xetSysmanPsuGet
     xe_result_t __xecall
-    xetSysmanStandbyGetCount(
+    xetSysmanPsuGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of standby hardware components.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_psu_handle_t* phPsu                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
-        auto pfnStandbyGetCount = context.xetDdiTable.Sysman.pfnStandbyGetCount;
+        auto pfnPsuGet = context.xetDdiTable.Sysman.pfnPsuGet;
 
-        if( nullptr == pfnStandbyGetCount )
+        if( nullptr == pfnPsuGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1844,245 +2092,25 @@ namespace layer
 
         }
 
-        return pfnStandbyGetCount( hSysman, pCount );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanStandbyGetProperties
-    xe_result_t __xecall
-    xetSysmanStandbyGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t stbyIndex,                             ///< [in] The index of the standby hardware component (0 ...
-                                                        ///< [::xetSysmanStandbyGetCount() - 1]).
-        xet_stby_properties_t* pProperties              ///< [in] Will contain the standby hardware properties.
-        )
-    {
-        auto pfnStandbyGetProperties = context.xetDdiTable.Sysman.pfnStandbyGetProperties;
-
-        if( nullptr == pfnStandbyGetProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnStandbyGetProperties( hSysman, stbyIndex, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanStandbyGetMode
-    xe_result_t __xecall
-    xetSysmanStandbyGetMode(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t stbyIndex,                             ///< [in] The index of the standby hardware component (0 ...
-                                                        ///< [::xetSysmanStandbyGetCount() - 1]).
-        xet_stby_promo_mode_t* pMode                    ///< [in] Will contain the current standby mode.
-        )
-    {
-        auto pfnStandbyGetMode = context.xetDdiTable.Sysman.pfnStandbyGetMode;
-
-        if( nullptr == pfnStandbyGetMode )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pMode )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnStandbyGetMode( hSysman, stbyIndex, pMode );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanStandbySetMode
-    xe_result_t __xecall
-    xetSysmanStandbySetMode(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t stbyIndex,                             ///< [in] The index of the standby hardware component (0 ...
-                                                        ///< [::xetSysmanStandbyGetCount() - 1]).
-        xet_stby_promo_mode_t mode                      ///< [in] New standby mode.
-        )
-    {
-        auto pfnStandbySetMode = context.xetDdiTable.Sysman.pfnStandbySetMode;
-
-        if( nullptr == pfnStandbySetMode )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnStandbySetMode( hSysman, stbyIndex, mode );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFirmwareGetCount
-    xe_result_t __xecall
-    xetSysmanFirmwareGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of firmwares.
-        )
-    {
-        auto pfnFirmwareGetCount = context.xetDdiTable.Sysman.pfnFirmwareGetCount;
-
-        if( nullptr == pfnFirmwareGetCount )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFirmwareGetCount( hSysman, pCount );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFirmwareGetProperties
-    xe_result_t __xecall
-    xetSysmanFirmwareGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ... [::xetSysmanFirmwareGetCount() -
-                                                        ///< 1]).
-        xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
-        )
-    {
-        auto pfnFirmwareGetProperties = context.xetDdiTable.Sysman.pfnFirmwareGetProperties;
-
-        if( nullptr == pfnFirmwareGetProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFirmwareGetProperties( hSysman, firmwareIndex, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFirmwareGetChecksum
-    xe_result_t __xecall
-    xetSysmanFirmwareGetChecksum(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ... [::xetSysmanFirmwareGetCount() -
-                                                        ///< 1]).
-        uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
-        )
-    {
-        auto pfnFirmwareGetChecksum = context.xetDdiTable.Sysman.pfnFirmwareGetChecksum;
-
-        if( nullptr == pfnFirmwareGetChecksum )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pChecksum )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFirmwareGetChecksum( hSysman, firmwareIndex, pChecksum );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFirmwareFlash
-    xe_result_t __xecall
-    xetSysmanFirmwareFlash(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ... [::xetSysmanFirmwareGetCount() -
-                                                        ///< 1]).
-        void* pImage,                                   ///< [in] Image of the new firmware to flash.
-        uint32_t size                                   ///< [in] Size of the flash image.
-        )
-    {
-        auto pfnFirmwareFlash = context.xetDdiTable.Sysman.pfnFirmwareFlash;
-
-        if( nullptr == pfnFirmwareFlash )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pImage )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFirmwareFlash( hSysman, firmwareIndex, pImage, size );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPsuGetCount
-    xe_result_t __xecall
-    xetSysmanPsuGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of PSUs.
-        )
-    {
-        auto pfnPsuGetCount = context.xetDdiTable.Sysman.pfnPsuGetCount;
-
-        if( nullptr == pfnPsuGetCount )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPsuGetCount( hSysman, pCount );
+        return pfnPsuGet( hSysman, pCount, phPsu );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPsuGetProperties
     xe_result_t __xecall
     xetSysmanPsuGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ... [::xetSysmanPsuGetCount() -
-                                                        ///< 1]).
+        xet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
         xet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
         )
     {
-        auto pfnPsuGetProperties = context.xetDdiTable.Sysman.pfnPsuGetProperties;
+        auto pfnGetProperties = context.xetDdiTable.SysmanPsu.pfnGetProperties;
 
-        if( nullptr == pfnPsuGetProperties )
+        if( nullptr == pfnGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hPsu )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pProperties )
@@ -2090,27 +2118,25 @@ namespace layer
 
         }
 
-        return pfnPsuGetProperties( hSysman, psuIndex, pProperties );
+        return pfnGetProperties( hPsu, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPsuGetState
     xe_result_t __xecall
     xetSysmanPsuGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ... [::xetSysmanPsuGetCount() -
-                                                        ///< 1]).
+        xet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
         xet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
         )
     {
-        auto pfnPsuGetState = context.xetDdiTable.Sysman.pfnPsuGetState;
+        auto pfnGetState = context.xetDdiTable.SysmanPsu.pfnGetState;
 
-        if( nullptr == pfnPsuGetState )
+        if( nullptr == pfnGetState )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hPsu )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pState )
@@ -2118,20 +2144,28 @@ namespace layer
 
         }
 
-        return pfnPsuGetState( hSysman, psuIndex, pState );
+        return pfnGetState( hPsu, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFanGetCount
+    /// @brief Intercept function for xetSysmanFanGet
     xe_result_t __xecall
-    xetSysmanFanGetCount(
+    xetSysmanFanGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of fans.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_fan_handle_t* phFan                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
-        auto pfnFanGetCount = context.xetDdiTable.Sysman.pfnFanGetCount;
+        auto pfnFanGet = context.xetDdiTable.Sysman.pfnFanGet;
 
-        if( nullptr == pfnFanGetCount )
+        if( nullptr == pfnFanGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2144,26 +2178,25 @@ namespace layer
 
         }
 
-        return pfnFanGetCount( hSysman, pCount );
+        return pfnFanGet( hSysman, pCount, phFan );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanFanGetProperties
     xe_result_t __xecall
     xetSysmanFanGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+        xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         xet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
         )
     {
-        auto pfnFanGetProperties = context.xetDdiTable.Sysman.pfnFanGetProperties;
+        auto pfnGetProperties = context.xetDdiTable.SysmanFan.pfnGetProperties;
 
-        if( nullptr == pfnFanGetProperties )
+        if( nullptr == pfnGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hFan )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pProperties )
@@ -2171,26 +2204,25 @@ namespace layer
 
         }
 
-        return pfnFanGetProperties( hSysman, fanIndex, pProperties );
+        return pfnGetProperties( hFan, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanFanGetConfig
     xe_result_t __xecall
     xetSysmanFanGetConfig(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+        xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         xet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
         )
     {
-        auto pfnFanGetConfig = context.xetDdiTable.Sysman.pfnFanGetConfig;
+        auto pfnGetConfig = context.xetDdiTable.SysmanFan.pfnGetConfig;
 
-        if( nullptr == pfnFanGetConfig )
+        if( nullptr == pfnGetConfig )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hFan )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pConfig )
@@ -2198,26 +2230,25 @@ namespace layer
 
         }
 
-        return pfnFanGetConfig( hSysman, fanIndex, pConfig );
+        return pfnGetConfig( hFan, pConfig );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanFanSetConfig
     xe_result_t __xecall
     xetSysmanFanSetConfig(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+        xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         const xet_fan_config_t* pConfig                 ///< [in] New fan configuration.
         )
     {
-        auto pfnFanSetConfig = context.xetDdiTable.Sysman.pfnFanSetConfig;
+        auto pfnSetConfig = context.xetDdiTable.SysmanFan.pfnSetConfig;
 
-        if( nullptr == pfnFanSetConfig )
+        if( nullptr == pfnSetConfig )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hFan )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pConfig )
@@ -2225,27 +2256,26 @@ namespace layer
 
         }
 
-        return pfnFanSetConfig( hSysman, fanIndex, pConfig );
+        return pfnSetConfig( hFan, pConfig );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanFanGetState
     xe_result_t __xecall
     xetSysmanFanGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+        xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         xet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
         xet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
         )
     {
-        auto pfnFanGetState = context.xetDdiTable.Sysman.pfnFanGetState;
+        auto pfnGetState = context.xetDdiTable.SysmanFan.pfnGetState;
 
-        if( nullptr == pfnFanGetState )
+        if( nullptr == pfnGetState )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hFan )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pState )
@@ -2253,20 +2283,28 @@ namespace layer
 
         }
 
-        return pfnFanGetState( hSysman, fanIndex, units, pState );
+        return pfnGetState( hFan, units, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanLedGetCount
+    /// @brief Intercept function for xetSysmanLedGet
     xe_result_t __xecall
-    xetSysmanLedGetCount(
+    xetSysmanLedGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of LEDs.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_led_handle_t* phLed                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
-        auto pfnLedGetCount = context.xetDdiTable.Sysman.pfnLedGetCount;
+        auto pfnLedGet = context.xetDdiTable.Sysman.pfnLedGet;
 
-        if( nullptr == pfnLedGetCount )
+        if( nullptr == pfnLedGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2279,26 +2317,25 @@ namespace layer
 
         }
 
-        return pfnLedGetCount( hSysman, pCount );
+        return pfnLedGet( hSysman, pCount, phLed );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanLedGetProperties
     xe_result_t __xecall
     xetSysmanLedGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xetSysmanLedGetCount() - 1]).
+        xet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
         xet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
         )
     {
-        auto pfnLedGetProperties = context.xetDdiTable.Sysman.pfnLedGetProperties;
+        auto pfnGetProperties = context.xetDdiTable.SysmanLed.pfnGetProperties;
 
-        if( nullptr == pfnLedGetProperties )
+        if( nullptr == pfnGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hLed )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pProperties )
@@ -2306,26 +2343,25 @@ namespace layer
 
         }
 
-        return pfnLedGetProperties( hSysman, ledIndex, pProperties );
+        return pfnGetProperties( hLed, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanLedGetState
     xe_result_t __xecall
     xetSysmanLedGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xetSysmanLedGetCount() - 1]).
+        xet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
         xet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
         )
     {
-        auto pfnLedGetState = context.xetDdiTable.Sysman.pfnLedGetState;
+        auto pfnGetState = context.xetDdiTable.SysmanLed.pfnGetState;
 
-        if( nullptr == pfnLedGetState )
+        if( nullptr == pfnGetState )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hLed )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pState )
@@ -2333,26 +2369,25 @@ namespace layer
 
         }
 
-        return pfnLedGetState( hSysman, ledIndex, pState );
+        return pfnGetState( hLed, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanLedSetState
     xe_result_t __xecall
     xetSysmanLedSetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xetSysmanLedGetCount() - 1]).
+        xet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
         const xet_led_state_t* pState                   ///< [in] New state of the LED.
         )
     {
-        auto pfnLedSetState = context.xetDdiTable.Sysman.pfnLedSetState;
+        auto pfnSetState = context.xetDdiTable.SysmanLed.pfnSetState;
 
-        if( nullptr == pfnLedSetState )
+        if( nullptr == pfnSetState )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hLed )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pState )
@@ -2360,20 +2395,28 @@ namespace layer
 
         }
 
-        return pfnLedSetState( hSysman, ledIndex, pState );
+        return pfnSetState( hLed, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanRasGetCount
+    /// @brief Intercept function for xetSysmanRasGet
     xe_result_t __xecall
-    xetSysmanRasGetCount(
+    xetSysmanRasGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of RAS errors sets.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_ras_handle_t* phRas                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
-        auto pfnRasGetCount = context.xetDdiTable.Sysman.pfnRasGetCount;
+        auto pfnRasGet = context.xetDdiTable.Sysman.pfnRasGet;
 
-        if( nullptr == pfnRasGetCount )
+        if( nullptr == pfnRasGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2386,27 +2429,25 @@ namespace layer
 
         }
 
-        return pfnRasGetCount( hSysman, pCount );
+        return pfnRasGet( hSysman, pCount, phRas );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanRasGetProperties
     xe_result_t __xecall
     xetSysmanRasGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t rasIndex,                              ///< [in] The index of the RAS error set (0 ... [::xetSysmanRasGetCount() -
-                                                        ///< 1]).
+        xet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         xet_ras_properties_t* pProperties               ///< [in] Structure describing RAS properties
         )
     {
-        auto pfnRasGetProperties = context.xetDdiTable.Sysman.pfnRasGetProperties;
+        auto pfnGetProperties = context.xetDdiTable.SysmanRas.pfnGetProperties;
 
-        if( nullptr == pfnRasGetProperties )
+        if( nullptr == pfnGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hRas )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pProperties )
@@ -2414,29 +2455,27 @@ namespace layer
 
         }
 
-        return pfnRasGetProperties( hSysman, rasIndex, pProperties );
+        return pfnGetProperties( hRas, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanRasGetErrors
     xe_result_t __xecall
     xetSysmanRasGetErrors(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t rasIndex,                              ///< [in] The index of the RAS error set (0 ... [::xetSysmanRasGetCount() -
-                                                        ///< 1]).
+        xet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         xe_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
         uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
         xet_ras_details_t* pDetails                     ///< [in][optional] Breakdown of where errors have occurred
         )
     {
-        auto pfnRasGetErrors = context.xetDdiTable.Sysman.pfnRasGetErrors;
+        auto pfnGetErrors = context.xetDdiTable.SysmanRas.pfnGetErrors;
 
-        if( nullptr == pfnRasGetErrors )
+        if( nullptr == pfnGetErrors )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hRas )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pTotalErrors )
@@ -2444,7 +2483,7 @@ namespace layer
 
         }
 
-        return pfnRasGetErrors( hSysman, rasIndex, clear, pTotalErrors, pDetails );
+        return pfnGetErrors( hRas, clear, pTotalErrors, pDetails );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2557,16 +2596,24 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDiagnosticsGetCount
+    /// @brief Intercept function for xetSysmanDiagnosticsGet
     xe_result_t __xecall
-    xetSysmanDiagnosticsGetCount(
+    xetSysmanDiagnosticsGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of diagnostic test suites.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_diag_handle_t* phDiagnostics         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
-        auto pfnDiagnosticsGetCount = context.xetDdiTable.Sysman.pfnDiagnosticsGetCount;
+        auto pfnDiagnosticsGet = context.xetDdiTable.Sysman.pfnDiagnosticsGet;
 
-        if( nullptr == pfnDiagnosticsGetCount )
+        if( nullptr == pfnDiagnosticsGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2579,27 +2626,25 @@ namespace layer
 
         }
 
-        return pfnDiagnosticsGetCount( hSysman, pCount );
+        return pfnDiagnosticsGet( hSysman, pCount, phDiagnostics );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanDiagnosticsGetProperties
     xe_result_t __xecall
     xetSysmanDiagnosticsGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t testIndex,                             ///< [in] The index of a diagnostics test (0 ...
-                                                        ///< [::xetSysmanDiagnosticsGetCount() - 1]).
+        xet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
         xet_diag_properties_t* pProperties              ///< [in] Structure describing the properties of a diagnostics test suite
         )
     {
-        auto pfnDiagnosticsGetProperties = context.xetDdiTable.Sysman.pfnDiagnosticsGetProperties;
+        auto pfnGetProperties = context.xetDdiTable.SysmanDiagnostics.pfnGetProperties;
 
-        if( nullptr == pfnDiagnosticsGetProperties )
+        if( nullptr == pfnGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDiagnostics )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pProperties )
@@ -2607,16 +2652,14 @@ namespace layer
 
         }
 
-        return pfnDiagnosticsGetProperties( hSysman, testIndex, pProperties );
+        return pfnGetProperties( hDiagnostics, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanDiagnosticsRunTests
     xe_result_t __xecall
     xetSysmanDiagnosticsRunTests(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
-        uint32_t testIndex,                             ///< [in] The index of a diagnostics test (0 ...
-                                                        ///< [::xetSysmanDiagnosticsGetCount() - 1]).
+        xet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
         uint32_t start,                                 ///< [in] The index of the first test to run. Set to
                                                         ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
         uint32_t end,                                   ///< [in] The index of the last test to run. Set to
@@ -2624,14 +2667,14 @@ namespace layer
         xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
         )
     {
-        auto pfnDiagnosticsRunTests = context.xetDdiTable.Sysman.pfnDiagnosticsRunTests;
+        auto pfnRunTests = context.xetDdiTable.SysmanDiagnostics.pfnRunTests;
 
-        if( nullptr == pfnDiagnosticsRunTests )
+        if( nullptr == pfnRunTests )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDiagnostics )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pResult )
@@ -2639,7 +2682,7 @@ namespace layer
 
         }
 
-        return pfnDiagnosticsRunTests( hSysman, testIndex, start, end, pResult );
+        return pfnRunTests( hDiagnostics, start, end, pResult );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3238,69 +3281,6 @@ xetGetSysmanProcAddrTable(
     dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
     pDdiTable->pfnDeviceReset                            = layer::xetSysmanDeviceReset;
 
-    dditable.pfnPowerGetCount                            = pDdiTable->pfnPowerGetCount;
-    pDdiTable->pfnPowerGetCount                          = layer::xetSysmanPowerGetCount;
-
-    dditable.pfnPowerGetProperties                       = pDdiTable->pfnPowerGetProperties;
-    pDdiTable->pfnPowerGetProperties                     = layer::xetSysmanPowerGetProperties;
-
-    dditable.pfnPowerGetEnergyCounter                    = pDdiTable->pfnPowerGetEnergyCounter;
-    pDdiTable->pfnPowerGetEnergyCounter                  = layer::xetSysmanPowerGetEnergyCounter;
-
-    dditable.pfnPowerGetEnergyThreshold                  = pDdiTable->pfnPowerGetEnergyThreshold;
-    pDdiTable->pfnPowerGetEnergyThreshold                = layer::xetSysmanPowerGetEnergyThreshold;
-
-    dditable.pfnPowerSetEnergyThreshold                  = pDdiTable->pfnPowerSetEnergyThreshold;
-    pDdiTable->pfnPowerSetEnergyThreshold                = layer::xetSysmanPowerSetEnergyThreshold;
-
-    dditable.pfnPowerGetLimits                           = pDdiTable->pfnPowerGetLimits;
-    pDdiTable->pfnPowerGetLimits                         = layer::xetSysmanPowerGetLimits;
-
-    dditable.pfnPowerSetLimits                           = pDdiTable->pfnPowerSetLimits;
-    pDdiTable->pfnPowerSetLimits                         = layer::xetSysmanPowerSetLimits;
-
-    dditable.pfnFrequencyGetCount                        = pDdiTable->pfnFrequencyGetCount;
-    pDdiTable->pfnFrequencyGetCount                      = layer::xetSysmanFrequencyGetCount;
-
-    dditable.pfnFrequencyGetProperties                   = pDdiTable->pfnFrequencyGetProperties;
-    pDdiTable->pfnFrequencyGetProperties                 = layer::xetSysmanFrequencyGetProperties;
-
-    dditable.pfnFrequencyGetRange                        = pDdiTable->pfnFrequencyGetRange;
-    pDdiTable->pfnFrequencyGetRange                      = layer::xetSysmanFrequencyGetRange;
-
-    dditable.pfnFrequencySetRange                        = pDdiTable->pfnFrequencySetRange;
-    pDdiTable->pfnFrequencySetRange                      = layer::xetSysmanFrequencySetRange;
-
-    dditable.pfnFrequencyGetState                        = pDdiTable->pfnFrequencyGetState;
-    pDdiTable->pfnFrequencyGetState                      = layer::xetSysmanFrequencyGetState;
-
-    dditable.pfnFrequencyGetThrottleTime                 = pDdiTable->pfnFrequencyGetThrottleTime;
-    pDdiTable->pfnFrequencyGetThrottleTime               = layer::xetSysmanFrequencyGetThrottleTime;
-
-    dditable.pfnEngineGetCount                           = pDdiTable->pfnEngineGetCount;
-    pDdiTable->pfnEngineGetCount                         = layer::xetSysmanEngineGetCount;
-
-    dditable.pfnEngineGetProperties                      = pDdiTable->pfnEngineGetProperties;
-    pDdiTable->pfnEngineGetProperties                    = layer::xetSysmanEngineGetProperties;
-
-    dditable.pfnEngineGetActivity                        = pDdiTable->pfnEngineGetActivity;
-    pDdiTable->pfnEngineGetActivity                      = layer::xetSysmanEngineGetActivity;
-
-    dditable.pfnMemoryGetCount                           = pDdiTable->pfnMemoryGetCount;
-    pDdiTable->pfnMemoryGetCount                         = layer::xetSysmanMemoryGetCount;
-
-    dditable.pfnMemoryGetProperties                      = pDdiTable->pfnMemoryGetProperties;
-    pDdiTable->pfnMemoryGetProperties                    = layer::xetSysmanMemoryGetProperties;
-
-    dditable.pfnMemoryGetBandwidth                       = pDdiTable->pfnMemoryGetBandwidth;
-    pDdiTable->pfnMemoryGetBandwidth                     = layer::xetSysmanMemoryGetBandwidth;
-
-    dditable.pfnMemoryGetAllocated                       = pDdiTable->pfnMemoryGetAllocated;
-    pDdiTable->pfnMemoryGetAllocated                     = layer::xetSysmanMemoryGetAllocated;
-
-    dditable.pfnPciGetCount                              = pDdiTable->pfnPciGetCount;
-    pDdiTable->pfnPciGetCount                            = layer::xetSysmanPciGetCount;
-
     dditable.pfnPciGetProperties                         = pDdiTable->pfnPciGetProperties;
     pDdiTable->pfnPciGetProperties                       = layer::xetSysmanPciGetProperties;
 
@@ -3316,107 +3296,41 @@ xetGetSysmanProcAddrTable(
     dditable.pfnPciGetStats                              = pDdiTable->pfnPciGetStats;
     pDdiTable->pfnPciGetStats                            = layer::xetSysmanPciGetStats;
 
-    dditable.pfnSwitchGetCount                           = pDdiTable->pfnSwitchGetCount;
-    pDdiTable->pfnSwitchGetCount                         = layer::xetSysmanSwitchGetCount;
+    dditable.pfnPowerGet                                 = pDdiTable->pfnPowerGet;
+    pDdiTable->pfnPowerGet                               = layer::xetSysmanPowerGet;
 
-    dditable.pfnSwitchGetProperties                      = pDdiTable->pfnSwitchGetProperties;
-    pDdiTable->pfnSwitchGetProperties                    = layer::xetSysmanSwitchGetProperties;
+    dditable.pfnFrequencyGet                             = pDdiTable->pfnFrequencyGet;
+    pDdiTable->pfnFrequencyGet                           = layer::xetSysmanFrequencyGet;
 
-    dditable.pfnSwitchGetState                           = pDdiTable->pfnSwitchGetState;
-    pDdiTable->pfnSwitchGetState                         = layer::xetSysmanSwitchGetState;
+    dditable.pfnEngineGet                                = pDdiTable->pfnEngineGet;
+    pDdiTable->pfnEngineGet                              = layer::xetSysmanEngineGet;
 
-    dditable.pfnSwitchSetState                           = pDdiTable->pfnSwitchSetState;
-    pDdiTable->pfnSwitchSetState                         = layer::xetSysmanSwitchSetState;
+    dditable.pfnStandbyGet                               = pDdiTable->pfnStandbyGet;
+    pDdiTable->pfnStandbyGet                             = layer::xetSysmanStandbyGet;
 
-    dditable.pfnSwitchPortGetProperties                  = pDdiTable->pfnSwitchPortGetProperties;
-    pDdiTable->pfnSwitchPortGetProperties                = layer::xetSysmanSwitchPortGetProperties;
+    dditable.pfnFirmwareGet                              = pDdiTable->pfnFirmwareGet;
+    pDdiTable->pfnFirmwareGet                            = layer::xetSysmanFirmwareGet;
 
-    dditable.pfnSwitchPortGetState                       = pDdiTable->pfnSwitchPortGetState;
-    pDdiTable->pfnSwitchPortGetState                     = layer::xetSysmanSwitchPortGetState;
+    dditable.pfnMemoryGet                                = pDdiTable->pfnMemoryGet;
+    pDdiTable->pfnMemoryGet                              = layer::xetSysmanMemoryGet;
 
-    dditable.pfnSwitchPortGetThroughput                  = pDdiTable->pfnSwitchPortGetThroughput;
-    pDdiTable->pfnSwitchPortGetThroughput                = layer::xetSysmanSwitchPortGetThroughput;
-
-    dditable.pfnSwitchPortGetStats                       = pDdiTable->pfnSwitchPortGetStats;
-    pDdiTable->pfnSwitchPortGetStats                     = layer::xetSysmanSwitchPortGetStats;
-
-    dditable.pfnTemperatureGetCount                      = pDdiTable->pfnTemperatureGetCount;
-    pDdiTable->pfnTemperatureGetCount                    = layer::xetSysmanTemperatureGetCount;
-
-    dditable.pfnTemperatureGetProperties                 = pDdiTable->pfnTemperatureGetProperties;
-    pDdiTable->pfnTemperatureGetProperties               = layer::xetSysmanTemperatureGetProperties;
+    dditable.pfnLinkSwitchGet                            = pDdiTable->pfnLinkSwitchGet;
+    pDdiTable->pfnLinkSwitchGet                          = layer::xetSysmanLinkSwitchGet;
 
     dditable.pfnTemperatureGet                           = pDdiTable->pfnTemperatureGet;
     pDdiTable->pfnTemperatureGet                         = layer::xetSysmanTemperatureGet;
 
-    dditable.pfnStandbyGetCount                          = pDdiTable->pfnStandbyGetCount;
-    pDdiTable->pfnStandbyGetCount                        = layer::xetSysmanStandbyGetCount;
+    dditable.pfnPsuGet                                   = pDdiTable->pfnPsuGet;
+    pDdiTable->pfnPsuGet                                 = layer::xetSysmanPsuGet;
 
-    dditable.pfnStandbyGetProperties                     = pDdiTable->pfnStandbyGetProperties;
-    pDdiTable->pfnStandbyGetProperties                   = layer::xetSysmanStandbyGetProperties;
+    dditable.pfnFanGet                                   = pDdiTable->pfnFanGet;
+    pDdiTable->pfnFanGet                                 = layer::xetSysmanFanGet;
 
-    dditable.pfnStandbyGetMode                           = pDdiTable->pfnStandbyGetMode;
-    pDdiTable->pfnStandbyGetMode                         = layer::xetSysmanStandbyGetMode;
+    dditable.pfnLedGet                                   = pDdiTable->pfnLedGet;
+    pDdiTable->pfnLedGet                                 = layer::xetSysmanLedGet;
 
-    dditable.pfnStandbySetMode                           = pDdiTable->pfnStandbySetMode;
-    pDdiTable->pfnStandbySetMode                         = layer::xetSysmanStandbySetMode;
-
-    dditable.pfnFirmwareGetCount                         = pDdiTable->pfnFirmwareGetCount;
-    pDdiTable->pfnFirmwareGetCount                       = layer::xetSysmanFirmwareGetCount;
-
-    dditable.pfnFirmwareGetProperties                    = pDdiTable->pfnFirmwareGetProperties;
-    pDdiTable->pfnFirmwareGetProperties                  = layer::xetSysmanFirmwareGetProperties;
-
-    dditable.pfnFirmwareGetChecksum                      = pDdiTable->pfnFirmwareGetChecksum;
-    pDdiTable->pfnFirmwareGetChecksum                    = layer::xetSysmanFirmwareGetChecksum;
-
-    dditable.pfnFirmwareFlash                            = pDdiTable->pfnFirmwareFlash;
-    pDdiTable->pfnFirmwareFlash                          = layer::xetSysmanFirmwareFlash;
-
-    dditable.pfnPsuGetCount                              = pDdiTable->pfnPsuGetCount;
-    pDdiTable->pfnPsuGetCount                            = layer::xetSysmanPsuGetCount;
-
-    dditable.pfnPsuGetProperties                         = pDdiTable->pfnPsuGetProperties;
-    pDdiTable->pfnPsuGetProperties                       = layer::xetSysmanPsuGetProperties;
-
-    dditable.pfnPsuGetState                              = pDdiTable->pfnPsuGetState;
-    pDdiTable->pfnPsuGetState                            = layer::xetSysmanPsuGetState;
-
-    dditable.pfnFanGetCount                              = pDdiTable->pfnFanGetCount;
-    pDdiTable->pfnFanGetCount                            = layer::xetSysmanFanGetCount;
-
-    dditable.pfnFanGetProperties                         = pDdiTable->pfnFanGetProperties;
-    pDdiTable->pfnFanGetProperties                       = layer::xetSysmanFanGetProperties;
-
-    dditable.pfnFanGetConfig                             = pDdiTable->pfnFanGetConfig;
-    pDdiTable->pfnFanGetConfig                           = layer::xetSysmanFanGetConfig;
-
-    dditable.pfnFanSetConfig                             = pDdiTable->pfnFanSetConfig;
-    pDdiTable->pfnFanSetConfig                           = layer::xetSysmanFanSetConfig;
-
-    dditable.pfnFanGetState                              = pDdiTable->pfnFanGetState;
-    pDdiTable->pfnFanGetState                            = layer::xetSysmanFanGetState;
-
-    dditable.pfnLedGetCount                              = pDdiTable->pfnLedGetCount;
-    pDdiTable->pfnLedGetCount                            = layer::xetSysmanLedGetCount;
-
-    dditable.pfnLedGetProperties                         = pDdiTable->pfnLedGetProperties;
-    pDdiTable->pfnLedGetProperties                       = layer::xetSysmanLedGetProperties;
-
-    dditable.pfnLedGetState                              = pDdiTable->pfnLedGetState;
-    pDdiTable->pfnLedGetState                            = layer::xetSysmanLedGetState;
-
-    dditable.pfnLedSetState                              = pDdiTable->pfnLedSetState;
-    pDdiTable->pfnLedSetState                            = layer::xetSysmanLedSetState;
-
-    dditable.pfnRasGetCount                              = pDdiTable->pfnRasGetCount;
-    pDdiTable->pfnRasGetCount                            = layer::xetSysmanRasGetCount;
-
-    dditable.pfnRasGetProperties                         = pDdiTable->pfnRasGetProperties;
-    pDdiTable->pfnRasGetProperties                       = layer::xetSysmanRasGetProperties;
-
-    dditable.pfnRasGetErrors                             = pDdiTable->pfnRasGetErrors;
-    pDdiTable->pfnRasGetErrors                           = layer::xetSysmanRasGetErrors;
+    dditable.pfnRasGet                                   = pDdiTable->pfnRasGet;
+    pDdiTable->pfnRasGet                                 = layer::xetSysmanRasGet;
 
     dditable.pfnEventsGetProperties                      = pDdiTable->pfnEventsGetProperties;
     pDdiTable->pfnEventsGetProperties                    = layer::xetSysmanEventsGetProperties;
@@ -3430,14 +3344,566 @@ xetGetSysmanProcAddrTable(
     dditable.pfnEventsListen                             = pDdiTable->pfnEventsListen;
     pDdiTable->pfnEventsListen                           = layer::xetSysmanEventsListen;
 
-    dditable.pfnDiagnosticsGetCount                      = pDdiTable->pfnDiagnosticsGetCount;
-    pDdiTable->pfnDiagnosticsGetCount                    = layer::xetSysmanDiagnosticsGetCount;
+    dditable.pfnDiagnosticsGet                           = pDdiTable->pfnDiagnosticsGet;
+    pDdiTable->pfnDiagnosticsGet                         = layer::xetSysmanDiagnosticsGet;
 
-    dditable.pfnDiagnosticsGetProperties                 = pDdiTable->pfnDiagnosticsGetProperties;
-    pDdiTable->pfnDiagnosticsGetProperties               = layer::xetSysmanDiagnosticsGetProperties;
+    return result;
+}
 
-    dditable.pfnDiagnosticsRunTests                      = pDdiTable->pfnDiagnosticsRunTests;
-    pDdiTable->pfnDiagnosticsRunTests                    = layer::xetSysmanDiagnosticsRunTests;
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanPower table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanPowerProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_power_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanPower;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanPowerGetProperties;
+
+    dditable.pfnGetEnergyCounter                         = pDdiTable->pfnGetEnergyCounter;
+    pDdiTable->pfnGetEnergyCounter                       = layer::xetSysmanPowerGetEnergyCounter;
+
+    dditable.pfnGetEnergyThreshold                       = pDdiTable->pfnGetEnergyThreshold;
+    pDdiTable->pfnGetEnergyThreshold                     = layer::xetSysmanPowerGetEnergyThreshold;
+
+    dditable.pfnSetEnergyThreshold                       = pDdiTable->pfnSetEnergyThreshold;
+    pDdiTable->pfnSetEnergyThreshold                     = layer::xetSysmanPowerSetEnergyThreshold;
+
+    dditable.pfnGetLimits                                = pDdiTable->pfnGetLimits;
+    pDdiTable->pfnGetLimits                              = layer::xetSysmanPowerGetLimits;
+
+    dditable.pfnSetLimits                                = pDdiTable->pfnSetLimits;
+    pDdiTable->pfnSetLimits                              = layer::xetSysmanPowerSetLimits;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanFrequency table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanFrequencyProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_frequency_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanFrequency;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanFrequencyGetProperties;
+
+    dditable.pfnGetRange                                 = pDdiTable->pfnGetRange;
+    pDdiTable->pfnGetRange                               = layer::xetSysmanFrequencyGetRange;
+
+    dditable.pfnSetRange                                 = pDdiTable->pfnSetRange;
+    pDdiTable->pfnSetRange                               = layer::xetSysmanFrequencySetRange;
+
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::xetSysmanFrequencyGetState;
+
+    dditable.pfnGetThrottleTime                          = pDdiTable->pfnGetThrottleTime;
+    pDdiTable->pfnGetThrottleTime                        = layer::xetSysmanFrequencyGetThrottleTime;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanEngine table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanEngineProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_engine_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanEngine;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanEngineGetProperties;
+
+    dditable.pfnGetActivity                              = pDdiTable->pfnGetActivity;
+    pDdiTable->pfnGetActivity                            = layer::xetSysmanEngineGetActivity;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanStandby table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanStandbyProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_standby_dditable_t* pDdiTable        ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanStandby;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanStandbyGetProperties;
+
+    dditable.pfnGetMode                                  = pDdiTable->pfnGetMode;
+    pDdiTable->pfnGetMode                                = layer::xetSysmanStandbyGetMode;
+
+    dditable.pfnSetMode                                  = pDdiTable->pfnSetMode;
+    pDdiTable->pfnSetMode                                = layer::xetSysmanStandbySetMode;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanFirmware table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanFirmwareProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_firmware_dditable_t* pDdiTable       ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanFirmware;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanFirmwareGetProperties;
+
+    dditable.pfnGetChecksum                              = pDdiTable->pfnGetChecksum;
+    pDdiTable->pfnGetChecksum                            = layer::xetSysmanFirmwareGetChecksum;
+
+    dditable.pfnFlash                                    = pDdiTable->pfnFlash;
+    pDdiTable->pfnFlash                                  = layer::xetSysmanFirmwareFlash;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanMemory table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanMemoryProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_memory_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanMemory;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanMemoryGetProperties;
+
+    dditable.pfnGetBandwidth                             = pDdiTable->pfnGetBandwidth;
+    pDdiTable->pfnGetBandwidth                           = layer::xetSysmanMemoryGetBandwidth;
+
+    dditable.pfnGetAllocated                             = pDdiTable->pfnGetAllocated;
+    pDdiTable->pfnGetAllocated                           = layer::xetSysmanMemoryGetAllocated;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanLinkSwitch table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanLinkSwitchProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_link_switch_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanLinkSwitch;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanLinkSwitchGetProperties;
+
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::xetSysmanLinkSwitchGetState;
+
+    dditable.pfnSetState                                 = pDdiTable->pfnSetState;
+    pDdiTable->pfnSetState                               = layer::xetSysmanLinkSwitchSetState;
+
+    dditable.pfnGetPorts                                 = pDdiTable->pfnGetPorts;
+    pDdiTable->pfnGetPorts                               = layer::xetSysmanLinkSwitchGetPorts;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanLinkPort table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanLinkPortProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_link_port_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanLinkPort;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanLinkPortGetProperties;
+
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::xetSysmanLinkPortGetState;
+
+    dditable.pfnGetThroughput                            = pDdiTable->pfnGetThroughput;
+    pDdiTable->pfnGetThroughput                          = layer::xetSysmanLinkPortGetThroughput;
+
+    dditable.pfnGetStats                                 = pDdiTable->pfnGetStats;
+    pDdiTable->pfnGetStats                               = layer::xetSysmanLinkPortGetStats;
+
+    dditable.pfnIsConnected                              = pDdiTable->pfnIsConnected;
+    pDdiTable->pfnIsConnected                            = layer::xetSysmanLinkPortIsConnected;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanTemperature table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanTemperatureProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_temperature_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanTemperature;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanTemperatureGetProperties;
+
+    dditable.pfnRead                                     = pDdiTable->pfnRead;
+    pDdiTable->pfnRead                                   = layer::xetSysmanTemperatureRead;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanPsu table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanPsuProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_psu_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanPsu;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanPsuGetProperties;
+
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::xetSysmanPsuGetState;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanFan table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanFanProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_fan_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanFan;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanFanGetProperties;
+
+    dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::xetSysmanFanGetConfig;
+
+    dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::xetSysmanFanSetConfig;
+
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::xetSysmanFanGetState;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanLed table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanLedProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_led_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanLed;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanLedGetProperties;
+
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::xetSysmanLedGetState;
+
+    dditable.pfnSetState                                 = pDdiTable->pfnSetState;
+    pDdiTable->pfnSetState                               = layer::xetSysmanLedSetState;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanRas table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanRasProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_ras_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanRas;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanRasGetProperties;
+
+    dditable.pfnGetErrors                                = pDdiTable->pfnGetErrors;
+    pDdiTable->pfnGetErrors                              = layer::xetSysmanRasGetErrors;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanDiagnostics table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanDiagnosticsProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_diagnostics_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.SysmanDiagnostics;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xetSysmanDiagnosticsGetProperties;
+
+    dditable.pfnRunTests                                 = pDdiTable->pfnRunTests;
+    pDdiTable->pfnRunTests                               = layer::xetSysmanDiagnosticsRunTests;
 
     return result;
 }

@@ -170,7 +170,7 @@ Many component types have multiple components - for example, there are two frequ
 type, the appropriate component identifier is provided as an argument to the function. The diagram above shows that there are two frequency domains
 and so the function calls will receive either ::${T}_FREQ_DOMAIN_GPU or ::${T}_FREQ_DOMAIN_MEMORY.
 
-Other component types can have an arbitrary number of components - for example the number of fans is given by the function ::${t}SysmanFanGetCount().
+Other component types can have an arbitrary number of components - for example the number of fans is given by the function ::${t}SysmanFanGet().
 When calling the functions for fans, one specifies the fan index, a number between 0 and the number of fans minus 1. This is illustrated in the diagram below:
 
 ![Fan flow](../images/tools_sysman_fan_flow.png?raw=true)
@@ -406,64 +406,76 @@ The following functions provide access to information about the PCI device:
 
 These functions will return the same information for a sub-device handle.
 
-${"##"} <a name="sml">Switch</a>
-A device is able access memory and resources on a remote device using a high-speed switch rather than using the PCI bus. If the device has such a
-switch, ::${t}SysmanSwitchGetCount() will return a non-zero number.
+${"##"} <a name="sml">Connectivity Switch</a>
+A device is able access memory and resources on a remote device using a high-speed data fabric rather than using the PCI bus. This is achieved through
+a connectivity switch. If ::${t}SysmanLinkSwitchGet() returns one or more switches, high-speed connectivity to other devices is possible.
 
 The following functions can be used to manage the switch:
 
 | Function                               | Device/sub-device behavior |
 | :---                                   | :---        |
-| ::${t}SysmanSwitchGetProperties()      | Get the number of ports. |
-| ::${t}SysmanSwitchGetState()           | Get the current state of the switch (enabled/disabled). |
-| ::${t}SysmanSwitchSetState()           | Enables/disabled the switch. |
-| ::${t}SysmanSwitchPortGetProperties()  | Get the properties of a port on the switch - maximum supported bandwidth. |
-| ::${t}SysmanSwitchPortGetState()       | Get the current state of a port on the switch - connected, remote switch device/index/port, current maximum bandwidth. |
-| ::${t}SysmanSwitchPortGetThroughput()  | Get the throughput counters of a port on the switch. |
-| ::${t}SysmanSwitchPortGetStats()       | Gets telemetry counters of a port on the switch - number of replays. |
+| ::${t}SysmanLinkSwitchGetProperties()  | Get the number of ports. |
+| ::${t}SysmanLinkSwitchGetState()       | Get the current state of the switch (enabled/disabled). |
+| ::${t}SysmanLinkSwitchSetState()       | Enables/disabled the switch. |
 
-For devices with sub-devices, the switch is usually located in the sub-device. Given a device handle, ::${t}SysmanSwitchGetCount() will
-include the switches on each sub-device. In this case, ::${t}_switch_properties_t.onSubdevice will be set to true and
-::${t}_switch_properties_t.subdeviceUuid will give the device UUID of the sub-device where that switch is located. Give a sub-device handle,
-::${t}SysmanSwitchGetCount() will only give the number of switches in the sub-device.
+Each switch has one or more ports that is configured with a point-to-point connection to another port on another device's switch. A handle for
+each port on the switch is obtained using the function ::${t}SysmanLinkSwitchGetPorts().
+
+The following functions can be used to manage each connectivity port:
+
+| ::${t}SysmanLinkPortGetProperties()    | Get the properties of a port on the switch - maximum supported bandwidth. |
+| ::${t}SysmanLinkPortGetState()         | Get the current state of a port on the switch - connected, remote switch device/index/port, current maximum bandwidth. |
+| ::${t}SysmanLinkPortGetThroughput()    | Get the throughput counters of a port on the switch. |
+| ::${t}SysmanLinkPortGetStats()         | Gets telemetry counters of a port on the switch - number of replays. |
+
+For devices with sub-devices, the switch is usually located in the sub-device. Given a device handle, ::${t}SysmanLinkSwitchGet() will
+include the switches on each sub-device. In this case, ::${t}_link_switch_properties_t.onSubdevice will be set to true and
+::${t}_link_switch_properties_t.subdeviceId will give the subdevice ID where that switch is located.
 
 The example below shows how to get the state of all switches in the device and sub-devices:
 
 ```c
-void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
+void ShowSwitchInfo(xet_sysman_link_switch_handle_t hSwitch)
 {
-    xet_switch_properties_t swprops;
-    if (xetSysmanSwitchGetProperties(hSysmanDevice, SwitchIndex, &swprops) == XE_RESULT_SUCCESS)
+    xet_link_switch_properties_t swprops;
+    if (xetSysmanLinkSwitchGetProperties(hSwitch, &swprops) == XE_RESULT_SUCCESS)
     {
-        xet_switch_state_t swstate;
-        if (xetSysmanSwitchGetState(hSysmanDevice, SwitchIndex, &swstate) == XE_RESULT_SUCCESS)
+        xet_link_switch_state_t swstate;
+        if (xetSysmanLinkSwitchGetState(hSwitch, &swstate) == XE_RESULT_SUCCESS)
         {
-            fprintf(stdout, "        #port:         %u\n", swprops.numPorts);
             if (swprops.onSubdevice)
             {
-                fprintf(stdout, "        On sub-device: %s\n", swprops.subdeviceUuid.id);
+                fprintf(stdout, "        On sub-device: %u\n", swprops.subdeviceId);
             }
             fprintf(stdout, "        State:         %s\n", swstate.enabled ? "Enabled" : "Disabled");
             if (swstate.enabled)
             {
-                fprintf(stdout, "        Ports:\n");
-                for (uint32_t portIndex = 0; portIndex < swprops.numPorts; portIndex++)
+                uint32_t numPorts;
+                if (xetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, NULL) == XE_RESULT_SUCCESS)
                 {
-                    xet_switch_port_state_t portstate;
-                    if (xetSysmanSwitchPortGetState(hSysmanDevice, SwitchIndex, portIndex, &portstate)
-                        == XE_RESULT_SUCCESS)
+                    xet_sysman_link_port_handle_t* phPorts =
+                        (xet_sysman_link_port_handle_t*)malloc(numPorts * sizeof(xet_sysman_link_port_handle_t));
+                    if (xetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, phPorts) == XE_RESULT_SUCCESS)
                     {
-                        if (portstate.isConnected)
+                        fprintf(stdout, "        Ports:\n");
+                        for (uint32_t portIndex = 0; portIndex < numPorts; portIndex++)
                         {
-                            fprintf(stdout,
-                                "            %u: "
-                                "connected to switch on device UUID %s, max rx/tx bandwidth %u/%u bytes/sec\n",
-                                portIndex, portstate.remoteDeviceUuid.id,
-                                portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
-                        }
-                        else
-                        {
-                            fprintf(stdout, "            %u: not connected\n", portIndex);
+                            xet_link_port_state_t portstate;
+                            if (xetSysmanLinkPortGetState(phPorts[portIndex], &portstate)
+                                == XE_RESULT_SUCCESS)
+                            {
+                                fprintf(stdout, "            %u: ", portIndex);
+                                if (portstate.isConnected)
+                                {
+                                    fprintf(stdout,
+                                        "connected, max rx/tx bandwidth: %u/%u bytes/sec\n",
+                                        portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
+                                }
+                                else
+                                {
+                                    fprintf(stdout, "not connected\n");
+                                }
+                            }
                         }
                     }
                 }
@@ -474,15 +486,17 @@ void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
 
 void ShowSwitches(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_properties_t props;
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    uint32_t numSwitches;
+    if ((xetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, NULL) == XE_RESULT_SUCCESS) && numSwitches)
     {
-        if (props.numSwitches)
+        xet_sysman_link_switch_handle_t* phSwitches =
+            (xet_sysman_link_switch_handle_t*)malloc(numSwitches * sizeof(xet_sysman_link_switch_handle_t));
+        if (xetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, phSwitches) == XE_RESULT_SUCCESS)
         {
-            for (uint32_t switchIndex = 0; switchIndex < props.numSwitches; switchIndex++)
+            for (uint32_t index = 0; index < numSwitches; index++)
             {
-                fprintf(stdout, "    Switch %u:\n", switchIndex);
-                ShowSwitchInfo(hSysmanDevice, switchIndex);
+                fprintf(stdout, "    Switch %u:\n", index);
+                ShowSwitchInfo(phSwitches[index]);
             }
         }
     }
@@ -510,10 +524,10 @@ The following functions can be used to control how the hardware promotes to stan
 | ::${t}SysmanStandbyGetMode()           | Get the current promotion mode for the device. If there are sub-devices, this will return the promotion mode across sub-devices that gives the best performance. | Get the current promotion mode for the sub-device. |
 | ::${t}SysmanStandbySetMode()           | Set the promotion mode for the device. If there are sub-devices, this will set the same promotion mode across all sub-devices. | Set the promotion mode for the sub-device. |
 
-The available promotion modes are described in the enumerator ::${t}_stby_promo_mode_t.
+The available promotion modes are described in the enumerator ::${t}_standby_promo_mode_t.
 
 ${"##"} <a name="smw">Firmware</a>
-If ::${t}SysmanFirmwareGetCount() is non-zero, the following functions can be used to manage firmwares on the device:
+If ::${t}SysmanFirmwareGet() returns one or more handles, the following functions can be used to manage firmwares on the device:
 
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
@@ -522,7 +536,7 @@ If ::${t}SysmanFirmwareGetCount() is non-zero, the following functions can be us
 | ::${t}SysmanFirmwareFlash()            | Flash a new firmware image, including for firmware on sub-devices | Flash a new firmware image on a sub-devices |
 
 ${"##"} <a name="smy">PSU</a>
-If ::${t}SysmanPsuGetCount() is non-zero, the following functions can be used to access information about each power-supply:
+If ::${t}SysmanPsuGet() returns one or more PSU handles, the following functions can be used to access information about each power-supply:
 
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
@@ -530,7 +544,7 @@ If ::${t}SysmanPsuGetCount() is non-zero, the following functions can be used to
 | ::${t}SysmanPsuGetState()              | Get information about the health (temperature, current, fan) of the power supply. | No power supplies will be enumerated. |
 
 ${"##"} <a name="smn">Fan</a>
-If ::${t}SysmanFanGetCount() is non-zero, it is possible to manage their speed. The hardware can be instructed to run the fan at a fixed
+If ::${t}SysmanFanGet() returns one or more fan handles, it is possible to manage their speed. The hardware can be instructed to run the fan at a fixed
 speed (or 0 for silent operations) or to provide a table of temperature-speed points in which case the hardware will dynamically change the fan
 speed based on the current temperature of the chip. This configuration information is described in the structure ::${t}_fan_config_t. When specifying
 speed, one can provide the value in revolutions per minute (::${T}_FAN_SPEED_UNITS_RPM) or as a percentage of the maximum RPM
@@ -550,17 +564,17 @@ The example below shows how to output the fan speed of all fans:
 ```c
 void ShowFans(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_properties_t props;
-    
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    uint32_t numFans;
+    if (xetSysmanFanGet(hSysmanDevice, &numFans, NULL) == XE_RESULT_SUCCESS)
     {
-        if (props.numFans)
+        xet_sysman_fan_handle_t* phFans = (xet_sysman_fan_handle_t*)malloc(numFans * sizeof(xet_sysman_fan_handle_t));
+        if (xetSysmanFanGet(hSysmanDevice, &numFans, phFans) == XE_RESULT_SUCCESS)
         {
             fprintf(stdout, "    Fans\n");
-            for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
+            for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
                 xet_fan_state_t state;
-                if (xetSysmanFanGetState(hSysmanDevice, fanIndex, XET_FAN_SPEED_UNITS_RPM, &state)
+                if (xetSysmanFanGetState(phFans[fanIndex], XET_FAN_SPEED_UNITS_RPM, &state)
                     == XE_RESULT_SUCCESS)
                 {
                     fprintf(stdout, "        Fan %u: %u RPM\n", fanIndex, state.speed);
@@ -576,23 +590,24 @@ The next example shows how to set the fan speed for all fans to a fixed value in
 ```c
 void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 {
-    xet_sysman_properties_t props;
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    uint32_t numFans;
+    if (xetSysmanFanGet(hSysmanDevice, &numFans, NULL) == XE_RESULT_SUCCESS)
     {
-        if (props.numFans)
+        xet_sysman_fan_handle_t* phFans = (xet_sysman_fan_handle_t*)malloc(numFans * sizeof(xet_sysman_fan_handle_t));
+        if (xetSysmanFanGet(hSysmanDevice, &numFans, phFans) == XE_RESULT_SUCCESS)
         {
             xet_fan_config_t config;
             config.mode = XET_FAN_SPEED_MODE_FIXED;
             config.speed = SpeedRpm;
             config.speedUnits = XET_FAN_SPEED_UNITS_RPM;
-            for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
+            for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
                 xet_fan_properties_t fanprops;
-                if (xetSysmanFanGetProperties(hSysmanDevice, fanIndex, &fanprops) == XE_RESULT_SUCCESS)
+                if (xetSysmanFanGetProperties(phFans[fanIndex], &fanprops) == XE_RESULT_SUCCESS)
                 {
                     if (fanprops.canControl)
                     {
-                        xetSysmanFanSetConfig(hSysmanDevice, fanIndex, &config);
+                        xetSysmanFanSetConfig(phFans[fanIndex], &config);
                     }
                     else
                     {
@@ -606,7 +621,7 @@ void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 ```
 
 ${"##"} <a name="smd">LED</a>
-If ::${t}SysmanLedGetCount() is non-zero, it is possible to manage LEDs on the device. This includes turning them off/on and where
+If ::${t}SysmanLedGet() returns one or more LED handles, it is possible to manage LEDs on the device. This includes turning them off/on and where
 the capability exists, changing their color in realtime.
 
 The following functions are available:
@@ -646,43 +661,66 @@ The code below shows how to determine if RAS is supported and the current state 
 ```c
 void PrintRasDetails(xet_ras_details_t* pDetails)
 {
-    fprintf(stdout, "    Number new resets:                %llu\n", pDetails->numResets);
-    fprintf(stdout, "    Number new programming errors:    %llu\n", pDetails->numProgrammingErrors);
-    fprintf(stdout, "    Number new driver errors:         %llu\n", pDetails->numDriverErrors);
-    fprintf(stdout, "    Number new compute errors:        %llu\n", pDetails->numComputeErrors);
-    fprintf(stdout, "    Number new non-compute errors:    %llu\n", pDetails->numNonComputeErrors);
-    fprintf(stdout, "    Number new cache errors:          %llu\n", pDetails->numCacheErrors);
-    fprintf(stdout, "    Number new memory errors:         %llu\n", pDetails->numMemoryErrors);
-    fprintf(stdout, "    Number new link errors:           %llu\n", pDetails->numLinkErrors);
-    fprintf(stdout, "    Number new display errors:        %llu\n", pDetails->numDisplayErrors);
+    fprintf(stdout, "        Number new resets:                %llu\n", pDetails->numResets);
+    fprintf(stdout, "        Number new programming errors:    %llu\n", pDetails->numProgrammingErrors);
+    fprintf(stdout, "        Number new driver errors:         %llu\n", pDetails->numDriverErrors);
+    fprintf(stdout, "        Number new compute errors:        %llu\n", pDetails->numComputeErrors);
+    fprintf(stdout, "        Number new non-compute errors:    %llu\n", pDetails->numNonComputeErrors);
+    fprintf(stdout, "        Number new cache errors:          %llu\n", pDetails->numCacheErrors);
+    fprintf(stdout, "        Number new memory errors:         %llu\n", pDetails->numMemoryErrors);
+    fprintf(stdout, "        Number new PCI errors:            %llu\n", pDetails->numPciErrors);
+    fprintf(stdout, "        Number new switch errors:         %llu\n", pDetails->numSwitchErrors);
+    fprintf(stdout, "        Number new display errors:        %llu\n", pDetails->numDisplayErrors);
 }
 
 void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_ras_properties_t props;
-    if (xetSysmanRasGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    uint32_t numRasErrorSets;
+    if ((xetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) == XE_RESULT_SUCCESS) && numRasErrorSets)
     {
-        fprintf(stdout, "RAS supported: %s\n", props.supported ? "yes" : "no");
-        fprintf(stdout, "RAS enabled: %s\n", props.enabled ? "yes" : "no");
-        fprintf(stdout, "RAS repaired: %s\n", props.repaired ? "yes" : "no");
-        if (props.supported && props.enabled)
+        xet_sysman_ras_handle_t* phRasErrorSets =
+            (xet_sysman_ras_handle_t*)malloc(numRasErrorSets * sizeof(xet_sysman_ras_handle_t));
+        if (xetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == XE_RESULT_SUCCESS)
         {
-            uint64_t newErrors;
-            xet_ras_details_t errorDetails;
-            if (xetSysmanRasGetErrors(hSysmanDevice, XET_RAS_ERROR_TYPE_UNCORRECTABLE, 1, &newErrors, &errorDetails) == XE_RESULT_SUCCESS)
+            for (uint32_t rasIndex = 0; rasIndex < numRasErrorSets; rasIndex++)
             {
-                fprintf(stdout, "RAS new uncorrectable errors: %llu\n", newErrors);
-                if (newErrors)
+                xet_ras_properties_t props;
+                if (xetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == XE_RESULT_SUCCESS)
                 {
-                    PrintRasDetails(&errorDetails);
-                }
-            }
-            if (xetSysmanRasGetErrors(hSysmanDevice, XET_RAS_ERROR_TYPE_CORRECTABLE, 1, &newErrors, &errorDetails) == XE_RESULT_SUCCESS)
-            {
-                fprintf(stdout, "RAS new correctable errors: %llu\n", newErrors);
-                if (newErrors)
-                {
-                    PrintRasDetails(&errorDetails);
+                    const char* pErrorType;
+                    switch (props.type)
+                    {
+                    case XET_RAS_ERROR_TYPE_CORRECTABLE:
+                        pErrorType = "Correctable";
+                        break;
+                    case XET_RAS_ERROR_TYPE_UNCORRECTABLE:
+                        pErrorType = "Uncorrectable";
+                        break;
+                    default:
+                        pErrorType = "Unknown";
+                        break;
+                    }
+                    fprintf(stdout, "RAS %s errors\n", pErrorType);
+                    if (props.onSubdevice)
+                    {
+                        fprintf(stdout, "    On sub-device: %u\n", props.subdeviceId);
+                    }
+                    fprintf(stdout, "    RAS supported: %s\n", props.supported ? "yes" : "no");
+                    fprintf(stdout, "    RAS enabled: %s\n", props.enabled ? "yes" : "no");
+                    if (props.supported && props.enabled)
+                    {
+                        uint64_t newErrors;
+                        xet_ras_details_t errorDetails;
+                        if (xetSysmanRasGetErrors(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                            == XE_RESULT_SUCCESS)
+                        {
+                            fprintf(stdout, "    Number new errors: %llu\n", newErrors);
+                            if (newErrors)
+                            {
+                                PrintRasDetails(&errorDetails);
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -53,27 +53,12 @@ desc: "Device properties"
 class: $tSysman
 name: $t_sysman_properties_t
 members:
-    - type: $x_device_type_t
-      name: type
-      desc: "[out] generic device type"
-    - type: uint32_t
-      name: "vendorId"
-      desc: "[out] vendorId from PCI configuration"
-    - type: uint32_t
-      name: "deviceId"
-      desc: "[out] deviceId from PCI configuration"
-    - type: $x_device_uuid_t
-      name: "uuid"
-      desc: "[out] Device UUID"
+    - type: $x_device_properties_t
+      name: core
+      desc: "[out] Core device properties"
     - type: uint32_t
       name: "numSubdevices"
       desc: "[out] Number of sub-devices"
-    - type: $x_bool_t
-      name: isSubdevice
-      desc: "[out] If this handle refers to a sub-device."
-    - type: uint32_t
-      name: subdeviceId
-      desc: "[out] sub-device id. Only valid if isSubdevice is true."
     - type: int8_t
       name: "serialNumber[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] Manufacturing serial number (NULL terminated string value)"
@@ -151,727 +136,6 @@ params:
       desc: "[in] SMI handle for the device"
 
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Power domains"
-class: $tSysman
-name: $t_power_domain_t
-etors:
-    - name: $T_PWR_DOMAIN_TOTAL
-      value: "0"
-      desc: "Measures/controls total power for the device/sub-device."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Properties related to device power settings"
-class: $tSysman
-name: $t_power_properties_t
-members:
-    - type: $t_power_domain_t
-      name: "type"
-      desc: "[out] The type of power domain"
-    - type: $x_bool_t
-      name: "onSubdevice"
-      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
-    - type: $x_bool_t
-      name: "canControl"
-      desc: "[out] Software can change the power limits."
-    - type: uint32_t
-      name: "maxLimit"
-      desc: "[out] The maximum power limit in milliwatts that can be requested."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Energy counter snapshot"
-class: $tSysman
-name: $t_power_energy_counter_t
-details:
-    - "Average power is calculated by taking two snapshots (s1, s2) and using the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp - s1.timestamp)"
-members:
-    - type: uint64_t
-      name: "energy"
-      desc: "[out] The monotonic energy counter in microjoules."
-    - type: uint64_t
-      name: "timestamp"
-      desc: |
-            [out] Microsecond timestamp when energy was captured.
-            No assumption should be made about the absolute value of the timestamp.
-            It should only be used to calculate delta time between two snapshots of the same structure.
-            Never take the delta of this timestamp with the timestamp from a different structure.
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Energy threshold"
-class: $tSysman
-name: $t_power_energy_threshold_t
-details:
-    - "Energy threshold value, when this value is crossed, pcu will signal an interrupt."
-members:
-    - type: uint32_t
-      name: "energy"
-      desc: "[in,out] The energy threshold in joules."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Sustained power limits"
-class: $tSysman
-name: $t_power_sustained_limit_t
-details:
-    - "The power controller (Punit) will throttle the operating frequency if the power averaged over a window (typically seconds) exceeds this limit."
-members:
-    - type: $x_bool_t
-      name: enabled
-      desc: "[in,out] indicates if the limit is enabled (true) or ignored (false)"
-    - type: uint32_t
-      name: power
-      desc: "[in,out] power limit in milliwatts"
-    - type: uint32_t
-      name: interval
-      desc: "[in,out] power averaging window (Tau) in milliseconds"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Burst power limit"
-class: $tSysman
-name: $t_power_burst_limit_t
-details:
-    - "The power controller (Punit) will throttle the operating frequency of the device if the power averaged over a few milliseconds exceeds a limit known as PL2. Typically PL2 > PL1 so that it permits the frequency to burst higher for short periods than would be otherwise permitted by PL1."
-members:
-    - type: $x_bool_t
-      name: enabled
-      desc: "[in,out] indicates if the limit is enabled (true) or ignored (false)"
-    - type: uint32_t
-      name: power
-      desc: "[in,out] power limit in milliwatts"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Peak power limit"
-class: $tSysman
-name: $t_power_peak_limit_t
-details:
-    - "The power controller (Punit) will preemptively throttle the operating frequency of the device when the instantaneous power exceeds this limit. The limit is known as PL4. It expresses the maximum power that can be drawn from the power supply."
-    - "If this power limit is removed or set too high, the power supply will generate an interrupt when it detects an overcurrent condition and the power controller will throttle the device frequencies down to min. It is thus better to tune the PL4 value in order to avoid such excursions."
-members:
-    - type: uint32_t
-      name: power
-      desc: "[in,out] power limit in milliwatts"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the number of power domains"
-class: $tSysman
-name: PowerGetCount
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
-      name: pCount
-      desc: "[in] The number of power domains."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get properties related to a power domain"
-class: $tSysman
-name: PowerGetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pwrIndex
-      desc: "[in] The index of the power domain (0 ... [$tSysmanPowerGetCount() - 1])."
-    - type: $t_power_properties_t*
-      name: pProperties
-      desc: "[in] Structure that will contain property data."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get energy counter"
-class: $tSysman
-name: PowerGetEnergyCounter
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pwrIndex
-      desc: "[in] The index of the power domain (0 ... [$tSysmanPowerGetCount() - 1])."
-    - type: $t_power_energy_counter_t*
-      name: pEnergy
-      desc: "[in] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get energy threshold"
-class: $tSysman
-name: PowerGetEnergyThreshold
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pwrIndex
-      desc: "[in] The index of the power domain (0 ... [$tSysmanPowerGetCount() - 1])."
-    - type: $t_power_energy_threshold_t*
-      name: pThreshold
-      desc: "[out] The current energy threshold value in joules."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set energy threshold"
-class: $tSysman
-name: PowerSetEnergyThreshold
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pwrIndex
-      desc: "[in] The index of the power domain (0 ... [$tSysmanPowerGetCount() - 1])."
-    - type: $t_power_energy_threshold_t*
-      name: pThreshold
-      desc: "[in] The energy threshold to be set in joules."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get power limits"
-class: $tSysman
-name: PowerGetLimits
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pwrIndex
-      desc: "[in] The index of the power domain (0 ... [$tSysmanPowerGetCount() - 1])."
-    - type: $t_power_sustained_limit_t*
-      name: pSustained
-      desc: "[in][optional] The sustained power limit."
-    - type: $t_power_burst_limit_t*
-      name: pBurst
-      desc: "[in][optional] The burst power limit."
-    - type: $t_power_peak_limit_t*
-      name: pPeak
-      desc: "[in][optional] The peak power limit."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set power limits"
-class: $tSysman
-name: PowerSetLimits
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pwrIndex
-      desc: "[in] The index of the power domain (0 ... [$tSysmanPowerGetCount() - 1])."
-    - type: const $t_power_sustained_limit_t*
-      name: pSustained
-      desc: "[in][optional] The sustained power limit."
-    - type: const $t_power_burst_limit_t*
-      name: pBurst
-      desc: "[in][optional] The burst power limit."
-    - type: const $t_power_peak_limit_t*
-      name: pPeak
-      desc: "[in][optional] The peak power limit."
-
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Frequency domains"
-class: $tSysman
-name: $t_freq_domain_t
-etors:
-    - name: $T_FREQ_DOMAIN_GPU
-      value: "0"
-      desc: "Frequency of the GPU."
-    - name: $T_FREQ_DOMAIN_MEMORY
-      desc: "Frequency of the local memory."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Frequency properties"
-class: $tSysman
-name: $t_freq_properties_t
-details:
-    - "Provides the set of frequencies as a list and as a range/step."
-    - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
-members:
-    - type: $t_freq_domain_t
-      name: "type"
-      desc: "[out] The type of frequency domain (GPU, memory, ...)"
-    - type: $x_bool_t
-      name: "onSubdevice"
-      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
-    - type: $x_bool_t
-      name: canControl
-      desc: "[out] Indicates if software can control the frequency of this domain"
-    - type: $x_bool_t
-      name: canOverclock
-      desc: "[out] Indicates if software can overclock this frequency domain"
-    - type: double
-      name: min
-      desc: "[out] The minimum clock frequency in units of MHz"
-    - type: double
-      name: max
-      desc: "[out] The maximum clock frequency in units of MHz"
-    - type: double
-      name: step
-      desc: "[out] The step clock frequency in units of MHz"
-    - type: uint32_t
-      name: num
-      desc: "[out] The number of clocks in the array pClocks"
-    - type: "const double*"
-      name: "pClocks"
-      desc: "[out] Array of clock frequencies in units of MHz ordered from smallest to largest."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Frequency range between which the hardware can operate."
-class: $tSysman
-name: $t_freq_range_t
-members:
-    - type: double
-      name: "min"
-      desc: "[in,out] The min frequency in MHz below which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
-    - type: double
-      name: "max"
-      desc: "[in,out] The max frequency in MHz above which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Frequency throttle reasons"
-class: $tSysman
-name: $t_freq_throttle_reasons_t
-etors:
-    - name: $T_FREQ_THROTTLE_REASONS_NONE
-      value: "0"
-      desc: "frequency not throttled"
-    - name: $T_FREQ_THROTTLE_REASONS_AVE_PWR_CAP
-      value: "$X_BIT( 0 )"
-      desc: "frequency throttled due to average power excursion (PL1)"
-    - name: $T_FREQ_THROTTLE_REASONS_BURST_PWR_CAP
-      value: "$X_BIT( 1 )"
-      desc: "frequency throttled due to burst power excursion (PL2)"
-    - name: $T_FREQ_THROTTLE_REASONS_CURRENT_LIMIT
-      value: "$X_BIT( 2 )"
-      desc: "frequency throttled due to current excursion (PL4)"
-    - name: $T_FREQ_THROTTLE_REASONS_THERMAL_LIMIT
-      value: "$X_BIT( 3 )"
-      desc: "frequency throttled due to thermal excursion (T > TjMax)"
-    - name: $T_FREQ_THROTTLE_REASONS_PSU_ALERT
-      value: "$X_BIT( 4 )"
-      desc: "frequency throttled due to power supply assertion"
-    - name: $T_FREQ_THROTTLE_REASONS_SW_RANGE
-      value: "$X_BIT( 5 )"
-      desc: "frequency throttled due to software supplied frequency range"
-    - name: $T_FREQ_THROTTLE_REASONS_HW_RANGE
-      value: "$X_BIT( 6 )"
-      desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Frequency state"
-class: $tSysman
-name: $t_freq_state_t
-members:
-    - type: double
-      name: "request"
-      desc: "[out] The current frequency request in MHz."
-    - type: double
-      name: "tdp"
-      desc: "[out] The maximum frequency in MHz supported under the current TDP conditions"
-    - type: double
-      name: "efficient"
-      desc: "[out] The efficient minimum frequency in MHz"
-    - type: double
-      name: "actual"
-      desc: "[out] The resolved frequency in MHz"
-    - type: uint32_t
-      name: "throttleReasons"
-      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of (1<<$t_freq_throttle_reasons_t))."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Frequency throttle time snapshot"
-class: $tSysman
-name: $t_freq_throttle_time_t
-details:
-    - "Percent time throttled is calculated by taking two snapshots (s1, s2) and using the equation: %throttled = (s2.throttleTime - s1.throttleTime) / (s2.timestamp - s1.timestamp)"
-members:
-    - type: uint64_t
-      name: "throttleTime"
-      desc: "[out] The monotonic counter of time in microseconds that the frequency has been limited by the hardware."
-    - type: uint64_t
-      name: "timestamp"
-      desc: |
-            [out] Microsecond timestamp when throttleTime was captured.
-            No assumption should be made about the absolute value of the timestamp.
-            It should only be used to calculate delta time between two snapshots of the same structure.
-            Never take the delta of this timestamp with the timestamp from a different structure.
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the number of frequency domains"
-class: $tSysman
-name: FrequencyGetCount
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
-      name: pCount
-      desc: "[in] The number of frequency domains."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get frequency properties - available frequencies"
-class: $tSysman
-name: FrequencyGetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: freqIndex
-      desc: "[in] The index of the frequency domain (0 ... [$tSysmanFrequencyGetCount() - 1])."
-    - type: $t_freq_properties_t*
-      name: pProperties
-      desc: "[in] The frequency properties for the specified domain."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get current frequency limits"
-class: $tSysman
-name: FrequencyGetRange
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: freqIndex
-      desc: "[in] The index of the frequency domain (0 ... [$tSysmanFrequencyGetCount() - 1])."
-    - type: $t_freq_range_t*
-      name: pLimits
-      desc: "[in] The range between which the hardware can operate for the specified domain."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set frequency range between which the hardware can operate."
-class: $tSysman
-name: FrequencySetRange
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: freqIndex
-      desc: "[in] The index of the frequency domain (0 ... [$tSysmanFrequencyGetCount() - 1])."
-    - type: const $t_freq_range_t*
-      name: pLimits
-      desc: "[in] The limits between which the hardware can operate for the specified domain."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get current frequency state - frequency request, actual frequency, TDP limits"
-class: $tSysman
-name: FrequencyGetState
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: freqIndex
-      desc: "[in] The index of the frequency domain (0 ... [$tSysmanFrequencyGetCount() - 1])."
-    - type: $t_freq_state_t*
-      name: pState
-      desc: "[in] Frequency state for the specified domain."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get frequency throttle time"
-class: $tSysman
-name: FrequencyGetThrottleTime
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: freqIndex
-      desc: "[in] The index of the frequency domain (0 ... [$tSysmanFrequencyGetCount() - 1])."
-    - type: $t_freq_throttle_time_t*
-      name: pThrottleTime
-      desc: "[in] Will contain a snapshot of the throttle time counters for the specified domain."
-
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Accelerator engine groups"
-class: $tSysman
-name: $t_engine_group_t
-etors:
-    - name: $T_ENGINE_GROUP_ALL
-      value: "0"
-      desc: "Access information about all engines combined."
-    - name: $T_ENGINE_GROUP_COMPUTE
-      desc: "Access information about compute engines."
-    - name: $T_ENGINE_GROUP_MEDIA
-      desc: "Access information about media engines."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Engine group properties"
-class: $tSysman
-name: $t_engine_properties_t
-members:
-    - type: $t_engine_group_t
-      name: "type"
-      desc: "[out] The engine group"
-    - type: $x_bool_t
-      name: "onSubdevice"
-      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Engine counters"
-details:
-    - "Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: %util = (s2.activeTime - s1.activeTime) / (s2.timestamp - s1.timestamp)"
-class: $tSysman
-name: $t_engine_stats_t
-members:
-    - type: uint64_t
-      name: "activeTime"
-      desc: "[out] Monotonic counter for time in microseconds that this resource is actively running workloads."
-    - type: uint64_t
-      name: "timestamp"
-      desc: |
-            [out] Monotonic timestamp counter in microseconds when activeTime counter was sampled.
-            No assumption should be made about the absolute value of the timestamp.
-            It should only be used to calculate delta time between two snapshots of the same structure.
-            Never take the delta of this timestamp with the timestamp from a different structure.
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the number of engine groups that can be monitored on this device/sub-device"
-class: $tSysman
-name: EngineGetCount
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
-      name: pCount
-      desc: "[in] The number of engine groups."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get engine group properties"
-class: $tSysman
-name: EngineGetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: engineIndex
-      desc: "[in] The index of the engine group (0 ... [$tSysmanEngineGetCount() - 1])."
-    - type: $t_engine_properties_t*
-      name: pProperties
-      desc: "[in] The properties for the specified engine group."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the activity stats for an engine group"
-class: $tSysman
-name: EngineGetActivity
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: engineIndex
-      desc: "[in] The index of the engine group (0 ... [$tSysmanEngineGetCount() - 1])."
-    - type: $t_engine_stats_t*
-      name: pStats
-      desc: "[in] Will contain a snapshot of the engine group activity counters."
-
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Memory resource types"
-class: $tSysman
-name: $t_mem_type_t
-etors:
-    - name: $T_MEM_TYPE_HBM
-      value: "0"
-      desc: "HBM memory"
-    - name: $T_MEM_TYPE_DDR
-      desc: "DDR memory"
-    - name: $T_MEM_TYPE_SRAM
-      desc: "SRAM memory"
-    - name: $T_MEM_TYPE_L1
-      desc: "L1 cache"
-    - name: $T_MEM_TYPE_L3
-      desc: "L3 cache"
-    - name: $T_MEM_TYPE_GRF
-      desc: "Execution unit register file"
-    - name: $T_MEM_TYPE_SLM
-      desc: "Execution unit shared local memory"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Memory properties"
-class: $tSysman
-name: $t_mem_properties_t
-members:
-    - type: $t_mem_type_t
-      name: type
-      desc: "[out] The memory type"
-    - type: $x_bool_t
-      name: "onSubdevice"
-      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
-    - type: uint64_t
-      name: size
-      desc: "[out] Physical memory size in bytes"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Memory bandwidth"
-class: $tSysman
-name: $t_mem_bandwidth_t
-details:
-    - "Percent bandwidth is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.readCounter - s1.readCounter) + (s2.writeCounter - s1.writeCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
-members:
-    - type: uint64_t
-      name: readCounter
-      desc: "[out] Total bytes read from memory"
-    - type: uint64_t
-      name: writeCounter
-      desc: "[out] Total bytes written to memory"
-    - type: uint64_t
-      name: maxBandwidth
-      desc: "[out] Current maximum bandwidth in units of bytes/sec"
-    - type: uint64_t
-      name: timestamp
-      desc: |
-            [out] The timestamp when these measurements were sampled.
-            No assumption should be made about the absolute value of the timestamp.
-            It should only be used to calculate delta time between two snapshots of the same structure.
-            Never take the delta of this timestamp with the timestamp from a different structure.
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Memory allocation"
-class: $tSysman
-name: $t_mem_alloc_t
-details:
-    - "Percent allocation is given by 100 * allocated / total."
-    - "Percent free is given by 100 * (total - allocated) / total."
-members:
-    - type: uint64_t
-      name: allocated
-      desc: "[out] The total allocated bytes"
-    - type: uint64_t
-      name: total
-      desc: "[out] The total physical memory in bytes"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the number of memory modules that can be monitored on this device/sub-device"
-class: $tSysman
-name: MemoryGetCount
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
-      name: pCount
-      desc: "[in] The number of memory modules."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get memory properties"
-class: $tSysman
-name: MemoryGetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: memIndex
-      desc: "[in] The index of the memory module (0 ... [$tSysmanMemoryGetCount() - 1])."
-    - type: $t_mem_properties_t*
-      name: pProperties
-      desc: "[in] Will contain memory properties."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get memory bandwidth"
-class: $tSysman
-name: MemoryGetBandwidth
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: memIndex
-      desc: "[in] The index of the memory module (0 ... [$tSysmanMemoryGetCount() - 1])."
-    - type: $t_mem_bandwidth_t*
-      name: pBandwidth
-      desc: "[in] Will contain a snapshot of the bandwidth counters."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get memory allocation"
-class: $tSysman
-name: MemoryGetAllocated
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: memIndex
-      desc: "[in] The index of the memory module (0 ... [$tSysmanMemoryGetCount() - 1])."
-    - type: $t_mem_alloc_t*
-      name: pAllocated
-      desc: "[in] Will contain the current allocated memory."
-
---- #--------------------------------------------------------------------------
 type: struct
 desc: "PCI address"
 class: $tSysman
@@ -919,9 +183,9 @@ members:
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: uint32_t
       name: "numBars"
       desc: "[out] The number of configured bars"
@@ -1024,21 +288,6 @@ members:
       desc: "[out] Monotonic counter for the number of packets"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of PCI end-points that can be monitored on this device/sub-device"
-class: $tSysman
-name: PciGetCount
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
-      name: pCount
-      desc: "[in] The number of PCI end-points."
---- #--------------------------------------------------------------------------
-type: function
 desc: "Get PCI properties - address, max speed"
 class: $tSysman
 name: PciGetProperties
@@ -1049,9 +298,6 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pciIndex
-      desc: "[in] The index of the PCI end-point (0 ... [$tSysmanPciGetCount() - 1])."
     - type: $t_pci_properties_t*
       name: pProperties
       desc: "[in] Will contain the PCI properties."
@@ -1067,9 +313,6 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pciIndex
-      desc: "[in] The index of the PCI end-point (0 ... [$tSysmanPciGetCount() - 1])."
     - type: $t_pci_state_t*
       name: pState
       desc: "[in] Will contain the PCI properties."
@@ -1085,9 +328,6 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pciIndex
-      desc: "[in] The index of the PCI end-point (0 ... [$tSysmanPciGetCount() - 1])."
     - type: uint32_t
       name: barIndex
       desc: "[in] The index of the bar (0 ... [$t_pci_properties_t.numBars - 1])."
@@ -1106,9 +346,6 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pciIndex
-      desc: "[in] The index of the PCI end-point (0 ... [$tSysmanPciGetCount() - 1])."
     - type: $t_pci_throughput_t*
       name: pThroughput
       desc: "[in] Will contain a snapshot of the latest throughput counters."
@@ -1124,42 +361,1000 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: pciIndex
-      desc: "[in] The index of the PCI end-point (0 ... [$tSysmanPciGetCount() - 1])."
     - type: $t_pci_stats_t*
       name: pStats
       desc: "[in] Will contain a snapshot of the latest stats."
 
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Power domains"
+class: $tSysmanPower
+name: $t_power_domain_t
+etors:
+    - name: $T_PWR_DOMAIN_TOTAL
+      value: "0"
+      desc: "Measures/controls total power for the device/sub-device."
+--- #--------------------------------------------------------------------------
 type: struct
-desc: "Switch properties"
-class: $tSysman
-name: $t_switch_properties_t
+desc: "Properties related to device power settings"
+class: $tSysmanPower
+name: $t_power_properties_t
+members:
+    - type: $t_power_domain_t
+      name: "type"
+      desc: "[out] The type of power domain"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Software can change the power limits."
+    - type: uint32_t
+      name: "maxLimit"
+      desc: "[out] The maximum power limit in milliwatts that can be requested."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Energy counter snapshot"
+class: $tSysmanPower
+name: $t_power_energy_counter_t
+details:
+    - "Average power is calculated by taking two snapshots (s1, s2) and using the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp - s1.timestamp)"
+members:
+    - type: uint64_t
+      name: "energy"
+      desc: "[out] The monotonic energy counter in microjoules."
+    - type: uint64_t
+      name: "timestamp"
+      desc: |
+            [out] Microsecond timestamp when energy was captured.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Energy threshold"
+class: $tSysmanPower
+name: $t_power_energy_threshold_t
+details:
+    - "Energy threshold value, when this value is crossed, pcu will signal an interrupt."
 members:
     - type: uint32_t
-      name: "numPorts"
-      desc: "[out] The number of ports"
+      name: "energy"
+      desc: "[in,out] The energy threshold in joules."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Sustained power limits"
+class: $tSysmanPower
+name: $t_power_sustained_limit_t
+details:
+    - "The power controller (Punit) will throttle the operating frequency if the power averaged over a window (typically seconds) exceeds this limit."
+members:
+    - type: $x_bool_t
+      name: enabled
+      desc: "[in,out] indicates if the limit is enabled (true) or ignored (false)"
+    - type: uint32_t
+      name: power
+      desc: "[in,out] power limit in milliwatts"
+    - type: uint32_t
+      name: interval
+      desc: "[in,out] power averaging window (Tau) in milliseconds"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Burst power limit"
+class: $tSysmanPower
+name: $t_power_burst_limit_t
+details:
+    - "The power controller (Punit) will throttle the operating frequency of the device if the power averaged over a few milliseconds exceeds a limit known as PL2. Typically PL2 > PL1 so that it permits the frequency to burst higher for short periods than would be otherwise permitted by PL1."
+members:
+    - type: $x_bool_t
+      name: enabled
+      desc: "[in,out] indicates if the limit is enabled (true) or ignored (false)"
+    - type: uint32_t
+      name: power
+      desc: "[in,out] power limit in milliwatts"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Peak power limit"
+class: $tSysmanPower
+name: $t_power_peak_limit_t
+details:
+    - "The power controller (Punit) will preemptively throttle the operating frequency of the device when the instantaneous power exceeds this limit. The limit is known as PL4. It expresses the maximum power that can be drawn from the power supply."
+    - "If this power limit is removed or set too high, the power supply will generate an interrupt when it detects an overcurrent condition and the power controller will throttle the device frequencies down to min. It is thus better to tune the PL4 value in order to avoid such excursions."
+members:
+    - type: uint32_t
+      name: power
+      desc: "[in,out] power limit in milliwatts"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of power domains"
+class: $tSysman
+name: PowerGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_pwr_handle_t*"
+      name: phPower
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get properties related to a power domain"
+class: $tSysmanPower
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $t_power_properties_t*
+      name: pProperties
+      desc: "[in] Structure that will contain property data."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get energy counter"
+class: $tSysmanPower
+name: GetEnergyCounter
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $t_power_energy_counter_t*
+      name: pEnergy
+      desc: "[in] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get energy threshold"
+class: $tSysmanPower
+name: GetEnergyThreshold
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $t_power_energy_threshold_t*
+      name: pThreshold
+      desc: "[out] The current energy threshold value in joules."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set energy threshold"
+class: $tSysmanPower
+name: SetEnergyThreshold
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $t_power_energy_threshold_t*
+      name: pThreshold
+      desc: "[in] The energy threshold to be set in joules."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get power limits"
+class: $tSysmanPower
+name: GetLimits
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $t_power_sustained_limit_t*
+      name: pSustained
+      desc: "[in][optional] The sustained power limit."
+    - type: $t_power_burst_limit_t*
+      name: pBurst
+      desc: "[in][optional] The burst power limit."
+    - type: $t_power_peak_limit_t*
+      name: pPeak
+      desc: "[in][optional] The peak power limit."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set power limits"
+class: $tSysmanPower
+name: SetLimits
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: const $t_power_sustained_limit_t*
+      name: pSustained
+      desc: "[in][optional] The sustained power limit."
+    - type: const $t_power_burst_limit_t*
+      name: pBurst
+      desc: "[in][optional] The burst power limit."
+    - type: const $t_power_peak_limit_t*
+      name: pPeak
+      desc: "[in][optional] The peak power limit."
+
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Frequency domains"
+class: $tSysmanFrequency
+name: $t_freq_domain_t
+etors:
+    - name: $T_FREQ_DOMAIN_GPU
+      value: "0"
+      desc: "Frequency of the GPU."
+    - name: $T_FREQ_DOMAIN_MEMORY
+      desc: "Frequency of the local memory."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency properties"
+class: $tSysmanFrequency
+name: $t_freq_properties_t
+details:
+    - "Provides the set of frequencies as a list and as a range/step."
+    - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
+members:
+    - type: $t_freq_domain_t
+      name: "type"
+      desc: "[out] The type of frequency domain (GPU, memory, ...)"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: canControl
+      desc: "[out] Indicates if software can control the frequency of this domain"
+    - type: $x_bool_t
+      name: canOverclock
+      desc: "[out] Indicates if software can overclock this frequency domain"
+    - type: double
+      name: min
+      desc: "[out] The minimum clock frequency in units of MHz"
+    - type: double
+      name: max
+      desc: "[out] The maximum clock frequency in units of MHz"
+    - type: double
+      name: step
+      desc: "[out] The step clock frequency in units of MHz"
+    - type: uint32_t
+      name: num
+      desc: "[out] The number of clocks in the array pClocks"
+    - type: "const double*"
+      name: "pClocks"
+      desc: "[out] Array of clock frequencies in units of MHz ordered from smallest to largest."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency range between which the hardware can operate."
+class: $tSysmanFrequency
+name: $t_freq_range_t
+members:
+    - type: double
+      name: "min"
+      desc: "[in,out] The min frequency in MHz below which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
+    - type: double
+      name: "max"
+      desc: "[in,out] The max frequency in MHz above which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Frequency throttle reasons"
+class: $tSysmanFrequency
+name: $t_freq_throttle_reasons_t
+etors:
+    - name: $T_FREQ_THROTTLE_REASONS_NONE
+      value: "0"
+      desc: "frequency not throttled"
+    - name: $T_FREQ_THROTTLE_REASONS_AVE_PWR_CAP
+      value: "$X_BIT( 0 )"
+      desc: "frequency throttled due to average power excursion (PL1)"
+    - name: $T_FREQ_THROTTLE_REASONS_BURST_PWR_CAP
+      value: "$X_BIT( 1 )"
+      desc: "frequency throttled due to burst power excursion (PL2)"
+    - name: $T_FREQ_THROTTLE_REASONS_CURRENT_LIMIT
+      value: "$X_BIT( 2 )"
+      desc: "frequency throttled due to current excursion (PL4)"
+    - name: $T_FREQ_THROTTLE_REASONS_THERMAL_LIMIT
+      value: "$X_BIT( 3 )"
+      desc: "frequency throttled due to thermal excursion (T > TjMax)"
+    - name: $T_FREQ_THROTTLE_REASONS_PSU_ALERT
+      value: "$X_BIT( 4 )"
+      desc: "frequency throttled due to power supply assertion"
+    - name: $T_FREQ_THROTTLE_REASONS_SW_RANGE
+      value: "$X_BIT( 5 )"
+      desc: "frequency throttled due to software supplied frequency range"
+    - name: $T_FREQ_THROTTLE_REASONS_HW_RANGE
+      value: "$X_BIT( 6 )"
+      desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency state"
+class: $tSysmanFrequency
+name: $t_freq_state_t
+members:
+    - type: double
+      name: "request"
+      desc: "[out] The current frequency request in MHz."
+    - type: double
+      name: "tdp"
+      desc: "[out] The maximum frequency in MHz supported under the current TDP conditions"
+    - type: double
+      name: "efficient"
+      desc: "[out] The efficient minimum frequency in MHz"
+    - type: double
+      name: "actual"
+      desc: "[out] The resolved frequency in MHz"
+    - type: uint32_t
+      name: "throttleReasons"
+      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of (1<<$t_freq_throttle_reasons_t))."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency throttle time snapshot"
+class: $tSysmanFrequency
+name: $t_freq_throttle_time_t
+details:
+    - "Percent time throttled is calculated by taking two snapshots (s1, s2) and using the equation: %throttled = (s2.throttleTime - s1.throttleTime) / (s2.timestamp - s1.timestamp)"
+members:
+    - type: uint64_t
+      name: "throttleTime"
+      desc: "[out] The monotonic counter of time in microseconds that the frequency has been limited by the hardware."
+    - type: uint64_t
+      name: "timestamp"
+      desc: |
+            [out] Microsecond timestamp when throttleTime was captured.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of frequency domains"
+class: $tSysman
+name: FrequencyGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_freq_handle_t*"
+      name: phFrequency
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get frequency properties - available frequencies"
+class: $tSysmanFrequency
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_freq_properties_t*
+      name: pProperties
+      desc: "[in] The frequency properties for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current frequency limits"
+class: $tSysmanFrequency
+name: GetRange
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_freq_range_t*
+      name: pLimits
+      desc: "[in] The range between which the hardware can operate for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set frequency range between which the hardware can operate."
+class: $tSysmanFrequency
+name: SetRange
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: const $t_freq_range_t*
+      name: pLimits
+      desc: "[in] The limits between which the hardware can operate for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current frequency state - frequency request, actual frequency, TDP limits"
+class: $tSysmanFrequency
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_freq_state_t*
+      name: pState
+      desc: "[in] Frequency state for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get frequency throttle time"
+class: $tSysmanFrequency
+name: GetThrottleTime
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_freq_throttle_time_t*
+      name: pThrottleTime
+      desc: "[in] Will contain a snapshot of the throttle time counters for the specified domain."
+
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Accelerator engine groups"
+class: $tSysmanEngine
+name: $t_engine_group_t
+etors:
+    - name: $T_ENGINE_GROUP_ALL
+      value: "0"
+      desc: "Access information about all engines combined."
+    - name: $T_ENGINE_GROUP_COMPUTE
+      desc: "Access information about compute engines."
+    - name: $T_ENGINE_GROUP_MEDIA
+      desc: "Access information about media engines."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Engine group properties"
+class: $tSysmanEngine
+name: $t_engine_properties_t
+members:
+    - type: $t_engine_group_t
+      name: "type"
+      desc: "[out] The engine group"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Engine activity counters"
+details:
+    - "Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: %util = (s2.activeTime - s1.activeTime) / (s2.timestamp - s1.timestamp)"
+class: $tSysmanEngine
+name: $t_engine_stats_t
+members:
+    - type: uint64_t
+      name: "activeTime"
+      desc: "[out] Monotonic counter for time in microseconds that this resource is actively running workloads."
+    - type: uint64_t
+      name: "timestamp"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when activeTime counter was sampled.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of engine groups"
+class: $tSysman
+name: EngineGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_engine_handle_t*"
+      name: phEngine
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get engine group properties"
+class: $tSysmanEngine
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_engine_handle_t
+      name: hEngine
+      desc: "[in] Handle for the component."
+    - type: $t_engine_properties_t*
+      name: pProperties
+      desc: "[in] The properties for the specified engine group."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the activity stats for an engine group"
+class: $tSysmanEngine
+name: GetActivity
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_engine_handle_t
+      name: hEngine
+      desc: "[in] Handle for the component."
+    - type: $t_engine_stats_t*
+      name: pStats
+      desc: "[in] Will contain a snapshot of the engine group activity counters."
+
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Standby hardware components"
+class: $tSysmanStandby
+name: $t_standby_type_t
+etors:
+    - name: $T_STANDBY_TYPE_GLOBAL
+      value: "0"
+      desc: "Control the overall standby policy of the device/sub-device"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Standby hardware component properties"
+class: $tSysmanStandby
+name: $t_standby_properties_t
+members:
+    - type: $t_standby_type_t
+      name: "type"
+      desc: "[out] Which standby hardware component this controls"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Standby promotion modes"
+class: $tSysmanStandby
+name: $t_standby_promo_mode_t
+etors:
+    - name: $T_STANDBY_PROMO_MODE_DEFAULT
+      value: "0"
+      desc: "Best compromise between performance and energy savings."
+    - name: $T_STANDBY_PROMO_MODE_NEVER
+      desc: "The device/component will never shutdown. This can improve performance but uses more energy."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of standby controls"
+class: $tSysman
+name: StandbyGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_standby_handle_t*"
+      name: phStandby
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get standby hardware component properties"
+class: $tSysmanStandby
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_standby_handle_t
+      name: hStandby
+      desc: "[in] Handle for the component."
+    - type: $t_standby_properties_t*
+      name: pProperties
+      desc: "[in] Will contain the standby hardware properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the current standby promotion mode"
+class: $tSysmanStandby
+name: GetMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_standby_handle_t
+      name: hStandby
+      desc: "[in] Handle for the component."
+    - type: $t_standby_promo_mode_t*
+      name: pMode
+      desc: "[in] Will contain the current standby mode."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set standby promotion mode"
+class: $tSysmanStandby
+name: SetMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_standby_handle_t
+      name: hStandby
+      desc: "[in] Handle for the component."
+    - type: $t_standby_promo_mode_t
+      name: mode
+      desc: "[in] New standby mode."
+
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Firmware properties"
+class: $tSysmanFirmware
+name: $t_firmware_properties_t
+members:
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can flash the firmware"
+    - type: int8_t
+      name: "name[$T_STRING_PROPERTY_SIZE]"
+      desc: "[out] NULL terminated string value"
+    - type: int8_t
+      name: "version[$T_STRING_PROPERTY_SIZE]"
+      desc: "[out] NULL terminated string value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of firmwares"
+class: $tSysman
+name: FirmwareGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_firmware_handle_t*"
+      name: phFirmware
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get firmware properties"
+class: $tSysmanFirmware
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_firmware_handle_t
+      name: hFirmware
+      desc: "[in] Handle for the component."
+    - type: $t_firmware_properties_t*
+      name: pProperties
+      desc: "[in] Pointer to an array that will hold the properties of the firmware"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get firmware checksum"
+class: $tSysmanFirmware
+name: GetChecksum
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_firmware_handle_t
+      name: hFirmware
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: pChecksum
+      desc: "[in] Calculated checksum of the installed firmware."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Flash a new firmware image"
+class: $tSysmanFirmware
+name: Flash
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_firmware_handle_t
+      name: hFirmware
+      desc: "[in] Handle for the component."
+    - type: void*
+      name: pImage
+      desc: "[in] Image of the new firmware to flash."
+    - type: uint32_t
+      name: size
+      desc: "[in] Size of the flash image."
+
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory module types"
+class: $tSysmanMemory
+name: $t_mem_type_t
+etors:
+    - name: $T_MEM_TYPE_HBM
+      value: "0"
+      desc: "HBM memory"
+    - name: $T_MEM_TYPE_DDR
+      desc: "DDR memory"
+    - name: $T_MEM_TYPE_SRAM
+      desc: "SRAM memory"
+    - name: $T_MEM_TYPE_L1
+      desc: "L1 cache"
+    - name: $T_MEM_TYPE_L3
+      desc: "L3 cache"
+    - name: $T_MEM_TYPE_GRF
+      desc: "Execution unit register file"
+    - name: $T_MEM_TYPE_SLM
+      desc: "Execution unit shared local memory"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory properties"
+class: $tSysmanMemory
+name: $t_mem_properties_t
+members:
+    - type: $t_mem_type_t
+      name: type
+      desc: "[out] The memory type"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: uint64_t
+      name: size
+      desc: "[out] Physical memory size in bytes"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory bandwidth"
+class: $tSysmanMemory
+name: $t_mem_bandwidth_t
+details:
+    - "Percent bandwidth is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.readCounter - s1.readCounter) + (s2.writeCounter - s1.writeCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
+members:
+    - type: uint64_t
+      name: readCounter
+      desc: "[out] Total bytes read from memory"
+    - type: uint64_t
+      name: writeCounter
+      desc: "[out] Total bytes written to memory"
+    - type: uint64_t
+      name: maxBandwidth
+      desc: "[out] Current maximum bandwidth in units of bytes/sec"
+    - type: uint64_t
+      name: timestamp
+      desc: |
+            [out] The timestamp when these measurements were sampled.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory allocation"
+class: $tSysmanMemory
+name: $t_mem_alloc_t
+details:
+    - "Percent allocation is given by 100 * allocated / total."
+    - "Percent free is given by 100 * (total - allocated) / total."
+members:
+    - type: uint64_t
+      name: allocated
+      desc: "[out] The total allocated bytes"
+    - type: uint64_t
+      name: total
+      desc: "[out] The total physical memory in bytes"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of memory modules"
+class: $tSysman
+name: MemoryGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_mem_handle_t*"
+      name: phMemory
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory properties"
+class: $tSysmanMemory
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_mem_handle_t
+      name: hMemory
+      desc: "[in] Handle for the component."
+    - type: $t_mem_properties_t*
+      name: pProperties
+      desc: "[in] Will contain memory properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory bandwidth"
+class: $tSysmanMemory
+name: GetBandwidth
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_mem_handle_t
+      name: hMemory
+      desc: "[in] Handle for the component."
+    - type: $t_mem_bandwidth_t*
+      name: pBandwidth
+      desc: "[in] Will contain a snapshot of the bandwidth counters."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory allocation"
+class: $tSysmanMemory
+name: GetAllocated
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_mem_handle_t
+      name: hMemory
+      desc: "[in] Handle for the component."
+    - type: $t_mem_alloc_t*
+      name: pAllocated
+      desc: "[in] Will contain the current allocated memory."
+
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Connectivity switch properties"
+class: $tSysmanLinkSwitch
+name: $t_link_switch_properties_t
+members:
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if the switch is located on a sub-device; false means that the switch is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Switch state"
-class: $tSysman
-name: $t_switch_state_t
+desc: "Connectivity switch state"
+class: $tSysmanLinkSwitch
+name: $t_link_switch_state_t
 members:
     - type: $x_bool_t
       name: "enabled"
       desc: "[out] Indicates if the switch is enabled/disabled"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Switch port speed"
+type: function
+desc: "Get handle of connectivity switches"
 class: $tSysman
-name: $t_switch_port_speed_t
+name: LinkSwitchGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_link_switch_handle_t*"
+      name: phSwitch
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get connectivity switch properties"
+class: $tSysmanLinkSwitch
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_link_switch_handle_t
+      name: hSwitch
+      desc: "[in] Handle for the component."
+    - type: $t_link_switch_properties_t*
+      name: pProperties
+      desc: "[in] Will contain the Switch properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get connectivity switch state"
+class: $tSysmanLinkSwitch
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_link_switch_handle_t
+      name: hSwitch
+      desc: "[in] Handle for the component."
+    - type: $t_link_switch_state_t*
+      name: pState
+      desc: "[in] Will contain the current state of the switch (enabled/disabled)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set connectivity switch state"
+class: $tSysmanLinkSwitch
+name: SetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_link_switch_handle_t
+      name: hSwitch
+      desc: "[in] Handle for the component."
+    - type: $x_bool_t
+      name: enable
+      desc: "[in] Set to true to enable the Switch, otherwise it will be disabled."
+
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Connectivity port speed"
+class: $tSysmanLinkPort
+name: $t_link_port_speed_t
 members:
     - type: uint32_t
       name: "bitRate"
@@ -1172,42 +1367,36 @@ members:
       desc: "[out] The maximum bandwidth in bytes/sec"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Switch Port properties"
-class: $tSysman
-name: $t_switch_port_properties_t
+desc: "Connectivity port properties"
+class: $tSysmanLinkPort
+name: $t_link_port_properties_t
 members:
-    - type: $t_switch_port_speed_t
+    - type: uint32_t
+      name: "portNum"
+      desc: "[out] The port number on the switch"
+    - type: $t_link_port_speed_t
       name: "maxSpeed"
       desc: "[out] Maximum bandwidth supported by the port"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Switch Port state"
-class: $tSysman
-name: $t_switch_port_state_t
+desc: "Connectivity port state"
+class: $tSysmanLinkPort
+name: $t_link_port_state_t
 members:
     - type: $x_bool_t
       name: "isConnected"
       desc: "[out] Indicates if the port is connected to a remote Switch"
-    - type: $x_device_uuid_t
-      name: "remoteDeviceUuid"
-      desc: "[out] If connected is true, this gives the device UUID where the port connects"
-    - type: uint32_t
-      name: "remoteDeviceSwitchIndex"
-      desc: "[out] If connected is true, this gives the switch index on the remote device where the port connects"
-    - type: uint32_t
-      name: "remoteSwitchPortIndex"
-      desc: "[out] If connected is true, this gives the port index on the remote switch"
-    - type: $t_switch_port_speed_t
+    - type: $t_link_port_speed_t
       name: "rxSpeed"
       desc: "[out] Current maximum receive speed"
-    - type: $t_switch_port_speed_t
+    - type: $t_link_port_speed_t
       name: "txSpeed"
       desc: "[out] Current maximum transmit speed"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Switch Port throughput"
-class: $tSysman
-name: $t_switch_port_throughput_t
+desc: "Connectivity port throughput"
+class: $tSysmanLinkPort
+name: $t_link_port_throughput_t
 details:
     - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation:"
     - "    %rx_bandwidth = 10^6 * (s2.rxCounter - s1.rxCounter) / (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))"
@@ -1234,9 +1423,9 @@ members:
       desc: "[out] The current maximum bandwidth in bytes/sec for transmitting packets"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Switch Port stats counters"
-class: $tSysman
-name: $t_switch_port_stats_t
+desc: "Connectivity port stats counters"
+class: $tSysmanLinkPort
+name: $t_link_port_stats_t
 details:
     - "Percent replays is calculated by taking two snapshots (s1, s2) and using the equation: %replay = 10^6 * (s2.replayCounter - s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
 members:
@@ -1255,162 +1444,109 @@ members:
       desc: "[out] Monotonic counter for the number of packets"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of high-speed switches that can be monitored on this device/sub-device"
-class: $tSysman
-name: SwitchGetCount
+desc: "Get handle of connectivity ports in a switch"
+class: $tSysmanLinkSwitch
+name: GetPorts
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
+    - type: $t_sysman_link_switch_handle_t
+      name: hSysmanLinkSwitch
+      desc: "[in] SMI handle of the connectivity switch."
+    - type: "uint32_t*"
       name: pCount
-      desc: "[in] The number of high-speed switches."
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_link_port_handle_t*"
+      name: phPort
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get Switch properties"
-class: $tSysman
-name: SwitchGetProperties
+desc: "Get connectivity port properties"
+class: $tSysmanLinkPort
+name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: switchIndex
-      desc: "[in] The index of the switch (0 ... [$tSysmanSwitchGetCount() - 1])."
-    - type: $t_switch_properties_t*
-      name: pProperties
-      desc: "[in] Will contain the Switch properties."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get Switch state"
-class: $tSysman
-name: SwitchGetState
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: switchIndex
-      desc: "[in] The index of the switch (0 ... [$tSysmanSwitchGetCount() - 1])."
-    - type: $t_switch_state_t*
-      name: pState
-      desc: "[in] Will contain the current state of the switch (enabled/disabled)."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set Switch state"
-class: $tSysman
-name: SwitchSetState
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: switchIndex
-      desc: "[in] The index of the switch (0 ... [$tSysmanSwitchGetCount() - 1])."
-    - type: $x_bool_t
-      name: enable
-      desc: "[in] Set to true to enable the Switch, otherwise it will be disabled."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get Switch Port properties"
-class: $tSysman
-name: SwitchPortGetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: switchIndex
-      desc: "[in] The index of the switch (0 ... [$tSysmanSwitchGetCount() - 1])."
-    - type: uint32_t
-      name: portIndex
-      desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
-    - type: $t_switch_port_properties_t*
+    - type: $t_sysman_link_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $t_link_port_properties_t*
       name: pProperties
       desc: "[in] Will contain properties of the Switch Port"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get Switch Port state"
-class: $tSysman
-name: SwitchPortGetState
+desc: "Get connectivity port state"
+class: $tSysmanLinkPort
+name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: switchIndex
-      desc: "[in] The index of the switch (0 ... [$tSysmanSwitchGetCount() - 1])."
-    - type: uint32_t
-      name: portIndex
-      desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
-    - type: $t_switch_port_state_t*
+    - type: $t_sysman_link_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $t_link_port_state_t*
       name: pState
       desc: "[in] Will contain the current state of the Switch Port"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get Switch Port throughput"
-class: $tSysman
-name: SwitchPortGetThroughput
+desc: "Get connectivity port throughput"
+class: $tSysmanLinkPort
+name: GetThroughput
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: switchIndex
-      desc: "[in] The index of the switch (0 ... [$tSysmanSwitchGetCount() - 1])."
-    - type: uint32_t
-      name: portIndex
-      desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
-    - type: $t_switch_port_throughput_t*
+    - type: $t_sysman_link_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $t_link_port_throughput_t*
       name: pThroughput
       desc: "[in] Will contain the Switch port throughput counters."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get Switch Port stats"
-class: $tSysman
-name: SwitchPortGetStats
+desc: "Get connectivity port stats"
+class: $tSysmanLinkPort
+name: GetStats
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: switchIndex
-      desc: "[in] The index of the switch (0 ... [$tSysmanSwitchGetCount() - 1])."
-    - type: uint32_t
-      name: portIndex
-      desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
-    - type: $t_switch_port_stats_t*
+    - type: $t_sysman_link_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $t_link_port_stats_t*
       name: pStats
       desc: "[in] Will contain the Switch port stats."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Check if two connectivity ports are physically connected"
+class: $tSysmanLinkPort
+name: IsConnected
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_link_port_handle_t
+      name: hPort
+      desc: "[in] Handle of the local connectivity port."
+    - type: $t_sysman_link_port_handle_t
+      name: hRemotePort
+      desc: "[in] Handle of the remote connectivity port."
+    - type: $x_bool_t*
+      name: pConnected
+      desc: "[in] Will indicate connected to the remote port."
 
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Temperature sensors"
-class: $tSysman
+class: $tSysmanTemperature
 name: $t_temp_sensors_t
 etors:
     - name: $T_TEMP_SENSORS_GLOBAL
@@ -1423,7 +1559,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor properties"
-class: $tSysman
+class: $tSysmanTemperature
 name: $t_temp_properties_t
 members:
     - type: $t_temp_sensors_t
@@ -1432,45 +1568,12 @@ members:
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the number of temperature sensors that can be monitored on this device/sub-device"
-class: $tSysman
-name: TemperatureGetCount
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
-      name: pCount
-      desc: "[in] The number of temperature sensors."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get temperature sensor properties"
-class: $tSysman
-name: TemperatureGetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: tempIndex
-      desc: "[in] The index of the temperature sensor (0 ... [$tSysmanTemperatureGetCount() - 1])."
-    - type: $t_temp_properties_t*
-      name: pProperties
-      desc: "[in] Will contain the temperature sensor properties."
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the temperature from a specified sensor"
+desc: "Get handle of temperature sensors"
 class: $tSysman
 name: TemperatureGet
 details:
@@ -1480,216 +1583,51 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: tempIndex
-      desc: "[in] The index of the temperature sensor (0 ... [$tSysmanTemperatureGetCount() - 1])."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_temp_handle_t*"
+      name: phTemperature
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get temperature sensor properties"
+class: $tSysmanTemperature
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_temp_handle_t
+      name: hTemperature
+      desc: "[in] Handle for the component."
+    - type: $t_temp_properties_t*
+      name: pProperties
+      desc: "[in] Will contain the temperature sensor properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the temperature from a specified sensor"
+class: $tSysmanTemperature
+name: Read
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_temp_handle_t
+      name: hTemperature
+      desc: "[in] Handle for the component."
     - type: uint32_t*
       name: pTemperature
       desc: "[in] Will contain the temperature read from the specified sensor."
 
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Standby hardware components"
-class: $tSysman
-name: $t_stby_type_t
-etors:
-    - name: $T_STBY_TYPE_GLOBAL
-      value: "0"
-      desc: "Control the overall standby policy of the device/sub-device"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Standby hardware component properties"
-class: $tSysman
-name: $t_stby_properties_t
-members:
-    - type: $t_stby_type_t
-      name: "type"
-      desc: "[out] Which standby hardware component this controls"
-    - type: $x_bool_t
-      name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Standby promotion modes"
-class: $tSysman
-name: $t_stby_promo_mode_t
-etors:
-    - name: $T_STBY_PROMO_MODE_DEFAULT
-      value: "0"
-      desc: "Best compromise between performance and energy savings."
-    - name: $T_STBY_PROMO_MODE_NEVER
-      desc: "The device/component will never shutdown. This can improve performance but uses more energy."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the number of standby hardware components that can be controlled on this device/sub-device"
-class: $tSysman
-name: StandbyGetCount
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
-      name: pCount
-      desc: "[in] The number of standby hardware components."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get standby hardware component properties"
-class: $tSysman
-name: StandbyGetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: stbyIndex
-      desc: "[in] The index of the standby hardware component (0 ... [$tSysmanStandbyGetCount() - 1])."
-    - type: $t_stby_properties_t*
-      name: pProperties
-      desc: "[in] Will contain the standby hardware properties."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the current standby promotion mode"
-class: $tSysman
-name: StandbyGetMode
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: stbyIndex
-      desc: "[in] The index of the standby hardware component (0 ... [$tSysmanStandbyGetCount() - 1])."
-    - type: $t_stby_promo_mode_t*
-      name: pMode
-      desc: "[in] Will contain the current standby mode."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set standby promotion mode"
-class: $tSysman
-name: StandbySetMode
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: stbyIndex
-      desc: "[in] The index of the standby hardware component (0 ... [$tSysmanStandbyGetCount() - 1])."
-    - type: $t_stby_promo_mode_t
-      name: mode
-      desc: "[in] New standby mode."
-
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Firmware properties"
-class: $tSysman
-name: $t_firmware_properties_t
-members:
-    - type: $x_bool_t
-      name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
-    - type: $x_bool_t
-      name: "canControl"
-      desc: "[out] Indicates if software can flash the firmware"
-    - type: int8_t
-      name: "name[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
-    - type: int8_t
-      name: "version[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the number of firmwares on this device/sub-device"
-class: $tSysman
-name: FirmwareGetCount
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
-      name: pCount
-      desc: "[in] The number of firmwares."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get firmware properties"
-class: $tSysman
-name: FirmwareGetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: firmwareIndex
-      desc: "[in] The index of the firmware (0 ... [$tSysmanFirmwareGetCount() - 1])."
-    - type: $t_firmware_properties_t*
-      name: pProperties
-      desc: "[in] Pointer to an array that will hold the properties of the firmware"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get firmware checksum"
-class: $tSysman
-name: FirmwareGetChecksum
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: firmwareIndex
-      desc: "[in] The index of the firmware (0 ... [$tSysmanFirmwareGetCount() - 1])."
-    - type: uint32_t*
-      name: pChecksum
-      desc: "[in] Calculated checksum of the installed firmware."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Flash a new firmware image"
-class: $tSysman
-name: FirmwareFlash
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: firmwareIndex
-      desc: "[in] The index of the firmware (0 ... [$tSysmanFirmwareGetCount() - 1])."
-    - type: void*
-      name: pImage
-      desc: "[in] Image of the new firmware to flash."
-    - type: uint32_t
-      name: size
-      desc: "[in] Size of the flash image."
-
---- #--------------------------------------------------------------------------
-type: enum
 desc: "PSU voltage status"
-class: $tSysman
+class: $tSysmanPsu
 name: $t_psu_voltage_status_t
 etors:
     - name: $T_PSU_VOLTAGE_STATUS_NORMAL
@@ -1702,15 +1640,15 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Static properties of the power supply"
-class: $tSysman
+class: $tSysmanPsu
 name: $t_psu_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "canControl"
       desc: "[out] Indicates if software can control the PSU"
@@ -1723,7 +1661,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Dynamic state of the power supply"
-class: $tSysman
+class: $tSysmanPsu
 name: $t_psu_state_t
 members:
     - type: $t_psu_voltage_status_t
@@ -1740,9 +1678,9 @@ members:
       desc: "[out] The amps being drawn in amperes"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of PSU attached this device/sub-device"
+desc: "Get handle of power supplies"
 class: $tSysman
-name: PsuGetCount
+name: PsuGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1750,42 +1688,43 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t*
+    - type: "uint32_t*"
       name: pCount
-      desc: "[in] The number of PSUs."
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_psu_handle_t*"
+      name: phPsu
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get power supply properties"
-class: $tSysman
-name: PsuGetProperties
+class: $tSysmanPsu
+name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: psuIndex
-      desc: "[in] The index of the power supply (0 ... [$tSysmanPsuGetCount() - 1])."
+    - type: $t_sysman_psu_handle_t
+      name: hPsu
+      desc: "[in] Handle for the component."
     - type: $t_psu_properties_t*
       name: pProperties
       desc: "[in] Will contain the properties of the power supply."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current power supply state"
-class: $tSysman
-name: PsuGetState
+class: $tSysmanPsu
+name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: psuIndex
-      desc: "[in] The index of the power supply (0 ... [$tSysmanPsuGetCount() - 1])."
+    - type: $t_sysman_psu_handle_t
+      name: hPsu
+      desc: "[in] Handle for the component."
     - type: $t_psu_state_t*
       name: pState
       desc: "[in] Will contain the current state of the power supply."
@@ -1793,7 +1732,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fan resource speed mode"
-class: $tSysman
+class: $tSysmanFan
 name: $t_fan_speed_mode_t
 etors:
     - name: $T_FAN_SPEED_MODE_DEFAULT
@@ -1806,7 +1745,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fan speed units"
-class: $tSysman
+class: $tSysmanFan
 name: $t_fan_speed_units_t
 etors:
     - name: $T_FAN_SPEED_UNITS_RPM
@@ -1817,7 +1756,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan temperature/speed pair"
-class: $tSysman
+class: $tSysmanFan
 name: $t_fan_temp_speed_t
 members:
     - type: uint32_t
@@ -1837,15 +1776,15 @@ value: "32"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan properties"
-class: $tSysman
+class: $tSysmanFan
 name: $t_fan_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "canControl"
       desc: "[out] Indicates if software can control the fan speed"
@@ -1858,7 +1797,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan configuration"
-class: $tSysman
+class: $tSysmanFan
 name: $t_fan_config_t
 members:
     - type: $t_fan_speed_mode_t
@@ -1879,7 +1818,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan state"
-class: $tSysman
+class: $tSysmanFan
 name: $t_fan_state_t
 members:
     - type: $t_fan_speed_mode_t
@@ -1893,9 +1832,9 @@ members:
       desc: "[out] The current fan speed"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of fans attached this device/sub-device"
+desc: "Get handle of fans"
 class: $tSysman
-name: FanGetCount
+name: FanGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1903,78 +1842,73 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t*
+    - type: "uint32_t*"
       name: pCount
-      desc: "[in] The number of fans."
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_fan_handle_t*"
+      name: phFan
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get fan properties"
-class: $tSysman
-name: FanGetProperties
+class: $tSysmanFan
+name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: fanIndex
-      desc: "[in] The index of the fan (0 ... [$tSysmanFanGetCount() - 1])."
+    - type: $t_sysman_fan_handle_t
+      name: hFan
+      desc: "[in] Handle for the component."
     - type: $t_fan_properties_t*
       name: pProperties
       desc: "[in] Will contain the properties of the fan."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current fan configuration"
-class: $tSysman
-name: FanGetConfig
+class: $tSysmanFan
+name: GetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: fanIndex
-      desc: "[in] The index of the fan (0 ... [$tSysmanFanGetCount() - 1])."
+    - type: $t_sysman_fan_handle_t
+      name: hFan
+      desc: "[in] Handle for the component."
     - type: $t_fan_config_t*
       name: pConfig
       desc: "[in] Will contain the current configuration of the fan."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set fan configuration"
-class: $tSysman
-name: FanSetConfig
+class: $tSysmanFan
+name: SetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: fanIndex
-      desc: "[in] The index of the fan (0 ... [$tSysmanFanGetCount() - 1])."
+    - type: $t_sysman_fan_handle_t
+      name: hFan
+      desc: "[in] Handle for the component."
     - type: const $t_fan_config_t*
       name: pConfig
       desc: "[in] New fan configuration."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current state of a fan - current mode and speed"
-class: $tSysman
-name: FanGetState
+class: $tSysmanFan
+name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: fanIndex
-      desc: "[in] The index of the fan (0 ... [$tSysmanFanGetCount() - 1])."
+    - type: $t_sysman_fan_handle_t
+      name: hFan
+      desc: "[in] Handle for the component."
     - type: $t_fan_speed_units_t
       name: units
       desc: "[in] The units in which the fan speed should be returned."
@@ -1985,15 +1919,15 @@ params:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "LED properties"
-class: $tSysman
+class: $tSysmanLed
 name: $t_led_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "canControl"
       desc: "[out] Indicates if software can control the LED"
@@ -2003,7 +1937,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "LED state"
-class: $tSysman
+class: $tSysmanLed
 name: $t_led_state_t
 members:
     - type: $x_bool_t
@@ -2020,9 +1954,9 @@ members:
       desc: "[in,out][range(0, 255)] The LED blue value"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of PSU attached this device/sub-device"
+desc: "Get handle of LEDs"
 class: $tSysman
-name: LedGetCount
+name: LedGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -2030,60 +1964,58 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t*
+    - type: "uint32_t*"
       name: pCount
-      desc: "[in] The number of LEDs."
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_led_handle_t*"
+      name: phLed
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get LED properties"
-class: $tSysman
-name: LedGetProperties
+class: $tSysmanLed
+name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: ledIndex
-      desc: "[in] The index of the LED (0 ... [$tSysmanLedGetCount() - 1])."
+    - type: $t_sysman_led_handle_t
+      name: hLed
+      desc: "[in] Handle for the component."
     - type: $t_led_properties_t*
       name: pProperties
       desc: "[in] Will contain the properties of the LED."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current state of a LED - on/off, color"
-class: $tSysman
-name: LedGetState
+class: $tSysmanLed
+name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: ledIndex
-      desc: "[in] The index of the LED (0 ... [$tSysmanLedGetCount() - 1])."
+    - type: $t_sysman_led_handle_t
+      name: hLed
+      desc: "[in] Handle for the component."
     - type: $t_led_state_t*
       name: pState
       desc: "[in] Will contain the current state of the LED."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set state of a LED - on/off, color"
-class: $tSysman
-name: LedSetState
+class: $tSysmanLed
+name: SetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: ledIndex
-      desc: "[in] The index of the LED (0 ... [$tSysmanLedGetCount() - 1])."
+    - type: $t_sysman_led_handle_t
+      name: hLed
+      desc: "[in] Handle for the component."
     - type: const $t_led_state_t*
       name: pState
       desc: "[in] New state of the LED."
@@ -2091,7 +2023,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "RAS error type"
-class: $tSysman
+class: $tSysmanRas
 name: $t_ras_error_type_t
 etors:
     - name: $T_RAS_ERROR_TYPE_CORRECTABLE
@@ -2102,7 +2034,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "RAS properties"
-class: $tSysman
+class: $tSysmanRas
 name: $t_ras_properties_t
 members:
     - type: $t_ras_error_type_t
@@ -2111,9 +2043,9 @@ members:
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "supported"
       desc: "[out] True if RAS is supported on this device"
@@ -2123,7 +2055,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "RAS error details"
-class: $tSysman
+class: $tSysmanRas
 name: $t_ras_details_t
 members:
     - type: uint64_t
@@ -2158,9 +2090,9 @@ members:
       desc: "[out] The number of errors that have occurred in the display"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of RAS error sets on this device/sub-device"
+desc: "Get handle of RAS error sets"
 class: $tSysman
-name: RasGetCount
+name: RasGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -2168,44 +2100,45 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t*
+    - type: "uint32_t*"
       name: pCount
-      desc: "[in] The number of RAS errors sets."
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_ras_handle_t*"
+      name: phRas
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get RAS properties of the device"
-class: $tSysman
-name: RasGetProperties
+class: $tSysmanRas
+name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] Handle of the SMI object"
-    - type: uint32_t
-      name: rasIndex
-      desc: "[in] The index of the RAS error set (0 ... [$tSysmanRasGetCount() - 1])."
+    - type: $t_sysman_ras_handle_t
+      name: hRas
+      desc: "[in] Handle for the component."
     - type: $t_ras_properties_t*
       name: pProperties
       desc: "[in] Structure describing RAS properties"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the number of errors of a given RAS error set"
-class: $tSysman
-name: RasGetErrors
+class: $tSysmanRas
+name: GetErrors
 details:
     - "Clearing errors will affect other threads/applications - the counter values will start from zero."
     - "Clearing errors requires write permissions."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] Handle of the SMI object"
-    - type: uint32_t
-      name: rasIndex
-      desc: "[in] The index of the RAS error set (0 ... [$tSysmanRasGetCount() - 1])."
+    - type: $t_sysman_ras_handle_t
+      name: hRas
+      desc: "[in] Handle for the component."
     - type: $x_bool_t
       name: clear
       desc: "[in] Set to 1 to clear the counters of this type"
@@ -2344,8 +2277,8 @@ params:
 
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Diagnostic type"
-class: $tSysman
+desc: "Diagnostic test suite type"
+class: $tSysmanDiagnostics
 name: $t_diag_type_t
 etors:
     - name: $T_DIAG_TYPE_SCAN
@@ -2356,7 +2289,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Diagnostic results"
-class: $tSysman
+class: $tSysmanDiagnostics
 name: $t_diag_result_t
 etors:
     - name: $T_DIAG_RESULT_NO_ERRORS
@@ -2381,7 +2314,7 @@ value: "0xFFFFFFFF"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Diagnostic test"
-class: $tSysman
+class: $tSysmanDiagnostics
 name: $t_diag_test_t
 members:
     - type: uint32_t
@@ -2393,7 +2326,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Diagnostics test suite properties"
-class: $tSysman
+class: $tSysmanDiagnostics
 name: $t_diag_properties_t
 members:
     - type: $t_diag_type_t
@@ -2402,9 +2335,9 @@ members:
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: $x_device_uuid_t
-      name: "subdeviceUuid"
-      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: const char*
       name: "name"
       desc: "[out] Name of the diagnostics test suite"
@@ -2416,9 +2349,9 @@ members:
       desc: "[out] Array of tests (size $t_diag_properties_t.numTests), sorted by increasing value of $t_diag_test_t.index"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of diagnostic test suites that can be run on this device/sub-device"
+desc: "Get handle of diagnostics test suites"
 class: $tSysman
-name: DiagnosticsGetCount
+name: DiagnosticsGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -2426,41 +2359,42 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t*
+    - type: "uint32_t*"
       name: pCount
-      desc: "[in] The number of diagnostic test suites."
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_diag_handle_t*"
+      name: phDiagnostics
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties of a diagnostics test suite"
-class: $tSysman
-name: DiagnosticsGetProperties
+class: $tSysmanDiagnostics
+name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] Handle of the SMI object"
-    - type: uint32_t
-      name: testIndex
-      desc: "[in] The index of a diagnostics test (0 ... [$tSysmanDiagnosticsGetCount() - 1])."
+    - type: $t_sysman_diag_handle_t
+      name: hDiagnostics
+      desc: "[in] Handle for the component."
     - type: $t_diag_properties_t*
       name: pProperties
       desc: "[in] Structure describing the properties of a diagnostics test suite"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Run a diagnostics test suite, either all tests or a subset of tests."
-class: $tSysman
-name: DiagnosticsRunTests
+class: $tSysmanDiagnostics
+name: RunTests
 details:
     - "This function will block until the diagnostics have completed."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle for the device"
-    - type: uint32_t
-      name: testIndex
-      desc: "[in] The index of a diagnostics test (0 ... [$tSysmanDiagnosticsGetCount() - 1])."
+    - type: $t_sysman_diag_handle_t
+      name: hDiagnostics
+      desc: "[in] Handle for the component."
     - type: uint32_t
       name: start
       desc: "[in] The index of the first test to run. Set to $T_DIAG_FIRST_TEST_INDEX to start from the beginning."
@@ -2473,7 +2407,7 @@ params:
 
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for SMI of a device"
+desc: "C++ wrapper for a SMI device"
 name: $tSysman
 owner: $tDevice
 members:
@@ -2483,4 +2417,186 @@ members:
       init: nullptr
     - type: $tDevice*
       name: pDevice
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device power domain"
+name: $tSysmanPower
+owner: $tSysman
+members:
+    - type: $t_sysman_pwr_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device frequency domain"
+name: $tSysmanFrequency
+owner: $tSysman
+members:
+    - type: $t_sysman_freq_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device engine group"
+name: $tSysmanEngine
+owner: $tSysman
+members:
+    - type: $t_sysman_engine_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI standby control"
+name: $tSysmanStandby
+owner: $tSysman
+members:
+    - type: $t_sysman_standby_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device firmware"
+name: $tSysmanFirmware
+owner: $tSysman
+members:
+    - type: $t_sysman_firmware_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device memory module"
+name: $tSysmanMemory
+owner: $tSysman
+members:
+    - type: $t_sysman_mem_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device connectivity switch"
+name: $tSysmanLinkSwitch
+owner: $tSysman
+members:
+    - type: $t_sysman_link_switch_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device connectivity port"
+name: $tSysmanLinkPort
+owner: $tSysmanLinkSwitch
+members:
+    - type: $t_sysman_link_port_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysmanLinkSwitch*
+      name: pSysmanLinkSwitch
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device temperature sensor"
+name: $tSysmanTemperature
+owner: $tSysman
+members:
+    - type: $t_sysman_temp_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device power supply"
+name: $tSysmanPsu
+owner: $tSysman
+members:
+    - type: $t_sysman_psu_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device fan"
+name: $tSysmanFan
+owner: $tSysman
+members:
+    - type: $t_sysman_fan_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device LED"
+name: $tSysmanLed
+owner: $tSysman
+members:
+    - type: $t_sysman_led_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device RAS error set"
+name: $tSysmanRas
+owner: $tSysman
+members:
+    - type: $t_sysman_ras_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device diagnostic test suite"
+name: $tSysmanDiagnostics
+owner: $tSysman
+members:
+    - type: $t_sysman_diag_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
       desc: "[in] pointer to owner object"

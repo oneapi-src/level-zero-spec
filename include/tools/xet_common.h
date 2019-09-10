@@ -71,8 +71,64 @@ typedef struct _xet_metric_query_handle_t *xet_metric_query_handle_t;
 typedef struct _xet_tracer_handle_t *xet_tracer_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for accessing System Resource Management features
+/// @brief Handle for accessing System Resource Management features of a device
 typedef struct _xet_sysman_handle_t *xet_sysman_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device power domain
+typedef struct _xet_sysman_pwr_handle_t *xet_sysman_pwr_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device frequency domain
+typedef struct _xet_sysman_freq_handle_t *xet_sysman_freq_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device engine group
+typedef struct _xet_sysman_engine_handle_t *xet_sysman_engine_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device standby control
+typedef struct _xet_sysman_standby_handle_t *xet_sysman_standby_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device firmware
+typedef struct _xet_sysman_firmware_handle_t *xet_sysman_firmware_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device memory module
+typedef struct _xet_sysman_mem_handle_t *xet_sysman_mem_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device connectivity switch
+typedef struct _xet_sysman_link_switch_handle_t *xet_sysman_link_switch_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device connectivity port
+typedef struct _xet_sysman_link_port_handle_t *xet_sysman_link_port_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device temperature sensor
+typedef struct _xet_sysman_temp_handle_t *xet_sysman_temp_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device power supply
+typedef struct _xet_sysman_psu_handle_t *xet_sysman_psu_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device fan
+typedef struct _xet_sysman_fan_handle_t *xet_sysman_fan_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device LED
+typedef struct _xet_sysman_led_handle_t *xet_sysman_led_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device RAS error set
+typedef struct _xet_sysman_ras_handle_t *xet_sysman_ras_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device diagnostics test suite
+typedef struct _xet_sysman_diag_handle_t *xet_sysman_diag_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_metric_group_properties_t
@@ -109,6 +165,34 @@ typedef struct _xet_profile_register_sequence_t xet_profile_register_sequence_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_sysman_properties_t
 typedef struct _xet_sysman_properties_t xet_sysman_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_pci_address_t
+typedef struct _xet_pci_address_t xet_pci_address_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_pci_speed_t
+typedef struct _xet_pci_speed_t xet_pci_speed_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_pci_properties_t
+typedef struct _xet_pci_properties_t xet_pci_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_pci_state_t
+typedef struct _xet_pci_state_t xet_pci_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_pci_bar_properties_t
+typedef struct _xet_pci_bar_properties_t xet_pci_bar_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_pci_throughput_t
+typedef struct _xet_pci_throughput_t xet_pci_throughput_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_pci_stats_t
+typedef struct _xet_pci_stats_t xet_pci_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_power_properties_t
@@ -159,6 +243,14 @@ typedef struct _xet_engine_properties_t xet_engine_properties_t;
 typedef struct _xet_engine_stats_t xet_engine_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_standby_properties_t
+typedef struct _xet_standby_properties_t xet_standby_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_firmware_properties_t
+typedef struct _xet_firmware_properties_t xet_firmware_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_mem_properties_t
 typedef struct _xet_mem_properties_t xet_mem_properties_t;
 
@@ -171,72 +263,36 @@ typedef struct _xet_mem_bandwidth_t xet_mem_bandwidth_t;
 typedef struct _xet_mem_alloc_t xet_mem_alloc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_pci_address_t
-typedef struct _xet_pci_address_t xet_pci_address_t;
+/// @brief Forward-declare xet_link_switch_properties_t
+typedef struct _xet_link_switch_properties_t xet_link_switch_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_pci_speed_t
-typedef struct _xet_pci_speed_t xet_pci_speed_t;
+/// @brief Forward-declare xet_link_switch_state_t
+typedef struct _xet_link_switch_state_t xet_link_switch_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_pci_properties_t
-typedef struct _xet_pci_properties_t xet_pci_properties_t;
+/// @brief Forward-declare xet_link_port_speed_t
+typedef struct _xet_link_port_speed_t xet_link_port_speed_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_pci_state_t
-typedef struct _xet_pci_state_t xet_pci_state_t;
+/// @brief Forward-declare xet_link_port_properties_t
+typedef struct _xet_link_port_properties_t xet_link_port_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_pci_bar_properties_t
-typedef struct _xet_pci_bar_properties_t xet_pci_bar_properties_t;
+/// @brief Forward-declare xet_link_port_state_t
+typedef struct _xet_link_port_state_t xet_link_port_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_pci_throughput_t
-typedef struct _xet_pci_throughput_t xet_pci_throughput_t;
+/// @brief Forward-declare xet_link_port_throughput_t
+typedef struct _xet_link_port_throughput_t xet_link_port_throughput_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_pci_stats_t
-typedef struct _xet_pci_stats_t xet_pci_stats_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_switch_properties_t
-typedef struct _xet_switch_properties_t xet_switch_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_switch_state_t
-typedef struct _xet_switch_state_t xet_switch_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_switch_port_speed_t
-typedef struct _xet_switch_port_speed_t xet_switch_port_speed_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_switch_port_properties_t
-typedef struct _xet_switch_port_properties_t xet_switch_port_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_switch_port_state_t
-typedef struct _xet_switch_port_state_t xet_switch_port_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_switch_port_throughput_t
-typedef struct _xet_switch_port_throughput_t xet_switch_port_throughput_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_switch_port_stats_t
-typedef struct _xet_switch_port_stats_t xet_switch_port_stats_t;
+/// @brief Forward-declare xet_link_port_stats_t
+typedef struct _xet_link_port_stats_t xet_link_port_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_temp_properties_t
 typedef struct _xet_temp_properties_t xet_temp_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_stby_properties_t
-typedef struct _xet_stby_properties_t xet_stby_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_firmware_properties_t
-typedef struct _xet_firmware_properties_t xet_firmware_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_psu_properties_t

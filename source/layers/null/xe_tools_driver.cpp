@@ -761,556 +761,10 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetCount
-    xe_result_t __xecall
-    xetSysmanPowerGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of power domains.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPowerGetCount = context.xetDdiTable.Sysman.pfnPowerGetCount;
-        if( nullptr != pfnPowerGetCount )
-        {
-            result = pfnPowerGetCount( hSysman, pCount );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetProperties
-    xe_result_t __xecall
-    xetSysmanPowerGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_properties_t* pProperties             ///< [in] Structure that will contain property data.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPowerGetProperties = context.xetDdiTable.Sysman.pfnPowerGetProperties;
-        if( nullptr != pfnPowerGetProperties )
-        {
-            result = pfnPowerGetProperties( hSysman, pwrIndex, pProperties );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetEnergyCounter
-    xe_result_t __xecall
-    xetSysmanPowerGetEnergyCounter(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
-                                                        ///< timestamp when the last counter value was measured.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPowerGetEnergyCounter = context.xetDdiTable.Sysman.pfnPowerGetEnergyCounter;
-        if( nullptr != pfnPowerGetEnergyCounter )
-        {
-            result = pfnPowerGetEnergyCounter( hSysman, pwrIndex, pEnergy );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetEnergyThreshold
-    xe_result_t __xecall
-    xetSysmanPowerGetEnergyThreshold(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPowerGetEnergyThreshold = context.xetDdiTable.Sysman.pfnPowerGetEnergyThreshold;
-        if( nullptr != pfnPowerGetEnergyThreshold )
-        {
-            result = pfnPowerGetEnergyThreshold( hSysman, pwrIndex, pThreshold );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerSetEnergyThreshold
-    xe_result_t __xecall
-    xetSysmanPowerSetEnergyThreshold(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPowerSetEnergyThreshold = context.xetDdiTable.Sysman.pfnPowerSetEnergyThreshold;
-        if( nullptr != pfnPowerSetEnergyThreshold )
-        {
-            result = pfnPowerSetEnergyThreshold( hSysman, pwrIndex, pThreshold );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerGetLimits
-    xe_result_t __xecall
-    xetSysmanPowerGetLimits(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        xet_power_sustained_limit_t* pSustained,        ///< [in][optional] The sustained power limit.
-        xet_power_burst_limit_t* pBurst,                ///< [in][optional] The burst power limit.
-        xet_power_peak_limit_t* pPeak                   ///< [in][optional] The peak power limit.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPowerGetLimits = context.xetDdiTable.Sysman.pfnPowerGetLimits;
-        if( nullptr != pfnPowerGetLimits )
-        {
-            result = pfnPowerGetLimits( hSysman, pwrIndex, pSustained, pBurst, pPeak );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPowerSetLimits
-    xe_result_t __xecall
-    xetSysmanPowerSetLimits(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pwrIndex,                              ///< [in] The index of the power domain (0 ... [::xetSysmanPowerGetCount()
-                                                        ///< - 1]).
-        const xet_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
-        const xet_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
-        const xet_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPowerSetLimits = context.xetDdiTable.Sysman.pfnPowerSetLimits;
-        if( nullptr != pfnPowerSetLimits )
-        {
-            result = pfnPowerSetLimits( hSysman, pwrIndex, pSustained, pBurst, pPeak );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetCount
-    xe_result_t __xecall
-    xetSysmanFrequencyGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of frequency domains.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFrequencyGetCount = context.xetDdiTable.Sysman.pfnFrequencyGetCount;
-        if( nullptr != pfnFrequencyGetCount )
-        {
-            result = pfnFrequencyGetCount( hSysman, pCount );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetProperties
-    xe_result_t __xecall
-    xetSysmanFrequencyGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        xet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFrequencyGetProperties = context.xetDdiTable.Sysman.pfnFrequencyGetProperties;
-        if( nullptr != pfnFrequencyGetProperties )
-        {
-            result = pfnFrequencyGetProperties( hSysman, freqIndex, pProperties );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetRange
-    xe_result_t __xecall
-    xetSysmanFrequencyGetRange(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        xet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFrequencyGetRange = context.xetDdiTable.Sysman.pfnFrequencyGetRange;
-        if( nullptr != pfnFrequencyGetRange )
-        {
-            result = pfnFrequencyGetRange( hSysman, freqIndex, pLimits );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencySetRange
-    xe_result_t __xecall
-    xetSysmanFrequencySetRange(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        const xet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFrequencySetRange = context.xetDdiTable.Sysman.pfnFrequencySetRange;
-        if( nullptr != pfnFrequencySetRange )
-        {
-            result = pfnFrequencySetRange( hSysman, freqIndex, pLimits );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetState
-    xe_result_t __xecall
-    xetSysmanFrequencyGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        xet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFrequencyGetState = context.xetDdiTable.Sysman.pfnFrequencyGetState;
-        if( nullptr != pfnFrequencyGetState )
-        {
-            result = pfnFrequencyGetState( hSysman, freqIndex, pState );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFrequencyGetThrottleTime
-    xe_result_t __xecall
-    xetSysmanFrequencyGetThrottleTime(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t freqIndex,                             ///< [in] The index of the frequency domain (0 ...
-                                                        ///< [::xetSysmanFrequencyGetCount() - 1]).
-        xet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
-                                                        ///< specified domain.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFrequencyGetThrottleTime = context.xetDdiTable.Sysman.pfnFrequencyGetThrottleTime;
-        if( nullptr != pfnFrequencyGetThrottleTime )
-        {
-            result = pfnFrequencyGetThrottleTime( hSysman, freqIndex, pThrottleTime );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanEngineGetCount
-    xe_result_t __xecall
-    xetSysmanEngineGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of engine groups.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnEngineGetCount = context.xetDdiTable.Sysman.pfnEngineGetCount;
-        if( nullptr != pfnEngineGetCount )
-        {
-            result = pfnEngineGetCount( hSysman, pCount );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanEngineGetProperties
-    xe_result_t __xecall
-    xetSysmanEngineGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
-                                                        ///< - 1]).
-        xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnEngineGetProperties = context.xetDdiTable.Sysman.pfnEngineGetProperties;
-        if( nullptr != pfnEngineGetProperties )
-        {
-            result = pfnEngineGetProperties( hSysman, engineIndex, pProperties );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanEngineGetActivity
-    xe_result_t __xecall
-    xetSysmanEngineGetActivity(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
-                                                        ///< - 1]).
-        xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnEngineGetActivity = context.xetDdiTable.Sysman.pfnEngineGetActivity;
-        if( nullptr != pfnEngineGetActivity )
-        {
-            result = pfnEngineGetActivity( hSysman, engineIndex, pStats );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanMemoryGetCount
-    xe_result_t __xecall
-    xetSysmanMemoryGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of memory modules.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnMemoryGetCount = context.xetDdiTable.Sysman.pfnMemoryGetCount;
-        if( nullptr != pfnMemoryGetCount )
-        {
-            result = pfnMemoryGetCount( hSysman, pCount );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanMemoryGetProperties
-    xe_result_t __xecall
-    xetSysmanMemoryGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t memIndex,                              ///< [in] The index of the memory module (0 ...
-                                                        ///< [::xetSysmanMemoryGetCount() - 1]).
-        xet_mem_properties_t* pProperties               ///< [in] Will contain memory properties.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnMemoryGetProperties = context.xetDdiTable.Sysman.pfnMemoryGetProperties;
-        if( nullptr != pfnMemoryGetProperties )
-        {
-            result = pfnMemoryGetProperties( hSysman, memIndex, pProperties );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanMemoryGetBandwidth
-    xe_result_t __xecall
-    xetSysmanMemoryGetBandwidth(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t memIndex,                              ///< [in] The index of the memory module (0 ...
-                                                        ///< [::xetSysmanMemoryGetCount() - 1]).
-        xet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnMemoryGetBandwidth = context.xetDdiTable.Sysman.pfnMemoryGetBandwidth;
-        if( nullptr != pfnMemoryGetBandwidth )
-        {
-            result = pfnMemoryGetBandwidth( hSysman, memIndex, pBandwidth );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanMemoryGetAllocated
-    xe_result_t __xecall
-    xetSysmanMemoryGetAllocated(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t memIndex,                              ///< [in] The index of the memory module (0 ...
-                                                        ///< [::xetSysmanMemoryGetCount() - 1]).
-        xet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnMemoryGetAllocated = context.xetDdiTable.Sysman.pfnMemoryGetAllocated;
-        if( nullptr != pfnMemoryGetAllocated )
-        {
-            result = pfnMemoryGetAllocated( hSysman, memIndex, pAllocated );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPciGetCount
-    xe_result_t __xecall
-    xetSysmanPciGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of PCI end-points.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPciGetCount = context.xetDdiTable.Sysman.pfnPciGetCount;
-        if( nullptr != pfnPciGetCount )
-        {
-            result = pfnPciGetCount( hSysman, pCount );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPciGetProperties
     xe_result_t __xecall
     xetSysmanPciGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         xet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
         )
     {
@@ -1320,7 +774,7 @@ namespace driver
         auto pfnPciGetProperties = context.xetDdiTable.Sysman.pfnPciGetProperties;
         if( nullptr != pfnPciGetProperties )
         {
-            result = pfnPciGetProperties( hSysman, pciIndex, pProperties );
+            result = pfnPciGetProperties( hSysman, pProperties );
         }
         else
         {
@@ -1335,8 +789,6 @@ namespace driver
     xe_result_t __xecall
     xetSysmanPciGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         xet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
         )
     {
@@ -1346,7 +798,7 @@ namespace driver
         auto pfnPciGetState = context.xetDdiTable.Sysman.pfnPciGetState;
         if( nullptr != pfnPciGetState )
         {
-            result = pfnPciGetState( hSysman, pciIndex, pState );
+            result = pfnPciGetState( hSysman, pState );
         }
         else
         {
@@ -1361,8 +813,6 @@ namespace driver
     xe_result_t __xecall
     xetSysmanPciGetBarProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::xet_pci_properties_t.numBars -
                                                         ///< 1]).
         xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
@@ -1374,7 +824,7 @@ namespace driver
         auto pfnPciGetBarProperties = context.xetDdiTable.Sysman.pfnPciGetBarProperties;
         if( nullptr != pfnPciGetBarProperties )
         {
-            result = pfnPciGetBarProperties( hSysman, pciIndex, barIndex, pProperties );
+            result = pfnPciGetBarProperties( hSysman, barIndex, pProperties );
         }
         else
         {
@@ -1389,8 +839,6 @@ namespace driver
     xe_result_t __xecall
     xetSysmanPciGetThroughput(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         xet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
         )
     {
@@ -1400,7 +848,7 @@ namespace driver
         auto pfnPciGetThroughput = context.xetDdiTable.Sysman.pfnPciGetThroughput;
         if( nullptr != pfnPciGetThroughput )
         {
-            result = pfnPciGetThroughput( hSysman, pciIndex, pThroughput );
+            result = pfnPciGetThroughput( hSysman, pThroughput );
         }
         else
         {
@@ -1415,8 +863,6 @@ namespace driver
     xe_result_t __xecall
     xetSysmanPciGetStats(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t pciIndex,                              ///< [in] The index of the PCI end-point (0 ... [::xetSysmanPciGetCount() -
-                                                        ///< 1]).
         xet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
         )
     {
@@ -1426,7 +872,7 @@ namespace driver
         auto pfnPciGetStats = context.xetDdiTable.Sysman.pfnPciGetStats;
         if( nullptr != pfnPciGetStats )
         {
-            result = pfnPciGetStats( hSysman, pciIndex, pStats );
+            result = pfnPciGetStats( hSysman, pStats );
         }
         else
         {
@@ -1437,46 +883,55 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchGetCount
+    /// @brief Intercept function for xetSysmanPowerGet
     xe_result_t __xecall
-    xetSysmanSwitchGetCount(
+    xetSysmanPowerGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of high-speed switches.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_pwr_handle_t* phPower                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSwitchGetCount = context.xetDdiTable.Sysman.pfnSwitchGetCount;
-        if( nullptr != pfnSwitchGetCount )
+        auto pfnPowerGet = context.xetDdiTable.Sysman.pfnPowerGet;
+        if( nullptr != pfnPowerGet )
         {
-            result = pfnSwitchGetCount( hSysman, pCount );
+            result = pfnPowerGet( hSysman, pCount, phPower );
         }
         else
         {
             // generic implementation
+            for( size_t i = 0; ( nullptr != phPower ) && ( i < *pCount ); ++i )
+                phPower[ i ] = reinterpret_cast<xet_sysman_pwr_handle_t>( context.get() );
+
         }
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchGetProperties
+    /// @brief Intercept function for xetSysmanPowerGetProperties
     xe_result_t __xecall
-    xetSysmanSwitchGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        xet_switch_properties_t* pProperties            ///< [in] Will contain the Switch properties.
+    xetSysmanPowerGetProperties(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_properties_t* pProperties             ///< [in] Structure that will contain property data.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSwitchGetProperties = context.xetDdiTable.Sysman.pfnSwitchGetProperties;
-        if( nullptr != pfnSwitchGetProperties )
+        auto pfnGetProperties = context.xetDdiTable.SysmanPower.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
         {
-            result = pfnSwitchGetProperties( hSysman, switchIndex, pProperties );
+            result = pfnGetProperties( hPower, pProperties );
         }
         else
         {
@@ -1487,22 +942,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchGetState
+    /// @brief Intercept function for xetSysmanPowerGetEnergyCounter
     xe_result_t __xecall
-    xetSysmanSwitchGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        xet_switch_state_t* pState                      ///< [in] Will contain the current state of the switch (enabled/disabled).
+    xetSysmanPowerGetEnergyCounter(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
+                                                        ///< timestamp when the last counter value was measured.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSwitchGetState = context.xetDdiTable.Sysman.pfnSwitchGetState;
-        if( nullptr != pfnSwitchGetState )
+        auto pfnGetEnergyCounter = context.xetDdiTable.SysmanPower.pfnGetEnergyCounter;
+        if( nullptr != pfnGetEnergyCounter )
         {
-            result = pfnSwitchGetState( hSysman, switchIndex, pState );
+            result = pfnGetEnergyCounter( hPower, pEnergy );
         }
         else
         {
@@ -1513,22 +967,766 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchSetState
+    /// @brief Intercept function for xetSysmanPowerGetEnergyThreshold
     xe_result_t __xecall
-    xetSysmanSwitchSetState(
+    xetSysmanPowerGetEnergyThreshold(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetEnergyThreshold = context.xetDdiTable.SysmanPower.pfnGetEnergyThreshold;
+        if( nullptr != pfnGetEnergyThreshold )
+        {
+            result = pfnGetEnergyThreshold( hPower, pThreshold );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerSetEnergyThreshold
+    xe_result_t __xecall
+    xetSysmanPowerSetEnergyThreshold(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetEnergyThreshold = context.xetDdiTable.SysmanPower.pfnSetEnergyThreshold;
+        if( nullptr != pfnSetEnergyThreshold )
+        {
+            result = pfnSetEnergyThreshold( hPower, pThreshold );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerGetLimits
+    xe_result_t __xecall
+    xetSysmanPowerGetLimits(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        xet_power_sustained_limit_t* pSustained,        ///< [in][optional] The sustained power limit.
+        xet_power_burst_limit_t* pBurst,                ///< [in][optional] The burst power limit.
+        xet_power_peak_limit_t* pPeak                   ///< [in][optional] The peak power limit.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetLimits = context.xetDdiTable.SysmanPower.pfnGetLimits;
+        if( nullptr != pfnGetLimits )
+        {
+            result = pfnGetLimits( hPower, pSustained, pBurst, pPeak );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerSetLimits
+    xe_result_t __xecall
+    xetSysmanPowerSetLimits(
+        xet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        const xet_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
+        const xet_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
+        const xet_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetLimits = context.xetDdiTable.SysmanPower.pfnSetLimits;
+        if( nullptr != pfnSetLimits )
+        {
+            result = pfnSetLimits( hPower, pSustained, pBurst, pPeak );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGet
+    xe_result_t __xecall
+    xetSysmanFrequencyGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFrequencyGet = context.xetDdiTable.Sysman.pfnFrequencyGet;
+        if( nullptr != pfnFrequencyGet )
+        {
+            result = pfnFrequencyGet( hSysman, pCount, phFrequency );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phFrequency ) && ( i < *pCount ); ++i )
+                phFrequency[ i ] = reinterpret_cast<xet_sysman_freq_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetProperties
+    xe_result_t __xecall
+    xetSysmanFrequencyGetProperties(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.SysmanFrequency.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hFrequency, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetRange
+    xe_result_t __xecall
+    xetSysmanFrequencyGetRange(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetRange = context.xetDdiTable.SysmanFrequency.pfnGetRange;
+        if( nullptr != pfnGetRange )
+        {
+            result = pfnGetRange( hFrequency, pLimits );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetRange
+    xe_result_t __xecall
+    xetSysmanFrequencySetRange(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        const xet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetRange = context.xetDdiTable.SysmanFrequency.pfnSetRange;
+        if( nullptr != pfnSetRange )
+        {
+            result = pfnSetRange( hFrequency, pLimits );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetState
+    xe_result_t __xecall
+    xetSysmanFrequencyGetState(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetState = context.xetDdiTable.SysmanFrequency.pfnGetState;
+        if( nullptr != pfnGetState )
+        {
+            result = pfnGetState( hFrequency, pState );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetThrottleTime
+    xe_result_t __xecall
+    xetSysmanFrequencyGetThrottleTime(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                        ///< specified domain.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetThrottleTime = context.xetDdiTable.SysmanFrequency.pfnGetThrottleTime;
+        if( nullptr != pfnGetThrottleTime )
+        {
+            result = pfnGetThrottleTime( hFrequency, pThrottleTime );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanEngineGet
+    xe_result_t __xecall
+    xetSysmanEngineGet(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_engine_handle_t* phEngine            ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnEngineGet = context.xetDdiTable.Sysman.pfnEngineGet;
+        if( nullptr != pfnEngineGet )
+        {
+            result = pfnEngineGet( hSysman, pCount, phEngine );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phEngine ) && ( i < *pCount ); ++i )
+                phEngine[ i ] = reinterpret_cast<xet_sysman_engine_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanEngineGetProperties
+    xe_result_t __xecall
+    xetSysmanEngineGetProperties(
+        xet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
+        xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.SysmanEngine.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hEngine, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanEngineGetActivity
+    xe_result_t __xecall
+    xetSysmanEngineGetActivity(
+        xet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
+        xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetActivity = context.xetDdiTable.SysmanEngine.pfnGetActivity;
+        if( nullptr != pfnGetActivity )
+        {
+            result = pfnGetActivity( hEngine, pStats );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanStandbyGet
+    xe_result_t __xecall
+    xetSysmanStandbyGet(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_standby_handle_t* phStandby          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnStandbyGet = context.xetDdiTable.Sysman.pfnStandbyGet;
+        if( nullptr != pfnStandbyGet )
+        {
+            result = pfnStandbyGet( hSysman, pCount, phStandby );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phStandby ) && ( i < *pCount ); ++i )
+                phStandby[ i ] = reinterpret_cast<xet_sysman_standby_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanStandbyGetProperties
+    xe_result_t __xecall
+    xetSysmanStandbyGetProperties(
+        xet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
+        xet_standby_properties_t* pProperties           ///< [in] Will contain the standby hardware properties.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.SysmanStandby.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hStandby, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanStandbyGetMode
+    xe_result_t __xecall
+    xetSysmanStandbyGetMode(
+        xet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
+        xet_standby_promo_mode_t* pMode                 ///< [in] Will contain the current standby mode.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetMode = context.xetDdiTable.SysmanStandby.pfnGetMode;
+        if( nullptr != pfnGetMode )
+        {
+            result = pfnGetMode( hStandby, pMode );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanStandbySetMode
+    xe_result_t __xecall
+    xetSysmanStandbySetMode(
+        xet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
+        xet_standby_promo_mode_t mode                   ///< [in] New standby mode.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetMode = context.xetDdiTable.SysmanStandby.pfnSetMode;
+        if( nullptr != pfnSetMode )
+        {
+            result = pfnSetMode( hStandby, mode );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFirmwareGet
+    xe_result_t __xecall
+    xetSysmanFirmwareGet(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_firmware_handle_t* phFirmware        ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFirmwareGet = context.xetDdiTable.Sysman.pfnFirmwareGet;
+        if( nullptr != pfnFirmwareGet )
+        {
+            result = pfnFirmwareGet( hSysman, pCount, phFirmware );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phFirmware ) && ( i < *pCount ); ++i )
+                phFirmware[ i ] = reinterpret_cast<xet_sysman_firmware_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFirmwareGetProperties
+    xe_result_t __xecall
+    xetSysmanFirmwareGetProperties(
+        xet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
+        xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.SysmanFirmware.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hFirmware, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFirmwareGetChecksum
+    xe_result_t __xecall
+    xetSysmanFirmwareGetChecksum(
+        xet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
+        uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetChecksum = context.xetDdiTable.SysmanFirmware.pfnGetChecksum;
+        if( nullptr != pfnGetChecksum )
+        {
+            result = pfnGetChecksum( hFirmware, pChecksum );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFirmwareFlash
+    xe_result_t __xecall
+    xetSysmanFirmwareFlash(
+        xet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
+        void* pImage,                                   ///< [in] Image of the new firmware to flash.
+        uint32_t size                                   ///< [in] Size of the flash image.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFlash = context.xetDdiTable.SysmanFirmware.pfnFlash;
+        if( nullptr != pfnFlash )
+        {
+            result = pfnFlash( hFirmware, pImage, size );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanMemoryGet
+    xe_result_t __xecall
+    xetSysmanMemoryGet(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_mem_handle_t* phMemory               ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnMemoryGet = context.xetDdiTable.Sysman.pfnMemoryGet;
+        if( nullptr != pfnMemoryGet )
+        {
+            result = pfnMemoryGet( hSysman, pCount, phMemory );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phMemory ) && ( i < *pCount ); ++i )
+                phMemory[ i ] = reinterpret_cast<xet_sysman_mem_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanMemoryGetProperties
+    xe_result_t __xecall
+    xetSysmanMemoryGetProperties(
+        xet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+        xet_mem_properties_t* pProperties               ///< [in] Will contain memory properties.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.SysmanMemory.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hMemory, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanMemoryGetBandwidth
+    xe_result_t __xecall
+    xetSysmanMemoryGetBandwidth(
+        xet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+        xet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetBandwidth = context.xetDdiTable.SysmanMemory.pfnGetBandwidth;
+        if( nullptr != pfnGetBandwidth )
+        {
+            result = pfnGetBandwidth( hMemory, pBandwidth );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanMemoryGetAllocated
+    xe_result_t __xecall
+    xetSysmanMemoryGetAllocated(
+        xet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+        xet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetAllocated = context.xetDdiTable.SysmanMemory.pfnGetAllocated;
+        if( nullptr != pfnGetAllocated )
+        {
+            result = pfnGetAllocated( hMemory, pAllocated );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkSwitchGet
+    xe_result_t __xecall
+    xetSysmanLinkSwitchGet(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_link_switch_handle_t* phSwitch       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnLinkSwitchGet = context.xetDdiTable.Sysman.pfnLinkSwitchGet;
+        if( nullptr != pfnLinkSwitchGet )
+        {
+            result = pfnLinkSwitchGet( hSysman, pCount, phSwitch );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phSwitch ) && ( i < *pCount ); ++i )
+                phSwitch[ i ] = reinterpret_cast<xet_sysman_link_switch_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkSwitchGetProperties
+    xe_result_t __xecall
+    xetSysmanLinkSwitchGetProperties(
+        xet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
+        xet_link_switch_properties_t* pProperties       ///< [in] Will contain the Switch properties.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.SysmanLinkSwitch.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hSwitch, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkSwitchGetState
+    xe_result_t __xecall
+    xetSysmanLinkSwitchGetState(
+        xet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
+        xet_link_switch_state_t* pState                 ///< [in] Will contain the current state of the switch (enabled/disabled).
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetState = context.xetDdiTable.SysmanLinkSwitch.pfnGetState;
+        if( nullptr != pfnGetState )
+        {
+            result = pfnGetState( hSwitch, pState );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkSwitchSetState
+    xe_result_t __xecall
+    xetSysmanLinkSwitchSetState(
+        xet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
         xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSwitchSetState = context.xetDdiTable.Sysman.pfnSwitchSetState;
-        if( nullptr != pfnSwitchSetState )
+        auto pfnSetState = context.xetDdiTable.SysmanLinkSwitch.pfnSetState;
+        if( nullptr != pfnSetState )
         {
-            result = pfnSwitchSetState( hSysman, switchIndex, enable );
+            result = pfnSetState( hSwitch, enable );
         }
         else
         {
@@ -1539,24 +1737,55 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchPortGetProperties
+    /// @brief Intercept function for xetSysmanLinkSwitchGetPorts
     xe_result_t __xecall
-    xetSysmanSwitchPortGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                        ///< - 1]).
-        xet_switch_port_properties_t* pProperties       ///< [in] Will contain properties of the Switch Port
+    xetSysmanLinkSwitchGetPorts(
+        xet_sysman_link_switch_handle_t hSysmanLinkSwitch,  ///< [in] SMI handle of the connectivity switch.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_link_port_handle_t* phPort           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSwitchPortGetProperties = context.xetDdiTable.Sysman.pfnSwitchPortGetProperties;
-        if( nullptr != pfnSwitchPortGetProperties )
+        auto pfnGetPorts = context.xetDdiTable.SysmanLinkSwitch.pfnGetPorts;
+        if( nullptr != pfnGetPorts )
         {
-            result = pfnSwitchPortGetProperties( hSysman, switchIndex, portIndex, pProperties );
+            result = pfnGetPorts( hSysmanLinkSwitch, pCount, phPort );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phPort ) && ( i < *pCount ); ++i )
+                phPort[ i ] = reinterpret_cast<xet_sysman_link_port_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanLinkPortGetProperties
+    xe_result_t __xecall
+    xetSysmanLinkPortGetProperties(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+        xet_link_port_properties_t* pProperties         ///< [in] Will contain properties of the Switch Port
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.SysmanLinkPort.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hPort, pProperties );
         }
         else
         {
@@ -1567,24 +1796,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchPortGetState
+    /// @brief Intercept function for xetSysmanLinkPortGetState
     xe_result_t __xecall
-    xetSysmanSwitchPortGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                        ///< - 1]).
-        xet_switch_port_state_t* pState                 ///< [in] Will contain the current state of the Switch Port
+    xetSysmanLinkPortGetState(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+        xet_link_port_state_t* pState                   ///< [in] Will contain the current state of the Switch Port
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSwitchPortGetState = context.xetDdiTable.Sysman.pfnSwitchPortGetState;
-        if( nullptr != pfnSwitchPortGetState )
+        auto pfnGetState = context.xetDdiTable.SysmanLinkPort.pfnGetState;
+        if( nullptr != pfnGetState )
         {
-            result = pfnSwitchPortGetState( hSysman, switchIndex, portIndex, pState );
+            result = pfnGetState( hPort, pState );
         }
         else
         {
@@ -1595,24 +1820,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchPortGetThroughput
+    /// @brief Intercept function for xetSysmanLinkPortGetThroughput
     xe_result_t __xecall
-    xetSysmanSwitchPortGetThroughput(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                        ///< - 1]).
-        xet_switch_port_throughput_t* pThroughput       ///< [in] Will contain the Switch port throughput counters.
+    xetSysmanLinkPortGetThroughput(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+        xet_link_port_throughput_t* pThroughput         ///< [in] Will contain the Switch port throughput counters.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSwitchPortGetThroughput = context.xetDdiTable.Sysman.pfnSwitchPortGetThroughput;
-        if( nullptr != pfnSwitchPortGetThroughput )
+        auto pfnGetThroughput = context.xetDdiTable.SysmanLinkPort.pfnGetThroughput;
+        if( nullptr != pfnGetThroughput )
         {
-            result = pfnSwitchPortGetThroughput( hSysman, switchIndex, portIndex, pThroughput );
+            result = pfnGetThroughput( hPort, pThroughput );
         }
         else
         {
@@ -1623,24 +1844,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSwitchPortGetStats
+    /// @brief Intercept function for xetSysmanLinkPortGetStats
     xe_result_t __xecall
-    xetSysmanSwitchPortGetStats(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ... [::xetSysmanSwitchGetCount() -
-                                                        ///< 1]).
-        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
-                                                        ///< - 1]).
-        xet_switch_port_stats_t* pStats                 ///< [in] Will contain the Switch port stats.
+    xetSysmanLinkPortGetStats(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
+        xet_link_port_stats_t* pStats                   ///< [in] Will contain the Switch port stats.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSwitchPortGetStats = context.xetDdiTable.Sysman.pfnSwitchPortGetStats;
-        if( nullptr != pfnSwitchPortGetStats )
+        auto pfnGetStats = context.xetDdiTable.SysmanLinkPort.pfnGetStats;
+        if( nullptr != pfnGetStats )
         {
-            result = pfnSwitchPortGetStats( hSysman, switchIndex, portIndex, pStats );
+            result = pfnGetStats( hPort, pStats );
         }
         else
         {
@@ -1651,46 +1868,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanTemperatureGetCount
+    /// @brief Intercept function for xetSysmanLinkPortIsConnected
     xe_result_t __xecall
-    xetSysmanTemperatureGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of temperature sensors.
+    xetSysmanLinkPortIsConnected(
+        xet_sysman_link_port_handle_t hPort,            ///< [in] Handle of the local connectivity port.
+        xet_sysman_link_port_handle_t hRemotePort,      ///< [in] Handle of the remote connectivity port.
+        xe_bool_t* pConnected                           ///< [in] Will indicate connected to the remote port.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnTemperatureGetCount = context.xetDdiTable.Sysman.pfnTemperatureGetCount;
-        if( nullptr != pfnTemperatureGetCount )
+        auto pfnIsConnected = context.xetDdiTable.SysmanLinkPort.pfnIsConnected;
+        if( nullptr != pfnIsConnected )
         {
-            result = pfnTemperatureGetCount( hSysman, pCount );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanTemperatureGetProperties
-    xe_result_t __xecall
-    xetSysmanTemperatureGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t tempIndex,                             ///< [in] The index of the temperature sensor (0 ...
-                                                        ///< [::xetSysmanTemperatureGetCount() - 1]).
-        xet_temp_properties_t* pProperties              ///< [in] Will contain the temperature sensor properties.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnTemperatureGetProperties = context.xetDdiTable.Sysman.pfnTemperatureGetProperties;
-        if( nullptr != pfnTemperatureGetProperties )
-        {
-            result = pfnTemperatureGetProperties( hSysman, tempIndex, pProperties );
+            result = pfnIsConnected( hPort, hRemotePort, pConnected );
         }
         else
         {
@@ -1705,9 +1897,15 @@ namespace driver
     xe_result_t __xecall
     xetSysmanTemperatureGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t tempIndex,                             ///< [in] The index of the temperature sensor (0 ...
-                                                        ///< [::xetSysmanTemperatureGetCount() - 1]).
-        uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_temp_handle_t* phTemperature         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1716,7 +1914,34 @@ namespace driver
         auto pfnTemperatureGet = context.xetDdiTable.Sysman.pfnTemperatureGet;
         if( nullptr != pfnTemperatureGet )
         {
-            result = pfnTemperatureGet( hSysman, tempIndex, pTemperature );
+            result = pfnTemperatureGet( hSysman, pCount, phTemperature );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phTemperature ) && ( i < *pCount ); ++i )
+                phTemperature[ i ] = reinterpret_cast<xet_sysman_temp_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanTemperatureGetProperties
+    xe_result_t __xecall
+    xetSysmanTemperatureGetProperties(
+        xet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        xet_temp_properties_t* pProperties              ///< [in] Will contain the temperature sensor properties.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.SysmanTemperature.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hTemperature, pProperties );
         }
         else
         {
@@ -1727,20 +1952,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanStandbyGetCount
+    /// @brief Intercept function for xetSysmanTemperatureRead
     xe_result_t __xecall
-    xetSysmanStandbyGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of standby hardware components.
+    xetSysmanTemperatureRead(
+        xet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnStandbyGetCount = context.xetDdiTable.Sysman.pfnStandbyGetCount;
-        if( nullptr != pfnStandbyGetCount )
+        auto pfnRead = context.xetDdiTable.SysmanTemperature.pfnRead;
+        if( nullptr != pfnRead )
         {
-            result = pfnStandbyGetCount( hSysman, pCount );
+            result = pfnRead( hTemperature, pTemperature );
         }
         else
         {
@@ -1751,205 +1976,35 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanStandbyGetProperties
+    /// @brief Intercept function for xetSysmanPsuGet
     xe_result_t __xecall
-    xetSysmanStandbyGetProperties(
+    xetSysmanPsuGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t stbyIndex,                             ///< [in] The index of the standby hardware component (0 ...
-                                                        ///< [::xetSysmanStandbyGetCount() - 1]).
-        xet_stby_properties_t* pProperties              ///< [in] Will contain the standby hardware properties.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_psu_handle_t* phPsu                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnStandbyGetProperties = context.xetDdiTable.Sysman.pfnStandbyGetProperties;
-        if( nullptr != pfnStandbyGetProperties )
+        auto pfnPsuGet = context.xetDdiTable.Sysman.pfnPsuGet;
+        if( nullptr != pfnPsuGet )
         {
-            result = pfnStandbyGetProperties( hSysman, stbyIndex, pProperties );
+            result = pfnPsuGet( hSysman, pCount, phPsu );
         }
         else
         {
             // generic implementation
-        }
+            for( size_t i = 0; ( nullptr != phPsu ) && ( i < *pCount ); ++i )
+                phPsu[ i ] = reinterpret_cast<xet_sysman_psu_handle_t>( context.get() );
 
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanStandbyGetMode
-    xe_result_t __xecall
-    xetSysmanStandbyGetMode(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t stbyIndex,                             ///< [in] The index of the standby hardware component (0 ...
-                                                        ///< [::xetSysmanStandbyGetCount() - 1]).
-        xet_stby_promo_mode_t* pMode                    ///< [in] Will contain the current standby mode.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnStandbyGetMode = context.xetDdiTable.Sysman.pfnStandbyGetMode;
-        if( nullptr != pfnStandbyGetMode )
-        {
-            result = pfnStandbyGetMode( hSysman, stbyIndex, pMode );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanStandbySetMode
-    xe_result_t __xecall
-    xetSysmanStandbySetMode(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t stbyIndex,                             ///< [in] The index of the standby hardware component (0 ...
-                                                        ///< [::xetSysmanStandbyGetCount() - 1]).
-        xet_stby_promo_mode_t mode                      ///< [in] New standby mode.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnStandbySetMode = context.xetDdiTable.Sysman.pfnStandbySetMode;
-        if( nullptr != pfnStandbySetMode )
-        {
-            result = pfnStandbySetMode( hSysman, stbyIndex, mode );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFirmwareGetCount
-    xe_result_t __xecall
-    xetSysmanFirmwareGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of firmwares.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFirmwareGetCount = context.xetDdiTable.Sysman.pfnFirmwareGetCount;
-        if( nullptr != pfnFirmwareGetCount )
-        {
-            result = pfnFirmwareGetCount( hSysman, pCount );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFirmwareGetProperties
-    xe_result_t __xecall
-    xetSysmanFirmwareGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ... [::xetSysmanFirmwareGetCount() -
-                                                        ///< 1]).
-        xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFirmwareGetProperties = context.xetDdiTable.Sysman.pfnFirmwareGetProperties;
-        if( nullptr != pfnFirmwareGetProperties )
-        {
-            result = pfnFirmwareGetProperties( hSysman, firmwareIndex, pProperties );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFirmwareGetChecksum
-    xe_result_t __xecall
-    xetSysmanFirmwareGetChecksum(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ... [::xetSysmanFirmwareGetCount() -
-                                                        ///< 1]).
-        uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFirmwareGetChecksum = context.xetDdiTable.Sysman.pfnFirmwareGetChecksum;
-        if( nullptr != pfnFirmwareGetChecksum )
-        {
-            result = pfnFirmwareGetChecksum( hSysman, firmwareIndex, pChecksum );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFirmwareFlash
-    xe_result_t __xecall
-    xetSysmanFirmwareFlash(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ... [::xetSysmanFirmwareGetCount() -
-                                                        ///< 1]).
-        void* pImage,                                   ///< [in] Image of the new firmware to flash.
-        uint32_t size                                   ///< [in] Size of the flash image.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFirmwareFlash = context.xetDdiTable.Sysman.pfnFirmwareFlash;
-        if( nullptr != pfnFirmwareFlash )
-        {
-            result = pfnFirmwareFlash( hSysman, firmwareIndex, pImage, size );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanPsuGetCount
-    xe_result_t __xecall
-    xetSysmanPsuGetCount(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of PSUs.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPsuGetCount = context.xetDdiTable.Sysman.pfnPsuGetCount;
-        if( nullptr != pfnPsuGetCount )
-        {
-            result = pfnPsuGetCount( hSysman, pCount );
-        }
-        else
-        {
-            // generic implementation
         }
 
         return result;
@@ -1959,19 +2014,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanPsuGetProperties
     xe_result_t __xecall
     xetSysmanPsuGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ... [::xetSysmanPsuGetCount() -
-                                                        ///< 1]).
+        xet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
         xet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPsuGetProperties = context.xetDdiTable.Sysman.pfnPsuGetProperties;
-        if( nullptr != pfnPsuGetProperties )
+        auto pfnGetProperties = context.xetDdiTable.SysmanPsu.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
         {
-            result = pfnPsuGetProperties( hSysman, psuIndex, pProperties );
+            result = pfnGetProperties( hPsu, pProperties );
         }
         else
         {
@@ -1985,19 +2038,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanPsuGetState
     xe_result_t __xecall
     xetSysmanPsuGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ... [::xetSysmanPsuGetCount() -
-                                                        ///< 1]).
+        xet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
         xet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPsuGetState = context.xetDdiTable.Sysman.pfnPsuGetState;
-        if( nullptr != pfnPsuGetState )
+        auto pfnGetState = context.xetDdiTable.SysmanPsu.pfnGetState;
+        if( nullptr != pfnGetState )
         {
-            result = pfnPsuGetState( hSysman, psuIndex, pState );
+            result = pfnGetState( hPsu, pState );
         }
         else
         {
@@ -2008,24 +2059,35 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanFanGetCount
+    /// @brief Intercept function for xetSysmanFanGet
     xe_result_t __xecall
-    xetSysmanFanGetCount(
+    xetSysmanFanGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of fans.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_fan_handle_t* phFan                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFanGetCount = context.xetDdiTable.Sysman.pfnFanGetCount;
-        if( nullptr != pfnFanGetCount )
+        auto pfnFanGet = context.xetDdiTable.Sysman.pfnFanGet;
+        if( nullptr != pfnFanGet )
         {
-            result = pfnFanGetCount( hSysman, pCount );
+            result = pfnFanGet( hSysman, pCount, phFan );
         }
         else
         {
             // generic implementation
+            for( size_t i = 0; ( nullptr != phFan ) && ( i < *pCount ); ++i )
+                phFan[ i ] = reinterpret_cast<xet_sysman_fan_handle_t>( context.get() );
+
         }
 
         return result;
@@ -2035,18 +2097,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanFanGetProperties
     xe_result_t __xecall
     xetSysmanFanGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+        xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         xet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFanGetProperties = context.xetDdiTable.Sysman.pfnFanGetProperties;
-        if( nullptr != pfnFanGetProperties )
+        auto pfnGetProperties = context.xetDdiTable.SysmanFan.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
         {
-            result = pfnFanGetProperties( hSysman, fanIndex, pProperties );
+            result = pfnGetProperties( hFan, pProperties );
         }
         else
         {
@@ -2060,18 +2121,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanFanGetConfig
     xe_result_t __xecall
     xetSysmanFanGetConfig(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+        xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         xet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFanGetConfig = context.xetDdiTable.Sysman.pfnFanGetConfig;
-        if( nullptr != pfnFanGetConfig )
+        auto pfnGetConfig = context.xetDdiTable.SysmanFan.pfnGetConfig;
+        if( nullptr != pfnGetConfig )
         {
-            result = pfnFanGetConfig( hSysman, fanIndex, pConfig );
+            result = pfnGetConfig( hFan, pConfig );
         }
         else
         {
@@ -2085,18 +2145,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanFanSetConfig
     xe_result_t __xecall
     xetSysmanFanSetConfig(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+        xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         const xet_fan_config_t* pConfig                 ///< [in] New fan configuration.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFanSetConfig = context.xetDdiTable.Sysman.pfnFanSetConfig;
-        if( nullptr != pfnFanSetConfig )
+        auto pfnSetConfig = context.xetDdiTable.SysmanFan.pfnSetConfig;
+        if( nullptr != pfnSetConfig )
         {
-            result = pfnFanSetConfig( hSysman, fanIndex, pConfig );
+            result = pfnSetConfig( hFan, pConfig );
         }
         else
         {
@@ -2110,8 +2169,7 @@ namespace driver
     /// @brief Intercept function for xetSysmanFanGetState
     xe_result_t __xecall
     xetSysmanFanGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xetSysmanFanGetCount() - 1]).
+        xet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         xet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
         xet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
         )
@@ -2119,10 +2177,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFanGetState = context.xetDdiTable.Sysman.pfnFanGetState;
-        if( nullptr != pfnFanGetState )
+        auto pfnGetState = context.xetDdiTable.SysmanFan.pfnGetState;
+        if( nullptr != pfnGetState )
         {
-            result = pfnFanGetState( hSysman, fanIndex, units, pState );
+            result = pfnGetState( hFan, units, pState );
         }
         else
         {
@@ -2133,24 +2191,35 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanLedGetCount
+    /// @brief Intercept function for xetSysmanLedGet
     xe_result_t __xecall
-    xetSysmanLedGetCount(
+    xetSysmanLedGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of LEDs.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_led_handle_t* phLed                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnLedGetCount = context.xetDdiTable.Sysman.pfnLedGetCount;
-        if( nullptr != pfnLedGetCount )
+        auto pfnLedGet = context.xetDdiTable.Sysman.pfnLedGet;
+        if( nullptr != pfnLedGet )
         {
-            result = pfnLedGetCount( hSysman, pCount );
+            result = pfnLedGet( hSysman, pCount, phLed );
         }
         else
         {
             // generic implementation
+            for( size_t i = 0; ( nullptr != phLed ) && ( i < *pCount ); ++i )
+                phLed[ i ] = reinterpret_cast<xet_sysman_led_handle_t>( context.get() );
+
         }
 
         return result;
@@ -2160,18 +2229,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanLedGetProperties
     xe_result_t __xecall
     xetSysmanLedGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xetSysmanLedGetCount() - 1]).
+        xet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
         xet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnLedGetProperties = context.xetDdiTable.Sysman.pfnLedGetProperties;
-        if( nullptr != pfnLedGetProperties )
+        auto pfnGetProperties = context.xetDdiTable.SysmanLed.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
         {
-            result = pfnLedGetProperties( hSysman, ledIndex, pProperties );
+            result = pfnGetProperties( hLed, pProperties );
         }
         else
         {
@@ -2185,18 +2253,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanLedGetState
     xe_result_t __xecall
     xetSysmanLedGetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xetSysmanLedGetCount() - 1]).
+        xet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
         xet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnLedGetState = context.xetDdiTable.Sysman.pfnLedGetState;
-        if( nullptr != pfnLedGetState )
+        auto pfnGetState = context.xetDdiTable.SysmanLed.pfnGetState;
+        if( nullptr != pfnGetState )
         {
-            result = pfnLedGetState( hSysman, ledIndex, pState );
+            result = pfnGetState( hLed, pState );
         }
         else
         {
@@ -2210,18 +2277,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanLedSetState
     xe_result_t __xecall
     xetSysmanLedSetState(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xetSysmanLedGetCount() - 1]).
+        xet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
         const xet_led_state_t* pState                   ///< [in] New state of the LED.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnLedSetState = context.xetDdiTable.Sysman.pfnLedSetState;
-        if( nullptr != pfnLedSetState )
+        auto pfnSetState = context.xetDdiTable.SysmanLed.pfnSetState;
+        if( nullptr != pfnSetState )
         {
-            result = pfnLedSetState( hSysman, ledIndex, pState );
+            result = pfnSetState( hLed, pState );
         }
         else
         {
@@ -2232,24 +2298,35 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanRasGetCount
+    /// @brief Intercept function for xetSysmanRasGet
     xe_result_t __xecall
-    xetSysmanRasGetCount(
+    xetSysmanRasGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of RAS errors sets.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_ras_handle_t* phRas                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnRasGetCount = context.xetDdiTable.Sysman.pfnRasGetCount;
-        if( nullptr != pfnRasGetCount )
+        auto pfnRasGet = context.xetDdiTable.Sysman.pfnRasGet;
+        if( nullptr != pfnRasGet )
         {
-            result = pfnRasGetCount( hSysman, pCount );
+            result = pfnRasGet( hSysman, pCount, phRas );
         }
         else
         {
             // generic implementation
+            for( size_t i = 0; ( nullptr != phRas ) && ( i < *pCount ); ++i )
+                phRas[ i ] = reinterpret_cast<xet_sysman_ras_handle_t>( context.get() );
+
         }
 
         return result;
@@ -2259,19 +2336,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanRasGetProperties
     xe_result_t __xecall
     xetSysmanRasGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t rasIndex,                              ///< [in] The index of the RAS error set (0 ... [::xetSysmanRasGetCount() -
-                                                        ///< 1]).
+        xet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         xet_ras_properties_t* pProperties               ///< [in] Structure describing RAS properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnRasGetProperties = context.xetDdiTable.Sysman.pfnRasGetProperties;
-        if( nullptr != pfnRasGetProperties )
+        auto pfnGetProperties = context.xetDdiTable.SysmanRas.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
         {
-            result = pfnRasGetProperties( hSysman, rasIndex, pProperties );
+            result = pfnGetProperties( hRas, pProperties );
         }
         else
         {
@@ -2285,9 +2360,7 @@ namespace driver
     /// @brief Intercept function for xetSysmanRasGetErrors
     xe_result_t __xecall
     xetSysmanRasGetErrors(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t rasIndex,                              ///< [in] The index of the RAS error set (0 ... [::xetSysmanRasGetCount() -
-                                                        ///< 1]).
+        xet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         xe_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
         uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
         xet_ras_details_t* pDetails                     ///< [in][optional] Breakdown of where errors have occurred
@@ -2296,10 +2369,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnRasGetErrors = context.xetDdiTable.Sysman.pfnRasGetErrors;
-        if( nullptr != pfnRasGetErrors )
+        auto pfnGetErrors = context.xetDdiTable.SysmanRas.pfnGetErrors;
+        if( nullptr != pfnGetErrors )
         {
-            result = pfnRasGetErrors( hSysman, rasIndex, clear, pTotalErrors, pDetails );
+            result = pfnGetErrors( hRas, clear, pTotalErrors, pDetails );
         }
         else
         {
@@ -2417,24 +2490,35 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDiagnosticsGetCount
+    /// @brief Intercept function for xetSysmanDiagnosticsGet
     xe_result_t __xecall
-    xetSysmanDiagnosticsGetCount(
+    xetSysmanDiagnosticsGet(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of diagnostic test suites.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        xet_sysman_diag_handle_t* phDiagnostics         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDiagnosticsGetCount = context.xetDdiTable.Sysman.pfnDiagnosticsGetCount;
-        if( nullptr != pfnDiagnosticsGetCount )
+        auto pfnDiagnosticsGet = context.xetDdiTable.Sysman.pfnDiagnosticsGet;
+        if( nullptr != pfnDiagnosticsGet )
         {
-            result = pfnDiagnosticsGetCount( hSysman, pCount );
+            result = pfnDiagnosticsGet( hSysman, pCount, phDiagnostics );
         }
         else
         {
             // generic implementation
+            for( size_t i = 0; ( nullptr != phDiagnostics ) && ( i < *pCount ); ++i )
+                phDiagnostics[ i ] = reinterpret_cast<xet_sysman_diag_handle_t>( context.get() );
+
         }
 
         return result;
@@ -2444,19 +2528,17 @@ namespace driver
     /// @brief Intercept function for xetSysmanDiagnosticsGetProperties
     xe_result_t __xecall
     xetSysmanDiagnosticsGetProperties(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t testIndex,                             ///< [in] The index of a diagnostics test (0 ...
-                                                        ///< [::xetSysmanDiagnosticsGetCount() - 1]).
+        xet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
         xet_diag_properties_t* pProperties              ///< [in] Structure describing the properties of a diagnostics test suite
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDiagnosticsGetProperties = context.xetDdiTable.Sysman.pfnDiagnosticsGetProperties;
-        if( nullptr != pfnDiagnosticsGetProperties )
+        auto pfnGetProperties = context.xetDdiTable.SysmanDiagnostics.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
         {
-            result = pfnDiagnosticsGetProperties( hSysman, testIndex, pProperties );
+            result = pfnGetProperties( hDiagnostics, pProperties );
         }
         else
         {
@@ -2470,9 +2552,7 @@ namespace driver
     /// @brief Intercept function for xetSysmanDiagnosticsRunTests
     xe_result_t __xecall
     xetSysmanDiagnosticsRunTests(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
-        uint32_t testIndex,                             ///< [in] The index of a diagnostics test (0 ...
-                                                        ///< [::xetSysmanDiagnosticsGetCount() - 1]).
+        xet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
         uint32_t start,                                 ///< [in] The index of the first test to run. Set to
                                                         ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
         uint32_t end,                                   ///< [in] The index of the last test to run. Set to
@@ -2483,10 +2563,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDiagnosticsRunTests = context.xetDdiTable.Sysman.pfnDiagnosticsRunTests;
-        if( nullptr != pfnDiagnosticsRunTests )
+        auto pfnRunTests = context.xetDdiTable.SysmanDiagnostics.pfnRunTests;
+        if( nullptr != pfnRunTests )
         {
-            result = pfnDiagnosticsRunTests( hSysman, testIndex, start, end, pResult );
+            result = pfnRunTests( hDiagnostics, start, end, pResult );
         }
         else
         {
@@ -3028,48 +3108,6 @@ xetGetSysmanProcAddrTable(
 
     pDdiTable->pfnDeviceReset                            = driver::xetSysmanDeviceReset;
 
-    pDdiTable->pfnPowerGetCount                          = driver::xetSysmanPowerGetCount;
-
-    pDdiTable->pfnPowerGetProperties                     = driver::xetSysmanPowerGetProperties;
-
-    pDdiTable->pfnPowerGetEnergyCounter                  = driver::xetSysmanPowerGetEnergyCounter;
-
-    pDdiTable->pfnPowerGetEnergyThreshold                = driver::xetSysmanPowerGetEnergyThreshold;
-
-    pDdiTable->pfnPowerSetEnergyThreshold                = driver::xetSysmanPowerSetEnergyThreshold;
-
-    pDdiTable->pfnPowerGetLimits                         = driver::xetSysmanPowerGetLimits;
-
-    pDdiTable->pfnPowerSetLimits                         = driver::xetSysmanPowerSetLimits;
-
-    pDdiTable->pfnFrequencyGetCount                      = driver::xetSysmanFrequencyGetCount;
-
-    pDdiTable->pfnFrequencyGetProperties                 = driver::xetSysmanFrequencyGetProperties;
-
-    pDdiTable->pfnFrequencyGetRange                      = driver::xetSysmanFrequencyGetRange;
-
-    pDdiTable->pfnFrequencySetRange                      = driver::xetSysmanFrequencySetRange;
-
-    pDdiTable->pfnFrequencyGetState                      = driver::xetSysmanFrequencyGetState;
-
-    pDdiTable->pfnFrequencyGetThrottleTime               = driver::xetSysmanFrequencyGetThrottleTime;
-
-    pDdiTable->pfnEngineGetCount                         = driver::xetSysmanEngineGetCount;
-
-    pDdiTable->pfnEngineGetProperties                    = driver::xetSysmanEngineGetProperties;
-
-    pDdiTable->pfnEngineGetActivity                      = driver::xetSysmanEngineGetActivity;
-
-    pDdiTable->pfnMemoryGetCount                         = driver::xetSysmanMemoryGetCount;
-
-    pDdiTable->pfnMemoryGetProperties                    = driver::xetSysmanMemoryGetProperties;
-
-    pDdiTable->pfnMemoryGetBandwidth                     = driver::xetSysmanMemoryGetBandwidth;
-
-    pDdiTable->pfnMemoryGetAllocated                     = driver::xetSysmanMemoryGetAllocated;
-
-    pDdiTable->pfnPciGetCount                            = driver::xetSysmanPciGetCount;
-
     pDdiTable->pfnPciGetProperties                       = driver::xetSysmanPciGetProperties;
 
     pDdiTable->pfnPciGetState                            = driver::xetSysmanPciGetState;
@@ -3080,73 +3118,29 @@ xetGetSysmanProcAddrTable(
 
     pDdiTable->pfnPciGetStats                            = driver::xetSysmanPciGetStats;
 
-    pDdiTable->pfnSwitchGetCount                         = driver::xetSysmanSwitchGetCount;
+    pDdiTable->pfnPowerGet                               = driver::xetSysmanPowerGet;
 
-    pDdiTable->pfnSwitchGetProperties                    = driver::xetSysmanSwitchGetProperties;
+    pDdiTable->pfnFrequencyGet                           = driver::xetSysmanFrequencyGet;
 
-    pDdiTable->pfnSwitchGetState                         = driver::xetSysmanSwitchGetState;
+    pDdiTable->pfnEngineGet                              = driver::xetSysmanEngineGet;
 
-    pDdiTable->pfnSwitchSetState                         = driver::xetSysmanSwitchSetState;
+    pDdiTable->pfnStandbyGet                             = driver::xetSysmanStandbyGet;
 
-    pDdiTable->pfnSwitchPortGetProperties                = driver::xetSysmanSwitchPortGetProperties;
+    pDdiTable->pfnFirmwareGet                            = driver::xetSysmanFirmwareGet;
 
-    pDdiTable->pfnSwitchPortGetState                     = driver::xetSysmanSwitchPortGetState;
+    pDdiTable->pfnMemoryGet                              = driver::xetSysmanMemoryGet;
 
-    pDdiTable->pfnSwitchPortGetThroughput                = driver::xetSysmanSwitchPortGetThroughput;
-
-    pDdiTable->pfnSwitchPortGetStats                     = driver::xetSysmanSwitchPortGetStats;
-
-    pDdiTable->pfnTemperatureGetCount                    = driver::xetSysmanTemperatureGetCount;
-
-    pDdiTable->pfnTemperatureGetProperties               = driver::xetSysmanTemperatureGetProperties;
+    pDdiTable->pfnLinkSwitchGet                          = driver::xetSysmanLinkSwitchGet;
 
     pDdiTable->pfnTemperatureGet                         = driver::xetSysmanTemperatureGet;
 
-    pDdiTable->pfnStandbyGetCount                        = driver::xetSysmanStandbyGetCount;
+    pDdiTable->pfnPsuGet                                 = driver::xetSysmanPsuGet;
 
-    pDdiTable->pfnStandbyGetProperties                   = driver::xetSysmanStandbyGetProperties;
+    pDdiTable->pfnFanGet                                 = driver::xetSysmanFanGet;
 
-    pDdiTable->pfnStandbyGetMode                         = driver::xetSysmanStandbyGetMode;
+    pDdiTable->pfnLedGet                                 = driver::xetSysmanLedGet;
 
-    pDdiTable->pfnStandbySetMode                         = driver::xetSysmanStandbySetMode;
-
-    pDdiTable->pfnFirmwareGetCount                       = driver::xetSysmanFirmwareGetCount;
-
-    pDdiTable->pfnFirmwareGetProperties                  = driver::xetSysmanFirmwareGetProperties;
-
-    pDdiTable->pfnFirmwareGetChecksum                    = driver::xetSysmanFirmwareGetChecksum;
-
-    pDdiTable->pfnFirmwareFlash                          = driver::xetSysmanFirmwareFlash;
-
-    pDdiTable->pfnPsuGetCount                            = driver::xetSysmanPsuGetCount;
-
-    pDdiTable->pfnPsuGetProperties                       = driver::xetSysmanPsuGetProperties;
-
-    pDdiTable->pfnPsuGetState                            = driver::xetSysmanPsuGetState;
-
-    pDdiTable->pfnFanGetCount                            = driver::xetSysmanFanGetCount;
-
-    pDdiTable->pfnFanGetProperties                       = driver::xetSysmanFanGetProperties;
-
-    pDdiTable->pfnFanGetConfig                           = driver::xetSysmanFanGetConfig;
-
-    pDdiTable->pfnFanSetConfig                           = driver::xetSysmanFanSetConfig;
-
-    pDdiTable->pfnFanGetState                            = driver::xetSysmanFanGetState;
-
-    pDdiTable->pfnLedGetCount                            = driver::xetSysmanLedGetCount;
-
-    pDdiTable->pfnLedGetProperties                       = driver::xetSysmanLedGetProperties;
-
-    pDdiTable->pfnLedGetState                            = driver::xetSysmanLedGetState;
-
-    pDdiTable->pfnLedSetState                            = driver::xetSysmanLedSetState;
-
-    pDdiTable->pfnRasGetCount                            = driver::xetSysmanRasGetCount;
-
-    pDdiTable->pfnRasGetProperties                       = driver::xetSysmanRasGetProperties;
-
-    pDdiTable->pfnRasGetErrors                           = driver::xetSysmanRasGetErrors;
+    pDdiTable->pfnRasGet                                 = driver::xetSysmanRasGet;
 
     pDdiTable->pfnEventsGetProperties                    = driver::xetSysmanEventsGetProperties;
 
@@ -3156,11 +3150,491 @@ xetGetSysmanProcAddrTable(
 
     pDdiTable->pfnEventsListen                           = driver::xetSysmanEventsListen;
 
-    pDdiTable->pfnDiagnosticsGetCount                    = driver::xetSysmanDiagnosticsGetCount;
+    pDdiTable->pfnDiagnosticsGet                         = driver::xetSysmanDiagnosticsGet;
 
-    pDdiTable->pfnDiagnosticsGetProperties               = driver::xetSysmanDiagnosticsGetProperties;
+    return result;
+}
 
-    pDdiTable->pfnDiagnosticsRunTests                    = driver::xetSysmanDiagnosticsRunTests;
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanPower table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanPowerProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_power_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanPowerGetProperties;
+
+    pDdiTable->pfnGetEnergyCounter                       = driver::xetSysmanPowerGetEnergyCounter;
+
+    pDdiTable->pfnGetEnergyThreshold                     = driver::xetSysmanPowerGetEnergyThreshold;
+
+    pDdiTable->pfnSetEnergyThreshold                     = driver::xetSysmanPowerSetEnergyThreshold;
+
+    pDdiTable->pfnGetLimits                              = driver::xetSysmanPowerGetLimits;
+
+    pDdiTable->pfnSetLimits                              = driver::xetSysmanPowerSetLimits;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanFrequency table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanFrequencyProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_frequency_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanFrequencyGetProperties;
+
+    pDdiTable->pfnGetRange                               = driver::xetSysmanFrequencyGetRange;
+
+    pDdiTable->pfnSetRange                               = driver::xetSysmanFrequencySetRange;
+
+    pDdiTable->pfnGetState                               = driver::xetSysmanFrequencyGetState;
+
+    pDdiTable->pfnGetThrottleTime                        = driver::xetSysmanFrequencyGetThrottleTime;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanEngine table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanEngineProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_engine_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanEngineGetProperties;
+
+    pDdiTable->pfnGetActivity                            = driver::xetSysmanEngineGetActivity;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanStandby table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanStandbyProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_standby_dditable_t* pDdiTable        ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanStandbyGetProperties;
+
+    pDdiTable->pfnGetMode                                = driver::xetSysmanStandbyGetMode;
+
+    pDdiTable->pfnSetMode                                = driver::xetSysmanStandbySetMode;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanFirmware table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanFirmwareProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_firmware_dditable_t* pDdiTable       ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanFirmwareGetProperties;
+
+    pDdiTable->pfnGetChecksum                            = driver::xetSysmanFirmwareGetChecksum;
+
+    pDdiTable->pfnFlash                                  = driver::xetSysmanFirmwareFlash;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanMemory table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanMemoryProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_memory_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanMemoryGetProperties;
+
+    pDdiTable->pfnGetBandwidth                           = driver::xetSysmanMemoryGetBandwidth;
+
+    pDdiTable->pfnGetAllocated                           = driver::xetSysmanMemoryGetAllocated;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanLinkSwitch table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanLinkSwitchProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_link_switch_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanLinkSwitchGetProperties;
+
+    pDdiTable->pfnGetState                               = driver::xetSysmanLinkSwitchGetState;
+
+    pDdiTable->pfnSetState                               = driver::xetSysmanLinkSwitchSetState;
+
+    pDdiTable->pfnGetPorts                               = driver::xetSysmanLinkSwitchGetPorts;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanLinkPort table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanLinkPortProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_link_port_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanLinkPortGetProperties;
+
+    pDdiTable->pfnGetState                               = driver::xetSysmanLinkPortGetState;
+
+    pDdiTable->pfnGetThroughput                          = driver::xetSysmanLinkPortGetThroughput;
+
+    pDdiTable->pfnGetStats                               = driver::xetSysmanLinkPortGetStats;
+
+    pDdiTable->pfnIsConnected                            = driver::xetSysmanLinkPortIsConnected;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanTemperature table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanTemperatureProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_temperature_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanTemperatureGetProperties;
+
+    pDdiTable->pfnRead                                   = driver::xetSysmanTemperatureRead;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanPsu table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanPsuProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_psu_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanPsuGetProperties;
+
+    pDdiTable->pfnGetState                               = driver::xetSysmanPsuGetState;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanFan table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanFanProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_fan_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanFanGetProperties;
+
+    pDdiTable->pfnGetConfig                              = driver::xetSysmanFanGetConfig;
+
+    pDdiTable->pfnSetConfig                              = driver::xetSysmanFanSetConfig;
+
+    pDdiTable->pfnGetState                               = driver::xetSysmanFanGetState;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanLed table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanLedProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_led_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanLedGetProperties;
+
+    pDdiTable->pfnGetState                               = driver::xetSysmanLedGetState;
+
+    pDdiTable->pfnSetState                               = driver::xetSysmanLedSetState;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanRas table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanRasProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_ras_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanRasGetProperties;
+
+    pDdiTable->pfnGetErrors                              = driver::xetSysmanRasGetErrors;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanDiagnostics table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetSysmanDiagnosticsProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_sysman_diagnostics_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProperties                          = driver::xetSysmanDiagnosticsGetProperties;
+
+    pDdiTable->pfnRunTests                               = driver::xetSysmanDiagnosticsRunTests;
 
     return result;
 }
