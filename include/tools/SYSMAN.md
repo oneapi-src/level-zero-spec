@@ -499,7 +499,7 @@ void ShowAveragePower(xet_sysman_handle_t hSysmanDevice, xet_power_energy_counte
 }
 ```
 
-## <a name="freq">Operations on frequency domains</a>
+## <a name="frq">Operations on frequency domains</a>
 The hardware manages frequencies to achieve a balance between best performance and power consumption. Most devices have one or more frequency domains.
 
 The following functions are provided to manage the frequency domains on the device:
