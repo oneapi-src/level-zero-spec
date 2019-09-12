@@ -901,6 +901,31 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanDeviceWasRepaired
+    xe_result_t __xecall
+    xetSysmanDeviceWasRepaired(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        xe_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnDeviceWasRepaired = dditable->xet.Sysman.pfnDeviceWasRepaired;
+        if( nullptr == pfnDeviceWasRepaired )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnDeviceWasRepaired( hSysman, pWasRepaired );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPciGetProperties
     xe_result_t __xecall
     xetSysmanPciGetProperties(
@@ -3832,6 +3857,7 @@ xetGetSysmanProcAddrTable(
             pDdiTable->pfnDeviceGetGuardTimeout                    = loader::xetSysmanDeviceGetGuardTimeout;
             pDdiTable->pfnDeviceSetGuardTimeout                    = loader::xetSysmanDeviceSetGuardTimeout;
             pDdiTable->pfnDeviceReset                              = loader::xetSysmanDeviceReset;
+            pDdiTable->pfnDeviceWasRepaired                        = loader::xetSysmanDeviceWasRepaired;
             pDdiTable->pfnPciGetProperties                         = loader::xetSysmanPciGetProperties;
             pDdiTable->pfnPciGetState                              = loader::xetSysmanPciGetState;
             pDdiTable->pfnPciGetBarProperties                      = loader::xetSysmanPciGetBarProperties;

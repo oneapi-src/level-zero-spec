@@ -628,6 +628,13 @@ typedef xe_result_t (__xecall *xet_pfnSysmanDeviceReset_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanDeviceWasRepaired 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceWasRepaired_t)(
+    xet_sysman_handle_t,
+    xe_bool_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanPciGetProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanPciGetProperties_t)(
     xet_sysman_handle_t,
@@ -808,6 +815,7 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanDeviceGetGuardTimeout_t                        pfnDeviceGetGuardTimeout;
     xet_pfnSysmanDeviceSetGuardTimeout_t                        pfnDeviceSetGuardTimeout;
     xet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
+    xet_pfnSysmanDeviceWasRepaired_t                            pfnDeviceWasRepaired;
     xet_pfnSysmanPciGetProperties_t                             pfnPciGetProperties;
     xet_pfnSysmanPciGetState_t                                  pfnPciGetState;
     xet_pfnSysmanPciGetBarProperties_t                          pfnPciGetBarProperties;

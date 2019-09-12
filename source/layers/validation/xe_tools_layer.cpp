@@ -794,6 +794,32 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanDeviceWasRepaired
+    xe_result_t __xecall
+    xetSysmanDeviceWasRepaired(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        xe_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+        )
+    {
+        auto pfnDeviceWasRepaired = context.xetDdiTable.Sysman.pfnDeviceWasRepaired;
+
+        if( nullptr == pfnDeviceWasRepaired )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pWasRepaired )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnDeviceWasRepaired( hSysman, pWasRepaired );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPciGetProperties
     xe_result_t __xecall
     xetSysmanPciGetProperties(
@@ -3283,6 +3309,9 @@ xetGetSysmanProcAddrTable(
 
     dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
     pDdiTable->pfnDeviceReset                            = layer::xetSysmanDeviceReset;
+
+    dditable.pfnDeviceWasRepaired                        = pDdiTable->pfnDeviceWasRepaired;
+    pDdiTable->pfnDeviceWasRepaired                      = layer::xetSysmanDeviceWasRepaired;
 
     dditable.pfnPciGetProperties                         = pDdiTable->pfnPciGetProperties;
     pDdiTable->pfnPciGetProperties                       = layer::xetSysmanPciGetProperties;

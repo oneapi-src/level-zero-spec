@@ -80,9 +80,43 @@ void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
                 }
             }
         }
+        free(phRasErrorSets);
     }
 }
 
+void ListDiagnosticTests(xet_sysman_handle_t hSysmanDevice)
+{
+    uint32_t numTestSuites;
+    if ((xetSysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, NULL) == XE_RESULT_SUCCESS) && numTestSuites)
+    {
+        xet_sysman_diag_handle_t* phTestSuites =
+            (xet_sysman_diag_handle_t*)malloc(numTestSuites * sizeof(xet_sysman_diag_handle_t));
+        if (xetSysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, phTestSuites) == XE_RESULT_SUCCESS)
+        {
+            for (uint32_t suiteIndex = 0; suiteIndex < numTestSuites; suiteIndex++)
+            {
+                xet_diag_properties_t suiteProps;
+                if (xetSysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) == XE_RESULT_SUCCESS)
+                {
+                    fprintf(stdout, "Diagnostic test suite %s:\n", suiteProps.name);
+                    if (suiteProps.numTests)
+                    {
+                        for (uint32_t i = 0; i < suiteProps.numTests; i++)
+                        {
+                            const xet_diag_test_t* pTest = &suiteProps.pTests[i];
+                            fprintf(stdout, "    Test %u: %s\n", pTest->index, pTest->name);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(stdout, "    Cannot run subset of tests.\n");
+                    }
+                }
+            }
+        }
+        free(phTestSuites);
+    }
+}
 
 void ResetDevice(xet_sysman_handle_t hSysmanDevice)
 {
@@ -176,6 +210,7 @@ void FixGpuFrequency(xet_sysman_handle_t hSysmanDevice, double FreqMHz)
                 xet_freq_properties_t props;
                 if (xetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == XE_RESULT_SUCCESS)
                 {
+                    // Only control GPU frequency domains
                     if (props.type == XET_FREQ_DOMAIN_GPU)
                     {
                         if (props.canControl)
@@ -200,12 +235,55 @@ void FixGpuFrequency(xet_sysman_handle_t hSysmanDevice, double FreqMHz)
     }
 }
 
+void FixSubdeviceGpuFrequency(xet_sysman_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
+{
+    uint32_t numFreqDomains;
+    if ((xetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == XE_RESULT_SUCCESS) && numFreqDomains)
+    {
+        xet_sysman_freq_handle_t* pFreqHandles = (xet_sysman_freq_handle_t*)malloc(numFreqDomains * sizeof(xet_sysman_freq_handle_t));
+        if (xetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == XE_RESULT_SUCCESS)
+        {
+            for (uint32_t index = 0; index < numFreqDomains; index++)
+            {
+                xet_freq_properties_t props;
+                if (xetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == XE_RESULT_SUCCESS)
+                {
+                    // Only control GPU frequency domains
+                    if (props.type == XET_FREQ_DOMAIN_GPU)
+                    {
+                        // Only control the GPU frequency domain for a specific sub-device
+                        if (props.onSubdevice && (props.subdeviceId == subdeviceId))
+                        {
+                            if (props.canControl)
+                            {
+                                xet_freq_range_t range;
+                                range.min = FreqMHz;
+                                range.max = FreqMHz;
+                                if (xetSysmanFrequencySetRange(pFreqHandles[index], &range) != XE_RESULT_SUCCESS)
+                                {
+                                    fprintf(stderr, "ERROR: Problem setting the frequency range for domain with index %u.\n", index);
+                                }
+                            }
+                            else
+                            {
+                                fprintf(stderr, "ERROR: Can't control GPU frequency domain with index %u.\n", index);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        free(pFreqHandles);
+    }
+}
+
 void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 {
     uint32_t numFans;
     if (xetSysmanFanGet(hSysmanDevice, &numFans, NULL) == XE_RESULT_SUCCESS)
     {
-        xet_sysman_fan_handle_t* phFans = (xet_sysman_fan_handle_t*)malloc(numFans * sizeof(xet_sysman_fan_handle_t));
+        xet_sysman_fan_handle_t* phFans =
+            (xet_sysman_fan_handle_t*)malloc(numFans * sizeof(xet_sysman_fan_handle_t));
         if (xetSysmanFanGet(hSysmanDevice, &numFans, phFans) == XE_RESULT_SUCCESS)
         {
             xet_fan_config_t config;
@@ -228,6 +306,7 @@ void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
                 }
             }
         }
+        free(phFans);
     }
 }
 
@@ -236,7 +315,8 @@ void ShowFans(xet_sysman_handle_t hSysmanDevice)
     uint32_t numFans;
     if (xetSysmanFanGet(hSysmanDevice, &numFans, NULL) == XE_RESULT_SUCCESS)
     {
-        xet_sysman_fan_handle_t* phFans = (xet_sysman_fan_handle_t*)malloc(numFans * sizeof(xet_sysman_fan_handle_t));
+        xet_sysman_fan_handle_t* phFans =
+            (xet_sysman_fan_handle_t*)malloc(numFans * sizeof(xet_sysman_fan_handle_t));
         if (xetSysmanFanGet(hSysmanDevice, &numFans, phFans) == XE_RESULT_SUCCESS)
         {
             fprintf(stdout, "    Fans\n");
@@ -250,6 +330,7 @@ void ShowFans(xet_sysman_handle_t hSysmanDevice)
                 }
             }
         }
+        free(phFans);
     }
 }
 
@@ -268,7 +349,43 @@ void ShowAveragePower(xet_sysman_pwr_handle_t hPower, xet_power_energy_counter_t
     }
 }
 
-void ShowPowerLimits(xet_sysman_handle_t hSysmanDevice, xet_sysman_pwr_handle_t hPower)
+// Forward declaration
+void ShowPowerLimits(xet_sysman_pwr_handle_t hPower);
+
+void ShowPowerDomains(xet_sysman_handle_t hSysmanDevice)
+{
+    uint32_t numPowerDomains;
+    if (xetSysmanPowerGet(hSysmanDevice, &numPowerDomains, NULL) == XE_RESULT_SUCCESS)
+    {
+        xet_sysman_pwr_handle_t* phPower =
+            (xet_sysman_pwr_handle_t*)malloc(numPowerDomains * sizeof(xet_sysman_pwr_handle_t));
+        if (xetSysmanPowerGet(hSysmanDevice, &numPowerDomains, phPower) == XE_RESULT_SUCCESS)
+        {
+            for (uint32_t pwrIndex = 0; pwrIndex < numPowerDomains; pwrIndex++)
+            {
+                xet_power_properties_t props;
+                if (xetSysmanPowerGetProperties(phPower[pwrIndex], &props) == XE_RESULT_SUCCESS)
+                {
+                    if (props.onSubdevice)
+                    {
+                        fprintf(stdout, "Sub-device %u power:\n", props.subdeviceId);
+                        fprintf(stdout, "    Can control: %s\n", props.canControl ? "yes" : "no");
+                        ShowPowerLimits(phPower[pwrIndex]);
+                    }
+                    else
+                    {
+                        fprintf(stdout, "Total package power:\n");
+                        fprintf(stdout, "    Can control: %s\n", props.canControl ? "yes" : "no");
+                        ShowPowerLimits(phPower[pwrIndex]);
+                    }
+                }
+            }
+        }
+        free(phPower);
+    }
+}
+
+void ShowPowerLimits(xet_sysman_pwr_handle_t hPower)
 {
     xet_power_sustained_limit_t sustainedLimits;
     xet_power_burst_limit_t burstLimits;
@@ -299,26 +416,36 @@ void ShowPowerLimits(xet_sysman_handle_t hSysmanDevice, xet_sysman_pwr_handle_t 
 
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_properties_t props;
+    xet_sysman_properties_t devProps;
+    xet_pci_properties_t pciProps;
     uint32_t timeout;
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    xe_bool_t repaired;
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == XE_RESULT_SUCCESS)
     {
-        fprintf(stdout, "    UUID:    %s\n", props.core.uuid.id);
-        fprintf(stdout, "    brand:   %s\n", props.brandName);
-        fprintf(stdout, "    model:   %s\n", props.modelName);
-        fprintf(stdout, "    serial#: %s\n", props.serialNumber);
-        fprintf(stdout, "    board#:  %s\n", props.boardNumber);
+        fprintf(stdout, "    UUID:           %s\n", devProps.core.uuid.id);
+        fprintf(stdout, "    #subdevices:    %u\n", devProps.numSubdevices);
+        fprintf(stdout, "    brand:          %s\n", devProps.brandName);
+        fprintf(stdout, "    model:          %s\n", devProps.modelName);
+        fprintf(stdout, "    driver timeout: disabled\n");
+    }
+    if (xetSysmanDeviceWasRepaired(hSysmanDevice, &repaired) == XE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "    Was repaired:   %s\n", repaired ? "yes" : "no");
     }
     if (xetSysmanDeviceGetGuardTimeout(hSysmanDevice, &timeout) == XE_RESULT_SUCCESS)
     {
         if (timeout == XET_DISABLE_GUARD_TIMEOUT)
         {
-            fprintf(stdout, "    timeout: disabled\n");
+            fprintf(stdout, "    driver timeout: disabled\n");
         }
         else
         {
-            fprintf(stdout, "    timeout: %u milliseconds\n", timeout);
+            fprintf(stdout, "    timeout:        %u milliseconds\n", timeout);
         }
+    }
+    if (xetSysmanPciGetProperties(hSysmanDevice, &pciProps) == XE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "    PCI address:        %04u:%02u:%02u.%u\n", pciProps.address.domain, pciProps.address.bus, pciProps.address.device, pciProps.address.function);
     }
 }
 

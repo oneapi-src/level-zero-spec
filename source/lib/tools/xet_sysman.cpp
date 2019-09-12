@@ -166,6 +166,32 @@ xetSysmanDeviceReset(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out if the device has been repaired (either by the manufacturer
+///        or by running diagnostics)
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pWasRepaired
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + This device does not record this information or does not support repair features.
+xe_result_t __xecall
+xetSysmanDeviceWasRepaired(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    xe_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+    )
+{
+    auto pfnDeviceWasRepaired = xet_lib::context.ddiTable.Sysman.pfnDeviceWasRepaired;
+    if( nullptr == pfnDeviceWasRepaired )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnDeviceWasRepaired( hSysman, pWasRepaired );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get PCI properties - address, max speed
 /// 
 /// @details
@@ -2517,6 +2543,24 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out if the device has been repaired (either by the manufacturer
+    ///        or by running diagnostics)
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::DeviceWasRepaired(
+        xe::bool_t* pWasRepaired                        ///< [in] Will indicate if the device was repaired
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanDeviceWasRepaired(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xe_bool_t*>( pWasRepaired ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceWasRepaired" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get PCI properties - address, max speed
     /// 
     /// @details
@@ -4641,10 +4685,6 @@ namespace xet
             str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
         str += "\n";
-        
-        str += "Sysman::properties_t::wasRepaired : ";
-        str += std::to_string(val.wasRepaired);
-        str += "\n";
 
         return str;
     }
@@ -4707,14 +4747,6 @@ namespace xet
         
         str += "Sysman::pci_properties_t::address : ";
         str += to_string(val.address);
-        str += "\n";
-        
-        str += "Sysman::pci_properties_t::onSubdevice : ";
-        str += std::to_string(val.onSubdevice);
-        str += "\n";
-        
-        str += "Sysman::pci_properties_t::subdeviceId : ";
-        str += std::to_string(val.subdeviceId);
         str += "\n";
         
         str += "Sysman::pci_properties_t::numBars : ";
@@ -4847,34 +4879,10 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPower::power_domain_t to std::string
-    std::string to_string( const SysmanPower::power_domain_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case SysmanPower::power_domain_t::PWR_DOMAIN_TOTAL:
-            str = "SysmanPower::power_domain_t::PWR_DOMAIN_TOTAL";
-            break;
-
-        default:
-            str = "SysmanPower::power_domain_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanPower::power_properties_t to std::string
     std::string to_string( const SysmanPower::power_properties_t val )
     {
         std::string str;
-        
-        str += "SysmanPower::power_properties_t::type : ";
-        str += to_string(val.type);
-        str += "\n";
         
         str += "SysmanPower::power_properties_t::onSubdevice : ";
         str += std::to_string(val.onSubdevice);

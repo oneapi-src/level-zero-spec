@@ -764,6 +764,30 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanDeviceWasRepaired
+    xe_result_t __xecall
+    xetSysmanDeviceWasRepaired(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        xe_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnDeviceWasRepaired = context.xetDdiTable.Sysman.pfnDeviceWasRepaired;
+        if( nullptr != pfnDeviceWasRepaired )
+        {
+            result = pfnDeviceWasRepaired( hSysman, pWasRepaired );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPciGetProperties
     xe_result_t __xecall
     xetSysmanPciGetProperties(
@@ -3110,6 +3134,8 @@ xetGetSysmanProcAddrTable(
     pDdiTable->pfnDeviceSetGuardTimeout                  = driver::xetSysmanDeviceSetGuardTimeout;
 
     pDdiTable->pfnDeviceReset                            = driver::xetSysmanDeviceReset;
+
+    pDdiTable->pfnDeviceWasRepaired                      = driver::xetSysmanDeviceWasRepaired;
 
     pDdiTable->pfnPciGetProperties                       = driver::xetSysmanPciGetProperties;
 
