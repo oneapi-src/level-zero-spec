@@ -2341,6 +2341,40 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeFunctionSuggestMaxCooperativeGroupCount
+    xe_result_t __xecall
+    xeFunctionSuggestMaxCooperativeGroupCount(
+        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+        uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
+        uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
+        uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
+        )
+    {
+        auto pfnSuggestMaxCooperativeGroupCount = context.xeDdiTable.Function.pfnSuggestMaxCooperativeGroupCount;
+
+        if( nullptr == pfnSuggestMaxCooperativeGroupCount )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFunction )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == groupCountX )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == groupCountY )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == groupCountZ )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSuggestMaxCooperativeGroupCount( hFunction, groupCountX, groupCountY, groupCountZ );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeFunctionSetArgumentValue
     xe_result_t __xecall
     xeFunctionSetArgumentValue(
@@ -3397,6 +3431,9 @@ xeGetFunctionProcAddrTable(
 
     dditable.pfnSuggestGroupSize                         = pDdiTable->pfnSuggestGroupSize;
     pDdiTable->pfnSuggestGroupSize                       = layer::xeFunctionSuggestGroupSize;
+
+    dditable.pfnSuggestMaxCooperativeGroupCount          = pDdiTable->pfnSuggestMaxCooperativeGroupCount;
+    pDdiTable->pfnSuggestMaxCooperativeGroupCount        = layer::xeFunctionSuggestMaxCooperativeGroupCount;
 
     dditable.pfnSetArgumentValue                         = pDdiTable->pfnSetArgumentValue;
     pDdiTable->pfnSetArgumentValue                       = layer::xeFunctionSetArgumentValue;

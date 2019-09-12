@@ -402,6 +402,33 @@ xeFunctionSuggestGroupSize(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Query a suggested max group count for device for cooperative functions
+///        that device supports.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFunction
+///         + nullptr == groupCountX
+///         + nullptr == groupCountY
+///         + nullptr == groupCountZ
+///         + invalid number of threads.
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeFunctionSuggestMaxCooperativeGroupCount(
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
+    uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
+    uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Set function argument used on function launch.
 /// 
 /// @details
@@ -573,10 +600,12 @@ xeCommandListAppendLaunchFunction(
 ///     - This function may **not** be called from simultaneous threads with the
 ///       same command list handle.
 ///     - The implementation of this function should be lock-free.
+///     - Use ::xeFunctionSuggestMaxCooperativeGroupCount to recommend max group
+///       count for device for cooperative functions that device supports.
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuLaunchKernel**
+///     - **cudaLaunchCooperativeKernel**
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS

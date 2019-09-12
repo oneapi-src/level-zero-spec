@@ -436,6 +436,24 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Query a suggested max group count for device for cooperative functions
+        ///        that device supports.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @returns
+        ///     - uint32_t: recommend group count X dimension.
+        ///     - uint32_t: recommend group count Y dimension.
+        ///     - uint32_t: recommend group count Z dimension.
+        /// 
+        /// @throws result_t
+        std::tuple<uint32_t, uint32_t, uint32_t> __xecall
+        SuggestMaxCooperativeGroupCount(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Set function argument used on function launch.
         /// 
         /// @details

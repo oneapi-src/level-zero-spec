@@ -2412,6 +2412,31 @@ typedef void (__xecall *xe_pfnFunctionSuggestGroupSizeCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xeFunctionSuggestMaxCooperativeGroupCount 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _xe_function_suggest_max_cooperative_group_count_params_t
+{
+    xe_function_handle_t* phFunction;
+    uint32_t** pgroupCountX;
+    uint32_t** pgroupCountY;
+    uint32_t** pgroupCountZ;
+} xe_function_suggest_max_cooperative_group_count_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xeFunctionSuggestMaxCooperativeGroupCount 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__xecall *xe_pfnFunctionSuggestMaxCooperativeGroupCountCb_t)(
+    xe_function_suggest_max_cooperative_group_count_params_t* params,
+    xe_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFunctionSetArgumentValue 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -2492,6 +2517,7 @@ typedef struct _xe_function_callbacks_t
     xe_pfnFunctionDestroyCb_t                                       pfnDestroyCb;
     xe_pfnFunctionSetGroupSizeCb_t                                  pfnSetGroupSizeCb;
     xe_pfnFunctionSuggestGroupSizeCb_t                              pfnSuggestGroupSizeCb;
+    xe_pfnFunctionSuggestMaxCooperativeGroupCountCb_t               pfnSuggestMaxCooperativeGroupCountCb;
     xe_pfnFunctionSetArgumentValueCb_t                              pfnSetArgumentValueCb;
     xe_pfnFunctionSetAttributeCb_t                                  pfnSetAttributeCb;
     xe_pfnFunctionGetAttributeCb_t                                  pfnGetAttributeCb;

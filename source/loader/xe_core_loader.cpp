@@ -2554,6 +2554,33 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeFunctionSuggestMaxCooperativeGroupCount
+    xe_result_t __xecall
+    xeFunctionSuggestMaxCooperativeGroupCount(
+        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+        uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
+        uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
+        uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
+        auto pfnSuggestMaxCooperativeGroupCount = dditable->xe.Function.pfnSuggestMaxCooperativeGroupCount;
+        if( nullptr == pfnSuggestMaxCooperativeGroupCount )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+
+        // forward to device-driver
+        result = pfnSuggestMaxCooperativeGroupCount( hFunction, groupCountX, groupCountY, groupCountZ );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeFunctionSetArgumentValue
     xe_result_t __xecall
     xeFunctionSetArgumentValue(
@@ -3849,6 +3876,7 @@ xeGetFunctionProcAddrTable(
             pDdiTable->pfnDestroy                                  = loader::xeFunctionDestroy;
             pDdiTable->pfnSetGroupSize                             = loader::xeFunctionSetGroupSize;
             pDdiTable->pfnSuggestGroupSize                         = loader::xeFunctionSuggestGroupSize;
+            pDdiTable->pfnSuggestMaxCooperativeGroupCount          = loader::xeFunctionSuggestMaxCooperativeGroupCount;
             pDdiTable->pfnSetArgumentValue                         = loader::xeFunctionSetArgumentValue;
             pDdiTable->pfnSetAttribute                             = loader::xeFunctionSetAttribute;
             pDdiTable->pfnGetAttribute                             = loader::xeFunctionGetAttribute;

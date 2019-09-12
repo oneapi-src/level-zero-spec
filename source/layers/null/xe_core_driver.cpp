@@ -2183,6 +2183,32 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeFunctionSuggestMaxCooperativeGroupCount
+    xe_result_t __xecall
+    xeFunctionSuggestMaxCooperativeGroupCount(
+        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+        uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
+        uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
+        uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSuggestMaxCooperativeGroupCount = context.xeDdiTable.Function.pfnSuggestMaxCooperativeGroupCount;
+        if( nullptr != pfnSuggestMaxCooperativeGroupCount )
+        {
+            result = pfnSuggestMaxCooperativeGroupCount( hFunction, groupCountX, groupCountY, groupCountZ );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeFunctionSetArgumentValue
     xe_result_t __xecall
     xeFunctionSetArgumentValue(
@@ -7244,6 +7270,65 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeFunctionSuggestMaxCooperativeGroupCount
+    xe_result_t __xecall
+    xeFunctionSuggestMaxCooperativeGroupCount(
+        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+        uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
+        uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
+        uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // capture parameters
+        xe_function_suggest_max_cooperative_group_count_params_t in_params = {
+            &hFunction,
+            &groupCountX,
+            &groupCountY,
+            &groupCountZ
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].xePrologueCbs.Function;
+                if( nullptr != table.pfnSuggestMaxCooperativeGroupCountCb )
+                    table.pfnSuggestMaxCooperativeGroupCountCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::xeFunctionSuggestMaxCooperativeGroupCount( hFunction, groupCountX, groupCountY, groupCountZ );
+
+        // capture parameters
+        xe_function_suggest_max_cooperative_group_count_params_t out_params = {
+            &hFunction,
+            &groupCountX,
+            &groupCountY,
+            &groupCountZ
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Function;
+                if( nullptr != table.pfnSuggestMaxCooperativeGroupCountCb )
+                    table.pfnSuggestMaxCooperativeGroupCountCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeFunctionSetArgumentValue
     xe_result_t __xecall
     xeFunctionSetArgumentValue(
@@ -8882,6 +8967,11 @@ xeGetFunctionProcAddrTable(
         pDdiTable->pfnSuggestGroupSize                       = instrumented::xeFunctionSuggestGroupSize;
     else
         pDdiTable->pfnSuggestGroupSize                       = driver::xeFunctionSuggestGroupSize;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnSuggestMaxCooperativeGroupCount        = instrumented::xeFunctionSuggestMaxCooperativeGroupCount;
+    else
+        pDdiTable->pfnSuggestMaxCooperativeGroupCount        = driver::xeFunctionSuggestMaxCooperativeGroupCount;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnSetArgumentValue                       = instrumented::xeFunctionSetArgumentValue;

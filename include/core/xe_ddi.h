@@ -1198,6 +1198,15 @@ typedef xe_result_t (__xecall *xe_pfnFunctionSuggestGroupSize_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeFunctionSuggestMaxCooperativeGroupCount 
+typedef xe_result_t (__xecall *xe_pfnFunctionSuggestMaxCooperativeGroupCount_t)(
+    xe_function_handle_t,
+    uint32_t*,
+    uint32_t*,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeFunctionSetArgumentValue 
 typedef xe_result_t (__xecall *xe_pfnFunctionSetArgumentValue_t)(
     xe_function_handle_t,
@@ -1230,6 +1239,7 @@ typedef struct _xe_function_dditable_t
     xe_pfnFunctionDestroy_t                                     pfnDestroy;
     xe_pfnFunctionSetGroupSize_t                                pfnSetGroupSize;
     xe_pfnFunctionSuggestGroupSize_t                            pfnSuggestGroupSize;
+    xe_pfnFunctionSuggestMaxCooperativeGroupCount_t             pfnSuggestMaxCooperativeGroupCount;
     xe_pfnFunctionSetArgumentValue_t                            pfnSetArgumentValue;
     xe_pfnFunctionSetAttribute_t                                pfnSetAttribute;
     xe_pfnFunctionGetAttribute_t                                pfnGetAttribute;

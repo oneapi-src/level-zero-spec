@@ -607,10 +607,12 @@ namespace xe
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same command list handle.
         ///     - The implementation of this function should be lock-free.
+        ///     - Use ::xeFunctionSuggestMaxCooperativeGroupCount to recommend max group
+        ///       count for device for cooperative functions that device supports.
         /// 
         /// @remarks
         ///   _Analogues_
-        ///     - **cuLaunchKernel**
+        ///     - **cudaLaunchCooperativeKernel**
         /// @throws result_t
         void __xecall
         AppendLaunchCooperativeFunction(

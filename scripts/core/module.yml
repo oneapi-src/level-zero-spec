@@ -354,6 +354,30 @@ returns:
         - "invalid number of threads."
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Query a suggested max group count for device for cooperative functions that device supports."
+class: $xFunction
+name: SuggestMaxCooperativeGroupCount
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_function_handle_t"
+      name: hFunction
+      desc: "[in] handle of the function object" 
+    - type: "uint32_t*"
+      name: groupCountX
+      desc: "[out] recommend group count X dimension."
+    - type: "uint32_t*"
+      name: groupCountY
+      desc: "[out] recommend group count Y dimension."
+    - type: "uint32_t*"
+      name: groupCountZ
+      desc: "[out] recommend group count Z dimension."
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "invalid number of threads."        
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Set function argument used on function launch."
 class: $xFunction
 name: SetArgumentValue
@@ -515,12 +539,13 @@ desc: "Launch function cooperatively over one or more work groups."
 class: $xCommandList
 name: AppendLaunchCooperativeFunction
 analogue:
-    - "**cuLaunchKernel**"
+    - "**cudaLaunchCooperativeKernel**"
 details:
     - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
     - "This may only be used for a command list that are submitted to command queue with cooperative flag set."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
+    - "Use $xFunctionSuggestMaxCooperativeGroupCount to recommend max group count for device for cooperative functions that device supports."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList

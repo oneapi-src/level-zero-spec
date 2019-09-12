@@ -828,6 +828,17 @@ device to generate the parameters.
     xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
 ```
 
+### Cooperative Functions
+Cooperative functions allow sharing of data and synchronization across all launched groups in a safe manner. To support this
+there is a ::xeCommandListAppendLaunchCooperativeFunction that allows launching a group of functions that can cooperate with each other.
+The command list must be submitted to a command queue that was created with the $X_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_FUNCTIONS command queue flag.
+Finally, there is a xeFunctionSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
+
+In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
+a command list. The most basic version of these is ::xeCommandListAppendLaunchFunction which takes a
+command list, function, launch arguments, and an optional synchronization event used to signal completion.
+The launch arguments contain thread group dimensions.
+
 ## <a name="smp">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
 Module functions.  The ::xeSamplerCreate function takes a sampler descriptor (::xe_sampler_desc_t):

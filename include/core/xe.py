@@ -1913,6 +1913,13 @@ else:
     _xeFunctionSuggestGroupSize_t = CFUNCTYPE( xe_result_t, xe_function_handle_t, c_ulong, c_ulong, c_ulong, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
 
 ###############################################################################
+## @brief Function-pointer for xeFunctionSuggestMaxCooperativeGroupCount
+if __use_win_types:
+    _xeFunctionSuggestMaxCooperativeGroupCount_t = WINFUNCTYPE( xe_result_t, xe_function_handle_t, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
+else:
+    _xeFunctionSuggestMaxCooperativeGroupCount_t = CFUNCTYPE( xe_result_t, xe_function_handle_t, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
+
+###############################################################################
 ## @brief Function-pointer for xeFunctionSetArgumentValue
 if __use_win_types:
     _xeFunctionSetArgumentValue_t = WINFUNCTYPE( xe_result_t, xe_function_handle_t, c_ulong, c_size_t, c_void_p )
@@ -1942,6 +1949,7 @@ class _xe_function_dditable_t(Structure):
         ("pfnDestroy", c_void_p),                                       ## _xeFunctionDestroy_t
         ("pfnSetGroupSize", c_void_p),                                  ## _xeFunctionSetGroupSize_t
         ("pfnSuggestGroupSize", c_void_p),                              ## _xeFunctionSuggestGroupSize_t
+        ("pfnSuggestMaxCooperativeGroupCount", c_void_p),               ## _xeFunctionSuggestMaxCooperativeGroupCount_t
         ("pfnSetArgumentValue", c_void_p),                              ## _xeFunctionSetArgumentValue_t
         ("pfnSetAttribute", c_void_p),                                  ## _xeFunctionSetAttribute_t
         ("pfnGetAttribute", c_void_p)                                   ## _xeFunctionGetAttribute_t
@@ -2197,6 +2205,7 @@ class XE_DDI:
         self.xeFunctionDestroy = _xeFunctionDestroy_t(self.__dditable.Function.pfnDestroy)
         self.xeFunctionSetGroupSize = _xeFunctionSetGroupSize_t(self.__dditable.Function.pfnSetGroupSize)
         self.xeFunctionSuggestGroupSize = _xeFunctionSuggestGroupSize_t(self.__dditable.Function.pfnSuggestGroupSize)
+        self.xeFunctionSuggestMaxCooperativeGroupCount = _xeFunctionSuggestMaxCooperativeGroupCount_t(self.__dditable.Function.pfnSuggestMaxCooperativeGroupCount)
         self.xeFunctionSetArgumentValue = _xeFunctionSetArgumentValue_t(self.__dditable.Function.pfnSetArgumentValue)
         self.xeFunctionSetAttribute = _xeFunctionSetAttribute_t(self.__dditable.Function.pfnSetAttribute)
         self.xeFunctionGetAttribute = _xeFunctionGetAttribute_t(self.__dditable.Function.pfnGetAttribute)
