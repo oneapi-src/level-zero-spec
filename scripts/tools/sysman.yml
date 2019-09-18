@@ -88,7 +88,7 @@ name: $T_DISABLE_GUARD_TIMEOUT
 value: "0xFFFFFFFF"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get current forward progress guard timeout"
+desc: "Get current forward progress guard timeout [PROPOSED - NOT SUPPORTED AT THIS TIME]"
 class: $tSysman
 name: DeviceGetGuardTimeout
 details:
@@ -105,7 +105,7 @@ params:
       desc: "[in] Returns the guard timeout in milliseconds (a value of $T_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is disabled)."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set forward progress guard timeout"
+desc: "Set forward progress guard timeout [PROPOSED - NOT SUPPORTED AT THIS TIME]"
 class: $tSysman
 name: DeviceSetGuardTimeout
 details:

@@ -74,7 +74,8 @@ xetSysmanDeviceGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current forward progress guard timeout
+/// @brief Get current forward progress guard timeout [PROPOSED - NOT SUPPORTED
+///        AT THIS TIME]
 /// 
 /// @details
 ///     - The driver keeps track of how long it takes the GPU to complete a
@@ -110,7 +111,8 @@ xetSysmanDeviceGetGuardTimeout(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set forward progress guard timeout
+/// @brief Set forward progress guard timeout [PROPOSED - NOT SUPPORTED AT THIS
+///        TIME]
 /// 
 /// @details
 ///     - The driver keeps track of how long it takes the GPU to complete a
@@ -2722,7 +2724,8 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get current forward progress guard timeout
+    /// @brief Get current forward progress guard timeout [PROPOSED - NOT SUPPORTED
+    ///        AT THIS TIME]
     /// 
     /// @details
     ///     - The driver keeps track of how long it takes the GPU to complete a
@@ -2751,7 +2754,8 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set forward progress guard timeout
+    /// @brief Set forward progress guard timeout [PROPOSED - NOT SUPPORTED AT THIS
+    ///        TIME]
     /// 
     /// @details
     ///     - The driver keeps track of how long it takes the GPU to complete a
