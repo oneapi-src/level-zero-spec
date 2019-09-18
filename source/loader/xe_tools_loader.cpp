@@ -1253,6 +1253,231 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetFanSpeed
+    xe_result_t __xecall
+    xetSysmanFrequencySetFanSpeed(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_fan_control_t* pFanControl               ///< [out] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnSetFanSpeed = dditable->xet.SysmanFrequency.pfnSetFanSpeed;
+        if( nullptr == pfnSetFanSpeed )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnSetFanSpeed( hFrequency, pFanControl );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcCapabilities
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcCapabilities(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_capabilities_t* pOcCapabilities          ///< [out] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetOcCapabilities = dditable->xet.SysmanFrequency.pfnGetOcCapabilities;
+        if( nullptr == pfnGetOcCapabilities )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnGetOcCapabilities( hFrequency, pOcCapabilities );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcVrTopology
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcVrTopology(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_vr_topology* pOcVrTopology               ///< [out] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetOcVrTopology = dditable->xet.SysmanFrequency.pfnGetOcVrTopology;
+        if( nullptr == pfnGetOcVrTopology )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnGetOcVrTopology( hFrequency, pOcVrTopology );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcOverrideProperties
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcOverrideProperties(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_settings_override_t* pOcSettingsOverride ///< [out] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetOcOverrideProperties = dditable->xet.SysmanFrequency.pfnGetOcOverrideProperties;
+        if( nullptr == pfnGetOcOverrideProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnGetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcIccMax
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcIccMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcIccMax                             ///< [out] Pointer to the allocated uint32.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetOcIccMax = dditable->xet.SysmanFrequency.pfnGetOcIccMax;
+        if( nullptr == pfnGetOcIccMax )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnGetOcIccMax( hFrequency, pOcIccMax );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcTjMax
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcTjMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcTjMax                              ///< [out] Pointer to the allocated uint32.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetOcTjMax = dditable->xet.SysmanFrequency.pfnGetOcTjMax;
+        if( nullptr == pfnGetOcTjMax )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnGetOcTjMax( hFrequency, pOcTjMax );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetOcOverrideProperties
+    xe_result_t __xecall
+    xetSysmanFrequencySetOcOverrideProperties(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_settings_override_t* pOcSettingsOverride ///< [in] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnSetOcOverrideProperties = dditable->xet.SysmanFrequency.pfnSetOcOverrideProperties;
+        if( nullptr == pfnSetOcOverrideProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnSetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetOcIccMax
+    xe_result_t __xecall
+    xetSysmanFrequencySetOcIccMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnSetOcIccMax = dditable->xet.SysmanFrequency.pfnSetOcIccMax;
+        if( nullptr == pfnSetOcIccMax )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnSetOcIccMax( hFrequency, pOcIccMax );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetOcTjMax
+    xe_result_t __xecall
+    xetSysmanFrequencySetOcTjMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnSetOcTjMax = dditable->xet.SysmanFrequency.pfnSetOcTjMax;
+        if( nullptr == pfnSetOcTjMax )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<xet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnSetOcTjMax( hFrequency, pOcTjMax );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanFrequencyGet
     xe_result_t __xecall
     xetSysmanFrequencyGet(
@@ -4012,6 +4237,15 @@ xetGetSysmanFrequencyProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
+            pDdiTable->pfnSetFanSpeed                              = loader::xetSysmanFrequencySetFanSpeed;
+            pDdiTable->pfnGetOcCapabilities                        = loader::xetSysmanFrequencyGetOcCapabilities;
+            pDdiTable->pfnGetOcVrTopology                          = loader::xetSysmanFrequencyGetOcVrTopology;
+            pDdiTable->pfnGetOcOverrideProperties                  = loader::xetSysmanFrequencyGetOcOverrideProperties;
+            pDdiTable->pfnGetOcIccMax                              = loader::xetSysmanFrequencyGetOcIccMax;
+            pDdiTable->pfnGetOcTjMax                               = loader::xetSysmanFrequencyGetOcTjMax;
+            pDdiTable->pfnSetOcOverrideProperties                  = loader::xetSysmanFrequencySetOcOverrideProperties;
+            pDdiTable->pfnSetOcIccMax                              = loader::xetSysmanFrequencySetOcIccMax;
+            pDdiTable->pfnSetOcTjMax                               = loader::xetSysmanFrequencySetOcTjMax;
             pDdiTable->pfnGetProperties                            = loader::xetSysmanFrequencyGetProperties;
             pDdiTable->pfnGetRange                                 = loader::xetSysmanFrequencyGetRange;
             pDdiTable->pfnSetRange                                 = loader::xetSysmanFrequencySetRange;

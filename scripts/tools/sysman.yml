@@ -585,7 +585,302 @@ params:
     - type: const $t_power_peak_limit_t*
       name: pPeak
       desc: "[in][optional] The peak power limit."
-
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Overcloking modes"
+class: $tSysmanFrequency
+name: $t_oc_mode_t
+etors:
+    - name: $T_OC_MODE_INTERPOLATIVE
+      value: "0"
+      desc: "Interpolative Mode."
+    - name: $T_OC_MODE_OVERRIDE
+      value: "1"
+      desc: "Override Mode."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Overclocking error type"
+class: $tSysmanFrequency
+name: $t_oc_error_type_t
+etors:
+    - name: $T_OVERCLOCKING_LOCKED
+      value: "225"
+      desc: "The overclocking is locked. Service is read-only."
+    - name: $T_OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED
+      desc: "The specified domain does not support the requested service."
+    - name: $T_OVERCLOCKING_RATIO_EXCEEDS_MAX
+      desc: "The ratio exceeds maximum overclocking limits."
+    - name: $T_OVERCLOCKING_VOLTAGE_EXCEEDS_MAX
+      desc: "Requested voltage exceeds input regulators max supported voltage."
+    - name: $T_OVERCLOCKING_NOT_SUPPORTED
+      desc: "No overclocking capability on the Hardware."
+    - name: $OVERCLOCKING_INVALID_VR_ADDRESS
+      desc: "The VR Address provided is illegal."
+    - name: $OVERCLOCKING_INVALID_ICCMAX
+      desc: "ICCMAX value given is invalid (more than 10 bits) or too low."
+    - name: $T_OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED
+      desc: "Voltage manipulation attempted when it is disabled."
+    - name: $T_OVERCLOCKING_INVALID_COMMAND
+      desc: "Data setting invalid for the command."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Overclocking VR Topolgy"
+class: $tSysmanFrequency
+name: $t_oc_vr_topology
+details:
+    - "Provides all the information related to the VR."
+members:
+    - type: $x_bool_t
+      name: VccInAuxExists
+      desc: "[out] VCCIN_AUX Exists (asserted if separate VR)"
+    - type: $x_bool_t
+      name: VccStgPgExists
+      desc: "[out] VCCSTG_PG Exists"
+    - type: $x_bool_t
+      name: VccStPgExists
+      desc: "[out] VCCST_PG Exists"
+    - type: $x_bool_t
+      name: VccSfrOcPgExists
+      desc: "[out] VCCSFR_OC_PG Exists"
+    - type: uint16_t
+      name: VccInAuxLp
+      desc: "[out] VCCIN_Aux_LP Level (0: 1.8v, 1: 1.65v)"
+    - type: uint16_t
+      name: VccInSvidAddress
+      desc: "[out] VCCIN SVID Address"
+    - type: uint16_t
+      name: VccInVrType
+      desc: "[out] VCCIN VR Type (asserted if SVID)"
+    - type: uint16_t
+      name: SvidNotPresent
+      desc: "[out] SVID not present"
+    - type: uint16_t
+      name: PsysDisabled
+      desc: "[out] PSYS Disabled"      
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Overclocking properties"
+class: $tSysmanFrequency
+name: $t_oc_capabilities_t
+details:
+    - "Provides all the overclocking capabilities and properties supported by the device in the current domain."
+members:
+    - type: uint16_t
+      name: MaxOcRatioLimit
+      desc: "[out] Max overclocking ratio limit"
+    - type: uint16_t
+      name: P0Ratio
+      desc: "[out] Fused P0 ratio."
+    - type: uint16_t
+      name: P0Voltage
+      desc: "[out] Fused P0 voltage."
+    - type: $x_bool_t
+      name: RatioOcSupported
+      desc: "[out] Ratio overclocking supported"
+    - type: $x_bool_t
+      name: VoltageOverrideSupported
+      desc: "[out] Voltage overrides supported"
+    - type: $x_bool_t
+      name: VoltageOffsetSupported
+      desc: "[out] Voltage offset is supported"
+    - type: $x_bool_t
+      name: HighVoltModeCapable
+      desc: "[out] Capable of high voltage mode"
+    - type: $x_bool_t
+      name: HighVoltModeEnabled
+      desc: "[out] High voltage mode is enabled"
+    - type: $t_oc_vr_topology
+      name: OcVrTopology
+      desc: "[out] Hold all the Vr Topology properties."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Overclocking settings override"
+class: $tSysmanFrequency
+name: $t_oc_settings_override_t
+details:
+    - "Provide the current settings to be read or changed."
+members:
+    - type: uint16_t
+      name: MaxOcRatio
+      desc: "[in,out] Max overclocking ratio"
+    - type: uint16_t
+      name: TargetVoltage
+      desc: "[in,out] Target Voltage. Units: divide by 2^10 for decimal voltage."
+    - type: uint16_t
+      name: TargetMode
+      desc: "[in,out] Overclock Mode: 0 - Interpolative,  1 - Override."
+    - type: uint16_t
+      name: VoltageOffset
+      desc: "[in,out] Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV)."
+    - type: uint32_t
+      name: ICCMax
+      desc: "[in,out] Maximum desired current."  
+    - type: uint32_t
+      name: TjMax
+      desc: "[in,out] Maximum temperature in °C."  
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fan Point."
+class: $tSysmanFrequency
+name: $t_oc_fan_point_t
+details:
+    - "Temperature is given in °C and fan speed is given as a percentage value"
+members:
+    - type: uint8_t
+      name: TemperatureDegreesCelsius
+      desc: "[in] Temperature for current point."
+    - type: uint8_t
+      name: FanSpeedPercent
+      desc: "[in] Percentage value, where 0% means stop the fan and 100% means run the fan at maximum speed." 
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fan control settings."
+class: $tSysmanFrequency
+name: $t_oc_fan_control_t
+details:
+    - "Provide the means to control the fan speed."
+members:
+    - type: uint32_t
+      name: FanPointsNumber
+      desc: "[in] Number of fan points."
+    - type: $t_oc_fan_point_t*
+      name: pFanPoints
+      desc: "[in] Array with FanPointsNumber of points."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set fan speed"
+class: $tSysmanFrequency
+name: SetFanSpeed
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_oc_fan_control_t*
+      name: pFanControl
+      desc: "[out] Pointer to the allocated structure."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the overclocking capabilities."
+class: $tSysmanFrequency
+name: GetOcCapabilities
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_oc_capabilities_t*
+      name: pOcCapabilities
+      desc: "[out] Pointer to the allocated structure."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the Vr topology."
+class: $tSysmanFrequency
+name: GetOcVrTopology
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_oc_vr_topology*
+      name: pOcVrTopology
+      desc: "[out] Pointer to the allocated structure."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the Oc override properties."
+class: $tSysmanFrequency
+name: GetOcOverrideProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_oc_settings_override_t*
+      name: pOcSettingsOverride
+      desc: "[out] Pointer to the allocated structure."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the Oc Icc Max."
+class: $tSysmanFrequency
+name: GetOcIccMax
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: pOcIccMax
+      desc: "[out] Pointer to the allocated uint32."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the Oc Tj Max."
+class: $tSysmanFrequency
+name: GetOcTjMax
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: pOcTjMax
+      desc: "[out] Pointer to the allocated uint32."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the Oc override properties."
+class: $tSysmanFrequency
+name: SetOcOverrideProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_oc_settings_override_t*
+      name: pOcSettingsOverride
+      desc: "[in] Pointer to the allocated structure."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the Oc Icc Max."
+class: $tSysmanFrequency
+name: SetOcIccMax
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: pOcIccMax
+      desc: "[in] Pointer to the allocated uint32."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the Oc Tj Max."
+class: $tSysmanFrequency
+name: SetOcTjMax
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: pOcTjMax
+      desc: "[in] Pointer to the allocated uint32."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency domains"

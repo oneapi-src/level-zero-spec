@@ -1141,6 +1141,240 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetFanSpeed
+    xe_result_t __xecall
+    xetSysmanFrequencySetFanSpeed(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_fan_control_t* pFanControl               ///< [out] Pointer to the allocated structure.
+        )
+    {
+        auto pfnSetFanSpeed = context.xetDdiTable.SysmanFrequency.pfnSetFanSpeed;
+
+        if( nullptr == pfnSetFanSpeed )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pFanControl )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetFanSpeed( hFrequency, pFanControl );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcCapabilities
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcCapabilities(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_capabilities_t* pOcCapabilities          ///< [out] Pointer to the allocated structure.
+        )
+    {
+        auto pfnGetOcCapabilities = context.xetDdiTable.SysmanFrequency.pfnGetOcCapabilities;
+
+        if( nullptr == pfnGetOcCapabilities )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pOcCapabilities )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetOcCapabilities( hFrequency, pOcCapabilities );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcVrTopology
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcVrTopology(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_vr_topology* pOcVrTopology               ///< [out] Pointer to the allocated structure.
+        )
+    {
+        auto pfnGetOcVrTopology = context.xetDdiTable.SysmanFrequency.pfnGetOcVrTopology;
+
+        if( nullptr == pfnGetOcVrTopology )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pOcVrTopology )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetOcVrTopology( hFrequency, pOcVrTopology );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcOverrideProperties
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcOverrideProperties(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_settings_override_t* pOcSettingsOverride ///< [out] Pointer to the allocated structure.
+        )
+    {
+        auto pfnGetOcOverrideProperties = context.xetDdiTable.SysmanFrequency.pfnGetOcOverrideProperties;
+
+        if( nullptr == pfnGetOcOverrideProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pOcSettingsOverride )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcIccMax
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcIccMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcIccMax                             ///< [out] Pointer to the allocated uint32.
+        )
+    {
+        auto pfnGetOcIccMax = context.xetDdiTable.SysmanFrequency.pfnGetOcIccMax;
+
+        if( nullptr == pfnGetOcIccMax )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pOcIccMax )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetOcIccMax( hFrequency, pOcIccMax );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcTjMax
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcTjMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcTjMax                              ///< [out] Pointer to the allocated uint32.
+        )
+    {
+        auto pfnGetOcTjMax = context.xetDdiTable.SysmanFrequency.pfnGetOcTjMax;
+
+        if( nullptr == pfnGetOcTjMax )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pOcTjMax )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetOcTjMax( hFrequency, pOcTjMax );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetOcOverrideProperties
+    xe_result_t __xecall
+    xetSysmanFrequencySetOcOverrideProperties(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_settings_override_t* pOcSettingsOverride ///< [in] Pointer to the allocated structure.
+        )
+    {
+        auto pfnSetOcOverrideProperties = context.xetDdiTable.SysmanFrequency.pfnSetOcOverrideProperties;
+
+        if( nullptr == pfnSetOcOverrideProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pOcSettingsOverride )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetOcIccMax
+    xe_result_t __xecall
+    xetSysmanFrequencySetOcIccMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        auto pfnSetOcIccMax = context.xetDdiTable.SysmanFrequency.pfnSetOcIccMax;
+
+        if( nullptr == pfnSetOcIccMax )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pOcIccMax )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetOcIccMax( hFrequency, pOcIccMax );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetOcTjMax
+    xe_result_t __xecall
+    xetSysmanFrequencySetOcTjMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        auto pfnSetOcTjMax = context.xetDdiTable.SysmanFrequency.pfnSetOcTjMax;
+
+        if( nullptr == pfnSetOcTjMax )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pOcTjMax )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetOcTjMax( hFrequency, pOcTjMax );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanFrequencyGet
     xe_result_t __xecall
     xetSysmanFrequencyGet(
@@ -3456,6 +3690,33 @@ xetGetSysmanFrequencyProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnSetFanSpeed                              = pDdiTable->pfnSetFanSpeed;
+    pDdiTable->pfnSetFanSpeed                            = layer::xetSysmanFrequencySetFanSpeed;
+
+    dditable.pfnGetOcCapabilities                        = pDdiTable->pfnGetOcCapabilities;
+    pDdiTable->pfnGetOcCapabilities                      = layer::xetSysmanFrequencyGetOcCapabilities;
+
+    dditable.pfnGetOcVrTopology                          = pDdiTable->pfnGetOcVrTopology;
+    pDdiTable->pfnGetOcVrTopology                        = layer::xetSysmanFrequencyGetOcVrTopology;
+
+    dditable.pfnGetOcOverrideProperties                  = pDdiTable->pfnGetOcOverrideProperties;
+    pDdiTable->pfnGetOcOverrideProperties                = layer::xetSysmanFrequencyGetOcOverrideProperties;
+
+    dditable.pfnGetOcIccMax                              = pDdiTable->pfnGetOcIccMax;
+    pDdiTable->pfnGetOcIccMax                            = layer::xetSysmanFrequencyGetOcIccMax;
+
+    dditable.pfnGetOcTjMax                               = pDdiTable->pfnGetOcTjMax;
+    pDdiTable->pfnGetOcTjMax                             = layer::xetSysmanFrequencyGetOcTjMax;
+
+    dditable.pfnSetOcOverrideProperties                  = pDdiTable->pfnSetOcOverrideProperties;
+    pDdiTable->pfnSetOcOverrideProperties                = layer::xetSysmanFrequencySetOcOverrideProperties;
+
+    dditable.pfnSetOcIccMax                              = pDdiTable->pfnSetOcIccMax;
+    pDdiTable->pfnSetOcIccMax                            = layer::xetSysmanFrequencySetOcIccMax;
+
+    dditable.pfnSetOcTjMax                               = pDdiTable->pfnSetOcTjMax;
+    pDdiTable->pfnSetOcTjMax                             = layer::xetSysmanFrequencySetOcTjMax;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = layer::xetSysmanFrequencyGetProperties;

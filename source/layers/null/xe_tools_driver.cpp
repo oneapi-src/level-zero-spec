@@ -1094,6 +1094,222 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetFanSpeed
+    xe_result_t __xecall
+    xetSysmanFrequencySetFanSpeed(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_fan_control_t* pFanControl               ///< [out] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetFanSpeed = context.xetDdiTable.SysmanFrequency.pfnSetFanSpeed;
+        if( nullptr != pfnSetFanSpeed )
+        {
+            result = pfnSetFanSpeed( hFrequency, pFanControl );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcCapabilities
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcCapabilities(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_capabilities_t* pOcCapabilities          ///< [out] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetOcCapabilities = context.xetDdiTable.SysmanFrequency.pfnGetOcCapabilities;
+        if( nullptr != pfnGetOcCapabilities )
+        {
+            result = pfnGetOcCapabilities( hFrequency, pOcCapabilities );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcVrTopology
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcVrTopology(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_vr_topology* pOcVrTopology               ///< [out] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetOcVrTopology = context.xetDdiTable.SysmanFrequency.pfnGetOcVrTopology;
+        if( nullptr != pfnGetOcVrTopology )
+        {
+            result = pfnGetOcVrTopology( hFrequency, pOcVrTopology );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcOverrideProperties
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcOverrideProperties(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_settings_override_t* pOcSettingsOverride ///< [out] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetOcOverrideProperties = context.xetDdiTable.SysmanFrequency.pfnGetOcOverrideProperties;
+        if( nullptr != pfnGetOcOverrideProperties )
+        {
+            result = pfnGetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcIccMax
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcIccMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcIccMax                             ///< [out] Pointer to the allocated uint32.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetOcIccMax = context.xetDdiTable.SysmanFrequency.pfnGetOcIccMax;
+        if( nullptr != pfnGetOcIccMax )
+        {
+            result = pfnGetOcIccMax( hFrequency, pOcIccMax );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencyGetOcTjMax
+    xe_result_t __xecall
+    xetSysmanFrequencyGetOcTjMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcTjMax                              ///< [out] Pointer to the allocated uint32.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetOcTjMax = context.xetDdiTable.SysmanFrequency.pfnGetOcTjMax;
+        if( nullptr != pfnGetOcTjMax )
+        {
+            result = pfnGetOcTjMax( hFrequency, pOcTjMax );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetOcOverrideProperties
+    xe_result_t __xecall
+    xetSysmanFrequencySetOcOverrideProperties(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        xet_oc_settings_override_t* pOcSettingsOverride ///< [in] Pointer to the allocated structure.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetOcOverrideProperties = context.xetDdiTable.SysmanFrequency.pfnSetOcOverrideProperties;
+        if( nullptr != pfnSetOcOverrideProperties )
+        {
+            result = pfnSetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetOcIccMax
+    xe_result_t __xecall
+    xetSysmanFrequencySetOcIccMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetOcIccMax = context.xetDdiTable.SysmanFrequency.pfnSetOcIccMax;
+        if( nullptr != pfnSetOcIccMax )
+        {
+            result = pfnSetOcIccMax( hFrequency, pOcIccMax );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanFrequencySetOcTjMax
+    xe_result_t __xecall
+    xetSysmanFrequencySetOcTjMax(
+        xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetOcTjMax = context.xetDdiTable.SysmanFrequency.pfnSetOcTjMax;
+        if( nullptr != pfnSetOcTjMax )
+        {
+            result = pfnSetOcTjMax( hFrequency, pOcTjMax );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanFrequencyGet
     xe_result_t __xecall
     xetSysmanFrequencyGet(
@@ -3248,6 +3464,24 @@ xetGetSysmanFrequencyProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnSetFanSpeed                            = driver::xetSysmanFrequencySetFanSpeed;
+
+    pDdiTable->pfnGetOcCapabilities                      = driver::xetSysmanFrequencyGetOcCapabilities;
+
+    pDdiTable->pfnGetOcVrTopology                        = driver::xetSysmanFrequencyGetOcVrTopology;
+
+    pDdiTable->pfnGetOcOverrideProperties                = driver::xetSysmanFrequencyGetOcOverrideProperties;
+
+    pDdiTable->pfnGetOcIccMax                            = driver::xetSysmanFrequencyGetOcIccMax;
+
+    pDdiTable->pfnGetOcTjMax                             = driver::xetSysmanFrequencyGetOcTjMax;
+
+    pDdiTable->pfnSetOcOverrideProperties                = driver::xetSysmanFrequencySetOcOverrideProperties;
+
+    pDdiTable->pfnSetOcIccMax                            = driver::xetSysmanFrequencySetOcIccMax;
+
+    pDdiTable->pfnSetOcTjMax                             = driver::xetSysmanFrequencySetOcTjMax;
 
     pDdiTable->pfnGetProperties                          = driver::xetSysmanFrequencyGetProperties;
 

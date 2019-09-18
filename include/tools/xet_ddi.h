@@ -947,6 +947,69 @@ typedef xe_result_t (__xecall *xet_pfnGetSysmanPowerProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencySetFanSpeed 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencySetFanSpeed_t)(
+    xet_sysman_freq_handle_t,
+    xet_oc_fan_control_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencyGetOcCapabilities 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetOcCapabilities_t)(
+    xet_sysman_freq_handle_t,
+    xet_oc_capabilities_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencyGetOcVrTopology 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetOcVrTopology_t)(
+    xet_sysman_freq_handle_t,
+    xet_oc_vr_topology*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencyGetOcOverrideProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetOcOverrideProperties_t)(
+    xet_sysman_freq_handle_t,
+    xet_oc_settings_override_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencyGetOcIccMax 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetOcIccMax_t)(
+    xet_sysman_freq_handle_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencyGetOcTjMax 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetOcTjMax_t)(
+    xet_sysman_freq_handle_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencySetOcOverrideProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencySetOcOverrideProperties_t)(
+    xet_sysman_freq_handle_t,
+    xet_oc_settings_override_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencySetOcIccMax 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencySetOcIccMax_t)(
+    xet_sysman_freq_handle_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencySetOcTjMax 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencySetOcTjMax_t)(
+    xet_sysman_freq_handle_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanFrequencyGetProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetProperties_t)(
     xet_sysman_freq_handle_t,
@@ -985,6 +1048,15 @@ typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetThrottleTime_t)(
 /// @brief Table of SysmanFrequency functions pointers
 typedef struct _xet_sysman_frequency_dditable_t
 {
+    xet_pfnSysmanFrequencySetFanSpeed_t                         pfnSetFanSpeed;
+    xet_pfnSysmanFrequencyGetOcCapabilities_t                   pfnGetOcCapabilities;
+    xet_pfnSysmanFrequencyGetOcVrTopology_t                     pfnGetOcVrTopology;
+    xet_pfnSysmanFrequencyGetOcOverrideProperties_t             pfnGetOcOverrideProperties;
+    xet_pfnSysmanFrequencyGetOcIccMax_t                         pfnGetOcIccMax;
+    xet_pfnSysmanFrequencyGetOcTjMax_t                          pfnGetOcTjMax;
+    xet_pfnSysmanFrequencySetOcOverrideProperties_t             pfnSetOcOverrideProperties;
+    xet_pfnSysmanFrequencySetOcIccMax_t                         pfnSetOcIccMax;
+    xet_pfnSysmanFrequencySetOcTjMax_t                          pfnSetOcTjMax;
     xet_pfnSysmanFrequencyGetProperties_t                       pfnGetProperties;
     xet_pfnSysmanFrequencyGetRange_t                            pfnGetRange;
     xet_pfnSysmanFrequencySetRange_t                            pfnSetRange;

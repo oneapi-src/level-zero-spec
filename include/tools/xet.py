@@ -628,6 +628,112 @@ class xet_power_peak_limit_t(Structure):
     ]
 
 ###############################################################################
+## @brief Overcloking modes
+class xet_oc_mode_v(IntEnum):
+    INTERPOLATIVE = 0                               ## Interpolative Mode.
+    OVERRIDE = 1                                    ## Override Mode.
+
+class xet_oc_mode_t(c_int):
+    def __str__(self):
+        return str(xet_oc_mode_v(value))
+
+
+###############################################################################
+## @brief Overclocking error type
+class xet_oc_error_type_v(IntEnum):
+    OVERCLOCKING_LOCKED = 225                       ## The overclocking is locked. Service is read-only.
+    OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED = auto() ## The specified domain does not support the requested service.
+    OVERCLOCKING_RATIO_EXCEEDS_MAX = auto()         ## The ratio exceeds maximum overclocking limits.
+    OVERCLOCKING_VOLTAGE_EXCEEDS_MAX = auto()       ## Requested voltage exceeds input regulators max supported voltage.
+    OVERCLOCKING_NOT_SUPPORTED = auto()             ## No overclocking capability on the Hardware.
+    $OVERCLOCKING_INVALID_VR_ADDRESS = auto()       ## The VR Address provided is illegal.
+    $OVERCLOCKING_INVALID_ICCMAX = auto()           ## ICCMAX value given is invalid (more than 10 bits) or too low.
+    OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED = auto() ## Voltage manipulation attempted when it is disabled.
+    OVERCLOCKING_INVALID_COMMAND = auto()           ## Data setting invalid for the command.
+
+class xet_oc_error_type_t(c_int):
+    def __str__(self):
+        return str(xet_oc_error_type_v(value))
+
+
+###############################################################################
+## @brief Overclocking VR Topolgy
+## 
+## @details
+##     - Provides all the information related to the VR.
+class xet_oc_vr_topology(Structure):
+    _fields_ = [
+        ("VccInAuxExists", xe_bool_t),                                  ## [out] VCCIN_AUX Exists (asserted if separate VR)
+        ("VccStgPgExists", xe_bool_t),                                  ## [out] VCCSTG_PG Exists
+        ("VccStPgExists", xe_bool_t),                                   ## [out] VCCST_PG Exists
+        ("VccSfrOcPgExists", xe_bool_t),                                ## [out] VCCSFR_OC_PG Exists
+        ("VccInAuxLp", c_ushort),                                       ## [out] VCCIN_Aux_LP Level (0: 1.8v, 1: 1.65v)
+        ("VccInSvidAddress", c_ushort),                                 ## [out] VCCIN SVID Address
+        ("VccInVrType", c_ushort),                                      ## [out] VCCIN VR Type (asserted if SVID)
+        ("SvidNotPresent", c_ushort),                                   ## [out] SVID not present
+        ("PsysDisabled", c_ushort)                                      ## [out] PSYS Disabled
+    ]
+
+###############################################################################
+## @brief Overclocking properties
+## 
+## @details
+##     - Provides all the overclocking capabilities and properties supported by
+##       the device in the current domain.
+class xet_oc_capabilities_t(Structure):
+    _fields_ = [
+        ("MaxOcRatioLimit", c_ushort),                                  ## [out] Max overclocking ratio limit
+        ("P0Ratio", c_ushort),                                          ## [out] Fused P0 ratio.
+        ("P0Voltage", c_ushort),                                        ## [out] Fused P0 voltage.
+        ("RatioOcSupported", xe_bool_t),                                ## [out] Ratio overclocking supported
+        ("VoltageOverrideSupported", xe_bool_t),                        ## [out] Voltage overrides supported
+        ("VoltageOffsetSupported", xe_bool_t),                          ## [out] Voltage offset is supported
+        ("HighVoltModeCapable", xe_bool_t),                             ## [out] Capable of high voltage mode
+        ("HighVoltModeEnabled", xe_bool_t),                             ## [out] High voltage mode is enabled
+        ("OcVrTopology", xet_oc_vr_topology)                            ## [out] Hold all the Vr Topology properties.
+    ]
+
+###############################################################################
+## @brief Overclocking settings override
+## 
+## @details
+##     - Provide the current settings to be read or changed.
+class xet_oc_settings_override_t(Structure):
+    _fields_ = [
+        ("MaxOcRatio", c_ushort),                                       ## [in,out] Max overclocking ratio
+        ("TargetVoltage", c_ushort),                                    ## [in,out] Target Voltage. Units: divide by 2^10 for decimal voltage.
+        ("TargetMode", c_ushort),                                       ## [in,out] Overclock Mode: 0 - Interpolative,  1 - Override.
+        ("VoltageOffset", c_ushort),                                    ## [in,out] Voltage offset +/-999mV (minimum end voltage cannot be lower
+                                                                        ## than 250mV).
+        ("ICCMax", c_ulong),                                            ## [in,out] Maximum desired current.
+        ("TjMax", c_ulong)                                              ## [in,out] Maximum temperature in °C.
+    ]
+
+###############################################################################
+## @brief Fan Point.
+## 
+## @details
+##     - Temperature is given in °C and fan speed is given as a percentage
+##       value
+class xet_oc_fan_point_t(Structure):
+    _fields_ = [
+        ("TemperatureDegreesCelsius", c_ubyte),                         ## [in] Temperature for current point.
+        ("FanSpeedPercent", c_ubyte)                                    ## [in] Percentage value, where 0% means stop the fan and 100% means run
+                                                                        ## the fan at maximum speed.
+    ]
+
+###############################################################################
+## @brief Fan control settings.
+## 
+## @details
+##     - Provide the means to control the fan speed.
+class xet_oc_fan_control_t(Structure):
+    _fields_ = [
+        ("FanPointsNumber", c_ulong),                                   ## [in] Number of fan points.
+        ("pFanPoints", POINTER(xet_oc_fan_poc_int_t))                   ## [in] Array with FanPointsNumber of points.
+    ]
+
+###############################################################################
 ## @brief Frequency domains
 class xet_freq_domain_v(IntEnum):
     GPU = 0                                         ## Frequency of the GPU.
@@ -1872,6 +1978,69 @@ class _xet_sysman_power_dditable_t(Structure):
     ]
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanFrequencySetFanSpeed
+if __use_win_types:
+    _xetSysmanFrequencySetFanSpeed_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_fan_control_t) )
+else:
+    _xetSysmanFrequencySetFanSpeed_t = CFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_fan_control_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetOcCapabilities
+if __use_win_types:
+    _xetSysmanFrequencyGetOcCapabilities_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_capabilities_t) )
+else:
+    _xetSysmanFrequencyGetOcCapabilities_t = CFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_capabilities_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetOcVrTopology
+if __use_win_types:
+    _xetSysmanFrequencyGetOcVrTopology_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_vr_topology) )
+else:
+    _xetSysmanFrequencyGetOcVrTopology_t = CFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_vr_topology) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetOcOverrideProperties
+if __use_win_types:
+    _xetSysmanFrequencyGetOcOverrideProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_settings_override_t) )
+else:
+    _xetSysmanFrequencyGetOcOverrideProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_settings_override_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetOcIccMax
+if __use_win_types:
+    _xetSysmanFrequencyGetOcIccMax_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanFrequencyGetOcIccMax_t = CFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetOcTjMax
+if __use_win_types:
+    _xetSysmanFrequencyGetOcTjMax_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanFrequencyGetOcTjMax_t = CFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencySetOcOverrideProperties
+if __use_win_types:
+    _xetSysmanFrequencySetOcOverrideProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_settings_override_t) )
+else:
+    _xetSysmanFrequencySetOcOverrideProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_oc_settings_override_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencySetOcIccMax
+if __use_win_types:
+    _xetSysmanFrequencySetOcIccMax_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanFrequencySetOcIccMax_t = CFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencySetOcTjMax
+if __use_win_types:
+    _xetSysmanFrequencySetOcTjMax_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanFrequencySetOcTjMax_t = CFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(c_ulong) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanFrequencyGetProperties
 if __use_win_types:
     _xetSysmanFrequencyGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_freq_handle_t, POINTER(xet_freq_properties_t) )
@@ -1911,6 +2080,15 @@ else:
 ## @brief Table of SysmanFrequency functions pointers
 class _xet_sysman_frequency_dditable_t(Structure):
     _fields_ = [
+        ("pfnSetFanSpeed", c_void_p),                                   ## _xetSysmanFrequencySetFanSpeed_t
+        ("pfnGetOcCapabilities", c_void_p),                             ## _xetSysmanFrequencyGetOcCapabilities_t
+        ("pfnGetOcVrTopology", c_void_p),                               ## _xetSysmanFrequencyGetOcVrTopology_t
+        ("pfnGetOcOverrideProperties", c_void_p),                       ## _xetSysmanFrequencyGetOcOverrideProperties_t
+        ("pfnGetOcIccMax", c_void_p),                                   ## _xetSysmanFrequencyGetOcIccMax_t
+        ("pfnGetOcTjMax", c_void_p),                                    ## _xetSysmanFrequencyGetOcTjMax_t
+        ("pfnSetOcOverrideProperties", c_void_p),                       ## _xetSysmanFrequencySetOcOverrideProperties_t
+        ("pfnSetOcIccMax", c_void_p),                                   ## _xetSysmanFrequencySetOcIccMax_t
+        ("pfnSetOcTjMax", c_void_p),                                    ## _xetSysmanFrequencySetOcTjMax_t
         ("pfnGetProperties", c_void_p),                                 ## _xetSysmanFrequencyGetProperties_t
         ("pfnGetRange", c_void_p),                                      ## _xetSysmanFrequencyGetRange_t
         ("pfnSetRange", c_void_p),                                      ## _xetSysmanFrequencySetRange_t
@@ -2513,6 +2691,15 @@ class XET_DDI:
         self.__dditable.SysmanFrequency = _SysmanFrequency
 
         # attach function interface to function address
+        self.xetSysmanFrequencySetFanSpeed = _xetSysmanFrequencySetFanSpeed_t(self.__dditable.SysmanFrequency.pfnSetFanSpeed)
+        self.xetSysmanFrequencyGetOcCapabilities = _xetSysmanFrequencyGetOcCapabilities_t(self.__dditable.SysmanFrequency.pfnGetOcCapabilities)
+        self.xetSysmanFrequencyGetOcVrTopology = _xetSysmanFrequencyGetOcVrTopology_t(self.__dditable.SysmanFrequency.pfnGetOcVrTopology)
+        self.xetSysmanFrequencyGetOcOverrideProperties = _xetSysmanFrequencyGetOcOverrideProperties_t(self.__dditable.SysmanFrequency.pfnGetOcOverrideProperties)
+        self.xetSysmanFrequencyGetOcIccMax = _xetSysmanFrequencyGetOcIccMax_t(self.__dditable.SysmanFrequency.pfnGetOcIccMax)
+        self.xetSysmanFrequencyGetOcTjMax = _xetSysmanFrequencyGetOcTjMax_t(self.__dditable.SysmanFrequency.pfnGetOcTjMax)
+        self.xetSysmanFrequencySetOcOverrideProperties = _xetSysmanFrequencySetOcOverrideProperties_t(self.__dditable.SysmanFrequency.pfnSetOcOverrideProperties)
+        self.xetSysmanFrequencySetOcIccMax = _xetSysmanFrequencySetOcIccMax_t(self.__dditable.SysmanFrequency.pfnSetOcIccMax)
+        self.xetSysmanFrequencySetOcTjMax = _xetSysmanFrequencySetOcTjMax_t(self.__dditable.SysmanFrequency.pfnSetOcTjMax)
         self.xetSysmanFrequencyGetProperties = _xetSysmanFrequencyGetProperties_t(self.__dditable.SysmanFrequency.pfnGetProperties)
         self.xetSysmanFrequencyGetRange = _xetSysmanFrequencyGetRange_t(self.__dditable.SysmanFrequency.pfnGetRange)
         self.xetSysmanFrequencySetRange = _xetSysmanFrequencySetRange_t(self.__dditable.SysmanFrequency.pfnSetRange)

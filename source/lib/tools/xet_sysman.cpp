@@ -541,6 +541,258 @@ xetSysmanPowerSetLimits(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Set fan speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pFanControl
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetFanSpeed(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_fan_control_t* pFanControl               ///< [out] Pointer to the allocated structure.
+    )
+{
+    auto pfnSetFanSpeed = xet_lib::context.ddiTable.SysmanFrequency.pfnSetFanSpeed;
+    if( nullptr == pfnSetFanSpeed )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetFanSpeed( hFrequency, pFanControl );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the overclocking capabilities.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcCapabilities
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcCapabilities(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_capabilities_t* pOcCapabilities          ///< [out] Pointer to the allocated structure.
+    )
+{
+    auto pfnGetOcCapabilities = xet_lib::context.ddiTable.SysmanFrequency.pfnGetOcCapabilities;
+    if( nullptr == pfnGetOcCapabilities )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetOcCapabilities( hFrequency, pOcCapabilities );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the Vr topology.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcVrTopology
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcVrTopology(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_vr_topology* pOcVrTopology               ///< [out] Pointer to the allocated structure.
+    )
+{
+    auto pfnGetOcVrTopology = xet_lib::context.ddiTable.SysmanFrequency.pfnGetOcVrTopology;
+    if( nullptr == pfnGetOcVrTopology )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetOcVrTopology( hFrequency, pOcVrTopology );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the Oc override properties.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcSettingsOverride
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcOverrideProperties(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_settings_override_t* pOcSettingsOverride ///< [out] Pointer to the allocated structure.
+    )
+{
+    auto pfnGetOcOverrideProperties = xet_lib::context.ddiTable.SysmanFrequency.pfnGetOcOverrideProperties;
+    if( nullptr == pfnGetOcOverrideProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the Oc Icc Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcIccMax
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcIccMax(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    uint32_t* pOcIccMax                             ///< [out] Pointer to the allocated uint32.
+    )
+{
+    auto pfnGetOcIccMax = xet_lib::context.ddiTable.SysmanFrequency.pfnGetOcIccMax;
+    if( nullptr == pfnGetOcIccMax )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetOcIccMax( hFrequency, pOcIccMax );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the Oc Tj Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcTjMax
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcTjMax(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    uint32_t* pOcTjMax                              ///< [out] Pointer to the allocated uint32.
+    )
+{
+    auto pfnGetOcTjMax = xet_lib::context.ddiTable.SysmanFrequency.pfnGetOcTjMax;
+    if( nullptr == pfnGetOcTjMax )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetOcTjMax( hFrequency, pOcTjMax );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set the Oc override properties.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcSettingsOverride
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetOcOverrideProperties(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_settings_override_t* pOcSettingsOverride ///< [in] Pointer to the allocated structure.
+    )
+{
+    auto pfnSetOcOverrideProperties = xet_lib::context.ddiTable.SysmanFrequency.pfnSetOcOverrideProperties;
+    if( nullptr == pfnSetOcOverrideProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set the Oc Icc Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcIccMax
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetOcIccMax(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+    )
+{
+    auto pfnSetOcIccMax = xet_lib::context.ddiTable.SysmanFrequency.pfnSetOcIccMax;
+    if( nullptr == pfnSetOcIccMax )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetOcIccMax( hFrequency, pOcIccMax );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set the Oc Tj Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcTjMax
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetOcTjMax(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+    )
+{
+    auto pfnSetOcTjMax = xet_lib::context.ddiTable.SysmanFrequency.pfnSetOcTjMax;
+    if( nullptr == pfnSetOcTjMax )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetOcTjMax( hFrequency, pOcTjMax );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle of frequency domains
 /// 
 /// @details
@@ -2863,6 +3115,237 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set fan speed
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - oc_fan_control_t: Pointer to the allocated structure.
+    /// 
+    /// @throws result_t
+    SysmanFrequency::oc_fan_control_t __xecall
+    SysmanFrequency::SetFanSpeed(
+        void
+        )
+    {
+        xet_oc_fan_control_t fanControl;
+
+        auto result = static_cast<result_t>( ::xetSysmanFrequencySetFanSpeed(
+            reinterpret_cast<xet_sysman_freq_handle_t>( getHandle() ),
+            &fanControl ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanFrequency::SetFanSpeed" );
+
+        return *reinterpret_cast<oc_fan_control_t*>( &fanControl );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get the overclocking capabilities.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - oc_capabilities_t: Pointer to the allocated structure.
+    /// 
+    /// @throws result_t
+    SysmanFrequency::oc_capabilities_t __xecall
+    SysmanFrequency::GetOcCapabilities(
+        void
+        )
+    {
+        xet_oc_capabilities_t ocCapabilities;
+
+        auto result = static_cast<result_t>( ::xetSysmanFrequencyGetOcCapabilities(
+            reinterpret_cast<xet_sysman_freq_handle_t>( getHandle() ),
+            &ocCapabilities ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanFrequency::GetOcCapabilities" );
+
+        return *reinterpret_cast<oc_capabilities_t*>( &ocCapabilities );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get the Vr topology.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - oc_vr_topology: Pointer to the allocated structure.
+    /// 
+    /// @throws result_t
+    SysmanFrequency::oc_vr_topology __xecall
+    SysmanFrequency::GetOcVrTopology(
+        void
+        )
+    {
+        xet_oc_vr_topology ocVrTopology;
+
+        auto result = static_cast<result_t>( ::xetSysmanFrequencyGetOcVrTopology(
+            reinterpret_cast<xet_sysman_freq_handle_t>( getHandle() ),
+            &ocVrTopology ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanFrequency::GetOcVrTopology" );
+
+        return *reinterpret_cast<oc_vr_topology*>( &ocVrTopology );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get the Oc override properties.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - oc_settings_override_t: Pointer to the allocated structure.
+    /// 
+    /// @throws result_t
+    SysmanFrequency::oc_settings_override_t __xecall
+    SysmanFrequency::GetOcOverrideProperties(
+        void
+        )
+    {
+        xet_oc_settings_override_t ocSettingsOverride;
+
+        auto result = static_cast<result_t>( ::xetSysmanFrequencyGetOcOverrideProperties(
+            reinterpret_cast<xet_sysman_freq_handle_t>( getHandle() ),
+            &ocSettingsOverride ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanFrequency::GetOcOverrideProperties" );
+
+        return *reinterpret_cast<oc_settings_override_t*>( &ocSettingsOverride );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get the Oc Icc Max.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - uint32_t: Pointer to the allocated uint32.
+    /// 
+    /// @throws result_t
+    uint32_t __xecall
+    SysmanFrequency::GetOcIccMax(
+        void
+        )
+    {
+        uint32_t ocIccMax;
+
+        auto result = static_cast<result_t>( ::xetSysmanFrequencyGetOcIccMax(
+            reinterpret_cast<xet_sysman_freq_handle_t>( getHandle() ),
+            &ocIccMax ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanFrequency::GetOcIccMax" );
+
+        return ocIccMax;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get the Oc Tj Max.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - uint32_t: Pointer to the allocated uint32.
+    /// 
+    /// @throws result_t
+    uint32_t __xecall
+    SysmanFrequency::GetOcTjMax(
+        void
+        )
+    {
+        uint32_t ocTjMax;
+
+        auto result = static_cast<result_t>( ::xetSysmanFrequencyGetOcTjMax(
+            reinterpret_cast<xet_sysman_freq_handle_t>( getHandle() ),
+            &ocTjMax ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanFrequency::GetOcTjMax" );
+
+        return ocTjMax;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set the Oc override properties.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    SysmanFrequency::SetOcOverrideProperties(
+        oc_settings_override_t* pOcSettingsOverride     ///< [in] Pointer to the allocated structure.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFrequencySetOcOverrideProperties(
+            reinterpret_cast<xet_sysman_freq_handle_t>( getHandle() ),
+            reinterpret_cast<xet_oc_settings_override_t*>( pOcSettingsOverride ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanFrequency::SetOcOverrideProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set the Oc Icc Max.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    SysmanFrequency::SetOcIccMax(
+        uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFrequencySetOcIccMax(
+            reinterpret_cast<xet_sysman_freq_handle_t>( getHandle() ),
+            pOcIccMax ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanFrequency::SetOcIccMax" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set the Oc Tj Max.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    SysmanFrequency::SetOcTjMax(
+        uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFrequencySetOcTjMax(
+            reinterpret_cast<xet_sysman_freq_handle_t>( getHandle() ),
+            pOcTjMax ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanFrequency::SetOcTjMax" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get handle of frequency domains
     /// 
     /// @details
@@ -4985,6 +5468,82 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::oc_mode_t to std::string
+    std::string to_string( const SysmanFrequency::oc_mode_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case SysmanFrequency::oc_mode_t::INTERPOLATIVE:
+            str = "SysmanFrequency::oc_mode_t::INTERPOLATIVE";
+            break;
+
+        case SysmanFrequency::oc_mode_t::OVERRIDE:
+            str = "SysmanFrequency::oc_mode_t::OVERRIDE";
+            break;
+
+        default:
+            str = "SysmanFrequency::oc_mode_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::oc_error_type_t to std::string
+    std::string to_string( const SysmanFrequency::oc_error_type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_LOCKED:
+            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_LOCKED";
+            break;
+
+        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED:
+            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED";
+            break;
+
+        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_RATIO_EXCEEDS_MAX:
+            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_RATIO_EXCEEDS_MAX";
+            break;
+
+        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_VOLTAGE_EXCEEDS_MAX:
+            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_VOLTAGE_EXCEEDS_MAX";
+            break;
+
+        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_NOT_SUPPORTED:
+            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_NOT_SUPPORTED";
+            break;
+
+        case SysmanFrequency::oc_error_type_t::$OVERCLOCKING_INVALID_VR_ADDRESS:
+            str = "SysmanFrequency::oc_error_type_t::$OVERCLOCKING_INVALID_VR_ADDRESS";
+            break;
+
+        case SysmanFrequency::oc_error_type_t::$OVERCLOCKING_INVALID_ICCMAX:
+            str = "SysmanFrequency::oc_error_type_t::$OVERCLOCKING_INVALID_ICCMAX";
+            break;
+
+        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED:
+            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED";
+            break;
+
+        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_INVALID_COMMAND:
+            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_INVALID_COMMAND";
+            break;
+
+        default:
+            str = "SysmanFrequency::oc_error_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::freq_domain_t to std::string
     std::string to_string( const SysmanFrequency::freq_domain_t val )
     {
@@ -5043,6 +5602,167 @@ namespace xet
         return ( str.size() > 3 ) 
             ? "SysmanFrequency::freq_throttle_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
             : "SysmanFrequency::freq_throttle_reasons_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::oc_vr_topology to std::string
+    std::string to_string( const SysmanFrequency::oc_vr_topology val )
+    {
+        std::string str;
+        
+        str += "SysmanFrequency::oc_vr_topology::VccInAuxExists : ";
+        str += std::to_string(val.VccInAuxExists);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_vr_topology::VccStgPgExists : ";
+        str += std::to_string(val.VccStgPgExists);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_vr_topology::VccStPgExists : ";
+        str += std::to_string(val.VccStPgExists);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_vr_topology::VccSfrOcPgExists : ";
+        str += std::to_string(val.VccSfrOcPgExists);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_vr_topology::VccInAuxLp : ";
+        str += std::to_string(val.VccInAuxLp);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_vr_topology::VccInSvidAddress : ";
+        str += std::to_string(val.VccInSvidAddress);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_vr_topology::VccInVrType : ";
+        str += std::to_string(val.VccInVrType);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_vr_topology::SvidNotPresent : ";
+        str += std::to_string(val.SvidNotPresent);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_vr_topology::PsysDisabled : ";
+        str += std::to_string(val.PsysDisabled);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::oc_capabilities_t to std::string
+    std::string to_string( const SysmanFrequency::oc_capabilities_t val )
+    {
+        std::string str;
+        
+        str += "SysmanFrequency::oc_capabilities_t::MaxOcRatioLimit : ";
+        str += std::to_string(val.MaxOcRatioLimit);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::P0Ratio : ";
+        str += std::to_string(val.P0Ratio);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::P0Voltage : ";
+        str += std::to_string(val.P0Voltage);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::RatioOcSupported : ";
+        str += std::to_string(val.RatioOcSupported);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::VoltageOverrideSupported : ";
+        str += std::to_string(val.VoltageOverrideSupported);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::VoltageOffsetSupported : ";
+        str += std::to_string(val.VoltageOffsetSupported);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::HighVoltModeCapable : ";
+        str += std::to_string(val.HighVoltModeCapable);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::HighVoltModeEnabled : ";
+        str += std::to_string(val.HighVoltModeEnabled);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::OcVrTopology : ";
+        str += to_string(val.OcVrTopology);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::oc_settings_override_t to std::string
+    std::string to_string( const SysmanFrequency::oc_settings_override_t val )
+    {
+        std::string str;
+        
+        str += "SysmanFrequency::oc_settings_override_t::MaxOcRatio : ";
+        str += std::to_string(val.MaxOcRatio);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_settings_override_t::TargetVoltage : ";
+        str += std::to_string(val.TargetVoltage);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_settings_override_t::TargetMode : ";
+        str += std::to_string(val.TargetMode);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_settings_override_t::VoltageOffset : ";
+        str += std::to_string(val.VoltageOffset);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_settings_override_t::ICCMax : ";
+        str += std::to_string(val.ICCMax);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_settings_override_t::TjMax : ";
+        str += std::to_string(val.TjMax);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::oc_fan_point_t to std::string
+    std::string to_string( const SysmanFrequency::oc_fan_point_t val )
+    {
+        std::string str;
+        
+        str += "SysmanFrequency::oc_fan_point_t::TemperatureDegreesCelsius : ";
+        str += std::to_string(val.TemperatureDegreesCelsius);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_fan_point_t::FanSpeedPercent : ";
+        str += std::to_string(val.FanSpeedPercent);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::oc_fan_control_t to std::string
+    std::string to_string( const SysmanFrequency::oc_fan_control_t val )
+    {
+        std::string str;
+        
+        str += "SysmanFrequency::oc_fan_control_t::FanPointsNumber : ";
+        str += std::to_string(val.FanPointsNumber);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_fan_control_t::pFanPoints : ";
+        {
+            std::stringstream ss;
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pFanPoints);
+            str += ss.str();
+        }
+        str += "\n";
+
+        return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////

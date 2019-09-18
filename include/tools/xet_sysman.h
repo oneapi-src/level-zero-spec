@@ -664,6 +664,302 @@ xetSysmanPowerSetLimits(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Overcloking modes
+typedef enum _xet_oc_mode_t
+{
+    XET_OC_MODE_INTERPOLATIVE = 0,                  ///< Interpolative Mode.
+    XET_OC_MODE_OVERRIDE = 1,                       ///< Override Mode.
+
+} xet_oc_mode_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Overclocking error type
+typedef enum _xet_oc_error_type_t
+{
+    XET_OVERCLOCKING_LOCKED = 225,                  ///< The overclocking is locked. Service is read-only.
+    XET_OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED, ///< The specified domain does not support the requested service.
+    XET_OVERCLOCKING_RATIO_EXCEEDS_MAX,             ///< The ratio exceeds maximum overclocking limits.
+    XET_OVERCLOCKING_VOLTAGE_EXCEEDS_MAX,           ///< Requested voltage exceeds input regulators max supported voltage.
+    XET_OVERCLOCKING_NOT_SUPPORTED,                 ///< No overclocking capability on the Hardware.
+    $OVERCLOCKING_INVALID_VR_ADDRESS,               ///< The VR Address provided is illegal.
+    $OVERCLOCKING_INVALID_ICCMAX,                   ///< ICCMAX value given is invalid (more than 10 bits) or too low.
+    XET_OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED,     ///< Voltage manipulation attempted when it is disabled.
+    XET_OVERCLOCKING_INVALID_COMMAND,               ///< Data setting invalid for the command.
+
+} xet_oc_error_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Overclocking VR Topolgy
+/// 
+/// @details
+///     - Provides all the information related to the VR.
+typedef struct _xet_oc_vr_topology
+{
+    xe_bool_t VccInAuxExists;                       ///< [out] VCCIN_AUX Exists (asserted if separate VR)
+    xe_bool_t VccStgPgExists;                       ///< [out] VCCSTG_PG Exists
+    xe_bool_t VccStPgExists;                        ///< [out] VCCST_PG Exists
+    xe_bool_t VccSfrOcPgExists;                     ///< [out] VCCSFR_OC_PG Exists
+    uint16_t VccInAuxLp;                            ///< [out] VCCIN_Aux_LP Level (0: 1.8v, 1: 1.65v)
+    uint16_t VccInSvidAddress;                      ///< [out] VCCIN SVID Address
+    uint16_t VccInVrType;                           ///< [out] VCCIN VR Type (asserted if SVID)
+    uint16_t SvidNotPresent;                        ///< [out] SVID not present
+    uint16_t PsysDisabled;                          ///< [out] PSYS Disabled
+
+} xet_oc_vr_topology;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Overclocking properties
+/// 
+/// @details
+///     - Provides all the overclocking capabilities and properties supported by
+///       the device in the current domain.
+typedef struct _xet_oc_capabilities_t
+{
+    uint16_t MaxOcRatioLimit;                       ///< [out] Max overclocking ratio limit
+    uint16_t P0Ratio;                               ///< [out] Fused P0 ratio.
+    uint16_t P0Voltage;                             ///< [out] Fused P0 voltage.
+    xe_bool_t RatioOcSupported;                     ///< [out] Ratio overclocking supported
+    xe_bool_t VoltageOverrideSupported;             ///< [out] Voltage overrides supported
+    xe_bool_t VoltageOffsetSupported;               ///< [out] Voltage offset is supported
+    xe_bool_t HighVoltModeCapable;                  ///< [out] Capable of high voltage mode
+    xe_bool_t HighVoltModeEnabled;                  ///< [out] High voltage mode is enabled
+    xet_oc_vr_topology OcVrTopology;                ///< [out] Hold all the Vr Topology properties.
+
+} xet_oc_capabilities_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Overclocking settings override
+/// 
+/// @details
+///     - Provide the current settings to be read or changed.
+typedef struct _xet_oc_settings_override_t
+{
+    uint16_t MaxOcRatio;                            ///< [in,out] Max overclocking ratio
+    uint16_t TargetVoltage;                         ///< [in,out] Target Voltage. Units: divide by 2^10 for decimal voltage.
+    uint16_t TargetMode;                            ///< [in,out] Overclock Mode: 0 - Interpolative,  1 - Override.
+    uint16_t VoltageOffset;                         ///< [in,out] Voltage offset +/-999mV (minimum end voltage cannot be lower
+                                                    ///< than 250mV).
+    uint32_t ICCMax;                                ///< [in,out] Maximum desired current.
+    uint32_t TjMax;                                 ///< [in,out] Maximum temperature in °C.
+
+} xet_oc_settings_override_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fan Point.
+/// 
+/// @details
+///     - Temperature is given in °C and fan speed is given as a percentage
+///       value
+typedef struct _xet_oc_fan_point_t
+{
+    uint8_t TemperatureDegreesCelsius;              ///< [in] Temperature for current point.
+    uint8_t FanSpeedPercent;                        ///< [in] Percentage value, where 0% means stop the fan and 100% means run
+                                                    ///< the fan at maximum speed.
+
+} xet_oc_fan_point_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fan control settings.
+/// 
+/// @details
+///     - Provide the means to control the fan speed.
+typedef struct _xet_oc_fan_control_t
+{
+    uint32_t FanPointsNumber;                       ///< [in] Number of fan points.
+    xet_oc_fan_point_t* pFanPoints;                 ///< [in] Array with FanPointsNumber of points.
+
+} xet_oc_fan_control_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set fan speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pFanControl
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetFanSpeed(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_fan_control_t* pFanControl               ///< [out] Pointer to the allocated structure.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the overclocking capabilities.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcCapabilities
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcCapabilities(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_capabilities_t* pOcCapabilities          ///< [out] Pointer to the allocated structure.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the Vr topology.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcVrTopology
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcVrTopology(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_vr_topology* pOcVrTopology               ///< [out] Pointer to the allocated structure.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the Oc override properties.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcSettingsOverride
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcOverrideProperties(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_settings_override_t* pOcSettingsOverride ///< [out] Pointer to the allocated structure.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the Oc Icc Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcIccMax
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcIccMax(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    uint32_t* pOcIccMax                             ///< [out] Pointer to the allocated uint32.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the Oc Tj Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcTjMax
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetOcTjMax(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    uint32_t* pOcTjMax                              ///< [out] Pointer to the allocated uint32.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set the Oc override properties.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcSettingsOverride
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetOcOverrideProperties(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    xet_oc_settings_override_t* pOcSettingsOverride ///< [in] Pointer to the allocated structure.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set the Oc Icc Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcIccMax
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetOcIccMax(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set the Oc Tj Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcTjMax
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetOcTjMax(
+    xet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Frequency domains
 typedef enum _xet_freq_domain_t
 {

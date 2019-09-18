@@ -219,6 +219,26 @@ typedef struct _xet_power_burst_limit_t xet_power_burst_limit_t;
 typedef struct _xet_power_peak_limit_t xet_power_peak_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_oc_vr_topology
+typedef struct _xet_oc_vr_topology xet_oc_vr_topology;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_oc_capabilities_t
+typedef struct _xet_oc_capabilities_t xet_oc_capabilities_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_oc_settings_override_t
+typedef struct _xet_oc_settings_override_t xet_oc_settings_override_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_oc_fan_point_t
+typedef struct _xet_oc_fan_point_t xet_oc_fan_point_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_oc_fan_control_t
+typedef struct _xet_oc_fan_control_t xet_oc_fan_control_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_freq_properties_t
 typedef struct _xet_freq_properties_t xet_freq_properties_t;
 
