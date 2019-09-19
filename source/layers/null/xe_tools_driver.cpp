@@ -718,7 +718,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanDeviceSchedulerGetConcurrentModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+        xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
         )
@@ -729,7 +729,7 @@ namespace driver
         auto pfnDeviceSchedulerGetConcurrentModeProperties = context.xetDdiTable.Sysman.pfnDeviceSchedulerGetConcurrentModeProperties;
         if( nullptr != pfnDeviceSchedulerGetConcurrentModeProperties )
         {
-            result = pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, default, pConfig );
+            result = pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
         }
         else
         {
@@ -744,7 +744,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanDeviceSchedulerGetTimesliceModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+        xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
         )
@@ -755,7 +755,7 @@ namespace driver
         auto pfnDeviceSchedulerGetTimesliceModeProperties = context.xetDdiTable.Sysman.pfnDeviceSchedulerGetTimesliceModeProperties;
         if( nullptr != pfnDeviceSchedulerGetTimesliceModeProperties )
         {
-            result = pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, default, pConfig );
+            result = pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
         }
         else
         {

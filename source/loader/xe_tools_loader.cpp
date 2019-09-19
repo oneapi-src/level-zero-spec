@@ -853,7 +853,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanDeviceSchedulerGetConcurrentModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+        xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
         )
@@ -870,7 +870,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, default, pConfig );
+        result = pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
 
         return result;
     }
@@ -880,7 +880,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanDeviceSchedulerGetTimesliceModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+        xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
         )
@@ -897,7 +897,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, default, pConfig );
+        result = pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
 
         return result;
     }

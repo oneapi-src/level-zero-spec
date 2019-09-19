@@ -350,7 +350,7 @@ namespace xet
         /// @throws result_t
         void __xecall
         DeviceSchedulerGetConcurrentModeProperties(
-            xe::bool_t default,                             ///< [in] If TRUE, the driver will return the system default properties for
+            xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                             ///< this mode, otherwise it will return the current properties.
             sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
             );
@@ -364,7 +364,7 @@ namespace xet
         /// @throws result_t
         void __xecall
         DeviceSchedulerGetTimesliceModeProperties(
-            xe::bool_t default,                             ///< [in] If TRUE, the driver will return the system default properties for
+            xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                             ///< this mode, otherwise it will return the current properties.
             sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
             );

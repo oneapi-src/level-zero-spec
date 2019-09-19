@@ -121,7 +121,7 @@ xetSysmanDeviceSchedulerGetCurrentMode(
 xe_result_t __xecall
 xetSysmanDeviceSchedulerGetConcurrentModeProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+    xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
     )
@@ -130,7 +130,7 @@ xetSysmanDeviceSchedulerGetConcurrentModeProperties(
     if( nullptr == pfnDeviceSchedulerGetConcurrentModeProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, default, pConfig );
+    return pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ xetSysmanDeviceSchedulerGetConcurrentModeProperties(
 xe_result_t __xecall
 xetSysmanDeviceSchedulerGetTimesliceModeProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+    xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
     )
@@ -161,7 +161,7 @@ xetSysmanDeviceSchedulerGetTimesliceModeProperties(
     if( nullptr == pfnDeviceSchedulerGetTimesliceModeProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, default, pConfig );
+    return pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2880,14 +2880,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::DeviceSchedulerGetConcurrentModeProperties(
-        xe::bool_t default,                             ///< [in] If TRUE, the driver will return the system default properties for
+        xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanDeviceSchedulerGetConcurrentModeProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            static_cast<xe_bool_t>( default ),
+            static_cast<xe_bool_t>( getDefaults ),
             reinterpret_cast<xet_sched_concurrent_properties_t*>( pConfig ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2904,14 +2904,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::DeviceSchedulerGetTimesliceModeProperties(
-        xe::bool_t default,                             ///< [in] If TRUE, the driver will return the system default properties for
+        xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanDeviceSchedulerGetTimesliceModeProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            static_cast<xe_bool_t>( default ),
+            static_cast<xe_bool_t>( getDefaults ),
             reinterpret_cast<xet_sched_concurrent_properties_t*>( pConfig ) ) );
 
         if( result_t::SUCCESS != result )

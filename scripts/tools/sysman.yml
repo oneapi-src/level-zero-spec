@@ -155,7 +155,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: $x_bool_t
-      name: default
+      name: getDefaults
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
     - type: $t_sched_concurrent_properties_t*
       name: pConfig
@@ -176,7 +176,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: $x_bool_t
-      name: default
+      name: getDefaults
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
     - type: $t_sched_concurrent_properties_t*
       name: pConfig

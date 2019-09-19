@@ -750,7 +750,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanDeviceSchedulerGetConcurrentModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+        xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
         )
@@ -770,7 +770,7 @@ namespace layer
 
         }
 
-        return pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, default, pConfig );
+        return pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -778,7 +778,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanDeviceSchedulerGetTimesliceModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+        xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
         )
@@ -798,7 +798,7 @@ namespace layer
 
         }
 
-        return pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, default, pConfig );
+        return pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
