@@ -25,6 +25,7 @@ def add_argument(parser, name, help, default=False):
     
 """
 def clean():
+    util.removeFile(util.jsonRead("generated.json"))
     util.removePath("../include")
     util.makePath("../include")
     util.removePath("../build")
@@ -103,6 +104,9 @@ def main():
 
             if args['md']:
                 generate_docs.generate_md(srcpath, dstpath, tags, meta)
+
+    if args['debug']:
+        util.makoFileListWrite("generated.json")
 
     # build code
     if args['build']:

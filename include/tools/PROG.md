@@ -36,7 +36,7 @@ The callbacks are defined as a collection of per-API function pointers, with the
 * pTracerUserData : the user's pointer for the tracer's data
 * ppTracerInstanceUserData : a per-tracer, per-instance storage location; typically used for passing data from the prologue to the epilogue
 
-Note: since the creation of a tracer requires a device, on first glance it appears that xeInit, xeDriverGet and xeDeviceGet are not traceable.
+Note: since the creation of a tracer requires a device, on first glance it appears that ::xeInit, ::xeDriverGet and ::xeDeviceGet are not traceable.
 However, these APIs **are** traceable for all calls subsequent from the creation and enabling of the tracer itself.
 
 ## Enabling/Disabling and Destruction

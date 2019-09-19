@@ -43,6 +43,16 @@ def removePath(path):
         print("warning: failed to remove %s"%path)
 
 """
+    removes all files in list
+"""
+def removeFile(lst):
+    for f in lst:
+        try:
+            os.remove(f)
+        except:
+            print("warning: failed to remove %s"%f)
+
+"""
     returns a list of files in path matching pattern
 """
 def findFiles(path, pattern):
@@ -118,8 +128,19 @@ def yamlRead(path):
         return None
 
 """
+    write to yml file
+"""
+def yamlWrite(path, data):
+    try:
+        with open(path, 'w') as fout:
+            yaml.dump(data, fout, default_flow_style=False)
+    except:
+        print("error: unable to write %s"%path)
+
+"""
     generates file using template, args
 """
+makoFileList = []
 def makoWrite(inpath, outpath, **args):
     try:
         template = Template(filename=inpath)
@@ -129,6 +150,7 @@ def makoWrite(inpath, outpath, **args):
         with open(outpath, 'w') as fout:
             fout.write(rendered)
 
+        makoFileList.append(outpath)
         return len(rendered.splitlines())
     except:
         traceback = RichTraceback()
@@ -137,5 +159,8 @@ def makoWrite(inpath, outpath, **args):
             print(line, "\n")
         print("%s: %s" % (str(traceback.error.__class__.__name__), traceback.error))
         return 0
+
+def makoFileListWrite(outpath):
+    jsonWrite(outpath, makoFileList)
 
 # END OF FILE
