@@ -98,22 +98,62 @@ xetSysmanDeviceGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_DISABLE_GUARD_TIMEOUT
-/// @brief Disable forward progress guard timeout.
-#define XET_DISABLE_GUARD_TIMEOUT  0xFFFFFFFF
-#endif // XET_DISABLE_GUARD_TIMEOUT
+/// @brief Scheduler mode
+typedef enum _xet_sched_mode_t
+{
+    XET_SCHED_MODE_CONCURRENT = 0,                  ///< Multiple applications or contexts are submitting work concurrently to
+                                                    ///< the hardware. When work for one context completes or higher priority
+                                                    ///< work arrives, the scheduler organizes to submit the new work to the
+                                                    ///< hardware as soon as possible.
+    XET_SCHED_MODE_TIMESLICE,                       ///< The scheduler attempts to fairly timeslice hardware execution time
+                                                    ///< between multiple contexts submitting work to the hardware
+                                                    ///< concurrently.
+    XET_SCHED_MODE_EXCLUSIVE,                       ///< Any application or context can run indefinitely on the hardware
+                                                    ///< without being preempted or terminated. All pending work for other
+                                                    ///< contexts must wait until the running context completes with no further
+                                                    ///< submitted work.
+
+} xet_sched_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current forward progress guard timeout [PROPOSED - NOT SUPPORTED
-///        AT THIS TIME]
+#ifndef XET_SCHED_WATCHDOG_DISABLE
+/// @brief Disable forward progress guard timeout.
+#define XET_SCHED_WATCHDOG_DISABLE  0xFFFFFFFF
+#endif // XET_SCHED_WATCHDOG_DISABLE
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Configuration for concurrent scheduler mode
+///        (::XET_SCHED_MODE_CONCURRENT)
+typedef struct _xet_sched_concurrent_properties_t
+{
+    uint64_t watchdogTimeout;                       ///< [in,out] The maximum time in microseconds that the scheduler will wait
+                                                    ///< for a batch of work submitted to a hardware engine to complete or to
+                                                    ///< be preempted so as to run another context.
+                                                    ///< If this time is exceeded, the hardware engine is reset and the context terminated.
+                                                    ///< If set to ::XET_SCHED_WATCHDOG_DISABLE, a running workload can run as
+                                                    ///< long as it wants without being terminated, but preemption attempts to
+                                                    ///< run other contexts are permitted but not enforced.
+
+} xet_sched_concurrent_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Configuration for timeslice scheduler mode
+///        (::XET_SCHED_MODE_TIMESLICE)
+typedef struct _xet_sched_timeslice_properties_t
+{
+    uint64_t interval;                              ///< [in,out] The average interval in microseconds that a submission for a
+                                                    ///< context will run on a hardware engine before being preempted out to
+                                                    ///< run a pending submission for another context.
+    uint64_t yieldTimeout;                          ///< [in,out] The maximum time in microseconds that the scheduler will wait
+                                                    ///< to preempt a workload running on an engine before deciding to reset
+                                                    ///< the hardware engine and terminating the associated context.
+
+} xet_sched_timeslice_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current scheduler mode
 /// 
 /// @details
-///     - The driver keeps track of how long it takes the GPU to complete a
-///       batch of work. If this exceeds a guard timeout value, the graphics
-///       context is destroyed.
-///     - Some graphics kernels are designed to run longer than the default
-///       guard timeout. In this case, administrators should increase or disable
-///       the timeout.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -123,27 +163,19 @@ xetSysmanDeviceGetProperties(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pTimeout
+///         + nullptr == pMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + Device does not support scheduler modes.
 xe_result_t __xecall
-xetSysmanDeviceGetGuardTimeout(
+xetSysmanDeviceSchedulerGetCurrentMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pTimeout                              ///< [in] Returns the guard timeout in milliseconds (a value of
-                                                    ///< ::XET_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is
-                                                    ///< disabled).
+    xet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set forward progress guard timeout [PROPOSED - NOT SUPPORTED AT THIS
-///        TIME]
+/// @brief Get scheduler config for mode ::XET_SCHED_MODE_CONCURRENT
 /// 
 /// @details
-///     - The driver keeps track of how long it takes the GPU to complete a
-///       batch of work. If this exceeds a guard timeout value, the graphics
-///       context is destroyed.
-///     - Some graphics kernels are designed to run longer than the default
-///       guard timeout. In this case, administrators should increase or disable
-///       the timeout.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -153,12 +185,125 @@ xetSysmanDeviceGetGuardTimeout(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
+///         + nullptr == pConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSetGuardTimeout(
+xetSysmanDeviceSchedulerGetConcurrentModeProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t timeout                                ///< [in] The timeout in milliseconds or ::XET_DISABLE_GUARD_TIMEOUT to
-                                                    ///< disable the timeout.
+    xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+                                                    ///< this mode, otherwise it will return the current properties.
+    xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get scheduler config for mode ::XET_SCHED_MODE_TIMESLICE
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+xe_result_t __xecall
+xetSysmanDeviceSchedulerGetTimesliceModeProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xe_bool_t default,                              ///< [in] If TRUE, the driver will return the system default properties for
+                                                    ///< this mode, otherwise it will return the current properties.
+    xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change scheduler mode to ::XET_SCHED_MODE_CONCURRENT or update
+///        scheduler mode parameters if already running in this mode.
+/// 
+/// @details
+///     - This mode is optimized for multiple applications or contexts
+///       submitting work concurrently to the hardware. When work for one
+///       context completes or higher priority work arrives, the scheduler
+///       organizes to submit the new work to the hardware as soon as possible.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///         + nullptr == pNeedReboot
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+xe_result_t __xecall
+xetSysmanDeviceSchedulerSetConcurrentMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
+    xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                    ///< scheduler mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change scheduler mode to ::XET_SCHED_MODE_TIMESLICE or update
+///        scheduler mode parameters if already running in this mode.
+/// 
+/// @details
+///     - This mode is optimized to provide fair sharing of hardware execution
+///       time between multiple contexts submitting work to the hardware
+///       concurrently.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///         + nullptr == pNeedReboot
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+xe_result_t __xecall
+xetSysmanDeviceSchedulerSetTimesliceMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
+    xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                    ///< scheduler mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change scheduler mode to ::XET_SCHED_MODE_EXCLUSIVE
+/// 
+/// @details
+///     - This mode is optimized for single application/context use-cases. It
+///       permits a context to run indefinitely on the hardware without being
+///       preempted or terminated. All pending work for other contexts must wait
+///       until the running context completes with no further submitted work.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pNeedReboot
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+xe_result_t __xecall
+xetSysmanDeviceSchedulerSetExclusiveMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                    ///< scheduler mode.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

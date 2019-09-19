@@ -17,6 +17,9 @@ The following documents the high-level programming models and guidelines.
     + [Events](#evt)
 * [Interface details](#id)
     + [Global operations](#glo)
+        + [Device properties](#glod)
+        + [Scheduler operations](#glos)
+        + [PCI properties](#glop)
     + [Operations on power domains](#pwr)
 	+ [Operations on frequency domains](#frq)
 	+ [Operations on engine groups](#eng)
@@ -148,7 +151,7 @@ The following operations are provided to access overall device information and c
 
 - Get device UUID, deviceID, number of sub-devices
 - Get Brand/model/vendor name
-- Set workload forward progress guard timeout
+- Get/set scheduler mode and properties
 - Reset device
 - Query if the device has been repaired
 - PCI information:
@@ -324,20 +327,14 @@ The full list of available functions for handling events is described [below](#e
 # <a name="id">Interface details</a>
 
 ## <a name="glo">Global operations</a>
-The following operations affect the entire device independent of whether there are sub-devices:
 
-| Function                             | Description |
-| :---                                 | :---        |
-| ::xetSysmanDeviceGetProperties()    | Get static device properties -  device UUID, sub-device ID, device brand/model/vendor strings |
-| ::xetSysmanDeviceGetGuardTimeout()  | Get current workload forward progress guard timeout. |
-| ::xetSysmanDeviceSetGuardTimeout()  | Set workload forward progress guard timeout or disable timeout checking in the driver |
-| ::xetSysmanDeviceReset()            | Performs a warm reset of the device which includes unloading the driver. |
-| ::xetSysmanDeviceWasRepaired()      | Performs a warm reset of the device which includes unloading the driver. |
-| ::xetSysmanPciGetProperties()       | Get static properties for the PCI port - BDF address, number of bars, maximum supported speed |
-| ::xetSysmanPciGetState()            | Get current PCI port speed (number of lanes, generation) |
-| ::xetSysmanPciGetBarProperties()    | Get information about each configured PCI bar |
-| ::xetSysmanPciGetThroughput()       | Get current PCI throughput |
-| ::xetSysmanPciGetStats()            | Get PCI statistics - total packets, number of packet replays |
+### <a name="glod">Device properties</a>
+The following operations permit getting properties about the entire device:
+
+| Function                                                   | Description |
+| :---                                                       | :---        |
+| ::xetSysmanDeviceGetProperties()                          | Get static device properties -  device UUID, sub-device ID, device brand/model/vendor strings |
+| ::xetSysmanDeviceWasRepaired()                            | Performs a warm reset of the device which includes unloading the driver. |
 
 The example below shows how to display general information about a device:
 
@@ -345,8 +342,7 @@ The example below shows how to display general information about a device:
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
     xet_sysman_properties_t devProps;
-    xet_pci_properties_t pciProps;
-    uint32_t timeout;
+    xe_bool_t repaired;
     if (xetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == XE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    UUID:           %s\n", devProps.core.uuid.id);
@@ -355,17 +351,102 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
         fprintf(stdout, "    model:          %s\n", devProps.modelName);
         fprintf(stdout, "    driver timeout: disabled\n");
     }
-    if (xetSysmanDeviceGetGuardTimeout(hSysmanDevice, &timeout) == XE_RESULT_SUCCESS)
+    if (xetSysmanDeviceWasRepaired(hSysmanDevice, &repaired) == XE_RESULT_SUCCESS)
     {
-        if (timeout == XET_DISABLE_GUARD_TIMEOUT)
+        fprintf(stdout, "    Was repaired:   %s\n", repaired ? "yes" : "no");
+    }
+}
+```
+
+### <a name="glos">Scheduler operations</a>
+On some devices, it is possible to change the way the scheduler executes workloads. To find out if this is supported, execute the function
+::xetSysmanDeviceSchedulerGetCurrentMode() and check that it does not return an error.
+
+The available scheduler operating modes are given by the enum ::xet_sched_mode_t:
+
+| Scheduler mode               | Description |
+| :---                         | :---        |
+| ::XET_SCHED_MODE_CONCURRENT | This mode is optimized for multiple applications or contexts submitting work concurrently to the hardware. When work for one context completes or higher priority work arrives, the scheduler organizes to submit the new work to the hardware as soon as possible.<br />It is possible to configure (::xet_sched_concurrent_properties_t) the watchdog timeout which controls the maximum time the scheduler will wait for a workload to complete a batch of work or yield to other applications before it is terminated.<br />If the watchdog timeout is set to ::XET_SCHED_WATCHDOG_DISABLE, the scheduler enforces no fairness but will attempt to submit other work to the hardware. |
+| ::XET_SCHED_MODE_TIMESLICE  | This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently.<br />It is possible to configure (::xet_sched_timeslice_properties_t) the timeslice interval and the amount of time the scheduler will wait for work to yield to another application before it is terminated. |
+| ::XET_SCHED_MODE_EXCLUSIVE  | This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work. |
+
+The following functions are available for changing the behavior of the scheduler:
+
+| Function                                                   | Description |
+| :---                                                       | :---        |
+| ::xetSysmanDeviceSchedulerGetCurrentMode()                | Get the current scheduler mode (concurrent, timeslice, exclusive) |
+| ::xetSysmanDeviceSchedulerGetConcurrentModeProperties()   | Get the settings for the concurrent scheduler mode |
+| ::xetSysmanDeviceSchedulerGetTimesliceModeProperties()    | Get the settings for the timeslice scheduler mode |
+| ::xetSysmanDeviceSchedulerSetConcurrentMode               | Change to concurrent scheduler mode and/or change properties |
+| ::xetSysmanDeviceSchedulerSetTimesliceMode                | Change to timeslice scheduler mode and/or change properties |
+| ::xetSysmanDeviceSchedulerSetExclusiveMode                | Change to exclusive scheduler mode and/or change properties |
+
+The example below shows how to stop the scheduler enforcing fairness while permitting other work to attempt to run:
+
+```c
+void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
+{
+    xe_result_t res;
+    xet_sched_mode_t currentMode;
+    res = xetSysmanDeviceSchedulerGetCurrentMode(hSysmanDevice, &currentMode);
+    if (res == XE_RESULT_SUCCESS)
+    {
+        xe_bool_t requireReboot;
+        xet_sched_concurrent_properties_t props;
+        props.watchdogTimeout = XET_SCHED_WATCHDOG_DISABLE;
+        res = xetSysmanDeviceSchedulerSetConcurrentMode(hSysmanDevice, &props, &requireReboot);
+        if (res == XE_RESULT_SUCCESS)
         {
-            fprintf(stdout, "    driver timeout: disabled\n");
+            if (requireReboot)
+            {
+                fprintf(stderr, "WARNING: Reboot required to complete desired configuration.\n");
+            }
+            else
+            {
+                fprintf(stdout, "Schedule mode changed successfully.\n");
+            }
+        }
+        else if(res == XE_RESULT_ERROR_UNSUPPORTED)
+        {
+            fprintf(stderr, "ERROR: The concurrent scheduler mode is not supported on this device.\n");
+        }
+        else if(res == XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
+        {
+            fprintf(stderr, "ERROR: Don't have permissions to change the scheduler mode.\n");
         }
         else
         {
-            fprintf(stdout, "    timeout:        %u milliseconds\n", timeout);
+            fprintf(stderr, "ERROR: Problem calling the API to change the scheduler mode.\n");
         }
     }
+    else if(res == XE_RESULT_ERROR_UNSUPPORTED)
+    {
+        fprintf(stderr, "ERROR: Scheduler modes are not supported on this device.\n");
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: Problem calling the API.\n");
+    }
+}
+```
+
+### <a name="glop">PCI properties</a>
+The following functions permit getting data about the PCI endpoint for the device:
+
+| Function                                                   | Description |
+| :---                                                       | :---        |
+| ::xetSysmanPciGetProperties()                             | Get static properties for the PCI port - BDF address, number of bars, maximum supported speed |
+| ::xetSysmanPciGetState()                                  | Get current PCI port speed (number of lanes, generation) |
+| ::xetSysmanPciGetBarProperties()                          | Get information about each configured PCI bar |
+| ::xetSysmanPciGetThroughput()                             | Get current PCI throughput |
+| ::xetSysmanPciGetStats()                                  | Get PCI statistics - total packets, number of packet replays |
+
+The example below shows how to output the PCI BDF address:
+
+```c
+void ShowPciInfo(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_pci_properties_t pciProps;
     if (xetSysmanPciGetProperties(hSysmanDevice, &pciProps) == XE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    PCI address:        %04u:%02u:%02u.%u\n", pciProps.address.domain, pciProps.address.bus, pciProps.address.device, pciProps.address.function);

@@ -608,17 +608,49 @@ typedef xe_result_t (__xecall *xet_pfnSysmanDeviceGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanDeviceGetGuardTimeout 
-typedef xe_result_t (__xecall *xet_pfnSysmanDeviceGetGuardTimeout_t)(
+/// @brief Function-pointer for xetSysmanDeviceSchedulerGetCurrentMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSchedulerGetCurrentMode_t)(
     xet_sysman_handle_t,
-    uint32_t*
+    xet_sched_mode_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanDeviceSetGuardTimeout 
-typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSetGuardTimeout_t)(
+/// @brief Function-pointer for xetSysmanDeviceSchedulerGetConcurrentModeProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSchedulerGetConcurrentModeProperties_t)(
     xet_sysman_handle_t,
-    uint32_t
+    xe_bool_t,
+    xet_sched_concurrent_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanDeviceSchedulerGetTimesliceModeProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSchedulerGetTimesliceModeProperties_t)(
+    xet_sysman_handle_t,
+    xe_bool_t,
+    xet_sched_concurrent_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanDeviceSchedulerSetConcurrentMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSchedulerSetConcurrentMode_t)(
+    xet_sysman_handle_t,
+    xet_sched_concurrent_properties_t*,
+    xe_bool_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanDeviceSchedulerSetTimesliceMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSchedulerSetTimesliceMode_t)(
+    xet_sysman_handle_t,
+    xet_sched_concurrent_properties_t*,
+    xe_bool_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanDeviceSchedulerSetExclusiveMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSchedulerSetExclusiveMode_t)(
+    xet_sysman_handle_t,
+    xe_bool_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -812,8 +844,12 @@ typedef struct _xet_sysman_dditable_t
 {
     xet_pfnSysmanGet_t                                          pfnGet;
     xet_pfnSysmanDeviceGetProperties_t                          pfnDeviceGetProperties;
-    xet_pfnSysmanDeviceGetGuardTimeout_t                        pfnDeviceGetGuardTimeout;
-    xet_pfnSysmanDeviceSetGuardTimeout_t                        pfnDeviceSetGuardTimeout;
+    xet_pfnSysmanDeviceSchedulerGetCurrentMode_t                pfnDeviceSchedulerGetCurrentMode;
+    xet_pfnSysmanDeviceSchedulerGetConcurrentModeProperties_t   pfnDeviceSchedulerGetConcurrentModeProperties;
+    xet_pfnSysmanDeviceSchedulerGetTimesliceModeProperties_t    pfnDeviceSchedulerGetTimesliceModeProperties;
+    xet_pfnSysmanDeviceSchedulerSetConcurrentMode_t             pfnDeviceSchedulerSetConcurrentMode;
+    xet_pfnSysmanDeviceSchedulerSetTimesliceMode_t              pfnDeviceSchedulerSetTimesliceMode;
+    xet_pfnSysmanDeviceSchedulerSetExclusiveMode_t              pfnDeviceSchedulerSetExclusiveMode;
     xet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
     xet_pfnSysmanDeviceWasRepaired_t                            pfnDeviceWasRepaired;
     xet_pfnSysmanPciGetProperties_t                             pfnPciGetProperties;

@@ -82,44 +82,171 @@ params:
       desc: "[in] Structure that will contain information about the device."
 
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Scheduler mode"
+class: $tSysman
+name: $t_sched_mode_t
+etors:
+    - name: $T_SCHED_MODE_CONCURRENT
+      value: "0"
+      desc: "Multiple applications or contexts are submitting work concurrently to the hardware. When work for one context completes or higher priority work arrives, the scheduler organizes to submit the new work to the hardware as soon as possible."
+    - name: $T_SCHED_MODE_TIMESLICE
+      desc: "The scheduler attempts to fairly timeslice hardware execution time between multiple contexts submitting work to the hardware concurrently."
+    - name: $T_SCHED_MODE_EXCLUSIVE
+      desc: "Any application or context can run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Disable forward progress guard timeout."
-name: $T_DISABLE_GUARD_TIMEOUT
+name: $T_SCHED_WATCHDOG_DISABLE
 value: "0xFFFFFFFF"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Get current forward progress guard timeout [PROPOSED - NOT SUPPORTED AT THIS TIME]"
+type: struct
+desc: "Configuration for concurrent scheduler mode ($T_SCHED_MODE_CONCURRENT)"
 class: $tSysman
-name: DeviceGetGuardTimeout
-details:
-    - "The driver keeps track of how long it takes the GPU to complete a batch of work. If this exceeds a guard timeout value, the graphics context is destroyed."
-    - "Some graphics kernels are designed to run longer than the default guard timeout. In this case, administrators should increase or disable the timeout."
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t*
-      name: pTimeout
-      desc: "[in] Returns the guard timeout in milliseconds (a value of $T_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is disabled)."
+name: $t_sched_concurrent_properties_t
+members:
+    - type: uint64_t
+      name: "watchdogTimeout"
+      desc: "[in,out] The maximum time in microseconds that the scheduler will wait for a batch of work submitted to a hardware engine to complete or to be preempted so as to run another context. "
+      desc: |
+            [in,out] The maximum time in microseconds that the scheduler will wait for a batch of work submitted to a hardware engine to complete or to be preempted so as to run another context.
+            If this time is exceeded, the hardware engine is reset and the context terminated.
+            If set to $T_SCHED_WATCHDOG_DISABLE, a running workload can run as long as it wants without being terminated, but preemption attempts to run other contexts are permitted but not enforced.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Configuration for timeslice scheduler mode ($T_SCHED_MODE_TIMESLICE)"
+class: $tSysman
+name: $t_sched_timeslice_properties_t
+members:
+    - type: uint64_t
+      name: "interval"
+      desc: "[in,out] The average interval in microseconds that a submission for a context will run on a hardware engine before being preempted out to run a pending submission for another context."
+    - type: uint64_t
+      name: "yieldTimeout"
+      desc: "[in,out] The maximum time in microseconds that the scheduler will wait to preempt a workload running on an engine before deciding to reset the hardware engine and terminating the associated context."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set forward progress guard timeout [PROPOSED - NOT SUPPORTED AT THIS TIME]"
+desc: "Get current scheduler mode"
 class: $tSysman
-name: DeviceSetGuardTimeout
+name: DeviceSchedulerGetCurrentMode
 details:
-    - "The driver keeps track of how long it takes the GPU to complete a batch of work. If this exceeds a guard timeout value, the graphics context is destroyed."
-    - "Some graphics kernels are designed to run longer than the default guard timeout. In this case, administrators should increase or disable the timeout."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: timeout
-      desc: "[in] The timeout in milliseconds or $T_DISABLE_GUARD_TIMEOUT to disable the timeout."
+    - type: $t_sched_mode_t*
+      name: pMode
+      desc: "[in] Will contain the current scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Device does not support scheduler modes."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get scheduler config for mode $T_SCHED_MODE_CONCURRENT"
+class: $tSysman
+name: DeviceSchedulerGetConcurrentModeProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $x_bool_t
+      name: default
+      desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
+    - type: $t_sched_concurrent_properties_t*
+      name: pConfig
+      desc: "[in] Will contain the current parameters for this mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get scheduler config for mode $T_SCHED_MODE_TIMESLICE"
+class: $tSysman
+name: DeviceSchedulerGetTimesliceModeProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $x_bool_t
+      name: default
+      desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
+    - type: $t_sched_concurrent_properties_t*
+      name: pConfig
+      desc: "[in] Will contain the current parameters for this mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Change scheduler mode to $T_SCHED_MODE_CONCURRENT or update scheduler mode parameters if already running in this mode."
+class: $tSysman
+name: DeviceSchedulerSetConcurrentMode
+details:
+    - "This mode is optimized for multiple applications or contexts submitting work concurrently to the hardware. When work for one context completes or higher priority work arrives, the scheduler organizes to submit the new work to the hardware as soon as possible."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_sched_concurrent_properties_t*
+      name: pProperties
+      desc: "[in] The properties to use when configurating this mode."
+    - type: $x_bool_t*
+      name: pNeedReboot
+      desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Change scheduler mode to $T_SCHED_MODE_TIMESLICE or update scheduler mode parameters if already running in this mode."
+class: $tSysman
+name: DeviceSchedulerSetTimesliceMode
+details:
+    - "This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_sched_concurrent_properties_t*
+      name: pProperties
+      desc: "[in] The properties to use when configurating this mode."
+    - type: $x_bool_t*
+      name: pNeedReboot
+      desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Change scheduler mode to $T_SCHED_MODE_EXCLUSIVE"
+class: $tSysman
+name: DeviceSchedulerSetExclusiveMode
+details:
+    - "This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $x_bool_t*
+      name: pNeedReboot
+      desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
 
 --- #--------------------------------------------------------------------------
 type: function

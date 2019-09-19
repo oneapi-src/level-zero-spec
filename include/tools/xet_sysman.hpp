@@ -28,10 +28,10 @@
 #endif // XET_STRING_PROPERTY_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_DISABLE_GUARD_TIMEOUT
+#ifndef XET_SCHED_WATCHDOG_DISABLE
 /// @brief Disable forward progress guard timeout.
-#define XET_DISABLE_GUARD_TIMEOUT  0xFFFFFFFF
-#endif // XET_DISABLE_GUARD_TIMEOUT
+#define XET_SCHED_WATCHDOG_DISABLE  0xFFFFFFFF
+#endif // XET_SCHED_WATCHDOG_DISABLE
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_FAN_TEMP_SPEED_PAIR_COUNT
@@ -69,6 +69,24 @@ namespace xet
         enum class version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Scheduler mode
+        enum class sched_mode_t
+        {
+            CONCURRENT = 0,                                 ///< Multiple applications or contexts are submitting work concurrently to
+                                                            ///< the hardware. When work for one context completes or higher priority
+                                                            ///< work arrives, the scheduler organizes to submit the new work to the
+                                                            ///< hardware as soon as possible.
+            TIMESLICE,                                      ///< The scheduler attempts to fairly timeslice hardware execution time
+                                                            ///< between multiple contexts submitting work to the hardware
+                                                            ///< concurrently.
+            EXCLUSIVE,                                      ///< Any application or context can run indefinitely on the hardware
+                                                            ///< without being preempted or terminated. All pending work for other
+                                                            ///< contexts must wait until the running context completes with no further
+                                                            ///< submitted work.
 
         };
 
@@ -111,6 +129,35 @@ namespace xet
             int8_t modelName[XET_STRING_PROPERTY_SIZE];     ///< [out] Model name of the device (NULL terminated string value)
             int8_t vendorName[XET_STRING_PROPERTY_SIZE];    ///< [out] Vendor name of the device (NULL terminated string value)
             int8_t driverVersion[XET_STRING_PROPERTY_SIZE]; ///< [out] Installed driver version (NULL terminated string value)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Configuration for concurrent scheduler mode
+        ///        (::XET_SCHED_MODE_CONCURRENT)
+        struct sched_concurrent_properties_t
+        {
+            uint64_t watchdogTimeout;                       ///< [in,out] The maximum time in microseconds that the scheduler will wait
+                                                            ///< for a batch of work submitted to a hardware engine to complete or to
+                                                            ///< be preempted so as to run another context.
+                                                            ///< If this time is exceeded, the hardware engine is reset and the context terminated.
+                                                            ///< If set to ::XET_SCHED_WATCHDOG_DISABLE, a running workload can run as
+                                                            ///< long as it wants without being terminated, but preemption attempts to
+                                                            ///< run other contexts are permitted but not enforced.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Configuration for timeslice scheduler mode
+        ///        (::XET_SCHED_MODE_TIMESLICE)
+        struct sched_timeslice_properties_t
+        {
+            uint64_t interval;                              ///< [in,out] The average interval in microseconds that a submission for a
+                                                            ///< context will run on a hardware engine before being preempted out to
+                                                            ///< run a pending submission for another context.
+            uint64_t yieldTimeout;                          ///< [in,out] The maximum time in microseconds that the scheduler will wait
+                                                            ///< to preempt a workload running on an engine before deciding to reset
+                                                            ///< the hardware engine and terminating the associated context.
 
         };
 
@@ -283,44 +330,97 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current forward progress guard timeout [PROPOSED - NOT SUPPORTED
-        ///        AT THIS TIME]
+        /// @brief Get current scheduler mode
         /// 
         /// @details
-        ///     - The driver keeps track of how long it takes the GPU to complete a
-        ///       batch of work. If this exceeds a guard timeout value, the graphics
-        ///       context is destroyed.
-        ///     - Some graphics kernels are designed to run longer than the default
-        ///       guard timeout. In this case, administrators should increase or disable
-        ///       the timeout.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceGetGuardTimeout(
-            uint32_t* pTimeout                              ///< [in] Returns the guard timeout in milliseconds (a value of
-                                                            ///< ::XET_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is
-                                                            ///< disabled).
+        DeviceSchedulerGetCurrentMode(
+            sched_mode_t* pMode                             ///< [in] Will contain the current scheduler mode.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set forward progress guard timeout [PROPOSED - NOT SUPPORTED AT THIS
-        ///        TIME]
+        /// @brief Get scheduler config for mode ::XET_SCHED_MODE_CONCURRENT
         /// 
         /// @details
-        ///     - The driver keeps track of how long it takes the GPU to complete a
-        ///       batch of work. If this exceeds a guard timeout value, the graphics
-        ///       context is destroyed.
-        ///     - Some graphics kernels are designed to run longer than the default
-        ///       guard timeout. In this case, administrators should increase or disable
-        ///       the timeout.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceSetGuardTimeout(
-            uint32_t timeout                                ///< [in] The timeout in milliseconds or ::XET_DISABLE_GUARD_TIMEOUT to
-                                                            ///< disable the timeout.
+        DeviceSchedulerGetConcurrentModeProperties(
+            xe::bool_t default,                             ///< [in] If TRUE, the driver will return the system default properties for
+                                                            ///< this mode, otherwise it will return the current properties.
+            sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get scheduler config for mode ::XET_SCHED_MODE_TIMESLICE
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        DeviceSchedulerGetTimesliceModeProperties(
+            xe::bool_t default,                             ///< [in] If TRUE, the driver will return the system default properties for
+                                                            ///< this mode, otherwise it will return the current properties.
+            sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::XET_SCHED_MODE_CONCURRENT or update
+        ///        scheduler mode parameters if already running in this mode.
+        /// 
+        /// @details
+        ///     - This mode is optimized for multiple applications or contexts
+        ///       submitting work concurrently to the hardware. When work for one
+        ///       context completes or higher priority work arrives, the scheduler
+        ///       organizes to submit the new work to the hardware as soon as possible.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        DeviceSchedulerSetConcurrentMode(
+            sched_concurrent_properties_t* pProperties,     ///< [in] The properties to use when configurating this mode.
+            xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                            ///< scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::XET_SCHED_MODE_TIMESLICE or update
+        ///        scheduler mode parameters if already running in this mode.
+        /// 
+        /// @details
+        ///     - This mode is optimized to provide fair sharing of hardware execution
+        ///       time between multiple contexts submitting work to the hardware
+        ///       concurrently.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        DeviceSchedulerSetTimesliceMode(
+            sched_concurrent_properties_t* pProperties,     ///< [in] The properties to use when configurating this mode.
+            xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                            ///< scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::XET_SCHED_MODE_EXCLUSIVE
+        /// 
+        /// @details
+        ///     - This mode is optimized for single application/context use-cases. It
+        ///       permits a context to run indefinitely on the hardware without being
+        ///       preempted or terminated. All pending work for other contexts must wait
+        ///       until the running context completes with no further submitted work.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        DeviceSchedulerSetExclusiveMode(
+            xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                            ///< scheduler mode.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2689,6 +2789,18 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::properties_t to std::string
     std::string to_string( const Sysman::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::sched_mode_t to std::string
+    std::string to_string( const Sysman::sched_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::sched_concurrent_properties_t to std::string
+    std::string to_string( const Sysman::sched_concurrent_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::sched_timeslice_properties_t to std::string
+    std::string to_string( const Sysman::sched_timeslice_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_address_t to std::string

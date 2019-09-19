@@ -417,8 +417,6 @@ void ShowPowerLimits(xet_sysman_pwr_handle_t hPower)
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
     xet_sysman_properties_t devProps;
-    xet_pci_properties_t pciProps;
-    uint32_t timeout;
     xe_bool_t repaired;
     if (xetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == XE_RESULT_SUCCESS)
     {
@@ -432,17 +430,56 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
     {
         fprintf(stdout, "    Was repaired:   %s\n", repaired ? "yes" : "no");
     }
-    if (xetSysmanDeviceGetGuardTimeout(hSysmanDevice, &timeout) == XE_RESULT_SUCCESS)
+}
+
+void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
+{
+    xe_result_t res;
+    xet_sched_mode_t currentMode;
+    res = xetSysmanDeviceSchedulerGetCurrentMode(hSysmanDevice, &currentMode);
+    if (res == XE_RESULT_SUCCESS)
     {
-        if (timeout == XET_DISABLE_GUARD_TIMEOUT)
+        xe_bool_t requireReboot;
+        xet_sched_concurrent_properties_t props;
+        props.watchdogTimeout = XET_SCHED_WATCHDOG_DISABLE;
+        res = xetSysmanDeviceSchedulerSetConcurrentMode(hSysmanDevice, &props, &requireReboot);
+        if (res == XE_RESULT_SUCCESS)
         {
-            fprintf(stdout, "    driver timeout: disabled\n");
+            if (requireReboot)
+            {
+                fprintf(stderr, "WARNING: Reboot required to complete desired configuration.\n");
+            }
+            else
+            {
+                fprintf(stdout, "Schedule mode changed successfully.\n");
+            }
+        }
+        else if(res == XE_RESULT_ERROR_UNSUPPORTED)
+        {
+            fprintf(stderr, "ERROR: The concurrent scheduler mode is not supported on this device.\n");
+        }
+        else if(res == XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
+        {
+            fprintf(stderr, "ERROR: Don't have permissions to change the scheduler mode.\n");
         }
         else
         {
-            fprintf(stdout, "    timeout:        %u milliseconds\n", timeout);
+            fprintf(stderr, "ERROR: Problem calling the API to change the scheduler mode.\n");
         }
     }
+    else if(res == XE_RESULT_ERROR_UNSUPPORTED)
+    {
+        fprintf(stderr, "ERROR: Scheduler modes are not supported on this device.\n");
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: Problem calling the API.\n");
+    }
+}
+
+void ShowPciInfo(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_pci_properties_t pciProps;
     if (xetSysmanPciGetProperties(hSysmanDevice, &pciProps) == XE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    PCI address:        %04u:%02u:%02u.%u\n", pciProps.address.domain, pciProps.address.bus, pciProps.address.device, pciProps.address.function);

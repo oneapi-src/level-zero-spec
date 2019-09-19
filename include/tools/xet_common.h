@@ -167,6 +167,14 @@ typedef struct _xet_profile_register_sequence_t xet_profile_register_sequence_t;
 typedef struct _xet_sysman_properties_t xet_sysman_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_sched_concurrent_properties_t
+typedef struct _xet_sched_concurrent_properties_t xet_sched_concurrent_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_sched_timeslice_properties_t
+typedef struct _xet_sched_timeslice_properties_t xet_sched_timeslice_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_pci_address_t
 typedef struct _xet_pci_address_t xet_pci_address_t;
 
