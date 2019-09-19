@@ -831,8 +831,8 @@ device to generate the parameters.
 ### Cooperative Functions
 Cooperative functions allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ::xeCommandListAppendLaunchCooperativeFunction that allows launching a group of functions that can cooperate with each other.
-The command list must be submitted to a command queue that was created with the $X_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_FUNCTIONS command queue flag.
-Finally, there is a xeFunctionSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
+The command list must be submitted to a command queue that was created with the ::XE_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_FUNCTIONS command queue flag.
+Finally, there is a ::xeFunctionSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
 
 In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
 a command list. The most basic version of these is ::xeCommandListAppendLaunchFunction which takes a
