@@ -90,16 +90,16 @@ xetSysmanDeviceGetProperties(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + Device does not support scheduler modes.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerGetCurrentMode(
+xetSysmanSchedulerGetCurrentMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
     )
 {
-    auto pfnDeviceSchedulerGetCurrentMode = xet_lib::context.ddiTable.Sysman.pfnDeviceSchedulerGetCurrentMode;
-    if( nullptr == pfnDeviceSchedulerGetCurrentMode )
+    auto pfnSchedulerGetCurrentMode = xet_lib::context.ddiTable.Sysman.pfnSchedulerGetCurrentMode;
+    if( nullptr == pfnSchedulerGetCurrentMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnDeviceSchedulerGetCurrentMode( hSysman, pMode );
+    return pfnSchedulerGetCurrentMode( hSysman, pMode );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,20 +117,20 @@ xetSysmanDeviceSchedulerGetCurrentMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerGetConcurrentModeProperties(
+xetSysmanSchedulerGetConcurrentModeProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
     )
 {
-    auto pfnDeviceSchedulerGetConcurrentModeProperties = xet_lib::context.ddiTable.Sysman.pfnDeviceSchedulerGetConcurrentModeProperties;
-    if( nullptr == pfnDeviceSchedulerGetConcurrentModeProperties )
+    auto pfnSchedulerGetConcurrentModeProperties = xet_lib::context.ddiTable.Sysman.pfnSchedulerGetConcurrentModeProperties;
+    if( nullptr == pfnSchedulerGetConcurrentModeProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
+    return pfnSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -148,20 +148,20 @@ xetSysmanDeviceSchedulerGetConcurrentModeProperties(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerGetTimesliceModeProperties(
+xetSysmanSchedulerGetTimesliceModeProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
     )
 {
-    auto pfnDeviceSchedulerGetTimesliceModeProperties = xet_lib::context.ddiTable.Sysman.pfnDeviceSchedulerGetTimesliceModeProperties;
-    if( nullptr == pfnDeviceSchedulerGetTimesliceModeProperties )
+    auto pfnSchedulerGetTimesliceModeProperties = xet_lib::context.ddiTable.Sysman.pfnSchedulerGetTimesliceModeProperties;
+    if( nullptr == pfnSchedulerGetTimesliceModeProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
+    return pfnSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -185,20 +185,20 @@ xetSysmanDeviceSchedulerGetTimesliceModeProperties(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerSetConcurrentMode(
+xetSysmanSchedulerSetConcurrentMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
     xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
     )
 {
-    auto pfnDeviceSchedulerSetConcurrentMode = xet_lib::context.ddiTable.Sysman.pfnDeviceSchedulerSetConcurrentMode;
-    if( nullptr == pfnDeviceSchedulerSetConcurrentMode )
+    auto pfnSchedulerSetConcurrentMode = xet_lib::context.ddiTable.Sysman.pfnSchedulerSetConcurrentMode;
+    if( nullptr == pfnSchedulerSetConcurrentMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnDeviceSchedulerSetConcurrentMode( hSysman, pProperties, pNeedReboot );
+    return pfnSchedulerSetConcurrentMode( hSysman, pProperties, pNeedReboot );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -221,20 +221,20 @@ xetSysmanDeviceSchedulerSetConcurrentMode(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerSetTimesliceMode(
+xetSysmanSchedulerSetTimesliceMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
     xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
     )
 {
-    auto pfnDeviceSchedulerSetTimesliceMode = xet_lib::context.ddiTable.Sysman.pfnDeviceSchedulerSetTimesliceMode;
-    if( nullptr == pfnDeviceSchedulerSetTimesliceMode )
+    auto pfnSchedulerSetTimesliceMode = xet_lib::context.ddiTable.Sysman.pfnSchedulerSetTimesliceMode;
+    if( nullptr == pfnSchedulerSetTimesliceMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnDeviceSchedulerSetTimesliceMode( hSysman, pProperties, pNeedReboot );
+    return pfnSchedulerSetTimesliceMode( hSysman, pProperties, pNeedReboot );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,19 +256,19 @@ xetSysmanDeviceSchedulerSetTimesliceMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pNeedReboot
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerSetExclusiveMode(
+xetSysmanSchedulerSetExclusiveMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
     )
 {
-    auto pfnDeviceSchedulerSetExclusiveMode = xet_lib::context.ddiTable.Sysman.pfnDeviceSchedulerSetExclusiveMode;
-    if( nullptr == pfnDeviceSchedulerSetExclusiveMode )
+    auto pfnSchedulerSetExclusiveMode = xet_lib::context.ddiTable.Sysman.pfnSchedulerSetExclusiveMode;
+    if( nullptr == pfnSchedulerSetExclusiveMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnDeviceSchedulerSetExclusiveMode( hSysman, pNeedReboot );
+    return pfnSchedulerSetExclusiveMode( hSysman, pNeedReboot );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2858,16 +2858,16 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::DeviceSchedulerGetCurrentMode(
+    Sysman::SchedulerGetCurrentMode(
         sched_mode_t* pMode                             ///< [in] Will contain the current scheduler mode.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanDeviceSchedulerGetCurrentMode(
+        auto result = static_cast<result_t>( ::xetSysmanSchedulerGetCurrentMode(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             reinterpret_cast<xet_sched_mode_t*>( pMode ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceSchedulerGetCurrentMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SchedulerGetCurrentMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2879,19 +2879,19 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::DeviceSchedulerGetConcurrentModeProperties(
+    Sysman::SchedulerGetConcurrentModeProperties(
         xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanDeviceSchedulerGetConcurrentModeProperties(
+        auto result = static_cast<result_t>( ::xetSysmanSchedulerGetConcurrentModeProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             static_cast<xe_bool_t>( getDefaults ),
             reinterpret_cast<xet_sched_concurrent_properties_t*>( pConfig ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceSchedulerGetConcurrentModeProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SchedulerGetConcurrentModeProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2903,19 +2903,19 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::DeviceSchedulerGetTimesliceModeProperties(
+    Sysman::SchedulerGetTimesliceModeProperties(
         xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanDeviceSchedulerGetTimesliceModeProperties(
+        auto result = static_cast<result_t>( ::xetSysmanSchedulerGetTimesliceModeProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             static_cast<xe_bool_t>( getDefaults ),
             reinterpret_cast<xet_sched_concurrent_properties_t*>( pConfig ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceSchedulerGetTimesliceModeProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SchedulerGetTimesliceModeProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2932,19 +2932,19 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::DeviceSchedulerSetConcurrentMode(
+    Sysman::SchedulerSetConcurrentMode(
         sched_concurrent_properties_t* pProperties,     ///< [in] The properties to use when configurating this mode.
         xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanDeviceSchedulerSetConcurrentMode(
+        auto result = static_cast<result_t>( ::xetSysmanSchedulerSetConcurrentMode(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             reinterpret_cast<xet_sched_concurrent_properties_t*>( pProperties ),
             reinterpret_cast<xe_bool_t*>( pNeedReboot ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceSchedulerSetConcurrentMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SchedulerSetConcurrentMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2960,19 +2960,19 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::DeviceSchedulerSetTimesliceMode(
+    Sysman::SchedulerSetTimesliceMode(
         sched_concurrent_properties_t* pProperties,     ///< [in] The properties to use when configurating this mode.
         xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanDeviceSchedulerSetTimesliceMode(
+        auto result = static_cast<result_t>( ::xetSysmanSchedulerSetTimesliceMode(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             reinterpret_cast<xet_sched_concurrent_properties_t*>( pProperties ),
             reinterpret_cast<xe_bool_t*>( pNeedReboot ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceSchedulerSetTimesliceMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SchedulerSetTimesliceMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2988,17 +2988,17 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::DeviceSchedulerSetExclusiveMode(
+    Sysman::SchedulerSetExclusiveMode(
         xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanDeviceSchedulerSetExclusiveMode(
+        auto result = static_cast<result_t>( ::xetSysmanSchedulerSetExclusiveMode(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             reinterpret_cast<xe_bool_t*>( pNeedReboot ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceSchedulerSetExclusiveMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SchedulerSetExclusiveMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

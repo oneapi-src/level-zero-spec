@@ -337,7 +337,7 @@ namespace xet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceSchedulerGetCurrentMode(
+        SchedulerGetCurrentMode(
             sched_mode_t* pMode                             ///< [in] Will contain the current scheduler mode.
             );
 
@@ -349,7 +349,7 @@ namespace xet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceSchedulerGetConcurrentModeProperties(
+        SchedulerGetConcurrentModeProperties(
             xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                             ///< this mode, otherwise it will return the current properties.
             sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
@@ -363,7 +363,7 @@ namespace xet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceSchedulerGetTimesliceModeProperties(
+        SchedulerGetTimesliceModeProperties(
             xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                             ///< this mode, otherwise it will return the current properties.
             sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
@@ -382,7 +382,7 @@ namespace xet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceSchedulerSetConcurrentMode(
+        SchedulerSetConcurrentMode(
             sched_concurrent_properties_t* pProperties,     ///< [in] The properties to use when configurating this mode.
             xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                             ///< scheduler mode.
@@ -400,7 +400,7 @@ namespace xet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceSchedulerSetTimesliceMode(
+        SchedulerSetTimesliceMode(
             sched_concurrent_properties_t* pProperties,     ///< [in] The properties to use when configurating this mode.
             xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                             ///< scheduler mode.
@@ -418,7 +418,7 @@ namespace xet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceSchedulerSetExclusiveMode(
+        SchedulerSetExclusiveMode(
             xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                             ///< scheduler mode.
             );

@@ -360,7 +360,7 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 
 ### <a name="glos">Scheduler operations</a>
 On some devices, it is possible to change the way the scheduler executes workloads. To find out if this is supported, execute the function
-::xetSysmanDeviceSchedulerGetCurrentMode() and check that it does not return an error.
+::xetSysmanSchedulerGetCurrentMode() and check that it does not return an error.
 
 The available scheduler operating modes are given by the enum ::xet_sched_mode_t:
 
@@ -372,14 +372,14 @@ The available scheduler operating modes are given by the enum ::xet_sched_mode_t
 
 The following functions are available for changing the behavior of the scheduler:
 
-| Function                                                   | Description |
-| :---                                                       | :---        |
-| ::xetSysmanDeviceSchedulerGetCurrentMode()                | Get the current scheduler mode (concurrent, timeslice, exclusive) |
-| ::xetSysmanDeviceSchedulerGetConcurrentModeProperties()   | Get the settings for the concurrent scheduler mode |
-| ::xetSysmanDeviceSchedulerGetTimesliceModeProperties()    | Get the settings for the timeslice scheduler mode |
-| ::xetSysmanDeviceSchedulerSetConcurrentMode               | Change to concurrent scheduler mode and/or change properties |
-| ::xetSysmanDeviceSchedulerSetTimesliceMode                | Change to timeslice scheduler mode and/or change properties |
-| ::xetSysmanDeviceSchedulerSetExclusiveMode                | Change to exclusive scheduler mode and/or change properties |
+| Function                                             | Description |
+| :---                                                 | :---        |
+| ::xetSysmanSchedulerGetCurrentMode()                | Get the current scheduler mode (concurrent, timeslice, exclusive) |
+| ::xetSysmanSchedulerGetConcurrentModeProperties()   | Get the settings for the concurrent scheduler mode |
+| ::xetSysmanSchedulerGetTimesliceModeProperties()    | Get the settings for the timeslice scheduler mode |
+| ::xetSysmanSchedulerSetConcurrentMode               | Change to concurrent scheduler mode and/or change properties |
+| ::xetSysmanSchedulerSetTimesliceMode                | Change to timeslice scheduler mode and/or change properties |
+| ::xetSysmanSchedulerSetExclusiveMode                | Change to exclusive scheduler mode and/or change properties |
 
 The example below shows how to stop the scheduler enforcing fairness while permitting other work to attempt to run:
 
@@ -388,13 +388,13 @@ void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
 {
     xe_result_t res;
     xet_sched_mode_t currentMode;
-    res = xetSysmanDeviceSchedulerGetCurrentMode(hSysmanDevice, &currentMode);
+    res = xetSysmanSchedulerGetCurrentMode(hSysmanDevice, &currentMode);
     if (res == XE_RESULT_SUCCESS)
     {
         xe_bool_t requireReboot;
         xet_sched_concurrent_properties_t props;
         props.watchdogTimeout = XET_SCHED_WATCHDOG_DISABLE;
-        res = xetSysmanDeviceSchedulerSetConcurrentMode(hSysmanDevice, &props, &requireReboot);
+        res = xetSysmanSchedulerSetConcurrentMode(hSysmanDevice, &props, &requireReboot);
         if (res == XE_RESULT_SUCCESS)
         {
             if (requireReboot)

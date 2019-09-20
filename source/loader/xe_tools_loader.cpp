@@ -824,9 +824,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerGetCurrentMode
+    /// @brief Intercept function for xetSysmanSchedulerGetCurrentMode
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerGetCurrentMode(
+    xetSysmanSchedulerGetCurrentMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
         )
@@ -835,23 +835,23 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceSchedulerGetCurrentMode = dditable->xet.Sysman.pfnDeviceSchedulerGetCurrentMode;
-        if( nullptr == pfnDeviceSchedulerGetCurrentMode )
+        auto pfnSchedulerGetCurrentMode = dditable->xet.Sysman.pfnSchedulerGetCurrentMode;
+        if( nullptr == pfnSchedulerGetCurrentMode )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceSchedulerGetCurrentMode( hSysman, pMode );
+        result = pfnSchedulerGetCurrentMode( hSysman, pMode );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerGetConcurrentModeProperties
+    /// @brief Intercept function for xetSysmanSchedulerGetConcurrentModeProperties
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerGetConcurrentModeProperties(
+    xetSysmanSchedulerGetConcurrentModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
@@ -862,23 +862,23 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceSchedulerGetConcurrentModeProperties = dditable->xet.Sysman.pfnDeviceSchedulerGetConcurrentModeProperties;
-        if( nullptr == pfnDeviceSchedulerGetConcurrentModeProperties )
+        auto pfnSchedulerGetConcurrentModeProperties = dditable->xet.Sysman.pfnSchedulerGetConcurrentModeProperties;
+        if( nullptr == pfnSchedulerGetConcurrentModeProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
+        result = pfnSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerGetTimesliceModeProperties
+    /// @brief Intercept function for xetSysmanSchedulerGetTimesliceModeProperties
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerGetTimesliceModeProperties(
+    xetSysmanSchedulerGetTimesliceModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
@@ -889,23 +889,23 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceSchedulerGetTimesliceModeProperties = dditable->xet.Sysman.pfnDeviceSchedulerGetTimesliceModeProperties;
-        if( nullptr == pfnDeviceSchedulerGetTimesliceModeProperties )
+        auto pfnSchedulerGetTimesliceModeProperties = dditable->xet.Sysman.pfnSchedulerGetTimesliceModeProperties;
+        if( nullptr == pfnSchedulerGetTimesliceModeProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
+        result = pfnSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerSetConcurrentMode
+    /// @brief Intercept function for xetSysmanSchedulerSetConcurrentMode
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerSetConcurrentMode(
+    xetSysmanSchedulerSetConcurrentMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
         xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -916,23 +916,23 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceSchedulerSetConcurrentMode = dditable->xet.Sysman.pfnDeviceSchedulerSetConcurrentMode;
-        if( nullptr == pfnDeviceSchedulerSetConcurrentMode )
+        auto pfnSchedulerSetConcurrentMode = dditable->xet.Sysman.pfnSchedulerSetConcurrentMode;
+        if( nullptr == pfnSchedulerSetConcurrentMode )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceSchedulerSetConcurrentMode( hSysman, pProperties, pNeedReboot );
+        result = pfnSchedulerSetConcurrentMode( hSysman, pProperties, pNeedReboot );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerSetTimesliceMode
+    /// @brief Intercept function for xetSysmanSchedulerSetTimesliceMode
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerSetTimesliceMode(
+    xetSysmanSchedulerSetTimesliceMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
         xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -943,23 +943,23 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceSchedulerSetTimesliceMode = dditable->xet.Sysman.pfnDeviceSchedulerSetTimesliceMode;
-        if( nullptr == pfnDeviceSchedulerSetTimesliceMode )
+        auto pfnSchedulerSetTimesliceMode = dditable->xet.Sysman.pfnSchedulerSetTimesliceMode;
+        if( nullptr == pfnSchedulerSetTimesliceMode )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceSchedulerSetTimesliceMode( hSysman, pProperties, pNeedReboot );
+        result = pfnSchedulerSetTimesliceMode( hSysman, pProperties, pNeedReboot );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerSetExclusiveMode
+    /// @brief Intercept function for xetSysmanSchedulerSetExclusiveMode
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerSetExclusiveMode(
+    xetSysmanSchedulerSetExclusiveMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
@@ -969,15 +969,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceSchedulerSetExclusiveMode = dditable->xet.Sysman.pfnDeviceSchedulerSetExclusiveMode;
-        if( nullptr == pfnDeviceSchedulerSetExclusiveMode )
+        auto pfnSchedulerSetExclusiveMode = dditable->xet.Sysman.pfnSchedulerSetExclusiveMode;
+        if( nullptr == pfnSchedulerSetExclusiveMode )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceSchedulerSetExclusiveMode( hSysman, pNeedReboot );
+        result = pfnSchedulerSetExclusiveMode( hSysman, pNeedReboot );
 
         return result;
     }
@@ -4185,12 +4185,12 @@ xetGetSysmanProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = loader::xetSysmanGet;
             pDdiTable->pfnDeviceGetProperties                      = loader::xetSysmanDeviceGetProperties;
-            pDdiTable->pfnDeviceSchedulerGetCurrentMode            = loader::xetSysmanDeviceSchedulerGetCurrentMode;
-            pDdiTable->pfnDeviceSchedulerGetConcurrentModeProperties   = loader::xetSysmanDeviceSchedulerGetConcurrentModeProperties;
-            pDdiTable->pfnDeviceSchedulerGetTimesliceModeProperties    = loader::xetSysmanDeviceSchedulerGetTimesliceModeProperties;
-            pDdiTable->pfnDeviceSchedulerSetConcurrentMode         = loader::xetSysmanDeviceSchedulerSetConcurrentMode;
-            pDdiTable->pfnDeviceSchedulerSetTimesliceMode          = loader::xetSysmanDeviceSchedulerSetTimesliceMode;
-            pDdiTable->pfnDeviceSchedulerSetExclusiveMode          = loader::xetSysmanDeviceSchedulerSetExclusiveMode;
+            pDdiTable->pfnSchedulerGetCurrentMode                  = loader::xetSysmanSchedulerGetCurrentMode;
+            pDdiTable->pfnSchedulerGetConcurrentModeProperties     = loader::xetSysmanSchedulerGetConcurrentModeProperties;
+            pDdiTable->pfnSchedulerGetTimesliceModeProperties      = loader::xetSysmanSchedulerGetTimesliceModeProperties;
+            pDdiTable->pfnSchedulerSetConcurrentMode               = loader::xetSysmanSchedulerSetConcurrentMode;
+            pDdiTable->pfnSchedulerSetTimesliceMode                = loader::xetSysmanSchedulerSetTimesliceMode;
+            pDdiTable->pfnSchedulerSetExclusiveMode                = loader::xetSysmanSchedulerSetExclusiveMode;
             pDdiTable->pfnDeviceReset                              = loader::xetSysmanDeviceReset;
             pDdiTable->pfnDeviceWasRepaired                        = loader::xetSysmanDeviceWasRepaired;
             pDdiTable->pfnPciGetProperties                         = loader::xetSysmanPciGetProperties;

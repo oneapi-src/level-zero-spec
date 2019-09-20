@@ -436,13 +436,13 @@ void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
 {
     xe_result_t res;
     xet_sched_mode_t currentMode;
-    res = xetSysmanDeviceSchedulerGetCurrentMode(hSysmanDevice, &currentMode);
+    res = xetSysmanSchedulerGetCurrentMode(hSysmanDevice, &currentMode);
     if (res == XE_RESULT_SUCCESS)
     {
         xe_bool_t requireReboot;
         xet_sched_concurrent_properties_t props;
         props.watchdogTimeout = XET_SCHED_WATCHDOG_DISABLE;
-        res = xetSysmanDeviceSchedulerSetConcurrentMode(hSysmanDevice, &props, &requireReboot);
+        res = xetSysmanSchedulerSetConcurrentMode(hSysmanDevice, &props, &requireReboot);
         if (res == XE_RESULT_SUCCESS)
         {
             if (requireReboot)

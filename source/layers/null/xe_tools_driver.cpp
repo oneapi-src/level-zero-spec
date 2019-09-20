@@ -690,9 +690,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerGetCurrentMode
+    /// @brief Intercept function for xetSysmanSchedulerGetCurrentMode
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerGetCurrentMode(
+    xetSysmanSchedulerGetCurrentMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
         )
@@ -700,10 +700,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceSchedulerGetCurrentMode = context.xetDdiTable.Sysman.pfnDeviceSchedulerGetCurrentMode;
-        if( nullptr != pfnDeviceSchedulerGetCurrentMode )
+        auto pfnSchedulerGetCurrentMode = context.xetDdiTable.Sysman.pfnSchedulerGetCurrentMode;
+        if( nullptr != pfnSchedulerGetCurrentMode )
         {
-            result = pfnDeviceSchedulerGetCurrentMode( hSysman, pMode );
+            result = pfnSchedulerGetCurrentMode( hSysman, pMode );
         }
         else
         {
@@ -714,9 +714,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerGetConcurrentModeProperties
+    /// @brief Intercept function for xetSysmanSchedulerGetConcurrentModeProperties
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerGetConcurrentModeProperties(
+    xetSysmanSchedulerGetConcurrentModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
@@ -726,10 +726,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceSchedulerGetConcurrentModeProperties = context.xetDdiTable.Sysman.pfnDeviceSchedulerGetConcurrentModeProperties;
-        if( nullptr != pfnDeviceSchedulerGetConcurrentModeProperties )
+        auto pfnSchedulerGetConcurrentModeProperties = context.xetDdiTable.Sysman.pfnSchedulerGetConcurrentModeProperties;
+        if( nullptr != pfnSchedulerGetConcurrentModeProperties )
         {
-            result = pfnDeviceSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
+            result = pfnSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
         }
         else
         {
@@ -740,9 +740,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerGetTimesliceModeProperties
+    /// @brief Intercept function for xetSysmanSchedulerGetTimesliceModeProperties
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerGetTimesliceModeProperties(
+    xetSysmanSchedulerGetTimesliceModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
@@ -752,10 +752,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceSchedulerGetTimesliceModeProperties = context.xetDdiTable.Sysman.pfnDeviceSchedulerGetTimesliceModeProperties;
-        if( nullptr != pfnDeviceSchedulerGetTimesliceModeProperties )
+        auto pfnSchedulerGetTimesliceModeProperties = context.xetDdiTable.Sysman.pfnSchedulerGetTimesliceModeProperties;
+        if( nullptr != pfnSchedulerGetTimesliceModeProperties )
         {
-            result = pfnDeviceSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
+            result = pfnSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
         }
         else
         {
@@ -766,9 +766,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerSetConcurrentMode
+    /// @brief Intercept function for xetSysmanSchedulerSetConcurrentMode
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerSetConcurrentMode(
+    xetSysmanSchedulerSetConcurrentMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
         xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -778,10 +778,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceSchedulerSetConcurrentMode = context.xetDdiTable.Sysman.pfnDeviceSchedulerSetConcurrentMode;
-        if( nullptr != pfnDeviceSchedulerSetConcurrentMode )
+        auto pfnSchedulerSetConcurrentMode = context.xetDdiTable.Sysman.pfnSchedulerSetConcurrentMode;
+        if( nullptr != pfnSchedulerSetConcurrentMode )
         {
-            result = pfnDeviceSchedulerSetConcurrentMode( hSysman, pProperties, pNeedReboot );
+            result = pfnSchedulerSetConcurrentMode( hSysman, pProperties, pNeedReboot );
         }
         else
         {
@@ -792,9 +792,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerSetTimesliceMode
+    /// @brief Intercept function for xetSysmanSchedulerSetTimesliceMode
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerSetTimesliceMode(
+    xetSysmanSchedulerSetTimesliceMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
         xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -804,10 +804,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceSchedulerSetTimesliceMode = context.xetDdiTable.Sysman.pfnDeviceSchedulerSetTimesliceMode;
-        if( nullptr != pfnDeviceSchedulerSetTimesliceMode )
+        auto pfnSchedulerSetTimesliceMode = context.xetDdiTable.Sysman.pfnSchedulerSetTimesliceMode;
+        if( nullptr != pfnSchedulerSetTimesliceMode )
         {
-            result = pfnDeviceSchedulerSetTimesliceMode( hSysman, pProperties, pNeedReboot );
+            result = pfnSchedulerSetTimesliceMode( hSysman, pProperties, pNeedReboot );
         }
         else
         {
@@ -818,9 +818,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSchedulerSetExclusiveMode
+    /// @brief Intercept function for xetSysmanSchedulerSetExclusiveMode
     xe_result_t __xecall
-    xetSysmanDeviceSchedulerSetExclusiveMode(
+    xetSysmanSchedulerSetExclusiveMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
@@ -829,10 +829,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceSchedulerSetExclusiveMode = context.xetDdiTable.Sysman.pfnDeviceSchedulerSetExclusiveMode;
-        if( nullptr != pfnDeviceSchedulerSetExclusiveMode )
+        auto pfnSchedulerSetExclusiveMode = context.xetDdiTable.Sysman.pfnSchedulerSetExclusiveMode;
+        if( nullptr != pfnSchedulerSetExclusiveMode )
         {
-            result = pfnDeviceSchedulerSetExclusiveMode( hSysman, pNeedReboot );
+            result = pfnSchedulerSetExclusiveMode( hSysman, pNeedReboot );
         }
         else
         {
@@ -3447,17 +3447,17 @@ xetGetSysmanProcAddrTable(
 
     pDdiTable->pfnDeviceGetProperties                    = driver::xetSysmanDeviceGetProperties;
 
-    pDdiTable->pfnDeviceSchedulerGetCurrentMode          = driver::xetSysmanDeviceSchedulerGetCurrentMode;
+    pDdiTable->pfnSchedulerGetCurrentMode                = driver::xetSysmanSchedulerGetCurrentMode;
 
-    pDdiTable->pfnDeviceSchedulerGetConcurrentModeProperties = driver::xetSysmanDeviceSchedulerGetConcurrentModeProperties;
+    pDdiTable->pfnSchedulerGetConcurrentModeProperties   = driver::xetSysmanSchedulerGetConcurrentModeProperties;
 
-    pDdiTable->pfnDeviceSchedulerGetTimesliceModeProperties  = driver::xetSysmanDeviceSchedulerGetTimesliceModeProperties;
+    pDdiTable->pfnSchedulerGetTimesliceModeProperties    = driver::xetSysmanSchedulerGetTimesliceModeProperties;
 
-    pDdiTable->pfnDeviceSchedulerSetConcurrentMode       = driver::xetSysmanDeviceSchedulerSetConcurrentMode;
+    pDdiTable->pfnSchedulerSetConcurrentMode             = driver::xetSysmanSchedulerSetConcurrentMode;
 
-    pDdiTable->pfnDeviceSchedulerSetTimesliceMode        = driver::xetSysmanDeviceSchedulerSetTimesliceMode;
+    pDdiTable->pfnSchedulerSetTimesliceMode              = driver::xetSysmanSchedulerSetTimesliceMode;
 
-    pDdiTable->pfnDeviceSchedulerSetExclusiveMode        = driver::xetSysmanDeviceSchedulerSetExclusiveMode;
+    pDdiTable->pfnSchedulerSetExclusiveMode              = driver::xetSysmanSchedulerSetExclusiveMode;
 
     pDdiTable->pfnDeviceReset                            = driver::xetSysmanDeviceReset;
 

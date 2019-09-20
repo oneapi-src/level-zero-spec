@@ -128,7 +128,7 @@ members:
 type: function
 desc: "Get current scheduler mode"
 class: $tSysman
-name: DeviceSchedulerGetCurrentMode
+name: SchedulerGetCurrentMode
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -146,7 +146,7 @@ returns:
 type: function
 desc: "Get scheduler config for mode $T_SCHED_MODE_CONCURRENT"
 class: $tSysman
-name: DeviceSchedulerGetConcurrentModeProperties
+name: SchedulerGetConcurrentModeProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -162,12 +162,12 @@ params:
       desc: "[in] Will contain the current parameters for this mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get scheduler config for mode $T_SCHED_MODE_TIMESLICE"
 class: $tSysman
-name: DeviceSchedulerGetTimesliceModeProperties
+name: SchedulerGetTimesliceModeProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -183,12 +183,12 @@ params:
       desc: "[in] Will contain the current parameters for this mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change scheduler mode to $T_SCHED_MODE_CONCURRENT or update scheduler mode parameters if already running in this mode."
 class: $tSysman
-name: DeviceSchedulerSetConcurrentMode
+name: SchedulerSetConcurrentMode
 details:
     - "This mode is optimized for multiple applications or contexts submitting work concurrently to the hardware. When work for one context completes or higher priority work arrives, the scheduler organizes to submit the new work to the hardware as soon as possible."
     - "The application may call this function from simultaneous threads."
@@ -205,12 +205,12 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change scheduler mode to $T_SCHED_MODE_TIMESLICE or update scheduler mode parameters if already running in this mode."
 class: $tSysman
-name: DeviceSchedulerSetTimesliceMode
+name: SchedulerSetTimesliceMode
 details:
     - "This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently."
     - "The application may call this function from simultaneous threads."
@@ -227,12 +227,12 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change scheduler mode to $T_SCHED_MODE_EXCLUSIVE"
 class: $tSysman
-name: DeviceSchedulerSetExclusiveMode
+name: SchedulerSetExclusiveMode
 details:
     - "This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
     - "The application may call this function from simultaneous threads."
@@ -246,7 +246,7 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
 
 --- #--------------------------------------------------------------------------
 type: function

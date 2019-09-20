@@ -167,7 +167,7 @@ typedef struct _xet_sched_timeslice_properties_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + Device does not support scheduler modes.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerGetCurrentMode(
+xetSysmanSchedulerGetCurrentMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
     );
@@ -187,9 +187,9 @@ xetSysmanDeviceSchedulerGetCurrentMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerGetConcurrentModeProperties(
+xetSysmanSchedulerGetConcurrentModeProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
@@ -211,9 +211,9 @@ xetSysmanDeviceSchedulerGetConcurrentModeProperties(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerGetTimesliceModeProperties(
+xetSysmanSchedulerGetTimesliceModeProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
@@ -241,9 +241,9 @@ xetSysmanDeviceSchedulerGetTimesliceModeProperties(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerSetConcurrentMode(
+xetSysmanSchedulerSetConcurrentMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
     xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -270,9 +270,9 @@ xetSysmanDeviceSchedulerSetConcurrentMode(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerSetTimesliceMode(
+xetSysmanSchedulerSetTimesliceMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
     xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -298,9 +298,9 @@ xetSysmanDeviceSchedulerSetTimesliceMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pNeedReboot
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanDeviceSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
-xetSysmanDeviceSchedulerSetExclusiveMode(
+xetSysmanSchedulerSetExclusiveMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
