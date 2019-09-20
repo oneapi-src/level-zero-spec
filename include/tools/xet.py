@@ -451,7 +451,7 @@ class xet_sched_mode_t(c_int):
 
 ###############################################################################
 ## @brief Disable forward progress guard timeout.
-XET_SCHED_WATCHDOG_DISABLE = 0xFFFFFFFF
+XET_SCHED_WATCHDOG_DISABLE = (~(0ULL))
 
 ###############################################################################
 ## @brief Configuration for concurrent scheduler mode

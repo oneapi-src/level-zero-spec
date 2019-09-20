@@ -30,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_SCHED_WATCHDOG_DISABLE
 /// @brief Disable forward progress guard timeout.
-#define XET_SCHED_WATCHDOG_DISABLE  0xFFFFFFFF
+#define XET_SCHED_WATCHDOG_DISABLE  (~(0ULL))
 #endif // XET_SCHED_WATCHDOG_DISABLE
 
 ///////////////////////////////////////////////////////////////////////////////

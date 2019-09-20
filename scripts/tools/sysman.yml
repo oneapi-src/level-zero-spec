@@ -98,7 +98,7 @@ etors:
 type: macro
 desc: "Disable forward progress guard timeout."
 name: $T_SCHED_WATCHDOG_DISABLE
-value: "0xFFFFFFFF"
+value: "(~(0ULL))"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Configuration for concurrent scheduler mode ($T_SCHED_MODE_CONCURRENT)"
