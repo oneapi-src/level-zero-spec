@@ -443,6 +443,9 @@ class xet_sched_mode_v(IntEnum):
                                                     ## without being preempted or terminated. All pending work for other
                                                     ## contexts must wait until the running context completes with no further
                                                     ## submitted work.
+    SINGLE_CMDQUEUE = auto()                        ## Only a single command queue can execute work at a given time. Work is
+                                                    ## permitted to run as long as needed without enforcing any scheduler
+                                                    ## fairness policies.
 
 class xet_sched_mode_t(c_int):
     def __str__(self):
@@ -1795,6 +1798,13 @@ else:
     _xetSysmanSchedulerSetExclusiveMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xe_bool_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanSchedulerSetSingleCmdQueueMode
+if __use_win_types:
+    _xetSysmanSchedulerSetSingleCmdQueueMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xe_bool_t) )
+else:
+    _xetSysmanSchedulerSetSingleCmdQueueMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xe_bool_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanDeviceReset
 if __use_win_types:
     _xetSysmanDeviceReset_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t )
@@ -1975,6 +1985,7 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnSchedulerSetConcurrentMode", c_void_p),                    ## _xetSysmanSchedulerSetConcurrentMode_t
         ("pfnSchedulerSetTimesliceMode", c_void_p),                     ## _xetSysmanSchedulerSetTimesliceMode_t
         ("pfnSchedulerSetExclusiveMode", c_void_p),                     ## _xetSysmanSchedulerSetExclusiveMode_t
+        ("pfnSchedulerSetSingleCmdQueueMode", c_void_p),                ## _xetSysmanSchedulerSetSingleCmdQueueMode_t
         ("pfnDeviceReset", c_void_p),                                   ## _xetSysmanDeviceReset_t
         ("pfnDeviceWasRepaired", c_void_p),                             ## _xetSysmanDeviceWasRepaired_t
         ("pfnPciGetProperties", c_void_p),                              ## _xetSysmanPciGetProperties_t
@@ -2726,6 +2737,7 @@ class XET_DDI:
         self.xetSysmanSchedulerSetConcurrentMode = _xetSysmanSchedulerSetConcurrentMode_t(self.__dditable.Sysman.pfnSchedulerSetConcurrentMode)
         self.xetSysmanSchedulerSetTimesliceMode = _xetSysmanSchedulerSetTimesliceMode_t(self.__dditable.Sysman.pfnSchedulerSetTimesliceMode)
         self.xetSysmanSchedulerSetExclusiveMode = _xetSysmanSchedulerSetExclusiveMode_t(self.__dditable.Sysman.pfnSchedulerSetExclusiveMode)
+        self.xetSysmanSchedulerSetSingleCmdQueueMode = _xetSysmanSchedulerSetSingleCmdQueueMode_t(self.__dditable.Sysman.pfnSchedulerSetSingleCmdQueueMode)
         self.xetSysmanDeviceReset = _xetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
         self.xetSysmanDeviceWasRepaired = _xetSysmanDeviceWasRepaired_t(self.__dditable.Sysman.pfnDeviceWasRepaired)
         self.xetSysmanPciGetProperties = _xetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)

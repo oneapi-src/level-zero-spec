@@ -891,6 +891,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanSchedulerSetSingleCmdQueueMode
+    xe_result_t __xecall
+    xetSysmanSchedulerSetSingleCmdQueueMode(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                        ///< scheduler mode.
+        )
+    {
+        auto pfnSchedulerSetSingleCmdQueueMode = context.xetDdiTable.Sysman.pfnSchedulerSetSingleCmdQueueMode;
+
+        if( nullptr == pfnSchedulerSetSingleCmdQueueMode )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pNeedReboot )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSchedulerSetSingleCmdQueueMode( hSysman, pNeedReboot );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanDeviceReset
     xe_result_t __xecall
     xetSysmanDeviceReset(
@@ -3671,6 +3698,9 @@ xetGetSysmanProcAddrTable(
 
     dditable.pfnSchedulerSetExclusiveMode                = pDdiTable->pfnSchedulerSetExclusiveMode;
     pDdiTable->pfnSchedulerSetExclusiveMode              = layer::xetSysmanSchedulerSetExclusiveMode;
+
+    dditable.pfnSchedulerSetSingleCmdQueueMode           = pDdiTable->pfnSchedulerSetSingleCmdQueueMode;
+    pDdiTable->pfnSchedulerSetSingleCmdQueueMode         = layer::xetSysmanSchedulerSetSingleCmdQueueMode;
 
     dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
     pDdiTable->pfnDeviceReset                            = layer::xetSysmanDeviceReset;

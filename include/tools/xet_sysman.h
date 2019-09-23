@@ -112,6 +112,9 @@ typedef enum _xet_sched_mode_t
                                                     ///< without being preempted or terminated. All pending work for other
                                                     ///< contexts must wait until the running context completes with no further
                                                     ///< submitted work.
+    XET_SCHED_MODE_SINGLE_CMDQUEUE,                 ///< Only a single command queue can execute work at a given time. Work is
+                                                    ///< permitted to run as long as needed without enforcing any scheduler
+                                                    ///< fairness policies.
 
 } xet_sched_mode_t;
 
@@ -301,6 +304,33 @@ xetSysmanSchedulerSetTimesliceMode(
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 xe_result_t __xecall
 xetSysmanSchedulerSetExclusiveMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                    ///< scheduler mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change scheduler mode to ::XET_SCHED_MODE_SINGLE_CMDQUEUE
+/// 
+/// @details
+///     - This mode is optimized for application debug. It ensures that only one
+///       command queue can execute work on the hardware at a given time. Work
+///       is permitted to run as long as needed without enforcing any scheduler
+///       fairness policies.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pNeedReboot
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+xe_result_t __xecall
+xetSysmanSchedulerSetSingleCmdQueueMode(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.

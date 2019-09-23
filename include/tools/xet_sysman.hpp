@@ -87,6 +87,9 @@ namespace xet
                                                             ///< without being preempted or terminated. All pending work for other
                                                             ///< contexts must wait until the running context completes with no further
                                                             ///< submitted work.
+            SINGLE_CMDQUEUE,                                ///< Only a single command queue can execute work at a given time. Work is
+                                                            ///< permitted to run as long as needed without enforcing any scheduler
+                                                            ///< fairness policies.
 
         };
 
@@ -419,6 +422,23 @@ namespace xet
         /// @throws result_t
         void __xecall
         SchedulerSetExclusiveMode(
+            xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                            ///< scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::XET_SCHED_MODE_SINGLE_CMDQUEUE
+        /// 
+        /// @details
+        ///     - This mode is optimized for application debug. It ensures that only one
+        ///       command queue can execute work on the hardware at a given time. Work
+        ///       is permitted to run as long as needed without enforcing any scheduler
+        ///       fairness policies.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        SchedulerSetSingleCmdQueueMode(
             xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                             ///< scheduler mode.
             );

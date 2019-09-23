@@ -654,6 +654,13 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerSetExclusiveMode_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanSchedulerSetSingleCmdQueueMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerSetSingleCmdQueueMode_t)(
+    xet_sysman_handle_t,
+    xe_bool_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanDeviceReset 
 typedef xe_result_t (__xecall *xet_pfnSysmanDeviceReset_t)(
     xet_sysman_handle_t
@@ -850,6 +857,7 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanSchedulerSetConcurrentMode_t                   pfnSchedulerSetConcurrentMode;
     xet_pfnSysmanSchedulerSetTimesliceMode_t                    pfnSchedulerSetTimesliceMode;
     xet_pfnSysmanSchedulerSetExclusiveMode_t                    pfnSchedulerSetExclusiveMode;
+    xet_pfnSysmanSchedulerSetSingleCmdQueueMode_t               pfnSchedulerSetSingleCmdQueueMode;
     xet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
     xet_pfnSysmanDeviceWasRepaired_t                            pfnDeviceWasRepaired;
     xet_pfnSysmanPciGetProperties_t                             pfnPciGetProperties;

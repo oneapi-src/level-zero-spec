@@ -983,6 +983,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanSchedulerSetSingleCmdQueueMode
+    xe_result_t __xecall
+    xetSysmanSchedulerSetSingleCmdQueueMode(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                        ///< scheduler mode.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnSchedulerSetSingleCmdQueueMode = dditable->xet.Sysman.pfnSchedulerSetSingleCmdQueueMode;
+        if( nullptr == pfnSchedulerSetSingleCmdQueueMode )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnSchedulerSetSingleCmdQueueMode( hSysman, pNeedReboot );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanDeviceReset
     xe_result_t __xecall
     xetSysmanDeviceReset(
@@ -4191,6 +4217,7 @@ xetGetSysmanProcAddrTable(
             pDdiTable->pfnSchedulerSetConcurrentMode               = loader::xetSysmanSchedulerSetConcurrentMode;
             pDdiTable->pfnSchedulerSetTimesliceMode                = loader::xetSysmanSchedulerSetTimesliceMode;
             pDdiTable->pfnSchedulerSetExclusiveMode                = loader::xetSysmanSchedulerSetExclusiveMode;
+            pDdiTable->pfnSchedulerSetSingleCmdQueueMode           = loader::xetSysmanSchedulerSetSingleCmdQueueMode;
             pDdiTable->pfnDeviceReset                              = loader::xetSysmanDeviceReset;
             pDdiTable->pfnDeviceWasRepaired                        = loader::xetSysmanDeviceWasRepaired;
             pDdiTable->pfnPciGetProperties                         = loader::xetSysmanPciGetProperties;

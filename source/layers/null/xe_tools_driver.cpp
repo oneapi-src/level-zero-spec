@@ -843,6 +843,31 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanSchedulerSetSingleCmdQueueMode
+    xe_result_t __xecall
+    xetSysmanSchedulerSetSingleCmdQueueMode(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                        ///< scheduler mode.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSchedulerSetSingleCmdQueueMode = context.xetDdiTable.Sysman.pfnSchedulerSetSingleCmdQueueMode;
+        if( nullptr != pfnSchedulerSetSingleCmdQueueMode )
+        {
+            result = pfnSchedulerSetSingleCmdQueueMode( hSysman, pNeedReboot );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanDeviceReset
     xe_result_t __xecall
     xetSysmanDeviceReset(
@@ -3458,6 +3483,8 @@ xetGetSysmanProcAddrTable(
     pDdiTable->pfnSchedulerSetTimesliceMode              = driver::xetSysmanSchedulerSetTimesliceMode;
 
     pDdiTable->pfnSchedulerSetExclusiveMode              = driver::xetSysmanSchedulerSetExclusiveMode;
+
+    pDdiTable->pfnSchedulerSetSingleCmdQueueMode         = driver::xetSysmanSchedulerSetSingleCmdQueueMode;
 
     pDdiTable->pfnDeviceReset                            = driver::xetSysmanDeviceReset;
 

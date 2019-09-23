@@ -272,6 +272,40 @@ xetSysmanSchedulerSetExclusiveMode(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Change scheduler mode to ::XET_SCHED_MODE_SINGLE_CMDQUEUE
+/// 
+/// @details
+///     - This mode is optimized for application debug. It ensures that only one
+///       command queue can execute work on the hardware at a given time. Work
+///       is permitted to run as long as needed without enforcing any scheduler
+///       fairness policies.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pNeedReboot
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + This scheduler mode is not supported. Other modes may be supported unless ::xetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+xe_result_t __xecall
+xetSysmanSchedulerSetSingleCmdQueueMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                    ///< scheduler mode.
+    )
+{
+    auto pfnSchedulerSetSingleCmdQueueMode = xet_lib::context.ddiTable.Sysman.pfnSchedulerSetSingleCmdQueueMode;
+    if( nullptr == pfnSchedulerSetSingleCmdQueueMode )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSchedulerSetSingleCmdQueueMode( hSysman, pNeedReboot );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset device
 /// 
 /// @returns
@@ -3002,6 +3036,32 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Change scheduler mode to ::XET_SCHED_MODE_SINGLE_CMDQUEUE
+    /// 
+    /// @details
+    ///     - This mode is optimized for application debug. It ensures that only one
+    ///       command queue can execute work on the hardware at a given time. Work
+    ///       is permitted to run as long as needed without enforcing any scheduler
+    ///       fairness policies.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::SchedulerSetSingleCmdQueueMode(
+        xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
+                                                        ///< scheduler mode.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanSchedulerSetSingleCmdQueueMode(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xe_bool_t*>( pNeedReboot ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SchedulerSetSingleCmdQueueMode" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Reset device
     /// 
     /// @throws result_t
@@ -5240,6 +5300,10 @@ namespace xet
 
         case Sysman::sched_mode_t::EXCLUSIVE:
             str = "Sysman::sched_mode_t::EXCLUSIVE";
+            break;
+
+        case Sysman::sched_mode_t::SINGLE_CMDQUEUE:
+            str = "Sysman::sched_mode_t::SINGLE_CMDQUEUE";
             break;
 
         default:

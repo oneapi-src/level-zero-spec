@@ -94,6 +94,8 @@ etors:
       desc: "The scheduler attempts to fairly timeslice hardware execution time between multiple contexts submitting work to the hardware concurrently."
     - name: $T_SCHED_MODE_EXCLUSIVE
       desc: "Any application or context can run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
+    - name: $T_SCHED_MODE_SINGLE_CMDQUEUE
+      desc: "Only a single command queue can execute work at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies."
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Disable forward progress guard timeout."
@@ -235,6 +237,25 @@ class: $tSysman
 name: SchedulerSetExclusiveMode
 details:
     - "This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $x_bool_t*
+      name: pNeedReboot
+      desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Change scheduler mode to $T_SCHED_MODE_SINGLE_CMDQUEUE"
+class: $tSysman
+name: SchedulerSetSingleCmdQueueMode
+details:
+    - "This mode is optimized for application debug. It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
