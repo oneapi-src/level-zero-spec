@@ -440,9 +440,9 @@ void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
     if (res == XE_RESULT_SUCCESS)
     {
         xe_bool_t requireReboot;
-        xet_sched_concurrent_properties_t props;
+        xet_sched_timeout_properties_t props;
         props.watchdogTimeout = XET_SCHED_WATCHDOG_DISABLE;
-        res = xetSysmanSchedulerSetConcurrentMode(hSysmanDevice, &props, &requireReboot);
+        res = xetSysmanSchedulerSetTimeoutMode(hSysmanDevice, &props, &requireReboot);
         if (res == XE_RESULT_SUCCESS)
         {
             if (requireReboot)
@@ -456,7 +456,7 @@ void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
         }
         else if(res == XE_RESULT_ERROR_UNSUPPORTED)
         {
-            fprintf(stderr, "ERROR: The concurrent scheduler mode is not supported on this device.\n");
+            fprintf(stderr, "ERROR: The timeout scheduler mode is not supported on this device.\n");
         }
         else if(res == XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
         {

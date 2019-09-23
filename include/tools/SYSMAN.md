@@ -366,7 +366,7 @@ The available scheduler operating modes are given by the enum ::xet_sched_mode_t
 
 | Scheduler mode                     | Description |
 | :---                               | :---        |
-| ::XET_SCHED_MODE_CONCURRENT       | This mode is optimized for multiple applications or contexts submitting work concurrently to the hardware. When work for one context completes or higher priority work arrives, the scheduler organizes to submit the new work to the hardware as soon as possible.<br />It is possible to configure (::xet_sched_concurrent_properties_t) the watchdog timeout which controls the maximum time the scheduler will wait for a workload to complete a batch of work or yield to other applications before it is terminated.<br />If the watchdog timeout is set to ::XET_SCHED_WATCHDOG_DISABLE, the scheduler enforces no fairness but will attempt to submit other work to the hardware. |
+| ::XET_SCHED_MODE_TIMEOUT          | This mode is optimized for multiple applications or contexts submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work.<br />It is possible to configure (::xet_sched_timeout_properties_t) the watchdog timeout which controls the maximum time the scheduler will wait for a workload to complete a batch of work or yield to other applications before it is terminated.<br />If the watchdog timeout is set to ::XET_SCHED_WATCHDOG_DISABLE, the scheduler enforces no fairness. This means that if there is other work to execute, the scheduler will try to submit it but will not terminate an executing process that does not complete quickly. |
 | ::XET_SCHED_MODE_TIMESLICE        | This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently.<br />It is possible to configure (::xet_sched_timeslice_properties_t) the timeslice interval and the amount of time the scheduler will wait for work to yield to another application before it is terminated. |
 | ::XET_SCHED_MODE_EXCLUSIVE        | This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work. |
 | ::XET_SCHED_MODE_SINGLE_CMDQUEUE  | This mode is optimized for application debug. It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies. |
@@ -375,10 +375,10 @@ The following functions are available for changing the behavior of the scheduler
 
 | Function                                             | Description |
 | :---                                                 | :---        |
-| ::xetSysmanSchedulerGetCurrentMode()                | Get the current scheduler mode (concurrent, timeslice, exclusive) |
-| ::xetSysmanSchedulerGetConcurrentModeProperties()   | Get the settings for the concurrent scheduler mode |
+| ::xetSysmanSchedulerGetCurrentMode()                | Get the current scheduler mode (timeout, timeslice, exclusive, single command queue) |
+| ::xetSysmanSchedulerGetTimeoutModeProperties()      | Get the settings for the timeout scheduler mode |
 | ::xetSysmanSchedulerGetTimesliceModeProperties()    | Get the settings for the timeslice scheduler mode |
-| ::xetSysmanSchedulerSetConcurrentMode               | Change to concurrent scheduler mode and/or change properties |
+| ::xetSysmanSchedulerSetTimeoutMode                  | Change to timeout scheduler mode and/or change properties |
 | ::xetSysmanSchedulerSetTimesliceMode                | Change to timeslice scheduler mode and/or change properties |
 | ::xetSysmanSchedulerSetExclusiveMode                | Change to exclusive scheduler mode and/or change properties |
 | ::xetSysmanSchedulerSetSingleCmdQueueMode           | Change to single command queue scheduler mode and/or change properties |
@@ -394,9 +394,9 @@ void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
     if (res == XE_RESULT_SUCCESS)
     {
         xe_bool_t requireReboot;
-        xet_sched_concurrent_properties_t props;
+        xet_sched_timeout_properties_t props;
         props.watchdogTimeout = XET_SCHED_WATCHDOG_DISABLE;
-        res = xetSysmanSchedulerSetConcurrentMode(hSysmanDevice, &props, &requireReboot);
+        res = xetSysmanSchedulerSetTimeoutMode(hSysmanDevice, &props, &requireReboot);
         if (res == XE_RESULT_SUCCESS)
         {
             if (requireReboot)
@@ -410,7 +410,7 @@ void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
         }
         else if(res == XE_RESULT_ERROR_UNSUPPORTED)
         {
-            fprintf(stderr, "ERROR: The concurrent scheduler mode is not supported on this device.\n");
+            fprintf(stderr, "ERROR: The timeout scheduler mode is not supported on this device.\n");
         }
         else if(res == XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
         {

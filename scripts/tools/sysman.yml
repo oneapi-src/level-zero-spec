@@ -87,9 +87,9 @@ desc: "Scheduler mode"
 class: $tSysman
 name: $t_sched_mode_t
 etors:
-    - name: $T_SCHED_MODE_CONCURRENT
+    - name: $T_SCHED_MODE_TIMEOUT
       value: "0"
-      desc: "Multiple applications or contexts are submitting work concurrently to the hardware. When work for one context completes or higher priority work arrives, the scheduler organizes to submit the new work to the hardware as soon as possible."
+      desc: "Multiple applications or contexts are submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work."
     - name: $T_SCHED_MODE_TIMESLICE
       desc: "The scheduler attempts to fairly timeslice hardware execution time between multiple contexts submitting work to the hardware concurrently."
     - name: $T_SCHED_MODE_EXCLUSIVE
@@ -103,9 +103,9 @@ name: $T_SCHED_WATCHDOG_DISABLE
 value: "(~(0ULL))"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Configuration for concurrent scheduler mode ($T_SCHED_MODE_CONCURRENT)"
+desc: "Configuration for timeout scheduler mode ($T_SCHED_MODE_TIMEOUT)"
 class: $tSysman
-name: $t_sched_concurrent_properties_t
+name: $t_sched_timeout_properties_t
 members:
     - type: uint64_t
       name: "watchdogTimeout"
@@ -146,9 +146,9 @@ returns:
         - "Device does not support scheduler modes."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get scheduler config for mode $T_SCHED_MODE_CONCURRENT"
+desc: "Get scheduler config for mode $T_SCHED_MODE_TIMEOUT"
 class: $tSysman
-name: SchedulerGetConcurrentModeProperties
+name: SchedulerGetTimeoutModeProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -159,7 +159,7 @@ params:
     - type: $x_bool_t
       name: getDefaults
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
-    - type: $t_sched_concurrent_properties_t*
+    - type: $t_sched_timeout_properties_t*
       name: pConfig
       desc: "[in] Will contain the current parameters for this mode."
 returns:
@@ -180,7 +180,7 @@ params:
     - type: $x_bool_t
       name: getDefaults
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
-    - type: $t_sched_concurrent_properties_t*
+    - type: $t_sched_timeslice_properties_t*
       name: pConfig
       desc: "[in] Will contain the current parameters for this mode."
 returns:
@@ -188,18 +188,18 @@ returns:
         - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Change scheduler mode to $T_SCHED_MODE_CONCURRENT or update scheduler mode parameters if already running in this mode."
+desc: "Change scheduler mode to $T_SCHED_MODE_TIMEOUT or update scheduler mode parameters if already running in this mode."
 class: $tSysman
-name: SchedulerSetConcurrentMode
+name: SchedulerSetTimeoutMode
 details:
-    - "This mode is optimized for multiple applications or contexts submitting work concurrently to the hardware. When work for one context completes or higher priority work arrives, the scheduler organizes to submit the new work to the hardware as soon as possible."
+    - "This mode is optimized for multiple applications or contexts submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: $t_sched_concurrent_properties_t*
+    - type: $t_sched_timeout_properties_t*
       name: pProperties
       desc: "[in] The properties to use when configurating this mode."
     - type: $x_bool_t*
@@ -221,7 +221,7 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: $t_sched_concurrent_properties_t*
+    - type: $t_sched_timeslice_properties_t*
       name: pProperties
       desc: "[in] The properties to use when configurating this mode."
     - type: $x_bool_t*

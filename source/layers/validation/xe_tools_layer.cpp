@@ -746,18 +746,18 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSchedulerGetConcurrentModeProperties
+    /// @brief Intercept function for xetSysmanSchedulerGetTimeoutModeProperties
     xe_result_t __xecall
-    xetSysmanSchedulerGetConcurrentModeProperties(
+    xetSysmanSchedulerGetTimeoutModeProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
-        xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
+        xet_sched_timeout_properties_t* pConfig         ///< [in] Will contain the current parameters for this mode.
         )
     {
-        auto pfnSchedulerGetConcurrentModeProperties = context.xetDdiTable.Sysman.pfnSchedulerGetConcurrentModeProperties;
+        auto pfnSchedulerGetTimeoutModeProperties = context.xetDdiTable.Sysman.pfnSchedulerGetTimeoutModeProperties;
 
-        if( nullptr == pfnSchedulerGetConcurrentModeProperties )
+        if( nullptr == pfnSchedulerGetTimeoutModeProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -770,7 +770,7 @@ namespace layer
 
         }
 
-        return pfnSchedulerGetConcurrentModeProperties( hSysman, getDefaults, pConfig );
+        return pfnSchedulerGetTimeoutModeProperties( hSysman, getDefaults, pConfig );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -780,7 +780,7 @@ namespace layer
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         xe_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
-        xet_sched_concurrent_properties_t* pConfig      ///< [in] Will contain the current parameters for this mode.
+        xet_sched_timeslice_properties_t* pConfig       ///< [in] Will contain the current parameters for this mode.
         )
     {
         auto pfnSchedulerGetTimesliceModeProperties = context.xetDdiTable.Sysman.pfnSchedulerGetTimesliceModeProperties;
@@ -802,18 +802,18 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanSchedulerSetConcurrentMode
+    /// @brief Intercept function for xetSysmanSchedulerSetTimeoutMode
     xe_result_t __xecall
-    xetSysmanSchedulerSetConcurrentMode(
+    xetSysmanSchedulerSetTimeoutMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
+        xet_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
         xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
         )
     {
-        auto pfnSchedulerSetConcurrentMode = context.xetDdiTable.Sysman.pfnSchedulerSetConcurrentMode;
+        auto pfnSchedulerSetTimeoutMode = context.xetDdiTable.Sysman.pfnSchedulerSetTimeoutMode;
 
-        if( nullptr == pfnSchedulerSetConcurrentMode )
+        if( nullptr == pfnSchedulerSetTimeoutMode )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -829,7 +829,7 @@ namespace layer
 
         }
 
-        return pfnSchedulerSetConcurrentMode( hSysman, pProperties, pNeedReboot );
+        return pfnSchedulerSetTimeoutMode( hSysman, pProperties, pNeedReboot );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -837,7 +837,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanSchedulerSetTimesliceMode(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xet_sched_concurrent_properties_t* pProperties, ///< [in] The properties to use when configurating this mode.
+        xet_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
         xe_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
         )
@@ -3684,14 +3684,14 @@ xetGetSysmanProcAddrTable(
     dditable.pfnSchedulerGetCurrentMode                  = pDdiTable->pfnSchedulerGetCurrentMode;
     pDdiTable->pfnSchedulerGetCurrentMode                = layer::xetSysmanSchedulerGetCurrentMode;
 
-    dditable.pfnSchedulerGetConcurrentModeProperties     = pDdiTable->pfnSchedulerGetConcurrentModeProperties;
-    pDdiTable->pfnSchedulerGetConcurrentModeProperties   = layer::xetSysmanSchedulerGetConcurrentModeProperties;
+    dditable.pfnSchedulerGetTimeoutModeProperties        = pDdiTable->pfnSchedulerGetTimeoutModeProperties;
+    pDdiTable->pfnSchedulerGetTimeoutModeProperties      = layer::xetSysmanSchedulerGetTimeoutModeProperties;
 
     dditable.pfnSchedulerGetTimesliceModeProperties      = pDdiTable->pfnSchedulerGetTimesliceModeProperties;
     pDdiTable->pfnSchedulerGetTimesliceModeProperties    = layer::xetSysmanSchedulerGetTimesliceModeProperties;
 
-    dditable.pfnSchedulerSetConcurrentMode               = pDdiTable->pfnSchedulerSetConcurrentMode;
-    pDdiTable->pfnSchedulerSetConcurrentMode             = layer::xetSysmanSchedulerSetConcurrentMode;
+    dditable.pfnSchedulerSetTimeoutMode                  = pDdiTable->pfnSchedulerSetTimeoutMode;
+    pDdiTable->pfnSchedulerSetTimeoutMode                = layer::xetSysmanSchedulerSetTimeoutMode;
 
     dditable.pfnSchedulerSetTimesliceMode                = pDdiTable->pfnSchedulerSetTimesliceMode;
     pDdiTable->pfnSchedulerSetTimesliceMode              = layer::xetSysmanSchedulerSetTimesliceMode;

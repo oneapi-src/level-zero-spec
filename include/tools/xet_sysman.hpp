@@ -76,10 +76,10 @@ namespace xet
         /// @brief Scheduler mode
         enum class sched_mode_t
         {
-            CONCURRENT = 0,                                 ///< Multiple applications or contexts are submitting work concurrently to
-                                                            ///< the hardware. When work for one context completes or higher priority
-                                                            ///< work arrives, the scheduler organizes to submit the new work to the
-                                                            ///< hardware as soon as possible.
+            TIMEOUT = 0,                                    ///< Multiple applications or contexts are submitting work to the hardware.
+                                                            ///< When higher priority work arrives, the scheduler attempts to pause the
+                                                            ///< current executing work within some timeout interval, then submits the
+                                                            ///< other work.
             TIMESLICE,                                      ///< The scheduler attempts to fairly timeslice hardware execution time
                                                             ///< between multiple contexts submitting work to the hardware
                                                             ///< concurrently.
@@ -136,9 +136,8 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Configuration for concurrent scheduler mode
-        ///        (::XET_SCHED_MODE_CONCURRENT)
-        struct sched_concurrent_properties_t
+        /// @brief Configuration for timeout scheduler mode (::XET_SCHED_MODE_TIMEOUT)
+        struct sched_timeout_properties_t
         {
             uint64_t watchdogTimeout;                       ///< [in,out] The maximum time in microseconds that the scheduler will wait
                                                             ///< for a batch of work submitted to a hardware engine to complete or to
@@ -345,17 +344,17 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get scheduler config for mode ::XET_SCHED_MODE_CONCURRENT
+        /// @brief Get scheduler config for mode ::XET_SCHED_MODE_TIMEOUT
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        SchedulerGetConcurrentModeProperties(
+        SchedulerGetTimeoutModeProperties(
             xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                             ///< this mode, otherwise it will return the current properties.
-            sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
+            sched_timeout_properties_t* pConfig             ///< [in] Will contain the current parameters for this mode.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -369,24 +368,24 @@ namespace xet
         SchedulerGetTimesliceModeProperties(
             xe::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                             ///< this mode, otherwise it will return the current properties.
-            sched_concurrent_properties_t* pConfig          ///< [in] Will contain the current parameters for this mode.
+            sched_timeslice_properties_t* pConfig           ///< [in] Will contain the current parameters for this mode.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::XET_SCHED_MODE_CONCURRENT or update
-        ///        scheduler mode parameters if already running in this mode.
+        /// @brief Change scheduler mode to ::XET_SCHED_MODE_TIMEOUT or update scheduler
+        ///        mode parameters if already running in this mode.
         /// 
         /// @details
         ///     - This mode is optimized for multiple applications or contexts
-        ///       submitting work concurrently to the hardware. When work for one
-        ///       context completes or higher priority work arrives, the scheduler
-        ///       organizes to submit the new work to the hardware as soon as possible.
+        ///       submitting work to the hardware. When higher priority work arrives,
+        ///       the scheduler attempts to pause the current executing work within some
+        ///       timeout interval, then submits the other work.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        SchedulerSetConcurrentMode(
-            sched_concurrent_properties_t* pProperties,     ///< [in] The properties to use when configurating this mode.
+        SchedulerSetTimeoutMode(
+            sched_timeout_properties_t* pProperties,        ///< [in] The properties to use when configurating this mode.
             xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                             ///< scheduler mode.
             );
@@ -404,7 +403,7 @@ namespace xet
         /// @throws result_t
         void __xecall
         SchedulerSetTimesliceMode(
-            sched_concurrent_properties_t* pProperties,     ///< [in] The properties to use when configurating this mode.
+            sched_timeslice_properties_t* pProperties,      ///< [in] The properties to use when configurating this mode.
             xe::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                             ///< scheduler mode.
             );
@@ -2815,8 +2814,8 @@ namespace xet
     std::string to_string( const Sysman::sched_mode_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::sched_concurrent_properties_t to std::string
-    std::string to_string( const Sysman::sched_concurrent_properties_t val );
+    /// @brief Converts Sysman::sched_timeout_properties_t to std::string
+    std::string to_string( const Sysman::sched_timeout_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::sched_timeslice_properties_t to std::string

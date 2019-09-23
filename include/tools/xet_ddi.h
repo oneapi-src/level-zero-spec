@@ -615,11 +615,11 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerGetCurrentMode_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanSchedulerGetConcurrentModeProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerGetConcurrentModeProperties_t)(
+/// @brief Function-pointer for xetSysmanSchedulerGetTimeoutModeProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerGetTimeoutModeProperties_t)(
     xet_sysman_handle_t,
     xe_bool_t,
-    xet_sched_concurrent_properties_t*
+    xet_sched_timeout_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -627,14 +627,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerGetConcurrentModeProperties
 typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerGetTimesliceModeProperties_t)(
     xet_sysman_handle_t,
     xe_bool_t,
-    xet_sched_concurrent_properties_t*
+    xet_sched_timeslice_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanSchedulerSetConcurrentMode 
-typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerSetConcurrentMode_t)(
+/// @brief Function-pointer for xetSysmanSchedulerSetTimeoutMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerSetTimeoutMode_t)(
     xet_sysman_handle_t,
-    xet_sched_concurrent_properties_t*,
+    xet_sched_timeout_properties_t*,
     xe_bool_t*
     );
 
@@ -642,7 +642,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerSetConcurrentMode_t)(
 /// @brief Function-pointer for xetSysmanSchedulerSetTimesliceMode 
 typedef xe_result_t (__xecall *xet_pfnSysmanSchedulerSetTimesliceMode_t)(
     xet_sysman_handle_t,
-    xet_sched_concurrent_properties_t*,
+    xet_sched_timeslice_properties_t*,
     xe_bool_t*
     );
 
@@ -852,9 +852,9 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanGet_t                                          pfnGet;
     xet_pfnSysmanDeviceGetProperties_t                          pfnDeviceGetProperties;
     xet_pfnSysmanSchedulerGetCurrentMode_t                      pfnSchedulerGetCurrentMode;
-    xet_pfnSysmanSchedulerGetConcurrentModeProperties_t         pfnSchedulerGetConcurrentModeProperties;
+    xet_pfnSysmanSchedulerGetTimeoutModeProperties_t            pfnSchedulerGetTimeoutModeProperties;
     xet_pfnSysmanSchedulerGetTimesliceModeProperties_t          pfnSchedulerGetTimesliceModeProperties;
-    xet_pfnSysmanSchedulerSetConcurrentMode_t                   pfnSchedulerSetConcurrentMode;
+    xet_pfnSysmanSchedulerSetTimeoutMode_t                      pfnSchedulerSetTimeoutMode;
     xet_pfnSysmanSchedulerSetTimesliceMode_t                    pfnSchedulerSetTimesliceMode;
     xet_pfnSysmanSchedulerSetExclusiveMode_t                    pfnSchedulerSetExclusiveMode;
     xet_pfnSysmanSchedulerSetSingleCmdQueueMode_t               pfnSchedulerSetSingleCmdQueueMode;

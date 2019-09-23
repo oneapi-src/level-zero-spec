@@ -432,10 +432,10 @@ class xet_sysman_properties_t(Structure):
 ###############################################################################
 ## @brief Scheduler mode
 class xet_sched_mode_v(IntEnum):
-    CONCURRENT = 0                                  ## Multiple applications or contexts are submitting work concurrently to
-                                                    ## the hardware. When work for one context completes or higher priority
-                                                    ## work arrives, the scheduler organizes to submit the new work to the
-                                                    ## hardware as soon as possible.
+    TIMEOUT = 0                                     ## Multiple applications or contexts are submitting work to the hardware.
+                                                    ## When higher priority work arrives, the scheduler attempts to pause the
+                                                    ## current executing work within some timeout interval, then submits the
+                                                    ## other work.
     TIMESLICE = auto()                              ## The scheduler attempts to fairly timeslice hardware execution time
                                                     ## between multiple contexts submitting work to the hardware
                                                     ## concurrently.
@@ -457,9 +457,8 @@ class xet_sched_mode_t(c_int):
 XET_SCHED_WATCHDOG_DISABLE = (~(0ULL))
 
 ###############################################################################
-## @brief Configuration for concurrent scheduler mode
-##        (::XET_SCHED_MODE_CONCURRENT)
-class xet_sched_concurrent_properties_t(Structure):
+## @brief Configuration for timeout scheduler mode (::XET_SCHED_MODE_TIMEOUT)
+class xet_sched_timeout_properties_t(Structure):
     _fields_ = [
         ("watchdogTimeout", c_ulonglong)                                ## [in,out] The maximum time in microseconds that the scheduler will wait
                                                                         ## for a batch of work submitted to a hardware engine to complete or to
@@ -1763,32 +1762,32 @@ else:
     _xetSysmanSchedulerGetCurrentMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sched_mode_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanSchedulerGetConcurrentModeProperties
+## @brief Function-pointer for xetSysmanSchedulerGetTimeoutModeProperties
 if __use_win_types:
-    _xetSysmanSchedulerGetConcurrentModeProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(xet_sched_concurrent_properties_t) )
+    _xetSysmanSchedulerGetTimeoutModeProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(xet_sched_timeout_properties_t) )
 else:
-    _xetSysmanSchedulerGetConcurrentModeProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(xet_sched_concurrent_properties_t) )
+    _xetSysmanSchedulerGetTimeoutModeProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(xet_sched_timeout_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSchedulerGetTimesliceModeProperties
 if __use_win_types:
-    _xetSysmanSchedulerGetTimesliceModeProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(xet_sched_concurrent_properties_t) )
+    _xetSysmanSchedulerGetTimesliceModeProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(xet_sched_timeslice_properties_t) )
 else:
-    _xetSysmanSchedulerGetTimesliceModeProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(xet_sched_concurrent_properties_t) )
+    _xetSysmanSchedulerGetTimesliceModeProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(xet_sched_timeslice_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanSchedulerSetConcurrentMode
+## @brief Function-pointer for xetSysmanSchedulerSetTimeoutMode
 if __use_win_types:
-    _xetSysmanSchedulerSetConcurrentMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sched_concurrent_properties_t), POINTER(xe_bool_t) )
+    _xetSysmanSchedulerSetTimeoutMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sched_timeout_properties_t), POINTER(xe_bool_t) )
 else:
-    _xetSysmanSchedulerSetConcurrentMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sched_concurrent_properties_t), POINTER(xe_bool_t) )
+    _xetSysmanSchedulerSetTimeoutMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sched_timeout_properties_t), POINTER(xe_bool_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSchedulerSetTimesliceMode
 if __use_win_types:
-    _xetSysmanSchedulerSetTimesliceMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sched_concurrent_properties_t), POINTER(xe_bool_t) )
+    _xetSysmanSchedulerSetTimesliceMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sched_timeslice_properties_t), POINTER(xe_bool_t) )
 else:
-    _xetSysmanSchedulerSetTimesliceMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sched_concurrent_properties_t), POINTER(xe_bool_t) )
+    _xetSysmanSchedulerSetTimesliceMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sched_timeslice_properties_t), POINTER(xe_bool_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSchedulerSetExclusiveMode
@@ -1980,9 +1979,9 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnGet", c_void_p),                                           ## _xetSysmanGet_t
         ("pfnDeviceGetProperties", c_void_p),                           ## _xetSysmanDeviceGetProperties_t
         ("pfnSchedulerGetCurrentMode", c_void_p),                       ## _xetSysmanSchedulerGetCurrentMode_t
-        ("pfnSchedulerGetConcurrentModeProperties", c_void_p),          ## _xetSysmanSchedulerGetConcurrentModeProperties_t
+        ("pfnSchedulerGetTimeoutModeProperties", c_void_p),             ## _xetSysmanSchedulerGetTimeoutModeProperties_t
         ("pfnSchedulerGetTimesliceModeProperties", c_void_p),           ## _xetSysmanSchedulerGetTimesliceModeProperties_t
-        ("pfnSchedulerSetConcurrentMode", c_void_p),                    ## _xetSysmanSchedulerSetConcurrentMode_t
+        ("pfnSchedulerSetTimeoutMode", c_void_p),                       ## _xetSysmanSchedulerSetTimeoutMode_t
         ("pfnSchedulerSetTimesliceMode", c_void_p),                     ## _xetSysmanSchedulerSetTimesliceMode_t
         ("pfnSchedulerSetExclusiveMode", c_void_p),                     ## _xetSysmanSchedulerSetExclusiveMode_t
         ("pfnSchedulerSetSingleCmdQueueMode", c_void_p),                ## _xetSysmanSchedulerSetSingleCmdQueueMode_t
@@ -2732,9 +2731,9 @@ class XET_DDI:
         self.xetSysmanGet = _xetSysmanGet_t(self.__dditable.Sysman.pfnGet)
         self.xetSysmanDeviceGetProperties = _xetSysmanDeviceGetProperties_t(self.__dditable.Sysman.pfnDeviceGetProperties)
         self.xetSysmanSchedulerGetCurrentMode = _xetSysmanSchedulerGetCurrentMode_t(self.__dditable.Sysman.pfnSchedulerGetCurrentMode)
-        self.xetSysmanSchedulerGetConcurrentModeProperties = _xetSysmanSchedulerGetConcurrentModeProperties_t(self.__dditable.Sysman.pfnSchedulerGetConcurrentModeProperties)
+        self.xetSysmanSchedulerGetTimeoutModeProperties = _xetSysmanSchedulerGetTimeoutModeProperties_t(self.__dditable.Sysman.pfnSchedulerGetTimeoutModeProperties)
         self.xetSysmanSchedulerGetTimesliceModeProperties = _xetSysmanSchedulerGetTimesliceModeProperties_t(self.__dditable.Sysman.pfnSchedulerGetTimesliceModeProperties)
-        self.xetSysmanSchedulerSetConcurrentMode = _xetSysmanSchedulerSetConcurrentMode_t(self.__dditable.Sysman.pfnSchedulerSetConcurrentMode)
+        self.xetSysmanSchedulerSetTimeoutMode = _xetSysmanSchedulerSetTimeoutMode_t(self.__dditable.Sysman.pfnSchedulerSetTimeoutMode)
         self.xetSysmanSchedulerSetTimesliceMode = _xetSysmanSchedulerSetTimesliceMode_t(self.__dditable.Sysman.pfnSchedulerSetTimesliceMode)
         self.xetSysmanSchedulerSetExclusiveMode = _xetSysmanSchedulerSetExclusiveMode_t(self.__dditable.Sysman.pfnSchedulerSetExclusiveMode)
         self.xetSysmanSchedulerSetSingleCmdQueueMode = _xetSysmanSchedulerSetSingleCmdQueueMode_t(self.__dditable.Sysman.pfnSchedulerSetSingleCmdQueueMode)
