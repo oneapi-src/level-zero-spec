@@ -3543,6 +3543,48 @@ namespace loader
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugAttach
+    ze_result_t __zecall
+    zetDebugAttach(
+        zet_device_handle_t hDevice,                    ///< [in] device handle
+        int pid,                                        ///< [in] host process identifier
+        uint64_t flags,                                 ///< [in] a bit-vector of ::zet_debug_attach_flags_t
+        zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_device_object_t*>( hDevice )->dditable;
+        auto pfnAttach = dditable->zet.Debug.pfnAttach;
+        if( nullptr == pfnAttach )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<zet_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        result = pfnAttach( hDevice, pid, flags, hDebug );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugDetach
+    ze_result_t __zecall
+    zetDebugDetach(
+        zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnDetach( hDebug );
+
+        return result;
+    }
+
 } // namespace loader
 
 #if defined(__cplusplus)
@@ -5300,6 +5342,71 @@ zetGetSysmanEventProcAddrTable(
     {
         auto getTable = reinterpret_cast<zet_pfnGetSysmanEventProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanEventProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Debug table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zetGetDebugProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_debug_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return ZE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( loader::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( ZE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<zet_pfnGetDebugProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "zetGetDebugProcAddrTable") );
+            result = getTable( version, &drv.dditable.zet.Debug );
+        }
+    }
+
+    if( ZE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnAttach                                   = loader::zetDebugAttach;
+            pDdiTable->pfnDetach                                   = loader::zetDebugDetach;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.zet.Debug;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        auto getTable = reinterpret_cast<zet_pfnGetDebugProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetDebugProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

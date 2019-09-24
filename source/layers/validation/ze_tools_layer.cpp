@@ -3339,6 +3339,56 @@ namespace layer
         return pfnSetEnabled( hTracer, enable );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugAttach
+    ze_result_t __zecall
+    zetDebugAttach(
+        zet_device_handle_t hDevice,                    ///< [in] device handle
+        int pid,                                        ///< [in] host process identifier
+        uint64_t flags,                                 ///< [in] a bit-vector of ::zet_debug_attach_flags_t
+        zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
+        )
+    {
+        auto pfnAttach = context.zetDdiTable.Debug.pfnAttach;
+
+        if( nullptr == pfnAttach )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAttach( hDevice, pid, flags, hDebug );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugDetach
+    ze_result_t __zecall
+    zetDebugDetach(
+        zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
+        )
+    {
+        auto pfnDetach = context.zetDdiTable.Debug.pfnDetach;
+
+        if( nullptr == pfnDetach )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnDetach( hDebug );
+    }
+
 } // namespace layer
 
 #if defined(__cplusplus)
@@ -4478,6 +4528,42 @@ zetGetSysmanEventProcAddrTable(
 
     dditable.pfnListen                                   = pDdiTable->pfnListen;
     pDdiTable->pfnListen                                 = layer::zetSysmanEventListen;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Debug table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zetGetDebugProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_debug_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.zetDdiTable.Debug;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    dditable.pfnAttach                                   = pDdiTable->pfnAttach;
+    pDdiTable->pfnAttach                                 = layer::zetDebugAttach;
+
+    dditable.pfnDetach                                   = pDdiTable->pfnDetach;
+    pDdiTable->pfnDetach                                 = layer::zetDebugDetach;
 
     return result;
 }

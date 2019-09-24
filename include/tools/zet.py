@@ -1572,6 +1572,21 @@ class zet_tracer_desc_t(Structure):
     ]
 
 ###############################################################################
+## @brief Debug session handle
+class zet_debug_session_handle_t(c_void_p):
+    pass
+
+###############################################################################
+## @brief Debug attach flags.
+class zet_debug_attach_flags_v(IntEnum):
+    DEBUG_ATTACH_NONE = 0                           ## No attach flags
+
+class zet_debug_attach_flags_t(c_int):
+    def __str__(self):
+        return str(zet_debug_attach_flags_v(value))
+
+
+###############################################################################
 """
 class cl_context(c_void_p):
     pass
@@ -2724,6 +2739,29 @@ class _zet_sysman_event_dditable_t(Structure):
     ]
 
 ###############################################################################
+## @brief Function-pointer for zetDebugAttach
+if __use_win_types:
+    _zetDebugAttach_t = WINFUNCTYPE( ze_result_t, zet_device_handle_t, c_int, c_ulonglong, POINTER(zet_debug_session_handle_t) )
+else:
+    _zetDebugAttach_t = CFUNCTYPE( ze_result_t, zet_device_handle_t, c_int, c_ulonglong, POINTER(zet_debug_session_handle_t) )
+
+###############################################################################
+## @brief Function-pointer for zetDebugDetach
+if __use_win_types:
+    _zetDebugDetach_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t )
+else:
+    _zetDebugDetach_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t )
+
+
+###############################################################################
+## @brief Table of Debug functions pointers
+class _zet_debug_dditable_t(Structure):
+    _fields_ = [
+        ("pfnAttach", c_void_p),                                        ## _zetDebugAttach_t
+        ("pfnDetach", c_void_p)                                         ## _zetDebugDetach_t
+    ]
+
+###############################################################################
 class _zet_dditable_t(Structure):
     _fields_ = [
         ("Global", _zet_global_dditable_t),
@@ -2751,7 +2789,8 @@ class _zet_dditable_t(Structure):
         ("SysmanLed", _zet_sysman_led_dditable_t),
         ("SysmanRas", _zet_sysman_ras_dditable_t),
         ("SysmanDiagnostics", _zet_sysman_diagnostics_dditable_t),
-        ("SysmanEvent", _zet_sysman_event_dditable_t)
+        ("SysmanEvent", _zet_sysman_event_dditable_t),
+        ("Debug", _zet_debug_dditable_t)
     ]
 
 ###############################################################################
@@ -3119,5 +3158,16 @@ class ZET_DDI:
         self.zetSysmanEventSetConfig = _zetSysmanEventSetConfig_t(self.__dditable.SysmanEvent.pfnSetConfig)
         self.zetSysmanEventGetState = _zetSysmanEventGetState_t(self.__dditable.SysmanEvent.pfnGetState)
         self.zetSysmanEventListen = _zetSysmanEventListen_t(self.__dditable.SysmanEvent.pfnListen)
+
+        # call driver to get function pointers
+        _Debug = _zet_debug_dditable_t()
+        r = ze_result_v(self.__dll.zetGetDebugProcAddrTable(version, byref(_Debug)))
+        if r != ze_result_v.SUCCESS:
+            raise Exception(r)
+        self.__dditable.Debug = _Debug
+
+        # attach function interface to function address
+        self.zetDebugAttach = _zetDebugAttach_t(self.__dditable.Debug.pfnAttach)
+        self.zetDebugDetach = _zetDebugDetach_t(self.__dditable.Debug.pfnDetach)
 
         # success!

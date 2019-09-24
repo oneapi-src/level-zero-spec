@@ -552,7 +552,50 @@ If a tool requires changing the address of an application's function, then it sh
 ${"#"} <a name="dbg">Program Debug</a>
 
 ${"##"} Introduction
-The program debug APIs provide tools a basic framework for inserting breakpoints and accessing register values of device programs,
-as they are executing on the device.
 
-(more details coming soon...)
+The program debug APIs provide tools a basic framework for debugging
+device code.
+
+The APIs operate on a single device.  When debugging a multi-device
+system, the tool would debug each device independently.  The APIs further
+operate in the context of a single host process.  When debugging multiple
+host processes at the same time, the tool would debug device code
+submitted by each host process indepenently.
+
+
+${"##"} Attach and Detach
+
+In order to use most of the program debug APIs, a tool needs to attach to
+a device by calling ::${t}DebugAttach.  As arguments it passes the
+::${x}_device_handle_t, the host process identifier, and a set of flags.
+The tool does not need to be attached to the host process itself, yet it
+does need permission to attach to the host process.
+
+If permission is granted, a ::${t}_debug_session_handle_t is provided,
+which can be used in other program debug APIs until the tool detaches
+again.
+
+To detach a debug session, a tool calls ::${t}DebugDetach passing the
+::${t}_debug_session_handle_t that had been provided on the corresponding
+::${t}DebugAttach call.
+
+The following sample code demonstrates attaching and detaching:
+
+```c
+    ${x}_device_handle_t device = ...;
+    int pid = ...;
+    ${t}_debug_session_handle_t session;
+    ${x}_result_t errcode;
+
+    errcode = ${t}DebugAttach(device, pid, ${T}_DEBUG_ATTACH_NONE, &session);
+    if (errcode)
+        return errcode;
+
+    ...
+
+    errcode = ${t}DebugDetach(session);
+    if (errcode)
+        return errcode;
+```
+
+(to be continued...)

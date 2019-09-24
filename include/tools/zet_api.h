@@ -30,5 +30,6 @@
 #include "zet_sysman.h"
 #include "zet_pin.h"
 #include "zet_tracing.h"
+#include "zet_debug.h"
 
 #endif // _ZET_API_H

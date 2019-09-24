@@ -1809,6 +1809,53 @@ typedef ze_result_t (__zecall *zet_pfnGetSysmanEventProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetDebugAttach 
+typedef ze_result_t (__zecall *zet_pfnDebugAttach_t)(
+    zet_device_handle_t,
+    int,
+    uint64_t,
+    zet_debug_session_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetDebugDetach 
+typedef ze_result_t (__zecall *zet_pfnDebugDetach_t)(
+    zet_debug_session_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Debug functions pointers
+typedef struct _zet_debug_dditable_t
+{
+    zet_pfnDebugAttach_t                                        pfnAttach;
+    zet_pfnDebugDetach_t                                        pfnDetach;
+} zet_debug_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Debug table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zetGetDebugProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_debug_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetGetDebugProcAddrTable
+typedef ze_result_t (__zecall *zet_pfnGetDebugProcAddrTable_t)(
+    ze_api_version_t,
+    zet_debug_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Container for all DDI tables
 typedef struct _zet_dditable_t
 {
@@ -1838,6 +1885,7 @@ typedef struct _zet_dditable_t
     zet_sysman_ras_dditable_t           SysmanRas;
     zet_sysman_diagnostics_dditable_t   SysmanDiagnostics;
     zet_sysman_event_dditable_t         SysmanEvent;
+    zet_debug_dditable_t                Debug;
 } zet_dditable_t;
 
 #if defined(__cplusplus)
