@@ -28,8 +28,8 @@ namespace loader
     using xet_module_object_t                 = object_t < xet_module_handle_t >;
     using xet_module_factory_t                = singleton_factory_t < xet_module_object_t, xet_module_handle_t >;
 
-    using xet_function_object_t               = object_t < xet_function_handle_t >;
-    using xet_function_factory_t              = singleton_factory_t < xet_function_object_t, xet_function_handle_t >;
+    using xet_kernel_object_t                 = object_t < xet_kernel_handle_t >;
+    using xet_kernel_factory_t                = singleton_factory_t < xet_kernel_object_t, xet_kernel_handle_t >;
 
     using xet_metric_group_object_t           = object_t < xet_metric_group_handle_t >;
     using xet_metric_group_factory_t          = singleton_factory_t < xet_metric_group_object_t, xet_metric_group_handle_t >;

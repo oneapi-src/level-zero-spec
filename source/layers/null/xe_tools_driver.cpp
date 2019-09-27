@@ -585,9 +585,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleGetFunctionNames
+    /// @brief Intercept function for xetModuleGetKernelNames
     xe_result_t __xecall
-    xetModuleGetFunctionNames(
+    xetModuleGetKernelNames(
         xet_module_handle_t hModule,                    ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -601,10 +601,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetFunctionNames = context.xetDdiTable.Module.pfnGetFunctionNames;
-        if( nullptr != pfnGetFunctionNames )
+        auto pfnGetKernelNames = context.xetDdiTable.Module.pfnGetKernelNames;
+        if( nullptr != pfnGetKernelNames )
         {
-            result = pfnGetFunctionNames( hModule, pCount, pNames );
+            result = pfnGetKernelNames( hModule, pCount, pNames );
         }
         else
         {
@@ -615,20 +615,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetFunctionGetProfileInfo
+    /// @brief Intercept function for xetKernelGetProfileInfo
     xe_result_t __xecall
-    xetFunctionGetProfileInfo(
-        xet_function_handle_t hFunction,                ///< [in] handle to function
+    xetKernelGetProfileInfo(
+        xet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
         xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetProfileInfo = context.xetDdiTable.Function.pfnGetProfileInfo;
+        auto pfnGetProfileInfo = context.xetDdiTable.Kernel.pfnGetProfileInfo;
         if( nullptr != pfnGetProfileInfo )
         {
-            result = pfnGetProfileInfo( hFunction, pInfo );
+            result = pfnGetProfileInfo( hKernel, pInfo );
         }
         else
         {
@@ -3202,13 +3202,13 @@ xetGetModuleProcAddrTable(
 
     pDdiTable->pfnGetDebugInfo                           = driver::xetModuleGetDebugInfo;
 
-    pDdiTable->pfnGetFunctionNames                       = driver::xetModuleGetFunctionNames;
+    pDdiTable->pfnGetKernelNames                         = driver::xetModuleGetKernelNames;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Function table
+/// @brief Exported function for filling application's Kernel table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3219,9 +3219,9 @@ xetGetModuleProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xetGetFunctionProcAddrTable(
+xetGetKernelProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_function_dditable_t* pDdiTable              ///< [in,out] pointer to table of DDI function pointers
+    xet_kernel_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
     if( nullptr == pDdiTable )
@@ -3232,7 +3232,7 @@ xetGetFunctionProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    pDdiTable->pfnGetProfileInfo                         = driver::xetFunctionGetProfileInfo;
+    pDdiTable->pfnGetProfileInfo                         = driver::xetKernelGetProfileInfo;
 
     return result;
 }

@@ -5,7 +5,7 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero APIs for OpenCL Interopability"
+desc: "Intel $OneApi Level-Zero APIs for OpenCL Interoperability"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Registers OpenCL memory with $OneApi"

@@ -49,9 +49,9 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of function object
-    class Function;
-    struct _function_handle_t;
-    using function_handle_t = _function_handle_t*;
+    class Kernel;
+    struct _kernel_handle_t;
+    using kernel_handle_t = _kernel_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric group's object

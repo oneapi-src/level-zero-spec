@@ -26,7 +26,7 @@ namespace loader
     xe_image_factory_t                  xe_image_factory;
     xe_module_factory_t                 xe_module_factory;
     xe_module_build_log_factory_t       xe_module_build_log_factory;
-    xe_function_factory_t               xe_function_factory;
+    xe_kernel_factory_t                 xe_kernel_factory;
     xe_sampler_factory_t                xe_sampler_factory;
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2385,7 +2385,7 @@ namespace loader
     xe_result_t __xecall
     xeModuleGetGlobalPointer(
         xe_module_handle_t hModule,                     ///< [in] handle of the device
-        const char* pGlobalName,                        ///< [in] name of function in global
+        const char* pGlobalName,                        ///< [in] name of global variable in module
         void** pptr                                     ///< [out] device visible pointer
         )
     {
@@ -2407,19 +2407,19 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionCreate
+    /// @brief Intercept function for xeKernelCreate
     xe_result_t __xecall
-    xeFunctionCreate(
+    xeKernelCreate(
         xe_module_handle_t hModule,                     ///< [in] handle of the module
-        const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
-        xe_function_handle_t* phFunction                ///< [out] handle of the Function object
+        const xe_kernel_desc_t* desc,                   ///< [in] pointer to kernel descriptor
+        xe_kernel_handle_t* phKernel                    ///< [out] handle of the Function object
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_module_object_t*>( hModule )->dditable;
-        auto pfnCreate = dditable->xe.Function.pfnCreate;
+        auto pfnCreate = dditable->xe.Kernel.pfnCreate;
         if( nullptr == pfnCreate )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
@@ -2427,13 +2427,13 @@ namespace loader
         hModule = reinterpret_cast<xe_module_object_t*>( hModule )->handle;
 
         // forward to device-driver
-        result = pfnCreate( hModule, desc, phFunction );
+        result = pfnCreate( hModule, desc, phKernel );
 
         try
         {
             // convert driver handle to loader handle
-            *phFunction = reinterpret_cast<xe_function_handle_t>(
-                xe_function_factory.getInstance( *phFunction, dditable ) );
+            *phKernel = reinterpret_cast<xe_kernel_handle_t>(
+                xe_kernel_factory.getInstance( *phKernel, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -2444,28 +2444,28 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionDestroy
+    /// @brief Intercept function for xeKernelDestroy
     xe_result_t __xecall
-    xeFunctionDestroy(
-        xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
+    xeKernelDestroy(
+        xe_kernel_handle_t hKernel                      ///< [in][release] handle of the kernel object
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
-        auto pfnDestroy = dditable->xe.Function.pfnDestroy;
+        auto dditable = reinterpret_cast<xe_kernel_object_t*>( hKernel )->dditable;
+        auto pfnDestroy = dditable->xe.Kernel.pfnDestroy;
         if( nullptr == pfnDestroy )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnDestroy( hFunction );
+        result = pfnDestroy( hKernel );
 
         // release loader handle
-        xe_function_factory.release( hFunction );
+        xe_kernel_factory.release( hKernel );
 
         return result;
     }
@@ -2497,67 +2497,67 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetGroupSize
+    /// @brief Intercept function for xeKernelSetGroupSize
     xe_result_t __xecall
-    xeFunctionSetGroupSize(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
-        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
-        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+    xeKernelSetGroupSize(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
+        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this kernel
+        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this kernel
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
-        auto pfnSetGroupSize = dditable->xe.Function.pfnSetGroupSize;
+        auto dditable = reinterpret_cast<xe_kernel_object_t*>( hKernel )->dditable;
+        auto pfnSetGroupSize = dditable->xe.Kernel.pfnSetGroupSize;
         if( nullptr == pfnSetGroupSize )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+        result = pfnSetGroupSize( hKernel, groupSizeX, groupSizeY, groupSizeZ );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSuggestGroupSize
+    /// @brief Intercept function for xeKernelSuggestGroupSize
     xe_result_t __xecall
-    xeFunctionSuggestGroupSize(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-        uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-        uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-        uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-        uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-        uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+    xeKernelSuggestGroupSize(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        uint32_t globalSizeX,                           ///< [in] global width for X dimension
+        uint32_t globalSizeY,                           ///< [in] global width for Y dimension
+        uint32_t globalSizeZ,                           ///< [in] global width for Z dimension
+        uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension
+        uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension
+        uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
-        auto pfnSuggestGroupSize = dditable->xe.Function.pfnSuggestGroupSize;
+        auto dditable = reinterpret_cast<xe_kernel_object_t*>( hKernel )->dditable;
+        auto pfnSuggestGroupSize = dditable->xe.Kernel.pfnSuggestGroupSize;
         if( nullptr == pfnSuggestGroupSize )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+        result = pfnSuggestGroupSize( hKernel, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSuggestMaxCooperativeGroupCount
+    /// @brief Intercept function for xeKernelSuggestMaxCooperativeGroupCount
     xe_result_t __xecall
-    xeFunctionSuggestMaxCooperativeGroupCount(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xeKernelSuggestMaxCooperativeGroupCount(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
         uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
         uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
@@ -2566,25 +2566,25 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
-        auto pfnSuggestMaxCooperativeGroupCount = dditable->xe.Function.pfnSuggestMaxCooperativeGroupCount;
+        auto dditable = reinterpret_cast<xe_kernel_object_t*>( hKernel )->dditable;
+        auto pfnSuggestMaxCooperativeGroupCount = dditable->xe.Kernel.pfnSuggestMaxCooperativeGroupCount;
         if( nullptr == pfnSuggestMaxCooperativeGroupCount )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnSuggestMaxCooperativeGroupCount( hFunction, groupCountX, groupCountY, groupCountZ );
+        result = pfnSuggestMaxCooperativeGroupCount( hKernel, groupCountX, groupCountY, groupCountZ );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetArgumentValue
+    /// @brief Intercept function for xeKernelSetArgumentValue
     xe_result_t __xecall
-    xeFunctionSetArgumentValue(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function args object.
+    xeKernelSetArgumentValue(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
         const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
@@ -2594,79 +2594,79 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
-        auto pfnSetArgumentValue = dditable->xe.Function.pfnSetArgumentValue;
+        auto dditable = reinterpret_cast<xe_kernel_object_t*>( hKernel )->dditable;
+        auto pfnSetArgumentValue = dditable->xe.Kernel.pfnSetArgumentValue;
         if( nullptr == pfnSetArgumentValue )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+        result = pfnSetArgumentValue( hKernel, argIndex, argSize, pArgValue );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetAttribute
+    /// @brief Intercept function for xeKernelSetAttribute
     xe_result_t __xecall
-    xeFunctionSetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function.
-        xe_function_set_attribute_t attr,               ///< [in] attribute to set
+    xeKernelSetAttribute(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        xe_kernel_set_attribute_t attr,                 ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
-        auto pfnSetAttribute = dditable->xe.Function.pfnSetAttribute;
+        auto dditable = reinterpret_cast<xe_kernel_object_t*>( hKernel )->dditable;
+        auto pfnSetAttribute = dditable->xe.Kernel.pfnSetAttribute;
         if( nullptr == pfnSetAttribute )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnSetAttribute( hFunction, attr, value );
+        result = pfnSetAttribute( hKernel, attr, value );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionGetAttribute
+    /// @brief Intercept function for xeKernelGetAttribute
     xe_result_t __xecall
-    xeFunctionGetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        xe_function_get_attribute_t attr,               ///< [in] attribute to query
+    xeKernelGetAttribute(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        xe_kernel_get_attribute_t attr,                 ///< [in] attribute to query
         uint32_t* pValue                                ///< [out] returned attribute value
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
-        auto pfnGetAttribute = dditable->xe.Function.pfnGetAttribute;
+        auto dditable = reinterpret_cast<xe_kernel_object_t*>( hKernel )->dditable;
+        auto pfnGetAttribute = dditable->xe.Kernel.pfnGetAttribute;
         if( nullptr == pfnGetAttribute )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnGetAttribute( hFunction, attr, pValue );
+        result = pfnGetAttribute( hKernel, attr, pValue );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchFunction
+    /// @brief Intercept function for xeCommandListAppendLaunchKernel
     xe_result_t __xecall
-    xeCommandListAppendLaunchFunction(
+    xeCommandListAppendLaunchKernel(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2677,15 +2677,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
-        auto pfnAppendLaunchFunction = dditable->xe.CommandList.pfnAppendLaunchFunction;
-        if( nullptr == pfnAppendLaunchFunction )
+        auto pfnAppendLaunchKernel = dditable->xe.CommandList.pfnAppendLaunchKernel;
+        if( nullptr == pfnAppendLaunchKernel )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // convert loader handle to driver handle
         hSignalEvent = ( hSignalEvent ) ? reinterpret_cast<xe_event_object_t*>( hSignalEvent )->handle : nullptr;
@@ -2695,18 +2695,18 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        result = pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendLaunchKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeFunction
+    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeKernel
     xe_result_t __xecall
-    xeCommandListAppendLaunchCooperativeFunction(
+    xeCommandListAppendLaunchCooperativeKernel(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2717,15 +2717,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
-        auto pfnAppendLaunchCooperativeFunction = dditable->xe.CommandList.pfnAppendLaunchCooperativeFunction;
-        if( nullptr == pfnAppendLaunchCooperativeFunction )
+        auto pfnAppendLaunchCooperativeKernel = dditable->xe.CommandList.pfnAppendLaunchCooperativeKernel;
+        if( nullptr == pfnAppendLaunchCooperativeKernel )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // convert loader handle to driver handle
         hSignalEvent = ( hSignalEvent ) ? reinterpret_cast<xe_event_object_t*>( hSignalEvent )->handle : nullptr;
@@ -2735,18 +2735,19 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        result = pfnAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendLaunchCooperativeKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
+    /// @brief Intercept function for xeCommandListAppendLaunchKernelIndirect
     xe_result_t __xecall
-    xeCommandListAppendLaunchFunctionIndirect(
+    xeCommandListAppendLaunchKernelIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+                                                        ///< arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2757,15 +2758,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
-        auto pfnAppendLaunchFunctionIndirect = dditable->xe.CommandList.pfnAppendLaunchFunctionIndirect;
-        if( nullptr == pfnAppendLaunchFunctionIndirect )
+        auto pfnAppendLaunchKernelIndirect = dditable->xe.CommandList.pfnAppendLaunchKernelIndirect;
+        if( nullptr == pfnAppendLaunchKernelIndirect )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xe_kernel_object_t*>( hKernel )->handle;
 
         // convert loader handle to driver handle
         hSignalEvent = ( hSignalEvent ) ? reinterpret_cast<xe_event_object_t*>( hSignalEvent )->handle : nullptr;
@@ -2775,23 +2776,23 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        result = pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendLaunchKernelIndirect( hCommandList, hKernel, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchMultipleFunctionsIndirect
+    /// @brief Intercept function for xeCommandListAppendLaunchMultipleKernelsIndirect
     xe_result_t __xecall
-    xeCommandListAppendLaunchMultipleFunctionsIndirect(
+    xeCommandListAppendLaunchMultipleKernelsIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-        xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
+        uint32_t numKernels,                            ///< [in] maximum number of kernels to launch
+        xe_kernel_handle_t* phKernels,                  ///< [in][range(0, numKernels)] handles of the kernel objects
         const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of functions to launch; value must be less-than or equal-to
-                                                        ///< numFunctions
-        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will
-                                                        ///< contain a contiguous array of launch arguments
+                                                        ///< number of kernels to launch; value must be less-than or equal-to
+                                                        ///< numKernels
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+                                                        ///< a contiguous array of thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2802,16 +2803,16 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
-        auto pfnAppendLaunchMultipleFunctionsIndirect = dditable->xe.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
-        if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
+        auto pfnAppendLaunchMultipleKernelsIndirect = dditable->xe.CommandList.pfnAppendLaunchMultipleKernelsIndirect;
+        if( nullptr == pfnAppendLaunchMultipleKernelsIndirect )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // convert loader handles to driver handles
-        for( size_t i = 0; ( nullptr != phFunctions ) && ( i < numFunctions ); ++i )
-            phFunctions[ i ] = reinterpret_cast<xe_function_object_t*>( phFunctions[ i ] )->handle;
+        for( size_t i = 0; ( nullptr != phKernels ) && ( i < numKernels ); ++i )
+            phKernels[ i ] = reinterpret_cast<xe_kernel_object_t*>( phKernels[ i ] )->handle;
 
         // convert loader handle to driver handle
         hSignalEvent = ( hSignalEvent ) ? reinterpret_cast<xe_event_object_t*>( hSignalEvent )->handle : nullptr;
@@ -2821,7 +2822,7 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        result = pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendLaunchMultipleKernelsIndirect( hCommandList, numKernels, phKernels, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
@@ -3400,10 +3401,10 @@ xeGetCommandListProcAddrTable(
             pDdiTable->pfnAppendSignalEvent                        = loader::xeCommandListAppendSignalEvent;
             pDdiTable->pfnAppendWaitOnEvents                       = loader::xeCommandListAppendWaitOnEvents;
             pDdiTable->pfnAppendEventReset                         = loader::xeCommandListAppendEventReset;
-            pDdiTable->pfnAppendLaunchFunction                     = loader::xeCommandListAppendLaunchFunction;
-            pDdiTable->pfnAppendLaunchCooperativeFunction          = loader::xeCommandListAppendLaunchCooperativeFunction;
-            pDdiTable->pfnAppendLaunchFunctionIndirect             = loader::xeCommandListAppendLaunchFunctionIndirect;
-            pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect    = loader::xeCommandListAppendLaunchMultipleFunctionsIndirect;
+            pDdiTable->pfnAppendLaunchKernel                       = loader::xeCommandListAppendLaunchKernel;
+            pDdiTable->pfnAppendLaunchCooperativeKernel            = loader::xeCommandListAppendLaunchCooperativeKernel;
+            pDdiTable->pfnAppendLaunchKernelIndirect               = loader::xeCommandListAppendLaunchKernelIndirect;
+            pDdiTable->pfnAppendLaunchMultipleKernelsIndirect      = loader::xeCommandListAppendLaunchMultipleKernelsIndirect;
             pDdiTable->pfnAppendLaunchHostFunction                 = loader::xeCommandListAppendLaunchHostFunction;
         }
         else
@@ -3829,7 +3830,7 @@ xeGetModuleBuildLogProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Function table
+/// @brief Exported function for filling application's Kernel table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3840,9 +3841,9 @@ xeGetModuleBuildLogProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xeGetFunctionProcAddrTable(
+xeGetKernelProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_function_dditable_t* pDdiTable               ///< [in,out] pointer to table of DDI function pointers
+    xe_kernel_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
     if( loader::context.drivers.size() < 1 )
@@ -3861,9 +3862,9 @@ xeGetFunctionProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "xeGetFunctionProcAddrTable") );
-            result = getTable( version, &drv.dditable.xe.Function );
+            auto getTable = reinterpret_cast<xe_pfnGetKernelProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "xeGetKernelProcAddrTable") );
+            result = getTable( version, &drv.dditable.xe.Kernel );
         }
     }
 
@@ -3872,27 +3873,27 @@ xeGetFunctionProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnCreate                                   = loader::xeFunctionCreate;
-            pDdiTable->pfnDestroy                                  = loader::xeFunctionDestroy;
-            pDdiTable->pfnSetGroupSize                             = loader::xeFunctionSetGroupSize;
-            pDdiTable->pfnSuggestGroupSize                         = loader::xeFunctionSuggestGroupSize;
-            pDdiTable->pfnSuggestMaxCooperativeGroupCount          = loader::xeFunctionSuggestMaxCooperativeGroupCount;
-            pDdiTable->pfnSetArgumentValue                         = loader::xeFunctionSetArgumentValue;
-            pDdiTable->pfnSetAttribute                             = loader::xeFunctionSetAttribute;
-            pDdiTable->pfnGetAttribute                             = loader::xeFunctionGetAttribute;
+            pDdiTable->pfnCreate                                   = loader::xeKernelCreate;
+            pDdiTable->pfnDestroy                                  = loader::xeKernelDestroy;
+            pDdiTable->pfnSetGroupSize                             = loader::xeKernelSetGroupSize;
+            pDdiTable->pfnSuggestGroupSize                         = loader::xeKernelSuggestGroupSize;
+            pDdiTable->pfnSuggestMaxCooperativeGroupCount          = loader::xeKernelSuggestMaxCooperativeGroupCount;
+            pDdiTable->pfnSetArgumentValue                         = loader::xeKernelSetArgumentValue;
+            pDdiTable->pfnSetAttribute                             = loader::xeKernelSetAttribute;
+            pDdiTable->pfnGetAttribute                             = loader::xeKernelGetAttribute;
         }
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.xe.Function;
+            *pDdiTable = loader::context.drivers.front().dditable.xe.Kernel;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetFunctionProcAddrTable") );
+        auto getTable = reinterpret_cast<xe_pfnGetKernelProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetKernelProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

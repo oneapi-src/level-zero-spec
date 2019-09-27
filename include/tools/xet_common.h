@@ -44,7 +44,7 @@ typedef xe_module_handle_t xet_module_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of function object
-typedef xe_function_handle_t xet_function_handle_t;
+typedef xe_kernel_handle_t xet_kernel_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of metric group's object

@@ -662,10 +662,10 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendEventReset_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendLaunchFunction 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunction_t)(
+/// @brief Function-pointer for xeCommandListAppendLaunchKernel 
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchKernel_t)(
     xe_command_list_handle_t,
-    xe_function_handle_t,
+    xe_kernel_handle_t,
     const xe_thread_group_dimensions_t*,
     xe_event_handle_t,
     uint32_t,
@@ -673,10 +673,10 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunction_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendLaunchCooperativeFunction 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchCooperativeFunction_t)(
+/// @brief Function-pointer for xeCommandListAppendLaunchCooperativeKernel 
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchCooperativeKernel_t)(
     xe_command_list_handle_t,
-    xe_function_handle_t,
+    xe_kernel_handle_t,
     const xe_thread_group_dimensions_t*,
     xe_event_handle_t,
     uint32_t,
@@ -684,10 +684,10 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchCooperativeFunction_
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendLaunchFunctionIndirect 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirect_t)(
+/// @brief Function-pointer for xeCommandListAppendLaunchKernelIndirect 
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchKernelIndirect_t)(
     xe_command_list_handle_t,
-    xe_function_handle_t,
+    xe_kernel_handle_t,
     const xe_thread_group_dimensions_t*,
     xe_event_handle_t,
     uint32_t,
@@ -695,11 +695,11 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirect_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendLaunchMultipleFunctionsIndirect 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchMultipleFunctionsIndirect_t)(
+/// @brief Function-pointer for xeCommandListAppendLaunchMultipleKernelsIndirect 
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchMultipleKernelsIndirect_t)(
     xe_command_list_handle_t,
     uint32_t,
-    xe_function_handle_t*,
+    xe_kernel_handle_t*,
     const uint32_t*,
     const xe_thread_group_dimensions_t*,
     xe_event_handle_t,
@@ -741,10 +741,10 @@ typedef struct _xe_command_list_dditable_t
     xe_pfnCommandListAppendSignalEvent_t                        pfnAppendSignalEvent;
     xe_pfnCommandListAppendWaitOnEvents_t                       pfnAppendWaitOnEvents;
     xe_pfnCommandListAppendEventReset_t                         pfnAppendEventReset;
-    xe_pfnCommandListAppendLaunchFunction_t                     pfnAppendLaunchFunction;
-    xe_pfnCommandListAppendLaunchCooperativeFunction_t          pfnAppendLaunchCooperativeFunction;
-    xe_pfnCommandListAppendLaunchFunctionIndirect_t             pfnAppendLaunchFunctionIndirect;
-    xe_pfnCommandListAppendLaunchMultipleFunctionsIndirect_t    pfnAppendLaunchMultipleFunctionsIndirect;
+    xe_pfnCommandListAppendLaunchKernel_t                       pfnAppendLaunchKernel;
+    xe_pfnCommandListAppendLaunchCooperativeKernel_t            pfnAppendLaunchCooperativeKernel;
+    xe_pfnCommandListAppendLaunchKernelIndirect_t               pfnAppendLaunchKernelIndirect;
+    xe_pfnCommandListAppendLaunchMultipleKernelsIndirect_t      pfnAppendLaunchMultipleKernelsIndirect;
     xe_pfnCommandListAppendLaunchHostFunction_t                 pfnAppendLaunchHostFunction;
 } xe_command_list_dditable_t;
 
@@ -1163,32 +1163,32 @@ typedef xe_result_t (__xecall *xe_pfnGetModuleBuildLogProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeFunctionCreate 
-typedef xe_result_t (__xecall *xe_pfnFunctionCreate_t)(
+/// @brief Function-pointer for xeKernelCreate 
+typedef xe_result_t (__xecall *xe_pfnKernelCreate_t)(
     xe_module_handle_t,
-    const xe_function_desc_t*,
-    xe_function_handle_t*
+    const xe_kernel_desc_t*,
+    xe_kernel_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeFunctionDestroy 
-typedef xe_result_t (__xecall *xe_pfnFunctionDestroy_t)(
-    xe_function_handle_t
+/// @brief Function-pointer for xeKernelDestroy 
+typedef xe_result_t (__xecall *xe_pfnKernelDestroy_t)(
+    xe_kernel_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeFunctionSetGroupSize 
-typedef xe_result_t (__xecall *xe_pfnFunctionSetGroupSize_t)(
-    xe_function_handle_t,
+/// @brief Function-pointer for xeKernelSetGroupSize 
+typedef xe_result_t (__xecall *xe_pfnKernelSetGroupSize_t)(
+    xe_kernel_handle_t,
     uint32_t,
     uint32_t,
     uint32_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeFunctionSuggestGroupSize 
-typedef xe_result_t (__xecall *xe_pfnFunctionSuggestGroupSize_t)(
-    xe_function_handle_t,
+/// @brief Function-pointer for xeKernelSuggestGroupSize 
+typedef xe_result_t (__xecall *xe_pfnKernelSuggestGroupSize_t)(
+    xe_kernel_handle_t,
     uint32_t,
     uint32_t,
     uint32_t,
@@ -1198,55 +1198,55 @@ typedef xe_result_t (__xecall *xe_pfnFunctionSuggestGroupSize_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeFunctionSuggestMaxCooperativeGroupCount 
-typedef xe_result_t (__xecall *xe_pfnFunctionSuggestMaxCooperativeGroupCount_t)(
-    xe_function_handle_t,
+/// @brief Function-pointer for xeKernelSuggestMaxCooperativeGroupCount 
+typedef xe_result_t (__xecall *xe_pfnKernelSuggestMaxCooperativeGroupCount_t)(
+    xe_kernel_handle_t,
     uint32_t*,
     uint32_t*,
     uint32_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeFunctionSetArgumentValue 
-typedef xe_result_t (__xecall *xe_pfnFunctionSetArgumentValue_t)(
-    xe_function_handle_t,
+/// @brief Function-pointer for xeKernelSetArgumentValue 
+typedef xe_result_t (__xecall *xe_pfnKernelSetArgumentValue_t)(
+    xe_kernel_handle_t,
     uint32_t,
     size_t,
     const void*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeFunctionSetAttribute 
-typedef xe_result_t (__xecall *xe_pfnFunctionSetAttribute_t)(
-    xe_function_handle_t,
-    xe_function_set_attribute_t,
+/// @brief Function-pointer for xeKernelSetAttribute 
+typedef xe_result_t (__xecall *xe_pfnKernelSetAttribute_t)(
+    xe_kernel_handle_t,
+    xe_kernel_set_attribute_t,
     uint32_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeFunctionGetAttribute 
-typedef xe_result_t (__xecall *xe_pfnFunctionGetAttribute_t)(
-    xe_function_handle_t,
-    xe_function_get_attribute_t,
+/// @brief Function-pointer for xeKernelGetAttribute 
+typedef xe_result_t (__xecall *xe_pfnKernelGetAttribute_t)(
+    xe_kernel_handle_t,
+    xe_kernel_get_attribute_t,
     uint32_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Function functions pointers
-typedef struct _xe_function_dditable_t
+/// @brief Table of Kernel functions pointers
+typedef struct _xe_kernel_dditable_t
 {
-    xe_pfnFunctionCreate_t                                      pfnCreate;
-    xe_pfnFunctionDestroy_t                                     pfnDestroy;
-    xe_pfnFunctionSetGroupSize_t                                pfnSetGroupSize;
-    xe_pfnFunctionSuggestGroupSize_t                            pfnSuggestGroupSize;
-    xe_pfnFunctionSuggestMaxCooperativeGroupCount_t             pfnSuggestMaxCooperativeGroupCount;
-    xe_pfnFunctionSetArgumentValue_t                            pfnSetArgumentValue;
-    xe_pfnFunctionSetAttribute_t                                pfnSetAttribute;
-    xe_pfnFunctionGetAttribute_t                                pfnGetAttribute;
-} xe_function_dditable_t;
+    xe_pfnKernelCreate_t                                        pfnCreate;
+    xe_pfnKernelDestroy_t                                       pfnDestroy;
+    xe_pfnKernelSetGroupSize_t                                  pfnSetGroupSize;
+    xe_pfnKernelSuggestGroupSize_t                              pfnSuggestGroupSize;
+    xe_pfnKernelSuggestMaxCooperativeGroupCount_t               pfnSuggestMaxCooperativeGroupCount;
+    xe_pfnKernelSetArgumentValue_t                              pfnSetArgumentValue;
+    xe_pfnKernelSetAttribute_t                                  pfnSetAttribute;
+    xe_pfnKernelGetAttribute_t                                  pfnGetAttribute;
+} xe_kernel_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Function table
+/// @brief Exported function for filling application's Kernel table
 ///        with current process' addresses
 ///
 /// @returns
@@ -1257,16 +1257,16 @@ typedef struct _xe_function_dditable_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xeGetFunctionProcAddrTable(
+xeGetKernelProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_function_dditable_t* pDdiTable               ///< [in,out] pointer to table of DDI function pointers
+    xe_kernel_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeGetFunctionProcAddrTable
-typedef xe_result_t (__xecall *xe_pfnGetFunctionProcAddrTable_t)(
+/// @brief Function-pointer for xeGetKernelProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetKernelProcAddrTable_t)(
     xe_api_version_t,
-    xe_function_dditable_t*
+    xe_kernel_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1330,7 +1330,7 @@ typedef struct _xe_dditable_t
     xe_image_dditable_t                 Image;
     xe_module_dditable_t                Module;
     xe_module_build_log_dditable_t      ModuleBuildLog;
-    xe_function_dditable_t              Function;
+    xe_kernel_dditable_t                Kernel;
     xe_sampler_dditable_t               Sampler;
 } xe_dditable_t;
 

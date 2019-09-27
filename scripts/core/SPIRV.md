@@ -76,18 +76,18 @@ The following table describes the supported **OpTypeImage** image types:
 
 **OpTypeSampler** sampler typed are supported.
 
-${"##"} Functions
+${"##"} Kernels
 
-An **OpFunction** in a SPIR-V module that is identified with **OpEntryPoint** defines a function that may be launched using host API interfaces.
+An **OpFunction** in a SPIR-V module that is identified with **OpEntryPoint** defines a kernel that may be launched using host API interfaces.
 
-${"##"} Function Return Types
+${"##"} Kernel Return Types
 
 The _Result Type_ for an **OpFunction** identified with **OpEntryPoint** must be **OpTypeVoid**.
 
-${"##"} Function Arguments
+${"##"} Kernel Arguments
 
-An **OpFunctionParameter** for an **OpFunction** that is identified with **OpEntryPoint** defines a function argument.
-Allowed types for function arguments are:
+An **OpFunctionParameter** for an **OpFunction** that is identified with **OpEntryPoint** defines a kernel argument.
+Allowed types for kernel arguments are:
 
   * **OpTypeInt**
   * **OpTypeFloat**

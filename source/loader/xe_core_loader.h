@@ -46,8 +46,8 @@ namespace loader
     using xe_module_build_log_object_t        = object_t < xe_module_build_log_handle_t >;
     using xe_module_build_log_factory_t       = singleton_factory_t < xe_module_build_log_object_t, xe_module_build_log_handle_t >;
 
-    using xe_function_object_t                = object_t < xe_function_handle_t >;
-    using xe_function_factory_t               = singleton_factory_t < xe_function_object_t, xe_function_handle_t >;
+    using xe_kernel_object_t                  = object_t < xe_kernel_handle_t >;
+    using xe_kernel_factory_t                 = singleton_factory_t < xe_kernel_object_t, xe_kernel_handle_t >;
 
     using xe_sampler_object_t                 = object_t < xe_sampler_handle_t >;
     using xe_sampler_factory_t                = singleton_factory_t < xe_sampler_object_t, xe_sampler_handle_t >;

@@ -374,8 +374,8 @@ namespace xe
         if( static_cast<uint32_t>(CommandQueue::flag_t::SINGLE_SLICE_ONLY) & bits )
             str += "SINGLE_SLICE_ONLY | ";
         
-        if( static_cast<uint32_t>(CommandQueue::flag_t::SUPPORTS_COOPERATIVE_FUNCTIONS) & bits )
-            str += "SUPPORTS_COOPERATIVE_FUNCTIONS | ";
+        if( static_cast<uint32_t>(CommandQueue::flag_t::SUPPORTS_COOPERATIVE_KERNELS) & bits )
+            str += "SUPPORTS_COOPERATIVE_KERNELS | ";
 
         return ( str.size() > 3 ) 
             ? "CommandQueue::flag_t::{ " + str.substr(0, str.size() - 3) + " }"

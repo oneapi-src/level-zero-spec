@@ -25,9 +25,9 @@ ${"##"} Table of Contents
     + [Fences](#fnc)
     + [Events](#evnt)
 * [Barriers](#brr)
-* [Modules and Functions](#mnf)
+* [Modules and Kernelss](#mnk)
     + [Modules](#mod)
-    + [Functions](#func)
+    + [Kernels](#kern)
     + [Execution](#exe)
     + [Sampler](#smp)
 * [Advanced](#adv)
@@ -397,8 +397,8 @@ The following sample code demonstrates a basic sequence for creation and usage o
     ${x}_command_list_handle_t hCommandList;
     ${x}CommandListCreateImmediate(hDevice, &commandQueueDesc, &hCommandList);
 
-    // Immediately submit a function to the device
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Immediately submit a kernel to the device
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
     ...
 ```
 
@@ -503,15 +503,15 @@ The following sample code demonstrates a sequence for creation and submission of
     ${x}_event_handle_t hEvent;
     ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
-    // Append a signal of an event into the command list after the function executes
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent, 0, nullptr);
+    // Append a signal of an event into the command list after the kernel executes
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent, 0, nullptr);
 
     // Execute the command list with the signal
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
     ...
 ```
 
-The following diagram illustrates an event being signalled between functions within a command list:  
+The following diagram illustrates an event being signalled between kernels within a command list:  
 ![Event](../images/core_event.png?raw=true)  
 @image latex core_event.png
 
@@ -522,12 +522,12 @@ There are two types of barriers:
 
 The following sample code demonstrates a sequence for submission of a brute-force execution and global memory barrier:
 ```c
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
-    // Append a barrier into a command list to ensure hFunction1 completes before hFunction2 begins
+    // Append a barrier into a command list to ensure hKernel1 completes before hKernel2 begins
     ${x}CommandListAppendBarrier(hCommandList, nullptr, 0, nullptr);
 
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
     ...
 ```
 
@@ -548,11 +548,11 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     ${x}_event_handle_t hEvent1;
     ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
 
-    // Ensure hFunction1 completes before signaling hEvent1
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent1, 0, nullptr);
+    // Ensure hKernel1 completes before signaling hEvent1
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
 
-    // Ensure hEvent1 is signalled before starting hFunction2
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent1);
+    // Ensure hEvent1 is signalled before starting hKernel2
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
     ...
 ```
 
@@ -573,11 +573,11 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     ${x}_event_handle_t hEvent1;
     ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
 
-    // Ensure hFunction1 memory writes are fully coherent across the device before signaling hEvent1
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent1, 0, nullptr);
+    // Ensure hKernel1 memory writes are fully coherent across the device before signaling hEvent1
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
 
-    // Ensure hEvent1 is signalled before starting hFunction2
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent1);
+    // Ensure hEvent1 is signalled before starting hKernel2
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
     ...
 ```
 
@@ -586,19 +586,19 @@ Range-based memory barriers provide explicit control of which cachelines require
 
 The following sample code demonstrates a sequence for submission of a range-based memory barrier:
 ```c
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, nullptr, 0, nullptr);
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, nullptr, 0, nullptr);
 
-    // Ensure memory range is fully coherent across the device after hFunction1 and before hFunction2
+    // Ensure memory range is fully coherent across the device after hKernel1 and before hKernel2
     ${x}CommandListAppendMemoryRangesBarrier(hCommandList, 1, &size, &ptr, nullptr, 0, nullptr);
 
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 0, nullptr);
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 0, nullptr);
     ...
 ```
 
-${"#"} <a name="mnf">Modules and Functions</a>
-There are multiple levels of constructs needed for executing functions on the device:
-1. A [**Module**](#mod) represents a single translation unit that consists of functions that have been compiled together.
-2. A [**Function**](#func) represents the function within the module that will be launched directly from a command list.
+${"#"} <a name="mnk">Modules and Kernels</a>
+There are multiple levels of constructs needed for executing kernels on the device:
+1. A [**Module**](#mod) represents a single translation unit that consists of kernels that have been compiled together.
+2. A [**Kernel**](#kern) represents the kernel within the module that will be launched directly from a command list.
 
 The following diagram provides a high level overview of the major parts of the system.
 
@@ -610,7 +610,7 @@ Modules can be created from an IL or directly from native format using ::${x}Mod
 - ::${x}ModuleCreate takes a format argument that specifies the input format.
 - ::${x}ModuleCreate performs a compilation step when format is IL.
 
-The following sample code demonstrates a sequence for creating a module from an OpenCL function:
+The following sample code demonstrates a sequence for creating a module from an OpenCL kernel:
 ```c
     __kernel void image_scaling( __read_only  image2d_t src_img,
                                  __write_only image2d_t dest_img,
@@ -628,7 +628,7 @@ The following sample code demonstrates a sequence for creating a module from an 
 ```
 
 ```c
-    // OpenCL C function has been compiled to SPIRV IL (pImageScalingIL)
+    // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
     ${x}_module_desc_t moduleDesc = {
         ${X}_MODULE_DESC_VERSION_CURRENT,
         ${X}_MODULE_FORMAT_IL_SPIRV,
@@ -703,124 +703,124 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
 Also, note that the native binary will retain all debug information that is associated with the module. This allows debug
 capabilities for modules that are created from native binaries.
 
-${"###"} Built-in Functions
-Built-in functions are not supported but can be implemented by an upper level runtime or library using the native binary
+${"###"} Built-in Kernels
+Built-in kernels are not supported but can be implemented by an upper level runtime or library using the native binary
 interface.
 
-${"##"} <a name="func">Functions</a>
-A Function is a reference to a function within a module. The Function object supports both explicit and implicit function
+${"##"} <a name="kern">Kernels</a>
+A Kernel is a reference to a kernel within a module. The Kernel object supports both explicit and implicit kernel
 arguments along with data needed for launch.
 
-The following sample code demonstrates a sequence for creating a function from a module:
+The following sample code demonstrates a sequence for creating a kernel from a module:
 ```c
-    ${x}_function_desc_t functionDesc = {
-        ${X}_FUNCTION_DESC_VERSION_CURRENT,
-        ${X}_FUNCTION_FLAG_NONE,
+    ${x}_kernel_desc_t kernelDesc = {
+        ${X}_KERNEL_DESC_VERSION_CURRENT,
+        ${X}_KERNEL_FLAG_NONE,
         "image_scaling"
     };
-    ${x}_function_handle_t hFunction;
-    ${x}FunctionCreate(hModule, &functionDesc, &hFunction);
+    ${x}_kernel_handle_t hKernel;
+    ${x}KernelCreate(hModule, &kernelDesc, &hKernel);
     ...
 ```
 
-${"###"} Function Attributes
-Use ::${x}FunctionGetAttribute to query attributes from a function object.
+${"###"} Kernel Attributes
+Use ::${x}KernelGetAttribute to query attributes from a kernel object.
 
 ```c
     ...
     uint32_t numRegisters;
 
-    // Number of program registers used by function.
-    ${x}FunctionGetAttribute(hFunction, ${X}_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
+    // Number of program registers used by kernel.
+    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_GET_ATTR_MAX_REGS_USED, &numRegisters);
     ...
 ```
-See ::${x}_function_get_attribute_t for more information on the "get" attributes.
+See ::${x}_kernel_get_attribute_t for more information on the "get" attributes.
 
-Use ::${x}FunctionSetAttribute to set attributes from a function object.
+Use ::${x}KernelSetAttribute to set attributes for a kernel object.
 
 ```c
-    // Function performs indirect device access.
-    ${x}FunctionSetAttribute(hFunction, ${X}_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
+    // Kernel performs indirect device access.
+    ${x}KernelSetAttribute(hKernel, ${X}_KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
     ...
 ```
 
-See ::${x}_function_set_attribute_t for more information on the "set" attributes.
+See ::${x}_kernel_set_attribute_t for more information on the "set" attributes.
 
 ${"##"} <a name="exe">Execution</a>
 
-${"###"} Function Group Size
-The group size for a function can be set using ::${x}FunctionSetGroupSize. If a group size is not
-set prior to appending a function into a command list then a default will be chosen.
+${"###"} Kernel Group Size
+The group size for a kernel can be set using ::${x}KernelSetGroupSize. If a group size is not
+set prior to appending a kernel into a command list then a default will be chosen.
 The group size can updated over a series of append operations. The driver will copy the
-group size information when appending the function into the command list.
+group size information when appending the kernel into the command list.
 
 ```c
-    ${x}FunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
+    ${x}KernelSetGroupSize(hKernel, groupSizeX, groupSizeY, 1);
 
     ...
 ```
 
 The API supports a query for suggested group size when providing the global size. This function ignores the
-group size that was set on the function using ::${x}FunctionSetGroupSize.
+group size that was set on the kernel using ::${x}KernelSetGroupSize.
 
 ```c
     // Find suggested group size for processing image.
     uint32_t groupSizeX;
     uint32_t groupSizeY;
-    ${x}FunctionSuggestGroupSize(function, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
+    ${x}KernelSuggestGroupSize(hKernel, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
 
-    ${x}FunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
+    ${x}KernelSetGroupSize(hKernel, groupSizeX, groupSizeY, 1);
 
     ...
 ```
 
-${"###"} Function Arguments
-Function arguments represent only the explicit function arguments that are within "brackets" e.g. func(arg1, arg2, ...).
-- Use ::${x}FunctionSetArgumentValue to setup arguments for a function launch.
-- The AppendLaunchFunction command will make a copy the function arguments to send to the device.
-- Function arguments can be updated at anytime and used across multiple append calls.
+${"###"} Kernel Arguments
+Kernel arguments represent only the explicit kernel arguments that are within "brackets" e.g. func(arg1, arg2, ...).
+- Use ::${x}KernelSetArgumentValue to setup arguments for a kernel launch.
+- The AppendLaunchKernel command will make a copy the kernel arguments to send to the device.
+- Kernel arguments can be updated at any time and used across multiple append calls.
 
-The following sample code demonstrates a sequence for creating function args and launching the function:
+The following sample code demonstrates a sequence for setting kernel args and launching the kernel:
 ```c
     // Bind arguments
-    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_image_handle_t), &src_image);
-    ${x}FunctionSetArgumentValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest_image);
-    ${x}FunctionSetArgumentValue(hFunction, 2, sizeof(uint32_t), &width);
-    ${x}FunctionSetArgumentValue(hFunction, 3, sizeof(uint32_t), &height);
+    ${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_image_handle_t), &src_image);
+    ${x}KernelSetArgumentValue(hKernel, 1, sizeof(${x}_image_handle_t), &dest_image);
+    ${x}KernelSetArgumentValue(hKernel, 2, sizeof(uint32_t), &width);
+    ${x}KernelSetArgumentValue(hKernel, 3, sizeof(uint32_t), &height);
 
     ${x}_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
-    // Append function
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Append launch kernel
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
     // Update image pointers to copy and scale next image.
-    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_image_handle_t), &src2_image);
-    ${x}FunctionSetArgumentValue(hFunction, 1, sizeof(${x}_image_handle_t), &dest2_image);
+    ${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_image_handle_t), &src2_image);
+    ${x}KernelSetArgumentValue(hKernel, 1, sizeof(${x}_image_handle_t), &dest2_image);
 
-    // Append function
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Append launch kernel
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
     ...
 ```
 
-${"###"} Function Launch
-In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
-a command list. The most basic version of these is ::${x}CommandListAppendLaunchFunction which takes a
-command list, function, launch arguments, and an optional synchronization event used to signal completion.
+${"###"} Kernel Launch
+In order to launch a kernel on the device an application must call one of the CommandListAppendLaunch* functions for
+a command list. The most basic version of these is ::${x}CommandListAppendLaunchKernel which takes a
+command list, kernel handle, launch arguments, and an optional synchronization event used to signal completion.
 The launch arguments contain thread group dimensions.
 
 ```c
-    // compute number of groups to launch based on image size and function group size.
+    // compute number of groups to launch based on image size and group size.
     uint32_t numGroupsX = imageWidth / groupSizeX;
     uint32_t numGroupsY = imageHeight / groupSizeY;
 
     ${x}_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
-    // Append function
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Append launch kernel
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 ```
 
-::${x}CommandListAppendLaunchFunctionIndirect allows the launch parameters to be supplied indirectly in a
+::${x}CommandListAppendLaunchKernelIndirect allows the launch parameters to be supplied indirectly in a
 buffer that the device reads instead of the command itself. This allows for the previous operations on the
 device to generate the parameters.
 
@@ -830,24 +830,24 @@ device to generate the parameters.
     ...
     ${x}DriverAllocDeviceMem(hDriver, hDevice, flags, 0, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
-    // Append function
-    ${x}CommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
+    // Append launch kernel - indirect
+    ${x}CommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
 ```
 
-${"###"} Cooperative Functions
-Cooperative functions allow sharing of data and synchronization across all launched groups in a safe manner. To support this
-there is a ::${x}CommandListAppendLaunchCooperativeFunction that allows launching a group of functions that can cooperate with each other.
-The command list must be submitted to a command queue that was created with the ::${X}_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_FUNCTIONS command queue flag.
-Finally, there is a ::${x}FunctionSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
+${"###"} Cooperative Kernels
+Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
+there is a ::${x}CommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
+The command list must be submitted to a command queue that was created with the ::${X}_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_KERNELS command queue flag.
+Finally, there is a ::${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
 
 In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
-a command list. The most basic version of these is ::${x}CommandListAppendLaunchFunction which takes a
+a command list. The most basic version of these is ::${x}CommandListAppendLaunchKernel which takes a
 command list, function, launch arguments, and an optional synchronization event used to signal completion.
 The launch arguments contain thread group dimensions.
 
 ${"##"} <a name="smp">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
-Module functions.  The ::${x}SamplerCreate function takes a sampler descriptor (::${x}_sampler_desc_t):
+kernels.  The ::${x}SamplerCreate function takes a sampler descriptor (::${x}_sampler_desc_t):
 
 | Sampler Field    | Description                                           |
 | :--              | :--                                                   |
@@ -855,7 +855,7 @@ Module functions.  The ::${x}SamplerCreate function takes a sampler descriptor (
 | Filter Mode      | Specifies which filtering mode to use. See ::${x}_sampler_filter_mode_t               |
 | Normalized       | Specifies whether coordinates for addressing image are normalized [0,1] or not.       |
 
-The following is sample for code creating a sampler object and passing it as a Function argument.
+The following is sample for code creating a sampler object and passing it as a kernel argument:
 
 ```c
     // Setup sampler for linear filtering and clamp out of bounds accesses to edge.
@@ -869,11 +869,11 @@ The following is sample for code creating a sampler object and passing it as a F
     ${x}SamplerCreate(hDevice, &desc, &sampler);
     ...
     
-    // The sampler can be passed as a function argument.
-    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(${x}_sampler_handle_t), &sampler);
+    // The sampler can be passed as a kernel argument.
+    ${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_sampler_handle_t), &sampler);
 
-    // Append function
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Append launch kernel
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 ```
 
 ${"#"} <a name="adv">Advanced</a>
@@ -943,11 +943,11 @@ For devices that do not support page-faults, the driver must ensure that all pag
 This can be determined by checking ::${x}_device_properties_t.onDemandPageFaultsSupported.
 
 In most cases, the driver implicitly handles residency of allocations for device access.
-This can be done by inspecting API parameters, including function arguments.
+This can be done by inspecting API parameters, including kernel arguments.
 However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
 such as multiple levels of indirection, there are two methods available:
-1. the application may set the ::${X}_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
- + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_function_set_attribute_t
+1. the application may set the ::${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
+ + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_set_attribute_t
  + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueExecuteCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 2. explcit ::${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
  + if the application over-commits device memory, then a call to ::${x}DeviceMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -964,10 +964,10 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
     ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
-    // 'begin' is passed as function argument and appended into command list
-    ${x}FunctionSetAttribute(hFuncArgs, ${X}_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
-    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // 'begin' is passed as kernel argument and appended into command list
+    ${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+    ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
     ...
 
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -984,9 +984,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
     ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
-    // 'begin' is passed as function argument and appended into command list
-    ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // 'begin' is passed as kernel argument and appended into command list
+    ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
     ...
 
     // Make indirect allocations resident before enqueuing
@@ -1133,8 +1133,8 @@ The following code examples demonstrate how to use the event IPC APIs:
     };
     ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
-    // submit function and signal event when complete
-    ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent, 0, nullptr);
+    // submit kernel and signal event when complete
+    ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &args, hEvent, 0, nullptr);
     ${x}CommandListClose(hCommandList);
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 ```

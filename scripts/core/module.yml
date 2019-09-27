@@ -184,7 +184,7 @@ params:
       desc: "[in] handle of the device"
     - type: "const char*"
       name: pGlobalName
-      desc: "[in] name of function in global"
+      desc: "[in] name of global variable in module"
     - type: "void**"
       name: pptr
       desc: "[out] device visible pointer"
@@ -194,46 +194,46 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED
 --- #--------------------------------------------------------------------------
 type: enum
-desc: API version of $x_function_desc_t
-class: $xFunction
-name: $x_function_desc_version_t
+desc: API version of $x_kernel_desc_t
+class: $xKernel
+name: $x_kernel_desc_version_t
 etors:
-    - name: $X_FUNCTION_DESC_VERSION_CURRENT
+    - name: $X_KERNEL_DESC_VERSION_CURRENT
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported function creation flags"
-class: $xFunction
-name: $x_function_flag_t
+desc: "Supported kernel creation flags"
+class: $xKernel
+name: $x_kernel_flag_t
 etors:
-    - name: $X_FUNCTION_FLAG_NONE
+    - name: $X_KERNEL_FLAG_NONE
       value: "0"
       desc: "default driver behavior"
-    - name: $X_FUNCTION_FLAG_FORCE_RESIDENCY
+    - name: $X_KERNEL_FLAG_FORCE_RESIDENCY
       desc: "force all device allocations to be resident during execution"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Function descriptor"
-class: $xFunction
-name: $x_function_desc_t
+desc: "Kernel descriptor"
+class: $xKernel
+name: $x_kernel_desc_t
 members:
-    - type: $x_function_desc_version_t
+    - type: $x_kernel_desc_version_t
       name: version
-      desc: "[in] $X_FUNCTION_DESC_VERSION_CURRENT"
-      init: $X_FUNCTION_DESC_VERSION_CURRENT
-    - type: "$x_function_flag_t"
+      desc: "[in] $X_KERNEL_DESC_VERSION_CURRENT"
+      init: $X_KERNEL_DESC_VERSION_CURRENT
+    - type: "$x_kernel_flag_t"
       name: flags
       desc: "[in] creation flags"
-      init: $X_FUNCTION_FLAG_NONE
+      init: $X_KERNEL_FLAG_NONE
     - type: "const char*"
-      name: pFunctionName
-      desc: "[in] null-terminated name of function in Module"
+      name: pKernelName
+      desc: "[in] null-terminated name of kernel in module"
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Create Function object from Module by name"
-class: $xFunction
+desc: "Create a kernel object from a module by name"
+class: $xKernel
 name: Create
 decl: static
 ordinal: "0"
@@ -246,36 +246,36 @@ params:
     - type: "$x_module_handle_t"
       name: hModule
       desc: "[in] handle of the module"
-    - type: "const $x_function_desc_t*"
+    - type: "const $x_kernel_desc_t*"
       name: desc
-      desc: "[in] pointer to function descriptor"
-    - type: "$x_function_handle_t*"
-      name:  phFunction
+      desc: "[in] pointer to kernel descriptor"
+    - type: "$x_kernel_handle_t*"
+      name:  phKernel
       desc: "[out] handle of the Function object"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "nullptr == pDesc->pFunctionName"
-        - "invalid value for pDesc->pFunctionName"
+        - "nullptr == pDesc->pKernelName"
+        - "invalid value for pDesc->pKernelName"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Destroys Function object"
-class: $xFunction
+desc: "Destroys a kernel object"
+class: $xKernel
 name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "All functions must be destroyed before the module is destroyed."
-    - "The application is responsible for making sure the device is not currently referencing the function before it is deleted"
-    - "The implementation of this function will immediately free all Host and Device allocations associated with this function"
-    - "The application may **not** call this function from simultaneous threads with the same function handle."
+    - "All kernels must be destroyed before the module is destroyed."
+    - "The application is responsible for making sure the device is not currently referencing the kernel before it is deleted"
+    - "The implementation of this function will immediately free all Host and Device allocations associated with this kernel"
+    - "The application may **not** call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in][release] handle of the function object"  
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in][release] handle of the kernel object"  
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieve function pointer from Module by name"
+desc: "Retrieve a function pointer from a module by name"
 class: $xModule
 name: GetFunctionPointer
 details:
@@ -298,72 +298,72 @@ returns:
         - "invalid value pFunctionName. Function name must exist in Module."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set group size for Function."
-class: $xFunction
+desc: "Set group size for a kernel"
+class: $xKernel
 name: SetGroupSize
 details:
     - "The application may **not** call this function from simultaneous threads with the same function handle."
     - "The implementation of this function should be lock-free."
     - "The implementation will copy the group size information into a command list when the function is appended."
 params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object" 
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object" 
     - type: "uint32_t"
       name: groupSizeX
-      desc: "[in] group size for X dimension to use for this function."
+      desc: "[in] group size for X dimension to use for this kernel"
     - type: "uint32_t"
       name: groupSizeY
-      desc: "[in] group size for Y dimension to use for this function."
+      desc: "[in] group size for Y dimension to use for this kernel"
     - type: "uint32_t"
       name: groupSizeZ
-      desc: "[in] group size for Z dimension to use for this function."
+      desc: "[in] group size for Z dimension to use for this kernel"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Query a suggested group size for function given a global size for each dimension."
-class: $xFunction
+desc: "Query a suggested group size for a kernel given a global size for each dimension."
+class: $xKernel
 name: SuggestGroupSize
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "This function ignores the group size that is set using $xFunctionSetGroupSize."
+    - "This function ignores the group size that is set using $xKernelSetGroupSize."
 params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object" 
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object" 
     - type: "uint32_t"
       name: globalSizeX
-      desc: "[in] global width for X dimension."
+      desc: "[in] global width for X dimension"
     - type: "uint32_t"
       name: globalSizeY
-      desc: "[in] global width for Y dimension."
+      desc: "[in] global width for Y dimension"
     - type: "uint32_t"
       name: globalSizeZ
-      desc: "[in] global width for Z dimension."
+      desc: "[in] global width for Z dimension"
     - type: "uint32_t*"
       name: groupSizeX
-      desc: "[out] recommended size of group for X dimension."
+      desc: "[out] recommended size of group for X dimension"
     - type: "uint32_t*"
       name: groupSizeY
-      desc: "[out] recommended size of group for Y dimension."
+      desc: "[out] recommended size of group for Y dimension"
     - type: "uint32_t*"
       name: groupSizeZ
-      desc: "[out] recommended size of group for Z dimension."
+      desc: "[out] recommended size of group for Z dimension"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid number of threads."
+        - "invalid global width"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Query a suggested max group count for device for cooperative functions that device supports."
-class: $xFunction
+desc: "Query a suggested max group count a cooperative kernel."
+class: $xKernel
 name: SuggestMaxCooperativeGroupCount
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object" 
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object" 
     - type: "uint32_t*"
       name: groupCountX
       desc: "[out] recommend group count X dimension."
@@ -378,17 +378,17 @@ returns:
         - "invalid number of threads."        
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set function argument used on function launch."
-class: $xFunction
+desc: "Set kernel argument used on kernel launch."
+class: $xKernel
 name: SetArgumentValue
 details:
     - "This function may **not** be called from simultaneous threads with the same function handle."
     - "The implementation of this function should be lock-free."
     - "The implementation will copy the arguments into a command list when the function is appended."
 params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function args object."
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
     - type: "uint32_t"
       name: argIndex
       desc: "[in] argument index in range [0, num args - 1]"
@@ -404,23 +404,23 @@ returns:
         - "invalid size specified"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Function attributes"
-class: $xFunction
-name: $x_function_set_attribute_t
+desc: "Kernel attributes"
+class: $xKernel
+name: $x_kernel_set_attribute_t
 analogue:
     - "**cl_kernel_exec_info**"
 etors:
-    - name: $X_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS
+    - name: $X_KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS
       value: "0"
       desc: "Indicates that the function accesses host allocations indirectly (default: false)"
-    - name: $X_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS
+    - name: $X_KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS
       desc: "Indicates that the function accesses device allocations indirectly (default: false)"
-    - name: $X_FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS
+    - name: $X_KERNEL_SET_ATTR_INDIRECT_SHARED_ACCESS
       desc: "Indicates that the function accesses shared allocations indirectly (default: false)"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Sets a function attribute"
-class: $xFunction
+desc: "Sets a kernel attribute"
+class: $xKernel
 name: SetAttribute
 analogue:
     - "**clSetKernelExecInfo**"
@@ -428,10 +428,10 @@ details:
     - "This function may **not** be called from simultaneous threads with the same function handle."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function."
-    - type: "$x_function_set_attribute_t"
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
+    - type: "$x_kernel_set_attribute_t"
       name: attr
       desc: "[in] attribute to set"
     - type: "uint32_t"
@@ -443,29 +443,29 @@ returns:
         - "invalid value for value"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Function attributes"
-class: $xFunction
-name: $x_function_get_attribute_t
+desc: "Kernel attributes"
+class: $xKernel
+name: $x_kernel_get_attribute_t
 analogue:
     - "**CUfunction_attribute**"
 etors:
-    - name: $X_FUNCTION_GET_ATTR_MAX_REGS_USED
+    - name: $X_KERNEL_GET_ATTR_MAX_REGS_USED
       value: "0"
-      desc: "Maximum device registers used for this function"
-    - name: $X_FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS
-      desc: "Maximum dimensions for group for this function"
-    - name: $X_FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE
-      desc: "Maximum shared memory required for this function"
-    - name: $X_FUNCTION_GET_ATTR_HAS_SPILL_FILL
-      desc: "Function required spill/fills."
-    - name: $X_FUNCTION_GET_ATTR_HAS_BARRIERS
-      desc: "Function contains barriers."
-    - name: $X_FUNCTION_GET_ATTR_HAS_DPAS
-      desc: "Function contains DPAs."
+      desc: "Maximum device registers used for this kernel"
+    - name: $X_KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS
+      desc: "Maximum dimensions for group for this kernel"
+    - name: $X_KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE
+      desc: "Maximum shared memory required for this kernel"
+    - name: $X_KERNEL_GET_ATTR_HAS_SPILL_FILL
+      desc: "Kernel required spill/fills"
+    - name: $X_KERNEL_GET_ATTR_HAS_BARRIERS
+      desc: "Kernel contains barriers"
+    - name: $X_KERNEL_GET_ATTR_HAS_DPAS
+      desc: "Kernel contains DPAS"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Query a function attribute."
-class: $xFunction
+desc: "Query a kernel attribute."
+class: $xKernel
 name: GetAttribute
 analogue:
     - "**cuFuncGetAttribute**"
@@ -473,10 +473,10 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object"
-    - type: "$x_function_get_attribute_t"
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
+    - type: "$x_kernel_get_attribute_t"
       name: attr
       desc: "[in] attribute to query"
     - type: "uint32_t*"
@@ -487,7 +487,7 @@ returns:
         - "invalid value for attr"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Function thread group dimensions."
+desc: "Kernel thread group dimensions."
 class: $xCommandList
 name: $x_thread_group_dimensions_t
 members:
@@ -505,9 +505,9 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Launch function over one or more work groups."
+desc: "Launch kernel over one or more work groups."
 class: $xCommandList
-name: AppendLaunchFunction
+name: AppendLaunchKernel
 analogue:
     - "**cuLaunchKernel**"
 details:
@@ -518,12 +518,12 @@ params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object"
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
     - type: "const $x_thread_group_dimensions_t*"
       name: pLaunchFuncArgs
-      desc: "[in] launch function arguments."
+      desc: "[in] thread group launch arguments"
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
@@ -535,9 +535,9 @@ params:
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Launch function cooperatively over one or more work groups."
+desc: "Launch kernel cooperatively over one or more work groups."
 class: $xCommandList
-name: AppendLaunchCooperativeFunction
+name: AppendLaunchCooperativeKernel
 analogue:
     - "**cudaLaunchCooperativeKernel**"
 details:
@@ -545,17 +545,17 @@ details:
     - "This may only be used for a command list that are submitted to command queue with cooperative flag set."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
-    - "Use $xFunctionSuggestMaxCooperativeGroupCount to recommend max group count for device for cooperative functions that device supports."
+    - "Use $xKernelSuggestMaxCooperativeGroupCount to recommend max group count for device for cooperative functions that device supports."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object"
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
     - type: "const $x_thread_group_dimensions_t*"
       name: pLaunchFuncArgs
-      desc: "[in] launch function arguments."
+      desc: "[in] thread group launch arguments"
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
@@ -567,9 +567,9 @@ params:
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"      
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Launch function over one or more work groups using indirect arguments."
+desc: "Launch kernel over one or more work groups using indirect arguments."
 class: $xCommandList
-name: AppendLaunchFunctionIndirect
+name: AppendLaunchKernelIndirect
 analogue:
     - "**cuLaunchKernel**"
 details:
@@ -582,12 +582,12 @@ params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-    - type: "$x_function_handle_t"
-      name: hFunction
-      desc: "[in] handle of the function object"
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
     - type: "const $x_thread_group_dimensions_t*"
       name: pLaunchArgumentsBuffer
-      desc: "[in] pointer to device buffer that will contain launch arguments"
+      desc: "[in] pointer to device buffer that will contain thread group launch arguments"
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
@@ -599,14 +599,14 @@ params:
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Launch multiple functions over one or more work groups using an array of indirect arguments."
+desc: "Launch multiple kernels over one or more work groups using an array of indirect arguments."
 class: $xCommandList
-name: AppendLaunchMultipleFunctionsIndirect
+name: AppendLaunchMultipleKernelsIndirect
 analogue:
     - "**cuLaunchKernel**"
 details:
     - "The array of launch arguments need to be device visible."
-    - "The array of launch arguments buffer may not be reusued until the function has completed on the device."
+    - "The array of launch arguments buffer may not be reused until the kernel has completed on the device."
     - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -615,17 +615,17 @@ params:
       name: hCommandList
       desc: "[in] handle of the command list"
     - type: uint32_t
-      name: numFunctions
-      desc: "[in] maximum number of functions to launch"
-    - type: "$x_function_handle_t*"
-      name: phFunctions
-      desc: "[in][range(0, numFunctions)] handles of the function objects"
+      name: numKernels
+      desc: "[in] maximum number of kernels to launch"
+    - type: "$x_kernel_handle_t*"
+      name: phKernels
+      desc: "[in][range(0, numKernels)] handles of the kernel objects"
     - type: "const uint32_t*"
       name: pCountBuffer
-      desc: "[in] pointer to device memory location that will contain the actual number of functions to launch; value must be less-than or equal-to numFunctions"
+      desc: "[in] pointer to device memory location that will contain the actual number of kernels to launch; value must be less-than or equal-to numKernels"
     - type: "const $x_thread_group_dimensions_t*"
       name: pLaunchArgumentsBuffer
-      desc: "[in][range(0, numFunctions)] pointer to device buffer that will contain a contiguous array of launch arguments"
+      desc: "[in][range(0, numKernels)] pointer to device buffer that will contain a contiguous array of thread group launch arguments"
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
@@ -707,16 +707,16 @@ members:
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for function"
-name: $xFunction
+desc: "C++ wrapper for kernel"
+name: $xKernel
 owner: $xModule
 members:
-    - type: $x_function_handle_t
+    - type: $x_kernel_handle_t
       name: handle
-      desc: "[in] handle of function object"
+      desc: "[in] handle of kernel object"
     - type: $xModule*
       name: pModule
       desc: "[in] pointer to owner object"
-    - type: $x_function_desc_t
+    - type: $x_kernel_desc_t
       name: desc
-      desc: "[in] descriptor of the function object"
+      desc: "[in] descriptor of the kernel object"

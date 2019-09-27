@@ -46,9 +46,9 @@ namespace xe
                                                             ///< dynamically assign based on usage
             SINGLE_SLICE_ONLY = XE_BIT(2),                  ///< command queue reserves and cannot comsume more than a single slice.
                                                             ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
-            SUPPORTS_COOPERATIVE_FUNCTIONS = XE_BIT(3),     ///< command queue supports command list with cooperative functions. See
-                                                            ///< ::xeCommandListAppendLaunchCooperativeFunction for more details.
-                                                            ///< cannot be combined with COPY_ONLY.
+            SUPPORTS_COOPERATIVE_KERNELS = XE_BIT(3),       ///< command queue supports command list with cooperative kernels. See
+                                                            ///< ::xeCommandListAppendLaunchCooperativeKernel for more details. cannot
+                                                            ///< be combined with COPY_ONLY.
 
         };
 
@@ -83,7 +83,7 @@ namespace xe
             mode_t mode = mode_t::DEFAULT;                  ///< [in] operation mode
             priority_t priority = priority_t::NORMAL;       ///< [in] priority
             uint32_t ordinal = 0;                           ///< [in] if logical-only flag is set, then will be ignored;
-                                                            ///< if supports-cooperative-functions is set, then may be ignored;
+                                                            ///< if supports-cooperative-kernels is set, then may be ignored;
                                                             ///< else-if copy-only flag is set, then must be less than ::xe_device_properties_t.numAsyncCopyEngines;
                                                             ///< otherwise must be less than
                                                             ///< ::xe_device_properties_t.numAsyncComputeEngines. When using sub-devices

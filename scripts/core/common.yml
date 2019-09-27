@@ -99,9 +99,9 @@ class: $xModuleBuildLog
 name: "$x_module_build_log_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle of driver's function object"
-class: $xFunction
-name: "$x_function_handle_t"
+desc: "Handle of driver's kernel object"
+class: $xKernel
+name: "$x_kernel_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's sampler object"

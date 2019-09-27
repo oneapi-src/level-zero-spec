@@ -20,7 +20,7 @@ namespace loader
     xet_device_factory_t                xet_device_factory;
     xet_command_list_factory_t          xet_command_list_factory;
     xet_module_factory_t                xet_module_factory;
-    xet_function_factory_t              xet_function_factory;
+    xet_kernel_factory_t                xet_kernel_factory;
     xet_metric_group_factory_t          xet_metric_group_factory;
     xet_metric_factory_t                xet_metric_factory;
     xet_metric_tracer_factory_t         xet_metric_tracer_factory;
@@ -706,9 +706,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleGetFunctionNames
+    /// @brief Intercept function for xetModuleGetKernelNames
     xe_result_t __xecall
-    xetModuleGetFunctionNames(
+    xetModuleGetKernelNames(
         xet_module_handle_t hModule,                    ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -723,40 +723,40 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_module_object_t*>( hModule )->dditable;
-        auto pfnGetFunctionNames = dditable->xet.Module.pfnGetFunctionNames;
-        if( nullptr == pfnGetFunctionNames )
+        auto pfnGetKernelNames = dditable->xet.Module.pfnGetKernelNames;
+        if( nullptr == pfnGetKernelNames )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<xet_module_object_t*>( hModule )->handle;
 
         // forward to device-driver
-        result = pfnGetFunctionNames( hModule, pCount, pNames );
+        result = pfnGetKernelNames( hModule, pCount, pNames );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetFunctionGetProfileInfo
+    /// @brief Intercept function for xetKernelGetProfileInfo
     xe_result_t __xecall
-    xetFunctionGetProfileInfo(
-        xet_function_handle_t hFunction,                ///< [in] handle to function
+    xetKernelGetProfileInfo(
+        xet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
         xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_function_object_t*>( hFunction )->dditable;
-        auto pfnGetProfileInfo = dditable->xet.Function.pfnGetProfileInfo;
+        auto dditable = reinterpret_cast<xet_kernel_object_t*>( hKernel )->dditable;
+        auto pfnGetProfileInfo = dditable->xet.Kernel.pfnGetProfileInfo;
         if( nullptr == pfnGetProfileInfo )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xet_function_object_t*>( hFunction )->handle;
+        hKernel = reinterpret_cast<xet_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnGetProfileInfo( hFunction, pInfo );
+        result = pfnGetProfileInfo( hKernel, pInfo );
 
         return result;
     }
@@ -3684,7 +3684,7 @@ xetGetModuleProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetDebugInfo                             = loader::xetModuleGetDebugInfo;
-            pDdiTable->pfnGetFunctionNames                         = loader::xetModuleGetFunctionNames;
+            pDdiTable->pfnGetKernelNames                           = loader::xetModuleGetKernelNames;
         }
         else
         {
@@ -3705,7 +3705,7 @@ xetGetModuleProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Function table
+/// @brief Exported function for filling application's Kernel table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3716,9 +3716,9 @@ xetGetModuleProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xetGetFunctionProcAddrTable(
+xetGetKernelProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_function_dditable_t* pDdiTable              ///< [in,out] pointer to table of DDI function pointers
+    xet_kernel_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
     if( loader::context.drivers.size() < 1 )
@@ -3737,9 +3737,9 @@ xetGetFunctionProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xet_pfnGetFunctionProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "xetGetFunctionProcAddrTable") );
-            result = getTable( version, &drv.dditable.xet.Function );
+            auto getTable = reinterpret_cast<xet_pfnGetKernelProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "xetGetKernelProcAddrTable") );
+            result = getTable( version, &drv.dditable.xet.Kernel );
         }
     }
 
@@ -3748,20 +3748,20 @@ xetGetFunctionProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnGetProfileInfo                           = loader::xetFunctionGetProfileInfo;
+            pDdiTable->pfnGetProfileInfo                           = loader::xetKernelGetProfileInfo;
         }
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.xet.Function;
+            *pDdiTable = loader::context.drivers.front().dditable.xet.Kernel;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        auto getTable = reinterpret_cast<xet_pfnGetFunctionProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetFunctionProcAddrTable") );
+        auto getTable = reinterpret_cast<xet_pfnGetKernelProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetKernelProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

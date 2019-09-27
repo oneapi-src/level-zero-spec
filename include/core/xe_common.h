@@ -117,8 +117,8 @@ typedef struct _xe_module_handle_t *xe_module_handle_t;
 typedef struct _xe_module_build_log_handle_t *xe_module_build_log_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of driver's function object
-typedef struct _xe_function_handle_t *xe_function_handle_t;
+/// @brief Handle of driver's kernel object
+typedef struct _xe_kernel_handle_t *xe_kernel_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's sampler object
@@ -269,8 +269,8 @@ typedef struct _xe_memory_allocation_properties_t xe_memory_allocation_propertie
 typedef struct _xe_module_desc_t xe_module_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_function_desc_t
-typedef struct _xe_function_desc_t xe_function_desc_t;
+/// @brief Forward-declare xe_kernel_desc_t
+typedef struct _xe_kernel_desc_t xe_kernel_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_thread_group_dimensions_t
