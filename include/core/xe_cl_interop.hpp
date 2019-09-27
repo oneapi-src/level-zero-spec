@@ -6,7 +6,7 @@
  *
  * @file xe_cl_interop.hpp
  *
- * @brief C++ wrapper of Intel 'One API' Level-Zero APIs for OpenCL Interopability
+ * @brief C++ wrapper of Intel 'One API' Level-Zero APIs for OpenCL Interoperability
  *
  * @cond DEV
  * DO NOT EDIT: generated from /scripts/core/cl_interop.yml

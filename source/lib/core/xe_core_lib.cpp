@@ -104,9 +104,9 @@ namespace xe_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xeGetFunctionProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &ddiTable.Function );
+            auto getTable = reinterpret_cast<xe_pfnGetKernelProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetKernelProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.Kernel );
         }
 
         if( XE_RESULT_SUCCESS == result )

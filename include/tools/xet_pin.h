@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve all function names in the module.
+/// @brief Retrieve all kernel names in the module.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -42,7 +42,7 @@ extern "C" {
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetModuleGetFunctionNames(
+xetModuleGetKernelNames(
     xet_module_handle_t hModule,                    ///< [in] handle of the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
                                                     ///< if count is zero, then the driver will update the value with the total
@@ -113,7 +113,7 @@ typedef struct _xet_profile_register_sequence_t
 } xet_profile_register_sequence_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve profiling information generated for the function.
+/// @brief Retrieve profiling information generated for the kernel.
 /// 
 /// @details
 ///     - Module must be created using the following build option:
@@ -128,12 +128,12 @@ typedef struct _xet_profile_register_sequence_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///         + nullptr == pInfo
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetFunctionGetProfileInfo(
-    xet_function_handle_t hFunction,                ///< [in] handle to function
+xetKernelGetProfileInfo(
+    xet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
     xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
     );
 

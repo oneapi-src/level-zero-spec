@@ -1484,110 +1484,110 @@ typedef void (__xecall *xe_pfnCommandListAppendEventResetCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeCommandListAppendLaunchFunction 
+/// @brief Callback function parameters for xeCommandListAppendLaunchKernel 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_command_list_append_launch_function_params_t
+typedef struct _xe_command_list_append_launch_kernel_params_t
 {
     xe_command_list_handle_t* phCommandList;
-    xe_function_handle_t* phFunction;
+    xe_kernel_handle_t* phKernel;
     const xe_thread_group_dimensions_t** ppLaunchFuncArgs;
     xe_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     xe_event_handle_t** pphWaitEvents;
-} xe_command_list_append_launch_function_params_t;
+} xe_command_list_append_launch_kernel_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeCommandListAppendLaunchFunction 
+/// @brief Callback function-pointer for xeCommandListAppendLaunchKernel 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnCommandListAppendLaunchFunctionCb_t)(
-    xe_command_list_append_launch_function_params_t* params,
+typedef void (__xecall *xe_pfnCommandListAppendLaunchKernelCb_t)(
+    xe_command_list_append_launch_kernel_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeCommandListAppendLaunchCooperativeFunction 
+/// @brief Callback function parameters for xeCommandListAppendLaunchCooperativeKernel 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_command_list_append_launch_cooperative_function_params_t
+typedef struct _xe_command_list_append_launch_cooperative_kernel_params_t
 {
     xe_command_list_handle_t* phCommandList;
-    xe_function_handle_t* phFunction;
+    xe_kernel_handle_t* phKernel;
     const xe_thread_group_dimensions_t** ppLaunchFuncArgs;
     xe_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     xe_event_handle_t** pphWaitEvents;
-} xe_command_list_append_launch_cooperative_function_params_t;
+} xe_command_list_append_launch_cooperative_kernel_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeCommandListAppendLaunchCooperativeFunction 
+/// @brief Callback function-pointer for xeCommandListAppendLaunchCooperativeKernel 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnCommandListAppendLaunchCooperativeFunctionCb_t)(
-    xe_command_list_append_launch_cooperative_function_params_t* params,
+typedef void (__xecall *xe_pfnCommandListAppendLaunchCooperativeKernelCb_t)(
+    xe_command_list_append_launch_cooperative_kernel_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeCommandListAppendLaunchFunctionIndirect 
+/// @brief Callback function parameters for xeCommandListAppendLaunchKernelIndirect 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_command_list_append_launch_function_indirect_params_t
+typedef struct _xe_command_list_append_launch_kernel_indirect_params_t
 {
     xe_command_list_handle_t* phCommandList;
-    xe_function_handle_t* phFunction;
+    xe_kernel_handle_t* phKernel;
     const xe_thread_group_dimensions_t** ppLaunchArgumentsBuffer;
     xe_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     xe_event_handle_t** pphWaitEvents;
-} xe_command_list_append_launch_function_indirect_params_t;
+} xe_command_list_append_launch_kernel_indirect_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeCommandListAppendLaunchFunctionIndirect 
+/// @brief Callback function-pointer for xeCommandListAppendLaunchKernelIndirect 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirectCb_t)(
-    xe_command_list_append_launch_function_indirect_params_t* params,
+typedef void (__xecall *xe_pfnCommandListAppendLaunchKernelIndirectCb_t)(
+    xe_command_list_append_launch_kernel_indirect_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeCommandListAppendLaunchMultipleFunctionsIndirect 
+/// @brief Callback function parameters for xeCommandListAppendLaunchMultipleKernelsIndirect 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_command_list_append_launch_multiple_functions_indirect_params_t
+typedef struct _xe_command_list_append_launch_multiple_kernels_indirect_params_t
 {
     xe_command_list_handle_t* phCommandList;
-    uint32_t* pnumFunctions;
-    xe_function_handle_t** pphFunctions;
+    uint32_t* pnumKernels;
+    xe_kernel_handle_t** pphKernels;
     const uint32_t** ppCountBuffer;
     const xe_thread_group_dimensions_t** ppLaunchArgumentsBuffer;
     xe_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     xe_event_handle_t** pphWaitEvents;
-} xe_command_list_append_launch_multiple_functions_indirect_params_t;
+} xe_command_list_append_launch_multiple_kernels_indirect_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeCommandListAppendLaunchMultipleFunctionsIndirect 
+/// @brief Callback function-pointer for xeCommandListAppendLaunchMultipleKernelsIndirect 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnCommandListAppendLaunchMultipleFunctionsIndirectCb_t)(
-    xe_command_list_append_launch_multiple_functions_indirect_params_t* params,
+typedef void (__xecall *xe_pfnCommandListAppendLaunchMultipleKernelsIndirectCb_t)(
+    xe_command_list_append_launch_multiple_kernels_indirect_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1643,10 +1643,10 @@ typedef struct _xe_command_list_callbacks_t
     xe_pfnCommandListAppendSignalEventCb_t                          pfnAppendSignalEventCb;
     xe_pfnCommandListAppendWaitOnEventsCb_t                         pfnAppendWaitOnEventsCb;
     xe_pfnCommandListAppendEventResetCb_t                           pfnAppendEventResetCb;
-    xe_pfnCommandListAppendLaunchFunctionCb_t                       pfnAppendLaunchFunctionCb;
-    xe_pfnCommandListAppendLaunchCooperativeFunctionCb_t            pfnAppendLaunchCooperativeFunctionCb;
-    xe_pfnCommandListAppendLaunchFunctionIndirectCb_t               pfnAppendLaunchFunctionIndirectCb;
-    xe_pfnCommandListAppendLaunchMultipleFunctionsIndirectCb_t      pfnAppendLaunchMultipleFunctionsIndirectCb;
+    xe_pfnCommandListAppendLaunchKernelCb_t                         pfnAppendLaunchKernelCb;
+    xe_pfnCommandListAppendLaunchCooperativeKernelCb_t              pfnAppendLaunchCooperativeKernelCb;
+    xe_pfnCommandListAppendLaunchKernelIndirectCb_t                 pfnAppendLaunchKernelIndirectCb;
+    xe_pfnCommandListAppendLaunchMultipleKernelsIndirectCb_t        pfnAppendLaunchMultipleKernelsIndirectCb;
     xe_pfnCommandListAppendLaunchHostFunctionCb_t                   pfnAppendLaunchHostFunctionCb;
 } xe_command_list_callbacks_t;
 
@@ -2313,215 +2313,215 @@ typedef struct _xe_module_build_log_callbacks_t
 } xe_module_build_log_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeFunctionCreate 
+/// @brief Callback function parameters for xeKernelCreate 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_function_create_params_t
+typedef struct _xe_kernel_create_params_t
 {
     xe_module_handle_t* phModule;
-    const xe_function_desc_t** pdesc;
-    xe_function_handle_t** pphFunction;
-} xe_function_create_params_t;
+    const xe_kernel_desc_t** pdesc;
+    xe_kernel_handle_t** pphKernel;
+} xe_kernel_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeFunctionCreate 
+/// @brief Callback function-pointer for xeKernelCreate 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnFunctionCreateCb_t)(
-    xe_function_create_params_t* params,
+typedef void (__xecall *xe_pfnKernelCreateCb_t)(
+    xe_kernel_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeFunctionDestroy 
+/// @brief Callback function parameters for xeKernelDestroy 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_function_destroy_params_t
+typedef struct _xe_kernel_destroy_params_t
 {
-    xe_function_handle_t* phFunction;
-} xe_function_destroy_params_t;
+    xe_kernel_handle_t* phKernel;
+} xe_kernel_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeFunctionDestroy 
+/// @brief Callback function-pointer for xeKernelDestroy 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnFunctionDestroyCb_t)(
-    xe_function_destroy_params_t* params,
+typedef void (__xecall *xe_pfnKernelDestroyCb_t)(
+    xe_kernel_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeFunctionSetGroupSize 
+/// @brief Callback function parameters for xeKernelSetGroupSize 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_function_set_group_size_params_t
+typedef struct _xe_kernel_set_group_size_params_t
 {
-    xe_function_handle_t* phFunction;
+    xe_kernel_handle_t* phKernel;
     uint32_t* pgroupSizeX;
     uint32_t* pgroupSizeY;
     uint32_t* pgroupSizeZ;
-} xe_function_set_group_size_params_t;
+} xe_kernel_set_group_size_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeFunctionSetGroupSize 
+/// @brief Callback function-pointer for xeKernelSetGroupSize 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnFunctionSetGroupSizeCb_t)(
-    xe_function_set_group_size_params_t* params,
+typedef void (__xecall *xe_pfnKernelSetGroupSizeCb_t)(
+    xe_kernel_set_group_size_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeFunctionSuggestGroupSize 
+/// @brief Callback function parameters for xeKernelSuggestGroupSize 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_function_suggest_group_size_params_t
+typedef struct _xe_kernel_suggest_group_size_params_t
 {
-    xe_function_handle_t* phFunction;
+    xe_kernel_handle_t* phKernel;
     uint32_t* pglobalSizeX;
     uint32_t* pglobalSizeY;
     uint32_t* pglobalSizeZ;
     uint32_t** pgroupSizeX;
     uint32_t** pgroupSizeY;
     uint32_t** pgroupSizeZ;
-} xe_function_suggest_group_size_params_t;
+} xe_kernel_suggest_group_size_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeFunctionSuggestGroupSize 
+/// @brief Callback function-pointer for xeKernelSuggestGroupSize 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnFunctionSuggestGroupSizeCb_t)(
-    xe_function_suggest_group_size_params_t* params,
+typedef void (__xecall *xe_pfnKernelSuggestGroupSizeCb_t)(
+    xe_kernel_suggest_group_size_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeFunctionSuggestMaxCooperativeGroupCount 
+/// @brief Callback function parameters for xeKernelSuggestMaxCooperativeGroupCount 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_function_suggest_max_cooperative_group_count_params_t
+typedef struct _xe_kernel_suggest_max_cooperative_group_count_params_t
 {
-    xe_function_handle_t* phFunction;
+    xe_kernel_handle_t* phKernel;
     uint32_t** pgroupCountX;
     uint32_t** pgroupCountY;
     uint32_t** pgroupCountZ;
-} xe_function_suggest_max_cooperative_group_count_params_t;
+} xe_kernel_suggest_max_cooperative_group_count_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeFunctionSuggestMaxCooperativeGroupCount 
+/// @brief Callback function-pointer for xeKernelSuggestMaxCooperativeGroupCount 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnFunctionSuggestMaxCooperativeGroupCountCb_t)(
-    xe_function_suggest_max_cooperative_group_count_params_t* params,
+typedef void (__xecall *xe_pfnKernelSuggestMaxCooperativeGroupCountCb_t)(
+    xe_kernel_suggest_max_cooperative_group_count_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeFunctionSetArgumentValue 
+/// @brief Callback function parameters for xeKernelSetArgumentValue 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_function_set_argument_value_params_t
+typedef struct _xe_kernel_set_argument_value_params_t
 {
-    xe_function_handle_t* phFunction;
+    xe_kernel_handle_t* phKernel;
     uint32_t* pargIndex;
     size_t* pargSize;
     const void** ppArgValue;
-} xe_function_set_argument_value_params_t;
+} xe_kernel_set_argument_value_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeFunctionSetArgumentValue 
+/// @brief Callback function-pointer for xeKernelSetArgumentValue 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnFunctionSetArgumentValueCb_t)(
-    xe_function_set_argument_value_params_t* params,
+typedef void (__xecall *xe_pfnKernelSetArgumentValueCb_t)(
+    xe_kernel_set_argument_value_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeFunctionSetAttribute 
+/// @brief Callback function parameters for xeKernelSetAttribute 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_function_set_attribute_params_t
+typedef struct _xe_kernel_set_attribute_params_t
 {
-    xe_function_handle_t* phFunction;
-    xe_function_set_attribute_t* pattr;
+    xe_kernel_handle_t* phKernel;
+    xe_kernel_set_attribute_t* pattr;
     uint32_t* pvalue;
-} xe_function_set_attribute_params_t;
+} xe_kernel_set_attribute_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeFunctionSetAttribute 
+/// @brief Callback function-pointer for xeKernelSetAttribute 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnFunctionSetAttributeCb_t)(
-    xe_function_set_attribute_params_t* params,
+typedef void (__xecall *xe_pfnKernelSetAttributeCb_t)(
+    xe_kernel_set_attribute_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeFunctionGetAttribute 
+/// @brief Callback function parameters for xeKernelGetAttribute 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_function_get_attribute_params_t
+typedef struct _xe_kernel_get_attribute_params_t
 {
-    xe_function_handle_t* phFunction;
-    xe_function_get_attribute_t* pattr;
+    xe_kernel_handle_t* phKernel;
+    xe_kernel_get_attribute_t* pattr;
     uint32_t** ppValue;
-} xe_function_get_attribute_params_t;
+} xe_kernel_get_attribute_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeFunctionGetAttribute 
+/// @brief Callback function-pointer for xeKernelGetAttribute 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnFunctionGetAttributeCb_t)(
-    xe_function_get_attribute_params_t* params,
+typedef void (__xecall *xe_pfnKernelGetAttributeCb_t)(
+    xe_kernel_get_attribute_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Function callback functions pointers
-typedef struct _xe_function_callbacks_t
+/// @brief Table of Kernel callback functions pointers
+typedef struct _xe_kernel_callbacks_t
 {
-    xe_pfnFunctionCreateCb_t                                        pfnCreateCb;
-    xe_pfnFunctionDestroyCb_t                                       pfnDestroyCb;
-    xe_pfnFunctionSetGroupSizeCb_t                                  pfnSetGroupSizeCb;
-    xe_pfnFunctionSuggestGroupSizeCb_t                              pfnSuggestGroupSizeCb;
-    xe_pfnFunctionSuggestMaxCooperativeGroupCountCb_t               pfnSuggestMaxCooperativeGroupCountCb;
-    xe_pfnFunctionSetArgumentValueCb_t                              pfnSetArgumentValueCb;
-    xe_pfnFunctionSetAttributeCb_t                                  pfnSetAttributeCb;
-    xe_pfnFunctionGetAttributeCb_t                                  pfnGetAttributeCb;
-} xe_function_callbacks_t;
+    xe_pfnKernelCreateCb_t                                          pfnCreateCb;
+    xe_pfnKernelDestroyCb_t                                         pfnDestroyCb;
+    xe_pfnKernelSetGroupSizeCb_t                                    pfnSetGroupSizeCb;
+    xe_pfnKernelSuggestGroupSizeCb_t                                pfnSuggestGroupSizeCb;
+    xe_pfnKernelSuggestMaxCooperativeGroupCountCb_t                 pfnSuggestMaxCooperativeGroupCountCb;
+    xe_pfnKernelSetArgumentValueCb_t                                pfnSetArgumentValueCb;
+    xe_pfnKernelSetAttributeCb_t                                    pfnSetAttributeCb;
+    xe_pfnKernelGetAttributeCb_t                                    pfnGetAttributeCb;
+} xe_kernel_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeSamplerCreate 
@@ -2592,7 +2592,7 @@ typedef struct _xe_callbacks_t
     xe_image_callbacks_t                Image;
     xe_module_callbacks_t               Module;
     xe_module_build_log_callbacks_t     ModuleBuildLog;
-    xe_function_callbacks_t             Function;
+    xe_kernel_callbacks_t               Kernel;
     xe_sampler_callbacks_t              Sampler;
 } xe_callbacks_t;
 

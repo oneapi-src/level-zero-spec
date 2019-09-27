@@ -175,11 +175,11 @@ namespace xe
         /// @throws result_t
         void* __xecall
         GetGlobalPointer(
-            const char* pGlobalName                         ///< [in] name of function in global
+            const char* pGlobalName                         ///< [in] name of global variable in module
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieve function pointer from Module by name
+        /// @brief Retrieve a function pointer from a module by name
         /// 
         /// @details
         ///     - The function pointer is unique for the device on which the module was
@@ -264,12 +264,12 @@ namespace xe
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for function
-    class Function
+    /// @brief C++ wrapper for kernel
+    class Kernel
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::xe_function_desc_t
+        /// @brief API version of ::xe_kernel_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -277,7 +277,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Supported function creation flags
+        /// @brief Supported kernel creation flags
         enum class flag_t
         {
             NONE = 0,                                       ///< default driver behavior
@@ -286,72 +286,72 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Function attributes
+        /// @brief Kernel attributes
         /// 
         /// @remarks
         ///   _Analogues_
         ///     - **cl_kernel_exec_info**
         enum class set_attribute_t
         {
-            FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS = 0,     ///< Indicates that the function accesses host allocations indirectly
+            KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS = 0,       ///< Indicates that the function accesses host allocations indirectly
                                                             ///< (default: false)
-            FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS,       ///< Indicates that the function accesses device allocations indirectly
+            KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS,         ///< Indicates that the function accesses device allocations indirectly
                                                             ///< (default: false)
-            FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS,       ///< Indicates that the function accesses shared allocations indirectly
+            KERNEL_SET_ATTR_INDIRECT_SHARED_ACCESS,         ///< Indicates that the function accesses shared allocations indirectly
                                                             ///< (default: false)
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Function attributes
+        /// @brief Kernel attributes
         /// 
         /// @remarks
         ///   _Analogues_
         ///     - **CUfunction_attribute**
         enum class get_attribute_t
         {
-            FUNCTION_GET_ATTR_MAX_REGS_USED = 0,            ///< Maximum device registers used for this function
-            FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS,        ///< Maximum dimensions for group for this function
-            FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE,          ///< Maximum shared memory required for this function
-            FUNCTION_GET_ATTR_HAS_SPILL_FILL,               ///< Function required spill/fills.
-            FUNCTION_GET_ATTR_HAS_BARRIERS,                 ///< Function contains barriers.
-            FUNCTION_GET_ATTR_HAS_DPAS,                     ///< Function contains DPAs.
+            KERNEL_GET_ATTR_MAX_REGS_USED = 0,              ///< Maximum device registers used for this kernel
+            KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS,          ///< Maximum dimensions for group for this kernel
+            KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE,            ///< Maximum shared memory required for this kernel
+            KERNEL_GET_ATTR_HAS_SPILL_FILL,                 ///< Kernel required spill/fills
+            KERNEL_GET_ATTR_HAS_BARRIERS,                   ///< Kernel contains barriers
+            KERNEL_GET_ATTR_HAS_DPAS,                       ///< Kernel contains DPAS
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Function descriptor
+        /// @brief Kernel descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_FUNCTION_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_KERNEL_DESC_VERSION_CURRENT
             flag_t flags = flag_t::NONE;                    ///< [in] creation flags
-            const char* pFunctionName = nullptr;            ///< [in] null-terminated name of function in Module
+            const char* pKernelName = nullptr;              ///< [in] null-terminated name of kernel in module
 
         };
 
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        function_handle_t m_handle;                     ///< [in] handle of function object
+        kernel_handle_t m_handle;                       ///< [in] handle of kernel object
         Module* m_pModule;                              ///< [in] pointer to owner object
-        desc_t m_desc;                                  ///< [in] descriptor of the function object
+        desc_t m_desc;                                  ///< [in] descriptor of the kernel object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        Function( void ) = delete;
-        Function( 
-            function_handle_t handle,                       ///< [in] handle of function object
+        Kernel( void ) = delete;
+        Kernel( 
+            kernel_handle_t handle,                         ///< [in] handle of kernel object
             Module* pModule,                                ///< [in] pointer to owner object
-            const desc_t* desc                              ///< [in] descriptor of the function object
+            const desc_t* desc                              ///< [in] descriptor of the kernel object
             );
 
-        ~Function( void ) = default;
+        ~Kernel( void ) = default;
 
-        Function( Function const& other ) = delete;
-        void operator=( Function const& other ) = delete;
+        Kernel( Kernel const& other ) = delete;
+        void operator=( Kernel const& other ) = delete;
 
-        Function( Function&& other ) = delete;
-        void operator=( Function&& other ) = delete;
+        Kernel( Kernel&& other ) = delete;
+        void operator=( Kernel&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
@@ -359,7 +359,7 @@ namespace xe
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Create Function object from Module by name
+        /// @brief Create a kernel object from a module by name
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -369,35 +369,35 @@ namespace xe
         ///   _Analogues_
         ///     - **cuModuleGetFunction**
         /// @returns
-        ///     - Function*: handle of the Function object
+        ///     - Kernel*: handle of the Function object
         /// 
         /// @throws result_t
-        static Function* __xecall
+        static Kernel* __xecall
         Create(
             Module* pModule,                                ///< [in] pointer to the module
-            const desc_t* desc                              ///< [in] pointer to function descriptor
+            const desc_t* desc                              ///< [in] pointer to kernel descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Destroys Function object
+        /// @brief Destroys a kernel object
         /// 
         /// @details
-        ///     - All functions must be destroyed before the module is destroyed.
+        ///     - All kernels must be destroyed before the module is destroyed.
         ///     - The application is responsible for making sure the device is not
-        ///       currently referencing the function before it is deleted
+        ///       currently referencing the kernel before it is deleted
         ///     - The implementation of this function will immediately free all Host and
-        ///       Device allocations associated with this function
+        ///       Device allocations associated with this kernel
         ///     - The application may **not** call this function from simultaneous
-        ///       threads with the same function handle.
+        ///       threads with the same kernel handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         static void __xecall
         Destroy(
-            Function* pFunction                             ///< [in][release] pointer to the function object
+            Kernel* pKernel                                 ///< [in][release] pointer to the kernel object
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set group size for Function.
+        /// @brief Set group size for a kernel
         /// 
         /// @details
         ///     - The application may **not** call this function from simultaneous
@@ -408,36 +408,35 @@ namespace xe
         /// @throws result_t
         void __xecall
         SetGroupSize(
-            uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
-            uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
-            uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+            uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
+            uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this kernel
+            uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this kernel
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Query a suggested group size for function given a global size for each
+        /// @brief Query a suggested group size for a kernel given a global size for each
         ///        dimension.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         ///     - This function ignores the group size that is set using
-        ///       ::xeFunctionSetGroupSize.
+        ///       ::xeKernelSetGroupSize.
         /// @returns
-        ///     - uint32_t: recommended size of group for X dimension.
-        ///     - uint32_t: recommended size of group for Y dimension.
-        ///     - uint32_t: recommended size of group for Z dimension.
+        ///     - uint32_t: recommended size of group for X dimension
+        ///     - uint32_t: recommended size of group for Y dimension
+        ///     - uint32_t: recommended size of group for Z dimension
         /// 
         /// @throws result_t
         std::tuple<uint32_t, uint32_t, uint32_t> __xecall
         SuggestGroupSize(
-            uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-            uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-            uint32_t globalSizeZ                            ///< [in] global width for Z dimension.
+            uint32_t globalSizeX,                           ///< [in] global width for X dimension
+            uint32_t globalSizeY,                           ///< [in] global width for Y dimension
+            uint32_t globalSizeZ                            ///< [in] global width for Z dimension
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Query a suggested max group count for device for cooperative functions
-        ///        that device supports.
+        /// @brief Query a suggested max group count a cooperative kernel.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -454,7 +453,7 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set function argument used on function launch.
+        /// @brief Set kernel argument used on kernel launch.
         /// 
         /// @details
         ///     - This function may **not** be called from simultaneous threads with the
@@ -472,7 +471,7 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Sets a function attribute
+        /// @brief Sets a kernel attribute
         /// 
         /// @details
         ///     - This function may **not** be called from simultaneous threads with the
@@ -490,7 +489,7 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Query a function attribute.
+        /// @brief Query a kernel attribute.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -527,24 +526,24 @@ namespace xe
     std::string to_string( const Module::desc_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::desc_version_t to std::string
-    std::string to_string( const Function::desc_version_t val );
+    /// @brief Converts Kernel::desc_version_t to std::string
+    std::string to_string( const Kernel::desc_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::flag_t to std::string
-    std::string to_string( const Function::flag_t val );
+    /// @brief Converts Kernel::flag_t to std::string
+    std::string to_string( const Kernel::flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::desc_t to std::string
-    std::string to_string( const Function::desc_t val );
+    /// @brief Converts Kernel::desc_t to std::string
+    std::string to_string( const Kernel::desc_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::set_attribute_t to std::string
-    std::string to_string( const Function::set_attribute_t val );
+    /// @brief Converts Kernel::set_attribute_t to std::string
+    std::string to_string( const Kernel::set_attribute_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::get_attribute_t to std::string
-    std::string to_string( const Function::get_attribute_t val );
+    /// @brief Converts Kernel::get_attribute_t to std::string
+    std::string to_string( const Kernel::get_attribute_t val );
 
 } // namespace xe
 #endif // defined(__cplusplus)

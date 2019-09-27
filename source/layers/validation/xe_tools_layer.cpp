@@ -609,9 +609,9 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleGetFunctionNames
+    /// @brief Intercept function for xetModuleGetKernelNames
     xe_result_t __xecall
-    xetModuleGetFunctionNames(
+    xetModuleGetKernelNames(
         xet_module_handle_t hModule,                    ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -622,9 +622,9 @@ namespace layer
         const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
         )
     {
-        auto pfnGetFunctionNames = context.xetDdiTable.Module.pfnGetFunctionNames;
+        auto pfnGetKernelNames = context.xetDdiTable.Module.pfnGetKernelNames;
 
-        if( nullptr == pfnGetFunctionNames )
+        if( nullptr == pfnGetKernelNames )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -637,25 +637,25 @@ namespace layer
 
         }
 
-        return pfnGetFunctionNames( hModule, pCount, pNames );
+        return pfnGetKernelNames( hModule, pCount, pNames );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetFunctionGetProfileInfo
+    /// @brief Intercept function for xetKernelGetProfileInfo
     xe_result_t __xecall
-    xetFunctionGetProfileInfo(
-        xet_function_handle_t hFunction,                ///< [in] handle to function
+    xetKernelGetProfileInfo(
+        xet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
         xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
         )
     {
-        auto pfnGetProfileInfo = context.xetDdiTable.Function.pfnGetProfileInfo;
+        auto pfnGetProfileInfo = context.xetDdiTable.Kernel.pfnGetProfileInfo;
 
         if( nullptr == pfnGetProfileInfo )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pInfo )
@@ -663,7 +663,7 @@ namespace layer
 
         }
 
-        return pfnGetProfileInfo( hFunction, pInfo );
+        return pfnGetProfileInfo( hKernel, pInfo );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3372,14 +3372,14 @@ xetGetModuleProcAddrTable(
     dditable.pfnGetDebugInfo                             = pDdiTable->pfnGetDebugInfo;
     pDdiTable->pfnGetDebugInfo                           = layer::xetModuleGetDebugInfo;
 
-    dditable.pfnGetFunctionNames                         = pDdiTable->pfnGetFunctionNames;
-    pDdiTable->pfnGetFunctionNames                       = layer::xetModuleGetFunctionNames;
+    dditable.pfnGetKernelNames                           = pDdiTable->pfnGetKernelNames;
+    pDdiTable->pfnGetKernelNames                         = layer::xetModuleGetKernelNames;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Function table
+/// @brief Exported function for filling application's Kernel table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3390,12 +3390,12 @@ xetGetModuleProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xetGetFunctionProcAddrTable(
+xetGetKernelProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_function_dditable_t* pDdiTable              ///< [in,out] pointer to table of DDI function pointers
+    xet_kernel_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.xetDdiTable.Function;
+    auto& dditable = layer::context.xetDdiTable.Kernel;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3406,7 +3406,7 @@ xetGetFunctionProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     dditable.pfnGetProfileInfo                           = pDdiTable->pfnGetProfileInfo;
-    pDdiTable->pfnGetProfileInfo                         = layer::xetFunctionGetProfileInfo;
+    pDdiTable->pfnGetProfileInfo                         = layer::xetKernelGetProfileInfo;
 
     return result;
 }

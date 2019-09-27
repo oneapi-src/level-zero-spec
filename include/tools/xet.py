@@ -39,7 +39,7 @@ class xet_module_handle_t(c_void_p):
 
 ###############################################################################
 ## @brief Handle of function object
-class xet_function_handle_t(c_void_p):
+class xet_kernel_handle_t(c_void_p):
     pass
 
 ###############################################################################
@@ -1516,11 +1516,11 @@ else:
     _xetModuleGetDebugInfo_t = CFUNCTYPE( xe_result_t, xet_module_handle_t, xet_module_debug_info_format_t, POINTER(c_size_t), POINTER(c_ubyte) )
 
 ###############################################################################
-## @brief Function-pointer for xetModuleGetFunctionNames
+## @brief Function-pointer for xetModuleGetKernelNames
 if __use_win_types:
-    _xetModuleGetFunctionNames_t = WINFUNCTYPE( xe_result_t, xet_module_handle_t, POINTER(c_ulong), POINTER(c_char*) )
+    _xetModuleGetKernelNames_t = WINFUNCTYPE( xe_result_t, xet_module_handle_t, POINTER(c_ulong), POINTER(c_char*) )
 else:
-    _xetModuleGetFunctionNames_t = CFUNCTYPE( xe_result_t, xet_module_handle_t, POINTER(c_ulong), POINTER(c_char*) )
+    _xetModuleGetKernelNames_t = CFUNCTYPE( xe_result_t, xet_module_handle_t, POINTER(c_ulong), POINTER(c_char*) )
 
 
 ###############################################################################
@@ -1528,22 +1528,22 @@ else:
 class _xet_module_dditable_t(Structure):
     _fields_ = [
         ("pfnGetDebugInfo", c_void_p),                                  ## _xetModuleGetDebugInfo_t
-        ("pfnGetFunctionNames", c_void_p)                               ## _xetModuleGetFunctionNames_t
+        ("pfnGetKernelNames", c_void_p)                                 ## _xetModuleGetKernelNames_t
     ]
 
 ###############################################################################
-## @brief Function-pointer for xetFunctionGetProfileInfo
+## @brief Function-pointer for xetKernelGetProfileInfo
 if __use_win_types:
-    _xetFunctionGetProfileInfo_t = WINFUNCTYPE( xe_result_t, xet_function_handle_t, POINTER(xet_profile_info_t) )
+    _xetKernelGetProfileInfo_t = WINFUNCTYPE( xe_result_t, xet_kernel_handle_t, POINTER(xet_profile_info_t) )
 else:
-    _xetFunctionGetProfileInfo_t = CFUNCTYPE( xe_result_t, xet_function_handle_t, POINTER(xet_profile_info_t) )
+    _xetKernelGetProfileInfo_t = CFUNCTYPE( xe_result_t, xet_kernel_handle_t, POINTER(xet_profile_info_t) )
 
 
 ###############################################################################
-## @brief Table of Function functions pointers
-class _xet_function_dditable_t(Structure):
+## @brief Table of Kernel functions pointers
+class _xet_kernel_dditable_t(Structure):
     _fields_ = [
-        ("pfnGetProfileInfo", c_void_p)                                 ## _xetFunctionGetProfileInfo_t
+        ("pfnGetProfileInfo", c_void_p)                                 ## _xetKernelGetProfileInfo_t
     ]
 
 ###############################################################################
@@ -2556,7 +2556,7 @@ class _xet_dditable_t(Structure):
         ("Device", _xet_device_dditable_t),
         ("CommandList", _xet_command_list_dditable_t),
         ("Module", _xet_module_dditable_t),
-        ("Function", _xet_function_dditable_t),
+        ("Kernel", _xet_kernel_dditable_t),
         ("MetricGroup", _xet_metric_group_dditable_t),
         ("Metric", _xet_metric_dditable_t),
         ("MetricTracer", _xet_metric_tracer_dditable_t),
@@ -2635,17 +2635,17 @@ class XET_DDI:
 
         # attach function interface to function address
         self.xetModuleGetDebugInfo = _xetModuleGetDebugInfo_t(self.__dditable.Module.pfnGetDebugInfo)
-        self.xetModuleGetFunctionNames = _xetModuleGetFunctionNames_t(self.__dditable.Module.pfnGetFunctionNames)
+        self.xetModuleGetKernelNames = _xetModuleGetKernelNames_t(self.__dditable.Module.pfnGetKernelNames)
 
         # call driver to get function pointers
-        _Function = _xet_function_dditable_t()
-        r = xe_result_v(self.__dll.xetGetFunctionProcAddrTable(version, byref(_Function)))
+        _Kernel = _xet_kernel_dditable_t()
+        r = xe_result_v(self.__dll.xetGetKernelProcAddrTable(version, byref(_Kernel)))
         if r != xe_result_v.SUCCESS:
             raise Exception(r)
-        self.__dditable.Function = _Function
+        self.__dditable.Kernel = _Kernel
 
         # attach function interface to function address
-        self.xetFunctionGetProfileInfo = _xetFunctionGetProfileInfo_t(self.__dditable.Function.pfnGetProfileInfo)
+        self.xetKernelGetProfileInfo = _xetKernelGetProfileInfo_t(self.__dditable.Kernel.pfnGetProfileInfo)
 
         # call driver to get function pointers
         _MetricGroup = _xet_metric_group_dditable_t()

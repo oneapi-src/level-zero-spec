@@ -2031,7 +2031,7 @@ namespace driver
     xe_result_t __xecall
     xeModuleGetGlobalPointer(
         xe_module_handle_t hModule,                     ///< [in] handle of the device
-        const char* pGlobalName,                        ///< [in] name of function in global
+        const char* pGlobalName,                        ///< [in] name of global variable in module
         void** pptr                                     ///< [out] device visible pointer
         )
     {
@@ -2052,26 +2052,26 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionCreate
+    /// @brief Intercept function for xeKernelCreate
     xe_result_t __xecall
-    xeFunctionCreate(
+    xeKernelCreate(
         xe_module_handle_t hModule,                     ///< [in] handle of the module
-        const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
-        xe_function_handle_t* phFunction                ///< [out] handle of the Function object
+        const xe_kernel_desc_t* desc,                   ///< [in] pointer to kernel descriptor
+        xe_kernel_handle_t* phKernel                    ///< [out] handle of the Function object
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnCreate = context.xeDdiTable.Function.pfnCreate;
+        auto pfnCreate = context.xeDdiTable.Kernel.pfnCreate;
         if( nullptr != pfnCreate )
         {
-            result = pfnCreate( hModule, desc, phFunction );
+            result = pfnCreate( hModule, desc, phKernel );
         }
         else
         {
             // generic implementation
-            *phFunction = reinterpret_cast<xe_function_handle_t>( context.get() );
+            *phKernel = reinterpret_cast<xe_kernel_handle_t>( context.get() );
 
         }
 
@@ -2079,19 +2079,19 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionDestroy
+    /// @brief Intercept function for xeKernelDestroy
     xe_result_t __xecall
-    xeFunctionDestroy(
-        xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
+    xeKernelDestroy(
+        xe_kernel_handle_t hKernel                      ///< [in][release] handle of the kernel object
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDestroy = context.xeDdiTable.Function.pfnDestroy;
+        auto pfnDestroy = context.xeDdiTable.Kernel.pfnDestroy;
         if( nullptr != pfnDestroy )
         {
-            result = pfnDestroy( hFunction );
+            result = pfnDestroy( hKernel );
         }
         else
         {
@@ -2128,22 +2128,22 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetGroupSize
+    /// @brief Intercept function for xeKernelSetGroupSize
     xe_result_t __xecall
-    xeFunctionSetGroupSize(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
-        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
-        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+    xeKernelSetGroupSize(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
+        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this kernel
+        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this kernel
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetGroupSize = context.xeDdiTable.Function.pfnSetGroupSize;
+        auto pfnSetGroupSize = context.xeDdiTable.Kernel.pfnSetGroupSize;
         if( nullptr != pfnSetGroupSize )
         {
-            result = pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+            result = pfnSetGroupSize( hKernel, groupSizeX, groupSizeY, groupSizeZ );
         }
         else
         {
@@ -2154,25 +2154,25 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSuggestGroupSize
+    /// @brief Intercept function for xeKernelSuggestGroupSize
     xe_result_t __xecall
-    xeFunctionSuggestGroupSize(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-        uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-        uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-        uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-        uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-        uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+    xeKernelSuggestGroupSize(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        uint32_t globalSizeX,                           ///< [in] global width for X dimension
+        uint32_t globalSizeY,                           ///< [in] global width for Y dimension
+        uint32_t globalSizeZ,                           ///< [in] global width for Z dimension
+        uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension
+        uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension
+        uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSuggestGroupSize = context.xeDdiTable.Function.pfnSuggestGroupSize;
+        auto pfnSuggestGroupSize = context.xeDdiTable.Kernel.pfnSuggestGroupSize;
         if( nullptr != pfnSuggestGroupSize )
         {
-            result = pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+            result = pfnSuggestGroupSize( hKernel, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
         }
         else
         {
@@ -2183,10 +2183,10 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSuggestMaxCooperativeGroupCount
+    /// @brief Intercept function for xeKernelSuggestMaxCooperativeGroupCount
     xe_result_t __xecall
-    xeFunctionSuggestMaxCooperativeGroupCount(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xeKernelSuggestMaxCooperativeGroupCount(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
         uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
         uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
@@ -2195,10 +2195,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSuggestMaxCooperativeGroupCount = context.xeDdiTable.Function.pfnSuggestMaxCooperativeGroupCount;
+        auto pfnSuggestMaxCooperativeGroupCount = context.xeDdiTable.Kernel.pfnSuggestMaxCooperativeGroupCount;
         if( nullptr != pfnSuggestMaxCooperativeGroupCount )
         {
-            result = pfnSuggestMaxCooperativeGroupCount( hFunction, groupCountX, groupCountY, groupCountZ );
+            result = pfnSuggestMaxCooperativeGroupCount( hKernel, groupCountX, groupCountY, groupCountZ );
         }
         else
         {
@@ -2209,10 +2209,10 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetArgumentValue
+    /// @brief Intercept function for xeKernelSetArgumentValue
     xe_result_t __xecall
-    xeFunctionSetArgumentValue(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function args object.
+    xeKernelSetArgumentValue(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
         const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
@@ -2222,10 +2222,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetArgumentValue = context.xeDdiTable.Function.pfnSetArgumentValue;
+        auto pfnSetArgumentValue = context.xeDdiTable.Kernel.pfnSetArgumentValue;
         if( nullptr != pfnSetArgumentValue )
         {
-            result = pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+            result = pfnSetArgumentValue( hKernel, argIndex, argSize, pArgValue );
         }
         else
         {
@@ -2236,21 +2236,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetAttribute
+    /// @brief Intercept function for xeKernelSetAttribute
     xe_result_t __xecall
-    xeFunctionSetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function.
-        xe_function_set_attribute_t attr,               ///< [in] attribute to set
+    xeKernelSetAttribute(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        xe_kernel_set_attribute_t attr,                 ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetAttribute = context.xeDdiTable.Function.pfnSetAttribute;
+        auto pfnSetAttribute = context.xeDdiTable.Kernel.pfnSetAttribute;
         if( nullptr != pfnSetAttribute )
         {
-            result = pfnSetAttribute( hFunction, attr, value );
+            result = pfnSetAttribute( hKernel, attr, value );
         }
         else
         {
@@ -2261,21 +2261,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionGetAttribute
+    /// @brief Intercept function for xeKernelGetAttribute
     xe_result_t __xecall
-    xeFunctionGetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        xe_function_get_attribute_t attr,               ///< [in] attribute to query
+    xeKernelGetAttribute(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        xe_kernel_get_attribute_t attr,                 ///< [in] attribute to query
         uint32_t* pValue                                ///< [out] returned attribute value
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetAttribute = context.xeDdiTable.Function.pfnGetAttribute;
+        auto pfnGetAttribute = context.xeDdiTable.Kernel.pfnGetAttribute;
         if( nullptr != pfnGetAttribute )
         {
-            result = pfnGetAttribute( hFunction, attr, pValue );
+            result = pfnGetAttribute( hKernel, attr, pValue );
         }
         else
         {
@@ -2286,12 +2286,12 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchFunction
+    /// @brief Intercept function for xeCommandListAppendLaunchKernel
     xe_result_t __xecall
-    xeCommandListAppendLaunchFunction(
+    xeCommandListAppendLaunchKernel(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2301,10 +2301,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnAppendLaunchFunction = context.xeDdiTable.CommandList.pfnAppendLaunchFunction;
-        if( nullptr != pfnAppendLaunchFunction )
+        auto pfnAppendLaunchKernel = context.xeDdiTable.CommandList.pfnAppendLaunchKernel;
+        if( nullptr != pfnAppendLaunchKernel )
         {
-            result = pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+            result = pfnAppendLaunchKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
         }
         else
         {
@@ -2315,12 +2315,12 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeFunction
+    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeKernel
     xe_result_t __xecall
-    xeCommandListAppendLaunchCooperativeFunction(
+    xeCommandListAppendLaunchCooperativeKernel(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2330,10 +2330,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnAppendLaunchCooperativeFunction = context.xeDdiTable.CommandList.pfnAppendLaunchCooperativeFunction;
-        if( nullptr != pfnAppendLaunchCooperativeFunction )
+        auto pfnAppendLaunchCooperativeKernel = context.xeDdiTable.CommandList.pfnAppendLaunchCooperativeKernel;
+        if( nullptr != pfnAppendLaunchCooperativeKernel )
         {
-            result = pfnAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+            result = pfnAppendLaunchCooperativeKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
         }
         else
         {
@@ -2344,12 +2344,13 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
+    /// @brief Intercept function for xeCommandListAppendLaunchKernelIndirect
     xe_result_t __xecall
-    xeCommandListAppendLaunchFunctionIndirect(
+    xeCommandListAppendLaunchKernelIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+                                                        ///< arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2359,10 +2360,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnAppendLaunchFunctionIndirect = context.xeDdiTable.CommandList.pfnAppendLaunchFunctionIndirect;
-        if( nullptr != pfnAppendLaunchFunctionIndirect )
+        auto pfnAppendLaunchKernelIndirect = context.xeDdiTable.CommandList.pfnAppendLaunchKernelIndirect;
+        if( nullptr != pfnAppendLaunchKernelIndirect )
         {
-            result = pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+            result = pfnAppendLaunchKernelIndirect( hCommandList, hKernel, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
         }
         else
         {
@@ -2373,17 +2374,17 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchMultipleFunctionsIndirect
+    /// @brief Intercept function for xeCommandListAppendLaunchMultipleKernelsIndirect
     xe_result_t __xecall
-    xeCommandListAppendLaunchMultipleFunctionsIndirect(
+    xeCommandListAppendLaunchMultipleKernelsIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-        xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
+        uint32_t numKernels,                            ///< [in] maximum number of kernels to launch
+        xe_kernel_handle_t* phKernels,                  ///< [in][range(0, numKernels)] handles of the kernel objects
         const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of functions to launch; value must be less-than or equal-to
-                                                        ///< numFunctions
-        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will
-                                                        ///< contain a contiguous array of launch arguments
+                                                        ///< number of kernels to launch; value must be less-than or equal-to
+                                                        ///< numKernels
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+                                                        ///< a contiguous array of thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2393,10 +2394,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnAppendLaunchMultipleFunctionsIndirect = context.xeDdiTable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
-        if( nullptr != pfnAppendLaunchMultipleFunctionsIndirect )
+        auto pfnAppendLaunchMultipleKernelsIndirect = context.xeDdiTable.CommandList.pfnAppendLaunchMultipleKernelsIndirect;
+        if( nullptr != pfnAppendLaunchMultipleKernelsIndirect )
         {
-            result = pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+            result = pfnAppendLaunchMultipleKernelsIndirect( hCommandList, numKernels, phKernels, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
         }
         else
         {
@@ -6929,7 +6930,7 @@ namespace instrumented
     xe_result_t __xecall
     xeModuleGetGlobalPointer(
         xe_module_handle_t hModule,                     ///< [in] handle of the device
-        const char* pGlobalName,                        ///< [in] name of function in global
+        const char* pGlobalName,                        ///< [in] name of global variable in module
         void** pptr                                     ///< [out] device visible pointer
         )
     {
@@ -6981,21 +6982,21 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionCreate
+    /// @brief Intercept function for xeKernelCreate
     xe_result_t __xecall
-    xeFunctionCreate(
+    xeKernelCreate(
         xe_module_handle_t hModule,                     ///< [in] handle of the module
-        const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
-        xe_function_handle_t* phFunction                ///< [out] handle of the Function object
+        const xe_kernel_desc_t* desc,                   ///< [in] pointer to kernel descriptor
+        xe_kernel_handle_t* phKernel                    ///< [out] handle of the Function object
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_function_create_params_t in_params = {
+        xe_kernel_create_params_t in_params = {
             &hModule,
             &desc,
-            &phFunction
+            &phKernel
         };
 
         // create storage locations for callbacks
@@ -7006,27 +7007,27 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Function;
+                auto& table = context.tracerData[ i ].xePrologueCbs.Kernel;
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeFunctionCreate( hModule, desc, phFunction );
+        result = driver::xeKernelCreate( hModule, desc, phKernel );
 
         // capture parameters
-        xe_function_create_params_t out_params = {
+        xe_kernel_create_params_t out_params = {
             &hModule,
             &desc,
-            &phFunction
+            &phKernel
         };
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Function;
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Kernel;
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
@@ -7037,17 +7038,17 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionDestroy
+    /// @brief Intercept function for xeKernelDestroy
     xe_result_t __xecall
-    xeFunctionDestroy(
-        xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
+    xeKernelDestroy(
+        xe_kernel_handle_t hKernel                      ///< [in][release] handle of the kernel object
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_function_destroy_params_t in_params = {
-            &hFunction
+        xe_kernel_destroy_params_t in_params = {
+            &hKernel
         };
 
         // create storage locations for callbacks
@@ -7058,25 +7059,25 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Function;
+                auto& table = context.tracerData[ i ].xePrologueCbs.Kernel;
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeFunctionDestroy( hFunction );
+        result = driver::xeKernelDestroy( hKernel );
 
         // capture parameters
-        xe_function_destroy_params_t out_params = {
-            &hFunction
+        xe_kernel_destroy_params_t out_params = {
+            &hKernel
         };
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Function;
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Kernel;
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
@@ -7143,20 +7144,20 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetGroupSize
+    /// @brief Intercept function for xeKernelSetGroupSize
     xe_result_t __xecall
-    xeFunctionSetGroupSize(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
-        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
-        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+    xeKernelSetGroupSize(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
+        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this kernel
+        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this kernel
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_function_set_group_size_params_t in_params = {
-            &hFunction,
+        xe_kernel_set_group_size_params_t in_params = {
+            &hKernel,
             &groupSizeX,
             &groupSizeY,
             &groupSizeZ
@@ -7170,18 +7171,18 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Function;
+                auto& table = context.tracerData[ i ].xePrologueCbs.Kernel;
                 if( nullptr != table.pfnSetGroupSizeCb )
                     table.pfnSetGroupSizeCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeFunctionSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+        result = driver::xeKernelSetGroupSize( hKernel, groupSizeX, groupSizeY, groupSizeZ );
 
         // capture parameters
-        xe_function_set_group_size_params_t out_params = {
-            &hFunction,
+        xe_kernel_set_group_size_params_t out_params = {
+            &hKernel,
             &groupSizeX,
             &groupSizeY,
             &groupSizeZ
@@ -7191,7 +7192,7 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Function;
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Kernel;
                 if( nullptr != table.pfnSetGroupSizeCb )
                     table.pfnSetGroupSizeCb( &out_params, result,
                         context.tracerData[ i ].userData,
@@ -7202,23 +7203,23 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSuggestGroupSize
+    /// @brief Intercept function for xeKernelSuggestGroupSize
     xe_result_t __xecall
-    xeFunctionSuggestGroupSize(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-        uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-        uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-        uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-        uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-        uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+    xeKernelSuggestGroupSize(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        uint32_t globalSizeX,                           ///< [in] global width for X dimension
+        uint32_t globalSizeY,                           ///< [in] global width for Y dimension
+        uint32_t globalSizeZ,                           ///< [in] global width for Z dimension
+        uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension
+        uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension
+        uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_function_suggest_group_size_params_t in_params = {
-            &hFunction,
+        xe_kernel_suggest_group_size_params_t in_params = {
+            &hKernel,
             &globalSizeX,
             &globalSizeY,
             &globalSizeZ,
@@ -7235,18 +7236,18 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Function;
+                auto& table = context.tracerData[ i ].xePrologueCbs.Kernel;
                 if( nullptr != table.pfnSuggestGroupSizeCb )
                     table.pfnSuggestGroupSizeCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeFunctionSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+        result = driver::xeKernelSuggestGroupSize( hKernel, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 
         // capture parameters
-        xe_function_suggest_group_size_params_t out_params = {
-            &hFunction,
+        xe_kernel_suggest_group_size_params_t out_params = {
+            &hKernel,
             &globalSizeX,
             &globalSizeY,
             &globalSizeZ,
@@ -7259,7 +7260,7 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Function;
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Kernel;
                 if( nullptr != table.pfnSuggestGroupSizeCb )
                     table.pfnSuggestGroupSizeCb( &out_params, result,
                         context.tracerData[ i ].userData,
@@ -7270,10 +7271,10 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSuggestMaxCooperativeGroupCount
+    /// @brief Intercept function for xeKernelSuggestMaxCooperativeGroupCount
     xe_result_t __xecall
-    xeFunctionSuggestMaxCooperativeGroupCount(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xeKernelSuggestMaxCooperativeGroupCount(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
         uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
         uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
@@ -7282,8 +7283,8 @@ namespace instrumented
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_function_suggest_max_cooperative_group_count_params_t in_params = {
-            &hFunction,
+        xe_kernel_suggest_max_cooperative_group_count_params_t in_params = {
+            &hKernel,
             &groupCountX,
             &groupCountY,
             &groupCountZ
@@ -7297,18 +7298,18 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Function;
+                auto& table = context.tracerData[ i ].xePrologueCbs.Kernel;
                 if( nullptr != table.pfnSuggestMaxCooperativeGroupCountCb )
                     table.pfnSuggestMaxCooperativeGroupCountCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeFunctionSuggestMaxCooperativeGroupCount( hFunction, groupCountX, groupCountY, groupCountZ );
+        result = driver::xeKernelSuggestMaxCooperativeGroupCount( hKernel, groupCountX, groupCountY, groupCountZ );
 
         // capture parameters
-        xe_function_suggest_max_cooperative_group_count_params_t out_params = {
-            &hFunction,
+        xe_kernel_suggest_max_cooperative_group_count_params_t out_params = {
+            &hKernel,
             &groupCountX,
             &groupCountY,
             &groupCountZ
@@ -7318,7 +7319,7 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Function;
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Kernel;
                 if( nullptr != table.pfnSuggestMaxCooperativeGroupCountCb )
                     table.pfnSuggestMaxCooperativeGroupCountCb( &out_params, result,
                         context.tracerData[ i ].userData,
@@ -7329,10 +7330,10 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetArgumentValue
+    /// @brief Intercept function for xeKernelSetArgumentValue
     xe_result_t __xecall
-    xeFunctionSetArgumentValue(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function args object.
+    xeKernelSetArgumentValue(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
         const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
@@ -7342,8 +7343,8 @@ namespace instrumented
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_function_set_argument_value_params_t in_params = {
-            &hFunction,
+        xe_kernel_set_argument_value_params_t in_params = {
+            &hKernel,
             &argIndex,
             &argSize,
             &pArgValue
@@ -7357,18 +7358,18 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Function;
+                auto& table = context.tracerData[ i ].xePrologueCbs.Kernel;
                 if( nullptr != table.pfnSetArgumentValueCb )
                     table.pfnSetArgumentValueCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeFunctionSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+        result = driver::xeKernelSetArgumentValue( hKernel, argIndex, argSize, pArgValue );
 
         // capture parameters
-        xe_function_set_argument_value_params_t out_params = {
-            &hFunction,
+        xe_kernel_set_argument_value_params_t out_params = {
+            &hKernel,
             &argIndex,
             &argSize,
             &pArgValue
@@ -7378,7 +7379,7 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Function;
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Kernel;
                 if( nullptr != table.pfnSetArgumentValueCb )
                     table.pfnSetArgumentValueCb( &out_params, result,
                         context.tracerData[ i ].userData,
@@ -7389,19 +7390,19 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetAttribute
+    /// @brief Intercept function for xeKernelSetAttribute
     xe_result_t __xecall
-    xeFunctionSetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function.
-        xe_function_set_attribute_t attr,               ///< [in] attribute to set
+    xeKernelSetAttribute(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        xe_kernel_set_attribute_t attr,                 ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_function_set_attribute_params_t in_params = {
-            &hFunction,
+        xe_kernel_set_attribute_params_t in_params = {
+            &hKernel,
             &attr,
             &value
         };
@@ -7414,18 +7415,18 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Function;
+                auto& table = context.tracerData[ i ].xePrologueCbs.Kernel;
                 if( nullptr != table.pfnSetAttributeCb )
                     table.pfnSetAttributeCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeFunctionSetAttribute( hFunction, attr, value );
+        result = driver::xeKernelSetAttribute( hKernel, attr, value );
 
         // capture parameters
-        xe_function_set_attribute_params_t out_params = {
-            &hFunction,
+        xe_kernel_set_attribute_params_t out_params = {
+            &hKernel,
             &attr,
             &value
         };
@@ -7434,7 +7435,7 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Function;
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Kernel;
                 if( nullptr != table.pfnSetAttributeCb )
                     table.pfnSetAttributeCb( &out_params, result,
                         context.tracerData[ i ].userData,
@@ -7445,19 +7446,19 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionGetAttribute
+    /// @brief Intercept function for xeKernelGetAttribute
     xe_result_t __xecall
-    xeFunctionGetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        xe_function_get_attribute_t attr,               ///< [in] attribute to query
+    xeKernelGetAttribute(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        xe_kernel_get_attribute_t attr,                 ///< [in] attribute to query
         uint32_t* pValue                                ///< [out] returned attribute value
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_function_get_attribute_params_t in_params = {
-            &hFunction,
+        xe_kernel_get_attribute_params_t in_params = {
+            &hKernel,
             &attr,
             &pValue
         };
@@ -7470,18 +7471,18 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Function;
+                auto& table = context.tracerData[ i ].xePrologueCbs.Kernel;
                 if( nullptr != table.pfnGetAttributeCb )
                     table.pfnGetAttributeCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeFunctionGetAttribute( hFunction, attr, pValue );
+        result = driver::xeKernelGetAttribute( hKernel, attr, pValue );
 
         // capture parameters
-        xe_function_get_attribute_params_t out_params = {
-            &hFunction,
+        xe_kernel_get_attribute_params_t out_params = {
+            &hKernel,
             &attr,
             &pValue
         };
@@ -7490,7 +7491,7 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Function;
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Kernel;
                 if( nullptr != table.pfnGetAttributeCb )
                     table.pfnGetAttributeCb( &out_params, result,
                         context.tracerData[ i ].userData,
@@ -7501,12 +7502,12 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchFunction
+    /// @brief Intercept function for xeCommandListAppendLaunchKernel
     xe_result_t __xecall
-    xeCommandListAppendLaunchFunction(
+    xeCommandListAppendLaunchKernel(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -7516,9 +7517,9 @@ namespace instrumented
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_command_list_append_launch_function_params_t in_params = {
+        xe_command_list_append_launch_kernel_params_t in_params = {
             &hCommandList,
-            &hFunction,
+            &hKernel,
             &pLaunchFuncArgs,
             &hSignalEvent,
             &numWaitEvents,
@@ -7534,18 +7535,18 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xePrologueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchFunctionCb )
-                    table.pfnAppendLaunchFunctionCb( &in_params, result,
+                if( nullptr != table.pfnAppendLaunchKernelCb )
+                    table.pfnAppendLaunchKernelCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeCommandListAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = driver::xeCommandListAppendLaunchKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 
         // capture parameters
-        xe_command_list_append_launch_function_params_t out_params = {
+        xe_command_list_append_launch_kernel_params_t out_params = {
             &hCommandList,
-            &hFunction,
+            &hKernel,
             &pLaunchFuncArgs,
             &hSignalEvent,
             &numWaitEvents,
@@ -7557,8 +7558,8 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xeEpilogueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchFunctionCb )
-                    table.pfnAppendLaunchFunctionCb( &out_params, result,
+                if( nullptr != table.pfnAppendLaunchKernelCb )
+                    table.pfnAppendLaunchKernelCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -7567,12 +7568,12 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeFunction
+    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeKernel
     xe_result_t __xecall
-    xeCommandListAppendLaunchCooperativeFunction(
+    xeCommandListAppendLaunchCooperativeKernel(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -7582,9 +7583,9 @@ namespace instrumented
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_command_list_append_launch_cooperative_function_params_t in_params = {
+        xe_command_list_append_launch_cooperative_kernel_params_t in_params = {
             &hCommandList,
-            &hFunction,
+            &hKernel,
             &pLaunchFuncArgs,
             &hSignalEvent,
             &numWaitEvents,
@@ -7600,18 +7601,18 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xePrologueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchCooperativeFunctionCb )
-                    table.pfnAppendLaunchCooperativeFunctionCb( &in_params, result,
+                if( nullptr != table.pfnAppendLaunchCooperativeKernelCb )
+                    table.pfnAppendLaunchCooperativeKernelCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeCommandListAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = driver::xeCommandListAppendLaunchCooperativeKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 
         // capture parameters
-        xe_command_list_append_launch_cooperative_function_params_t out_params = {
+        xe_command_list_append_launch_cooperative_kernel_params_t out_params = {
             &hCommandList,
-            &hFunction,
+            &hKernel,
             &pLaunchFuncArgs,
             &hSignalEvent,
             &numWaitEvents,
@@ -7623,8 +7624,8 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xeEpilogueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchCooperativeFunctionCb )
-                    table.pfnAppendLaunchCooperativeFunctionCb( &out_params, result,
+                if( nullptr != table.pfnAppendLaunchCooperativeKernelCb )
+                    table.pfnAppendLaunchCooperativeKernelCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -7633,12 +7634,13 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
+    /// @brief Intercept function for xeCommandListAppendLaunchKernelIndirect
     xe_result_t __xecall
-    xeCommandListAppendLaunchFunctionIndirect(
+    xeCommandListAppendLaunchKernelIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+                                                        ///< arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -7648,9 +7650,9 @@ namespace instrumented
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_command_list_append_launch_function_indirect_params_t in_params = {
+        xe_command_list_append_launch_kernel_indirect_params_t in_params = {
             &hCommandList,
-            &hFunction,
+            &hKernel,
             &pLaunchArgumentsBuffer,
             &hSignalEvent,
             &numWaitEvents,
@@ -7666,18 +7668,18 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xePrologueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchFunctionIndirectCb )
-                    table.pfnAppendLaunchFunctionIndirectCb( &in_params, result,
+                if( nullptr != table.pfnAppendLaunchKernelIndirectCb )
+                    table.pfnAppendLaunchKernelIndirectCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeCommandListAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = driver::xeCommandListAppendLaunchKernelIndirect( hCommandList, hKernel, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
         // capture parameters
-        xe_command_list_append_launch_function_indirect_params_t out_params = {
+        xe_command_list_append_launch_kernel_indirect_params_t out_params = {
             &hCommandList,
-            &hFunction,
+            &hKernel,
             &pLaunchArgumentsBuffer,
             &hSignalEvent,
             &numWaitEvents,
@@ -7689,8 +7691,8 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xeEpilogueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchFunctionIndirectCb )
-                    table.pfnAppendLaunchFunctionIndirectCb( &out_params, result,
+                if( nullptr != table.pfnAppendLaunchKernelIndirectCb )
+                    table.pfnAppendLaunchKernelIndirectCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -7699,17 +7701,17 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchMultipleFunctionsIndirect
+    /// @brief Intercept function for xeCommandListAppendLaunchMultipleKernelsIndirect
     xe_result_t __xecall
-    xeCommandListAppendLaunchMultipleFunctionsIndirect(
+    xeCommandListAppendLaunchMultipleKernelsIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-        xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
+        uint32_t numKernels,                            ///< [in] maximum number of kernels to launch
+        xe_kernel_handle_t* phKernels,                  ///< [in][range(0, numKernels)] handles of the kernel objects
         const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of functions to launch; value must be less-than or equal-to
-                                                        ///< numFunctions
-        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will
-                                                        ///< contain a contiguous array of launch arguments
+                                                        ///< number of kernels to launch; value must be less-than or equal-to
+                                                        ///< numKernels
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+                                                        ///< a contiguous array of thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -7719,10 +7721,10 @@ namespace instrumented
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_command_list_append_launch_multiple_functions_indirect_params_t in_params = {
+        xe_command_list_append_launch_multiple_kernels_indirect_params_t in_params = {
             &hCommandList,
-            &numFunctions,
-            &phFunctions,
+            &numKernels,
+            &phKernels,
             &pCountBuffer,
             &pLaunchArgumentsBuffer,
             &hSignalEvent,
@@ -7739,19 +7741,19 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xePrologueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchMultipleFunctionsIndirectCb )
-                    table.pfnAppendLaunchMultipleFunctionsIndirectCb( &in_params, result,
+                if( nullptr != table.pfnAppendLaunchMultipleKernelsIndirectCb )
+                    table.pfnAppendLaunchMultipleKernelsIndirectCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeCommandListAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = driver::xeCommandListAppendLaunchMultipleKernelsIndirect( hCommandList, numKernels, phKernels, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
         // capture parameters
-        xe_command_list_append_launch_multiple_functions_indirect_params_t out_params = {
+        xe_command_list_append_launch_multiple_kernels_indirect_params_t out_params = {
             &hCommandList,
-            &numFunctions,
-            &phFunctions,
+            &numKernels,
+            &phKernels,
             &pCountBuffer,
             &pLaunchArgumentsBuffer,
             &hSignalEvent,
@@ -7764,8 +7766,8 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xeEpilogueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchMultipleFunctionsIndirectCb )
-                    table.pfnAppendLaunchMultipleFunctionsIndirectCb( &out_params, result,
+                if( nullptr != table.pfnAppendLaunchMultipleKernelsIndirectCb )
+                    table.pfnAppendLaunchMultipleKernelsIndirectCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8598,24 +8600,24 @@ xeGetCommandListProcAddrTable(
         pDdiTable->pfnAppendEventReset                       = driver::xeCommandListAppendEventReset;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnAppendLaunchFunction                   = instrumented::xeCommandListAppendLaunchFunction;
+        pDdiTable->pfnAppendLaunchKernel                     = instrumented::xeCommandListAppendLaunchKernel;
     else
-        pDdiTable->pfnAppendLaunchFunction                   = driver::xeCommandListAppendLaunchFunction;
+        pDdiTable->pfnAppendLaunchKernel                     = driver::xeCommandListAppendLaunchKernel;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnAppendLaunchCooperativeFunction        = instrumented::xeCommandListAppendLaunchCooperativeFunction;
+        pDdiTable->pfnAppendLaunchCooperativeKernel          = instrumented::xeCommandListAppendLaunchCooperativeKernel;
     else
-        pDdiTable->pfnAppendLaunchCooperativeFunction        = driver::xeCommandListAppendLaunchCooperativeFunction;
+        pDdiTable->pfnAppendLaunchCooperativeKernel          = driver::xeCommandListAppendLaunchCooperativeKernel;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnAppendLaunchFunctionIndirect           = instrumented::xeCommandListAppendLaunchFunctionIndirect;
+        pDdiTable->pfnAppendLaunchKernelIndirect             = instrumented::xeCommandListAppendLaunchKernelIndirect;
     else
-        pDdiTable->pfnAppendLaunchFunctionIndirect           = driver::xeCommandListAppendLaunchFunctionIndirect;
+        pDdiTable->pfnAppendLaunchKernelIndirect             = driver::xeCommandListAppendLaunchKernelIndirect;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect  = instrumented::xeCommandListAppendLaunchMultipleFunctionsIndirect;
+        pDdiTable->pfnAppendLaunchMultipleKernelsIndirect    = instrumented::xeCommandListAppendLaunchMultipleKernelsIndirect;
     else
-        pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect  = driver::xeCommandListAppendLaunchMultipleFunctionsIndirect;
+        pDdiTable->pfnAppendLaunchMultipleKernelsIndirect    = driver::xeCommandListAppendLaunchMultipleKernelsIndirect;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnAppendLaunchHostFunction               = instrumented::xeCommandListAppendLaunchHostFunction;
@@ -8924,7 +8926,7 @@ xeGetModuleBuildLogProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Function table
+/// @brief Exported function for filling application's Kernel table
 ///        with current process' addresses
 ///
 /// @returns
@@ -8935,9 +8937,9 @@ xeGetModuleBuildLogProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xeGetFunctionProcAddrTable(
+xeGetKernelProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_function_dditable_t* pDdiTable               ///< [in,out] pointer to table of DDI function pointers
+    xe_kernel_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
     if( nullptr == pDdiTable )
@@ -8949,44 +8951,44 @@ xeGetFunctionProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnCreate                                 = instrumented::xeFunctionCreate;
+        pDdiTable->pfnCreate                                 = instrumented::xeKernelCreate;
     else
-        pDdiTable->pfnCreate                                 = driver::xeFunctionCreate;
+        pDdiTable->pfnCreate                                 = driver::xeKernelCreate;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnDestroy                                = instrumented::xeFunctionDestroy;
+        pDdiTable->pfnDestroy                                = instrumented::xeKernelDestroy;
     else
-        pDdiTable->pfnDestroy                                = driver::xeFunctionDestroy;
+        pDdiTable->pfnDestroy                                = driver::xeKernelDestroy;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnSetGroupSize                           = instrumented::xeFunctionSetGroupSize;
+        pDdiTable->pfnSetGroupSize                           = instrumented::xeKernelSetGroupSize;
     else
-        pDdiTable->pfnSetGroupSize                           = driver::xeFunctionSetGroupSize;
+        pDdiTable->pfnSetGroupSize                           = driver::xeKernelSetGroupSize;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnSuggestGroupSize                       = instrumented::xeFunctionSuggestGroupSize;
+        pDdiTable->pfnSuggestGroupSize                       = instrumented::xeKernelSuggestGroupSize;
     else
-        pDdiTable->pfnSuggestGroupSize                       = driver::xeFunctionSuggestGroupSize;
+        pDdiTable->pfnSuggestGroupSize                       = driver::xeKernelSuggestGroupSize;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnSuggestMaxCooperativeGroupCount        = instrumented::xeFunctionSuggestMaxCooperativeGroupCount;
+        pDdiTable->pfnSuggestMaxCooperativeGroupCount        = instrumented::xeKernelSuggestMaxCooperativeGroupCount;
     else
-        pDdiTable->pfnSuggestMaxCooperativeGroupCount        = driver::xeFunctionSuggestMaxCooperativeGroupCount;
+        pDdiTable->pfnSuggestMaxCooperativeGroupCount        = driver::xeKernelSuggestMaxCooperativeGroupCount;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnSetArgumentValue                       = instrumented::xeFunctionSetArgumentValue;
+        pDdiTable->pfnSetArgumentValue                       = instrumented::xeKernelSetArgumentValue;
     else
-        pDdiTable->pfnSetArgumentValue                       = driver::xeFunctionSetArgumentValue;
+        pDdiTable->pfnSetArgumentValue                       = driver::xeKernelSetArgumentValue;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnSetAttribute                           = instrumented::xeFunctionSetAttribute;
+        pDdiTable->pfnSetAttribute                           = instrumented::xeKernelSetAttribute;
     else
-        pDdiTable->pfnSetAttribute                           = driver::xeFunctionSetAttribute;
+        pDdiTable->pfnSetAttribute                           = driver::xeKernelSetAttribute;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetAttribute                           = instrumented::xeFunctionGetAttribute;
+        pDdiTable->pfnGetAttribute                           = instrumented::xeKernelGetAttribute;
     else
-        pDdiTable->pfnGetAttribute                           = driver::xeFunctionGetAttribute;
+        pDdiTable->pfnGetAttribute                           = driver::xeKernelGetAttribute;
 
     return result;
 }

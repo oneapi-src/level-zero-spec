@@ -44,6 +44,6 @@ name: $tModule
 base: $xModule
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for function"
-name: $tFunction
-base: $xFunction
+desc: "C++ wrapper for kernel"
+name: $tKernel
+base: $xKernel

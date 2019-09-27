@@ -228,7 +228,7 @@ xeModuleGetNativeBinary(
 xe_result_t __xecall
 xeModuleGetGlobalPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
-    const char* pGlobalName,                        ///< [in] name of function in global
+    const char* pGlobalName,                        ///< [in] name of global variable in module
     void** pptr                                     ///< [out] device visible pointer
     )
 {
@@ -240,7 +240,7 @@ xeModuleGetGlobalPointer(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Create Function object from Module by name
+/// @brief Create a kernel object from a module by name
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -257,36 +257,36 @@ xeModuleGetGlobalPointer(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
 ///         + nullptr == desc
-///         + nullptr == phFunction
-///         + nullptr == pDesc->pFunctionName
-///         + invalid value for pDesc->pFunctionName
+///         + nullptr == phKernel
+///         + nullptr == pDesc->pKernelName
+///         + invalid value for pDesc->pKernelName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < desc->version
+///         + ::XE_KERNEL_DESC_VERSION_CURRENT < desc->version
 xe_result_t __xecall
-xeFunctionCreate(
+xeKernelCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
-    xe_function_handle_t* phFunction                ///< [out] handle of the Function object
+    const xe_kernel_desc_t* desc,                   ///< [in] pointer to kernel descriptor
+    xe_kernel_handle_t* phKernel                    ///< [out] handle of the Function object
     )
 {
-    auto pfnCreate = xe_lib::context.ddiTable.Function.pfnCreate;
+    auto pfnCreate = xe_lib::context.ddiTable.Kernel.pfnCreate;
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnCreate( hModule, desc, phFunction );
+    return pfnCreate( hModule, desc, phKernel );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys Function object
+/// @brief Destroys a kernel object
 /// 
 /// @details
-///     - All functions must be destroyed before the module is destroyed.
+///     - All kernels must be destroyed before the module is destroyed.
 ///     - The application is responsible for making sure the device is not
-///       currently referencing the function before it is deleted
+///       currently referencing the kernel before it is deleted
 ///     - The implementation of this function will immediately free all Host and
-///       Device allocations associated with this function
+///       Device allocations associated with this kernel
 ///     - The application may **not** call this function from simultaneous
-///       threads with the same function handle.
+///       threads with the same kernel handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
@@ -294,22 +294,22 @@ xeFunctionCreate(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeFunctionDestroy(
-    xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
+xeKernelDestroy(
+    xe_kernel_handle_t hKernel                      ///< [in][release] handle of the kernel object
     )
 {
-    auto pfnDestroy = xe_lib::context.ddiTable.Function.pfnDestroy;
+    auto pfnDestroy = xe_lib::context.ddiTable.Kernel.pfnDestroy;
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnDestroy( hFunction );
+    return pfnDestroy( hKernel );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieve function pointer from Module by name
+/// @brief Retrieve a function pointer from a module by name
 /// 
 /// @details
 ///     - The function pointer is unique for the device on which the module was
@@ -343,7 +343,7 @@ xeModuleGetFunctionPointer(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set group size for Function.
+/// @brief Set group size for a kernel
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -357,65 +357,64 @@ xeModuleGetFunctionPointer(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeFunctionSetGroupSize(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
-    uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
-    uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+xeKernelSetGroupSize(
+    xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
+    uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this kernel
+    uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this kernel
     )
 {
-    auto pfnSetGroupSize = xe_lib::context.ddiTable.Function.pfnSetGroupSize;
+    auto pfnSetGroupSize = xe_lib::context.ddiTable.Kernel.pfnSetGroupSize;
     if( nullptr == pfnSetGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+    return pfnSetGroupSize( hKernel, groupSizeX, groupSizeY, groupSizeZ );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Query a suggested group size for function given a global size for each
+/// @brief Query a suggested group size for a kernel given a global size for each
 ///        dimension.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 ///     - This function ignores the group size that is set using
-///       ::xeFunctionSetGroupSize.
+///       ::xeKernelSetGroupSize.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///         + nullptr == groupSizeX
 ///         + nullptr == groupSizeY
 ///         + nullptr == groupSizeZ
-///         + invalid number of threads.
+///         + invalid global width
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeFunctionSuggestGroupSize(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-    uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-    uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-    uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-    uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-    uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+xeKernelSuggestGroupSize(
+    xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    uint32_t globalSizeX,                           ///< [in] global width for X dimension
+    uint32_t globalSizeY,                           ///< [in] global width for Y dimension
+    uint32_t globalSizeZ,                           ///< [in] global width for Z dimension
+    uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension
+    uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension
+    uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension
     )
 {
-    auto pfnSuggestGroupSize = xe_lib::context.ddiTable.Function.pfnSuggestGroupSize;
+    auto pfnSuggestGroupSize = xe_lib::context.ddiTable.Kernel.pfnSuggestGroupSize;
     if( nullptr == pfnSuggestGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+    return pfnSuggestGroupSize( hKernel, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Query a suggested max group count for device for cooperative functions
-///        that device supports.
+/// @brief Query a suggested max group count a cooperative kernel.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -426,29 +425,29 @@ xeFunctionSuggestGroupSize(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///         + nullptr == groupCountX
 ///         + nullptr == groupCountY
 ///         + nullptr == groupCountZ
 ///         + invalid number of threads.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeFunctionSuggestMaxCooperativeGroupCount(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+xeKernelSuggestMaxCooperativeGroupCount(
+    xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
     uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
     uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
     )
 {
-    auto pfnSuggestMaxCooperativeGroupCount = xe_lib::context.ddiTable.Function.pfnSuggestMaxCooperativeGroupCount;
+    auto pfnSuggestMaxCooperativeGroupCount = xe_lib::context.ddiTable.Kernel.pfnSuggestMaxCooperativeGroupCount;
     if( nullptr == pfnSuggestMaxCooperativeGroupCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSuggestMaxCooperativeGroupCount( hFunction, groupCountX, groupCountY, groupCountZ );
+    return pfnSuggestMaxCooperativeGroupCount( hKernel, groupCountX, groupCountY, groupCountZ );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set function argument used on function launch.
+/// @brief Set kernel argument used on kernel launch.
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads with the
@@ -462,28 +461,28 @@ xeFunctionSuggestMaxCooperativeGroupCount(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///         + invalid argument index
 ///         + invalid size specified
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeFunctionSetArgumentValue(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function args object.
+xeKernelSetArgumentValue(
+    xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
                                                     ///< null then argument value is considered null.
     )
 {
-    auto pfnSetArgumentValue = xe_lib::context.ddiTable.Function.pfnSetArgumentValue;
+    auto pfnSetArgumentValue = xe_lib::context.ddiTable.Kernel.pfnSetArgumentValue;
     if( nullptr == pfnSetArgumentValue )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+    return pfnSetArgumentValue( hKernel, argIndex, argSize, pArgValue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Sets a function attribute
+/// @brief Sets a kernel attribute
 /// 
 /// @details
 ///     - This function may **not** be called from simultaneous threads with the
@@ -499,26 +498,26 @@ xeFunctionSetArgumentValue(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///         + invalid value for attr
 ///         + invalid value for value
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeFunctionSetAttribute(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function.
-    xe_function_set_attribute_t attr,               ///< [in] attribute to set
+xeKernelSetAttribute(
+    xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    xe_kernel_set_attribute_t attr,                 ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
-    auto pfnSetAttribute = xe_lib::context.ddiTable.Function.pfnSetAttribute;
+    auto pfnSetAttribute = xe_lib::context.ddiTable.Kernel.pfnSetAttribute;
     if( nullptr == pfnSetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetAttribute( hFunction, attr, value );
+    return pfnSetAttribute( hKernel, attr, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Query a function attribute.
+/// @brief Query a kernel attribute.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -533,26 +532,26 @@ xeFunctionSetAttribute(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///         + nullptr == pValue
 ///         + invalid value for attr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeFunctionGetAttribute(
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    xe_function_get_attribute_t attr,               ///< [in] attribute to query
+xeKernelGetAttribute(
+    xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    xe_kernel_get_attribute_t attr,                 ///< [in] attribute to query
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
-    auto pfnGetAttribute = xe_lib::context.ddiTable.Function.pfnGetAttribute;
+    auto pfnGetAttribute = xe_lib::context.ddiTable.Kernel.pfnGetAttribute;
     if( nullptr == pfnGetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetAttribute( hFunction, attr, pValue );
+    return pfnGetAttribute( hKernel, attr, pValue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Launch function over one or more work groups.
+/// @brief Launch kernel over one or more work groups.
 /// 
 /// @details
 ///     - This may **not** be called for a command list created with
@@ -571,29 +570,29 @@ xeFunctionGetAttribute(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///         + nullptr == pLaunchFuncArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeCommandListAppendLaunchFunction(
+xeCommandListAppendLaunchKernel(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+    xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchFunction = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchFunction;
-    if( nullptr == pfnAppendLaunchFunction )
+    auto pfnAppendLaunchKernel = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchKernel;
+    if( nullptr == pfnAppendLaunchKernel )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Launch function cooperatively over one or more work groups.
+/// @brief Launch kernel cooperatively over one or more work groups.
 /// 
 /// @details
 ///     - This may **not** be called for a command list created with
@@ -603,7 +602,7 @@ xeCommandListAppendLaunchFunction(
 ///     - This function may **not** be called from simultaneous threads with the
 ///       same command list handle.
 ///     - The implementation of this function should be lock-free.
-///     - Use ::xeFunctionSuggestMaxCooperativeGroupCount to recommend max group
+///     - Use ::xeKernelSuggestMaxCooperativeGroupCount to recommend max group
 ///       count for device for cooperative functions that device supports.
 /// 
 /// @remarks
@@ -616,29 +615,29 @@ xeCommandListAppendLaunchFunction(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///         + nullptr == pLaunchFuncArgs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeCommandListAppendLaunchCooperativeFunction(
+xeCommandListAppendLaunchCooperativeKernel(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+    xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchCooperativeFunction = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchCooperativeFunction;
-    if( nullptr == pfnAppendLaunchCooperativeFunction )
+    auto pfnAppendLaunchCooperativeKernel = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchCooperativeKernel;
+    if( nullptr == pfnAppendLaunchCooperativeKernel )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchCooperativeKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Launch function over one or more work groups using indirect arguments.
+/// @brief Launch kernel over one or more work groups using indirect arguments.
 /// 
 /// @details
 ///     - The launch arguments need to be device visible.
@@ -660,35 +659,36 @@ xeCommandListAppendLaunchCooperativeFunction(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
-///         + nullptr == hFunction
+///         + nullptr == hKernel
 ///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeCommandListAppendLaunchFunctionIndirect(
+xeCommandListAppendLaunchKernelIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
+    xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+                                                    ///< arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchFunctionIndirect = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchFunctionIndirect;
-    if( nullptr == pfnAppendLaunchFunctionIndirect )
+    auto pfnAppendLaunchKernelIndirect = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchKernelIndirect;
+    if( nullptr == pfnAppendLaunchKernelIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchKernelIndirect( hCommandList, hKernel, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Launch multiple functions over one or more work groups using an array
-///        of indirect arguments.
+/// @brief Launch multiple kernels over one or more work groups using an array of
+///        indirect arguments.
 /// 
 /// @details
 ///     - The array of launch arguments need to be device visible.
-///     - The array of launch arguments buffer may not be reusued until the
-///       function has completed on the device.
+///     - The array of launch arguments buffer may not be reused until the
+///       kernel has completed on the device.
 ///     - This may **not** be called for a command list created with
 ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
 ///     - This function may **not** be called from simultaneous threads with the
@@ -705,31 +705,31 @@ xeCommandListAppendLaunchFunctionIndirect(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
-///         + nullptr == phFunctions
+///         + nullptr == phKernels
 ///         + nullptr == pCountBuffer
 ///         + nullptr == pLaunchArgumentsBuffer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeCommandListAppendLaunchMultipleFunctionsIndirect(
+xeCommandListAppendLaunchMultipleKernelsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-    xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
+    uint32_t numKernels,                            ///< [in] maximum number of kernels to launch
+    xe_kernel_handle_t* phKernels,                  ///< [in][range(0, numKernels)] handles of the kernel objects
     const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
-                                                    ///< number of functions to launch; value must be less-than or equal-to
-                                                    ///< numFunctions
-    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will
-                                                    ///< contain a contiguous array of launch arguments
+                                                    ///< number of kernels to launch; value must be less-than or equal-to
+                                                    ///< numKernels
+    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+                                                    ///< a contiguous array of thread group launch arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchMultipleFunctionsIndirect = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
-    if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
+    auto pfnAppendLaunchMultipleKernelsIndirect = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchMultipleKernelsIndirect;
+    if( nullptr == pfnAppendLaunchMultipleKernelsIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchMultipleKernelsIndirect( hCommandList, numKernels, phKernels, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -800,10 +800,10 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    Function::Function( 
-        function_handle_t handle,                       ///< [in] handle of function object
+    Kernel::Kernel( 
+        kernel_handle_t handle,                         ///< [in] handle of kernel object
         Module* pModule,                                ///< [in] pointer to owner object
-        const desc_t* desc                              ///< [in] descriptor of the function object
+        const desc_t* desc                              ///< [in] descriptor of the kernel object
         ) :
         m_handle( handle ),
         m_pModule( pModule ),
@@ -1022,7 +1022,7 @@ namespace xe
     /// @throws result_t
     void* __xecall
     Module::GetGlobalPointer(
-        const char* pGlobalName                         ///< [in] name of function in global
+        const char* pGlobalName                         ///< [in] name of global variable in module
         )
     {
         void* pptr;
@@ -1039,7 +1039,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Create Function object from Module by name
+    /// @brief Create a kernel object from a module by name
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -1050,72 +1050,72 @@ namespace xe
     ///     - **cuModuleGetFunction**
     /// 
     /// @returns
-    ///     - Function*: handle of the Function object
+    ///     - Kernel*: handle of the Function object
     /// 
     /// @throws result_t
-    Function* __xecall
-    Function::Create(
+    Kernel* __xecall
+    Kernel::Create(
         Module* pModule,                                ///< [in] pointer to the module
-        const desc_t* desc                              ///< [in] pointer to function descriptor
+        const desc_t* desc                              ///< [in] pointer to kernel descriptor
         )
     {
-        xe_function_handle_t hFunction;
+        xe_kernel_handle_t hKernel;
 
-        auto result = static_cast<result_t>( ::xeFunctionCreate(
+        auto result = static_cast<result_t>( ::xeKernelCreate(
             reinterpret_cast<xe_module_handle_t>( pModule->getHandle() ),
-            reinterpret_cast<const xe_function_desc_t*>( desc ),
-            &hFunction ) );
+            reinterpret_cast<const xe_kernel_desc_t*>( desc ),
+            &hKernel ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::Create" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Kernel::Create" );
 
-        Function* pFunction = nullptr;
+        Kernel* pKernel = nullptr;
 
         try
         {
-            pFunction = new Function( reinterpret_cast<function_handle_t>( hFunction ), pModule, desc );
+            pKernel = new Kernel( reinterpret_cast<kernel_handle_t>( hKernel ), pModule, desc );
         }
         catch( std::bad_alloc& )
         {
-            delete pFunction;
-            pFunction = nullptr;
+            delete pKernel;
+            pKernel = nullptr;
 
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Function::Create" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Kernel::Create" );
         }
 
-        return pFunction;
+        return pKernel;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Destroys Function object
+    /// @brief Destroys a kernel object
     /// 
     /// @details
-    ///     - All functions must be destroyed before the module is destroyed.
+    ///     - All kernels must be destroyed before the module is destroyed.
     ///     - The application is responsible for making sure the device is not
-    ///       currently referencing the function before it is deleted
+    ///       currently referencing the kernel before it is deleted
     ///     - The implementation of this function will immediately free all Host and
-    ///       Device allocations associated with this function
+    ///       Device allocations associated with this kernel
     ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same function handle.
+    ///       threads with the same kernel handle.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __xecall
-    Function::Destroy(
-        Function* pFunction                             ///< [in][release] pointer to the function object
+    Kernel::Destroy(
+        Kernel* pKernel                                 ///< [in][release] pointer to the kernel object
         )
     {
-        auto result = static_cast<result_t>( ::xeFunctionDestroy(
-            reinterpret_cast<xe_function_handle_t>( pFunction->getHandle() ) ) );
+        auto result = static_cast<result_t>( ::xeKernelDestroy(
+            reinterpret_cast<xe_kernel_handle_t>( pKernel->getHandle() ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::Destroy" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Kernel::Destroy" );
 
-        delete pFunction;
+        delete pKernel;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieve function pointer from Module by name
+    /// @brief Retrieve a function pointer from a module by name
     /// 
     /// @details
     ///     - The function pointer is unique for the device on which the module was
@@ -1147,7 +1147,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set group size for Function.
+    /// @brief Set group size for a kernel
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -1158,43 +1158,43 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    Function::SetGroupSize(
-        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
-        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
-        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+    Kernel::SetGroupSize(
+        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
+        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this kernel
+        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this kernel
         )
     {
-        auto result = static_cast<result_t>( ::xeFunctionSetGroupSize(
-            reinterpret_cast<xe_function_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeKernelSetGroupSize(
+            reinterpret_cast<xe_kernel_handle_t>( getHandle() ),
             groupSizeX,
             groupSizeY,
             groupSizeZ ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetGroupSize" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Kernel::SetGroupSize" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Query a suggested group size for function given a global size for each
+    /// @brief Query a suggested group size for a kernel given a global size for each
     ///        dimension.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     ///     - This function ignores the group size that is set using
-    ///       ::xeFunctionSetGroupSize.
+    ///       ::xeKernelSetGroupSize.
     /// 
     /// @returns
-    ///     - uint32_t: recommended size of group for X dimension.
-    ///     - uint32_t: recommended size of group for Y dimension.
-    ///     - uint32_t: recommended size of group for Z dimension.
+    ///     - uint32_t: recommended size of group for X dimension
+    ///     - uint32_t: recommended size of group for Y dimension
+    ///     - uint32_t: recommended size of group for Z dimension
     /// 
     /// @throws result_t
     std::tuple<uint32_t, uint32_t, uint32_t> __xecall
-    Function::SuggestGroupSize(
-        uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-        uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-        uint32_t globalSizeZ                            ///< [in] global width for Z dimension.
+    Kernel::SuggestGroupSize(
+        uint32_t globalSizeX,                           ///< [in] global width for X dimension
+        uint32_t globalSizeY,                           ///< [in] global width for Y dimension
+        uint32_t globalSizeZ                            ///< [in] global width for Z dimension
         )
     {
         uint32_t groupSizeX;
@@ -1203,8 +1203,8 @@ namespace xe
 
         uint32_t groupSizeZ;
 
-        auto result = static_cast<result_t>( ::xeFunctionSuggestGroupSize(
-            reinterpret_cast<xe_function_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeKernelSuggestGroupSize(
+            reinterpret_cast<xe_kernel_handle_t>( getHandle() ),
             globalSizeX,
             globalSizeY,
             globalSizeZ,
@@ -1213,14 +1213,13 @@ namespace xe
             &groupSizeZ ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SuggestGroupSize" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Kernel::SuggestGroupSize" );
 
         return std::make_tuple( groupSizeX, groupSizeY, groupSizeZ );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Query a suggested max group count for device for cooperative functions
-    ///        that device supports.
+    /// @brief Query a suggested max group count a cooperative kernel.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -1233,7 +1232,7 @@ namespace xe
     /// 
     /// @throws result_t
     std::tuple<uint32_t, uint32_t, uint32_t> __xecall
-    Function::SuggestMaxCooperativeGroupCount(
+    Kernel::SuggestMaxCooperativeGroupCount(
         void
         )
     {
@@ -1243,20 +1242,20 @@ namespace xe
 
         uint32_t groupCountZ;
 
-        auto result = static_cast<result_t>( ::xeFunctionSuggestMaxCooperativeGroupCount(
-            reinterpret_cast<xe_function_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeKernelSuggestMaxCooperativeGroupCount(
+            reinterpret_cast<xe_kernel_handle_t>( getHandle() ),
             &groupCountX,
             &groupCountY,
             &groupCountZ ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SuggestMaxCooperativeGroupCount" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Kernel::SuggestMaxCooperativeGroupCount" );
 
         return std::make_tuple( groupCountX, groupCountY, groupCountZ );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set function argument used on function launch.
+    /// @brief Set kernel argument used on kernel launch.
     /// 
     /// @details
     ///     - This function may **not** be called from simultaneous threads with the
@@ -1267,25 +1266,25 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    Function::SetArgumentValue(
+    Kernel::SetArgumentValue(
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
         const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
                                                         ///< null then argument value is considered null.
         )
     {
-        auto result = static_cast<result_t>( ::xeFunctionSetArgumentValue(
-            reinterpret_cast<xe_function_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeKernelSetArgumentValue(
+            reinterpret_cast<xe_kernel_handle_t>( getHandle() ),
             argIndex,
             argSize,
             pArgValue ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetArgumentValue" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Kernel::SetArgumentValue" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Sets a function attribute
+    /// @brief Sets a kernel attribute
     /// 
     /// @details
     ///     - This function may **not** be called from simultaneous threads with the
@@ -1298,22 +1297,22 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    Function::SetAttribute(
+    Kernel::SetAttribute(
         set_attribute_t attr,                           ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
         )
     {
-        auto result = static_cast<result_t>( ::xeFunctionSetAttribute(
-            reinterpret_cast<xe_function_handle_t>( getHandle() ),
-            static_cast<xe_function_set_attribute_t>( attr ),
+        auto result = static_cast<result_t>( ::xeKernelSetAttribute(
+            reinterpret_cast<xe_kernel_handle_t>( getHandle() ),
+            static_cast<xe_kernel_set_attribute_t>( attr ),
             value ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetAttribute" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Kernel::SetAttribute" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Query a function attribute.
+    /// @brief Query a kernel attribute.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -1328,25 +1327,25 @@ namespace xe
     /// 
     /// @throws result_t
     uint32_t __xecall
-    Function::GetAttribute(
+    Kernel::GetAttribute(
         get_attribute_t attr                            ///< [in] attribute to query
         )
     {
         uint32_t value;
 
-        auto result = static_cast<result_t>( ::xeFunctionGetAttribute(
-            reinterpret_cast<xe_function_handle_t>( getHandle() ),
-            static_cast<xe_function_get_attribute_t>( attr ),
+        auto result = static_cast<result_t>( ::xeKernelGetAttribute(
+            reinterpret_cast<xe_kernel_handle_t>( getHandle() ),
+            static_cast<xe_kernel_get_attribute_t>( attr ),
             &value ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::GetAttribute" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Kernel::GetAttribute" );
 
         return value;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Launch function over one or more work groups.
+    /// @brief Launch kernel over one or more work groups.
     /// 
     /// @details
     ///     - This may **not** be called for a command list created with
@@ -1361,9 +1360,9 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    CommandList::AppendLaunchFunction(
-        Function* pFunction,                            ///< [in] pointer to the function object
-        const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
+    CommandList::AppendLaunchKernel(
+        Kernel* pKernel,                                ///< [in] pointer to the kernel object
+        const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] thread group launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -1376,20 +1375,20 @@ namespace xe
         for( uint32_t i = 0; i < numWaitEvents; ++i )
             hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
 
-        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchFunction(
+        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchKernel(
             reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
-            reinterpret_cast<xe_function_handle_t>( pFunction->getHandle() ),
+            reinterpret_cast<xe_kernel_handle_t>( pKernel->getHandle() ),
             reinterpret_cast<const xe_thread_group_dimensions_t*>( pLaunchFuncArgs ),
             ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
             numWaitEvents,
             hWaitEvents.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchFunction" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchKernel" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Launch function cooperatively over one or more work groups.
+    /// @brief Launch kernel cooperatively over one or more work groups.
     /// 
     /// @details
     ///     - This may **not** be called for a command list created with
@@ -1399,7 +1398,7 @@ namespace xe
     ///     - This function may **not** be called from simultaneous threads with the
     ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
-    ///     - Use ::xeFunctionSuggestMaxCooperativeGroupCount to recommend max group
+    ///     - Use ::xeKernelSuggestMaxCooperativeGroupCount to recommend max group
     ///       count for device for cooperative functions that device supports.
     /// 
     /// @remarks
@@ -1408,9 +1407,9 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    CommandList::AppendLaunchCooperativeFunction(
-        Function* pFunction,                            ///< [in] pointer to the function object
-        const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
+    CommandList::AppendLaunchCooperativeKernel(
+        Kernel* pKernel,                                ///< [in] pointer to the kernel object
+        const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] thread group launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -1423,20 +1422,20 @@ namespace xe
         for( uint32_t i = 0; i < numWaitEvents; ++i )
             hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
 
-        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchCooperativeFunction(
+        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchCooperativeKernel(
             reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
-            reinterpret_cast<xe_function_handle_t>( pFunction->getHandle() ),
+            reinterpret_cast<xe_kernel_handle_t>( pKernel->getHandle() ),
             reinterpret_cast<const xe_thread_group_dimensions_t*>( pLaunchFuncArgs ),
             ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
             numWaitEvents,
             hWaitEvents.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchCooperativeFunction" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchCooperativeKernel" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Launch function over one or more work groups using indirect arguments.
+    /// @brief Launch kernel over one or more work groups using indirect arguments.
     /// 
     /// @details
     ///     - The launch arguments need to be device visible.
@@ -1454,9 +1453,10 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    CommandList::AppendLaunchFunctionIndirect(
-        Function* pFunction,                            ///< [in] pointer to the function object
-        const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
+    CommandList::AppendLaunchKernelIndirect(
+        Kernel* pKernel,                                ///< [in] pointer to the kernel object
+        const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain thread group launch
+                                                        ///< arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -1469,26 +1469,26 @@ namespace xe
         for( uint32_t i = 0; i < numWaitEvents; ++i )
             hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
 
-        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchFunctionIndirect(
+        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchKernelIndirect(
             reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
-            reinterpret_cast<xe_function_handle_t>( pFunction->getHandle() ),
+            reinterpret_cast<xe_kernel_handle_t>( pKernel->getHandle() ),
             reinterpret_cast<const xe_thread_group_dimensions_t*>( pLaunchArgumentsBuffer ),
             ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
             numWaitEvents,
             hWaitEvents.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchFunctionIndirect" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchKernelIndirect" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Launch multiple functions over one or more work groups using an array
-    ///        of indirect arguments.
+    /// @brief Launch multiple kernels over one or more work groups using an array of
+    ///        indirect arguments.
     /// 
     /// @details
     ///     - The array of launch arguments need to be device visible.
-    ///     - The array of launch arguments buffer may not be reusued until the
-    ///       function has completed on the device.
+    ///     - The array of launch arguments buffer may not be reused until the
+    ///       kernel has completed on the device.
     ///     - This may **not** be called for a command list created with
     ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - This function may **not** be called from simultaneous threads with the
@@ -1501,25 +1501,25 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    CommandList::AppendLaunchMultipleFunctionsIndirect(
-        uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-        Function** ppFunctions,                         ///< [in][range(0, numFunctions)] handles of the function objects
+    CommandList::AppendLaunchMultipleKernelsIndirect(
+        uint32_t numKernels,                            ///< [in] maximum number of kernels to launch
+        Kernel** ppKernels,                             ///< [in][range(0, numKernels)] handles of the kernel objects
         const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of functions to launch; value must be less-than or equal-to
-                                                        ///< numFunctions
-        const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in][range(0, numFunctions)] pointer to device buffer that will
-                                                        ///< contain a contiguous array of launch arguments
+                                                        ///< number of kernels to launch; value must be less-than or equal-to
+                                                        ///< numKernels
+        const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in][range(0, numKernels)] pointer to device buffer that will contain
+                                                        ///< a contiguous array of thread group launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                         ///< on before launching
         )
     {
-        thread_local std::vector<xe_function_handle_t> hFunctions;
-        hFunctions.resize( 0 );
-        hFunctions.reserve( numFunctions );
-        for( uint32_t i = 0; i < numFunctions; ++i )
-            hFunctions.emplace_back( reinterpret_cast<xe_function_handle_t>( ppFunctions[ i ]->getHandle() ) );
+        thread_local std::vector<xe_kernel_handle_t> hKernels;
+        hKernels.resize( 0 );
+        hKernels.reserve( numKernels );
+        for( uint32_t i = 0; i < numKernels; ++i )
+            hKernels.emplace_back( reinterpret_cast<xe_kernel_handle_t>( ppKernels[ i ]->getHandle() ) );
 
         thread_local std::vector<xe_event_handle_t> hWaitEvents;
         hWaitEvents.resize( 0 );
@@ -1527,10 +1527,10 @@ namespace xe
         for( uint32_t i = 0; i < numWaitEvents; ++i )
             hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
 
-        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchMultipleFunctionsIndirect(
+        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchMultipleKernelsIndirect(
             reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
-            numFunctions,
-            hFunctions.data(),
+            numKernels,
+            hKernels.data(),
             pCountBuffer,
             reinterpret_cast<const xe_thread_group_dimensions_t*>( pLaunchArgumentsBuffer ),
             ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
@@ -1538,7 +1538,7 @@ namespace xe
             hWaitEvents.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchMultipleFunctionsIndirect" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchMultipleKernelsIndirect" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1667,19 +1667,19 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::desc_version_t to std::string
-    std::string to_string( const Function::desc_version_t val )
+    /// @brief Converts Kernel::desc_version_t to std::string
+    std::string to_string( const Kernel::desc_version_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Function::desc_version_t::CURRENT:
-            str = "Function::desc_version_t::CURRENT";
+        case Kernel::desc_version_t::CURRENT:
+            str = "Kernel::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "Function::desc_version_t::?";
+            str = "Kernel::desc_version_t::?";
             break;
         };
 
@@ -1687,23 +1687,23 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::flag_t to std::string
-    std::string to_string( const Function::flag_t val )
+    /// @brief Converts Kernel::flag_t to std::string
+    std::string to_string( const Kernel::flag_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Function::flag_t::NONE:
-            str = "Function::flag_t::NONE";
+        case Kernel::flag_t::NONE:
+            str = "Kernel::flag_t::NONE";
             break;
 
-        case Function::flag_t::FORCE_RESIDENCY:
-            str = "Function::flag_t::FORCE_RESIDENCY";
+        case Kernel::flag_t::FORCE_RESIDENCY:
+            str = "Kernel::flag_t::FORCE_RESIDENCY";
             break;
 
         default:
-            str = "Function::flag_t::?";
+            str = "Kernel::flag_t::?";
             break;
         };
 
@@ -1711,27 +1711,27 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::set_attribute_t to std::string
-    std::string to_string( const Function::set_attribute_t val )
+    /// @brief Converts Kernel::set_attribute_t to std::string
+    std::string to_string( const Kernel::set_attribute_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS:
-            str = "Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS";
+        case Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS:
+            str = "Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS";
             break;
 
-        case Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS:
-            str = "Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS";
+        case Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS:
+            str = "Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS";
             break;
 
-        case Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS:
-            str = "Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS";
+        case Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_SHARED_ACCESS:
+            str = "Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_SHARED_ACCESS";
             break;
 
         default:
-            str = "Function::set_attribute_t::?";
+            str = "Kernel::set_attribute_t::?";
             break;
         };
 
@@ -1739,39 +1739,39 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::get_attribute_t to std::string
-    std::string to_string( const Function::get_attribute_t val )
+    /// @brief Converts Kernel::get_attribute_t to std::string
+    std::string to_string( const Kernel::get_attribute_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_REGS_USED:
-            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_REGS_USED";
+        case Kernel::get_attribute_t::KERNEL_GET_ATTR_MAX_REGS_USED:
+            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_MAX_REGS_USED";
             break;
 
-        case Function::get_attribute_t::FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS:
-            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS";
+        case Kernel::get_attribute_t::KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS:
+            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS";
             break;
 
-        case Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE:
-            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE";
+        case Kernel::get_attribute_t::KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE:
+            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE";
             break;
 
-        case Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_SPILL_FILL:
-            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_SPILL_FILL";
+        case Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_SPILL_FILL:
+            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_SPILL_FILL";
             break;
 
-        case Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_BARRIERS:
-            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_BARRIERS";
+        case Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_BARRIERS:
+            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_BARRIERS";
             break;
 
-        case Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_DPAS:
-            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_DPAS";
+        case Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_DPAS:
+            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_DPAS";
             break;
 
         default:
-            str = "Function::get_attribute_t::?";
+            str = "Kernel::get_attribute_t::?";
             break;
         };
 
@@ -1779,21 +1779,21 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::desc_t to std::string
-    std::string to_string( const Function::desc_t val )
+    /// @brief Converts Kernel::desc_t to std::string
+    std::string to_string( const Kernel::desc_t val )
     {
         std::string str;
         
-        str += "Function::desc_t::version : ";
+        str += "Kernel::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "Function::desc_t::flags : ";
+        str += "Kernel::desc_t::flags : ";
         str += to_string(val.flags);
         str += "\n";
         
-        str += "Function::desc_t::pFunctionName : ";
-        str += val.pFunctionName;
+        str += "Kernel::desc_t::pKernelName : ";
+        str += val.pKernelName;
         str += "\n";
 
         return str;

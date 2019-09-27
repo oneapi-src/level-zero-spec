@@ -73,14 +73,14 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieve all function names in the module.
+        /// @brief Retrieve all kernel names in the module.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        GetFunctionNames(
+        GetKernelNames(
             uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of names available.
@@ -93,8 +93,8 @@ namespace xet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for function
-    class Function : public xe::Function
+    /// @brief C++ wrapper for kernel
+    class Kernel : public xe::Kernel
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
@@ -162,20 +162,20 @@ namespace xet
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        using xe::Function::Function;
+        using xe::Kernel::Kernel;
 
-        ~Function( void ) = default;
+        ~Kernel( void ) = default;
 
-        Function( Function const& other ) = delete;
-        void operator=( Function const& other ) = delete;
+        Kernel( Kernel const& other ) = delete;
+        void operator=( Kernel const& other ) = delete;
 
-        Function( Function&& other ) = delete;
-        void operator=( Function&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
+        Kernel( Kernel&& other ) = delete;
+        void operator=( Kernel&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieve profiling information generated for the function.
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieve profiling information generated for the kernel.
         /// 
         /// @details
         ///     - Module must be created using the following build option:
@@ -204,28 +204,28 @@ namespace xet
     std::string to_string( const Module::debug_info_format_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_info_version_t to std::string
-    std::string to_string( const Function::profile_info_version_t val );
+    /// @brief Converts Kernel::profile_info_version_t to std::string
+    std::string to_string( const Kernel::profile_info_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_flag_t to std::string
-    std::string to_string( const Function::profile_flag_t val );
+    /// @brief Converts Kernel::profile_flag_t to std::string
+    std::string to_string( const Kernel::profile_flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_info_t to std::string
-    std::string to_string( const Function::profile_info_t val );
+    /// @brief Converts Kernel::profile_info_t to std::string
+    std::string to_string( const Kernel::profile_info_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_token_type_t to std::string
-    std::string to_string( const Function::profile_token_type_t val );
+    /// @brief Converts Kernel::profile_token_type_t to std::string
+    std::string to_string( const Kernel::profile_token_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_free_register_token_t to std::string
-    std::string to_string( const Function::profile_free_register_token_t val );
+    /// @brief Converts Kernel::profile_free_register_token_t to std::string
+    std::string to_string( const Kernel::profile_free_register_token_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_register_sequence_t to std::string
-    std::string to_string( const Function::profile_register_sequence_t val );
+    /// @brief Converts Kernel::profile_register_sequence_t to std::string
+    std::string to_string( const Kernel::profile_register_sequence_t val );
 
 } // namespace xet
 #endif // defined(__cplusplus)

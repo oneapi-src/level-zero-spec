@@ -63,7 +63,7 @@ The following sample code demonstrates a basic usage of API tracing:
         clock_t start;
     } my_instance_data_t;
 
-    void OnEnterCommandListAppendLaunchFunction(
+    void OnEnterCommandListAppendLaunchKernel(
         xe_command_list_append_launch_function_params_t* params,
         xe_result_t result,
         void* pTracerUserData,
@@ -75,7 +75,7 @@ The following sample code demonstrates a basic usage of API tracing:
         instance_data->start = clock();
     }
 
-    void OnExitCommandListAppendLaunchFunction(
+    void OnExitCommandListAppendLaunchKernel(
         xe_command_list_append_launch_function_params_t* params,
         xe_result_t result,
         void* pTracerUserData,
@@ -87,7 +87,7 @@ The following sample code demonstrates a basic usage of API tracing:
         my_instance_data_t* instance_data = *(my_instance_data_t**)ppTracerInstanceUserData;
         
         float time = 1000.f * ( end - instance_data->start ) / CLOCKS_PER_SEC;
-        printf("xeCommandListAppendLaunchFunction #%d takes %.4f ms\n", tracer_data->instance++, time);
+        printf("xeCommandListAppendLaunchKernel #%d takes %.4f ms\n", tracer_data->instance++, time);
         
         free(instance_data);
     }
@@ -104,17 +104,17 @@ The following sample code demonstrates a basic usage of API tracing:
         // Set all callbacks
         xet_core_callbacks_t prologCbs = {};
         xet_core_callbacks_t epilogCbs = {};
-        prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchFunction;
-        epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchFunction;
+        prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchKernel;
+        epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchKernel;
 
         xetTracerSetPrologues(hTracer, &prologCbs, nullptr);
         xetTracerSetEpilogues(hTracer, &epilogCbs, nullptr);
 
         xetTracerSetEnabled(hTracer, true);
 
-        xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-        xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-        xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        xeCommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        xeCommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        xeCommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
         xetTracerSetEnabled(hTracer, false);
         xetTracerDestroy(hTracer);
@@ -490,20 +490,20 @@ There are two type of instrumentation available:
 
 ## Inter-Function Instrumentation
 The following capabilities allow for a tool to intercept and redirect function calls:
-* Inter-module function calls - the ability to call functions between different modules; e.g., the applicaiton's module and a tool's module
+* Inter-module function calls - the ability to call functions between different modules; e.g., the application's module and a tool's module
 * [API Tracing](#at)
 
 For example, a tool may use API Tracing in any of the following ways:
 * ::xeModuleCreate - replace a module handle with instrumented module handle for all functions
-* ::xeFunctionCreate - replace a function handle with instrumented function handle for all call sites
+* ::xeKernelCreate - replace a kernel handle with instrumented kernel handle for all call sites
 * ::xeModuleGetFunctionPointer - replace a function pointer with instrumented function pointer for all call sites
-* ::xeCommandListAppendLaunchFunction - replace a function handle with instrumented function handle at call site
+* ::xeCommandListAppendLaunchKernel - replace a kernel handle with instrumented kernel handle at call site
 
 ## Intra-Function Instrumentation
-The following capabilities allow for a tool to inject instructions within a function:
+The following capabilities allow for a tool to inject instructions within a kernel:
 * ::xetModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
-* ::xetModuleGetFunctionNames - allows for a tool to query for all functions within an application's module
-* ::xetFunctionGetProfileInfo - allows a tool query detailed information on aspects of a function
+* ::xetModuleGetKernelNames - allows for a tool to query for all kernels within an application's module
+* ::xetKernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
 * ::xeModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
 * [API Tracing](#at) - same usage as Inter-Function Instrumentation above
 
@@ -519,7 +519,7 @@ In another example, a tool could recompile a Module using the build flag and use
 application's Module handle with it's own.
 
 ### Instrumentation
-Once the module has been compiled with instrumentation enabled, a tool may use ::xetModuleGetDebugInfo and ::xetFunctionGetProfileInfo
+Once the module has been compiled with instrumentation enabled, a tool may use ::xetModuleGetDebugInfo and ::xetKernelGetProfileInfo
 in order to decode the application's instructions and register usage for each function in the module.
 
 If a tool requires additional functions to be used, it may create other module(s) and use ::xeModuleGetFunctionPointer
@@ -535,7 +535,7 @@ TODO: need a picture and write-up from GT-PIN/IGC team on how to use the profile
 
 ### Execution
 If a tool requires changing the address of an application's function, then it should use API Tracing; for example,
-::xeModuleGetFunctionPointer and all flavors of ::xeCommandListAppendLaunchFunction.
+::xeModuleGetFunctionPointer and all flavors of ::xeCommandListAppendLaunchKernel.
 
 
 # <a name="dbg">Program Debug</a>

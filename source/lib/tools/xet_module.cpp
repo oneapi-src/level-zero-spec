@@ -109,19 +109,19 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_info_version_t to std::string
-    std::string to_string( const Function::profile_info_version_t val )
+    /// @brief Converts Kernel::profile_info_version_t to std::string
+    std::string to_string( const Kernel::profile_info_version_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Function::profile_info_version_t::CURRENT:
-            str = "Function::profile_info_version_t::CURRENT";
+        case Kernel::profile_info_version_t::CURRENT:
+            str = "Kernel::profile_info_version_t::CURRENT";
             break;
 
         default:
-            str = "Function::profile_info_version_t::?";
+            str = "Kernel::profile_info_version_t::?";
             break;
         };
 
@@ -129,38 +129,38 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_flag_t to std::string
-    std::string to_string( const Function::profile_flag_t val )
+    /// @brief Converts Kernel::profile_flag_t to std::string
+    std::string to_string( const Kernel::profile_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
 
         std::string str;
         
-        if( static_cast<uint32_t>(Function::profile_flag_t::REGISTER_REALLOCATION) & bits )
+        if( static_cast<uint32_t>(Kernel::profile_flag_t::REGISTER_REALLOCATION) & bits )
             str += "REGISTER_REALLOCATION | ";
         
-        if( static_cast<uint32_t>(Function::profile_flag_t::FREE_REGISTER_INFO) & bits )
+        if( static_cast<uint32_t>(Kernel::profile_flag_t::FREE_REGISTER_INFO) & bits )
             str += "FREE_REGISTER_INFO | ";
 
         return ( str.size() > 3 ) 
-            ? "Function::profile_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Function::profile_flag_t::{ ? }";
+            ? "Kernel::profile_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Kernel::profile_flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_token_type_t to std::string
-    std::string to_string( const Function::profile_token_type_t val )
+    /// @brief Converts Kernel::profile_token_type_t to std::string
+    std::string to_string( const Kernel::profile_token_type_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Function::profile_token_type_t::FREE_REGISTER:
-            str = "Function::profile_token_type_t::FREE_REGISTER";
+        case Kernel::profile_token_type_t::FREE_REGISTER:
+            str = "Kernel::profile_token_type_t::FREE_REGISTER";
             break;
 
         default:
-            str = "Function::profile_token_type_t::?";
+            str = "Kernel::profile_token_type_t::?";
             break;
         };
 
@@ -168,20 +168,20 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_info_t to std::string
-    std::string to_string( const Function::profile_info_t val )
+    /// @brief Converts Kernel::profile_info_t to std::string
+    std::string to_string( const Kernel::profile_info_t val )
     {
         std::string str;
         
-        str += "Function::profile_info_t::version : ";
+        str += "Kernel::profile_info_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "Function::profile_info_t::flags : ";
+        str += "Kernel::profile_info_t::flags : ";
         str += to_string(val.flags);
         str += "\n";
         
-        str += "Function::profile_info_t::numTokens : ";
+        str += "Kernel::profile_info_t::numTokens : ";
         str += std::to_string(val.numTokens);
         str += "\n";
 
@@ -189,20 +189,20 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_free_register_token_t to std::string
-    std::string to_string( const Function::profile_free_register_token_t val )
+    /// @brief Converts Kernel::profile_free_register_token_t to std::string
+    std::string to_string( const Kernel::profile_free_register_token_t val )
     {
         std::string str;
         
-        str += "Function::profile_free_register_token_t::type : ";
+        str += "Kernel::profile_free_register_token_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "Function::profile_free_register_token_t::size : ";
+        str += "Kernel::profile_free_register_token_t::size : ";
         str += std::to_string(val.size);
         str += "\n";
         
-        str += "Function::profile_free_register_token_t::count : ";
+        str += "Kernel::profile_free_register_token_t::count : ";
         str += std::to_string(val.count);
         str += "\n";
 
@@ -210,16 +210,16 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_register_sequence_t to std::string
-    std::string to_string( const Function::profile_register_sequence_t val )
+    /// @brief Converts Kernel::profile_register_sequence_t to std::string
+    std::string to_string( const Kernel::profile_register_sequence_t val )
     {
         std::string str;
         
-        str += "Function::profile_register_sequence_t::start : ";
+        str += "Kernel::profile_register_sequence_t::start : ";
         str += std::to_string(val.start);
         str += "\n";
         
-        str += "Function::profile_register_sequence_t::count : ";
+        str += "Kernel::profile_register_sequence_t::count : ";
         str += std::to_string(val.count);
         str += "\n";
 

@@ -44,9 +44,9 @@ typedef enum _xe_command_queue_flag_t
                                                     ///< dynamically assign based on usage
     XE_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY = XE_BIT(2),///< command queue reserves and cannot comsume more than a single slice.
                                                     ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
-    XE_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_FUNCTIONS = XE_BIT(3),   ///< command queue supports command list with cooperative functions. See
-                                                    ///< ::xeCommandListAppendLaunchCooperativeFunction for more details.
-                                                    ///< cannot be combined with COPY_ONLY.
+    XE_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_KERNELS = XE_BIT(3), ///< command queue supports command list with cooperative kernels. See
+                                                    ///< ::xeCommandListAppendLaunchCooperativeKernel for more details. cannot
+                                                    ///< be combined with COPY_ONLY.
 
 } xe_command_queue_flag_t;
 
@@ -81,7 +81,7 @@ typedef struct _xe_command_queue_desc_t
     xe_command_queue_mode_t mode;                   ///< [in] operation mode
     xe_command_queue_priority_t priority;           ///< [in] priority
     uint32_t ordinal;                               ///< [in] if logical-only flag is set, then will be ignored;
-                                                    ///< if supports-cooperative-functions is set, then may be ignored;
+                                                    ///< if supports-cooperative-kernels is set, then may be ignored;
                                                     ///< else-if copy-only flag is set, then must be less than ::xe_device_properties_t.numAsyncCopyEngines;
                                                     ///< otherwise must be less than
                                                     ///< ::xe_device_properties_t.numAsyncComputeEngines. When using sub-devices

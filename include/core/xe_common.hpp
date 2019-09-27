@@ -146,10 +146,10 @@ namespace xe
     using module_build_log_handle_t = _module_build_log_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of driver's function object
-    class Function;
-    struct _function_handle_t;
-    using function_handle_t = _function_handle_t*;
+    /// @brief Handle of driver's kernel object
+    class Kernel;
+    struct _kernel_handle_t;
+    using kernel_handle_t = _kernel_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's sampler object

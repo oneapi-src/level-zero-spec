@@ -34,9 +34,9 @@ alias: "$x_module_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of function object"
-class: $tFunction
-name: "$t_function_handle_t"
-alias: "$x_function_handle_t"
+class: $tKernel
+name: "$t_kernel_handle_t"
+alias: "$x_kernel_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of metric group's object"

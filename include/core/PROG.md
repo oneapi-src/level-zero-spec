@@ -21,9 +21,9 @@ NOTE: Sample code in this document contains little or no error checking for brev
     + [Fences](#fnc)
     + [Events](#evnt)
 * [Barriers](#brr)
-* [Modules and Functions](#mnf)
+* [Modules and Kernelss](#mnk)
     + [Modules](#mod)
-    + [Functions](#func)
+    + [Kernels](#kern)
     + [Execution](#exe)
     + [Sampler](#smp)
 * [Advanced](#adv)
@@ -393,8 +393,8 @@ The following sample code demonstrates a basic sequence for creation and usage o
     xe_command_list_handle_t hCommandList;
     xeCommandListCreateImmediate(hDevice, &commandQueueDesc, &hCommandList);
 
-    // Immediately submit a function to the device
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Immediately submit a kernel to the device
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
     ...
 ```
 
@@ -499,15 +499,15 @@ The following sample code demonstrates a sequence for creation and submission of
     xe_event_handle_t hEvent;
     xeEventCreate(hEventPool, &eventDesc, &hEvent);
 
-    // Append a signal of an event into the command list after the function executes
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent, 0, nullptr);
+    // Append a signal of an event into the command list after the kernel executes
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent, 0, nullptr);
 
     // Execute the command list with the signal
     xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
     ...
 ```
 
-The following diagram illustrates an event being signalled between functions within a command list:  
+The following diagram illustrates an event being signalled between kernels within a command list:  
 ![Event](../images/core_event.png?raw=true)  
 @image latex core_event.png
 
@@ -518,12 +518,12 @@ There are two types of barriers:
 
 The following sample code demonstrates a sequence for submission of a brute-force execution and global memory barrier:
 ```c
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
-    // Append a barrier into a command list to ensure hFunction1 completes before hFunction2 begins
+    // Append a barrier into a command list to ensure hKernel1 completes before hKernel2 begins
     xeCommandListAppendBarrier(hCommandList, nullptr, 0, nullptr);
 
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
     ...
 ```
 
@@ -544,11 +544,11 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     xe_event_handle_t hEvent1;
     xeEventCreate(hEventPool, &event1Desc, &hEvent1);
 
-    // Ensure hFunction1 completes before signaling hEvent1
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent1, 0, nullptr);
+    // Ensure hKernel1 completes before signaling hEvent1
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
 
-    // Ensure hEvent1 is signalled before starting hFunction2
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent1);
+    // Ensure hEvent1 is signalled before starting hKernel2
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
     ...
 ```
 
@@ -569,11 +569,11 @@ The following sample code demonstrates a sequence for submission of a fine-grain
     xe_event_handle_t hEvent1;
     xeEventCreate(hEventPool, &event1Desc, &hEvent1);
 
-    // Ensure hFunction1 memory writes are fully coherent across the device before signaling hEvent1
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, hEvent1, 0, nullptr);
+    // Ensure hKernel1 memory writes are fully coherent across the device before signaling hEvent1
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
 
-    // Ensure hEvent1 is signalled before starting hFunction2
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 1, &hEvent1);
+    // Ensure hEvent1 is signalled before starting hKernel2
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
     ...
 ```
 
@@ -582,19 +582,19 @@ Range-based memory barriers provide explicit control of which cachelines require
 
 The following sample code demonstrates a sequence for submission of a range-based memory barrier:
 ```c
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction1, &launchArgs, nullptr, 0, nullptr);
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, nullptr, 0, nullptr);
 
-    // Ensure memory range is fully coherent across the device after hFunction1 and before hFunction2
+    // Ensure memory range is fully coherent across the device after hKernel1 and before hKernel2
     xeCommandListAppendMemoryRangesBarrier(hCommandList, 1, &size, &ptr, nullptr, 0, nullptr);
 
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction2, &launchArgs, nullptr, 0, nullptr);
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 0, nullptr);
     ...
 ```
 
-# <a name="mnf">Modules and Functions</a>
-There are multiple levels of constructs needed for executing functions on the device:
-1. A [**Module**](#mod) represents a single translation unit that consists of functions that have been compiled together.
-2. A [**Function**](#func) represents the function within the module that will be launched directly from a command list.
+# <a name="mnk">Modules and Kernels</a>
+There are multiple levels of constructs needed for executing kernels on the device:
+1. A [**Module**](#mod) represents a single translation unit that consists of kernels that have been compiled together.
+2. A [**Kernel**](#kern) represents the kernel within the module that will be launched directly from a command list.
 
 The following diagram provides a high level overview of the major parts of the system.
 
@@ -606,7 +606,7 @@ Modules can be created from an IL or directly from native format using ::xeModul
 - ::xeModuleCreate takes a format argument that specifies the input format.
 - ::xeModuleCreate performs a compilation step when format is IL.
 
-The following sample code demonstrates a sequence for creating a module from an OpenCL function:
+The following sample code demonstrates a sequence for creating a module from an OpenCL kernel:
 ```c
     __kernel void image_scaling( __read_only  image2d_t src_img,
                                  __write_only image2d_t dest_img,
@@ -624,7 +624,7 @@ The following sample code demonstrates a sequence for creating a module from an 
 ```
 
 ```c
-    // OpenCL C function has been compiled to SPIRV IL (pImageScalingIL)
+    // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
     xe_module_desc_t moduleDesc = {
         XE_MODULE_DESC_VERSION_CURRENT,
         XE_MODULE_FORMAT_IL_SPIRV,
@@ -697,124 +697,124 @@ responsibility of the application to implement this using ::xeModuleGetNativeBin
 Also, note that the native binary will retain all debug information that is associated with the module. This allows debug
 capabilities for modules that are created from native binaries.
 
-### Built-in Functions
-Built-in functions are not supported but can be implemented by an upper level runtime or library using the native binary
+### Built-in Kernels
+Built-in kernels are not supported but can be implemented by an upper level runtime or library using the native binary
 interface.
 
-## <a name="func">Functions</a>
-A Function is a reference to a function within a module. The Function object supports both explicit and implicit function
+## <a name="kern">Kernels</a>
+A Kernel is a reference to a kernel within a module. The Kernel object supports both explicit and implicit kernel
 arguments along with data needed for launch.
 
-The following sample code demonstrates a sequence for creating a function from a module:
+The following sample code demonstrates a sequence for creating a kernel from a module:
 ```c
-    xe_function_desc_t functionDesc = {
-        XE_FUNCTION_DESC_VERSION_CURRENT,
-        XE_FUNCTION_FLAG_NONE,
+    xe_kernel_desc_t kernelDesc = {
+        XE_KERNEL_DESC_VERSION_CURRENT,
+        XE_KERNEL_FLAG_NONE,
         "image_scaling"
     };
-    xe_function_handle_t hFunction;
-    xeFunctionCreate(hModule, &functionDesc, &hFunction);
+    xe_kernel_handle_t hKernel;
+    xeKernelCreate(hModule, &kernelDesc, &hKernel);
     ...
 ```
 
-### Function Attributes
-Use ::xeFunctionGetAttribute to query attributes from a function object.
+### Kernel Attributes
+Use ::xeKernelGetAttribute to query attributes from a kernel object.
 
 ```c
     ...
     uint32_t numRegisters;
 
-    // Number of program registers used by function.
-    xeFunctionGetAttribute(hFunction, XE_FUNCTION_GET_ATTR_MAX_REGS_USED, &numRegisters);
+    // Number of program registers used by kernel.
+    xeKernelGetAttribute(hKernel, XE_KERNEL_GET_ATTR_MAX_REGS_USED, &numRegisters);
     ...
 ```
-See ::xe_function_get_attribute_t for more information on the "get" attributes.
+See ::xe_kernel_get_attribute_t for more information on the "get" attributes.
 
-Use ::xeFunctionSetAttribute to set attributes from a function object.
+Use ::xeKernelSetAttribute to set attributes for a kernel object.
 
 ```c
-    // Function performs indirect device access.
-    xeFunctionSetAttribute(hFunction, XE_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
+    // Kernel performs indirect device access.
+    xeKernelSetAttribute(hKernel, XE_KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
     ...
 ```
 
-See ::xe_function_set_attribute_t for more information on the "set" attributes.
+See ::xe_kernel_set_attribute_t for more information on the "set" attributes.
 
 ## <a name="exe">Execution</a>
 
-### Function Group Size
-The group size for a function can be set using ::xeFunctionSetGroupSize. If a group size is not
-set prior to appending a function into a command list then a default will be chosen.
+### Kernel Group Size
+The group size for a kernel can be set using ::xeKernelSetGroupSize. If a group size is not
+set prior to appending a kernel into a command list then a default will be chosen.
 The group size can updated over a series of append operations. The driver will copy the
-group size information when appending the function into the command list.
+group size information when appending the kernel into the command list.
 
 ```c
-    xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
+    xeKernelSetGroupSize(hKernel, groupSizeX, groupSizeY, 1);
 
     ...
 ```
 
 The API supports a query for suggested group size when providing the global size. This function ignores the
-group size that was set on the function using ::xeFunctionSetGroupSize.
+group size that was set on the kernel using ::xeKernelSetGroupSize.
 
 ```c
     // Find suggested group size for processing image.
     uint32_t groupSizeX;
     uint32_t groupSizeY;
-    xeFunctionSuggestGroupSize(function, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
+    xeKernelSuggestGroupSize(hKernel, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
 
-    xeFunctionSetGroupSize(function, groupSizeX, groupSizeY, 1);
+    xeKernelSetGroupSize(hKernel, groupSizeX, groupSizeY, 1);
 
     ...
 ```
 
-### Function Arguments
-Function arguments represent only the explicit function arguments that are within "brackets" e.g. func(arg1, arg2, ...).
-- Use ::xeFunctionSetArgumentValue to setup arguments for a function launch.
-- The AppendLaunchFunction command will make a copy the function arguments to send to the device.
-- Function arguments can be updated at anytime and used across multiple append calls.
+### Kernel Arguments
+Kernel arguments represent only the explicit kernel arguments that are within "brackets" e.g. func(arg1, arg2, ...).
+- Use ::xeKernelSetArgumentValue to setup arguments for a kernel launch.
+- The AppendLaunchKernel command will make a copy the kernel arguments to send to the device.
+- Kernel arguments can be updated at any time and used across multiple append calls.
 
-The following sample code demonstrates a sequence for creating function args and launching the function:
+The following sample code demonstrates a sequence for setting kernel args and launching the kernel:
 ```c
     // Bind arguments
-    xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_image_handle_t), &src_image);
-    xeFunctionSetArgumentValue(hFunction, 1, sizeof(xe_image_handle_t), &dest_image);
-    xeFunctionSetArgumentValue(hFunction, 2, sizeof(uint32_t), &width);
-    xeFunctionSetArgumentValue(hFunction, 3, sizeof(uint32_t), &height);
+    xeKernelSetArgumentValue(hKernel, 0, sizeof(xe_image_handle_t), &src_image);
+    xeKernelSetArgumentValue(hKernel, 1, sizeof(xe_image_handle_t), &dest_image);
+    xeKernelSetArgumentValue(hKernel, 2, sizeof(uint32_t), &width);
+    xeKernelSetArgumentValue(hKernel, 3, sizeof(uint32_t), &height);
 
     xe_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
-    // Append function
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Append launch kernel
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
     // Update image pointers to copy and scale next image.
-    xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_image_handle_t), &src2_image);
-    xeFunctionSetArgumentValue(hFunction, 1, sizeof(xe_image_handle_t), &dest2_image);
+    xeKernelSetArgumentValue(hKernel, 0, sizeof(xe_image_handle_t), &src2_image);
+    xeKernelSetArgumentValue(hKernel, 1, sizeof(xe_image_handle_t), &dest2_image);
 
-    // Append function
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Append launch kernel
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
     ...
 ```
 
-### Function Launch
-In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
-a command list. The most basic version of these is ::xeCommandListAppendLaunchFunction which takes a
-command list, function, launch arguments, and an optional synchronization event used to signal completion.
+### Kernel Launch
+In order to launch a kernel on the device an application must call one of the CommandListAppendLaunch* functions for
+a command list. The most basic version of these is ::xeCommandListAppendLaunchKernel which takes a
+command list, kernel handle, launch arguments, and an optional synchronization event used to signal completion.
 The launch arguments contain thread group dimensions.
 
 ```c
-    // compute number of groups to launch based on image size and function group size.
+    // compute number of groups to launch based on image size and group size.
     uint32_t numGroupsX = imageWidth / groupSizeX;
     uint32_t numGroupsY = imageHeight / groupSizeY;
 
     xe_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
-    // Append function
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Append launch kernel
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 ```
 
-::xeCommandListAppendLaunchFunctionIndirect allows the launch parameters to be supplied indirectly in a
+::xeCommandListAppendLaunchKernelIndirect allows the launch parameters to be supplied indirectly in a
 buffer that the device reads instead of the command itself. This allows for the previous operations on the
 device to generate the parameters.
 
@@ -824,24 +824,24 @@ device to generate the parameters.
     ...
     xeDriverAllocDeviceMem(hDriver, hDevice, flags, 0, sizeof(xe_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
-    // Append function
-    xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
+    // Append launch kernel - indirect
+    xeCommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
 ```
 
-### Cooperative Functions
-Cooperative functions allow sharing of data and synchronization across all launched groups in a safe manner. To support this
-there is a ::xeCommandListAppendLaunchCooperativeFunction that allows launching a group of functions that can cooperate with each other.
-The command list must be submitted to a command queue that was created with the ::XE_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_FUNCTIONS command queue flag.
-Finally, there is a ::xeFunctionSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
+### Cooperative Kernels
+Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
+there is a ::xeCommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
+The command list must be submitted to a command queue that was created with the ::XE_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_KERNELS command queue flag.
+Finally, there is a ::xeKernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
 
 In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
-a command list. The most basic version of these is ::xeCommandListAppendLaunchFunction which takes a
+a command list. The most basic version of these is ::xeCommandListAppendLaunchKernel which takes a
 command list, function, launch arguments, and an optional synchronization event used to signal completion.
 The launch arguments contain thread group dimensions.
 
 ## <a name="smp">Sampler</a>
 The API supports Sampler objects that represent state needed for sampling images from within
-Module functions.  The ::xeSamplerCreate function takes a sampler descriptor (::xe_sampler_desc_t):
+kernels.  The ::xeSamplerCreate function takes a sampler descriptor (::xe_sampler_desc_t):
 
 | Sampler Field    | Description                                           |
 | :--              | :--                                                   |
@@ -849,7 +849,7 @@ Module functions.  The ::xeSamplerCreate function takes a sampler descriptor (::
 | Filter Mode      | Specifies which filtering mode to use. See ::xe_sampler_filter_mode_t               |
 | Normalized       | Specifies whether coordinates for addressing image are normalized [0,1] or not.       |
 
-The following is sample for code creating a sampler object and passing it as a Function argument.
+The following is sample for code creating a sampler object and passing it as a kernel argument:
 
 ```c
     // Setup sampler for linear filtering and clamp out of bounds accesses to edge.
@@ -863,11 +863,11 @@ The following is sample for code creating a sampler object and passing it as a F
     xeSamplerCreate(hDevice, &desc, &sampler);
     ...
     
-    // The sampler can be passed as a function argument.
-    xeFunctionSetArgumentValue(hFunction, 0, sizeof(xe_sampler_handle_t), &sampler);
+    // The sampler can be passed as a kernel argument.
+    xeKernelSetArgumentValue(hKernel, 0, sizeof(xe_sampler_handle_t), &sampler);
 
-    // Append function
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // Append launch kernel
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 ```
 
 # <a name="adv">Advanced</a>
@@ -937,11 +937,11 @@ For devices that do not support page-faults, the driver must ensure that all pag
 This can be determined by checking ::xe_device_properties_t.onDemandPageFaultsSupported.
 
 In most cases, the driver implicitly handles residency of allocations for device access.
-This can be done by inspecting API parameters, including function arguments.
+This can be done by inspecting API parameters, including kernel arguments.
 However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
 such as multiple levels of indirection, there are two methods available:
-1. the application may set the ::XE_FUNCTION_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
- + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_function_set_attribute_t
+1. the application may set the ::XE_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
+ + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::xe_kernel_set_attribute_t
  + if the driver is unable to make all allocations resident, then the call to ::xeCommandQueueExecuteCommandLists will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 2. explcit ::xeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
  + if the application over-commits device memory, then a call to ::xeDeviceMakeMemoryResident will return XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -958,10 +958,10 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     xeDriverAllocHostMem(hDriver, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
     xeDriverAllocHostMem(hDriver, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
-    // 'begin' is passed as function argument and appended into command list
-    xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
-    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // 'begin' is passed as kernel argument and appended into command list
+    xeKernelSetAttribute(hFuncArgs, XE_KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+    xeKernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
     ...
 
     xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -978,9 +978,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     xeDriverAllocHostMem(hDriver, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
     xeDriverAllocHostMem(hDriver, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
-    // 'begin' is passed as function argument and appended into command list
-    xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+    // 'begin' is passed as kernel argument and appended into command list
+    xeKernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
     ...
 
     // Make indirect allocations resident before enqueuing
@@ -1127,8 +1127,8 @@ The following code examples demonstrate how to use the event IPC APIs:
     };
     xeEventCreate(hEventPool, &eventDesc, &hEvent);
 
-    // submit function and signal event when complete
-    xeCommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent, 0, nullptr);
+    // submit kernel and signal event when complete
+    xeCommandListAppendLaunchKernel(hCommandList, hKernel, &args, hEvent, 0, nullptr);
     xeCommandListClose(hCommandList);
     xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 ```

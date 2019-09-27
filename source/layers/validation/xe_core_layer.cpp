@@ -2168,7 +2168,7 @@ namespace layer
     xe_result_t __xecall
     xeModuleGetGlobalPointer(
         xe_module_handle_t hModule,                     ///< [in] handle of the device
-        const char* pGlobalName,                        ///< [in] name of function in global
+        const char* pGlobalName,                        ///< [in] name of global variable in module
         void** pptr                                     ///< [out] device visible pointer
         )
     {
@@ -2194,15 +2194,15 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionCreate
+    /// @brief Intercept function for xeKernelCreate
     xe_result_t __xecall
-    xeFunctionCreate(
+    xeKernelCreate(
         xe_module_handle_t hModule,                     ///< [in] handle of the module
-        const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
-        xe_function_handle_t* phFunction                ///< [out] handle of the Function object
+        const xe_kernel_desc_t* desc,                   ///< [in] pointer to kernel descriptor
+        xe_kernel_handle_t* phKernel                    ///< [out] handle of the Function object
         )
     {
-        auto pfnCreate = context.xeDdiTable.Function.pfnCreate;
+        auto pfnCreate = context.xeDdiTable.Kernel.pfnCreate;
 
         if( nullptr == pfnCreate )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2215,37 +2215,37 @@ namespace layer
             if( nullptr == desc )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == phFunction )
+            if( nullptr == phKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( XE_FUNCTION_DESC_VERSION_CURRENT < desc->version )
+            if( XE_KERNEL_DESC_VERSION_CURRENT < desc->version )
                 return XE_RESULT_ERROR_UNSUPPORTED;
 
         }
 
-        return pfnCreate( hModule, desc, phFunction );
+        return pfnCreate( hModule, desc, phKernel );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionDestroy
+    /// @brief Intercept function for xeKernelDestroy
     xe_result_t __xecall
-    xeFunctionDestroy(
-        xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
+    xeKernelDestroy(
+        xe_kernel_handle_t hKernel                      ///< [in][release] handle of the kernel object
         )
     {
-        auto pfnDestroy = context.xeDdiTable.Function.pfnDestroy;
+        auto pfnDestroy = context.xeDdiTable.Kernel.pfnDestroy;
 
         if( nullptr == pfnDestroy )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnDestroy( hFunction );
+        return pfnDestroy( hKernel );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2279,51 +2279,51 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetGroupSize
+    /// @brief Intercept function for xeKernelSetGroupSize
     xe_result_t __xecall
-    xeFunctionSetGroupSize(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
-        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
-        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
+    xeKernelSetGroupSize(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
+        uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this kernel
+        uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this kernel
         )
     {
-        auto pfnSetGroupSize = context.xeDdiTable.Function.pfnSetGroupSize;
+        auto pfnSetGroupSize = context.xeDdiTable.Kernel.pfnSetGroupSize;
 
         if( nullptr == pfnSetGroupSize )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+        return pfnSetGroupSize( hKernel, groupSizeX, groupSizeY, groupSizeZ );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSuggestGroupSize
+    /// @brief Intercept function for xeKernelSuggestGroupSize
     xe_result_t __xecall
-    xeFunctionSuggestGroupSize(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        uint32_t globalSizeX,                           ///< [in] global width for X dimension.
-        uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
-        uint32_t globalSizeZ,                           ///< [in] global width for Z dimension.
-        uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension.
-        uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension.
-        uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
+    xeKernelSuggestGroupSize(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        uint32_t globalSizeX,                           ///< [in] global width for X dimension
+        uint32_t globalSizeY,                           ///< [in] global width for Y dimension
+        uint32_t globalSizeZ,                           ///< [in] global width for Z dimension
+        uint32_t* groupSizeX,                           ///< [out] recommended size of group for X dimension
+        uint32_t* groupSizeY,                           ///< [out] recommended size of group for Y dimension
+        uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension
         )
     {
-        auto pfnSuggestGroupSize = context.xeDdiTable.Function.pfnSuggestGroupSize;
+        auto pfnSuggestGroupSize = context.xeDdiTable.Kernel.pfnSuggestGroupSize;
 
         if( nullptr == pfnSuggestGroupSize )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == groupSizeX )
@@ -2337,27 +2337,27 @@ namespace layer
 
         }
 
-        return pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+        return pfnSuggestGroupSize( hKernel, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSuggestMaxCooperativeGroupCount
+    /// @brief Intercept function for xeKernelSuggestMaxCooperativeGroupCount
     xe_result_t __xecall
-    xeFunctionSuggestMaxCooperativeGroupCount(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    xeKernelSuggestMaxCooperativeGroupCount(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
         uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
         uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
         )
     {
-        auto pfnSuggestMaxCooperativeGroupCount = context.xeDdiTable.Function.pfnSuggestMaxCooperativeGroupCount;
+        auto pfnSuggestMaxCooperativeGroupCount = context.xeDdiTable.Kernel.pfnSuggestMaxCooperativeGroupCount;
 
         if( nullptr == pfnSuggestMaxCooperativeGroupCount )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == groupCountX )
@@ -2371,76 +2371,76 @@ namespace layer
 
         }
 
-        return pfnSuggestMaxCooperativeGroupCount( hFunction, groupCountX, groupCountY, groupCountZ );
+        return pfnSuggestMaxCooperativeGroupCount( hKernel, groupCountX, groupCountY, groupCountZ );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetArgumentValue
+    /// @brief Intercept function for xeKernelSetArgumentValue
     xe_result_t __xecall
-    xeFunctionSetArgumentValue(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function args object.
+    xeKernelSetArgumentValue(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
         size_t argSize,                                 ///< [in] size of argument type
         const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
                                                         ///< null then argument value is considered null.
         )
     {
-        auto pfnSetArgumentValue = context.xeDdiTable.Function.pfnSetArgumentValue;
+        auto pfnSetArgumentValue = context.xeDdiTable.Kernel.pfnSetArgumentValue;
 
         if( nullptr == pfnSetArgumentValue )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+        return pfnSetArgumentValue( hKernel, argIndex, argSize, pArgValue );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionSetAttribute
+    /// @brief Intercept function for xeKernelSetAttribute
     xe_result_t __xecall
-    xeFunctionSetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function.
-        xe_function_set_attribute_t attr,               ///< [in] attribute to set
+    xeKernelSetAttribute(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        xe_kernel_set_attribute_t attr,                 ///< [in] attribute to set
         uint32_t value                                  ///< [in] attribute value to set
         )
     {
-        auto pfnSetAttribute = context.xeDdiTable.Function.pfnSetAttribute;
+        auto pfnSetAttribute = context.xeDdiTable.Kernel.pfnSetAttribute;
 
         if( nullptr == pfnSetAttribute )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetAttribute( hFunction, attr, value );
+        return pfnSetAttribute( hKernel, attr, value );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeFunctionGetAttribute
+    /// @brief Intercept function for xeKernelGetAttribute
     xe_result_t __xecall
-    xeFunctionGetAttribute(
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        xe_function_get_attribute_t attr,               ///< [in] attribute to query
+    xeKernelGetAttribute(
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        xe_kernel_get_attribute_t attr,                 ///< [in] attribute to query
         uint32_t* pValue                                ///< [out] returned attribute value
         )
     {
-        auto pfnGetAttribute = context.xeDdiTable.Function.pfnGetAttribute;
+        auto pfnGetAttribute = context.xeDdiTable.Kernel.pfnGetAttribute;
 
         if( nullptr == pfnGetAttribute )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pValue )
@@ -2448,25 +2448,25 @@ namespace layer
 
         }
 
-        return pfnGetAttribute( hFunction, attr, pValue );
+        return pfnGetAttribute( hKernel, attr, pValue );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchFunction
+    /// @brief Intercept function for xeCommandListAppendLaunchKernel
     xe_result_t __xecall
-    xeCommandListAppendLaunchFunction(
+    xeCommandListAppendLaunchKernel(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
                                                         ///< on before launching
         )
     {
-        auto pfnAppendLaunchFunction = context.xeDdiTable.CommandList.pfnAppendLaunchFunction;
+        auto pfnAppendLaunchKernel = context.xeDdiTable.CommandList.pfnAppendLaunchKernel;
 
-        if( nullptr == pfnAppendLaunchFunction )
+        if( nullptr == pfnAppendLaunchKernel )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2474,7 +2474,7 @@ namespace layer
             if( nullptr == hCommandList )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pLaunchFuncArgs )
@@ -2482,25 +2482,25 @@ namespace layer
 
         }
 
-        return pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        return pfnAppendLaunchKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeFunction
+    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeKernel
     xe_result_t __xecall
-    xeCommandListAppendLaunchCooperativeFunction(
+    xeCommandListAppendLaunchCooperativeKernel(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
                                                         ///< on before launching
         )
     {
-        auto pfnAppendLaunchCooperativeFunction = context.xeDdiTable.CommandList.pfnAppendLaunchCooperativeFunction;
+        auto pfnAppendLaunchCooperativeKernel = context.xeDdiTable.CommandList.pfnAppendLaunchCooperativeKernel;
 
-        if( nullptr == pfnAppendLaunchCooperativeFunction )
+        if( nullptr == pfnAppendLaunchCooperativeKernel )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2508,7 +2508,7 @@ namespace layer
             if( nullptr == hCommandList )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pLaunchFuncArgs )
@@ -2516,25 +2516,26 @@ namespace layer
 
         }
 
-        return pfnAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        return pfnAppendLaunchCooperativeKernel( hCommandList, hKernel, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
+    /// @brief Intercept function for xeCommandListAppendLaunchKernelIndirect
     xe_result_t __xecall
-    xeCommandListAppendLaunchFunctionIndirect(
+    xeCommandListAppendLaunchKernelIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
-        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
+        xe_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+                                                        ///< arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
                                                         ///< on before launching
         )
     {
-        auto pfnAppendLaunchFunctionIndirect = context.xeDdiTable.CommandList.pfnAppendLaunchFunctionIndirect;
+        auto pfnAppendLaunchKernelIndirect = context.xeDdiTable.CommandList.pfnAppendLaunchKernelIndirect;
 
-        if( nullptr == pfnAppendLaunchFunctionIndirect )
+        if( nullptr == pfnAppendLaunchKernelIndirect )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2542,7 +2543,7 @@ namespace layer
             if( nullptr == hCommandList )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hFunction )
+            if( nullptr == hKernel )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pLaunchArgumentsBuffer )
@@ -2550,30 +2551,30 @@ namespace layer
 
         }
 
-        return pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        return pfnAppendLaunchKernelIndirect( hCommandList, hKernel, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListAppendLaunchMultipleFunctionsIndirect
+    /// @brief Intercept function for xeCommandListAppendLaunchMultipleKernelsIndirect
     xe_result_t __xecall
-    xeCommandListAppendLaunchMultipleFunctionsIndirect(
+    xeCommandListAppendLaunchMultipleKernelsIndirect(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-        xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
+        uint32_t numKernels,                            ///< [in] maximum number of kernels to launch
+        xe_kernel_handle_t* phKernels,                  ///< [in][range(0, numKernels)] handles of the kernel objects
         const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of functions to launch; value must be less-than or equal-to
-                                                        ///< numFunctions
-        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will
-                                                        ///< contain a contiguous array of launch arguments
+                                                        ///< number of kernels to launch; value must be less-than or equal-to
+                                                        ///< numKernels
+        const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+                                                        ///< a contiguous array of thread group launch arguments
         xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
                                                         ///< on before launching
         )
     {
-        auto pfnAppendLaunchMultipleFunctionsIndirect = context.xeDdiTable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
+        auto pfnAppendLaunchMultipleKernelsIndirect = context.xeDdiTable.CommandList.pfnAppendLaunchMultipleKernelsIndirect;
 
-        if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
+        if( nullptr == pfnAppendLaunchMultipleKernelsIndirect )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2581,7 +2582,7 @@ namespace layer
             if( nullptr == hCommandList )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == phFunctions )
+            if( nullptr == phKernels )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCountBuffer )
@@ -2592,7 +2593,7 @@ namespace layer
 
         }
 
-        return pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        return pfnAppendLaunchMultipleKernelsIndirect( hCommandList, numKernels, phKernels, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3117,17 +3118,17 @@ xeGetCommandListProcAddrTable(
     dditable.pfnAppendEventReset                         = pDdiTable->pfnAppendEventReset;
     pDdiTable->pfnAppendEventReset                       = layer::xeCommandListAppendEventReset;
 
-    dditable.pfnAppendLaunchFunction                     = pDdiTable->pfnAppendLaunchFunction;
-    pDdiTable->pfnAppendLaunchFunction                   = layer::xeCommandListAppendLaunchFunction;
+    dditable.pfnAppendLaunchKernel                       = pDdiTable->pfnAppendLaunchKernel;
+    pDdiTable->pfnAppendLaunchKernel                     = layer::xeCommandListAppendLaunchKernel;
 
-    dditable.pfnAppendLaunchCooperativeFunction          = pDdiTable->pfnAppendLaunchCooperativeFunction;
-    pDdiTable->pfnAppendLaunchCooperativeFunction        = layer::xeCommandListAppendLaunchCooperativeFunction;
+    dditable.pfnAppendLaunchCooperativeKernel            = pDdiTable->pfnAppendLaunchCooperativeKernel;
+    pDdiTable->pfnAppendLaunchCooperativeKernel          = layer::xeCommandListAppendLaunchCooperativeKernel;
 
-    dditable.pfnAppendLaunchFunctionIndirect             = pDdiTable->pfnAppendLaunchFunctionIndirect;
-    pDdiTable->pfnAppendLaunchFunctionIndirect           = layer::xeCommandListAppendLaunchFunctionIndirect;
+    dditable.pfnAppendLaunchKernelIndirect               = pDdiTable->pfnAppendLaunchKernelIndirect;
+    pDdiTable->pfnAppendLaunchKernelIndirect             = layer::xeCommandListAppendLaunchKernelIndirect;
 
-    dditable.pfnAppendLaunchMultipleFunctionsIndirect    = pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect;
-    pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect  = layer::xeCommandListAppendLaunchMultipleFunctionsIndirect;
+    dditable.pfnAppendLaunchMultipleKernelsIndirect      = pDdiTable->pfnAppendLaunchMultipleKernelsIndirect;
+    pDdiTable->pfnAppendLaunchMultipleKernelsIndirect    = layer::xeCommandListAppendLaunchMultipleKernelsIndirect;
 
     dditable.pfnAppendLaunchHostFunction                 = pDdiTable->pfnAppendLaunchHostFunction;
     pDdiTable->pfnAppendLaunchHostFunction               = layer::xeCommandListAppendLaunchHostFunction;
@@ -3394,7 +3395,7 @@ xeGetModuleBuildLogProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Function table
+/// @brief Exported function for filling application's Kernel table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3405,12 +3406,12 @@ xeGetModuleBuildLogProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xeGetFunctionProcAddrTable(
+xeGetKernelProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_function_dditable_t* pDdiTable               ///< [in,out] pointer to table of DDI function pointers
+    xe_kernel_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.xeDdiTable.Function;
+    auto& dditable = layer::context.xeDdiTable.Kernel;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3421,28 +3422,28 @@ xeGetFunctionProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     dditable.pfnCreate                                   = pDdiTable->pfnCreate;
-    pDdiTable->pfnCreate                                 = layer::xeFunctionCreate;
+    pDdiTable->pfnCreate                                 = layer::xeKernelCreate;
 
     dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
-    pDdiTable->pfnDestroy                                = layer::xeFunctionDestroy;
+    pDdiTable->pfnDestroy                                = layer::xeKernelDestroy;
 
     dditable.pfnSetGroupSize                             = pDdiTable->pfnSetGroupSize;
-    pDdiTable->pfnSetGroupSize                           = layer::xeFunctionSetGroupSize;
+    pDdiTable->pfnSetGroupSize                           = layer::xeKernelSetGroupSize;
 
     dditable.pfnSuggestGroupSize                         = pDdiTable->pfnSuggestGroupSize;
-    pDdiTable->pfnSuggestGroupSize                       = layer::xeFunctionSuggestGroupSize;
+    pDdiTable->pfnSuggestGroupSize                       = layer::xeKernelSuggestGroupSize;
 
     dditable.pfnSuggestMaxCooperativeGroupCount          = pDdiTable->pfnSuggestMaxCooperativeGroupCount;
-    pDdiTable->pfnSuggestMaxCooperativeGroupCount        = layer::xeFunctionSuggestMaxCooperativeGroupCount;
+    pDdiTable->pfnSuggestMaxCooperativeGroupCount        = layer::xeKernelSuggestMaxCooperativeGroupCount;
 
     dditable.pfnSetArgumentValue                         = pDdiTable->pfnSetArgumentValue;
-    pDdiTable->pfnSetArgumentValue                       = layer::xeFunctionSetArgumentValue;
+    pDdiTable->pfnSetArgumentValue                       = layer::xeKernelSetArgumentValue;
 
     dditable.pfnSetAttribute                             = pDdiTable->pfnSetAttribute;
-    pDdiTable->pfnSetAttribute                           = layer::xeFunctionSetAttribute;
+    pDdiTable->pfnSetAttribute                           = layer::xeKernelSetAttribute;
 
     dditable.pfnGetAttribute                             = pDdiTable->pfnGetAttribute;
-    pDdiTable->pfnGetAttribute                           = layer::xeFunctionGetAttribute;
+    pDdiTable->pfnGetAttribute                           = layer::xeKernelGetAttribute;
 
     return result;
 }

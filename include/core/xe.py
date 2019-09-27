@@ -100,8 +100,8 @@ class xe_module_build_log_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle of driver's function object
-class xe_function_handle_t(c_void_p):
+## @brief Handle of driver's kernel object
+class xe_kernel_handle_t(c_void_p):
     pass
 
 ###############################################################################
@@ -462,9 +462,9 @@ class xe_command_queue_flag_v(IntEnum):
                                                     ## dynamically assign based on usage
     SINGLE_SLICE_ONLY = XE_BIT(2)                   ## command queue reserves and cannot comsume more than a single slice.
                                                     ## 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
-    SUPPORTS_COOPERATIVE_FUNCTIONS = XE_BIT(3)      ## command queue supports command list with cooperative functions. See
-                                                    ## ::xeCommandListAppendLaunchCooperativeFunction for more details.
-                                                    ## cannot be combined with COPY_ONLY.
+    SUPPORTS_COOPERATIVE_KERNELS = XE_BIT(3)        ## command queue supports command list with cooperative kernels. See
+                                                    ## ::xeCommandListAppendLaunchCooperativeKernel for more details. cannot
+                                                    ## be combined with COPY_ONLY.
 
 class xe_command_queue_flag_t(c_int):
     def __str__(self):
@@ -506,7 +506,7 @@ class xe_command_queue_desc_t(Structure):
         ("mode", xe_command_queue_mode_t),                              ## [in] operation mode
         ("priority", xe_command_queue_priority_t),                      ## [in] priority
         ("ordinal", c_ulong)                                            ## [in] if logical-only flag is set, then will be ignored;
-                                                                        ## if supports-cooperative-functions is set, then may be ignored;
+                                                                        ## if supports-cooperative-kernels is set, then may be ignored;
                                                                         ## else-if copy-only flag is set, then must be less than ::xe_device_properties_t.numAsyncCopyEngines;
                                                                         ## otherwise must be less than
                                                                         ## ::xe_device_properties_t.numAsyncComputeEngines. When using sub-devices
@@ -969,75 +969,75 @@ class xe_module_desc_t(Structure):
     ]
 
 ###############################################################################
-## @brief API version of ::xe_function_desc_t
-class xe_function_desc_version_v(IntEnum):
+## @brief API version of ::xe_kernel_desc_t
+class xe_kernel_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
-class xe_function_desc_version_t(c_int):
+class xe_kernel_desc_version_t(c_int):
     def __str__(self):
-        return str(xe_function_desc_version_v(value))
+        return str(xe_kernel_desc_version_v(value))
 
 
 ###############################################################################
-## @brief Supported function creation flags
-class xe_function_flag_v(IntEnum):
+## @brief Supported kernel creation flags
+class xe_kernel_flag_v(IntEnum):
     NONE = 0                                        ## default driver behavior
     FORCE_RESIDENCY = auto()                        ## force all device allocations to be resident during execution
 
-class xe_function_flag_t(c_int):
+class xe_kernel_flag_t(c_int):
     def __str__(self):
-        return str(xe_function_flag_v(value))
+        return str(xe_kernel_flag_v(value))
 
 
 ###############################################################################
-## @brief Function descriptor
-class xe_function_desc_t(Structure):
+## @brief Kernel descriptor
+class xe_kernel_desc_t(Structure):
     _fields_ = [
-        ("version", xe_function_desc_version_t),                        ## [in] ::XE_FUNCTION_DESC_VERSION_CURRENT
-        ("flags", xe_function_flag_t),                                  ## [in] creation flags
-        ("pFunctionName", POINTER(c_char))                              ## [in] null-terminated name of function in Module
+        ("version", xe_kernel_desc_version_t),                          ## [in] ::XE_KERNEL_DESC_VERSION_CURRENT
+        ("flags", xe_kernel_flag_t),                                    ## [in] creation flags
+        ("pKernelName", POINTER(c_char))                                ## [in] null-terminated name of kernel in module
     ]
 
 ###############################################################################
-## @brief Function attributes
+## @brief Kernel attributes
 ## 
 ## @remarks
 ##   _Analogues_
 ##     - **cl_kernel_exec_info**
-class xe_function_set_attribute_v(IntEnum):
-    FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS = 0      ## Indicates that the function accesses host allocations indirectly
+class xe_kernel_set_attribute_v(IntEnum):
+    KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS = 0        ## Indicates that the function accesses host allocations indirectly
                                                     ## (default: false)
-    FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS = auto()   ## Indicates that the function accesses device allocations indirectly
+    KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS = auto() ## Indicates that the function accesses device allocations indirectly
                                                     ## (default: false)
-    FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS = auto()   ## Indicates that the function accesses shared allocations indirectly
+    KERNEL_SET_ATTR_INDIRECT_SHARED_ACCESS = auto() ## Indicates that the function accesses shared allocations indirectly
                                                     ## (default: false)
 
-class xe_function_set_attribute_t(c_int):
+class xe_kernel_set_attribute_t(c_int):
     def __str__(self):
-        return str(xe_function_set_attribute_v(value))
+        return str(xe_kernel_set_attribute_v(value))
 
 
 ###############################################################################
-## @brief Function attributes
+## @brief Kernel attributes
 ## 
 ## @remarks
 ##   _Analogues_
 ##     - **CUfunction_attribute**
-class xe_function_get_attribute_v(IntEnum):
-    FUNCTION_GET_ATTR_MAX_REGS_USED = 0             ## Maximum device registers used for this function
-    FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS = auto()## Maximum dimensions for group for this function
-    FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE = auto()  ## Maximum shared memory required for this function
-    FUNCTION_GET_ATTR_HAS_SPILL_FILL = auto()       ## Function required spill/fills.
-    FUNCTION_GET_ATTR_HAS_BARRIERS = auto()         ## Function contains barriers.
-    FUNCTION_GET_ATTR_HAS_DPAS = auto()             ## Function contains DPAs.
+class xe_kernel_get_attribute_v(IntEnum):
+    KERNEL_GET_ATTR_MAX_REGS_USED = 0               ## Maximum device registers used for this kernel
+    KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS = auto()  ## Maximum dimensions for group for this kernel
+    KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE = auto()    ## Maximum shared memory required for this kernel
+    KERNEL_GET_ATTR_HAS_SPILL_FILL = auto()         ## Kernel required spill/fills
+    KERNEL_GET_ATTR_HAS_BARRIERS = auto()           ## Kernel contains barriers
+    KERNEL_GET_ATTR_HAS_DPAS = auto()               ## Kernel contains DPAS
 
-class xe_function_get_attribute_t(c_int):
+class xe_kernel_get_attribute_t(c_int):
     def __str__(self):
-        return str(xe_function_get_attribute_v(value))
+        return str(xe_kernel_get_attribute_v(value))
 
 
 ###############################################################################
-## @brief Function thread group dimensions.
+## @brief Kernel thread group dimensions.
 class xe_thread_group_dimensions_t(Structure):
     _fields_ = [
         ("groupCountX", c_ulong),                                       ## [in] size of thread group in X dimension
@@ -1569,32 +1569,32 @@ else:
     _xeCommandListAppendEventReset_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_event_handle_t )
 
 ###############################################################################
-## @brief Function-pointer for xeCommandListAppendLaunchFunction
+## @brief Function-pointer for xeCommandListAppendLaunchKernel
 if __use_win_types:
-    _xeCommandListAppendLaunchFunction_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+    _xeCommandListAppendLaunchKernel_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_kernel_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
 else:
-    _xeCommandListAppendLaunchFunction_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+    _xeCommandListAppendLaunchKernel_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_kernel_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeCommandListAppendLaunchCooperativeFunction
+## @brief Function-pointer for xeCommandListAppendLaunchCooperativeKernel
 if __use_win_types:
-    _xeCommandListAppendLaunchCooperativeFunction_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+    _xeCommandListAppendLaunchCooperativeKernel_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_kernel_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
 else:
-    _xeCommandListAppendLaunchCooperativeFunction_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+    _xeCommandListAppendLaunchCooperativeKernel_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_kernel_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeCommandListAppendLaunchFunctionIndirect
+## @brief Function-pointer for xeCommandListAppendLaunchKernelIndirect
 if __use_win_types:
-    _xeCommandListAppendLaunchFunctionIndirect_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+    _xeCommandListAppendLaunchKernelIndirect_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_kernel_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
 else:
-    _xeCommandListAppendLaunchFunctionIndirect_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+    _xeCommandListAppendLaunchKernelIndirect_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_kernel_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeCommandListAppendLaunchMultipleFunctionsIndirect
+## @brief Function-pointer for xeCommandListAppendLaunchMultipleKernelsIndirect
 if __use_win_types:
-    _xeCommandListAppendLaunchMultipleFunctionsIndirect_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, c_ulong, POINTER(xe_function_handle_t), POINTER(c_ulong), POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+    _xeCommandListAppendLaunchMultipleKernelsIndirect_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, c_ulong, POINTER(xe_kernel_handle_t), POINTER(c_ulong), POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
 else:
-    _xeCommandListAppendLaunchMultipleFunctionsIndirect_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, c_ulong, POINTER(xe_function_handle_t), POINTER(c_ulong), POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+    _xeCommandListAppendLaunchMultipleKernelsIndirect_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, c_ulong, POINTER(xe_kernel_handle_t), POINTER(c_ulong), POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xeCommandListAppendLaunchHostFunction
@@ -1627,10 +1627,10 @@ class _xe_command_list_dditable_t(Structure):
         ("pfnAppendSignalEvent", c_void_p),                             ## _xeCommandListAppendSignalEvent_t
         ("pfnAppendWaitOnEvents", c_void_p),                            ## _xeCommandListAppendWaitOnEvents_t
         ("pfnAppendEventReset", c_void_p),                              ## _xeCommandListAppendEventReset_t
-        ("pfnAppendLaunchFunction", c_void_p),                          ## _xeCommandListAppendLaunchFunction_t
-        ("pfnAppendLaunchCooperativeFunction", c_void_p),               ## _xeCommandListAppendLaunchCooperativeFunction_t
-        ("pfnAppendLaunchFunctionIndirect", c_void_p),                  ## _xeCommandListAppendLaunchFunctionIndirect_t
-        ("pfnAppendLaunchMultipleFunctionsIndirect", c_void_p),         ## _xeCommandListAppendLaunchMultipleFunctionsIndirect_t
+        ("pfnAppendLaunchKernel", c_void_p),                            ## _xeCommandListAppendLaunchKernel_t
+        ("pfnAppendLaunchCooperativeKernel", c_void_p),                 ## _xeCommandListAppendLaunchCooperativeKernel_t
+        ("pfnAppendLaunchKernelIndirect", c_void_p),                    ## _xeCommandListAppendLaunchKernelIndirect_t
+        ("pfnAppendLaunchMultipleKernelsIndirect", c_void_p),           ## _xeCommandListAppendLaunchMultipleKernelsIndirect_t
         ("pfnAppendLaunchHostFunction", c_void_p)                       ## _xeCommandListAppendLaunchHostFunction_t
     ]
 
@@ -1885,74 +1885,74 @@ class _xe_module_build_log_dditable_t(Structure):
     ]
 
 ###############################################################################
-## @brief Function-pointer for xeFunctionCreate
+## @brief Function-pointer for xeKernelCreate
 if __use_win_types:
-    _xeFunctionCreate_t = WINFUNCTYPE( xe_result_t, xe_module_handle_t, POINTER(xe_function_desc_t), POINTER(xe_function_handle_t) )
+    _xeKernelCreate_t = WINFUNCTYPE( xe_result_t, xe_module_handle_t, POINTER(xe_kernel_desc_t), POINTER(xe_kernel_handle_t) )
 else:
-    _xeFunctionCreate_t = CFUNCTYPE( xe_result_t, xe_module_handle_t, POINTER(xe_function_desc_t), POINTER(xe_function_handle_t) )
+    _xeKernelCreate_t = CFUNCTYPE( xe_result_t, xe_module_handle_t, POINTER(xe_kernel_desc_t), POINTER(xe_kernel_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeFunctionDestroy
+## @brief Function-pointer for xeKernelDestroy
 if __use_win_types:
-    _xeFunctionDestroy_t = WINFUNCTYPE( xe_result_t, xe_function_handle_t )
+    _xeKernelDestroy_t = WINFUNCTYPE( xe_result_t, xe_kernel_handle_t )
 else:
-    _xeFunctionDestroy_t = CFUNCTYPE( xe_result_t, xe_function_handle_t )
+    _xeKernelDestroy_t = CFUNCTYPE( xe_result_t, xe_kernel_handle_t )
 
 ###############################################################################
-## @brief Function-pointer for xeFunctionSetGroupSize
+## @brief Function-pointer for xeKernelSetGroupSize
 if __use_win_types:
-    _xeFunctionSetGroupSize_t = WINFUNCTYPE( xe_result_t, xe_function_handle_t, c_ulong, c_ulong, c_ulong )
+    _xeKernelSetGroupSize_t = WINFUNCTYPE( xe_result_t, xe_kernel_handle_t, c_ulong, c_ulong, c_ulong )
 else:
-    _xeFunctionSetGroupSize_t = CFUNCTYPE( xe_result_t, xe_function_handle_t, c_ulong, c_ulong, c_ulong )
+    _xeKernelSetGroupSize_t = CFUNCTYPE( xe_result_t, xe_kernel_handle_t, c_ulong, c_ulong, c_ulong )
 
 ###############################################################################
-## @brief Function-pointer for xeFunctionSuggestGroupSize
+## @brief Function-pointer for xeKernelSuggestGroupSize
 if __use_win_types:
-    _xeFunctionSuggestGroupSize_t = WINFUNCTYPE( xe_result_t, xe_function_handle_t, c_ulong, c_ulong, c_ulong, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
+    _xeKernelSuggestGroupSize_t = WINFUNCTYPE( xe_result_t, xe_kernel_handle_t, c_ulong, c_ulong, c_ulong, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
 else:
-    _xeFunctionSuggestGroupSize_t = CFUNCTYPE( xe_result_t, xe_function_handle_t, c_ulong, c_ulong, c_ulong, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
+    _xeKernelSuggestGroupSize_t = CFUNCTYPE( xe_result_t, xe_kernel_handle_t, c_ulong, c_ulong, c_ulong, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
 
 ###############################################################################
-## @brief Function-pointer for xeFunctionSuggestMaxCooperativeGroupCount
+## @brief Function-pointer for xeKernelSuggestMaxCooperativeGroupCount
 if __use_win_types:
-    _xeFunctionSuggestMaxCooperativeGroupCount_t = WINFUNCTYPE( xe_result_t, xe_function_handle_t, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
+    _xeKernelSuggestMaxCooperativeGroupCount_t = WINFUNCTYPE( xe_result_t, xe_kernel_handle_t, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
 else:
-    _xeFunctionSuggestMaxCooperativeGroupCount_t = CFUNCTYPE( xe_result_t, xe_function_handle_t, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
+    _xeKernelSuggestMaxCooperativeGroupCount_t = CFUNCTYPE( xe_result_t, xe_kernel_handle_t, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
 
 ###############################################################################
-## @brief Function-pointer for xeFunctionSetArgumentValue
+## @brief Function-pointer for xeKernelSetArgumentValue
 if __use_win_types:
-    _xeFunctionSetArgumentValue_t = WINFUNCTYPE( xe_result_t, xe_function_handle_t, c_ulong, c_size_t, c_void_p )
+    _xeKernelSetArgumentValue_t = WINFUNCTYPE( xe_result_t, xe_kernel_handle_t, c_ulong, c_size_t, c_void_p )
 else:
-    _xeFunctionSetArgumentValue_t = CFUNCTYPE( xe_result_t, xe_function_handle_t, c_ulong, c_size_t, c_void_p )
+    _xeKernelSetArgumentValue_t = CFUNCTYPE( xe_result_t, xe_kernel_handle_t, c_ulong, c_size_t, c_void_p )
 
 ###############################################################################
-## @brief Function-pointer for xeFunctionSetAttribute
+## @brief Function-pointer for xeKernelSetAttribute
 if __use_win_types:
-    _xeFunctionSetAttribute_t = WINFUNCTYPE( xe_result_t, xe_function_handle_t, xe_function_set_attribute_t, c_ulong )
+    _xeKernelSetAttribute_t = WINFUNCTYPE( xe_result_t, xe_kernel_handle_t, xe_kernel_set_attribute_t, c_ulong )
 else:
-    _xeFunctionSetAttribute_t = CFUNCTYPE( xe_result_t, xe_function_handle_t, xe_function_set_attribute_t, c_ulong )
+    _xeKernelSetAttribute_t = CFUNCTYPE( xe_result_t, xe_kernel_handle_t, xe_kernel_set_attribute_t, c_ulong )
 
 ###############################################################################
-## @brief Function-pointer for xeFunctionGetAttribute
+## @brief Function-pointer for xeKernelGetAttribute
 if __use_win_types:
-    _xeFunctionGetAttribute_t = WINFUNCTYPE( xe_result_t, xe_function_handle_t, xe_function_get_attribute_t, POINTER(c_ulong) )
+    _xeKernelGetAttribute_t = WINFUNCTYPE( xe_result_t, xe_kernel_handle_t, xe_kernel_get_attribute_t, POINTER(c_ulong) )
 else:
-    _xeFunctionGetAttribute_t = CFUNCTYPE( xe_result_t, xe_function_handle_t, xe_function_get_attribute_t, POINTER(c_ulong) )
+    _xeKernelGetAttribute_t = CFUNCTYPE( xe_result_t, xe_kernel_handle_t, xe_kernel_get_attribute_t, POINTER(c_ulong) )
 
 
 ###############################################################################
-## @brief Table of Function functions pointers
-class _xe_function_dditable_t(Structure):
+## @brief Table of Kernel functions pointers
+class _xe_kernel_dditable_t(Structure):
     _fields_ = [
-        ("pfnCreate", c_void_p),                                        ## _xeFunctionCreate_t
-        ("pfnDestroy", c_void_p),                                       ## _xeFunctionDestroy_t
-        ("pfnSetGroupSize", c_void_p),                                  ## _xeFunctionSetGroupSize_t
-        ("pfnSuggestGroupSize", c_void_p),                              ## _xeFunctionSuggestGroupSize_t
-        ("pfnSuggestMaxCooperativeGroupCount", c_void_p),               ## _xeFunctionSuggestMaxCooperativeGroupCount_t
-        ("pfnSetArgumentValue", c_void_p),                              ## _xeFunctionSetArgumentValue_t
-        ("pfnSetAttribute", c_void_p),                                  ## _xeFunctionSetAttribute_t
-        ("pfnGetAttribute", c_void_p)                                   ## _xeFunctionGetAttribute_t
+        ("pfnCreate", c_void_p),                                        ## _xeKernelCreate_t
+        ("pfnDestroy", c_void_p),                                       ## _xeKernelDestroy_t
+        ("pfnSetGroupSize", c_void_p),                                  ## _xeKernelSetGroupSize_t
+        ("pfnSuggestGroupSize", c_void_p),                              ## _xeKernelSuggestGroupSize_t
+        ("pfnSuggestMaxCooperativeGroupCount", c_void_p),               ## _xeKernelSuggestMaxCooperativeGroupCount_t
+        ("pfnSetArgumentValue", c_void_p),                              ## _xeKernelSetArgumentValue_t
+        ("pfnSetAttribute", c_void_p),                                  ## _xeKernelSetAttribute_t
+        ("pfnGetAttribute", c_void_p)                                   ## _xeKernelGetAttribute_t
     ]
 
 ###############################################################################
@@ -1992,7 +1992,7 @@ class _xe_dditable_t(Structure):
         ("Image", _xe_image_dditable_t),
         ("Module", _xe_module_dditable_t),
         ("ModuleBuildLog", _xe_module_build_log_dditable_t),
-        ("Function", _xe_function_dditable_t),
+        ("Kernel", _xe_kernel_dditable_t),
         ("Sampler", _xe_sampler_dditable_t)
     ]
 
@@ -2107,10 +2107,10 @@ class XE_DDI:
         self.xeCommandListAppendSignalEvent = _xeCommandListAppendSignalEvent_t(self.__dditable.CommandList.pfnAppendSignalEvent)
         self.xeCommandListAppendWaitOnEvents = _xeCommandListAppendWaitOnEvents_t(self.__dditable.CommandList.pfnAppendWaitOnEvents)
         self.xeCommandListAppendEventReset = _xeCommandListAppendEventReset_t(self.__dditable.CommandList.pfnAppendEventReset)
-        self.xeCommandListAppendLaunchFunction = _xeCommandListAppendLaunchFunction_t(self.__dditable.CommandList.pfnAppendLaunchFunction)
-        self.xeCommandListAppendLaunchCooperativeFunction = _xeCommandListAppendLaunchCooperativeFunction_t(self.__dditable.CommandList.pfnAppendLaunchCooperativeFunction)
-        self.xeCommandListAppendLaunchFunctionIndirect = _xeCommandListAppendLaunchFunctionIndirect_t(self.__dditable.CommandList.pfnAppendLaunchFunctionIndirect)
-        self.xeCommandListAppendLaunchMultipleFunctionsIndirect = _xeCommandListAppendLaunchMultipleFunctionsIndirect_t(self.__dditable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect)
+        self.xeCommandListAppendLaunchKernel = _xeCommandListAppendLaunchKernel_t(self.__dditable.CommandList.pfnAppendLaunchKernel)
+        self.xeCommandListAppendLaunchCooperativeKernel = _xeCommandListAppendLaunchCooperativeKernel_t(self.__dditable.CommandList.pfnAppendLaunchCooperativeKernel)
+        self.xeCommandListAppendLaunchKernelIndirect = _xeCommandListAppendLaunchKernelIndirect_t(self.__dditable.CommandList.pfnAppendLaunchKernelIndirect)
+        self.xeCommandListAppendLaunchMultipleKernelsIndirect = _xeCommandListAppendLaunchMultipleKernelsIndirect_t(self.__dditable.CommandList.pfnAppendLaunchMultipleKernelsIndirect)
         self.xeCommandListAppendLaunchHostFunction = _xeCommandListAppendLaunchHostFunction_t(self.__dditable.CommandList.pfnAppendLaunchHostFunction)
 
         # call driver to get function pointers
@@ -2194,21 +2194,21 @@ class XE_DDI:
         self.xeModuleBuildLogGetString = _xeModuleBuildLogGetString_t(self.__dditable.ModuleBuildLog.pfnGetString)
 
         # call driver to get function pointers
-        _Function = _xe_function_dditable_t()
-        r = xe_result_v(self.__dll.xeGetFunctionProcAddrTable(version, byref(_Function)))
+        _Kernel = _xe_kernel_dditable_t()
+        r = xe_result_v(self.__dll.xeGetKernelProcAddrTable(version, byref(_Kernel)))
         if r != xe_result_v.SUCCESS:
             raise Exception(r)
-        self.__dditable.Function = _Function
+        self.__dditable.Kernel = _Kernel
 
         # attach function interface to function address
-        self.xeFunctionCreate = _xeFunctionCreate_t(self.__dditable.Function.pfnCreate)
-        self.xeFunctionDestroy = _xeFunctionDestroy_t(self.__dditable.Function.pfnDestroy)
-        self.xeFunctionSetGroupSize = _xeFunctionSetGroupSize_t(self.__dditable.Function.pfnSetGroupSize)
-        self.xeFunctionSuggestGroupSize = _xeFunctionSuggestGroupSize_t(self.__dditable.Function.pfnSuggestGroupSize)
-        self.xeFunctionSuggestMaxCooperativeGroupCount = _xeFunctionSuggestMaxCooperativeGroupCount_t(self.__dditable.Function.pfnSuggestMaxCooperativeGroupCount)
-        self.xeFunctionSetArgumentValue = _xeFunctionSetArgumentValue_t(self.__dditable.Function.pfnSetArgumentValue)
-        self.xeFunctionSetAttribute = _xeFunctionSetAttribute_t(self.__dditable.Function.pfnSetAttribute)
-        self.xeFunctionGetAttribute = _xeFunctionGetAttribute_t(self.__dditable.Function.pfnGetAttribute)
+        self.xeKernelCreate = _xeKernelCreate_t(self.__dditable.Kernel.pfnCreate)
+        self.xeKernelDestroy = _xeKernelDestroy_t(self.__dditable.Kernel.pfnDestroy)
+        self.xeKernelSetGroupSize = _xeKernelSetGroupSize_t(self.__dditable.Kernel.pfnSetGroupSize)
+        self.xeKernelSuggestGroupSize = _xeKernelSuggestGroupSize_t(self.__dditable.Kernel.pfnSuggestGroupSize)
+        self.xeKernelSuggestMaxCooperativeGroupCount = _xeKernelSuggestMaxCooperativeGroupCount_t(self.__dditable.Kernel.pfnSuggestMaxCooperativeGroupCount)
+        self.xeKernelSetArgumentValue = _xeKernelSetArgumentValue_t(self.__dditable.Kernel.pfnSetArgumentValue)
+        self.xeKernelSetAttribute = _xeKernelSetAttribute_t(self.__dditable.Kernel.pfnSetAttribute)
+        self.xeKernelGetAttribute = _xeKernelGetAttribute_t(self.__dditable.Kernel.pfnGetAttribute)
 
         # call driver to get function pointers
         _Sampler = _xe_sampler_dditable_t()

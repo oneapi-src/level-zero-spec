@@ -124,7 +124,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Function thread group dimensions.
+        /// @brief Kernel thread group dimensions.
         struct thread_group_dimensions_t
         {
             uint32_t groupCountX = 0;                       ///< [in] size of thread group in X dimension
@@ -573,7 +573,7 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Launch function over one or more work groups.
+        /// @brief Launch kernel over one or more work groups.
         /// 
         /// @details
         ///     - This may **not** be called for a command list created with
@@ -587,9 +587,9 @@ namespace xe
         ///     - **cuLaunchKernel**
         /// @throws result_t
         void __xecall
-        AppendLaunchFunction(
-            Function* pFunction,                            ///< [in] pointer to the function object
-            const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
+        AppendLaunchKernel(
+            Kernel* pKernel,                                ///< [in] pointer to the kernel object
+            const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] thread group launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
             Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -597,7 +597,7 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Launch function cooperatively over one or more work groups.
+        /// @brief Launch kernel cooperatively over one or more work groups.
         /// 
         /// @details
         ///     - This may **not** be called for a command list created with
@@ -607,7 +607,7 @@ namespace xe
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same command list handle.
         ///     - The implementation of this function should be lock-free.
-        ///     - Use ::xeFunctionSuggestMaxCooperativeGroupCount to recommend max group
+        ///     - Use ::xeKernelSuggestMaxCooperativeGroupCount to recommend max group
         ///       count for device for cooperative functions that device supports.
         /// 
         /// @remarks
@@ -615,9 +615,9 @@ namespace xe
         ///     - **cudaLaunchCooperativeKernel**
         /// @throws result_t
         void __xecall
-        AppendLaunchCooperativeFunction(
-            Function* pFunction,                            ///< [in] pointer to the function object
-            const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
+        AppendLaunchCooperativeKernel(
+            Kernel* pKernel,                                ///< [in] pointer to the kernel object
+            const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] thread group launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
             Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -625,7 +625,7 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Launch function over one or more work groups using indirect arguments.
+        /// @brief Launch kernel over one or more work groups using indirect arguments.
         /// 
         /// @details
         ///     - The launch arguments need to be device visible.
@@ -642,9 +642,10 @@ namespace xe
         ///     - **cuLaunchKernel**
         /// @throws result_t
         void __xecall
-        AppendLaunchFunctionIndirect(
-            Function* pFunction,                            ///< [in] pointer to the function object
-            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
+        AppendLaunchKernelIndirect(
+            Kernel* pKernel,                                ///< [in] pointer to the kernel object
+            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain thread group launch
+                                                            ///< arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
             Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -652,13 +653,13 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Launch multiple functions over one or more work groups using an array
-        ///        of indirect arguments.
+        /// @brief Launch multiple kernels over one or more work groups using an array of
+        ///        indirect arguments.
         /// 
         /// @details
         ///     - The array of launch arguments need to be device visible.
-        ///     - The array of launch arguments buffer may not be reusued until the
-        ///       function has completed on the device.
+        ///     - The array of launch arguments buffer may not be reused until the
+        ///       kernel has completed on the device.
         ///     - This may **not** be called for a command list created with
         ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
         ///     - This function may **not** be called from simultaneous threads with the
@@ -670,14 +671,14 @@ namespace xe
         ///     - **cuLaunchKernel**
         /// @throws result_t
         void __xecall
-        AppendLaunchMultipleFunctionsIndirect(
-            uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-            Function** ppFunctions,                         ///< [in][range(0, numFunctions)] handles of the function objects
+        AppendLaunchMultipleKernelsIndirect(
+            uint32_t numKernels,                            ///< [in] maximum number of kernels to launch
+            Kernel** ppKernels,                             ///< [in][range(0, numKernels)] handles of the kernel objects
             const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
-                                                            ///< number of functions to launch; value must be less-than or equal-to
-                                                            ///< numFunctions
-            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in][range(0, numFunctions)] pointer to device buffer that will
-                                                            ///< contain a contiguous array of launch arguments
+                                                            ///< number of kernels to launch; value must be less-than or equal-to
+                                                            ///< numKernels
+            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in][range(0, numKernels)] pointer to device buffer that will contain
+                                                            ///< a contiguous array of thread group launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
             Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait

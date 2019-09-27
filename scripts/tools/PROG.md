@@ -70,7 +70,7 @@ The following sample code demonstrates a basic usage of API tracing:
         clock_t start;
     } my_instance_data_t;
 
-    void OnEnterCommandListAppendLaunchFunction(
+    void OnEnterCommandListAppendLaunchKernel(
         ${x}_command_list_append_launch_function_params_t* params,
         ${x}_result_t result,
         void* pTracerUserData,
@@ -82,7 +82,7 @@ The following sample code demonstrates a basic usage of API tracing:
         instance_data->start = clock();
     }
 
-    void OnExitCommandListAppendLaunchFunction(
+    void OnExitCommandListAppendLaunchKernel(
         ${x}_command_list_append_launch_function_params_t* params,
         ${x}_result_t result,
         void* pTracerUserData,
@@ -94,7 +94,7 @@ The following sample code demonstrates a basic usage of API tracing:
         my_instance_data_t* instance_data = *(my_instance_data_t**)ppTracerInstanceUserData;
         
         float time = 1000.f * ( end - instance_data->start ) / CLOCKS_PER_SEC;
-        printf("${x}CommandListAppendLaunchFunction #%d takes %.4f ms\n", tracer_data->instance++, time);
+        printf("${x}CommandListAppendLaunchKernel #%d takes %.4f ms\n", tracer_data->instance++, time);
         
         free(instance_data);
     }
@@ -112,17 +112,17 @@ The following sample code demonstrates a basic usage of API tracing:
         // Set all callbacks
         ${t}_core_callbacks_t prologCbs = {};
         ${t}_core_callbacks_t epilogCbs = {};
-        prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchFunction;
-        epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchFunction;
+        prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchKernel;
+        epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchKernel;
 
         ${t}TracerSetPrologues(hTracer, &prologCbs, nullptr);
         ${t}TracerSetEpilogues(hTracer, &epilogCbs, nullptr);
 
         ${t}TracerSetEnabled(hTracer, true);
 
-        ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-        ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-        ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
         ${t}TracerSetEnabled(hTracer, false);
         ${t}TracerDestroy(hTracer);
@@ -498,20 +498,20 @@ There are two type of instrumentation available:
 
 ${"##"} Inter-Function Instrumentation
 The following capabilities allow for a tool to intercept and redirect function calls:
-* Inter-module function calls - the ability to call functions between different modules; e.g., the applicaiton's module and a tool's module
+* Inter-module function calls - the ability to call functions between different modules; e.g., the application's module and a tool's module
 * [API Tracing](#at)
 
 For example, a tool may use API Tracing in any of the following ways:
 * ::${x}ModuleCreate - replace a module handle with instrumented module handle for all functions
-* ::${x}FunctionCreate - replace a function handle with instrumented function handle for all call sites
+* ::${x}KernelCreate - replace a kernel handle with instrumented kernel handle for all call sites
 * ::${x}ModuleGetFunctionPointer - replace a function pointer with instrumented function pointer for all call sites
-* ::${x}CommandListAppendLaunchFunction - replace a function handle with instrumented function handle at call site
+* ::${x}CommandListAppendLaunchKernel - replace a kernel handle with instrumented kernel handle at call site
 
 ${"##"} Intra-Function Instrumentation
-The following capabilities allow for a tool to inject instructions within a function:
+The following capabilities allow for a tool to inject instructions within a kernel:
 * ::${t}ModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
-* ::${t}ModuleGetFunctionNames - allows for a tool to query for all functions within an application's module
-* ::${t}FunctionGetProfileInfo - allows a tool query detailed information on aspects of a function
+* ::${t}ModuleGetKernelNames - allows for a tool to query for all kernels within an application's module
+* ::${t}KernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
 * ::${x}ModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
 * [API Tracing](#at) - same usage as Inter-Function Instrumentation above
 
@@ -529,7 +529,7 @@ In another example, a tool could recompile a Module using the build flag and use
 application's Module handle with it's own.
 
 ${"###"} Instrumentation
-Once the module has been compiled with instrumentation enabled, a tool may use ::${t}ModuleGetDebugInfo and ::${t}FunctionGetProfileInfo
+Once the module has been compiled with instrumentation enabled, a tool may use ::${t}ModuleGetDebugInfo and ::${t}KernelGetProfileInfo
 in order to decode the application's instructions and register usage for each function in the module.
 
 If a tool requires additional functions to be used, it may create other module(s) and use ::${x}ModuleGetFunctionPointer
@@ -545,7 +545,7 @@ TODO: need a picture and write-up from GT-PIN/IGC team on how to use the profile
 
 ${"###"} Execution
 If a tool requires changing the address of an application's function, then it should use API Tracing; for example,
-::${x}ModuleGetFunctionPointer and all flavors of ::${x}CommandListAppendLaunchFunction.
+::${x}ModuleGetFunctionPointer and all flavors of ::${x}CommandListAppendLaunchKernel.
 
 
 ${"#"} <a name="dbg">Program Debug</a>
