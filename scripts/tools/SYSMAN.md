@@ -62,14 +62,14 @@ The code example below shows how to enumerate the GPU devices in the system and 
 
 ```c
 int gNumDevices = 0;    // Global
-
-int ListDevices(xe_device_group_handle_t hDeviceGroup); // Forward declaration
+int ListDevice(ze_device_handle_t hDevice); // Forward declaration
+void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice); // Forward declaration
 
 int main( int argc, char *argv[] )
 {
     int ret = -1;
-    if ( (xeInit(XE_INIT_FLAG_NONE) != XE_RESULT_SUCCESS) ||
-         (xetInit(XE_INIT_FLAG_NONE) != XE_RESULT_SUCCESS) )
+    if ( (zeInit(ZE_INIT_FLAG_NONE) != ZE_RESULT_SUCCESS) ||
+         (zetInit(ZE_INIT_FLAG_NONE) != ZE_RESULT_SUCCESS) )
     {
         fprintf(stderr, "Can't initialize the API.\n");
         ret = 1;
@@ -77,27 +77,40 @@ int main( int argc, char *argv[] )
     else
     {
         // Discover all the device groups and devices
-        uint32_t groupCount = 0;
-        xeDeviceGroupGet(&groupCount, nullptr);
-        xe_device_group_handle_t* allDeviceGroups = (xe_device_group_handle_t*)
-            malloc(groupCount * sizeof(xe_device_group_handle_t));
-        xeDeviceGroupGet(&groupCount, allDeviceGroups);
+        uint32_t driversCount = 0;
+        zeDriverGet(&driversCount, nullptr);
+        ze_driver_handle_t* allDrivers = (ze_driver_handle_t*)
+            malloc(driversCount * sizeof(ze_driver_handle_t));
+        zeDriverGet(&driversCount, allDrivers);
+
         // Find the first GPU device group
-        xe_device_group_handle_t hDeviceGroup = nullptr;
-        for(uint32_t i = 0; i < groupCount; ++i)
+        ze_driver_handle_t hDriver = nullptr;
+        for(uint32_t i = 0; i < driversCount; ++i)
         {
-            xe_device_properties_t device_properties;
-            xeDeviceGroupGetDeviceProperties(allDeviceGroups[i], &device_properties);
-            if(XE_DEVICE_TYPE_GPU == device_properties.type)
+            uint32_t deviceCount = 0;
+            zeDeviceGet(allDrivers[i], &deviceCount, nullptr);
+
+            ze_device_handle_t* allDevices = (ze_device_handle_t*)
+                malloc(deviceCount * sizeof(ze_device_handle_t));
+            zeDeviceGet(allDrivers[i], &deviceCount, allDevices);
+
+            for(uint32_t d = 0; d < deviceCount; ++i)
             {
-                if ((ret = ListDevices(allDeviceGroups[i])) != 0)
+                ze_device_properties_t device_properties;
+                zeDeviceGetProperties(allDevices[d], &device_properties);
+                if(ZE_DEVICE_TYPE_GPU == device_properties.type)
                 {
-                    break;
+                    if ((ret = ListDevice(allDevices[d])) != 0)
+                    {
+                        break;
+                    }
                 }
             }
+
+            free(allDevices);
         }
 
-        free(allDeviceGroups);
+        free(allDrivers);
     }
 
     if (gNumDevices == 0)
@@ -108,47 +121,45 @@ int main( int argc, char *argv[] )
     return ret;
 }
 
-int ListDevices(xe_device_group_handle_t hDeviceGroup)
+int ListDevice(ze_device_handle_t hDevice)
 {
     int ret = 0;
-    uint32_t deviceCount = 0;
-    if (xeDeviceGet(hDeviceGroup, &deviceCount, nullptr) == XE_RESULT_SUCCESS)
+
+    zet_sysman_handle_t hSysmanDevice;
+    ze_result_t res = zetSysmanGet(hDevice, ZET_SYSMAN_VERSION_CURRENT, &hSysmanDevice);
+    if (res == ZE_RESULT_SUCCESS)
     {
-        if (deviceCount)
-        {
-            xe_device_handle_t* allDevices = (xe_device_handle_t*)
-                malloc(deviceCount * sizeof(xe_device_handle_t));
-            xeDeviceGet(hDeviceGroup, &deviceCount, allDevices);
+        gNumDevices++;
 
-            for (uint32_t i = 0; i < deviceCount; ++i)
-            {
-                xet_sysman_handle_t hSysmanDevice;
-                xe_result_t res = xetSysmanGet(allDevices[i], XET_SYSMAN_VERSION_CURRENT, &hSysmanDevice);
-                if (res == XE_RESULT_SUCCESS)
-                {
-                    gNumDevices++;
+        fprintf(stdout, "Device %d\n", gNumDevices);
 
-                    fprintf(stdout, "Device %d\n", gNumDevices);
-
-                    ShowDeviceInfo(hSysmanDevice);
-                }
-                else
-                {
-                    fprintf(stderr, "ERROR: Can't initialize system resource management for this device.\n");
-                    ret++;
-                }
-            }
-
-            free(allDevices);
-        }
+        ShowDeviceInfo(hSysmanDevice);
     }
     else
     {
-        fprintf(stderr, "ERROR: Couldn't get list of devices in a device group.\n");
-        ret = 1;
+        fprintf(stderr, "ERROR: Can't initialize system resource management for this device.\n");
+        ret++;
     }
 
     return ret;
+}
+
+void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
+{
+    zet_sysman_properties_t devProps;
+    ze_bool_t repaired;
+    if (zetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == ZE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "    UUID:           %s\n", devProps.core.uuid.id);
+        fprintf(stdout, "    #subdevices:    %u\n", devProps.numSubdevices);
+        fprintf(stdout, "    brand:          %s\n", devProps.brandName);
+        fprintf(stdout, "    model:          %s\n", devProps.modelName);
+        fprintf(stdout, "    driver timeout: disabled\n");
+    }
+    if (zetSysmanDeviceWasRepaired(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "    Was repaired:   %s\n", repaired ? "yes" : "no");
+    }
 }
 ```
 
@@ -218,28 +229,28 @@ In the C++ API, each class is a C++ class (e.g. An instance of the class ::${t}:
 The example code below shows how to use the SMI API to enumerate all GPU frequency components and fix each to a specific frequency:
 
 ```c
-void FixGpuFrequency(xet_sysman_handle_t hSysmanDevice, double FreqMHz)
+void FixGpuFrequency(zet_sysman_handle_t hSysmanDevice, double FreqMHz)
 {
     uint32_t numFreqDomains;
-    if ((xetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == XE_RESULT_SUCCESS) && numFreqDomains)
+    if ((zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == ZE_RESULT_SUCCESS) && numFreqDomains)
     {
-        xet_sysman_freq_handle_t* pFreqHandles = (xet_sysman_freq_handle_t*)malloc(numFreqDomains * sizeof(xet_sysman_freq_handle_t));
-        if (xetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == XE_RESULT_SUCCESS)
+        zet_sysman_freq_handle_t* pFreqHandles = (zet_sysman_freq_handle_t*)malloc(numFreqDomains * sizeof(zet_sysman_freq_handle_t));
+        if (zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == ZE_RESULT_SUCCESS)
         {
             for (uint32_t index = 0; index < numFreqDomains; index++)
             {
-                xet_freq_properties_t props;
-                if (xetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == XE_RESULT_SUCCESS)
+                zet_freq_properties_t props;
+                if (zetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == ZE_RESULT_SUCCESS)
                 {
                     // Only control GPU frequency domains
-                    if (props.type == XET_FREQ_DOMAIN_GPU)
+                    if (props.type == ZET_FREQ_DOMAIN_GPU)
                     {
                         if (props.canControl)
                         {
-                            xet_freq_range_t range;
+                            zet_freq_range_t range;
                             range.min = FreqMHz;
                             range.max = FreqMHz;
-                            if (xetSysmanFrequencySetRange(pFreqHandles[index], &range) != XE_RESULT_SUCCESS)
+                            if (zetSysmanFrequencySetRange(pFreqHandles[index], &range) != ZE_RESULT_SUCCESS)
                             {
                                 fprintf(stderr, "ERROR: Problem setting the frequency range for domain with index %u.\n", index);
                             }
@@ -271,31 +282,31 @@ HBM frequency control:
 The code below shows how to fix the GPU frequency on a specific sub-device (notice the additional sub-device check):
 
 ```c
-void FixSubdeviceGpuFrequency(xet_sysman_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
+void FixSubdeviceGpuFrequency(zet_sysman_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
 {
     uint32_t numFreqDomains;
-    if ((xetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == XE_RESULT_SUCCESS) && numFreqDomains)
+    if ((zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == ZE_RESULT_SUCCESS) && numFreqDomains)
     {
-        xet_sysman_freq_handle_t* pFreqHandles = (xet_sysman_freq_handle_t*)malloc(numFreqDomains * sizeof(xet_sysman_freq_handle_t));
-        if (xetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == XE_RESULT_SUCCESS)
+        zet_sysman_freq_handle_t* pFreqHandles = (zet_sysman_freq_handle_t*)malloc(numFreqDomains * sizeof(zet_sysman_freq_handle_t));
+        if (zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == ZE_RESULT_SUCCESS)
         {
             for (uint32_t index = 0; index < numFreqDomains; index++)
             {
-                xet_freq_properties_t props;
-                if (xetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == XE_RESULT_SUCCESS)
+                zet_freq_properties_t props;
+                if (zetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == ZE_RESULT_SUCCESS)
                 {
                     // Only control GPU frequency domains
-                    if (props.type == XET_FREQ_DOMAIN_GPU)
+                    if (props.type == ZET_FREQ_DOMAIN_GPU)
                     {
                         // Only control the GPU frequency domain for a specific sub-device
                         if (props.onSubdevice && (props.subdeviceId == subdeviceId))
                         {
                             if (props.canControl)
                             {
-                                xet_freq_range_t range;
+                                zet_freq_range_t range;
                                 range.min = FreqMHz;
                                 range.max = FreqMHz;
-                                if (xetSysmanFrequencySetRange(pFreqHandles[index], &range) != XE_RESULT_SUCCESS)
+                                if (zetSysmanFrequencySetRange(pFreqHandles[index], &range) != ZE_RESULT_SUCCESS)
                                 {
                                     fprintf(stderr, "ERROR: Problem setting the frequency range for domain with index %u.\n", index);
                                 }
@@ -345,11 +356,11 @@ The following operations permit getting properties about the entire device:
 The example below shows how to display general information about a device:
 
 ```c
-void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
+void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_properties_t devProps;
-    xe_bool_t repaired;
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == XE_RESULT_SUCCESS)
+    zet_sysman_properties_t devProps;
+    ze_bool_t repaired;
+    if (zetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == ZE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    UUID:           %s\n", devProps.core.uuid.id);
         fprintf(stdout, "    #subdevices:    %u\n", devProps.numSubdevices);
@@ -357,7 +368,7 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
         fprintf(stdout, "    model:          %s\n", devProps.modelName);
         fprintf(stdout, "    driver timeout: disabled\n");
     }
-    if (xetSysmanDeviceWasRepaired(hSysmanDevice, &repaired) == XE_RESULT_SUCCESS)
+    if (zetSysmanDeviceWasRepaired(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    Was repaired:   %s\n", repaired ? "yes" : "no");
     }
@@ -392,18 +403,18 @@ The following functions are available for changing the behavior of the scheduler
 The example below shows how to stop the scheduler enforcing fairness while permitting other work to attempt to run:
 
 ```c
-void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
+void DisableSchedulerWatchdog(zet_sysman_handle_t hSysmanDevice)
 {
-    xe_result_t res;
-    xet_sched_mode_t currentMode;
-    res = xetSysmanSchedulerGetCurrentMode(hSysmanDevice, &currentMode);
-    if (res == XE_RESULT_SUCCESS)
+    ze_result_t res;
+    zet_sched_mode_t currentMode;
+    res = zetSysmanSchedulerGetCurrentMode(hSysmanDevice, &currentMode);
+    if (res == ZE_RESULT_SUCCESS)
     {
-        xe_bool_t requireReboot;
-        xet_sched_timeout_properties_t props;
-        props.watchdogTimeout = XET_SCHED_WATCHDOG_DISABLE;
-        res = xetSysmanSchedulerSetTimeoutMode(hSysmanDevice, &props, &requireReboot);
-        if (res == XE_RESULT_SUCCESS)
+        ze_bool_t requireReboot;
+        zet_sched_timeout_properties_t props;
+        props.watchdogTimeout = ZET_SCHED_WATCHDOG_DISABLE;
+        res = zetSysmanSchedulerSetTimeoutMode(hSysmanDevice, &props, &requireReboot);
+        if (res == ZE_RESULT_SUCCESS)
         {
             if (requireReboot)
             {
@@ -414,11 +425,11 @@ void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
                 fprintf(stdout, "Schedule mode changed successfully.\n");
             }
         }
-        else if(res == XE_RESULT_ERROR_UNSUPPORTED)
+        else if(res == ZE_RESULT_ERROR_UNSUPPORTED)
         {
             fprintf(stderr, "ERROR: The timeout scheduler mode is not supported on this device.\n");
         }
-        else if(res == XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
+        else if(res == ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
         {
             fprintf(stderr, "ERROR: Don't have permissions to change the scheduler mode.\n");
         }
@@ -427,7 +438,7 @@ void DisableSchedulerWatchdog(xet_sysman_handle_t hSysmanDevice)
             fprintf(stderr, "ERROR: Problem calling the API to change the scheduler mode.\n");
         }
     }
-    else if(res == XE_RESULT_ERROR_UNSUPPORTED)
+    else if(res == ZE_RESULT_ERROR_UNSUPPORTED)
     {
         fprintf(stderr, "ERROR: Scheduler modes are not supported on this device.\n");
     }
@@ -452,10 +463,10 @@ The following functions permit getting data about the PCI endpoint for the devic
 The example below shows how to output the PCI BDF address:
 
 ```c
-void ShowPciInfo(xet_sysman_handle_t hSysmanDevice)
+void ShowPciInfo(zet_sysman_handle_t hSysmanDevice)
 {
-    xet_pci_properties_t pciProps;
-    if (xetSysmanPciGetProperties(hSysmanDevice, &pciProps) == XE_RESULT_SUCCESS)
+    zet_pci_properties_t pciProps;
+    if (zetSysmanPciGetProperties(hSysmanDevice, &pciProps) == ZE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    PCI address:        %04u:%02u:%02u.%u\n", pciProps.address.domain, pciProps.address.bus, pciProps.address.device, pciProps.address.function);
     }
@@ -504,21 +515,21 @@ The example below shows how to output information about each power domain on a d
 
 ```c
 // Forward declaration
-void ShowPowerLimits(xet_sysman_pwr_handle_t hPower);
+void ShowPowerLimits(zet_sysman_pwr_handle_t hPower);
 
-void ShowPowerDomains(xet_sysman_handle_t hSysmanDevice)
+void ShowPowerDomains(zet_sysman_handle_t hSysmanDevice)
 {
     uint32_t numPowerDomains;
-    if (xetSysmanPowerGet(hSysmanDevice, &numPowerDomains, NULL) == XE_RESULT_SUCCESS)
+    if (zetSysmanPowerGet(hSysmanDevice, &numPowerDomains, NULL) == ZE_RESULT_SUCCESS)
     {
-        xet_sysman_pwr_handle_t* phPower =
-            (xet_sysman_pwr_handle_t*)malloc(numPowerDomains * sizeof(xet_sysman_pwr_handle_t));
-        if (xetSysmanPowerGet(hSysmanDevice, &numPowerDomains, phPower) == XE_RESULT_SUCCESS)
+        zet_sysman_pwr_handle_t* phPower =
+            (zet_sysman_pwr_handle_t*)malloc(numPowerDomains * sizeof(zet_sysman_pwr_handle_t));
+        if (zetSysmanPowerGet(hSysmanDevice, &numPowerDomains, phPower) == ZE_RESULT_SUCCESS)
         {
             for (uint32_t pwrIndex = 0; pwrIndex < numPowerDomains; pwrIndex++)
             {
-                xet_power_properties_t props;
-                if (xetSysmanPowerGetProperties(phPower[pwrIndex], &props) == XE_RESULT_SUCCESS)
+                zet_power_properties_t props;
+                if (zetSysmanPowerGetProperties(phPower[pwrIndex], &props) == ZE_RESULT_SUCCESS)
                 {
                     if (props.onSubdevice)
                     {
@@ -539,12 +550,12 @@ void ShowPowerDomains(xet_sysman_handle_t hSysmanDevice)
     }
 }
 
-void ShowPowerLimits(xet_sysman_pwr_handle_t hPower)
+void ShowPowerLimits(zet_sysman_pwr_handle_t hPower)
 {
-    xet_power_sustained_limit_t sustainedLimits;
-    xet_power_burst_limit_t burstLimits;
-    xet_power_peak_limit_t peakLimits;
-    if (xetSysmanPowerGetLimits(hPower, &sustainedLimits, &burstLimits, &peakLimits) == XE_RESULT_SUCCESS)
+    zet_power_sustained_limit_t sustainedLimits;
+    zet_power_burst_limit_t burstLimits;
+    zet_power_peak_limit_t peakLimits;
+    if (zetSysmanPowerGetLimits(hPower, &sustainedLimits, &burstLimits, &peakLimits) == ZE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    Power limits\n");
         if (sustainedLimits.enabled)
@@ -572,10 +583,10 @@ void ShowPowerLimits(xet_sysman_pwr_handle_t hPower)
 The next example shows how to output the average power. It assumes that the function is called regularly (say every 100ms).
 
 ```c
-void ShowAveragePower(xet_sysman_handle_t hSysmanDevice, xet_power_energy_counter_t* pPrevEnergyCounter)
+void ShowAveragePower(zet_sysman_pwr_handle_t hPower, zet_power_energy_counter_t* pPrevEnergyCounter)
 {
-    xet_power_energy_counter_t newEnergyCounter;
-    if (xetSysmanPowerGetEnergyCounter(hSysmanDevice, &newEnergyCounter) == XE_RESULT_SUCCESS)
+    zet_power_energy_counter_t newEnergyCounter;
+    if (zetSysmanPowerGetEnergyCounter(hPower, &newEnergyCounter) == ZE_RESULT_SUCCESS)
     {
         uint64_t deltaTime = newEnergyCounter.timestamp - pPrevEnergyCounter->timestamp;
         if (deltaTime)
@@ -699,13 +710,13 @@ include the switches on each sub-device. In this case, ::${t}_link_switch_proper
 The example below shows how to get the state of all switches in the device and sub-devices:
 
 ```c
-void ShowSwitchInfo(xet_sysman_link_switch_handle_t hSwitch)
+void ShowSwitchInfo(zet_sysman_link_switch_handle_t hSwitch)
 {
-    xet_link_switch_properties_t swprops;
-    if (xetSysmanLinkSwitchGetProperties(hSwitch, &swprops) == XE_RESULT_SUCCESS)
+    zet_link_switch_properties_t swprops;
+    if (zetSysmanLinkSwitchGetProperties(hSwitch, &swprops) == ZE_RESULT_SUCCESS)
     {
-        xet_link_switch_state_t swstate;
-        if (xetSysmanLinkSwitchGetState(hSwitch, &swstate) == XE_RESULT_SUCCESS)
+        zet_link_switch_state_t swstate;
+        if (zetSysmanLinkSwitchGetState(hSwitch, &swstate) == ZE_RESULT_SUCCESS)
         {
             if (swprops.onSubdevice)
             {
@@ -715,18 +726,18 @@ void ShowSwitchInfo(xet_sysman_link_switch_handle_t hSwitch)
             if (swstate.enabled)
             {
                 uint32_t numPorts;
-                if (xetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, NULL) == XE_RESULT_SUCCESS)
+                if (zetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, NULL) == ZE_RESULT_SUCCESS)
                 {
-                    xet_sysman_link_port_handle_t* phPorts =
-                        (xet_sysman_link_port_handle_t*)malloc(numPorts * sizeof(xet_sysman_link_port_handle_t));
-                    if (xetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, phPorts) == XE_RESULT_SUCCESS)
+                    zet_sysman_link_port_handle_t* phPorts =
+                        (zet_sysman_link_port_handle_t*)malloc(numPorts * sizeof(zet_sysman_link_port_handle_t));
+                    if (zetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, phPorts) == ZE_RESULT_SUCCESS)
                     {
                         fprintf(stdout, "        Ports:\n");
                         for (uint32_t portIndex = 0; portIndex < numPorts; portIndex++)
                         {
-                            xet_link_port_state_t portstate;
-                            if (xetSysmanLinkPortGetState(phPorts[portIndex], &portstate)
-                                == XE_RESULT_SUCCESS)
+                            zet_link_port_state_t portstate;
+                            if (zetSysmanLinkPortGetState(phPorts[portIndex], &portstate)
+                                == ZE_RESULT_SUCCESS)
                             {
                                 fprintf(stdout, "            %u: ", portIndex);
                                 if (portstate.isConnected)
@@ -748,14 +759,14 @@ void ShowSwitchInfo(xet_sysman_link_switch_handle_t hSwitch)
     }
 }
 
-void ShowSwitches(xet_sysman_handle_t hSysmanDevice)
+void ShowSwitches(zet_sysman_handle_t hSysmanDevice)
 {
     uint32_t numSwitches;
-    if ((xetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, NULL) == XE_RESULT_SUCCESS) && numSwitches)
+    if ((zetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, NULL) == ZE_RESULT_SUCCESS) && numSwitches)
     {
-        xet_sysman_link_switch_handle_t* phSwitches =
-            (xet_sysman_link_switch_handle_t*)malloc(numSwitches * sizeof(xet_sysman_link_switch_handle_t));
-        if (xetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, phSwitches) == XE_RESULT_SUCCESS)
+        zet_sysman_link_switch_handle_t* phSwitches =
+            (zet_sysman_link_switch_handle_t*)malloc(numSwitches * sizeof(zet_sysman_link_switch_handle_t));
+        if (zetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, phSwitches) == ZE_RESULT_SUCCESS)
         {
             for (uint32_t index = 0; index < numSwitches; index++)
             {
@@ -807,21 +818,21 @@ The following functions are available:
 The example below shows how to output the fan speed of all fans:
 
 ```c
-void ShowFans(xet_sysman_handle_t hSysmanDevice)
+void ShowFans(zet_sysman_handle_t hSysmanDevice)
 {
     uint32_t numFans;
-    if (xetSysmanFanGet(hSysmanDevice, &numFans, NULL) == XE_RESULT_SUCCESS)
+    if (zetSysmanFanGet(hSysmanDevice, &numFans, NULL) == ZE_RESULT_SUCCESS)
     {
-        xet_sysman_fan_handle_t* phFans =
-            (xet_sysman_fan_handle_t*)malloc(numFans * sizeof(xet_sysman_fan_handle_t));
-        if (xetSysmanFanGet(hSysmanDevice, &numFans, phFans) == XE_RESULT_SUCCESS)
+        zet_sysman_fan_handle_t* phFans =
+            (zet_sysman_fan_handle_t*)malloc(numFans * sizeof(zet_sysman_fan_handle_t));
+        if (zetSysmanFanGet(hSysmanDevice, &numFans, phFans) == ZE_RESULT_SUCCESS)
         {
             fprintf(stdout, "    Fans\n");
             for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
-                xet_fan_state_t state;
-                if (xetSysmanFanGetState(phFans[fanIndex], XET_FAN_SPEED_UNITS_RPM, &state)
-                    == XE_RESULT_SUCCESS)
+                zet_fan_state_t state;
+                if (zetSysmanFanGetState(phFans[fanIndex], ZET_FAN_SPEED_UNITS_RPM, &state)
+                    == ZE_RESULT_SUCCESS)
                 {
                     fprintf(stdout, "        Fan %u: %u RPM\n", fanIndex, state.speed);
                 }
@@ -835,27 +846,27 @@ void ShowFans(xet_sysman_handle_t hSysmanDevice)
 The next example shows how to set the fan speed for all fans to a fixed value in RPM, but only if control is permitted:
 
 ```c
-void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
+void SetFanSpeed(zet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 {
     uint32_t numFans;
-    if (xetSysmanFanGet(hSysmanDevice, &numFans, NULL) == XE_RESULT_SUCCESS)
+    if (zetSysmanFanGet(hSysmanDevice, &numFans, NULL) == ZE_RESULT_SUCCESS)
     {
-        xet_sysman_fan_handle_t* phFans =
-            (xet_sysman_fan_handle_t*)malloc(numFans * sizeof(xet_sysman_fan_handle_t));
-        if (xetSysmanFanGet(hSysmanDevice, &numFans, phFans) == XE_RESULT_SUCCESS)
+        zet_sysman_fan_handle_t* phFans =
+            (zet_sysman_fan_handle_t*)malloc(numFans * sizeof(zet_sysman_fan_handle_t));
+        if (zetSysmanFanGet(hSysmanDevice, &numFans, phFans) == ZE_RESULT_SUCCESS)
         {
-            xet_fan_config_t config;
-            config.mode = XET_FAN_SPEED_MODE_FIXED;
+            zet_fan_config_t config;
+            config.mode = ZET_FAN_SPEED_MODE_FIXED;
             config.speed = SpeedRpm;
-            config.speedUnits = XET_FAN_SPEED_UNITS_RPM;
+            config.speedUnits = ZET_FAN_SPEED_UNITS_RPM;
             for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
-                xet_fan_properties_t fanprops;
-                if (xetSysmanFanGetProperties(phFans[fanIndex], &fanprops) == XE_RESULT_SUCCESS)
+                zet_fan_properties_t fanprops;
+                if (zetSysmanFanGetProperties(phFans[fanIndex], &fanprops) == ZE_RESULT_SUCCESS)
                 {
                     if (fanprops.canControl)
                     {
-                        xetSysmanFanSetConfig(phFans[fanIndex], &config);
+                        zetSysmanFanSetConfig(phFans[fanIndex], &config);
                     }
                     else
                     {
@@ -928,7 +939,7 @@ breakdown of the main device components where the errors occurred. The categorie
 The code below shows how to determine if RAS is supported and the current state of RAS errors:
 
 ```c
-void PrintRasDetails(xet_ras_details_t* pDetails)
+void PrintRasDetails(zet_ras_details_t* pDetails)
 {
     fprintf(stdout, "        Number new resets:                %llu\n", pDetails->numResets);
     fprintf(stdout, "        Number new programming errors:    %llu\n", pDetails->numProgrammingErrors);
@@ -942,27 +953,27 @@ void PrintRasDetails(xet_ras_details_t* pDetails)
     fprintf(stdout, "        Number new display errors:        %llu\n", pDetails->numDisplayErrors);
 }
 
-void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
+void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
 {
     uint32_t numRasErrorSets;
-    if ((xetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) == XE_RESULT_SUCCESS) && numRasErrorSets)
+    if ((zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) == ZE_RESULT_SUCCESS) && numRasErrorSets)
     {
-        xet_sysman_ras_handle_t* phRasErrorSets =
-            (xet_sysman_ras_handle_t*)malloc(numRasErrorSets * sizeof(xet_sysman_ras_handle_t));
-        if (xetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == XE_RESULT_SUCCESS)
+        zet_sysman_ras_handle_t* phRasErrorSets =
+            (zet_sysman_ras_handle_t*)malloc(numRasErrorSets * sizeof(zet_sysman_ras_handle_t));
+        if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ZE_RESULT_SUCCESS)
         {
             for (uint32_t rasIndex = 0; rasIndex < numRasErrorSets; rasIndex++)
             {
-                xet_ras_properties_t props;
-                if (xetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == XE_RESULT_SUCCESS)
+                zet_ras_properties_t props;
+                if (zetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ZE_RESULT_SUCCESS)
                 {
                     const char* pErrorType;
                     switch (props.type)
                     {
-                    case XET_RAS_ERROR_TYPE_CORRECTABLE:
+                    case ZET_RAS_ERROR_TYPE_CORRECTABLE:
                         pErrorType = "Correctable";
                         break;
-                    case XET_RAS_ERROR_TYPE_UNCORRECTABLE:
+                    case ZET_RAS_ERROR_TYPE_UNCORRECTABLE:
                         pErrorType = "Uncorrectable";
                         break;
                     default:
@@ -979,9 +990,9 @@ void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
                     if (props.supported && props.enabled)
                     {
                         uint64_t newErrors;
-                        xet_ras_details_t errorDetails;
-                        if (xetSysmanRasGetErrors(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
-                            == XE_RESULT_SUCCESS)
+                        zet_ras_details_t errorDetails;
+                        if (zetSysmanRasGetErrors(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                            == ZE_RESULT_SUCCESS)
                         {
                             fprintf(stdout, "    Number new errors: %llu\n", newErrors);
                             if (newErrors)
@@ -1021,26 +1032,26 @@ Each test suite contains one or more diagnostic tests. On some systems, it is po
 all test suites and the tests in each if this is known:
 
 ```c
-void ListDiagnosticTests(xet_sysman_handle_t hSysmanDevice)
+void ListDiagnosticTests(zet_sysman_handle_t hSysmanDevice)
 {
     uint32_t numTestSuites;
-    if ((xetSysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, NULL) == XE_RESULT_SUCCESS) && numTestSuites)
+    if ((zetSysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, NULL) == ZE_RESULT_SUCCESS) && numTestSuites)
     {
-        xet_sysman_diag_handle_t* phTestSuites =
-            (xet_sysman_diag_handle_t*)malloc(numTestSuites * sizeof(xet_sysman_diag_handle_t));
-        if (xetSysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, phTestSuites) == XE_RESULT_SUCCESS)
+        zet_sysman_diag_handle_t* phTestSuites =
+            (zet_sysman_diag_handle_t*)malloc(numTestSuites * sizeof(zet_sysman_diag_handle_t));
+        if (zetSysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, phTestSuites) == ZE_RESULT_SUCCESS)
         {
             for (uint32_t suiteIndex = 0; suiteIndex < numTestSuites; suiteIndex++)
             {
-                xet_diag_properties_t suiteProps;
-                if (xetSysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) == XE_RESULT_SUCCESS)
+                zet_diag_properties_t suiteProps;
+                if (zetSysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) == ZE_RESULT_SUCCESS)
                 {
                     fprintf(stdout, "Diagnostic test suite %s:\n", suiteProps.name);
                     if (suiteProps.numTests)
                     {
                         for (uint32_t i = 0; i < suiteProps.numTests; i++)
                         {
-                            const xet_diag_test_t* pTest = &suiteProps.pTests[i];
+                            const zet_diag_test_t* pTest = &suiteProps.pTests[i];
                             fprintf(stdout, "    Test %u: %s\n", pTest->index, pTest->name);
                         }
                     }
