@@ -45,7 +45,7 @@ Sysman is the System Resource Management Interface (SMI) used to monitor and con
 An application wishing to manage power and performance for devices first needs to use the Level0 Core API to enumerate through available accelerator
 devices in the system and select those of interest.
 
-For each selected device handle, applications use the function ::xetSysmanGet() to get an **SMI handle** to manage system resources of the device.
+For each selected device handle, applications use the function ::zetSysmanGet() to get an **SMI handle** to manage system resources of the device.
 
 ![Object hierarchy](../images/tools_sysman_object_hierarchy.png?raw=true) 
 
@@ -206,8 +206,8 @@ will provide two handles, one to control the GPU frequency and one to enumerate 
 
 ![Frequency flow](../images/tools_sysman_freq_flow.png?raw=true) 
 
-In the C API, each class is associated with a unique handle type (e.g. ::xet_sysman_freq_handle_t refers to a frequency component).
-In the C++ API, each class is a C++ class (e.g. An instance of the class ::xet::SysmanFrequency refers to a frequency component).
+In the C API, each class is associated with a unique handle type (e.g. ::zet_sysman_freq_handle_t refers to a frequency component).
+In the C++ API, each class is a C++ class (e.g. An instance of the class ::zet::SysmanFrequency refers to a frequency component).
 
 The example code below shows how to use the SMI API to enumerate all GPU frequency components and fix each to a specific frequency:
 
@@ -252,10 +252,10 @@ void FixGpuFrequency(xet_sysman_handle_t hSysmanDevice, double FreqMHz)
 ```
 
 ## <a name="sdm">Sub-device management</a>
-An SMI handle cannot be created for a sub-device - ::xetSysmanGet() will return error ::XE_RESULT_ERROR_UNSUPPORTED if a device handle for a 
+An SMI handle cannot be created for a sub-device - ::zetSysmanGet() will return error ::ZE_RESULT_ERROR_UNSUPPORTED if a device handle for a 
 sub-device is passed to this function. Instead, the enumerator for device components will return a list of components that are located in each
 sub-device. Properties for each component will indicate in which sub-device it is located. If software wishing to manage components in only one
-sub-device should filter the enumerated components using the sub-device ID (see ::xe_device_properties_t.subdeviceId).
+sub-device should filter the enumerated components using the sub-device ID (see ::ze_device_properties_t.subdeviceId).
 
 The figure below shows the frequency components that will be enumerated on a device with two sub-devices where each sub-device has a GPU and
 HBM frequency control:
@@ -333,8 +333,8 @@ The following operations permit getting properties about the entire device:
 
 | Function                                                   | Description |
 | :---                                                       | :---        |
-| ::xetSysmanDeviceGetProperties()                          | Get static device properties -  device UUID, sub-device ID, device brand/model/vendor strings |
-| ::xetSysmanDeviceWasRepaired()                            | Performs a warm reset of the device which includes unloading the driver. |
+| ::zetSysmanDeviceGetProperties()                          | Get static device properties -  device UUID, sub-device ID, device brand/model/vendor strings |
+| ::zetSysmanDeviceWasRepaired()                            | Performs a warm reset of the device which includes unloading the driver. |
 
 The example below shows how to display general information about a device:
 
@@ -360,28 +360,28 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 
 ### <a name="glos">Scheduler operations</a>
 On some devices, it is possible to change the way the scheduler executes workloads. To find out if this is supported, execute the function
-::xetSysmanSchedulerGetCurrentMode() and check that it does not return an error.
+::zetSysmanSchedulerGetCurrentMode() and check that it does not return an error.
 
-The available scheduler operating modes are given by the enum ::xet_sched_mode_t:
+The available scheduler operating modes are given by the enum ::zet_sched_mode_t:
 
 | Scheduler mode                     | Description |
 | :---                               | :---        |
-| ::XET_SCHED_MODE_TIMEOUT          | This mode is optimized for multiple applications or contexts submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work.<br />It is possible to configure (::xet_sched_timeout_properties_t) the watchdog timeout which controls the maximum time the scheduler will wait for a workload to complete a batch of work or yield to other applications before it is terminated.<br />If the watchdog timeout is set to ::XET_SCHED_WATCHDOG_DISABLE, the scheduler enforces no fairness. This means that if there is other work to execute, the scheduler will try to submit it but will not terminate an executing process that does not complete quickly. |
-| ::XET_SCHED_MODE_TIMESLICE        | This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently.<br />It is possible to configure (::xet_sched_timeslice_properties_t) the timeslice interval and the amount of time the scheduler will wait for work to yield to another application before it is terminated. |
-| ::XET_SCHED_MODE_EXCLUSIVE        | This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work. |
-| ::XET_SCHED_MODE_SINGLE_CMDQUEUE  | This mode is optimized for application debug. It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies. |
+| ::ZET_SCHED_MODE_TIMEOUT          | This mode is optimized for multiple applications or contexts submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work.<br />It is possible to configure (::zet_sched_timeout_properties_t) the watchdog timeout which controls the maximum time the scheduler will wait for a workload to complete a batch of work or yield to other applications before it is terminated.<br />If the watchdog timeout is set to ::ZET_SCHED_WATCHDOG_DISABLE, the scheduler enforces no fairness. This means that if there is other work to execute, the scheduler will try to submit it but will not terminate an executing process that does not complete quickly. |
+| ::ZET_SCHED_MODE_TIMESLICE        | This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently.<br />It is possible to configure (::zet_sched_timeslice_properties_t) the timeslice interval and the amount of time the scheduler will wait for work to yield to another application before it is terminated. |
+| ::ZET_SCHED_MODE_EXCLUSIVE        | This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work. |
+| ::ZET_SCHED_MODE_SINGLE_CMDQUEUE  | This mode is optimized for application debug. It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies. |
 
 The following functions are available for changing the behavior of the scheduler:
 
 | Function                                             | Description |
 | :---                                                 | :---        |
-| ::xetSysmanSchedulerGetCurrentMode()                | Get the current scheduler mode (timeout, timeslice, exclusive, single command queue) |
-| ::xetSysmanSchedulerGetTimeoutModeProperties()      | Get the settings for the timeout scheduler mode |
-| ::xetSysmanSchedulerGetTimesliceModeProperties()    | Get the settings for the timeslice scheduler mode |
-| ::xetSysmanSchedulerSetTimeoutMode                  | Change to timeout scheduler mode and/or change properties |
-| ::xetSysmanSchedulerSetTimesliceMode                | Change to timeslice scheduler mode and/or change properties |
-| ::xetSysmanSchedulerSetExclusiveMode                | Change to exclusive scheduler mode and/or change properties |
-| ::xetSysmanSchedulerSetSingleCmdQueueMode           | Change to single command queue scheduler mode and/or change properties |
+| ::zetSysmanSchedulerGetCurrentMode()                | Get the current scheduler mode (timeout, timeslice, exclusive, single command queue) |
+| ::zetSysmanSchedulerGetTimeoutModeProperties()      | Get the settings for the timeout scheduler mode |
+| ::zetSysmanSchedulerGetTimesliceModeProperties()    | Get the settings for the timeslice scheduler mode |
+| ::zetSysmanSchedulerSetTimeoutMode                  | Change to timeout scheduler mode and/or change properties |
+| ::zetSysmanSchedulerSetTimesliceMode                | Change to timeslice scheduler mode and/or change properties |
+| ::zetSysmanSchedulerSetExclusiveMode                | Change to exclusive scheduler mode and/or change properties |
+| ::zetSysmanSchedulerSetSingleCmdQueueMode           | Change to single command queue scheduler mode and/or change properties |
 
 The example below shows how to stop the scheduler enforcing fairness while permitting other work to attempt to run:
 
@@ -437,11 +437,11 @@ The following functions permit getting data about the PCI endpoint for the devic
 
 | Function                                                   | Description |
 | :---                                                       | :---        |
-| ::xetSysmanPciGetProperties()                             | Get static properties for the PCI port - BDF address, number of bars, maximum supported speed |
-| ::xetSysmanPciGetState()                                  | Get current PCI port speed (number of lanes, generation) |
-| ::xetSysmanPciGetBarProperties()                          | Get information about each configured PCI bar |
-| ::xetSysmanPciGetThroughput()                             | Get current PCI throughput |
-| ::xetSysmanPciGetStats()                                  | Get PCI statistics - total packets, number of packet replays |
+| ::zetSysmanPciGetProperties()                             | Get static properties for the PCI port - BDF address, number of bars, maximum supported speed |
+| ::zetSysmanPciGetState()                                  | Get current PCI port speed (number of lanes, generation) |
+| ::zetSysmanPciGetBarProperties()                          | Get information about each configured PCI bar |
+| ::zetSysmanPciGetThroughput()                             | Get current PCI throughput |
+| ::zetSysmanPciGetStats()                                  | Get PCI statistics - total packets, number of packet replays |
 
 The example below shows how to output the PCI BDF address:
 
@@ -488,11 +488,11 @@ The following functions are provided to manage the power of the device:
 
 | Function                            | Description |
 | :---                                | :---        |
-| ::xetSysmanPowerGet()              | Enumerate the power domains. |
-| ::xetSysmanPowerGetProperties()    | Get the maximum power limit that can be specified when changing the power limits of a specific power domain. |
-| ::xetSysmanPowerGetEnergyCounter() | Read the energy consumption of the specific domain. |
-| ::xetSysmanPowerGetLimits()        | Get the sustained/burst/peak power limits for the specific power domain. |
-| ::xetSysmanPowerSetLimits()        | Set the sustained/burst/peak power limits for the specific power domain. |
+| ::zetSysmanPowerGet()              | Enumerate the power domains. |
+| ::zetSysmanPowerGetProperties()    | Get the maximum power limit that can be specified when changing the power limits of a specific power domain. |
+| ::zetSysmanPowerGetEnergyCounter() | Read the energy consumption of the specific domain. |
+| ::zetSysmanPowerGetLimits()        | Get the sustained/burst/peak power limits for the specific power domain. |
+| ::zetSysmanPowerSetLimits()        | Set the sustained/burst/peak power limits for the specific power domain. |
 
 The example below shows how to output information about each power domain on a device:
 
@@ -589,28 +589,28 @@ The following functions are provided to manage the frequency domains on the devi
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanFrequencyGet()             | Enumerate all the frequency domains on the device and sub-devices. |
-| ::xetSysmanFrequencyGetProperties()   | Find out the part of the device (one of ::xet_freq_domain_t) that is controlled by a frequency domain. |
-| ::xetSysmanFrequencyGetRange()        | Get the current min/max frequency between which the hardware can operate for a frequency domain. |
-| ::xetSysmanFrequencySetRange()        | Set the min/max frequency between which the hardware can operate for a frequency domain. |
-| ::xetSysmanFrequencyGetState()        | Get the current frequency request, actual frequency, TDP frequency and throttle reasons for a frequency domain. |
-| ::xetSysmanFrequencyGetThrottleTime() | Gets the amount of time a frequency domain has been throttled. |
+| ::zetSysmanFrequencyGet()             | Enumerate all the frequency domains on the device and sub-devices. |
+| ::zetSysmanFrequencyGetProperties()   | Find out the part of the device (one of ::zet_freq_domain_t) that is controlled by a frequency domain. |
+| ::zetSysmanFrequencyGetRange()        | Get the current min/max frequency between which the hardware can operate for a frequency domain. |
+| ::zetSysmanFrequencySetRange()        | Set the min/max frequency between which the hardware can operate for a frequency domain. |
+| ::zetSysmanFrequencyGetState()        | Get the current frequency request, actual frequency, TDP frequency and throttle reasons for a frequency domain. |
+| ::zetSysmanFrequencyGetThrottleTime() | Gets the amount of time a frequency domain has been throttled. |
 
-It is only permitted to set the frequency range if the device property ::xet_freq_properties_t.canControl is true for the specific frequency
+It is only permitted to set the frequency range if the device property ::zet_freq_properties_t.canControl is true for the specific frequency
 domain.
 
 By setting the min/max frequency range to the same value, software is effectively disabling the hardware controlled frequency and getting a fixed stable
 frequency providing the Punit does not need to throttle due to excess power/heat. 
 
 Based on the power/thermal conditions, the frequency requested by software or the hardware may not be respected. This situation can be determined
-using the function ::xetSysmanFrequencyGetState() which will indicate the current frequency request, the actual (resolved) frequency and other
+using the function ::zetSysmanFrequencyGetState() which will indicate the current frequency request, the actual (resolved) frequency and other
 frequency information that depends on the current conditions. If the actual frequency is below the requested frequency,
-::xet_freq_state_t.throttleReasons will provide the reasons why the frequency is being limited by the Punit.
+::zet_freq_state_t.throttleReasons will provide the reasons why the frequency is being limited by the Punit.
 
 
 ## <a name="eng">Operations on engine groups</a>
 It is possible to monitor the activity of one or engines combined into an **engine group**. A device can have multiple engine groups and the possible
-types are defined in ::xet_engine_group_t. The current engine groups supported are global activity across all engines, activity across all compute
+types are defined in ::zet_engine_group_t. The current engine groups supported are global activity across all engines, activity across all compute
 accelerators and activity across all media accelerators.
 
 By taking two snapshots of the activity counters, it is possible to calculate the average utilization of different parts of the device.
@@ -619,9 +619,9 @@ The following functions are provided:
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanEngineGet()                | Enumerate the engine groups that can be queried. |
-| ::xetSysmanEngineGetProperties()      | Get the properties of an engine group. This will return the type of engine group (one of ::xet_engine_group_t) and on which sub-device the group is making measurements. |
-| ::xetSysmanEngineGetActivity()        | Returns the activity counters for an engine group. |
+| ::zetSysmanEngineGet()                | Enumerate the engine groups that can be queried. |
+| ::zetSysmanEngineGetProperties()      | Get the properties of an engine group. This will return the type of engine group (one of ::zet_engine_group_t) and on which sub-device the group is making measurements. |
+| ::zetSysmanEngineGetActivity()        | Returns the activity counters for an engine group. |
 
 
 ## <a name="sby">Operations on standby domains</a>
@@ -629,16 +629,16 @@ When a device is idle, it will enter a low-power state. Since exit from low-powe
 hardware attempts to stike a balance between saving power when there are large idle times between workloads submissions to the device and
 keeping the device awake when idle because it has determined that new workload submissions are imminent.
 
-A device can consist of one or more standby domains - the list of domains is given by ::xet_standby_type_t.
+A device can consist of one or more standby domains - the list of domains is given by ::zet_standby_type_t.
 
 The following functions can be used to control how the hardware promotes to standby states:
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanStandbyGet()               | Enumerate the standby domains. |
-| ::xetSysmanStandbyGetProperties()     | Get the properties of a standby domain. This will return the parts of the device that are affected by this domain (one of ::xet_engine_group_t) and on which sub-device the domain is located. |
-| ::xetSysmanStandbyGetMode()           | Get the current promotion mode (one of ::xet_standby_promo_mode_t) for a standby domain.|
-| ::xetSysmanStandbySetMode()           | Set the promotion mode (one of ::xet_standby_promo_mode_t) for a standby domain. |
+| ::zetSysmanStandbyGet()               | Enumerate the standby domains. |
+| ::zetSysmanStandbyGetProperties()     | Get the properties of a standby domain. This will return the parts of the device that are affected by this domain (one of ::zet_engine_group_t) and on which sub-device the domain is located. |
+| ::zetSysmanStandbyGetMode()           | Get the current promotion mode (one of ::zet_standby_promo_mode_t) for a standby domain.|
+| ::zetSysmanStandbySetMode()           | Set the promotion mode (one of ::zet_standby_promo_mode_t) for a standby domain. |
 
 
 ## <a name="fmw">Operations on firmwares</a>
@@ -646,49 +646,49 @@ The following functions are provided to manage firmwares on the device:
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanFirmwareGet()              | Enumerate all firmwares that can be managed on the device. |
-| ::xetSysmanFirmwareGetProperties()    | Find out the name and version of a firmware. |
-| ::xetSysmanFirmwareGetChecksum()      | Get the checksum for an installed firmware. |
-| ::xetSysmanFirmwareFlash()            | Flash a new firmware image. |
+| ::zetSysmanFirmwareGet()              | Enumerate all firmwares that can be managed on the device. |
+| ::zetSysmanFirmwareGetProperties()    | Find out the name and version of a firmware. |
+| ::zetSysmanFirmwareGetChecksum()      | Get the checksum for an installed firmware. |
+| ::zetSysmanFirmwareFlash()            | Flash a new firmware image. |
 
 ## <a name="mem">Querying memory modules</a>
 The following functions provide access to information about the local memory modules on the device:
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanMemoryGet()                | Enumerate the memory modules. |
-| ::xetSysmanMemoryGetProperties()      | Find out the type of memory and maximum physical memory of a module. |
-| ::xetSysmanMemoryGetBandwidth()       | Returns memory bandwidth counters for a module. |
-| ::xetSysmanMemoryGetAllocated()       | Returns the currently allocated memory size for a module. |
+| ::zetSysmanMemoryGet()                | Enumerate the memory modules. |
+| ::zetSysmanMemoryGetProperties()      | Find out the type of memory and maximum physical memory of a module. |
+| ::zetSysmanMemoryGetBandwidth()       | Returns memory bandwidth counters for a module. |
+| ::zetSysmanMemoryGetAllocated()       | Returns the currently allocated memory size for a module. |
 
 
 ## <a name="con">Operations on connectivity switches and ports</a>
 A device is able to access memory and resources on a remote device using a high-speed data fabric rather than using the PCI bus. This is achieved through
-a connectivity switch. If ::xetSysmanLinkSwitchGet() returns one or more switches, high-speed connectivity to other devices is possible.
+a connectivity switch. If ::zetSysmanLinkSwitchGet() returns one or more switches, high-speed connectivity to other devices is possible.
 
 The following functions can be used to manage the switch:
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanLinkSwitchGet()            | Enumerate connectivity switches on the device. |
-| ::xetSysmanLinkSwitchGetProperties()  | Get static properties about the switch. |
-| ::xetSysmanLinkSwitchGetState()       | Get the current state of the switch (enabled/disabled). |
-| ::xetSysmanLinkSwitchSetState()       | Enables/disabled the switch. |
-| ::xetSysmanLinkSwitchGetPorts()       | Enumerate the ports on the switch. |
+| ::zetSysmanLinkSwitchGet()            | Enumerate connectivity switches on the device. |
+| ::zetSysmanLinkSwitchGetProperties()  | Get static properties about the switch. |
+| ::zetSysmanLinkSwitchGetState()       | Get the current state of the switch (enabled/disabled). |
+| ::zetSysmanLinkSwitchSetState()       | Enables/disabled the switch. |
+| ::zetSysmanLinkSwitchGetPorts()       | Enumerate the ports on the switch. |
 
 Each switch has one or more ports, each of which can be configured with a point-to-point connection to another port on another device's switch. A handle for
-each port on the switch is obtained using the function ::xetSysmanLinkSwitchGetPorts().
+each port on the switch is obtained using the function ::zetSysmanLinkSwitchGetPorts().
 
 The following functions can be used to manage each connectivity port:
 
-| ::xetSysmanLinkPortGetProperties()    | Get the properties of a port on the switch - maximum supported bandwidth. |
-| ::xetSysmanLinkPortGetState()         | Get the current state of a port on the switch - connected, remote switch device/index/port, current maximum bandwidth. |
-| ::xetSysmanLinkPortGetThroughput()    | Get the throughput counters of a port on the switch. |
-| ::xetSysmanLinkPortGetStats()         | Gets telemetry counters of a port on the switch - number of replays. |
+| ::zetSysmanLinkPortGetProperties()    | Get the properties of a port on the switch - maximum supported bandwidth. |
+| ::zetSysmanLinkPortGetState()         | Get the current state of a port on the switch - connected, remote switch device/index/port, current maximum bandwidth. |
+| ::zetSysmanLinkPortGetThroughput()    | Get the throughput counters of a port on the switch. |
+| ::zetSysmanLinkPortGetStats()         | Gets telemetry counters of a port on the switch - number of replays. |
 
-For devices with sub-devices, the switch is usually located in the sub-device. Given a device handle, ::xetSysmanLinkSwitchGet() will
-include the switches on each sub-device. In this case, ::xet_link_switch_properties_t.onSubdevice will be set to true and
-::xet_link_switch_properties_t.subdeviceId will give the subdevice ID where that switch is located.
+For devices with sub-devices, the switch is usually located in the sub-device. Given a device handle, ::zetSysmanLinkSwitchGet() will
+include the switches on each sub-device. In this case, ::zet_link_switch_properties_t.onSubdevice will be set to true and
+::zet_link_switch_properties_t.subdeviceId will give the subdevice ID where that switch is located.
 
 The example below shows how to get the state of all switches in the device and sub-devices:
 
@@ -766,9 +766,9 @@ A device has multiple temperature sensors embedded at different locations. The f
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanTemperatureGet()           | Enumerate the temperature sensors on the device. |
-| ::xetSysmanTemperatureGetProperties() | Get static properties for a temperature sensor. In particular, this will indicate which parts of the device the sensor measures (one of ::xet_temp_sensors_t). |
-| ::xetSysmanTemperatureRead()          | Read the temperature of a sensor. |
+| ::zetSysmanTemperatureGet()           | Enumerate the temperature sensors on the device. |
+| ::zetSysmanTemperatureGetProperties() | Get static properties for a temperature sensor. In particular, this will indicate which parts of the device the sensor measures (one of ::zet_temp_sensors_t). |
+| ::zetSysmanTemperatureRead()          | Read the temperature of a sensor. |
 
 
 ## <a name="psu">Operations on power supplies</a>
@@ -776,27 +776,27 @@ The following functions can be used to access information about each power-suppl
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanPsuGet()                   | Enumerate the power supplies on the device that can be managed. |
-| ::xetSysmanPsuGetProperties()         | Get static details about the power supply. |
-| ::xetSysmanPsuGetState()              | Get information about the health (temperature, current, fan) of the power supply. |
+| ::zetSysmanPsuGet()                   | Enumerate the power supplies on the device that can be managed. |
+| ::zetSysmanPsuGetProperties()         | Get static details about the power supply. |
+| ::zetSysmanPsuGetState()              | Get information about the health (temperature, current, fan) of the power supply. |
 
 
 ## <a name="fan">Operations on fans</a>
-If ::xetSysmanFanGet() returns one or more fan handles, it is possible to manage their speed. The hardware can be instructed to run the fan at a fixed
+If ::zetSysmanFanGet() returns one or more fan handles, it is possible to manage their speed. The hardware can be instructed to run the fan at a fixed
 speed (or 0 for silent operations) or to provide a table of temperature-speed points in which case the hardware will dynamically change the fan
-speed based on the current temperature of the chip. This configuration information is described in the structure ::xet_fan_config_t. When specifying
-speed, one can provide the value in revolutions per minute (::XET_FAN_SPEED_UNITS_RPM) or as a percentage of the maximum RPM
-(::XET_FAN_SPEED_UNITS_PERCENT).
+speed based on the current temperature of the chip. This configuration information is described in the structure ::zet_fan_config_t. When specifying
+speed, one can provide the value in revolutions per minute (::ZET_FAN_SPEED_UNITS_RPM) or as a percentage of the maximum RPM
+(::ZET_FAN_SPEED_UNITS_PERCENT).
 
 The following functions are available:
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanFanGet()                   | Enumerate the fans on the device. |
-| ::xetSysmanFanGetProperties()         | Get the maximum RPM of the fan and the maximum number of points that can be specified in the temperature-speed table for a fan. |
-| ::xetSysmanFanGetConfig()             | Get the current configuration (speed) of a fan. |
-| ::xetSysmanFanSetConfig()             | Change the configuration (speed) of a fan. |
-| ::xetSysmanFanGetState()              | Get the current speed of a fan. |
+| ::zetSysmanFanGet()                   | Enumerate the fans on the device. |
+| ::zetSysmanFanGetProperties()         | Get the maximum RPM of the fan and the maximum number of points that can be specified in the temperature-speed table for a fan. |
+| ::zetSysmanFanGetConfig()             | Get the current configuration (speed) of a fan. |
+| ::zetSysmanFanSetConfig()             | Change the configuration (speed) of a fan. |
+| ::zetSysmanFanGetState()              | Get the current speed of a fan. |
 
 The example below shows how to output the fan speed of all fans:
 
@@ -864,17 +864,17 @@ void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 ```
 
 ## <a name="led">Operations on LEDs</a>
-If ::xetSysmanLedGet() returns one or more LED handles, it is possible to manage LEDs on the device. This includes turning them off/on and where
+If ::zetSysmanLedGet() returns one or more LED handles, it is possible to manage LEDs on the device. This includes turning them off/on and where
 the capability exists, changing their color in realtime.
 
 The following functions are available:
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::xetSysmanLedGet()                   | Enumerate the LEDs on the device that can be managed. |
-| ::xetSysmanLedGetProperties()         | Find out if a LED supports color changes. |
-| ::xetSysmanLedGetState()              | Find out if a LED is currently off/on and the color where the capability is available. |
-| ::xetSysmanLedSetState()              | Turn a LED off/on and set the color where the capability is available. |
+| ::zetSysmanLedGet()                   | Enumerate the LEDs on the device that can be managed. |
+| ::zetSysmanLedGetProperties()         | Find out if a LED supports color changes. |
+| ::zetSysmanLedGetState()              | Find out if a LED is currently off/on and the color where the capability is available. |
+| ::zetSysmanLedSetState()              | Turn a LED off/on and set the color where the capability is available. |
 
 
 ## <a name="ras">Querying RAS errors</a>
@@ -882,42 +882,42 @@ RAS stands for Reliability, Availability and Serviceability. It is a feature of 
 provide redundancy where permanent damage has occurred.
 
 If a device supports RAS, it maintains counters for hardware and software errors. There are two types of errors and they are defined in
-::xet_ras_error_type_t:
+::zet_ras_error_type_t:
 
 | Error Type                          | Description |
 | :---                                | :---        |
-| ::XET_RAS_ERROR_TYPE_UNCORRECTABLE | Hardware errors occurred which most likely resulted in loss of data or even a device hang. If an error results in device lockup, a warm boot is required before those errors will be reported. |
-| ::XET_RAS_ERROR_TYPE_CORRECTABLE   | These are errors that were corrected by the hardware and did not cause data corruption. |
+| ::ZET_RAS_ERROR_TYPE_UNCORRECTABLE | Hardware errors occurred which most likely resulted in loss of data or even a device hang. If an error results in device lockup, a warm boot is required before those errors will be reported. |
+| ::ZET_RAS_ERROR_TYPE_CORRECTABLE   | These are errors that were corrected by the hardware and did not cause data corruption. |
 
-Software can use the function ::xetSysmanRasGetProperties() to find out if the device supports RAS and if it is enabled. This will also indicate
-if the device had hardware repairs applied in the past. This information is returned in the structure ::xet_ras_properties_t.
+Software can use the function ::zetSysmanRasGetProperties() to find out if the device supports RAS and if it is enabled. This will also indicate
+if the device had hardware repairs applied in the past. This information is returned in the structure ::zet_ras_properties_t.
 
-The function ::xetSysmanRasGet() enumerates the available sets of RAS errors. If no handles are returned, the device does not support RAS.
+The function ::zetSysmanRasGet() enumerates the available sets of RAS errors. If no handles are returned, the device does not support RAS.
 A device without sub-devices will return one handle if RAS is supported. A device with sub-devices will return a handle for each sub-device.
 
-To determine if errors have occurred, software uses the function ::xetSysmanRasGetErrors(). This will return the total number of errors of a given type
+To determine if errors have occurred, software uses the function ::zetSysmanRasGetErrors(). This will return the total number of errors of a given type
 (correctable/uncorrectable) that have occurred.
 
-When calling ::xetSysmanRasGetErrors(), software can request that the error counters be cleared. When this is done, all counters of the specified
+When calling ::zetSysmanRasGetErrors(), software can request that the error counters be cleared. When this is done, all counters of the specified
 type (correctable/uncorrectable) will be set to zero and any subsequent calls to this function will only show new errors that have occurred.
 If software intends to clear errors, it should be the only application doing so and it should store the counters in an appropriate database
 for historical analysis.
 
-When calling ::xetSysmanRasGetErrors(), an optional pointer to a structure of type ::xet_ras_details_t can be supplied. This will give a
-breakdown of the main device components where the errors occurred. The categories are defined in the structure ::xet_ras_details_t:
+When calling ::zetSysmanRasGetErrors(), an optional pointer to a structure of type ::zet_ras_details_t can be supplied. This will give a
+breakdown of the main device components where the errors occurred. The categories are defined in the structure ::zet_ras_details_t:
 
 | Error category                            | Description |
 | :---                                      | :---        |
-| ::xet_ras_details_t.numResets            | The number of device resets that have taken place. |
-| ::xet_ras_details_t.numProgrammingErrors | The number of hardware exceptions generated by the way workloads have programmed the hardware. |
-| ::xet_ras_details_t.numDriverErrors      | The number of low level driver communication errors have occurred. |
-| ::xet_ras_details_t.numComputeErrors     | The number of errors that have occurred in the compute accelerator hardware. |
-| ::xet_ras_details_t.numNonComputeErrors  | The number of errors that have occurred in the fixed-function accelerator hardware. |
-| ::xet_ras_details_t.numCacheErrors       | The number of errors that have occurred in caches (L1/L3/register file/shared local memory/sampler). |
-| ::xet_ras_details_t.numMemoryErrors      | The number of errors that have occurred in the local memory. |
-| ::xet_ras_details_t.numPciErrors:        | The number of errors that have occurred in the PCI link. |
-| ::xet_ras_details_t.numSwitchErrors      | The number of errors that have occurred in the high-speed connectivity links. |
-| ::xet_ras_details_t.numDisplayErrors     | The number of errors that have occurred in the display. |
+| ::zet_ras_details_t.numResets            | The number of device resets that have taken place. |
+| ::zet_ras_details_t.numProgrammingErrors | The number of hardware exceptions generated by the way workloads have programmed the hardware. |
+| ::zet_ras_details_t.numDriverErrors      | The number of low level driver communication errors have occurred. |
+| ::zet_ras_details_t.numComputeErrors     | The number of errors that have occurred in the compute accelerator hardware. |
+| ::zet_ras_details_t.numNonComputeErrors  | The number of errors that have occurred in the fixed-function accelerator hardware. |
+| ::zet_ras_details_t.numCacheErrors       | The number of errors that have occurred in caches (L1/L3/register file/shared local memory/sampler). |
+| ::zet_ras_details_t.numMemoryErrors      | The number of errors that have occurred in the local memory. |
+| ::zet_ras_details_t.numPciErrors:        | The number of errors that have occurred in the PCI link. |
+| ::zet_ras_details_t.numSwitchErrors      | The number of errors that have occurred in the high-speed connectivity links. |
+| ::zet_ras_details_t.numDisplayErrors     | The number of errors that have occurred in the display. |
 
 The code below shows how to determine if RAS is supported and the current state of RAS errors:
 
@@ -995,23 +995,23 @@ void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
 
 ## <a name="dag">Performing diagnostics</a>
 Diagnostics is the process of taking a device offline and requesting that the hardware run self-checks and repairs. This is achieved using the function
-::xetSysmanDiagnosticsRunTests(). On return from the function, software can use the diagnostics return code (::xet_diag_result_t) to determine the new
+::zetSysmanDiagnosticsRunTests(). On return from the function, software can use the diagnostics return code (::zet_diag_result_t) to determine the new
 course of action:
 
-1. ::XET_DIAG_RESULT_NO_ERRORS - No errors found and workloads can resume submission to the hardware.
-2. ::XET_DIAG_RESULT_ABORT - Hardware had problems running diagnostic tests.
-3. ::XET_DIAG_RESULT_FAIL_CANT_REPAIR - Hardware had problems setting up repair. Card should be removed from the system.
-4. ::XET_DIAG_RESULT_REBOOT_FOR_REPAIR - Hardware has prepared for repair and requires a reboot after which time workloads can resume submission.
+1. ::ZET_DIAG_RESULT_NO_ERRORS - No errors found and workloads can resume submission to the hardware.
+2. ::ZET_DIAG_RESULT_ABORT - Hardware had problems running diagnostic tests.
+3. ::ZET_DIAG_RESULT_FAIL_CANT_REPAIR - Hardware had problems setting up repair. Card should be removed from the system.
+4. ::ZET_DIAG_RESULT_REBOOT_FOR_REPAIR - Hardware has prepared for repair and requires a reboot after which time workloads can resume submission.
 
-The function ::xetSysmanDeviceWasRepaired() can be used to determine if the device has been repaired.
+The function ::zetSysmanDeviceWasRepaired() can be used to determine if the device has been repaired.
 
-There are multiple diagnostic test suites that can be run and these are defined in the enumerator ::xet_diag_type_t. The function
-::xetSysmanDiagnosticsGet() will enumerate each available test suite and the function ::xetSysmanDiagnosticsGetProperties() can be used to determine
-the type and name of each test suite (::xet_diag_properties_t.type and ::xet_diag_properties_t.type).
+There are multiple diagnostic test suites that can be run and these are defined in the enumerator ::zet_diag_type_t. The function
+::zetSysmanDiagnosticsGet() will enumerate each available test suite and the function ::zetSysmanDiagnosticsGetProperties() can be used to determine
+the type and name of each test suite (::zet_diag_properties_t.type and ::zet_diag_properties_t.type).
 
 Each test suite contains one or more diagnostic tests. On some systems, it is possible to run only a subset of the tests. Use the function
-::xetSysmanDiagnosticsGetProperties() and check that ::xet_diag_properties_t.numTests is non-zero to determine if this feature is available. If it is,
-::xet_diag_properties_t.pTests provides the list of tests that can be run - the index and name of each test. The example code below shows how to 
+::zetSysmanDiagnosticsGetProperties() and check that ::zet_diag_properties_t.numTests is non-zero to determine if this feature is available. If it is,
+::zet_diag_properties_t.pTests provides the list of tests that can be run - the index and name of each test. The example code below shows how to 
 all test suites and the tests in each if this is known:
 
 ```c
@@ -1050,8 +1050,8 @@ void ListDiagnosticTests(xet_sysman_handle_t hSysmanDevice)
 }
 ```
 
-When running diagnostics for a test suite using ::xetSysmanDiagnosticsRunTests(), it is possible to specify the start and index of tests in the suite.
-Setting to ::XET_DIAG_FIRST_TEST_INDEX and ::XET_DIAG_LAST_TEST_INDEX will run all tests in the suite. If it is possible to run a subset of tests,
+When running diagnostics for a test suite using ::zetSysmanDiagnosticsRunTests(), it is possible to specify the start and index of tests in the suite.
+Setting to ::ZET_DIAG_FIRST_TEST_INDEX and ::ZET_DIAG_LAST_TEST_INDEX will run all tests in the suite. If it is possible to run a subset of tests,
 specify the index of the start test and the end test - all tests that have an index in this range will be run.
 
 
@@ -1060,26 +1060,26 @@ Events are a way to determine if changes have occurred on a device e.g. new RAS 
 notification about and then it queries to receive notifications. The query can request a blocking wait - this will put the calling application thread
 to sleep until new notifications are received.
 
-The list of all events is provided by the enumerator ::xet_sysman_event_type_t. Before registering to receive an event from this list, the application
+The list of all events is provided by the enumerator ::zet_sysman_event_type_t. Before registering to receive an event from this list, the application
 should first check if it is supported for a specific class of devices (devices with the same device ID). This is achieved using the function
-::xetSysmanEventsGetProperties() and looking at the array ::xet_event_properties_t.supportedEvents[::xet_sysman_event_type_t] for each event.
+::zetSysmanEventsGetProperties() and looking at the array ::zet_event_properties_t.supportedEvents[::zet_sysman_event_type_t] for each event.
 
-For events supported on a given device, the application uses the function ::xetSysmanEventsRegister() to register to receive notifications.
-It can stop notifications at any time using the function ::xetSysmanEventsUnregister().
+For events supported on a given device, the application uses the function ::zetSysmanEventsRegister() to register to receive notifications.
+It can stop notifications at any time using the function ::zetSysmanEventsUnregister().
 
-Finally, the application uses the function ::xetSysmanEventsListen() to get a list of new notifications that have occurred since the last time it checked.
+Finally, the application uses the function ::zetSysmanEventsListen() to get a list of new notifications that have occurred since the last time it checked.
 
-The application can choose to block for events by setting timeout to ::XET_EVENT_WAIT_INFINITE or it can set to zero if it wishes to get the current
+The application can choose to block for events by setting timeout to ::ZET_EVENT_WAIT_INFINITE or it can set to zero if it wishes to get the current
 status without blocking.
 
 The event notifications are returned as a bitfield of event types. It is up to the application to then enumerate the corresponding device properties
 to determine where the events occurred if that is required.
 
-When calling ::xetSysmanEventsListen(), the application can request that the status be cleared. The driver will return the current status and clear
+When calling ::zetSysmanEventsListen(), the application can request that the status be cleared. The driver will return the current status and clear
 it internally. The next call to the function will return no notifications until new events occur. If the application does not request that event list
 be cleared, subsequent calls to this function will show the same notifications and any new notifications.
 
-The first argument of ::xetSysmanEventsListen() specifies the SMI handle for the device on which event notifications wish to be received. However, this
+The first argument of ::zetSysmanEventsListen() specifies the SMI handle for the device on which event notifications wish to be received. However, this
 can be set to NULL in order to query event notifications across all devices for which the application has created SMI handles. When querying across
 multiple devices, it is suggested not to request event status clearing. In this way, the application can know when any event has occurred and can then
 make individual requests to each device, this time requesting that the event status be cleared.

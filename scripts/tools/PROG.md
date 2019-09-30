@@ -46,7 +46,7 @@ Note: since the creation of a tracer requires a device, on first glance it appea
 However, these APIs **are** traceable for all calls subsequent from the creation and enabling of the tracer itself.
 
 ${"##"} Enabling/Disabling and Destruction
-The tracer is created in a disabled state and must be explicitly enabled by calling ::xetTracerSetEnabled.
+The tracer is created in a disabled state and must be explicitly enabled by calling ::${t}TracerSetEnabled.
 The implementation gaurentees that prologues and epilogues will always be executed in pairs; i.e.
 * if the prologue was called then the epilogue is gaurenteed to be called, even if another thread disabled the tracer between execution
 * if the prologue was not called then the epilogue is gaurenteed not to be called, even if another thread enabled the tracer between execution
@@ -55,7 +55,7 @@ The tracer should be disabled by the application before the tracer is destoryed.
 If multiple threads are in-flight, then it is still possbile that callbacks will continue to execute even after the tracer is disabled;
 specifically due to the pairing rules above.
 Due to the complexity involved in ensuring no threads are still or will be executing a callback even after its been disabled,
-the implementation will stall and wait for any outstanding threads during ::xetTracerDestroy.
+the implementation will stall and wait for any outstanding threads during ::${t}TracerDestroy.
 
 The following sample code demonstrates a basic usage of API tracing:
 ```c

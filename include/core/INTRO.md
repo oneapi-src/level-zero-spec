@@ -93,30 +93,30 @@ In particular, the following words are used to describe the actions of an implem
 
 ## Naming Convention
 The following naming conventions are followed in order to avoid conflicts within the API, or with other APIs and libraries:
-- all driver entry points are prefixed with xe
-- all types follow **xe_\<name\>_t** convention
-- all macros and enumerator values use all caps **XE_\<SCOPE\>_\<NAME\>** convention
-- all functions use camel case **xe\<Object\>\<Action\>** convention
+- all driver entry points are prefixed with ze
+- all types follow **ze_\<name\>_t** convention
+- all macros and enumerator values use all caps **ZE_\<SCOPE\>_\<NAME\>** convention
+- all functions use camel case **ze\<Object\>\<Action\>** convention
     + exception: since "driver" functions use implicit \<Object\>, it is omitted
 - all structure members and function parameters use camel case convention
 
 In addition, the following coding standards are followed:
 - all function input parameters precede output parameters
-- all functions return ::xe_result_t
+- all functions return ::ze_result_t
 
 ## Versioning
 There are multiple versions that should be used by the application to determine compatibility:
 1. API Version - this is the version of the API supported by the device.
     - This is typically used to determine if the device supports the minimum set of APIs required by the application.
     - There is a single API version that represents a collection of APIs.
-    - The value is determined from calling ::xeDriverGetApiVersion
-    - The value returned will be the minimum of the ::xe_api_version_t supported by the device and known by the driver.
+    - The value is determined from calling ::zeDriverGetApiVersion
+    - The value returned will be the minimum of the ::ze_api_version_t supported by the device and known by the driver.
 2. Structure Version - these are the versions of the structures passed-by-pointer to the driver.
     - These are typically used by the driver to support applications written to older versions of the API.
     - They are provided as the first member of every structure passed to the driver.
 3. Driver Version - this is the version of the driver installed in the system.
     - This is typically used to mitigate driver implementation issues for a feature.
-    - The value is determined from calling ::xeDriverGetDriverVersion
+    - The value is determined from calling ::zeDriverGetDriverVersion
 
 
 ## Error Handling
@@ -130,7 +130,7 @@ The following design philosophies are adopted in order to reduce Host-side overh
     + synchronization primitive deadlocks
     + non-visible memory access by the Host or device
     + non-resident memeory access by the device
-- all API functions return ::xe_result_t
+- all API functions return ::ze_result_t
     + this allows for a consistent pattern on the application side for catching errors; especially when validation layer is enabled
 
 ## Multithreading and Concurrency
@@ -173,7 +173,7 @@ Applications should not rely on experimental APIs in production.
 - Experimental APIs are not gaurenteed to be forward or backward capatible between API versions.
 - Experimental APIs are not gaurenteed to be supported in production driver releases; and may appear and disappear from release to release.
 
-An implementation will return ::XE_RESULT_ERROR_UNSUPPORTED for any experimental API not supported by that driver.
+An implementation will return ::ZE_RESULT_ERROR_UNSUPPORTED for any experimental API not supported by that driver.
 
 # <a name="drv">Driver Architecture</a>
 The following section provides high-level driver architecture.
@@ -183,15 +183,15 @@ The following section provides high-level driver architecture.
 
 ## Library
 A static library is provided to allow applications to make direct API calls without understanding the underlying driver architecture. 
-For example, C/C++ applications should include "xe_api.h" (C) or "xe_api.hpp" (C++11) and link with "xe_api.lib".
+For example, C/C++ applications should include "ze_api.h" (C) or "ze_api.hpp" (C++11) and link with "ze_api.lib".
 
 ## Loader
 The loader initiates the loading of the driver(s) and layer(s).
 The loader exports all API functions to the static library via per-process API function pointer table(s).
 Each driver and layer must below the loader will also export its API/DDI functions via per-process function pointer table(s).
-The export function and table definitions are defined in "xe_ddi.h".
+The export function and table definitions are defined in "ze_ddi.h".
 
-The loader is dynamically linked with the application using the "xe_loader.dll" (windows) or "xe_loader.so" (linux).
+The loader is dynamically linked with the application using the "ze_loader.dll" (windows) or "ze_loader.so" (linux).
 The loader is vendor agnostic, but must be aware of the names of vendor-specific device driver names. 
 (Note: these are currently hard-coded but a registration method will be adopted when multiple vendors are supported.)
 
@@ -211,9 +211,9 @@ Thus, the loader's internal function pointer table entries may point to:
 ## Device Drivers
 The device driver(s) contain the device-specific implementations of the APIs.
 
-The device driver(s) are dynamically linked using a _xe_vendor_type.dll_ (windows) / _xe_vendor_type.so_ (linux);
+The device driver(s) are dynamically linked using a _ze_vendor_type.dll_ (windows) / _ze_vendor_type.so_ (linux);
 where _vendor_ and _type_ are names chosen by the device vendor.
-For example, Intel GPUs use the name: "xe_intc_gpu".
+For example, Intel GPUs use the name: "ze_intc_gpu".
 
 ## <a name="v0">Validation Layer</a>
 The validation layer provides an optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
@@ -229,7 +229,7 @@ Each capability is enabled by additional environment variables.
 The validation layer supports the following capabilities:
 - <a name="v1">Parameter Validation</a>
     + checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
-    + functions may return ::XE_RESULT_ERROR_INVALID_ARGUMENT or ::XE_RESULT_ERROR_UNSUPPORTED
+    + functions may return ::ZE_RESULT_ERROR_INVALID_ARGUMENT or ::ZE_RESULT_ERROR_UNSUPPORTED
 - <a name="v2">Handle Lifetime</a>
     + tracks handle allocations, destruction and usage for leaks and invalid usage (e.g., destruction while still in-use by device)
 - <a name="v3">Memory Tracker</a>
@@ -256,18 +256,18 @@ The instrumentation layer supports the following capabilities:
 The following table documents the supported knobs for overriding default driver behavior.
 | Category            | Name                                        | Values            | Description                                                                       |
 |---------------------|---------------------------------------------|-------------------|-----------------------------------------------------------------------------------|
-| Device              | [XE_AFFINITY_MASK](#aff)                  | hex string        | Forces driver to only report devices (and sub-devices) as specified by mask value |
-| Memory              | XE_SHARED_FORCE_DEVICE_ALLOC              | {**0**, 1}        | Forces all shared allocations into device memory                                  |
-| Validation          | [XE_ENABLE_VALIDATION_LAYER](#v0)         | {**0**, 1}        | Enables validation layer for debugging                                            |
-| ^                   | [XE_ENABLE_PARAMETER_VALIDATION](#v1)     | {**0**, 1}        | Enables the validation level for parameters                                       |
-| ^                   | [XE_ENABLE_HANDLE_LIFETIME](#v2)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
-| ^                   | [XE_ENABLE_MEMORY_TRACKER](#v3)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
-| ^                   | [XE_ENABLE_THREADING_VALIDATION](#v4)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
-| Instrumentation     | [XE_ENABLE_INSTRUMENTATION_LAYER](#i0)    | {**0**, 1}        | Enables instrumentation layer for profiling                                       |
-| ^                   | [XE_ENABLE_API_TRACING](#i1)              | {**0**, 1}        | Enables the instrumentation for API tracing                                       |
-| ^                   | [XE_ENABLE_METRICS](#i2)                  | {**0**, 1}        | Enables the instrumentation for device metrics                                    |
-| ^                   | [XE_ENABLE_PROGRAM_INSTRUMENTATION](#i3)  | {**0**, 1}        | Enables the instrumentation for program instrumentation                           |
-| ^                   | [XE_ENABLE_PROGRAM_DEBUGGING](#i4)        | {**0**, 1}        | Enables the instrumentation for program debugging                                 |
+| Device              | [ZE_AFFINITY_MASK](#aff)                  | hex string        | Forces driver to only report devices (and sub-devices) as specified by mask value |
+| Memory              | ZE_SHARED_FORCE_DEVICE_ALLOC              | {**0**, 1}        | Forces all shared allocations into device memory                                  |
+| Validation          | [ZE_ENABLE_VALIDATION_LAYER](#v0)         | {**0**, 1}        | Enables validation layer for debugging                                            |
+| ^                   | [ZE_ENABLE_PARAMETER_VALIDATION](#v1)     | {**0**, 1}        | Enables the validation level for parameters                                       |
+| ^                   | [ZE_ENABLE_HANDLE_LIFETIME](#v2)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
+| ^                   | [ZE_ENABLE_MEMORY_TRACKER](#v3)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
+| ^                   | [ZE_ENABLE_THREADING_VALIDATION](#v4)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
+| Instrumentation     | [ZE_ENABLE_INSTRUMENTATION_LAYER](#i0)    | {**0**, 1}        | Enables instrumentation layer for profiling                                       |
+| ^                   | [ZE_ENABLE_API_TRACING](#i1)              | {**0**, 1}        | Enables the instrumentation for API tracing                                       |
+| ^                   | [ZE_ENABLE_METRICS](#i2)                  | {**0**, 1}        | Enables the instrumentation for device metrics                                    |
+| ^                   | [ZE_ENABLE_PROGRAM_INSTRUMENTATION](#i3)  | {**0**, 1}        | Enables the instrumentation for program instrumentation                           |
+| ^                   | [ZE_ENABLE_PROGRAM_DEBUGGING](#i4)        | {**0**, 1}        | Enables the instrumentation for program debugging                                 |
 
 ### <a name="aff">Affinity Mask</a>
 The affinity mask allows an application or tool to restrict which devices (and sub-devices) are visible to 3rd-party libraries or applications in another process, respectively.

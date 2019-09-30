@@ -1,19 +1,19 @@
-set(TARGET_NAME xet_api)
+set(TARGET_NAME zet_api)
 
 add_library(${TARGET_NAME}
     STATIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_common.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_driver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_device.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_cmdlist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_module.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_pin.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_sysman.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_tracing.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_tools_lib.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_lib.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/xet_lib.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_driver.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_device.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_cmdlist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_metric.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_module.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_pin.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_sysman.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_tracing.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_tools_lib.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_lib.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_lib.cpp
 )
 
 target_include_directories(${TARGET_NAME}
@@ -23,5 +23,5 @@ target_include_directories(${TARGET_NAME}
 
 target_compile_definitions(${TARGET_NAME}
     PRIVATE
-        XE_ENABLE_OCL_INTEROP=0
+        ZE_ENABLE_OCL_INTEROP=0
 )

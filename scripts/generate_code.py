@@ -159,7 +159,7 @@ def mako_lib_cpp(path, namespace, tags, specs, meta):
 """
     generates c/c++ files from the specification documents
 """
-def mako_cmake_cpp(path, namespace, files):
+def mako_cmake_cpp(path, namespace, tags, files):
     template = "lib.cmake.mako"
     fin = os.path.join("templates", template)
 
@@ -170,6 +170,7 @@ def mako_cmake_cpp(path, namespace, files):
     return util.makoWrite(
         fin, fout,
         n=namespace,
+        tags=tags,
         files=files)
 
 """
@@ -287,7 +288,7 @@ def generate_lib_cpp(path, namespace, tags, specs, meta):
     loc, files = mako_lib_cpp(path, namespace, tags, specs, meta)
 
     files.extend(["%s_lib.h"%namespace, "%s_lib.cpp"%namespace])
-    mako_cmake_cpp(path, namespace, files)
+    mako_cmake_cpp(path, namespace, tags, files)
 
     return loc
 

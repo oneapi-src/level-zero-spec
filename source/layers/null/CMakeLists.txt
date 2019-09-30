@@ -1,12 +1,12 @@
-set(TARGET_NAME xe_null)
+set(TARGET_NAME ze_null)
 
 add_library(${TARGET_NAME}
     SHARED
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_null.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_null.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_core_driver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_experimental_driver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_tools_driver.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_driver.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_driver.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_driver.cpp
 )
 
 target_include_directories(${TARGET_NAME}
@@ -16,5 +16,5 @@ target_include_directories(${TARGET_NAME}
 
 target_compile_definitions(${TARGET_NAME}
     PRIVATE
-        XE_ENABLE_OCL_INTEROP=0
+        ZE_ENABLE_OCL_INTEROP=0
 )

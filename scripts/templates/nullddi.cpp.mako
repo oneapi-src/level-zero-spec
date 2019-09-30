@@ -74,7 +74,7 @@ namespace driver
     %endfor
 } // namespace driver
 
-%if n != "xet":
+%if not re.match(r"\w+t", n):
 namespace instrumented
 {
     %for obj in th.extract_objs(specs, r"function"):
@@ -177,7 +177,7 @@ ${tbl['export']['name']}(
     %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    %if n != "xet":
+    %if not re.match(r"\w+t", n):
     if( instrumented::context.enableTracing )
         pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = instrumented::${th.make_func_name(n, tags, obj)};
     else

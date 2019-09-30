@@ -14,8 +14,8 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 * [Program Debug](#dbg)
 
 # <a name="init">Initialization</a>
-The driver must be initialized by calling ::xetInit after calling ::xeInit and before calling any other experimental function.
-Simultaneous calls to ::xetInit are thread-safe.
+The driver must be initialized by calling ::zetInit after calling ::zeInit and before calling any other experimental function.
+Simultaneous calls to ::zetInit are thread-safe.
 
 # <a name="at">API Tracing</a>
 
@@ -26,8 +26,8 @@ Tools may also use these notifications as triggers to block and inject new API c
 
 ## Registration
 Tools may independently register for enter and exist callbacks for individual API calls, per driver instance.
-* ::xetTracerSetPrologues is used to specify all the enter callbacks
-* ::xetTracerSetEpilogues is used to specify all the exist callbacks
+* ::zetTracerSetPrologues is used to specify all the enter callbacks
+* ::zetTracerSetEpilogues is used to specify all the exist callbacks
 * If the value of a callback is nullptr, then it will be ignored.
 
 The callbacks are defined as a collection of per-API function pointers, with the following parameters:
@@ -36,11 +36,11 @@ The callbacks are defined as a collection of per-API function pointers, with the
 * pTracerUserData : the user's pointer for the tracer's data
 * ppTracerInstanceUserData : a per-tracer, per-instance storage location; typically used for passing data from the prologue to the epilogue
 
-Note: since the creation of a tracer requires a device, on first glance it appears that ::xeInit, ::xeDriverGet and ::xeDeviceGet are not traceable.
+Note: since the creation of a tracer requires a device, on first glance it appears that ::zeInit, ::zeDriverGet and ::zeDeviceGet are not traceable.
 However, these APIs **are** traceable for all calls subsequent from the creation and enabling of the tracer itself.
 
 ## Enabling/Disabling and Destruction
-The tracer is created in a disabled state and must be explicitly enabled by calling ::xetTracerSetEnabled.
+The tracer is created in a disabled state and must be explicitly enabled by calling ::zetTracerSetEnabled.
 The implementation gaurentees that prologues and epilogues will always be executed in pairs; i.e.
 * if the prologue was called then the epilogue is gaurenteed to be called, even if another thread disabled the tracer between execution
 * if the prologue was not called then the epilogue is gaurenteed not to be called, even if another thread enabled the tracer between execution
@@ -49,7 +49,7 @@ The tracer should be disabled by the application before the tracer is destoryed.
 If multiple threads are in-flight, then it is still possbile that callbacks will continue to execute even after the tracer is disabled;
 specifically due to the pairing rules above.
 Due to the complexity involved in ensuring no threads are still or will be executing a callback even after its been disabled,
-the implementation will stall and wait for any outstanding threads during ::xetTracerDestroy.
+the implementation will stall and wait for any outstanding threads during ::zetTracerDestroy.
 
 The following sample code demonstrates a basic usage of API tracing:
 ```c
@@ -64,8 +64,8 @@ The following sample code demonstrates a basic usage of API tracing:
     } my_instance_data_t;
 
     void OnEnterCommandListAppendLaunchKernel(
-        xe_command_list_append_launch_function_params_t* params,
-        xe_result_t result,
+        ze_command_list_append_launch_function_params_t* params,
+        ze_result_t result,
         void* pTracerUserData,
         void** ppTracerInstanceUserData )
     {
@@ -76,8 +76,8 @@ The following sample code demonstrates a basic usage of API tracing:
     }
 
     void OnExitCommandListAppendLaunchKernel(
-        xe_command_list_append_launch_function_params_t* params,
-        xe_result_t result,
+        ze_command_list_append_launch_function_params_t* params,
+        ze_result_t result,
         void* pTracerUserData,
         void** ppTracerInstanceUserData )
     {
@@ -87,7 +87,7 @@ The following sample code demonstrates a basic usage of API tracing:
         my_instance_data_t* instance_data = *(my_instance_data_t**)ppTracerInstanceUserData;
         
         float time = 1000.f * ( end - instance_data->start ) / CLOCKS_PER_SEC;
-        printf("xeCommandListAppendLaunchKernel #%d takes %.4f ms\n", tracer_data->instance++, time);
+        printf("zeCommandListAppendLaunchKernel #%d takes %.4f ms\n", tracer_data->instance++, time);
         
         free(instance_data);
     }
@@ -95,29 +95,29 @@ The following sample code demonstrates a basic usage of API tracing:
     void TracingExample( ... )
     {
         my_tracer_data_t tracer_data = {};
-        xet_tracer_desc_t tracer_desc;
-        tracer_desc.version = XET_TRACER_DESC_VERSION_CURRENT;
+        zet_tracer_desc_t tracer_desc;
+        tracer_desc.version = ZET_TRACER_DESC_VERSION_CURRENT;
         tracer_desc.pUserData = &tracer_data;
-        xet_tracer_handle_t hTracer;
-        xetTracerCreate(hDevice, &tracer_desc, &hTracer);
+        zet_tracer_handle_t hTracer;
+        zetTracerCreate(hDevice, &tracer_desc, &hTracer);
 
         // Set all callbacks
-        xet_core_callbacks_t prologCbs = {};
-        xet_core_callbacks_t epilogCbs = {};
+        zet_core_callbacks_t prologCbs = {};
+        zet_core_callbacks_t epilogCbs = {};
         prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchKernel;
         epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchKernel;
 
-        xetTracerSetPrologues(hTracer, &prologCbs, nullptr);
-        xetTracerSetEpilogues(hTracer, &epilogCbs, nullptr);
+        zetTracerSetPrologues(hTracer, &prologCbs, nullptr);
+        zetTracerSetEpilogues(hTracer, &epilogCbs, nullptr);
 
-        xetTracerSetEnabled(hTracer, true);
+        zetTracerSetEnabled(hTracer, true);
 
-        xeCommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-        xeCommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-        xeCommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        zeCommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        zeCommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        zeCommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
-        xetTracerSetEnabled(hTracer, false);
-        xetTracerDestroy(hTracer);
+        zetTracerSetEnabled(hTracer, false);
+        zetTracerDestroy(hTracer);
     }
 ```
 
@@ -154,14 +154,14 @@ Sampling types are a software representation of device capabilities in terms of 
 Each Metric Group provides information which sampling types it supports.
 There are separate sets of APIs supporting each of the sampling types [Time-based](#tbs) and [Event-based](#query).
 
-All available sampling types are defined in ::xet_metric_group_sampling_type_t.
+All available sampling types are defined in ::zet_metric_group_sampling_type_t.
 - Information about supported sampling types for a given Metric Group is provided in 
-  ::xet_metric_group_properties_t.samplingType.
+  ::zet_metric_group_properties_t.samplingType.
 - It's possible that a device provides multiple Metric Groups with the same names but different sampling types.
 - When enumerating, it's important to choose a Metric Group which supports the desired sampling type.
 
 ### <a name="dom">Domains</a>
-Every Metric Group belongs to a given domain (::xet_metric_group_properties_t.domain). 
+Every Metric Group belongs to a given domain (::zet_metric_group_properties_t.domain). 
 - The Metric Group typically define a uniform device counter configuration used for measurements.
 - Each domain represents an exclusive resource used by the Metric Group.
 - It's possible to simultaneously gather data for two different Metric Groups, only if they belong
@@ -173,10 +173,10 @@ All available metrics are organized into Metric Groups.
 - The list of available Metric Groups and their Metrics is device-specific.
 
 The following APIs provide all the information needed for identification and usage.
-- Metric Group properties are accessed through function ::xetMetricGroupGetProperties, returning
-  ::xet_metric_group_properties_t.
-- Metric properties are accessed through function ::xetMetricGetProperties, returning
-  ::xet_metric_properties_t.
+- Metric Group properties are accessed through function ::zetMetricGroupGetProperties, returning
+  ::zet_metric_group_properties_t.
+- Metric properties are accessed through function ::zetMetricGetProperties, returning
+  ::zet_metric_properties_t.
 
 A common tool flow is to enumerate metrics looking for a specific Metric Group.
 Depending on the metrics required for a specific scenario a tool may choose to run the workload multiple times,
@@ -185,40 +185,40 @@ Usually care must be taken to ensure run-to-run stability and result repeatabili
 When enumerating Metric tree to find a desired Metric Group, it's important to know in advance which sampling type it will be used. 
 
 To enumerate through the Metric tree:
-1. Call ::xetMetricGroupGet to obtain Metric Group count.
-2. Call ::xetMetricGroupGet to obtain all Metric Groups.
+1. Call ::zetMetricGroupGet to obtain Metric Group count.
+2. Call ::zetMetricGroupGet to obtain all Metric Groups.
 3. Iterate over all available Metric Groups.
     - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
     - Metric Group names may not be unique.
-4. For each Metric Group obtain their Metric count calling ::xetMetricGroupGetProperties with
-   Metric Group handle (::xet_metric_group_handle_t) and checking ::xet_metric_group_properties_t.metricCount.
-5. Iterate over available Metrics using ::xetMetricGet with parent Metric Group (::xet_metric_group_handle_t).
-6. Check Metric properties (e.g. name, description) calling ::xetMetricGetProperties with parent
-   Metric (::xet_metric_handle_t).
+4. For each Metric Group obtain their Metric count calling ::zetMetricGroupGetProperties with
+   Metric Group handle (::zet_metric_group_handle_t) and checking ::zet_metric_group_properties_t.metricCount.
+5. Iterate over available Metrics using ::zetMetricGet with parent Metric Group (::zet_metric_group_handle_t).
+6. Check Metric properties (e.g. name, description) calling ::zetMetricGetProperties with parent
+   Metric (::zet_metric_handle_t).
 
 
 The following sample code demonstrates a basic enumeration over all available metric groups and their metrics.
 Additionally, it returns a metric group with a chosen name and sampling type. Similar code could be used
 for selecting a preferred metric group for a specific type of measurements.
 ```c
-    xe_result_t FindMetricGroup( xe_device_handle_t hDevice,
+    ze_result_t FindMetricGroup( ze_device_handle_t hDevice,
                                    char* pMetricGroupName,
                                    uint32_t desiredSamplingType,
-                                   xet_metric_group_handle_t* phMetricGroup )
+                                   zet_metric_group_handle_t* phMetricGroup )
     {
         // Obtain available metric groups for the specific device
         uint32_t metricGroupCount = 0;
-        xetMetricGroupGet( hDevice, &metricGroupCount, nullptr );
+        zetMetricGroupGet( hDevice, &metricGroupCount, nullptr );
 
-        xet_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(xet_metric_group_handle_t));
-        xetMetricGroupGet( hDevice, &metricGroupCount, phMetricGroups );
+        zet_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(zet_metric_group_handle_t));
+        zetMetricGroupGet( hDevice, &metricGroupCount, phMetricGroups );
 
         // Iterate over all metric groups available
         for( uint32_t i = 0; i < metricGroupCount; i++ )
         {   
             // Get metric group under index 'i' and its properties
-            xet_metric_group_properties_t metricGroupProperties;
-            xetMetricGroupGetProperties( phMetricGroups[i], &metricGroupProperties );
+            zet_metric_group_properties_t metricGroupProperties;
+            zetMetricGroupGetProperties( phMetricGroups[i], &metricGroupProperties );
 
             printf("Metric Group: %s\n", metricGroupProperties.name);
 
@@ -239,15 +239,15 @@ for selecting a preferred metric group for a specific type of measurements.
 ```
 
 ## <a name="con">Configuration</a>
-Use the ::xetDeviceActivateMetricGroups API call to configure the device for data collection.
+Use the ::zetDeviceActivateMetricGroups API call to configure the device for data collection.
 - Subsequent calls to the function will disable device programming for the metric groups not selected for activation.
-- To avoid undefined results only call the ::xetDeviceActivateMetricGroups between experiments i.e. while not collecting data.
+- To avoid undefined results only call the ::zetDeviceActivateMetricGroups between experiments i.e. while not collecting data.
 
 Programming restrictions:
 - Any combination of metric groups can be configured simultaneously provided that all of them have
-  different ::xet_metric_group_properties_t.domain.
-- MetricGroup must be active until ::xetMetricQueryGetData and ::xetMetricTracerClose.
-- Conflicting Groups cannot be activated, in such case the call to ::xetDeviceActivateMetricGroups would fail.
+  different ::zet_metric_group_properties_t.domain.
+- MetricGroup must be active until ::zetMetricQueryGetData and ::zetMetricTracerClose.
+- Conflicting Groups cannot be activated, in such case the call to ::zetDeviceActivateMetricGroups would fail.
 
 ## <a name="col">Collection</a>
 There are two modes of metrics collection supported: time-based and event-based.
@@ -258,10 +258,10 @@ There are two modes of metrics collection supported: time-based and event-based.
 
 ### <a name="tbs">Metric Tracer</a>
 Time-based collection uses a simple Open, Wait, Read, Close scheme:
-- ::xetMetricTracerOpen opens the tracer.
-- ::xeEventHostSynchronize and ::xeEventQueryStatus can be used to wait for data.
-- ::xetMetricTracerReadData reads the data to be later processed by ::xetMetricGroupCalculateMetricValues.
-- ::xetMetricTracerClose closes the tracer.
+- ::zetMetricTracerOpen opens the tracer.
+- ::zeEventHostSynchronize and ::zeEventQueryStatus can be used to wait for data.
+- ::zetMetricTracerReadData reads the data to be later processed by ::zetMetricGroupCalculateMetricValues.
+- ::zetMetricTracerClose closes the tracer.
 
 ![MetricTracer](../images/tools_metric_tracer.png?raw=true)  
 @image latex tools_metric_tracer.png
@@ -269,57 +269,57 @@ Time-based collection uses a simple Open, Wait, Read, Close scheme:
 
 The following sample code demonstrates a basic sequence for tracer-based collection:
 ```c
-    xe_result_t TimeBasedUsageExample( xe_driver_handle_t hDriver,
-                                         xe_device_handle_t hDevice )
+    ze_result_t TimeBasedUsageExample( ze_driver_handle_t hDriver,
+                                         ze_device_handle_t hDevice )
     {
-        xet_metric_group_handle_t     hMetricGroup           = nullptr;
-        xe_event_handle_t            hNotificationEvent     = nullptr;
-        xe_event_pool_handle_t       hEventPool             = nullptr;
-        xe_event_pool_desc_t         eventPoolDesc          = {XE_EVENT_POOL_DESC_VERSION_CURRENT, XE_EVENT_POOL_FLAG_DEFAULT , 1};
-        xe_event_desc_t              eventDesc              = {XE_EVENT_DESC_VERSION_CURRENT};
-        xet_metric_tracer_handle_t    hMetricTracer          = nullptr;
-        xet_metric_tracer_desc_t      metricTracerDescriptor = {XET_METRIC_TRACER_DESC_VERSION_CURRENT}; 
+        zet_metric_group_handle_t     hMetricGroup           = nullptr;
+        ze_event_handle_t            hNotificationEvent     = nullptr;
+        ze_event_pool_handle_t       hEventPool             = nullptr;
+        ze_event_pool_desc_t         eventPoolDesc          = {ZE_EVENT_POOL_DESC_VERSION_CURRENT, ZE_EVENT_POOL_FLAG_DEFAULT , 1};
+        ze_event_desc_t              eventDesc              = {ZE_EVENT_DESC_VERSION_CURRENT};
+        zet_metric_tracer_handle_t    hMetricTracer          = nullptr;
+        zet_metric_tracer_desc_t      metricTracerDescriptor = {ZET_METRIC_TRACER_DESC_VERSION_CURRENT}; 
 
         // Find a "ComputeBasic" metric group suitable for Time Based collection
-        FindMetricGroup( hDevice, "ComputeBasic", XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
+        FindMetricGroup( hDevice, "ComputeBasic", ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
 
         // Configure the HW
-        xetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
+        zetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
         // Create notification event
-        xeEventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
+        zeEventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
         eventDesc.index  = 0;
         eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
         eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
-        xeEventCreate( hEventPool, &eventDesc, &hNotificationEvent );
+        zeEventCreate( hEventPool, &eventDesc, &hNotificationEvent );
         
         // Open metric tracer
         metricTracerDescriptor.samplingPeriod   	= 1000;
         metricTracerDescriptor.notifyEveryNReports  = 32768;
-        xetMetricTracerOpen( hDevice, hMetricGroup, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
+        zetMetricTracerOpen( hDevice, hMetricGroup, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
 
         // Run your workload, in this example we assume the data for the whole experiment fits in the device buffer
         Workload(hDevice);
         // Optionally insert markers during workload execution
-        //xetCommandListAppendMetricTracerMarker( hCommandList, hMetricTracer, tool_marker_value ); 
+        //zetCommandListAppendMetricTracerMarker( hCommandList, hMetricTracer, tool_marker_value ); 
 
         // Wait for data, optional in this example since the whole workload has already been executed by now
-        //xeEventHostSynchronize( hNotificationEvent, 1000 /*timeout*/ );
+        //zeEventHostSynchronize( hNotificationEvent, 1000 /*timeout*/ );
         // reset the event if it fired
 
         // Read raw data
         size_t rawSize = 0;
-        xetMetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, nullptr );
+        zetMetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, nullptr );
         uint8_t* rawData = malloc(rawSize); 
-        xetMetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, rawData );
+        zetMetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, rawData );
 
         // Close metric tracer
-        xetMetricTracerClose( hMetricTracer );   
-        xeEventDestroy( hNotificationEvent );
-        xeEventPoolDestroy( hEventPool );
+        zetMetricTracerClose( hMetricTracer );   
+        zeEventDestroy( hNotificationEvent );
+        zeEventPoolDestroy( hEventPool );
 
         // Deconfigure the device
-        xetDeviceActivateMetricGroups( hDevice, 0, nullptr );
+        zetDeviceActivateMetricGroups( hDevice, 0, nullptr );
 
         // Calculate metric data
         CalculateMetricsExample( hMetricGroup, rawSize, rawData );
@@ -329,51 +329,51 @@ The following sample code demonstrates a basic sequence for tracer-based collect
 
 ### <a name="query">Metric Query</a>
 Event-based collection uses a simple Begin, End, GetData scheme:
-- ::xetCommandListAppendMetricQueryBegin defines the start counting event
-- ::xetCommandListAppendMetricQueryEnd defines the finish counting event
-- ::xetMetricQueryGetData reads the raw data to be later processed by ::xetMetricGroupCalculateMetricValues.
+- ::zetCommandListAppendMetricQueryBegin defines the start counting event
+- ::zetCommandListAppendMetricQueryEnd defines the finish counting event
+- ::zetMetricQueryGetData reads the raw data to be later processed by ::zetMetricGroupCalculateMetricValues.
 
 Typically, multiple queries are used and recycled to characterize a workload.
 A Query Pool is used to efficiently use and reuse device meory for multiple queries.
-- ::xetMetricQueryPoolCreate creates a pool of homogeneous queries.
-- ::xetMetricQueryPoolDestroy frees the pool. The application must ensure no queries within the pool are in-use before freeing the pool.
-- ::xetMetricQueryCreate obtains a handle to a unique location in the pool.
-- ::xetMetricQueryReset allows for low-cost recycling of a location in the pool.
+- ::zetMetricQueryPoolCreate creates a pool of homogeneous queries.
+- ::zetMetricQueryPoolDestroy frees the pool. The application must ensure no queries within the pool are in-use before freeing the pool.
+- ::zetMetricQueryCreate obtains a handle to a unique location in the pool.
+- ::zetMetricQueryReset allows for low-cost recycling of a location in the pool.
 
 ![MetricQuery](../images/tools_metric_query.png?raw=true)  
 @image latex tools_metric_query.png
 
 The following sample code demonstrates a basic sequence for query-based collection:
 ```c
-    xe_result_t MetricQueryUsageExample( xe_driver_handle_t hDriver,
-                                           xe_device_handle_t hDevice )
+    ze_result_t MetricQueryUsageExample( ze_driver_handle_t hDriver,
+                                           ze_device_handle_t hDevice )
     {
-        xet_metric_group_handle_t      hMetricGroup          = nullptr;
-        xe_event_handle_t             hCompletionEvent      = nullptr;
-        xe_event_pool_desc_t          eventPoolDesc         = {XE_EVENT_POOL_DESC_VERSION_CURRENT};
-        xe_event_desc_t               eventDesc             = {XE_EVENT_DESC_VERSION_CURRENT};
-        xe_event_pool_handle_t        hEventPool            = nullptr;
-        xet_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
-        xet_metric_query_handle_t      hMetricQuery          = nullptr;
-        xet_metric_query_pool_desc_t   queryPoolDesc         = {XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT};
+        zet_metric_group_handle_t      hMetricGroup          = nullptr;
+        ze_event_handle_t             hCompletionEvent      = nullptr;
+        ze_event_pool_desc_t          eventPoolDesc         = {ZE_EVENT_POOL_DESC_VERSION_CURRENT};
+        ze_event_desc_t               eventDesc             = {ZE_EVENT_DESC_VERSION_CURRENT};
+        ze_event_pool_handle_t        hEventPool            = nullptr;
+        zet_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
+        zet_metric_query_handle_t      hMetricQuery          = nullptr;
+        zet_metric_query_pool_desc_t   queryPoolDesc         = {ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT};
     
         // Find a "ComputeBasic" metric group suitable for Event Based collection
-        FindMetricGroup( hDevice, "ComputeBasic", XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
+        FindMetricGroup( hDevice, "ComputeBasic", ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
 
         // Configure HW
-        xetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
+        zetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
         // Create metric query pool & completion event
-        queryPoolDesc.flags        = XET_METRIC_QUERY_POOL_FLAG_PERFORMANCE;
+        queryPoolDesc.flags        = ZET_METRIC_QUERY_POOL_FLAG_PERFORMANCE;
         queryPoolDesc.count        = 1000;
-        xetMetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
-        eventPoolDesc.flags = XE_EVENT_POOL_FLAG_DEFAULT;
+        zetMetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
+        eventPoolDesc.flags = ZE_EVENT_POOL_FLAG_DEFAULT;
         eventPoolDesc.count = 1000;
-        xeEventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
+        zeEventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
         // Write BEGIN metric query to command list 
-        xetMetricQueryCreate( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );
-        xetCommandListAppendMetricQueryBegin( hCommandList, hMetricQuery );
+        zetMetricQueryCreate( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );
+        zetCommandListAppendMetricQueryBegin( hCommandList, hMetricQuery );
 
         // build your command list
 
@@ -381,27 +381,27 @@ The following sample code demonstrates a basic sequence for query-based collecti
         eventDesc.index  = 0;
         eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
         eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
-        xeEventCreate( hEventPool, &eventDesc, &hCompletionEvent);
-        xetCommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
+        zeEventCreate( hEventPool, &eventDesc, &hCompletionEvent);
+        zetCommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 
-        // use xeCommandQueueExecuteCommandLists( , , , ) to submit your workload to the device
+        // use zeCommandQueueExecuteCommandLists( , , , ) to submit your workload to the device
    
         // Wait for data
-        xeEventHostSynchronize( hCompletionEvent, 1000 /*timeout*/ );
+        zeEventHostSynchronize( hCompletionEvent, 1000 /*timeout*/ );
 
         // Read raw data
         size_t rawSize = 0;
-        xetMetricQueryGetData( hMetricQuery, &rawSize, nullptr );
+        zetMetricQueryGetData( hMetricQuery, &rawSize, nullptr );
         uint8_t* rawData = malloc(rawSize); 
-        xetMetricQueryGetData( hMetricQuery, &rawSize, rawData );
+        zetMetricQueryGetData( hMetricQuery, &rawSize, rawData );
 
         // Free the resources
-        xeEventDestroy( hCompletionEvent );
-        xeEventPoolDestroy( hEventPool );
-        xetMetricQueryPoolDestroy( hMetricQueryPool );
+        zeEventDestroy( hCompletionEvent );
+        zeEventPoolDestroy( hEventPool );
+        zetMetricQueryPoolDestroy( hMetricQueryPool );
 
         // Deconfigure HW
-        xetDeviceActivateMetricGroups( hDevice, 0, nullptr );
+        zetDeviceActivateMetricGroups( hDevice, 0, nullptr );
 
         // Calculate metric data
         CalculateMetricsExample( hMetricGroup, rawSize, rawData );
@@ -411,25 +411,25 @@ The following sample code demonstrates a basic sequence for query-based collecti
 
 ## <a name="cal">Calculation</a>
 Both MetricTracer and MetricQueryPool collect the data in device specific, raw form that is not suitable
-for application processing. To calculate metric values use ::xetMetricGroupCalculateMetricValues.
+for application processing. To calculate metric values use ::zetMetricGroupCalculateMetricValues.
 
 The following sample code demonstrates a basic sequence for metric calculation and interpretation:
 ```c
-    xe_result_t CalculateMetricsExample( xet_metric_group_handle_t hMetricGroup,
+    ze_result_t CalculateMetricsExample( zet_metric_group_handle_t hMetricGroup,
                                            size_t rawSize, uint8_t* rawData )
     {
         // Calculate metric data
         uint32_t numMetricValues = 0;
-        xetMetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, nullptr );
-        xet_typed_value_t* metricValues = malloc( numMetricValues * sizeof(xet_typed_value_t) );
-        xetMetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, metricValues );
+        zetMetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, nullptr );
+        zet_typed_value_t* metricValues = malloc( numMetricValues * sizeof(zet_typed_value_t) );
+        zetMetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, metricValues );
 
         // Obtain available metrics for the specific metric group
         uint32_t metricCount = 0;
-        xetMetricGet( hMetricGroup, &metricCount, nullptr );
+        zetMetricGet( hMetricGroup, &metricCount, nullptr );
 
-        xet_metric_handle_t* phMetrics = malloc(metricCount * sizeof(xet_metric_handle_t));
-        xetMetricGet( hMetricGroup, &metricCount, phMetrics );
+        zet_metric_handle_t* phMetrics = malloc(metricCount * sizeof(zet_metric_handle_t));
+        zetMetricGet( hMetricGroup, &metricCount, phMetrics );
 
         // Print metric results
         uint32_t numReports = numMetricValues / metricCount;
@@ -439,28 +439,28 @@ The following sample code demonstrates a basic sequence for metric calculation a
 
             for( uint32_t metric = 0; metric < metricCount; ++metric )
             {
-                xet_typed_value_t data = metricValues[report * metricCount + metric];
+                zet_typed_value_t data = metricValues[report * metricCount + metric];
 
-                xet_metric_properties_t metricProperties;
-                xetMetricGetProperties( phMetrics[ metric ], &metricProperties );
+                zet_metric_properties_t metricProperties;
+                zetMetricGetProperties( phMetrics[ metric ], &metricProperties );
 
                 printf("Metric: %s\n", metricProperties.name );
 
                 switch( data.type )
                 {
-                case XET_VALUE_TYPE_UINT32:
+                case ZET_VALUE_TYPE_UINT32:
                     printf(" Value: %lu\n", data.value.ui32 );
                     break;
-                case XET_VALUE_TYPE_UINT64:
+                case ZET_VALUE_TYPE_UINT64:
                     printf(" Value: %llu\n", data.value.ui64 );
                     break;
-                case XET_VALUE_TYPE_FLOAT32:
+                case ZET_VALUE_TYPE_FLOAT32:
                     printf(" Value: %f\n", data.value.fp32 );
                     break;
-                case XET_VALUE_TYPE_FLOAT64:
+                case ZET_VALUE_TYPE_FLOAT64:
                     printf(" Value: %f\n", data.value.fp64 );
                     break;
-                case XET_VALUE_TYPE_BOOL8:
+                case ZET_VALUE_TYPE_BOOL8:
                     if( data.value.ui32 )
                         printf(" Value: true\n" );
                     else
@@ -494,37 +494,37 @@ The following capabilities allow for a tool to intercept and redirect function c
 * [API Tracing](#at)
 
 For example, a tool may use API Tracing in any of the following ways:
-* ::xeModuleCreate - replace a module handle with instrumented module handle for all functions
-* ::xeKernelCreate - replace a kernel handle with instrumented kernel handle for all call sites
-* ::xeModuleGetFunctionPointer - replace a function pointer with instrumented function pointer for all call sites
-* ::xeCommandListAppendLaunchKernel - replace a kernel handle with instrumented kernel handle at call site
+* ::zeModuleCreate - replace a module handle with instrumented module handle for all functions
+* ::zeKernelCreate - replace a kernel handle with instrumented kernel handle for all call sites
+* ::zeModuleGetFunctionPointer - replace a function pointer with instrumented function pointer for all call sites
+* ::zeCommandListAppendLaunchKernel - replace a kernel handle with instrumented kernel handle at call site
 
 ## Intra-Function Instrumentation
 The following capabilities allow for a tool to inject instructions within a kernel:
-* ::xetModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
-* ::xetModuleGetKernelNames - allows for a tool to query for all kernels within an application's module
-* ::xetKernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
-* ::xeModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
+* ::zetModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
+* ::zetModuleGetKernelNames - allows for a tool to query for all kernels within an application's module
+* ::zetKernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
+* ::zeModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
 * [API Tracing](#at) - same usage as Inter-Function Instrumentation above
 
 ### Compilation
 A module must be compiled with foreknowledge that instrumentation will be performed in order for the compiler
 to generate the proper profiling meta-data.
 Therefore, when the instrumentation layer is enabled, a new build flag is supported:
-"-xet-profile-flags <n>", where "<n>" must be a combination of ::xet_profile_flag_t, in hexidecimal.
+"-zet-profile-flags <n>", where "<n>" must be a combination of ::zet_profile_flag_t, in hexidecimal.
 
-As an example, a tool could use API Tracing to inject this build flag on each ::xeModuleCreate call 
+As an example, a tool could use API Tracing to inject this build flag on each ::zeModuleCreate call 
 that the tool wishes to instrument.
 In another example, a tool could recompile a Module using the build flag and use API Tracing to replace the 
 application's Module handle with it's own.
 
 ### Instrumentation
-Once the module has been compiled with instrumentation enabled, a tool may use ::xetModuleGetDebugInfo and ::xetKernelGetProfileInfo
+Once the module has been compiled with instrumentation enabled, a tool may use ::zetModuleGetDebugInfo and ::zetKernelGetProfileInfo
 in order to decode the application's instructions and register usage for each function in the module.
 
-If a tool requires additional functions to be used, it may create other module(s) and use ::xeModuleGetFunctionPointer
+If a tool requires additional functions to be used, it may create other module(s) and use ::zeModuleGetFunctionPointer
 to call functions between the application and tool modules.
-A tool may use ::xeModuleGetFunctionPointer to retrieve the Host and device address of each function in the module.
+A tool may use ::zeModuleGetFunctionPointer to retrieve the Host and device address of each function in the module.
 
 There are no APIs provided for the actual instrumentation.  Instead this is left up to the tool itself to decode the application module's
 native binary and inject native instructions.  This model prevents the instrumentation from being manipulated by
@@ -535,7 +535,7 @@ TODO: need a picture and write-up from GT-PIN/IGC team on how to use the profile
 
 ### Execution
 If a tool requires changing the address of an application's function, then it should use API Tracing; for example,
-::xeModuleGetFunctionPointer and all flavors of ::xeCommandListAppendLaunchKernel.
+::zeModuleGetFunctionPointer and all flavors of ::zeCommandListAppendLaunchKernel.
 
 
 # <a name="dbg">Program Debug</a>

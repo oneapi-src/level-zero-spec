@@ -1,0 +1,29 @@
+/*
+ *
+ * Copyright (C) 2019 Intel Corporation
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * @file ze_lib.cpp
+ *
+ */
+#include "ze_lib.h"
+
+namespace ze_lib
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    context_t context;
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    context_t::context_t()
+    {
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    context_t::~context_t()
+    {
+        FREE_DRIVER_LIBRARY( loader );
+    };
+
+} // namespace ze_lib

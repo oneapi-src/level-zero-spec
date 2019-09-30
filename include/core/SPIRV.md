@@ -129,7 +129,7 @@ An environment that supports SPIR-V 1.0 must support SPIR-V 1.0 modules that dec
   * **Vector16**
   * **GenericPointer**
   * **Groups**
-  * **ImageBasic** (for devices supporting ::xe_device_image_properties_t::supported)
+  * **ImageBasic** (for devices supporting ::ze_device_image_properties_t::supported)
   * **Float64** (TODO: Can fp64 be optional?)
 
 TODO: Consider:

@@ -48,7 +48,7 @@ namespace loader
         %endfor
         )
     {
-        xe_result_t result = ${X}_RESULT_SUCCESS;
+        ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
         %if re.match(r"Init", obj['name']):
         for( auto& drv : context.drivers )

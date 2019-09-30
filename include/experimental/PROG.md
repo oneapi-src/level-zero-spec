@@ -13,16 +13,16 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 * [Future](#fut)
 
 # <a name="init">Initialization</a>
-The driver must be initialized by calling ::xexInit after calling ::xeInit and before calling any other experimental function.
-Simultaneous calls to ::xexInit are thread-safe.
+The driver must be initialized by calling ::zexInit after calling ::zeInit and before calling any other experimental function.
+Simultaneous calls to ::zexInit are thread-safe.
 
 # <a name="dsc">Device-Specific Commands</a>
-::xexCommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.
+::zexCommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.
 The application is solely responsible for ensuring the commands are valid and correct for the specific device.
 
 ```c
     void* ptr = nullptr;
-    xexCommandListReserveSpace(hCommandList, sizeof(blob), &ptr);
+    zexCommandListReserveSpace(hCommandList, sizeof(blob), &ptr);
     ::memcpy(ptr, blob, sizeof(blob));
 ```
 

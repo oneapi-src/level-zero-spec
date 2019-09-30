@@ -1,4 +1,7 @@
 <%
+    x=tags['$x']
+    X=x.upper()
+
     TARGET_NAME="${TARGET_NAME}"
     CMAKE_CURRENT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
 
@@ -18,5 +21,5 @@ target_include_directories(${TARGET_NAME}
 
 target_compile_definitions(${TARGET_NAME}
     PRIVATE
-        XE_ENABLE_OCL_INTEROP=0
+        ${X}_ENABLE_OCL_INTEROP=0
 )

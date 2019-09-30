@@ -1,13 +1,13 @@
-set(TARGET_NAME xe_loader)
+set(TARGET_NAME ze_loader)
 
 add_library(${TARGET_NAME}
     SHARED
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_object.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_loader.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_loader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_core_loader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_experimental_loader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_tools_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_object.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_loader.cpp
 )
 
 target_include_directories(${TARGET_NAME}
@@ -17,5 +17,5 @@ target_include_directories(${TARGET_NAME}
 
 target_compile_definitions(${TARGET_NAME}
     PRIVATE
-        XE_ENABLE_OCL_INTEROP=0
+        ZE_ENABLE_OCL_INTEROP=0
 )

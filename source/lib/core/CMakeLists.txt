@@ -1,25 +1,25 @@
-set(TARGET_NAME xe_api)
+set(TARGET_NAME ze_api)
 
 add_library(${TARGET_NAME}
     STATIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_common.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_driver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_device.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_copy.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_event.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_fence.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_image.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_memory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_sampler.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_core_lib.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_lib.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_lib.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_driver.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_device.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_cmdqueue.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_cmdlist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_barrier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_cl_interop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_copy.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_event.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_fence.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_image.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_memory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_module.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_residency.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_sampler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_lib.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_lib.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_lib.cpp
 )
 
 target_include_directories(${TARGET_NAME}
@@ -29,5 +29,5 @@ target_include_directories(${TARGET_NAME}
 
 target_compile_definitions(${TARGET_NAME}
     PRIVATE
-        XE_ENABLE_OCL_INTEROP=0
+        ZE_ENABLE_OCL_INTEROP=0
 )
