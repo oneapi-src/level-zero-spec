@@ -112,9 +112,8 @@ typedef enum _zet_sched_mode_t
                                                     ///< without being preempted or terminated. All pending work for other
                                                     ///< contexts must wait until the running context completes with no further
                                                     ///< submitted work.
-    ZET_SCHED_MODE_SINGLE_CMDQUEUE,                 ///< Only a single command queue can execute work at a given time. Work is
-                                                    ///< permitted to run as long as needed without enforcing any scheduler
-                                                    ///< fairness policies.
+    ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG,              ///< Scheduler ensures that submission of workloads to the hardware is
+                                                    ///< optimized for compute unit debugging.
 
 } zet_sched_mode_t;
 
@@ -309,7 +308,7 @@ zetSysmanSchedulerSetExclusiveMode(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Change scheduler mode to ::ZET_SCHED_MODE_SINGLE_CMDQUEUE
+/// @brief Change scheduler mode to ::ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG
 /// 
 /// @details
 ///     - This mode is optimized for application debug. It ensures that only one
@@ -329,7 +328,7 @@ zetSysmanSchedulerSetExclusiveMode(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 ze_result_t __zecall
-zetSysmanSchedulerSetSingleCmdQueueMode(
+zetSysmanSchedulerSetComputeUnitDebugMode(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.

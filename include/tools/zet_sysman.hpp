@@ -87,9 +87,8 @@ namespace zet
                                                             ///< without being preempted or terminated. All pending work for other
                                                             ///< contexts must wait until the running context completes with no further
                                                             ///< submitted work.
-            SINGLE_CMDQUEUE,                                ///< Only a single command queue can execute work at a given time. Work is
-                                                            ///< permitted to run as long as needed without enforcing any scheduler
-                                                            ///< fairness policies.
+            COMPUTE_UNIT_DEBUG,                             ///< Scheduler ensures that submission of workloads to the hardware is
+                                                            ///< optimized for compute unit debugging.
 
         };
 
@@ -426,7 +425,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_SINGLE_CMDQUEUE
+        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG
         /// 
         /// @details
         ///     - This mode is optimized for application debug. It ensures that only one
@@ -437,7 +436,7 @@ namespace zet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SchedulerSetSingleCmdQueueMode(
+        SchedulerSetComputeUnitDebugMode(
             ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                             ///< scheduler mode.
             );

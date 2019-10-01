@@ -654,8 +654,8 @@ typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetExclusiveMode_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerSetSingleCmdQueueMode 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetSingleCmdQueueMode_t)(
+/// @brief Function-pointer for zetSysmanSchedulerSetComputeUnitDebugMode 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetComputeUnitDebugMode_t)(
     zet_sysman_handle_t,
     ze_bool_t*
     );
@@ -857,7 +857,7 @@ typedef struct _zet_sysman_dditable_t
     zet_pfnSysmanSchedulerSetTimeoutMode_t                      pfnSchedulerSetTimeoutMode;
     zet_pfnSysmanSchedulerSetTimesliceMode_t                    pfnSchedulerSetTimesliceMode;
     zet_pfnSysmanSchedulerSetExclusiveMode_t                    pfnSchedulerSetExclusiveMode;
-    zet_pfnSysmanSchedulerSetSingleCmdQueueMode_t               pfnSchedulerSetSingleCmdQueueMode;
+    zet_pfnSysmanSchedulerSetComputeUnitDebugMode_t             pfnSchedulerSetComputeUnitDebugMode;
     zet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
     zet_pfnSysmanDeviceWasRepaired_t                            pfnDeviceWasRepaired;
     zet_pfnSysmanPciGetProperties_t                             pfnPciGetProperties;

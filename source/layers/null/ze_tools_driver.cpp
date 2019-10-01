@@ -843,9 +843,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanSchedulerSetSingleCmdQueueMode
+    /// @brief Intercept function for zetSysmanSchedulerSetComputeUnitDebugMode
     ze_result_t __zecall
-    zetSysmanSchedulerSetSingleCmdQueueMode(
+    zetSysmanSchedulerSetComputeUnitDebugMode(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
@@ -854,10 +854,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSchedulerSetSingleCmdQueueMode = context.zetDdiTable.Sysman.pfnSchedulerSetSingleCmdQueueMode;
-        if( nullptr != pfnSchedulerSetSingleCmdQueueMode )
+        auto pfnSchedulerSetComputeUnitDebugMode = context.zetDdiTable.Sysman.pfnSchedulerSetComputeUnitDebugMode;
+        if( nullptr != pfnSchedulerSetComputeUnitDebugMode )
         {
-            result = pfnSchedulerSetSingleCmdQueueMode( hSysman, pNeedReboot );
+            result = pfnSchedulerSetComputeUnitDebugMode( hSysman, pNeedReboot );
         }
         else
         {
@@ -3484,7 +3484,7 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnSchedulerSetExclusiveMode              = driver::zetSysmanSchedulerSetExclusiveMode;
 
-    pDdiTable->pfnSchedulerSetSingleCmdQueueMode         = driver::zetSysmanSchedulerSetSingleCmdQueueMode;
+    pDdiTable->pfnSchedulerSetComputeUnitDebugMode       = driver::zetSysmanSchedulerSetComputeUnitDebugMode;
 
     pDdiTable->pfnDeviceReset                            = driver::zetSysmanDeviceReset;
 

@@ -381,12 +381,12 @@ On some devices, it is possible to change the way the scheduler executes workloa
 
 The available scheduler operating modes are given by the enum ::${t}_sched_mode_t:
 
-| Scheduler mode                     | Description |
-| :---                               | :---        |
-| ::${T}_SCHED_MODE_TIMEOUT          | This mode is optimized for multiple applications or contexts submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work.<br />It is possible to configure (::${t}_sched_timeout_properties_t) the watchdog timeout which controls the maximum time the scheduler will wait for a workload to complete a batch of work or yield to other applications before it is terminated.<br />If the watchdog timeout is set to ::${T}_SCHED_WATCHDOG_DISABLE, the scheduler enforces no fairness. This means that if there is other work to execute, the scheduler will try to submit it but will not terminate an executing process that does not complete quickly. |
-| ::${T}_SCHED_MODE_TIMESLICE        | This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently.<br />It is possible to configure (::${t}_sched_timeslice_properties_t) the timeslice interval and the amount of time the scheduler will wait for work to yield to another application before it is terminated. |
-| ::${T}_SCHED_MODE_EXCLUSIVE        | This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work. |
-| ::${T}_SCHED_MODE_SINGLE_CMDQUEUE  | This mode is optimized for application debug. It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies. |
+| Scheduler mode                       | Description |
+| :---                                 | :---        |
+| ::${T}_SCHED_MODE_TIMEOUT            | This mode is optimized for multiple applications or contexts submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work.<br />It is possible to configure (::${t}_sched_timeout_properties_t) the watchdog timeout which controls the maximum time the scheduler will wait for a workload to complete a batch of work or yield to other applications before it is terminated.<br />If the watchdog timeout is set to ::${T}_SCHED_WATCHDOG_DISABLE, the scheduler enforces no fairness. This means that if there is other work to execute, the scheduler will try to submit it but will not terminate an executing process that does not complete quickly. |
+| ::${T}_SCHED_MODE_TIMESLICE          | This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently.<br />It is possible to configure (::${t}_sched_timeslice_properties_t) the timeslice interval and the amount of time the scheduler will wait for work to yield to another application before it is terminated. |
+| ::${T}_SCHED_MODE_EXCLUSIVE          | This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work. |
+| ::${T}_SCHED_MODE_COMPUTE_UNIT_DEBUG | This mode is optimized for application debug. It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies. |
 
 The following functions are available for changing the behavior of the scheduler:
 
@@ -398,7 +398,7 @@ The following functions are available for changing the behavior of the scheduler
 | ::${t}SysmanSchedulerSetTimeoutMode                  | Change to timeout scheduler mode and/or change properties |
 | ::${t}SysmanSchedulerSetTimesliceMode                | Change to timeslice scheduler mode and/or change properties |
 | ::${t}SysmanSchedulerSetExclusiveMode                | Change to exclusive scheduler mode and/or change properties |
-| ::${t}SysmanSchedulerSetSingleCmdQueueMode           | Change to single command queue scheduler mode and/or change properties |
+| ::${t}SysmanSchedulerSetComputeUnitDebugMode         | Change to compute unit debug scheduler mode and/or change properties |
 
 The example below shows how to stop the scheduler enforcing fairness while permitting other work to attempt to run:
 

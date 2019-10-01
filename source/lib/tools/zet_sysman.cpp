@@ -272,7 +272,7 @@ zetSysmanSchedulerSetExclusiveMode(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Change scheduler mode to ::ZET_SCHED_MODE_SINGLE_CMDQUEUE
+/// @brief Change scheduler mode to ::ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG
 /// 
 /// @details
 ///     - This mode is optimized for application debug. It ensures that only one
@@ -292,17 +292,17 @@ zetSysmanSchedulerSetExclusiveMode(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 ze_result_t __zecall
-zetSysmanSchedulerSetSingleCmdQueueMode(
+zetSysmanSchedulerSetComputeUnitDebugMode(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
     )
 {
-    auto pfnSchedulerSetSingleCmdQueueMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetSingleCmdQueueMode;
-    if( nullptr == pfnSchedulerSetSingleCmdQueueMode )
+    auto pfnSchedulerSetComputeUnitDebugMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetComputeUnitDebugMode;
+    if( nullptr == pfnSchedulerSetComputeUnitDebugMode )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSchedulerSetSingleCmdQueueMode( hSysman, pNeedReboot );
+    return pfnSchedulerSetComputeUnitDebugMode( hSysman, pNeedReboot );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3036,7 +3036,7 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Change scheduler mode to ::ZET_SCHED_MODE_SINGLE_CMDQUEUE
+    /// @brief Change scheduler mode to ::ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG
     /// 
     /// @details
     ///     - This mode is optimized for application debug. It ensures that only one
@@ -3048,17 +3048,17 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerSetSingleCmdQueueMode(
+    Sysman::SchedulerSetComputeUnitDebugMode(
         ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanSchedulerSetSingleCmdQueueMode(
+        auto result = static_cast<result_t>( ::zetSysmanSchedulerSetComputeUnitDebugMode(
             reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
             reinterpret_cast<ze_bool_t*>( pNeedReboot ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerSetSingleCmdQueueMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerSetComputeUnitDebugMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -5302,8 +5302,8 @@ namespace zet
             str = "Sysman::sched_mode_t::EXCLUSIVE";
             break;
 
-        case Sysman::sched_mode_t::SINGLE_CMDQUEUE:
-            str = "Sysman::sched_mode_t::SINGLE_CMDQUEUE";
+        case Sysman::sched_mode_t::COMPUTE_UNIT_DEBUG:
+            str = "Sysman::sched_mode_t::COMPUTE_UNIT_DEBUG";
             break;
 
         default:

@@ -94,8 +94,8 @@ etors:
       desc: "The scheduler attempts to fairly timeslice hardware execution time between multiple contexts submitting work to the hardware concurrently."
     - name: $T_SCHED_MODE_EXCLUSIVE
       desc: "Any application or context can run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
-    - name: $T_SCHED_MODE_SINGLE_CMDQUEUE
-      desc: "Only a single command queue can execute work at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies."
+    - name: $T_SCHED_MODE_COMPUTE_UNIT_DEBUG
+      desc: "Scheduler ensures that submission of workloads to the hardware is optimized for compute unit debugging."
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Disable forward progress guard timeout."
@@ -251,9 +251,9 @@ returns:
         - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Change scheduler mode to $T_SCHED_MODE_SINGLE_CMDQUEUE"
+desc: "Change scheduler mode to $T_SCHED_MODE_COMPUTE_UNIT_DEBUG"
 class: $tSysman
-name: SchedulerSetSingleCmdQueueMode
+name: SchedulerSetComputeUnitDebugMode
 details:
     - "This mode is optimized for application debug. It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies."
     - "The application may call this function from simultaneous threads."

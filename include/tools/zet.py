@@ -443,9 +443,8 @@ class zet_sched_mode_v(IntEnum):
                                                     ## without being preempted or terminated. All pending work for other
                                                     ## contexts must wait until the running context completes with no further
                                                     ## submitted work.
-    SINGLE_CMDQUEUE = auto()                        ## Only a single command queue can execute work at a given time. Work is
-                                                    ## permitted to run as long as needed without enforcing any scheduler
-                                                    ## fairness policies.
+    COMPUTE_UNIT_DEBUG = auto()                     ## Scheduler ensures that submission of workloads to the hardware is
+                                                    ## optimized for compute unit debugging.
 
 class zet_sched_mode_t(c_int):
     def __str__(self):
@@ -1797,11 +1796,11 @@ else:
     _zetSysmanSchedulerSetExclusiveMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerSetSingleCmdQueueMode
+## @brief Function-pointer for zetSysmanSchedulerSetComputeUnitDebugMode
 if __use_win_types:
-    _zetSysmanSchedulerSetSingleCmdQueueMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
+    _zetSysmanSchedulerSetComputeUnitDebugMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
 else:
-    _zetSysmanSchedulerSetSingleCmdQueueMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
+    _zetSysmanSchedulerSetComputeUnitDebugMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanDeviceReset
@@ -1984,7 +1983,7 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnSchedulerSetTimeoutMode", c_void_p),                       ## _zetSysmanSchedulerSetTimeoutMode_t
         ("pfnSchedulerSetTimesliceMode", c_void_p),                     ## _zetSysmanSchedulerSetTimesliceMode_t
         ("pfnSchedulerSetExclusiveMode", c_void_p),                     ## _zetSysmanSchedulerSetExclusiveMode_t
-        ("pfnSchedulerSetSingleCmdQueueMode", c_void_p),                ## _zetSysmanSchedulerSetSingleCmdQueueMode_t
+        ("pfnSchedulerSetComputeUnitDebugMode", c_void_p),              ## _zetSysmanSchedulerSetComputeUnitDebugMode_t
         ("pfnDeviceReset", c_void_p),                                   ## _zetSysmanDeviceReset_t
         ("pfnDeviceWasRepaired", c_void_p),                             ## _zetSysmanDeviceWasRepaired_t
         ("pfnPciGetProperties", c_void_p),                              ## _zetSysmanPciGetProperties_t
@@ -2736,7 +2735,7 @@ class ZET_DDI:
         self.zetSysmanSchedulerSetTimeoutMode = _zetSysmanSchedulerSetTimeoutMode_t(self.__dditable.Sysman.pfnSchedulerSetTimeoutMode)
         self.zetSysmanSchedulerSetTimesliceMode = _zetSysmanSchedulerSetTimesliceMode_t(self.__dditable.Sysman.pfnSchedulerSetTimesliceMode)
         self.zetSysmanSchedulerSetExclusiveMode = _zetSysmanSchedulerSetExclusiveMode_t(self.__dditable.Sysman.pfnSchedulerSetExclusiveMode)
-        self.zetSysmanSchedulerSetSingleCmdQueueMode = _zetSysmanSchedulerSetSingleCmdQueueMode_t(self.__dditable.Sysman.pfnSchedulerSetSingleCmdQueueMode)
+        self.zetSysmanSchedulerSetComputeUnitDebugMode = _zetSysmanSchedulerSetComputeUnitDebugMode_t(self.__dditable.Sysman.pfnSchedulerSetComputeUnitDebugMode)
         self.zetSysmanDeviceReset = _zetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
         self.zetSysmanDeviceWasRepaired = _zetSysmanDeviceWasRepaired_t(self.__dditable.Sysman.pfnDeviceWasRepaired)
         self.zetSysmanPciGetProperties = _zetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)

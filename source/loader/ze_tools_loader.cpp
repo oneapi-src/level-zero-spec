@@ -983,9 +983,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanSchedulerSetSingleCmdQueueMode
+    /// @brief Intercept function for zetSysmanSchedulerSetComputeUnitDebugMode
     ze_result_t __zecall
-    zetSysmanSchedulerSetSingleCmdQueueMode(
+    zetSysmanSchedulerSetComputeUnitDebugMode(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
@@ -995,15 +995,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnSchedulerSetSingleCmdQueueMode = dditable->zet.Sysman.pfnSchedulerSetSingleCmdQueueMode;
-        if( nullptr == pfnSchedulerSetSingleCmdQueueMode )
+        auto pfnSchedulerSetComputeUnitDebugMode = dditable->zet.Sysman.pfnSchedulerSetComputeUnitDebugMode;
+        if( nullptr == pfnSchedulerSetComputeUnitDebugMode )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnSchedulerSetSingleCmdQueueMode( hSysman, pNeedReboot );
+        result = pfnSchedulerSetComputeUnitDebugMode( hSysman, pNeedReboot );
 
         return result;
     }
@@ -4217,7 +4217,7 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnSchedulerSetTimeoutMode                  = loader::zetSysmanSchedulerSetTimeoutMode;
             pDdiTable->pfnSchedulerSetTimesliceMode                = loader::zetSysmanSchedulerSetTimesliceMode;
             pDdiTable->pfnSchedulerSetExclusiveMode                = loader::zetSysmanSchedulerSetExclusiveMode;
-            pDdiTable->pfnSchedulerSetSingleCmdQueueMode           = loader::zetSysmanSchedulerSetSingleCmdQueueMode;
+            pDdiTable->pfnSchedulerSetComputeUnitDebugMode         = loader::zetSysmanSchedulerSetComputeUnitDebugMode;
             pDdiTable->pfnDeviceReset                              = loader::zetSysmanDeviceReset;
             pDdiTable->pfnDeviceWasRepaired                        = loader::zetSysmanDeviceWasRepaired;
             pDdiTable->pfnPciGetProperties                         = loader::zetSysmanPciGetProperties;

@@ -891,17 +891,17 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanSchedulerSetSingleCmdQueueMode
+    /// @brief Intercept function for zetSysmanSchedulerSetComputeUnitDebugMode
     ze_result_t __zecall
-    zetSysmanSchedulerSetSingleCmdQueueMode(
+    zetSysmanSchedulerSetComputeUnitDebugMode(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
         )
     {
-        auto pfnSchedulerSetSingleCmdQueueMode = context.zetDdiTable.Sysman.pfnSchedulerSetSingleCmdQueueMode;
+        auto pfnSchedulerSetComputeUnitDebugMode = context.zetDdiTable.Sysman.pfnSchedulerSetComputeUnitDebugMode;
 
-        if( nullptr == pfnSchedulerSetSingleCmdQueueMode )
+        if( nullptr == pfnSchedulerSetComputeUnitDebugMode )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -914,7 +914,7 @@ namespace layer
 
         }
 
-        return pfnSchedulerSetSingleCmdQueueMode( hSysman, pNeedReboot );
+        return pfnSchedulerSetComputeUnitDebugMode( hSysman, pNeedReboot );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3699,8 +3699,8 @@ zetGetSysmanProcAddrTable(
     dditable.pfnSchedulerSetExclusiveMode                = pDdiTable->pfnSchedulerSetExclusiveMode;
     pDdiTable->pfnSchedulerSetExclusiveMode              = layer::zetSysmanSchedulerSetExclusiveMode;
 
-    dditable.pfnSchedulerSetSingleCmdQueueMode           = pDdiTable->pfnSchedulerSetSingleCmdQueueMode;
-    pDdiTable->pfnSchedulerSetSingleCmdQueueMode         = layer::zetSysmanSchedulerSetSingleCmdQueueMode;
+    dditable.pfnSchedulerSetComputeUnitDebugMode         = pDdiTable->pfnSchedulerSetComputeUnitDebugMode;
+    pDdiTable->pfnSchedulerSetComputeUnitDebugMode       = layer::zetSysmanSchedulerSetComputeUnitDebugMode;
 
     dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
     pDdiTable->pfnDeviceReset                            = layer::zetSysmanDeviceReset;

@@ -966,23 +966,23 @@ typedef void (__zecall *zet_pfnSysmanSchedulerSetExclusiveModeCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanSchedulerSetSingleCmdQueueMode 
+/// @brief Callback function parameters for zetSysmanSchedulerSetComputeUnitDebugMode 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_scheduler_set_single_cmd_queue_mode_params_t
+typedef struct _zet_sysman_scheduler_set_compute_unit_debug_mode_params_t
 {
     zet_sysman_handle_t* phSysman;
     ze_bool_t** ppNeedReboot;
-} zet_sysman_scheduler_set_single_cmd_queue_mode_params_t;
+} zet_sysman_scheduler_set_compute_unit_debug_mode_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanSchedulerSetSingleCmdQueueMode 
+/// @brief Callback function-pointer for zetSysmanSchedulerSetComputeUnitDebugMode 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanSchedulerSetSingleCmdQueueModeCb_t)(
-    zet_sysman_scheduler_set_single_cmd_queue_mode_params_t* params,
+typedef void (__zecall *zet_pfnSysmanSchedulerSetComputeUnitDebugModeCb_t)(
+    zet_sysman_scheduler_set_compute_unit_debug_mode_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1569,7 +1569,7 @@ typedef struct _zet_sysman_callbacks_t
     zet_pfnSysmanSchedulerSetTimeoutModeCb_t                        pfnSchedulerSetTimeoutModeCb;
     zet_pfnSysmanSchedulerSetTimesliceModeCb_t                      pfnSchedulerSetTimesliceModeCb;
     zet_pfnSysmanSchedulerSetExclusiveModeCb_t                      pfnSchedulerSetExclusiveModeCb;
-    zet_pfnSysmanSchedulerSetSingleCmdQueueModeCb_t                 pfnSchedulerSetSingleCmdQueueModeCb;
+    zet_pfnSysmanSchedulerSetComputeUnitDebugModeCb_t               pfnSchedulerSetComputeUnitDebugModeCb;
     zet_pfnSysmanDeviceResetCb_t                                    pfnDeviceResetCb;
     zet_pfnSysmanDeviceWasRepairedCb_t                              pfnDeviceWasRepairedCb;
     zet_pfnSysmanPciGetPropertiesCb_t                               pfnPciGetPropertiesCb;
