@@ -26,8 +26,8 @@
 #include "zet_cmdlist.hpp"
 #include "zet_metric.hpp"
 #include "zet_module.hpp"
-#include "zet_pin.hpp"
 #include "zet_sysman.hpp"
+#include "zet_pin.hpp"
 #include "zet_tracing.hpp"
 
 #endif // defined(__cplusplus)

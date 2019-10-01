@@ -340,68 +340,6 @@ class zet_module_debug_info_format_t(c_int):
 
 
 ###############################################################################
-## @brief API version of ::zet_profile_info_t
-class zet_profile_info_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
-
-class zet_profile_info_version_t(c_int):
-    def __str__(self):
-        return str(zet_profile_info_version_v(value))
-
-
-###############################################################################
-## @brief Supportted profile features
-class zet_profile_flag_v(IntEnum):
-    REGISTER_REALLOCATION = ZE_BIT(0)               ## request the compiler attempt to minimize register usage as much as
-                                                    ## possible to allow for instrumentation
-    FREE_REGISTER_INFO = ZE_BIT(1)                  ## request the compiler generate free register info
-
-class zet_profile_flag_t(c_int):
-    def __str__(self):
-        return str(zet_profile_flag_v(value))
-
-
-###############################################################################
-## @brief Profiling meta-data for instrumentation
-class zet_profile_info_t(Structure):
-    _fields_ = [
-        ("version", zet_profile_info_version_t),                        ## [in] ::ZET_PROFILE_INFO_VERSION_CURRENT
-        ("flags", zet_profile_flag_t),                                  ## [out] indicates which flags were enabled during compilation
-        ("numTokens", c_ulong)                                          ## [out] number of tokens immediately following this structure
-    ]
-
-###############################################################################
-## @brief Supported profile token types
-class zet_profile_token_type_v(IntEnum):
-    FREE_REGISTER = auto()                          ## GRF info
-
-class zet_profile_token_type_t(c_int):
-    def __str__(self):
-        return str(zet_profile_token_type_v(value))
-
-
-###############################################################################
-## @brief Profile free register token detailing unused registers in the current
-##        function
-class zet_profile_free_register_token_t(Structure):
-    _fields_ = [
-        ("type", zet_profile_token_type_t),                             ## [out] type of token
-        ("size", c_ulong),                                              ## [out] total size of the token, in bytes
-        ("count", c_ulong)                                              ## [out] number of register sequences immediately following this
-                                                                        ## structure
-    ]
-
-###############################################################################
-## @brief Profile register sequence detailing consecutive bytes, all of which
-##        are unused
-class zet_profile_register_sequence_t(Structure):
-    _fields_ = [
-        ("start", c_ulong),                                             ## [out] starting byte in the register table, representing the start of
-                                                                        ## unused bytes in the current function
-        ("count", c_ulong)                                              ## [out] number of consecutive bytes in the sequence, starting from start
-    ]
-
-###############################################################################
 ## @brief API version of Sysman
 class zet_sysman_version_v(IntEnum):
     CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
@@ -1541,6 +1479,68 @@ class zet_diag_properties_t(Structure):
         ("haveTests", ze_bool_t)                                        ## [out] Indicates if this test suite has individual tests which can be
                                                                         ## run separately (use the function $SysmanDiagnosticsGetTests() to get
                                                                         ## the list of these tests)
+    ]
+
+###############################################################################
+## @brief API version of ::zet_profile_info_t
+class zet_profile_info_version_v(IntEnum):
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class zet_profile_info_version_t(c_int):
+    def __str__(self):
+        return str(zet_profile_info_version_v(value))
+
+
+###############################################################################
+## @brief Supportted profile features
+class zet_profile_flag_v(IntEnum):
+    REGISTER_REALLOCATION = ZE_BIT(0)               ## request the compiler attempt to minimize register usage as much as
+                                                    ## possible to allow for instrumentation
+    FREE_REGISTER_INFO = ZE_BIT(1)                  ## request the compiler generate free register info
+
+class zet_profile_flag_t(c_int):
+    def __str__(self):
+        return str(zet_profile_flag_v(value))
+
+
+###############################################################################
+## @brief Profiling meta-data for instrumentation
+class zet_profile_info_t(Structure):
+    _fields_ = [
+        ("version", zet_profile_info_version_t),                        ## [in] ::ZET_PROFILE_INFO_VERSION_CURRENT
+        ("flags", zet_profile_flag_t),                                  ## [out] indicates which flags were enabled during compilation
+        ("numTokens", c_ulong)                                          ## [out] number of tokens immediately following this structure
+    ]
+
+###############################################################################
+## @brief Supported profile token types
+class zet_profile_token_type_v(IntEnum):
+    FREE_REGISTER = auto()                          ## GRF info
+
+class zet_profile_token_type_t(c_int):
+    def __str__(self):
+        return str(zet_profile_token_type_v(value))
+
+
+###############################################################################
+## @brief Profile free register token detailing unused registers in the current
+##        function
+class zet_profile_free_register_token_t(Structure):
+    _fields_ = [
+        ("type", zet_profile_token_type_t),                             ## [out] type of token
+        ("size", c_ulong),                                              ## [out] total size of the token, in bytes
+        ("count", c_ulong)                                              ## [out] number of register sequences immediately following this
+                                                                        ## structure
+    ]
+
+###############################################################################
+## @brief Profile register sequence detailing consecutive bytes, all of which
+##        are unused
+class zet_profile_register_sequence_t(Structure):
+    _fields_ = [
+        ("start", c_ulong),                                             ## [out] starting byte in the register table, representing the start of
+                                                                        ## unused bytes in the current function
+        ("count", c_ulong)                                              ## [out] number of consecutive bytes in the sequence, starting from start
     ]
 
 ###############################################################################

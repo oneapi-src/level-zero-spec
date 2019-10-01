@@ -706,62 +706,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetModuleGetKernelNames
-    ze_result_t __zecall
-    zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of names available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
-                                                        ///< if count is larger than the number of names available, then the driver
-                                                        ///< will update the value with the correct number of names available.
-        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_module_object_t*>( hModule )->dditable;
-        auto pfnGetKernelNames = dditable->zet.Module.pfnGetKernelNames;
-        if( nullptr == pfnGetKernelNames )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hModule = reinterpret_cast<zet_module_object_t*>( hModule )->handle;
-
-        // forward to device-driver
-        result = pfnGetKernelNames( hModule, pCount, pNames );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetKernelGetProfileInfo
-    ze_result_t __zecall
-    zetKernelGetProfileInfo(
-        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
-        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_kernel_object_t*>( hKernel )->dditable;
-        auto pfnGetProfileInfo = dditable->zet.Kernel.pfnGetProfileInfo;
-        if( nullptr == pfnGetProfileInfo )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hKernel = reinterpret_cast<zet_kernel_object_t*>( hKernel )->handle;
-
-        // forward to device-driver
-        result = pfnGetProfileInfo( hKernel, pInfo );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanGet
     ze_result_t __zecall
     zetSysmanGet(
@@ -3396,6 +3340,62 @@ namespace loader
 
         // forward to device-driver
         result = pfnRunTests( hDiagnostics, start, end, pResult );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetModuleGetKernelNames
+    ze_result_t __zecall
+    zetModuleGetKernelNames(
+        zet_module_handle_t hModule,                    ///< [in] handle of the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_module_object_t*>( hModule )->dditable;
+        auto pfnGetKernelNames = dditable->zet.Module.pfnGetKernelNames;
+        if( nullptr == pfnGetKernelNames )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hModule = reinterpret_cast<zet_module_object_t*>( hModule )->handle;
+
+        // forward to device-driver
+        result = pfnGetKernelNames( hModule, pCount, pNames );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetKernelGetProfileInfo
+    ze_result_t __zecall
+    zetKernelGetProfileInfo(
+        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
+        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_kernel_object_t*>( hKernel )->dditable;
+        auto pfnGetProfileInfo = dditable->zet.Kernel.pfnGetProfileInfo;
+        if( nullptr == pfnGetProfileInfo )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hKernel = reinterpret_cast<zet_kernel_object_t*>( hKernel )->handle;
+
+        // forward to device-driver
+        result = pfnGetProfileInfo( hKernel, pInfo );
 
         return result;
     }

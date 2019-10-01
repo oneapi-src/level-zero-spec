@@ -8,8 +8,8 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_cmdlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_metric.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_module.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/zet_pin.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_sysman.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_pin.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_tracing.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_tools_lib.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_lib.h

@@ -151,18 +151,6 @@ typedef struct _zet_metric_tracer_desc_t zet_metric_tracer_desc_t;
 typedef struct _zet_metric_query_pool_desc_t zet_metric_query_pool_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_profile_info_t
-typedef struct _zet_profile_info_t zet_profile_info_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_profile_free_register_token_t
-typedef struct _zet_profile_free_register_token_t zet_profile_free_register_token_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_profile_register_sequence_t
-typedef struct _zet_profile_register_sequence_t zet_profile_register_sequence_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_sysman_properties_t
 typedef struct _zet_sysman_properties_t zet_sysman_properties_t;
 
@@ -369,6 +357,18 @@ typedef struct _zet_diag_test_t zet_diag_test_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_diag_properties_t
 typedef struct _zet_diag_properties_t zet_diag_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_profile_info_t
+typedef struct _zet_profile_info_t zet_profile_info_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_profile_free_register_token_t
+typedef struct _zet_profile_free_register_token_t zet_profile_free_register_token_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_profile_register_sequence_t
+typedef struct _zet_profile_register_sequence_t zet_profile_register_sequence_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_tracer_desc_t

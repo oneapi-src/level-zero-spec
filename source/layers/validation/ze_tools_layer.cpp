@@ -609,64 +609,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetModuleGetKernelNames
-    ze_result_t __zecall
-    zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of names available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
-                                                        ///< if count is larger than the number of names available, then the driver
-                                                        ///< will update the value with the correct number of names available.
-        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
-        )
-    {
-        auto pfnGetKernelNames = context.zetDdiTable.Module.pfnGetKernelNames;
-
-        if( nullptr == pfnGetKernelNames )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetKernelNames( hModule, pCount, pNames );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetKernelGetProfileInfo
-    ze_result_t __zecall
-    zetKernelGetProfileInfo(
-        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
-        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
-        )
-    {
-        auto pfnGetProfileInfo = context.zetDdiTable.Kernel.pfnGetProfileInfo;
-
-        if( nullptr == pfnGetProfileInfo )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pInfo )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetProfileInfo( hKernel, pInfo );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanGet
     ze_result_t __zecall
     zetSysmanGet(
@@ -3203,6 +3145,64 @@ namespace layer
         }
 
         return pfnRunTests( hDiagnostics, start, end, pResult );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetModuleGetKernelNames
+    ze_result_t __zecall
+    zetModuleGetKernelNames(
+        zet_module_handle_t hModule,                    ///< [in] handle of the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        auto pfnGetKernelNames = context.zetDdiTable.Module.pfnGetKernelNames;
+
+        if( nullptr == pfnGetKernelNames )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hModule )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetKernelNames( hModule, pCount, pNames );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetKernelGetProfileInfo
+    ze_result_t __zecall
+    zetKernelGetProfileInfo(
+        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
+        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
+        )
+    {
+        auto pfnGetProfileInfo = context.zetDdiTable.Kernel.pfnGetProfileInfo;
+
+        if( nullptr == pfnGetProfileInfo )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hKernel )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pInfo )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProfileInfo( hKernel, pInfo );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

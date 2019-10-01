@@ -585,60 +585,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetModuleGetKernelNames
-    ze_result_t __zecall
-    zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of names available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
-                                                        ///< if count is larger than the number of names available, then the driver
-                                                        ///< will update the value with the correct number of names available.
-        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetKernelNames = context.zetDdiTable.Module.pfnGetKernelNames;
-        if( nullptr != pfnGetKernelNames )
-        {
-            result = pfnGetKernelNames( hModule, pCount, pNames );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetKernelGetProfileInfo
-    ze_result_t __zecall
-    zetKernelGetProfileInfo(
-        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
-        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetProfileInfo = context.zetDdiTable.Kernel.pfnGetProfileInfo;
-        if( nullptr != pfnGetProfileInfo )
-        {
-            result = pfnGetProfileInfo( hKernel, pInfo );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanGet
     ze_result_t __zecall
     zetSysmanGet(
@@ -3038,6 +2984,60 @@ namespace driver
         if( nullptr != pfnRunTests )
         {
             result = pfnRunTests( hDiagnostics, start, end, pResult );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetModuleGetKernelNames
+    ze_result_t __zecall
+    zetModuleGetKernelNames(
+        zet_module_handle_t hModule,                    ///< [in] handle of the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetKernelNames = context.zetDdiTable.Module.pfnGetKernelNames;
+        if( nullptr != pfnGetKernelNames )
+        {
+            result = pfnGetKernelNames( hModule, pCount, pNames );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetKernelGetProfileInfo
+    ze_result_t __zecall
+    zetKernelGetProfileInfo(
+        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
+        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProfileInfo = context.zetDdiTable.Kernel.pfnGetProfileInfo;
+        if( nullptr != pfnGetProfileInfo )
+        {
+            result = pfnGetProfileInfo( hKernel, pInfo );
         }
         else
         {
