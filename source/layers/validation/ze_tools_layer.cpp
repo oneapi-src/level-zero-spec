@@ -3412,6 +3412,61 @@ namespace layer
         return pfnGetNumThreads( hDebug, numThreads );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWaitForEvent
+    ze_result_t __zecall
+    zetDebugWaitForEvent(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t timeout,                               ///< [in] timeout in milliseconds (UINT64_MAX for infinite)
+        uint64_t flags,                                 ///< [in] a bit-vector of ::zet_debug_wait_flags_t
+        size_t* size                                    ///< [out] size of the topmost event in bytes
+        )
+    {
+        auto pfnWaitForEvent = context.zetDdiTable.Debug.pfnWaitForEvent;
+
+        if( nullptr == pfnWaitForEvent )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == size )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnWaitForEvent( hDebug, timeout, flags, size );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadEvent
+    ze_result_t __zecall
+    zetDebugReadEvent(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        size_t size,                                    ///< [in] the size of the buffer in bytes
+        void* buffer                                    ///< [in,out] a buffer to hold the event data
+        )
+    {
+        auto pfnReadEvent = context.zetDdiTable.Debug.pfnReadEvent;
+
+        if( nullptr == pfnReadEvent )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnReadEvent( hDebug, size, buffer );
+    }
+
 } // namespace layer
 
 #if defined(__cplusplus)
@@ -4590,6 +4645,12 @@ zetGetDebugProcAddrTable(
 
     dditable.pfnGetNumThreads                            = pDdiTable->pfnGetNumThreads;
     pDdiTable->pfnGetNumThreads                          = layer::zetDebugGetNumThreads;
+
+    dditable.pfnWaitForEvent                             = pDdiTable->pfnWaitForEvent;
+    pDdiTable->pfnWaitForEvent                           = layer::zetDebugWaitForEvent;
+
+    dditable.pfnReadEvent                                = pDdiTable->pfnReadEvent;
+    pDdiTable->pfnReadEvent                              = layer::zetDebugReadEvent;
 
     return result;
 }

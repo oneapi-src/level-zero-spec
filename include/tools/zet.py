@@ -1587,6 +1587,111 @@ class zet_debug_attach_flags_t(c_int):
 
 
 ###############################################################################
+## @brief Debug wait flags.
+class zet_debug_wait_flags_v(IntEnum):
+    DEBUG_WAIT_NONE = 0                             ## No wait flags
+
+class zet_debug_wait_flags_t(c_int):
+    def __str__(self):
+        return str(zet_debug_wait_flags_v(value))
+
+
+###############################################################################
+## @brief An infinite timeout.
+ZET_DEBUG_TIMEOUT_INFINITE = 0xffffffffffffffffull
+
+###############################################################################
+## @brief Debug event flags.
+class zet_debug_event_flags_v(IntEnum):
+    DEBUG_EVENT_FLAG_NONE = 0                       ## No event flags
+    DEBUG_EVENT_FLAG_STOPPED = (1 << 0)             ## The reporting thread stopped
+
+class zet_debug_event_flags_t(c_int):
+    def __str__(self):
+        return str(zet_debug_event_flags_v(value))
+
+
+###############################################################################
+## @brief Debug event types.
+class zet_debug_event_type_v(IntEnum):
+    DEBUG_EVENT_INVALID = 0                         ## The event is invalid
+    DEBUG_EVENT_DETACHED = auto()                   ## The tool was detached
+    DEBUG_EVENT_PROCESS_ENTRY = auto()              ## The debuggee process created command queues on the device
+    DEBUG_EVENT_PROCESS_EXIT = auto()               ## The debuggee process destroyed all command queues on the device
+    DEBUG_EVENT_MODULE_LOAD = auto()                ## An in-memory module was loaded onto the device
+    DEBUG_EVENT_EXCEPTION = auto()                  ## The thread stopped due to a device exception
+
+class zet_debug_event_type_t(c_int):
+    def __str__(self):
+        return str(zet_debug_event_type_v(value))
+
+
+###############################################################################
+## @brief Debug detach reason.
+class zet_debug_detach_reason_v(IntEnum):
+    DEBUG_DETACH_INVALID = 0                        ## The detach reason is not valid
+    DEBUG_DETACH_HOST_EXIT = auto()                 ## The host process exited
+
+class zet_debug_detach_reason_t(c_int):
+    def __str__(self):
+        return str(zet_debug_detach_reason_v(value))
+
+
+###############################################################################
+## @brief No thread on the device.
+ZET_DEBUG_THREAD_NONE = 0xffffffffffffffffull
+
+###############################################################################
+## @brief All threads on the device.
+ZET_DEBUG_THREAD_ALL = 0xfffffffffffffffeull
+
+###############################################################################
+## @brief Event information for ::ZET_DEBUG_EVENT_DETACHED
+class zet_debug_event_info_detached_t(Structure):
+    _fields_ = [
+        ("reason", c_ubyte)                                             ## The detach reason
+    ]
+
+###############################################################################
+## @brief Event information for ::ZET_DEBUG_EVENT_MODULE_LOAD
+class zet_debug_event_info_module_t(Structure):
+    _fields_ = [
+        ("moduleBegin", c_ulonglong),                                   ## The begin address of the in-memory module
+        ("moduleEnd", c_ulonglong),                                     ## The end address of the in-memory module
+        ("loadBegin", c_ulonglong),                                     ## The begin address of the loaded module on the device
+        ("loadEnd", c_ulonglong)                                        ## The end address of the loaded module on the device
+    ]
+
+###############################################################################
+## @brief Event information for ::ZET_DEBUG_EVENT_EXCEPTION
+class zet_debug_event_info_exception_t(Structure):
+    _fields_ = [
+        ("code", c_ulonglong),                                          ## The device-specific exception code
+        ("ip", c_ulonglong),                                            ## The instruction pointer
+        ("sp", c_ulonglong)                                             ## The stack pointer
+    ]
+
+###############################################################################
+## @brief Event type specific information
+class zet_debug_event_info_t(Structure):
+    _fields_ = [
+        ("detached", zet_debug_event_info_detached_t),                  ## type == ::ZET_DEBUG_EVENT_DETACHED
+        ("module", zet_debug_event_info_module_t),                      ## type == ::ZET_DEBUG_EVENT_MODULE_LOAD
+        ("exception", zet_debug_event_info_exception_t)                 ## type == ::ZET_DEBUG_EVENT_EXCEPTION
+    ]
+
+###############################################################################
+## @brief A debug event on the device.
+class zet_debug_event_t(Structure):
+    _fields_ = [
+        ("size", c_ushort),                                             ## The size of the event object in bytes
+        ("type", c_ubyte),                                              ## The event type
+        ("flags", c_ulonglong),                                         ## A bit-vector of ::zet_debug_event_flags_t
+        ("thread", c_ulonglong),                                        ## The thread reporting the event
+        ("info", zet_debug_event_info_t)                                ## Event type specific information
+    ]
+
+###############################################################################
 """
 class cl_context(c_void_p):
     pass
@@ -2759,6 +2864,20 @@ if __use_win_types:
 else:
     _zetDebugGetNumThreads_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
 
+###############################################################################
+## @brief Function-pointer for zetDebugWaitForEvent
+if __use_win_types:
+    _zetDebugWaitForEvent_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, POINTER(c_size_t) )
+else:
+    _zetDebugWaitForEvent_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, POINTER(c_size_t) )
+
+###############################################################################
+## @brief Function-pointer for zetDebugReadEvent
+if __use_win_types:
+    _zetDebugReadEvent_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_size_t, c_void_p )
+else:
+    _zetDebugReadEvent_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_size_t, c_void_p )
+
 
 ###############################################################################
 ## @brief Table of Debug functions pointers
@@ -2766,7 +2885,9 @@ class _zet_debug_dditable_t(Structure):
     _fields_ = [
         ("pfnAttach", c_void_p),                                        ## _zetDebugAttach_t
         ("pfnDetach", c_void_p),                                        ## _zetDebugDetach_t
-        ("pfnGetNumThreads", c_void_p)                                  ## _zetDebugGetNumThreads_t
+        ("pfnGetNumThreads", c_void_p),                                 ## _zetDebugGetNumThreads_t
+        ("pfnWaitForEvent", c_void_p),                                  ## _zetDebugWaitForEvent_t
+        ("pfnReadEvent", c_void_p)                                      ## _zetDebugReadEvent_t
     ]
 
 ###############################################################################
@@ -3178,5 +3299,7 @@ class ZET_DDI:
         self.zetDebugAttach = _zetDebugAttach_t(self.__dditable.Debug.pfnAttach)
         self.zetDebugDetach = _zetDebugDetach_t(self.__dditable.Debug.pfnDetach)
         self.zetDebugGetNumThreads = _zetDebugGetNumThreads_t(self.__dditable.Debug.pfnGetNumThreads)
+        self.zetDebugWaitForEvent = _zetDebugWaitForEvent_t(self.__dditable.Debug.pfnWaitForEvent)
+        self.zetDebugReadEvent = _zetDebugReadEvent_t(self.__dditable.Debug.pfnReadEvent)
 
         # success!

@@ -656,4 +656,140 @@ states:
 Most API functions require the thread they operate on to be stopped.
 
 
+## Debug Events
+
+As long as the tool is attached, it will receive debug events from the
+device.  There are separate APIs for waiting for an event and for reading
+the topmost event.
+
+To wait for events, the tool passes the ::zet_debug_session_handle_t, a
+timeout in milliseconds, and a bit-vector of wait flags.  A timeout of
+zero does not wait and immediately returns if no events are available.  A
+timeout of ::ZET_DEBUG_TIMEOUT_INFINITE waits indefinitely.  On success,
+the API provides the size of the topmost event in bytes.  If the timeout
+expires, ::ZE_RESULT_NOT_READY is returned.
+
+To read the topmost event, the tool passes a pointer to a buffer and its
+size in bytes.  The buffer needs to be big enough to hold the topmost
+event.  On success, the topmost event is copied into the buffer.
+
+The following sample code demonstrates waiting for and reading an event:
+
+```c
+    zet_debug_session_handle_t session = ...;
+    uint8_t buffer[...], *pbuffer = buffer;
+    size_t size;
+    ze_result_t errcode;
+
+    errcode = zetDebugWaitForEvent(session, ZET_DEBUG_TIMEOUT_INFINITE,
+                                    ZET_DEBUG_WAIT_NONE, &size);
+    if (errcode)
+        return errcode;
+
+    if (sizeof(buffer) < size) {
+        pbuffer = malloc(size);
+        if (!pbuffer)
+            return ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+
+    errcode = zetDebugReadEvent(session, size, pbuffer);
+    if (errcode) {
+        if (pbuffer != buffer)
+            free(pbuffer);
+        return errcode;
+    }
+
+    ...
+
+    if (pbuffer != buffer)
+        free(pbuffer);
+```
+
+
+A debug event is described by the ::zet_debug_event_t structure.  It
+contains:
+
+  * The size of the event object in bytes.
+
+  * The event type as ::zet_debug_event_type_t.
+
+  * The thread that reported the event.
+
+    This is either the ordinal number of the thread on the device or one
+    of the following special thread identifiers:
+
+      * ::ZET_DEBUG_THREAD_NONE indicates no threads on the device.
+
+      * ::ZET_DEBUG_THREAD_ALL indicates all threads on the device.
+
+  * A bit-vector of ::zet_debug_event_flags_t, which can be one of the
+    following:
+
+    * ::ZET_DEBUG_EVENT_FLAG_STOPPED indicates that the thread that
+      reported the event is stopped and needs to be resumed in order to
+      proceed.
+
+      If the event was reported by ::ZET_DEBUG_THREAD_ALL, all threads
+      have stopped and the tool may resume ::ZET_DEBUG_THREAD_ALL.  The
+      tool may also resume individual threads.
+
+      If the event was reported by ::ZET_DEBUG_THREAD_NONE, the event
+      occured outside the context of any device thread, yet still blocks
+      progress.  The tool needs to resume ::ZET_DEBUG_THREAD_NONE in
+      order to acknowledge the event and unblock progress.
+
+      Note that progress may not necessarily be blocked on the device on
+      which the event occured.
+
+
+Following the common fields, the event object contains event-specific
+fields depending on the event type.  Not all events have event-specific
+fields.
+
+  * ::ZET_DEBUG_EVENT_DETACHED: the tool was detached.
+
+    * The detach reason as ::zet_debug_detach_reason_t.  This can be one
+      of the following reasons:
+
+        * ::ZET_DEBUG_DETACH_HOST_EXIT indicates that the host process
+          exited.
+
+  * ::ZET_DEBUG_EVENT_PROCESS_ENTRY: the host process created one of more
+    command queues on the device.
+
+  * ::ZET_DEBUG_EVENT_PROCESS_EXIT: the host process destroyed all
+    command queues on the device.
+
+  * ::ZET_DEBUG_EVENT_MODULE_LOAD: an in-memory module was loaded onto
+    the device.
+
+    The event is generated in the $::{x}ModuleCreate() flow with thread ==
+    ::ZET_DEBUG_THREAD_NONE.  If ::ZET_DEBUG_EVENT_FLAG_STOPPED is set,
+    the event blocks the ::zeModuleCreate() call until the debugger
+    acknowledges the event by resuming ::ZET_DEBUG_THREAD_NONE.
+
+    * The begin and end address of the in-memory module.  On all devices
+      supported today, the module is an ELF file with optional DWARF debug
+      information.
+
+    * The begin and end address of the loaded module.
+
+  * ::ZET_DEBUG_EVENT_EXCEPTION: the thread stopped due to a device
+    exception.  The event-specific fields provide the content of
+    frequently-used registers for the tool's convenience.
+
+    * The device-specific exception code.  If thread ==
+      ::ZET_DEBUG_THREAD_ALL, this may be a summary exception code,
+      e.g. indicating an external interrupt.
+
+      * For Intel Graphics devices, this will be CR0[0:1].
+
+    * The device instruction pointer.  This will be zero if thread ==
+      ::ZET_DEBUG_THREAD_ALL.
+
+    * The stack pointer.  This will be zero if thread ==
+      ::ZET_DEBUG_THREAD_ALL or if the implementation does not use a
+      stack.
+
+
 (to be continued...)

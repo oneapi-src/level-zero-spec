@@ -374,6 +374,22 @@ typedef struct _zet_profile_register_sequence_t zet_profile_register_sequence_t;
 /// @brief Forward-declare zet_tracer_desc_t
 typedef struct _zet_tracer_desc_t zet_tracer_desc_t;
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_event_info_detached_t
+typedef struct _zet_debug_event_info_detached_t zet_debug_event_info_detached_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_event_info_module_t
+typedef struct _zet_debug_event_info_module_t zet_debug_event_info_module_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_event_info_exception_t
+typedef struct _zet_debug_event_info_exception_t zet_debug_event_info_exception_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_event_t
+typedef struct _zet_debug_event_t zet_debug_event_t;
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

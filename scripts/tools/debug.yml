@@ -79,3 +79,190 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid debug handle has been supplied"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Debug wait flags."
+class: $tDebug
+name: $t_debug_wait_flags_t
+etors:
+    - name: $T_DEBUG_WAIT_NONE
+      desc: "No wait flags"
+      value: "0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "An infinite timeout."
+name: $T_DEBUG_TIMEOUT_INFINITE
+value: "0xffffffffffffffffull"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Wait for a debug event on the device."
+class: $tDebug
+name: WaitForEvent
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: timeout
+      desc: "[in] timeout in milliseconds (UINT64_MAX for infinite)"
+    - type: "uint64_t"
+      name: flags
+      desc: "[in] a bit-vector of $t_debug_wait_flags_t"
+    - type: "size_t*"
+      name: size
+      desc: "[out] size of the topmost event in bytes"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or size pointer has been supplied"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Debug event flags."
+class: $tDebug
+name: $t_debug_event_flags_t
+etors:
+    - name: $T_DEBUG_EVENT_FLAG_NONE
+      desc: "No event flags"
+      value: "0"
+    - name: $T_DEBUG_EVENT_FLAG_STOPPED
+      desc: "The reporting thread stopped"
+      value: "(1 << 0)"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Debug event types."
+class: $tDebug
+name: $t_debug_event_type_t
+etors:
+    - name: $T_DEBUG_EVENT_INVALID
+      desc: "The event is invalid"
+      value: "0"
+    - name: $T_DEBUG_EVENT_DETACHED
+      desc: "The tool was detached"
+    - name: $T_DEBUG_EVENT_PROCESS_ENTRY
+      desc: "The debuggee process created command queues on the device"
+    - name: $T_DEBUG_EVENT_PROCESS_EXIT
+      desc: "The debuggee process destroyed all command queues on the device"
+    - name: $T_DEBUG_EVENT_MODULE_LOAD
+      desc: "An in-memory module was loaded onto the device"
+    - name: $T_DEBUG_EVENT_EXCEPTION
+      desc: "The thread stopped due to a device exception"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Debug detach reason."
+class: $tDebug
+name: $t_debug_detach_reason_t
+etors:
+    - name: $T_DEBUG_DETACH_INVALID
+      desc: "The detach reason is not valid"
+      value: "0"
+    - name: $T_DEBUG_DETACH_HOST_EXIT
+      desc: "The host process exited"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "No thread on the device."
+name: $T_DEBUG_THREAD_NONE
+value: "0xffffffffffffffffull"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "All threads on the device."
+name: $T_DEBUG_THREAD_ALL
+value: "0xfffffffffffffffeull"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event information for $T_DEBUG_EVENT_DETACHED"
+class: $tDebug
+name: $t_debug_event_info_detached_t
+members:
+    - type: "uint8_t"
+      name: reason
+      desc: "The detach reason"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event information for $T_DEBUG_EVENT_MODULE_LOAD"
+class: $tDebug
+name: $t_debug_event_info_module_t
+members:
+    - type: "uint64_t"
+      name: moduleBegin
+      desc: "The begin address of the in-memory module"
+    - type: "uint64_t"
+      name: moduleEnd
+      desc: "The end address of the in-memory module"
+    - type: "uint64_t"
+      name: loadBegin
+      desc: "The begin address of the loaded module on the device"
+    - type: "uint64_t"
+      name: loadEnd
+      desc: "The end address of the loaded module on the device"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event information for $T_DEBUG_EVENT_EXCEPTION"
+class: $tDebug
+name: $t_debug_event_info_exception_t
+members:
+    - type: "uint64_t"
+      name: code
+      desc: "The device-specific exception code"
+    - type: "uint64_t"
+      name: ip
+      desc: "The instruction pointer"
+    - type: "uint64_t"
+      name: sp
+      desc: "The stack pointer"
+--- #--------------------------------------------------------------------------
+type: union
+desc: "Event type specific information"
+class: $tDebug
+name: $t_debug_event_info_t
+members:
+    - type: $t_debug_event_info_detached_t
+      name: detached
+      desc: "type == $T_DEBUG_EVENT_DETACHED"
+    - type: $t_debug_event_info_module_t
+      name: module
+      desc: "type == $T_DEBUG_EVENT_MODULE_LOAD"
+    - type: $t_debug_event_info_exception_t
+      name: exception
+      desc: "type == $T_DEBUG_EVENT_EXCEPTION"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "A debug event on the device."
+class: $tDebug
+name: $t_debug_event_t
+members:
+    - type: "uint16_t"
+      name: size
+      desc: "The size of the event object in bytes"
+    - type: "uint8_t"
+      name: type
+      desc: "The event type"
+    - type: "uint64_t"
+      name: flags
+      desc: "A bit-vector of $t_debug_event_flags_t"
+    - type: "uint64_t"
+      name: thread
+      desc: "The thread reporting the event"
+    - type: $t_debug_event_info_t
+      name: info
+      desc: "Event type specific information"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Read the topmost debug event."
+class: $tDebug
+name: ReadEvent
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "size_t"
+      name: size
+      desc: "[in] the size of the buffer in bytes"
+    - type: "void*"
+      name: buffer
+      desc: "[in,out] a buffer to hold the event data"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or buffer pointer has been supplied"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY:
+        - "the output buffer is too small to hold the event"
+    - $X_RESULT_NOT_READY:
+        - "there is no event"

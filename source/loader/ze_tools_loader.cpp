@@ -3601,6 +3601,41 @@ namespace loader
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWaitForEvent
+    ze_result_t __zecall
+    zetDebugWaitForEvent(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t timeout,                               ///< [in] timeout in milliseconds (UINT64_MAX for infinite)
+        uint64_t flags,                                 ///< [in] a bit-vector of ::zet_debug_wait_flags_t
+        size_t* size                                    ///< [out] size of the topmost event in bytes
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnWaitForEvent( hDebug, timeout, flags, size );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadEvent
+    ze_result_t __zecall
+    zetDebugReadEvent(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        size_t size,                                    ///< [in] the size of the buffer in bytes
+        void* buffer                                    ///< [in,out] a buffer to hold the event data
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnReadEvent( hDebug, size, buffer );
+
+        return result;
+    }
+
 } // namespace loader
 
 #if defined(__cplusplus)
@@ -5411,6 +5446,8 @@ zetGetDebugProcAddrTable(
             pDdiTable->pfnAttach                                   = loader::zetDebugAttach;
             pDdiTable->pfnDetach                                   = loader::zetDebugDetach;
             pDdiTable->pfnGetNumThreads                            = loader::zetDebugGetNumThreads;
+            pDdiTable->pfnWaitForEvent                             = loader::zetDebugWaitForEvent;
+            pDdiTable->pfnReadEvent                                = loader::zetDebugReadEvent;
         }
         else
         {
