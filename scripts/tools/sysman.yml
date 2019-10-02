@@ -34,7 +34,17 @@ type: macro
 desc: "Maximum number of characters in string properties."
 name: $T_STRING_PROPERTY_SIZE
 value: "32"
-
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Device Type"
+class: $tSysman
+name: $t_device_type_t
+etors:
+    - name: $T_DEVICE_TYPE_INTEGRATED
+      value: "0"
+      desc: "The device is an integrated GPU"
+    - name: $T_DEVICE_TYPE_DISCRETE
+      desc: "The device is a discrete GPU"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties"
@@ -47,6 +57,9 @@ members:
     - type: uint32_t
       name: "numSubdevices"
       desc: "[out] Number of sub-devices"
+    - type: $t_device_type_t
+      name: "deviceType"
+      desc: "[out] Device type"
     - type: int8_t
       name: "serialNumber[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] Manufacturing serial number (NULL terminated string value)"
@@ -537,6 +550,42 @@ members:
     - type: uint32_t
       name: "maxLimit"
       desc: "[out] The maximum power limit in milliwatts that can be requested."
+    - type: uint32_t
+      name: ICCMax
+      desc: "[in,out] Maximum desired current."  
+    - type: uint32_t
+      name: TjMax
+      desc: "[in,out] Maximum temperature in °C." 
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the Oc Icc Max."
+class: $tSysmanPower
+name: SetOcIccMax
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: OcIccMax
+      desc: "[in] Pointer to the allocated uint32."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the Oc Tj Max."
+class: $tSysmanPower
+name: SetOcTjMax
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: OcTjMax
+      desc: "[in] Pointer to the allocated uint32."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Energy counter snapshot"
@@ -607,8 +656,11 @@ details:
     - "If this power limit is removed or set too high, the power supply will generate an interrupt when it detects an overcurrent condition and the power controller will throttle the device frequencies down to min. It is thus better to tune the PL4 value in order to avoid such excursions."
 members:
     - type: uint32_t
-      name: power
-      desc: "[in,out] power limit in milliwatts"
+      name: powerAC
+      desc: "[in,out] power limit in milliwatts for the AC power source"
+    - type: uint32_t
+      name: powerDC
+      desc: "[in,out] power limit in milliwatts for the DC power source"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of power domains"
@@ -660,7 +712,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_power_energy_counter_t*
       name: pEnergy
-      desc: "[in] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
+      desc: "[out] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get energy threshold"
@@ -691,6 +743,9 @@ params:
     - type: $t_power_energy_threshold_t*
       name: pThreshold
       desc: "[in] The energy threshold to be set in joules."
+returns:
+    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
+        - "The device is in use, meaning that the GPU is under Over clocking, applying energy threshold under overclocking is not supported."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get power limits"
@@ -733,21 +788,24 @@ params:
     - type: const $t_power_peak_limit_t*
       name: pPeak
       desc: "[in][optional] The peak power limit."
+returns:
+    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
+        - "The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported."
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Overcloking modes"
+desc: "Over cloking modes"
 class: $tSysmanFrequency
 name: $t_oc_mode_t
 etors:
-    - name: $T_OC_MODE_INTERPOLATIVE
+    - name: $T_OVERCLOCKING_INTERPOLATIVE_MODE
       value: "0"
       desc: "Interpolative Mode."
-    - name: $T_OC_MODE_OVERRIDE
+    - name: $T_OVERCLOCKING_OVERRIDE_MODE
       value: "1"
       desc: "Override Mode."
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Overclocking error type"
+desc: "Over clocking error type"
 class: $tSysmanFrequency
 name: $t_oc_error_type_t
 etors:
@@ -762,49 +820,14 @@ etors:
       desc: "Requested voltage exceeds input regulators max supported voltage."
     - name: $T_OVERCLOCKING_NOT_SUPPORTED
       desc: "No overclocking capability on the Hardware."
-    - name: $OVERCLOCKING_INVALID_VR_ADDRESS
+    - name: $T_OOVERCLOCKING_INVALID_VR_ADDRESS
       desc: "The VR Address provided is illegal."
-    - name: $OVERCLOCKING_INVALID_ICCMAX
+    - name: $T_OOVERCLOCKING_INVALID_ICCMAX
       desc: "ICCMAX value given is invalid (more than 10 bits) or too low."
     - name: $T_OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED
       desc: "Voltage manipulation attempted when it is disabled."
     - name: $T_OVERCLOCKING_INVALID_COMMAND
       desc: "Data setting invalid for the command."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Overclocking VR Topolgy"
-class: $tSysmanFrequency
-name: $t_oc_vr_topology
-details:
-    - "Provides all the information related to the VR."
-members:
-    - type: $x_bool_t
-      name: VccInAuxExists
-      desc: "[out] VCCIN_AUX Exists (asserted if separate VR)"
-    - type: $x_bool_t
-      name: VccStgPgExists
-      desc: "[out] VCCSTG_PG Exists"
-    - type: $x_bool_t
-      name: VccStPgExists
-      desc: "[out] VCCST_PG Exists"
-    - type: $x_bool_t
-      name: VccSfrOcPgExists
-      desc: "[out] VCCSFR_OC_PG Exists"
-    - type: uint16_t
-      name: VccInAuxLp
-      desc: "[out] VCCIN_Aux_LP Level (0: 1.8v, 1: 1.65v)"
-    - type: uint16_t
-      name: VccInSvidAddress
-      desc: "[out] VCCIN SVID Address"
-    - type: uint16_t
-      name: VccInVrType
-      desc: "[out] VCCIN VR Type (asserted if SVID)"
-    - type: uint16_t
-      name: SvidNotPresent
-      desc: "[out] SVID not present"
-    - type: uint16_t
-      name: PsysDisabled
-      desc: "[out] PSYS Disabled"      
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Overclocking properties"
@@ -837,14 +860,11 @@ members:
     - type: $x_bool_t
       name: HighVoltModeEnabled
       desc: "[out] High voltage mode is enabled"
-    - type: $t_oc_vr_topology
-      name: OcVrTopology
-      desc: "[out] Hold all the Vr Topology properties."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Overclocking settings override"
+desc: "Overclocking configuration"
 class: $tSysmanFrequency
-name: $t_oc_settings_override_t
+name: $t_oc_configuration_t
 details:
     - "Provide the current settings to be read or changed."
 members:
@@ -859,13 +879,26 @@ members:
       desc: "[in,out] Overclock Mode: 0 - Interpolative,  1 - Override."
     - type: uint16_t
       name: VoltageOffset
-      desc: "[in,out] Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV)."
-    - type: uint32_t
-      name: ICCMax
-      desc: "[in,out] Maximum desired current."  
-    - type: uint32_t
-      name: TjMax
-      desc: "[in,out] Maximum temperature in °C."  
+      desc: "[in,out] Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV)." 
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum number of fan temperature/speed pairs in the fan speed table."
+name: $T_MAX_OVERCLOCKING_MODES
+value: "2"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Over clocking configuration override"
+class: $tSysmanFrequency
+name: $t_oc_configuration_override_t
+details:
+    - "Provide the current settings to be read or changed per mode."
+members:
+    - type: $t_oc_configuration_t
+      name: OcConfigurations[$T_MAX_OVERCLOCKING_MODES]
+      desc: "[in,out] Configuration to override."
+    - type: $t_oc_configuration_t*
+      name: pCurrentConfiguration
+      desc: "[in,out] Configuration to override."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan Point."
@@ -926,9 +959,9 @@ params:
       desc: "[out] Pointer to the allocated structure."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the Vr topology."
+desc: "Get the Max Oc ratio."
 class: $tSysmanFrequency
-name: GetOcVrTopology
+name: GetOcMaxRatio
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -936,14 +969,17 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_vr_topology*
-      name: pOcVrTopology
-      desc: "[out] Pointer to the allocated structure."
+    - type: $t_oc_mode_t
+      name: TargetMode
+      desc: "[in] Mode for the current configuration."
+    - type: uint16_t*
+      name: pMaxOcRatio
+      desc: "[out] Max overclocking ratio"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the Oc override properties."
+desc: "Get the Target Voltage."
 class: $tSysmanFrequency
-name: GetOcOverrideProperties
+name: GetOcTargetVoltage
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -951,14 +987,17 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_settings_override_t*
-      name: pOcSettingsOverride
-      desc: "[out] Pointer to the allocated structure."
+    - type: $t_oc_mode_t
+      name: TargetMode
+      desc: "[in] Mode for the current configuration."
+    - type: uint16_t*
+      name: pTargetVoltage
+      desc: "[out] Target Voltage. Units: divide by 2^10 for decimal voltage."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the Oc Icc Max."
+desc: "Get the the current Target Mode."
 class: $tSysmanFrequency
-name: GetOcIccMax
+name: GetOcTargetMode
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -966,14 +1005,14 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: uint32_t*
-      name: pOcIccMax
-      desc: "[out] Pointer to the allocated uint32."
+    - type: $t_oc_mode_t*
+      name: pTargetMode
+      desc: "[out] Overclock Mode: 0 - Interpolative,  1 - Override."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the Oc Tj Max."
+desc: "Get the Voltage Offset."
 class: $tSysmanFrequency
-name: GetOcTjMax
+name: GetOcVoltageOffset
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -981,14 +1020,17 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: uint32_t*
-      name: pOcTjMax
-      desc: "[out] Pointer to the allocated uint32."
+    - type: $t_oc_mode_t
+      name: TargetMode
+      desc: "[in] Mode for the current configuration."
+    - type: uint16_t*
+      name: pVoltageOffset
+      desc: "[out] Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV)."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set the Oc override properties."
+desc: "Set the Max Oc ratio."
 class: $tSysmanFrequency
-name: SetOcOverrideProperties
+name: SetOcMaxRatio
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -996,14 +1038,17 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_settings_override_t*
-      name: pOcSettingsOverride
-      desc: "[in] Pointer to the allocated structure."
+    - type: $t_oc_mode_t
+      name: TargetMode
+      desc: "[in] Mode for the current configuration."
+    - type: uint16_t
+      name: MaxOcRatio
+      desc: "[in] Max overclocking ratio"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set the Oc Icc Max."
+desc: "Set the Target Voltage."
 class: $tSysmanFrequency
-name: SetOcIccMax
+name: SetOcTargetVoltage
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1011,14 +1056,17 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: uint32_t*
-      name: pOcIccMax
-      desc: "[in] Pointer to the allocated uint32."
+    - type: $t_oc_mode_t
+      name: TargetMode
+      desc: "[in] Mode for the current configuration."
+    - type: uint16_t
+      name: TargetVoltage
+      desc: "[in] Target Voltage. Units: divide by 2^10 for decimal voltage."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set the Oc Tj Max."
+desc: "Set the the current Target Mode."
 class: $tSysmanFrequency
-name: SetOcTjMax
+name: SetOcTargetMode
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1026,9 +1074,27 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: uint32_t*
-      name: pOcTjMax
-      desc: "[in] Pointer to the allocated uint32."
+    - type: $t_oc_mode_t
+      name: TargetMode
+      desc: "[in] Overclock Mode: 0 - Interpolative,  1 - Override."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the Voltage Offset."
+class: $tSysmanFrequency
+name: SetOcVoltageOffset
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_oc_mode_t
+      name: TargetMode
+      desc: "[in] Mode for the current configuration."
+    - type: uint16_t
+      name: VoltageOffset
+      desc: "[in] Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV)."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency domains"
@@ -2602,6 +2668,8 @@ etors:
       desc: "The frequency is being throttled"
     - name: $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED
       desc: "Interrupt from the PCU when the energy threshold is crossed."
+    - name: $T_SYSMAN_EVENT_TYPE_MAX_TEMPERATURE
+      desc: "Interrupt from the PCU when the energy Max temperature is reached."
     - name: $T_SYSMAN_EVENT_TYPE_RAS_ERRORS
       desc: "ECC/RAS errors"
     - name: $T_SYSMAN_EVENT_TYPE_NUM

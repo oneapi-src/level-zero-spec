@@ -227,16 +227,16 @@ typedef struct _zet_power_burst_limit_t zet_power_burst_limit_t;
 typedef struct _zet_power_peak_limit_t zet_power_peak_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_oc_vr_topology
-typedef struct _zet_oc_vr_topology zet_oc_vr_topology;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_oc_capabilities_t
 typedef struct _zet_oc_capabilities_t zet_oc_capabilities_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_oc_settings_override_t
-typedef struct _zet_oc_settings_override_t zet_oc_settings_override_t;
+/// @brief Forward-declare zet_oc_configuration_t
+typedef struct _zet_oc_configuration_t zet_oc_configuration_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_oc_configuration_override_t
+typedef struct _zet_oc_configuration_override_t zet_oc_configuration_override_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_oc_fan_point_t

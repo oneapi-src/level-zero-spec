@@ -100,6 +100,10 @@ namespace ze
             str = "result_t::ERROR_INSUFFICENT_PERMISSIONS";
             break;
 
+        case result_t::ERROR_DEVICE_IS_IN_USE:
+            str = "result_t::ERROR_DEVICE_IS_IN_USE";
+            break;
+
         case result_t::ERROR_ARRAY_SIZE_TOO_SMALL:
             str = "result_t::ERROR_ARRAY_SIZE_TOO_SMALL";
             break;

@@ -34,6 +34,12 @@
 #endif // ZET_SCHED_WATCHDOG_DISABLE
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef ZET_MAX_OVERCLOCKING_MODES
+/// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
+#define ZET_MAX_OVERCLOCKING_MODES  2
+#endif // ZET_MAX_OVERCLOCKING_MODES
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_FAN_TEMP_SPEED_PAIR_COUNT
 /// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
 #define ZET_FAN_TEMP_SPEED_PAIR_COUNT  32
@@ -69,6 +75,15 @@ namespace zet
         enum class version_t
         {
             CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device Type
+        enum class device_type_t
+        {
+            INTEGRATED = 0,                                 ///< The device is an integrated GPU
+            DISCRETE,                                       ///< The device is a discrete GPU
 
         };
 
@@ -114,6 +129,7 @@ namespace zet
         {
             FREQ_THROTTLED = 0,                             ///< The frequency is being throttled
             ENERGY_THRESHOLD_CROSSED,                       ///< Interrupt from the PCU when the energy threshold is crossed.
+            MAX_TEMPERATURE,                                ///< Interrupt from the PCU when the energy Max temperature is reached.
             RAS_ERRORS,                                     ///< ECC/RAS errors
             NUM,                                            ///< The number of event types
 
@@ -125,6 +141,7 @@ namespace zet
         {
             ze::Device::properties_t core;                  ///< [out] Core device properties
             uint32_t numSubdevices;                         ///< [out] Number of sub-devices
+            device_type_t deviceType;                       ///< [out] Device type
             int8_t serialNumber[ZET_STRING_PROPERTY_SIZE];  ///< [out] Manufacturing serial number (NULL terminated string value)
             int8_t boardNumber[ZET_STRING_PROPERTY_SIZE];   ///< [out] Manufacturing board number (NULL terminated string value)
             int8_t brandName[ZET_STRING_PROPERTY_SIZE];     ///< [out] Brand name of the device (NULL terminated string value)
@@ -869,6 +886,8 @@ namespace zet
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Software can change the power limits.
             uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
+            uint32_t ICCMax;                                ///< [in,out] Maximum desired current.
+            uint32_t TjMax;                                 ///< [in,out] Maximum temperature in °C.
 
         };
 
@@ -949,7 +968,8 @@ namespace zet
         ///       excursions.
         struct power_peak_limit_t
         {
-            uint32_t power;                                 ///< [in,out] power limit in milliwatts
+            uint32_t powerAC;                               ///< [in,out] power limit in milliwatts for the AC power source
+            uint32_t powerDC;                               ///< [in,out] power limit in milliwatts for the DC power source
 
         };
 
@@ -978,6 +998,30 @@ namespace zet
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
         auto getSysman( void ) const { return m_pSysman; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set the Oc Icc Max.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetOcIccMax(
+            uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set the Oc Tj Max.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetOcTjMax(
+            uint32_t* OcTjMax                               ///< [in] Pointer to the allocated uint32.
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get properties related to a power domain
@@ -1067,16 +1111,16 @@ namespace zet
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Overcloking modes
+        /// @brief Over cloking modes
         enum class oc_mode_t
         {
-            INTERPOLATIVE = 0,                              ///< Interpolative Mode.
-            OVERRIDE = 1,                                   ///< Override Mode.
+            OVERCLOCKING_INTERPOLATIVE_MODE = 0,            ///< Interpolative Mode.
+            OVERCLOCKING_OVERRIDE_MODE = 1,                 ///< Override Mode.
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Overclocking error type
+        /// @brief Over clocking error type
         enum class oc_error_type_t
         {
             OVERCLOCKING_LOCKED = 225,                      ///< The overclocking is locked. Service is read-only.
@@ -1084,8 +1128,8 @@ namespace zet
             OVERCLOCKING_RATIO_EXCEEDS_MAX,                 ///< The ratio exceeds maximum overclocking limits.
             OVERCLOCKING_VOLTAGE_EXCEEDS_MAX,               ///< Requested voltage exceeds input regulators max supported voltage.
             OVERCLOCKING_NOT_SUPPORTED,                     ///< No overclocking capability on the Hardware.
-            $OVERCLOCKING_INVALID_VR_ADDRESS,               ///< The VR Address provided is illegal.
-            $OVERCLOCKING_INVALID_ICCMAX,                   ///< ICCMAX value given is invalid (more than 10 bits) or too low.
+            OOVERCLOCKING_INVALID_VR_ADDRESS,               ///< The VR Address provided is illegal.
+            OOVERCLOCKING_INVALID_ICCMAX,                   ///< ICCMAX value given is invalid (more than 10 bits) or too low.
             OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED,         ///< Voltage manipulation attempted when it is disabled.
             OVERCLOCKING_INVALID_COMMAND,                   ///< Data setting invalid for the command.
 
@@ -1117,25 +1161,6 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Overclocking VR Topolgy
-        /// 
-        /// @details
-        ///     - Provides all the information related to the VR.
-        struct oc_vr_topology
-        {
-            ze::bool_t VccInAuxExists;                      ///< [out] VCCIN_AUX Exists (asserted if separate VR)
-            ze::bool_t VccStgPgExists;                      ///< [out] VCCSTG_PG Exists
-            ze::bool_t VccStPgExists;                       ///< [out] VCCST_PG Exists
-            ze::bool_t VccSfrOcPgExists;                    ///< [out] VCCSFR_OC_PG Exists
-            uint16_t VccInAuxLp;                            ///< [out] VCCIN_Aux_LP Level (0: 1.8v, 1: 1.65v)
-            uint16_t VccInSvidAddress;                      ///< [out] VCCIN SVID Address
-            uint16_t VccInVrType;                           ///< [out] VCCIN VR Type (asserted if SVID)
-            uint16_t SvidNotPresent;                        ///< [out] SVID not present
-            uint16_t PsysDisabled;                          ///< [out] PSYS Disabled
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Overclocking properties
         /// 
         /// @details
@@ -1151,24 +1176,33 @@ namespace zet
             ze::bool_t VoltageOffsetSupported;              ///< [out] Voltage offset is supported
             ze::bool_t HighVoltModeCapable;                 ///< [out] Capable of high voltage mode
             ze::bool_t HighVoltModeEnabled;                 ///< [out] High voltage mode is enabled
-            oc_vr_topology OcVrTopology;                    ///< [out] Hold all the Vr Topology properties.
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Overclocking settings override
+        /// @brief Overclocking configuration
         /// 
         /// @details
         ///     - Provide the current settings to be read or changed.
-        struct oc_settings_override_t
+        struct oc_configuration_t
         {
             uint16_t MaxOcRatio;                            ///< [in,out] Max overclocking ratio
             uint16_t TargetVoltage;                         ///< [in,out] Target Voltage. Units: divide by 2^10 for decimal voltage.
             uint16_t TargetMode;                            ///< [in,out] Overclock Mode: 0 - Interpolative,  1 - Override.
             uint16_t VoltageOffset;                         ///< [in,out] Voltage offset +/-999mV (minimum end voltage cannot be lower
                                                             ///< than 250mV).
-            uint32_t ICCMax;                                ///< [in,out] Maximum desired current.
-            uint32_t TjMax;                                 ///< [in,out] Maximum temperature in °C.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Over clocking configuration override
+        /// 
+        /// @details
+        ///     - Provide the current settings to be read or changed per mode.
+        struct oc_configuration_override_t
+        {
+            oc_configuration_t OcConfigurations[ZET_MAX_OVERCLOCKING_MODES];///< [in,out] Configuration to override.
+            oc_configuration_t* pCurrentConfiguration;      ///< [in,out] Configuration to override.
 
         };
 
@@ -1327,99 +1361,115 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the Vr topology.
+        /// @brief Get the Max Oc ratio.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - oc_vr_topology: Pointer to the allocated structure.
+        ///     - uint16_t: Max overclocking ratio
         /// 
         /// @throws result_t
-        oc_vr_topology __zecall
-        GetOcVrTopology(
-            void
+        uint16_t __zecall
+        GetOcMaxRatio(
+            oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the Oc override properties.
+        /// @brief Get the Target Voltage.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - oc_settings_override_t: Pointer to the allocated structure.
+        ///     - uint16_t: Target Voltage. Units: divide by 2^10 for decimal voltage.
         /// 
         /// @throws result_t
-        oc_settings_override_t __zecall
-        GetOcOverrideProperties(
-            void
+        uint16_t __zecall
+        GetOcTargetVoltage(
+            oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the Oc Icc Max.
+        /// @brief Get the the current Target Mode.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - uint32_t: Pointer to the allocated uint32.
+        ///     - oc_mode_t: Overclock Mode: 0 - Interpolative,  1 - Override.
         /// 
         /// @throws result_t
-        uint32_t __zecall
-        GetOcIccMax(
+        oc_mode_t __zecall
+        GetOcTargetMode(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the Oc Tj Max.
+        /// @brief Get the Voltage Offset.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - uint32_t: Pointer to the allocated uint32.
+        ///     - uint16_t: Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV).
         /// 
         /// @throws result_t
-        uint32_t __zecall
-        GetOcTjMax(
-            void
+        uint16_t __zecall
+        GetOcVoltageOffset(
+            oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the Oc override properties.
+        /// @brief Set the Max Oc ratio.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetOcOverrideProperties(
-            oc_settings_override_t* pOcSettingsOverride     ///< [in] Pointer to the allocated structure.
+        SetOcMaxRatio(
+            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+            uint16_t MaxOcRatio                             ///< [in] Max overclocking ratio
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the Oc Icc Max.
+        /// @brief Set the Target Voltage.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetOcIccMax(
-            uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+        SetOcTargetVoltage(
+            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+            uint16_t TargetVoltage                          ///< [in] Target Voltage. Units: divide by 2^10 for decimal voltage.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the Oc Tj Max.
+        /// @brief Set the the current Target Mode.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetOcTjMax(
-            uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+        SetOcTargetMode(
+            oc_mode_t TargetMode                            ///< [in] Overclock Mode: 0 - Interpolative,  1 - Override.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set the Voltage Offset.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetOcVoltageOffset(
+            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+            uint16_t VoltageOffset                          ///< [in] Voltage offset +/-999mV (minimum end voltage cannot be lower than
+                                                            ///< 250mV).
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2805,6 +2855,10 @@ namespace zet
     std::string to_string( const Sysman::version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_type_t to std::string
+    std::string to_string( const Sysman::device_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::properties_t to std::string
     std::string to_string( const Sysman::properties_t val );
 
@@ -2897,16 +2951,16 @@ namespace zet
     std::string to_string( const SysmanFrequency::oc_error_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_vr_topology to std::string
-    std::string to_string( const SysmanFrequency::oc_vr_topology val );
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::oc_capabilities_t to std::string
     std::string to_string( const SysmanFrequency::oc_capabilities_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_settings_override_t to std::string
-    std::string to_string( const SysmanFrequency::oc_settings_override_t val );
+    /// @brief Converts SysmanFrequency::oc_configuration_t to std::string
+    std::string to_string( const SysmanFrequency::oc_configuration_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::oc_configuration_override_t to std::string
+    std::string to_string( const SysmanFrequency::oc_configuration_override_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::oc_fan_point_t to std::string

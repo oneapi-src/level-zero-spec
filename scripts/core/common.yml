@@ -162,6 +162,8 @@ etors:
       desc: "error in building module"
     - name: $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS
       desc: "access denied"
+    - name: $X_RESULT_ERROR_DEVICE_IS_IN_USE
+      desc: "the device is already in use"
     - name: $X_RESULT_ERROR_ARRAY_SIZE_TOO_SMALL
       desc: "an array argument doesn't have enough storage"
     - name: $X_RESULT_ERROR_DEVICE_ACCESS

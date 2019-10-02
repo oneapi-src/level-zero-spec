@@ -1597,6 +1597,52 @@ typedef struct _zet_sysman_callbacks_t
 } zet_sysman_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanPowerSetOcIccMax 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_power_set_oc_icc_max_params_t
+{
+    zet_sysman_pwr_handle_t* phPower;
+    uint32_t** pOcIccMax;
+} zet_sysman_power_set_oc_icc_max_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanPowerSetOcIccMax 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanPowerSetOcIccMaxCb_t)(
+    zet_sysman_power_set_oc_icc_max_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanPowerSetOcTjMax 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_power_set_oc_tj_max_params_t
+{
+    zet_sysman_pwr_handle_t* phPower;
+    uint32_t** pOcTjMax;
+} zet_sysman_power_set_oc_tj_max_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanPowerSetOcTjMax 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanPowerSetOcTjMaxCb_t)(
+    zet_sysman_power_set_oc_tj_max_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanPowerGetProperties 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1742,6 +1788,8 @@ typedef void (__zecall *zet_pfnSysmanPowerSetLimitsCb_t)(
 /// @brief Table of SysmanPower callback functions pointers
 typedef struct _zet_sysman_power_callbacks_t
 {
+    zet_pfnSysmanPowerSetOcIccMaxCb_t                               pfnSetOcIccMaxCb;
+    zet_pfnSysmanPowerSetOcTjMaxCb_t                                pfnSetOcTjMaxCb;
     zet_pfnSysmanPowerGetPropertiesCb_t                             pfnGetPropertiesCb;
     zet_pfnSysmanPowerGetEnergyCounterCb_t                          pfnGetEnergyCounterCb;
     zet_pfnSysmanPowerGetEnergyThresholdCb_t                        pfnGetEnergyThresholdCb;
@@ -1797,161 +1845,190 @@ typedef void (__zecall *zet_pfnSysmanFrequencyGetOcCapabilitiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetOcVrTopology 
+/// @brief Callback function parameters for zetSysmanFrequencyGetOcMaxRatio 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_oc_vr_topology_params_t
+typedef struct _zet_sysman_frequency_get_oc_max_ratio_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_vr_topology** ppOcVrTopology;
-} zet_sysman_frequency_get_oc_vr_topology_params_t;
+    zet_oc_mode_t* pTargetMode;
+    uint16_t** ppMaxOcRatio;
+} zet_sysman_frequency_get_oc_max_ratio_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetOcVrTopology 
+/// @brief Callback function-pointer for zetSysmanFrequencyGetOcMaxRatio 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetOcVrTopologyCb_t)(
-    zet_sysman_frequency_get_oc_vr_topology_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFrequencyGetOcMaxRatioCb_t)(
+    zet_sysman_frequency_get_oc_max_ratio_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetOcOverrideProperties 
+/// @brief Callback function parameters for zetSysmanFrequencyGetOcTargetVoltage 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_oc_override_properties_params_t
+typedef struct _zet_sysman_frequency_get_oc_target_voltage_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_settings_override_t** ppOcSettingsOverride;
-} zet_sysman_frequency_get_oc_override_properties_params_t;
+    zet_oc_mode_t* pTargetMode;
+    uint16_t** ppTargetVoltage;
+} zet_sysman_frequency_get_oc_target_voltage_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetOcOverrideProperties 
+/// @brief Callback function-pointer for zetSysmanFrequencyGetOcTargetVoltage 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetOcOverridePropertiesCb_t)(
-    zet_sysman_frequency_get_oc_override_properties_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFrequencyGetOcTargetVoltageCb_t)(
+    zet_sysman_frequency_get_oc_target_voltage_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetOcIccMax 
+/// @brief Callback function parameters for zetSysmanFrequencyGetOcTargetMode 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_oc_icc_max_params_t
+typedef struct _zet_sysman_frequency_get_oc_target_mode_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    uint32_t** ppOcIccMax;
-} zet_sysman_frequency_get_oc_icc_max_params_t;
+    zet_oc_mode_t** ppTargetMode;
+} zet_sysman_frequency_get_oc_target_mode_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetOcIccMax 
+/// @brief Callback function-pointer for zetSysmanFrequencyGetOcTargetMode 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetOcIccMaxCb_t)(
-    zet_sysman_frequency_get_oc_icc_max_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFrequencyGetOcTargetModeCb_t)(
+    zet_sysman_frequency_get_oc_target_mode_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetOcTjMax 
+/// @brief Callback function parameters for zetSysmanFrequencyGetOcVoltageOffset 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_oc_tj_max_params_t
+typedef struct _zet_sysman_frequency_get_oc_voltage_offset_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    uint32_t** ppOcTjMax;
-} zet_sysman_frequency_get_oc_tj_max_params_t;
+    zet_oc_mode_t* pTargetMode;
+    uint16_t** ppVoltageOffset;
+} zet_sysman_frequency_get_oc_voltage_offset_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetOcTjMax 
+/// @brief Callback function-pointer for zetSysmanFrequencyGetOcVoltageOffset 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetOcTjMaxCb_t)(
-    zet_sysman_frequency_get_oc_tj_max_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFrequencyGetOcVoltageOffsetCb_t)(
+    zet_sysman_frequency_get_oc_voltage_offset_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencySetOcOverrideProperties 
+/// @brief Callback function parameters for zetSysmanFrequencySetOcMaxRatio 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_set_oc_override_properties_params_t
+typedef struct _zet_sysman_frequency_set_oc_max_ratio_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_settings_override_t** ppOcSettingsOverride;
-} zet_sysman_frequency_set_oc_override_properties_params_t;
+    zet_oc_mode_t* pTargetMode;
+    uint16_t* pMaxOcRatio;
+} zet_sysman_frequency_set_oc_max_ratio_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencySetOcOverrideProperties 
+/// @brief Callback function-pointer for zetSysmanFrequencySetOcMaxRatio 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencySetOcOverridePropertiesCb_t)(
-    zet_sysman_frequency_set_oc_override_properties_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFrequencySetOcMaxRatioCb_t)(
+    zet_sysman_frequency_set_oc_max_ratio_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencySetOcIccMax 
+/// @brief Callback function parameters for zetSysmanFrequencySetOcTargetVoltage 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_set_oc_icc_max_params_t
+typedef struct _zet_sysman_frequency_set_oc_target_voltage_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    uint32_t** ppOcIccMax;
-} zet_sysman_frequency_set_oc_icc_max_params_t;
+    zet_oc_mode_t* pTargetMode;
+    uint16_t* pTargetVoltage;
+} zet_sysman_frequency_set_oc_target_voltage_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencySetOcIccMax 
+/// @brief Callback function-pointer for zetSysmanFrequencySetOcTargetVoltage 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencySetOcIccMaxCb_t)(
-    zet_sysman_frequency_set_oc_icc_max_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFrequencySetOcTargetVoltageCb_t)(
+    zet_sysman_frequency_set_oc_target_voltage_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencySetOcTjMax 
+/// @brief Callback function parameters for zetSysmanFrequencySetOcTargetMode 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_set_oc_tj_max_params_t
+typedef struct _zet_sysman_frequency_set_oc_target_mode_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    uint32_t** ppOcTjMax;
-} zet_sysman_frequency_set_oc_tj_max_params_t;
+    zet_oc_mode_t* pTargetMode;
+} zet_sysman_frequency_set_oc_target_mode_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencySetOcTjMax 
+/// @brief Callback function-pointer for zetSysmanFrequencySetOcTargetMode 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencySetOcTjMaxCb_t)(
-    zet_sysman_frequency_set_oc_tj_max_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFrequencySetOcTargetModeCb_t)(
+    zet_sysman_frequency_set_oc_target_mode_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanFrequencySetOcVoltageOffset 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_frequency_set_oc_voltage_offset_params_t
+{
+    zet_sysman_freq_handle_t* phFrequency;
+    zet_oc_mode_t* pTargetMode;
+    uint16_t* pVoltageOffset;
+} zet_sysman_frequency_set_oc_voltage_offset_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanFrequencySetOcVoltageOffset 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanFrequencySetOcVoltageOffsetCb_t)(
+    zet_sysman_frequency_set_oc_voltage_offset_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -2078,13 +2155,14 @@ typedef struct _zet_sysman_frequency_callbacks_t
 {
     zet_pfnSysmanFrequencySetFanSpeedCb_t                           pfnSetFanSpeedCb;
     zet_pfnSysmanFrequencyGetOcCapabilitiesCb_t                     pfnGetOcCapabilitiesCb;
-    zet_pfnSysmanFrequencyGetOcVrTopologyCb_t                       pfnGetOcVrTopologyCb;
-    zet_pfnSysmanFrequencyGetOcOverridePropertiesCb_t               pfnGetOcOverridePropertiesCb;
-    zet_pfnSysmanFrequencyGetOcIccMaxCb_t                           pfnGetOcIccMaxCb;
-    zet_pfnSysmanFrequencyGetOcTjMaxCb_t                            pfnGetOcTjMaxCb;
-    zet_pfnSysmanFrequencySetOcOverridePropertiesCb_t               pfnSetOcOverridePropertiesCb;
-    zet_pfnSysmanFrequencySetOcIccMaxCb_t                           pfnSetOcIccMaxCb;
-    zet_pfnSysmanFrequencySetOcTjMaxCb_t                            pfnSetOcTjMaxCb;
+    zet_pfnSysmanFrequencyGetOcMaxRatioCb_t                         pfnGetOcMaxRatioCb;
+    zet_pfnSysmanFrequencyGetOcTargetVoltageCb_t                    pfnGetOcTargetVoltageCb;
+    zet_pfnSysmanFrequencyGetOcTargetModeCb_t                       pfnGetOcTargetModeCb;
+    zet_pfnSysmanFrequencyGetOcVoltageOffsetCb_t                    pfnGetOcVoltageOffsetCb;
+    zet_pfnSysmanFrequencySetOcMaxRatioCb_t                         pfnSetOcMaxRatioCb;
+    zet_pfnSysmanFrequencySetOcTargetVoltageCb_t                    pfnSetOcTargetVoltageCb;
+    zet_pfnSysmanFrequencySetOcTargetModeCb_t                       pfnSetOcTargetModeCb;
+    zet_pfnSysmanFrequencySetOcVoltageOffsetCb_t                    pfnSetOcVoltageOffsetCb;
     zet_pfnSysmanFrequencyGetPropertiesCb_t                         pfnGetPropertiesCb;
     zet_pfnSysmanFrequencyGetRangeCb_t                              pfnGetRangeCb;
     zet_pfnSysmanFrequencySetRangeCb_t                              pfnSetRangeCb;

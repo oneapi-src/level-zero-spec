@@ -149,6 +149,7 @@ class ze_result_v(IntEnum):
     ERROR_OUT_OF_DEVICE_MEMORY = auto()             ## insufficient device memory to satisfy call
     ERROR_MODULE_BUILD_FAILURE = auto()             ## error in building module
     ERROR_INSUFFICENT_PERMISSIONS = auto()          ## access denied
+    ERROR_DEVICE_IS_IN_USE = auto()                 ## the device is already in use
     ERROR_ARRAY_SIZE_TOO_SMALL = auto()             ## an array argument doesn't have enough storage
     ERROR_DEVICE_ACCESS = auto()                    ## there was a problem accessing device data
     ERROR_UNKNOWN = 0x7fffffff                      ## unknown or internal error

@@ -909,6 +909,20 @@ typedef ze_result_t (__zecall *zet_pfnGetSysmanProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPowerSetOcIccMax 
+typedef ze_result_t (__zecall *zet_pfnSysmanPowerSetOcIccMax_t)(
+    zet_sysman_pwr_handle_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPowerSetOcTjMax 
+typedef ze_result_t (__zecall *zet_pfnSysmanPowerSetOcTjMax_t)(
+    zet_sysman_pwr_handle_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanPowerGetProperties 
 typedef ze_result_t (__zecall *zet_pfnSysmanPowerGetProperties_t)(
     zet_sysman_pwr_handle_t,
@@ -958,6 +972,8 @@ typedef ze_result_t (__zecall *zet_pfnSysmanPowerSetLimits_t)(
 /// @brief Table of SysmanPower functions pointers
 typedef struct _zet_sysman_power_dditable_t
 {
+    zet_pfnSysmanPowerSetOcIccMax_t                             pfnSetOcIccMax;
+    zet_pfnSysmanPowerSetOcTjMax_t                              pfnSetOcTjMax;
     zet_pfnSysmanPowerGetProperties_t                           pfnGetProperties;
     zet_pfnSysmanPowerGetEnergyCounter_t                        pfnGetEnergyCounter;
     zet_pfnSysmanPowerGetEnergyThreshold_t                      pfnGetEnergyThreshold;
@@ -1005,52 +1021,65 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcCapabilities_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencyGetOcVrTopology 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcVrTopology_t)(
+/// @brief Function-pointer for zetSysmanFrequencyGetOcMaxRatio 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcMaxRatio_t)(
     zet_sysman_freq_handle_t,
-    zet_oc_vr_topology*
+    zet_oc_mode_t,
+    uint16_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencyGetOcOverrideProperties 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcOverrideProperties_t)(
+/// @brief Function-pointer for zetSysmanFrequencyGetOcTargetVoltage 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcTargetVoltage_t)(
     zet_sysman_freq_handle_t,
-    zet_oc_settings_override_t*
+    zet_oc_mode_t,
+    uint16_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencyGetOcIccMax 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcIccMax_t)(
+/// @brief Function-pointer for zetSysmanFrequencyGetOcTargetMode 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcTargetMode_t)(
     zet_sysman_freq_handle_t,
-    uint32_t*
+    zet_oc_mode_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencyGetOcTjMax 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcTjMax_t)(
+/// @brief Function-pointer for zetSysmanFrequencyGetOcVoltageOffset 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcVoltageOffset_t)(
     zet_sysman_freq_handle_t,
-    uint32_t*
+    zet_oc_mode_t,
+    uint16_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencySetOcOverrideProperties 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcOverrideProperties_t)(
+/// @brief Function-pointer for zetSysmanFrequencySetOcMaxRatio 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcMaxRatio_t)(
     zet_sysman_freq_handle_t,
-    zet_oc_settings_override_t*
+    zet_oc_mode_t,
+    uint16_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencySetOcIccMax 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcIccMax_t)(
+/// @brief Function-pointer for zetSysmanFrequencySetOcTargetVoltage 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcTargetVoltage_t)(
     zet_sysman_freq_handle_t,
-    uint32_t*
+    zet_oc_mode_t,
+    uint16_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencySetOcTjMax 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcTjMax_t)(
+/// @brief Function-pointer for zetSysmanFrequencySetOcTargetMode 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcTargetMode_t)(
     zet_sysman_freq_handle_t,
-    uint32_t*
+    zet_oc_mode_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanFrequencySetOcVoltageOffset 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcVoltageOffset_t)(
+    zet_sysman_freq_handle_t,
+    zet_oc_mode_t,
+    uint16_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1094,13 +1123,14 @@ typedef struct _zet_sysman_frequency_dditable_t
 {
     zet_pfnSysmanFrequencySetFanSpeed_t                         pfnSetFanSpeed;
     zet_pfnSysmanFrequencyGetOcCapabilities_t                   pfnGetOcCapabilities;
-    zet_pfnSysmanFrequencyGetOcVrTopology_t                     pfnGetOcVrTopology;
-    zet_pfnSysmanFrequencyGetOcOverrideProperties_t             pfnGetOcOverrideProperties;
-    zet_pfnSysmanFrequencyGetOcIccMax_t                         pfnGetOcIccMax;
-    zet_pfnSysmanFrequencyGetOcTjMax_t                          pfnGetOcTjMax;
-    zet_pfnSysmanFrequencySetOcOverrideProperties_t             pfnSetOcOverrideProperties;
-    zet_pfnSysmanFrequencySetOcIccMax_t                         pfnSetOcIccMax;
-    zet_pfnSysmanFrequencySetOcTjMax_t                          pfnSetOcTjMax;
+    zet_pfnSysmanFrequencyGetOcMaxRatio_t                       pfnGetOcMaxRatio;
+    zet_pfnSysmanFrequencyGetOcTargetVoltage_t                  pfnGetOcTargetVoltage;
+    zet_pfnSysmanFrequencyGetOcTargetMode_t                     pfnGetOcTargetMode;
+    zet_pfnSysmanFrequencyGetOcVoltageOffset_t                  pfnGetOcVoltageOffset;
+    zet_pfnSysmanFrequencySetOcMaxRatio_t                       pfnSetOcMaxRatio;
+    zet_pfnSysmanFrequencySetOcTargetVoltage_t                  pfnSetOcTargetVoltage;
+    zet_pfnSysmanFrequencySetOcTargetMode_t                     pfnSetOcTargetMode;
+    zet_pfnSysmanFrequencySetOcVoltageOffset_t                  pfnSetOcVoltageOffset;
     zet_pfnSysmanFrequencyGetProperties_t                       pfnGetProperties;
     zet_pfnSysmanFrequencyGetRange_t                            pfnGetRange;
     zet_pfnSysmanFrequencySetRange_t                            pfnSetRange;

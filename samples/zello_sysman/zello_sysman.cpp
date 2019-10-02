@@ -197,6 +197,42 @@ void ShowSwitches(zet_sysman_handle_t hSysmanDevice)
     }
 }
 
+void ShowOcCapabilities(zet_sysman_handle_t hSysmanDevice)
+{
+    uint32_t numFreqDomains;
+    if ((zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == ZE_RESULT_SUCCESS) && numFreqDomains)
+    {
+        zet_sysman_freq_handle_t* pFreqHandles = (zet_sysman_freq_handle_t*)malloc(numFreqDomains * sizeof(zet_sysman_freq_handle_t));
+        if (zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == ZE_RESULT_SUCCESS)
+        {
+            for (uint32_t index = 0; index < numFreqDomains; index++)
+            {
+                zet_freq_properties_t props;
+                if (zetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == ZE_RESULT_SUCCESS)
+                {
+                    // Only control GPU frequency domains
+                    if (props.type == ZET_FREQ_DOMAIN_GPU)
+                    {
+                        zet_oc_capabilities_t oc_caps;
+                        if (zetSysmanFrequencyGetOcCapabilities(pFreqHandles[index], &oc_caps) == ZE_RESULT_SUCCESS)
+                        {
+                            fprintf(stdout, "    Over clock Capabilities\n");
+                            fprintf(stdout, "    Max Oc Ratio: %d\n",       oc_caps.MaxOcRatioLimit);
+                            fprintf(stdout, "    Fused P0 Ratio: %d\n",     oc_caps.P0Ratio);
+                            fprintf(stdout, "    Fused P0 Voltage: %d\n",   oc_caps.P0Voltage);
+                            fprintf(stdout, "    Is Ratio OC Supported: %s\n", oc_caps.RatioOcSupported ? "yes":"no");
+                            fprintf(stdout, "    Is Voltage Override Supported: %s\n", oc_caps.VoltageOverrideSupported ? "yes" : "no");
+                            fprintf(stdout, "    Is High Voltage Capable: %s\n", oc_caps.HighVoltModeCapable ? "yes" : "no");
+                            fprintf(stdout, "    Is High Voltage Enabled: %s\n", oc_caps.HighVoltModeEnabled ? "yes" : "no");
+                        }
+                    }
+                }
+            }
+        }
+        free(pFreqHandles);
+    }    
+}
+
 void FixGpuFrequency(zet_sysman_handle_t hSysmanDevice, double FreqMHz)
 {
     uint32_t numFreqDomains;
@@ -228,7 +264,7 @@ void FixGpuFrequency(zet_sysman_handle_t hSysmanDevice, double FreqMHz)
                             fprintf(stderr, "ERROR: Can't control GPU frequency domain with index %u.\n", index);
                         }
                     }
-                }
+                }              
             }
         }
         free(pFreqHandles);
@@ -349,8 +385,9 @@ void ShowAveragePower(zet_sysman_pwr_handle_t hPower, zet_power_energy_counter_t
     }
 }
 
-// Forward declaration
+// Forward declarations
 void ShowPowerLimits(zet_sysman_pwr_handle_t hPower);
+void ShowEnergyThreshold(zet_sysman_pwr_handle_t hPower);
 
 void ShowPowerDomains(zet_sysman_handle_t hSysmanDevice)
 {
@@ -379,6 +416,8 @@ void ShowPowerDomains(zet_sysman_handle_t hSysmanDevice)
                         ShowPowerLimits(phPower[pwrIndex]);
                     }
                 }
+
+                ShowEnergyThreshold(phPower[pwrIndex]);
             }
         }
         free(phPower);
@@ -410,8 +449,19 @@ void ShowPowerLimits(zet_sysman_pwr_handle_t hPower)
         {
             fprintf(stdout, "        Burst:     Disabled\n");
         }
-        fprintf(stdout, "        Burst:     %.3f\n", ((double)peakLimits.power) / 1000);
+        fprintf(stdout, "        Peak AC:     %.3f\n", ((double)peakLimits.powerAC) / 1000);
+        fprintf(stdout, "        Peak DC:     %.3f\n", ((double)peakLimits.powerDC) / 1000);
     }
+}
+
+void ShowEnergyThreshold(zet_sysman_pwr_handle_t hPower)
+{
+    zet_power_energy_threshold_t energyThreshold;
+    if (zetSysmanPowerGetEnergyThreshold(hPower, &energyThreshold) == ZE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "    Energy Threshold: %d\n", energyThreshold.energy);
+    }
+
 }
 
 void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
@@ -424,6 +474,7 @@ void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
         fprintf(stdout, "    #subdevices:    %u\n", devProps.numSubdevices);
         fprintf(stdout, "    brand:          %s\n", devProps.brandName);
         fprintf(stdout, "    model:          %s\n", devProps.modelName);
+        fprintf(stdout, "    is discrete:    %s\n", devProps.deviceType == zet_device_type_t::ZET_DEVICE_TYPE_DISCRETE ? "yes" : "no");
         fprintf(stdout, "    driver timeout: disabled\n");
     }
     if (zetSysmanDeviceWasRepaired(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)

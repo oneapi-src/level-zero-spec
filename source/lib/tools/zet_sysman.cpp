@@ -496,6 +496,62 @@ zetSysmanPciGetStats(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Set the Oc Icc Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hPower
+///         + nullptr == OcIccMax
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanPowerSetOcIccMax(
+    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+    uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
+    )
+{
+    auto pfnSetOcIccMax = zet_lib::context.ddiTable.SysmanPower.pfnSetOcIccMax;
+    if( nullptr == pfnSetOcIccMax )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetOcIccMax( hPower, OcIccMax );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set the Oc Tj Max.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hPower
+///         + nullptr == OcTjMax
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanPowerSetOcTjMax(
+    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+    uint32_t* OcTjMax                               ///< [in] Pointer to the allocated uint32.
+    )
+{
+    auto pfnSetOcTjMax = zet_lib::context.ddiTable.SysmanPower.pfnSetOcTjMax;
+    if( nullptr == pfnSetOcTjMax )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetOcTjMax( hPower, OcTjMax );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle of power domains
 /// 
 /// @details
@@ -631,6 +687,8 @@ zetSysmanPowerGetEnergyThreshold(
 ///         + nullptr == hPower
 ///         + nullptr == pThreshold
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///         + The device is in use, meaning that the GPU is under Over clocking, applying energy threshold under overclocking is not supported.
 ze_result_t __zecall
 zetSysmanPowerSetEnergyThreshold(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
@@ -687,6 +745,8 @@ zetSysmanPowerGetLimits(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///         + The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported.
 ze_result_t __zecall
 zetSysmanPowerSetLimits(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
@@ -759,7 +819,7 @@ zetSysmanFrequencyGetOcCapabilities(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the Vr topology.
+/// @brief Get the Max Oc ratio.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -771,23 +831,24 @@ zetSysmanFrequencyGetOcCapabilities(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
-///         + nullptr == pOcVrTopology
+///         + nullptr == pMaxOcRatio
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencyGetOcVrTopology(
+zetSysmanFrequencyGetOcMaxRatio(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_vr_topology* pOcVrTopology               ///< [out] Pointer to the allocated structure.
+    zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+    uint16_t* pMaxOcRatio                           ///< [out] Max overclocking ratio
     )
 {
-    auto pfnGetOcVrTopology = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcVrTopology;
-    if( nullptr == pfnGetOcVrTopology )
+    auto pfnGetOcMaxRatio = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcMaxRatio;
+    if( nullptr == pfnGetOcMaxRatio )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetOcVrTopology( hFrequency, pOcVrTopology );
+    return pfnGetOcMaxRatio( hFrequency, TargetMode, pMaxOcRatio );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the Oc override properties.
+/// @brief Get the Target Voltage.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -799,23 +860,24 @@ zetSysmanFrequencyGetOcVrTopology(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
-///         + nullptr == pOcSettingsOverride
+///         + nullptr == pTargetVoltage
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencyGetOcOverrideProperties(
+zetSysmanFrequencyGetOcTargetVoltage(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_settings_override_t* pOcSettingsOverride ///< [out] Pointer to the allocated structure.
+    zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+    uint16_t* pTargetVoltage                        ///< [out] Target Voltage. Units: divide by 2^10 for decimal voltage.
     )
 {
-    auto pfnGetOcOverrideProperties = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcOverrideProperties;
-    if( nullptr == pfnGetOcOverrideProperties )
+    auto pfnGetOcTargetVoltage = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcTargetVoltage;
+    if( nullptr == pfnGetOcTargetVoltage )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+    return pfnGetOcTargetVoltage( hFrequency, TargetMode, pTargetVoltage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the Oc Icc Max.
+/// @brief Get the the current Target Mode.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -827,23 +889,23 @@ zetSysmanFrequencyGetOcOverrideProperties(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
-///         + nullptr == pOcIccMax
+///         + nullptr == pTargetMode
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencyGetOcIccMax(
+zetSysmanFrequencyGetOcTargetMode(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    uint32_t* pOcIccMax                             ///< [out] Pointer to the allocated uint32.
+    zet_oc_mode_t* pTargetMode                      ///< [out] Overclock Mode: 0 - Interpolative,  1 - Override.
     )
 {
-    auto pfnGetOcIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcIccMax;
-    if( nullptr == pfnGetOcIccMax )
+    auto pfnGetOcTargetMode = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcTargetMode;
+    if( nullptr == pfnGetOcTargetMode )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetOcIccMax( hFrequency, pOcIccMax );
+    return pfnGetOcTargetMode( hFrequency, pTargetMode );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the Oc Tj Max.
+/// @brief Get the Voltage Offset.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -855,23 +917,25 @@ zetSysmanFrequencyGetOcIccMax(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
-///         + nullptr == pOcTjMax
+///         + nullptr == pVoltageOffset
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencyGetOcTjMax(
+zetSysmanFrequencyGetOcVoltageOffset(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    uint32_t* pOcTjMax                              ///< [out] Pointer to the allocated uint32.
+    zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+    uint16_t* pVoltageOffset                        ///< [out] Voltage offset +/-999mV (minimum end voltage cannot be lower
+                                                    ///< than 250mV).
     )
 {
-    auto pfnGetOcTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcTjMax;
-    if( nullptr == pfnGetOcTjMax )
+    auto pfnGetOcVoltageOffset = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcVoltageOffset;
+    if( nullptr == pfnGetOcVoltageOffset )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetOcTjMax( hFrequency, pOcTjMax );
+    return pfnGetOcVoltageOffset( hFrequency, TargetMode, pVoltageOffset );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Oc override properties.
+/// @brief Set the Max Oc ratio.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -883,23 +947,23 @@ zetSysmanFrequencyGetOcTjMax(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
-///         + nullptr == pOcSettingsOverride
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencySetOcOverrideProperties(
+zetSysmanFrequencySetOcMaxRatio(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_settings_override_t* pOcSettingsOverride ///< [in] Pointer to the allocated structure.
+    zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+    uint16_t MaxOcRatio                             ///< [in] Max overclocking ratio
     )
 {
-    auto pfnSetOcOverrideProperties = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcOverrideProperties;
-    if( nullptr == pfnSetOcOverrideProperties )
+    auto pfnSetOcMaxRatio = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcMaxRatio;
+    if( nullptr == pfnSetOcMaxRatio )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+    return pfnSetOcMaxRatio( hFrequency, TargetMode, MaxOcRatio );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Oc Icc Max.
+/// @brief Set the Target Voltage.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -911,23 +975,23 @@ zetSysmanFrequencySetOcOverrideProperties(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
-///         + nullptr == pOcIccMax
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencySetOcIccMax(
+zetSysmanFrequencySetOcTargetVoltage(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+    zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+    uint16_t TargetVoltage                          ///< [in] Target Voltage. Units: divide by 2^10 for decimal voltage.
     )
 {
-    auto pfnSetOcIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcIccMax;
-    if( nullptr == pfnSetOcIccMax )
+    auto pfnSetOcTargetVoltage = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcTargetVoltage;
+    if( nullptr == pfnSetOcTargetVoltage )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetOcIccMax( hFrequency, pOcIccMax );
+    return pfnSetOcTargetVoltage( hFrequency, TargetMode, TargetVoltage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Oc Tj Max.
+/// @brief Set the the current Target Mode.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -939,19 +1003,47 @@ zetSysmanFrequencySetOcIccMax(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
-///         + nullptr == pOcTjMax
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencySetOcTjMax(
+zetSysmanFrequencySetOcTargetMode(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+    zet_oc_mode_t TargetMode                        ///< [in] Overclock Mode: 0 - Interpolative,  1 - Override.
     )
 {
-    auto pfnSetOcTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcTjMax;
-    if( nullptr == pfnSetOcTjMax )
+    auto pfnSetOcTargetMode = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcTargetMode;
+    if( nullptr == pfnSetOcTargetMode )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetOcTjMax( hFrequency, pOcTjMax );
+    return pfnSetOcTargetMode( hFrequency, TargetMode );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set the Voltage Offset.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanFrequencySetOcVoltageOffset(
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+    uint16_t VoltageOffset                          ///< [in] Voltage offset +/-999mV (minimum end voltage cannot be lower than
+                                                    ///< 250mV).
+    )
+{
+    auto pfnSetOcVoltageOffset = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcVoltageOffset;
+    if( nullptr == pfnSetOcVoltageOffset )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetOcVoltageOffset( hFrequency, TargetMode, VoltageOffset );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3204,6 +3296,48 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set the Oc Icc Max.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanPower::SetOcIccMax(
+        uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanPowerSetOcIccMax(
+            reinterpret_cast<zet_sysman_pwr_handle_t>( getHandle() ),
+            OcIccMax ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::SetOcIccMax" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set the Oc Tj Max.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanPower::SetOcTjMax(
+        uint32_t* OcTjMax                               ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanPowerSetOcTjMax(
+            reinterpret_cast<zet_sysman_pwr_handle_t>( getHandle() ),
+            OcTjMax ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::SetOcTjMax" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get handle of power domains
     /// 
     /// @details
@@ -3454,119 +3588,122 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the Vr topology.
+    /// @brief Get the Max Oc ratio.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - oc_vr_topology: Pointer to the allocated structure.
+    ///     - uint16_t: Max overclocking ratio
     /// 
     /// @throws result_t
-    SysmanFrequency::oc_vr_topology __zecall
-    SysmanFrequency::GetOcVrTopology(
-        void
+    uint16_t __zecall
+    SysmanFrequency::GetOcMaxRatio(
+        oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
         )
     {
-        zet_oc_vr_topology ocVrTopology;
+        uint16_t maxOcRatio;
 
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcVrTopology(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcMaxRatio(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            &ocVrTopology ) );
+            static_cast<zet_oc_mode_t>( TargetMode ),
+            &maxOcRatio ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcVrTopology" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcMaxRatio" );
 
-        return *reinterpret_cast<oc_vr_topology*>( &ocVrTopology );
+        return maxOcRatio;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the Oc override properties.
+    /// @brief Get the Target Voltage.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - oc_settings_override_t: Pointer to the allocated structure.
+    ///     - uint16_t: Target Voltage. Units: divide by 2^10 for decimal voltage.
     /// 
     /// @throws result_t
-    SysmanFrequency::oc_settings_override_t __zecall
-    SysmanFrequency::GetOcOverrideProperties(
-        void
+    uint16_t __zecall
+    SysmanFrequency::GetOcTargetVoltage(
+        oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
         )
     {
-        zet_oc_settings_override_t ocSettingsOverride;
+        uint16_t targetVoltage;
 
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcOverrideProperties(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcTargetVoltage(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            &ocSettingsOverride ) );
+            static_cast<zet_oc_mode_t>( TargetMode ),
+            &targetVoltage ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcOverrideProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcTargetVoltage" );
 
-        return *reinterpret_cast<oc_settings_override_t*>( &ocSettingsOverride );
+        return targetVoltage;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the Oc Icc Max.
+    /// @brief Get the the current Target Mode.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - uint32_t: Pointer to the allocated uint32.
+    ///     - oc_mode_t: Overclock Mode: 0 - Interpolative,  1 - Override.
     /// 
     /// @throws result_t
-    uint32_t __zecall
-    SysmanFrequency::GetOcIccMax(
+    SysmanFrequency::oc_mode_t __zecall
+    SysmanFrequency::GetOcTargetMode(
         void
         )
     {
-        uint32_t ocIccMax;
+        zet_oc_mode_t targetMode;
 
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcIccMax(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcTargetMode(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            &ocIccMax ) );
+            &targetMode ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcIccMax" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcTargetMode" );
 
-        return ocIccMax;
+        return *reinterpret_cast<oc_mode_t*>( &targetMode );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the Oc Tj Max.
+    /// @brief Get the Voltage Offset.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - uint32_t: Pointer to the allocated uint32.
+    ///     - uint16_t: Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV).
     /// 
     /// @throws result_t
-    uint32_t __zecall
-    SysmanFrequency::GetOcTjMax(
-        void
+    uint16_t __zecall
+    SysmanFrequency::GetOcVoltageOffset(
+        oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
         )
     {
-        uint32_t ocTjMax;
+        uint16_t voltageOffset;
 
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcTjMax(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcVoltageOffset(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            &ocTjMax ) );
+            static_cast<zet_oc_mode_t>( TargetMode ),
+            &voltageOffset ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcTjMax" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcVoltageOffset" );
 
-        return ocTjMax;
+        return voltageOffset;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the Oc override properties.
+    /// @brief Set the Max Oc ratio.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3574,20 +3711,22 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::SetOcOverrideProperties(
-        oc_settings_override_t* pOcSettingsOverride     ///< [in] Pointer to the allocated structure.
+    SysmanFrequency::SetOcMaxRatio(
+        oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+        uint16_t MaxOcRatio                             ///< [in] Max overclocking ratio
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcOverrideProperties(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcMaxRatio(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            reinterpret_cast<zet_oc_settings_override_t*>( pOcSettingsOverride ) ) );
+            static_cast<zet_oc_mode_t>( TargetMode ),
+            MaxOcRatio ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcOverrideProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcMaxRatio" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the Oc Icc Max.
+    /// @brief Set the Target Voltage.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3595,20 +3734,22 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::SetOcIccMax(
-        uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+    SysmanFrequency::SetOcTargetVoltage(
+        oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+        uint16_t TargetVoltage                          ///< [in] Target Voltage. Units: divide by 2^10 for decimal voltage.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcIccMax(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcTargetVoltage(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            pOcIccMax ) );
+            static_cast<zet_oc_mode_t>( TargetMode ),
+            TargetVoltage ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcIccMax" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcTargetVoltage" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the Oc Tj Max.
+    /// @brief Set the the current Target Mode.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3616,16 +3757,40 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::SetOcTjMax(
-        uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+    SysmanFrequency::SetOcTargetMode(
+        oc_mode_t TargetMode                            ///< [in] Overclock Mode: 0 - Interpolative,  1 - Override.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcTjMax(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcTargetMode(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            pOcTjMax ) );
+            static_cast<zet_oc_mode_t>( TargetMode ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcTjMax" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcTargetMode" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set the Voltage Offset.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanFrequency::SetOcVoltageOffset(
+        oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+        uint16_t VoltageOffset                          ///< [in] Voltage offset +/-999mV (minimum end voltage cannot be lower than
+                                                        ///< 250mV).
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcVoltageOffset(
+            reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
+            static_cast<zet_oc_mode_t>( TargetMode ),
+            VoltageOffset ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcVoltageOffset" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -5283,6 +5448,30 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_type_t to std::string
+    std::string to_string( const Sysman::device_type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::device_type_t::INTEGRATED:
+            str = "Sysman::device_type_t::INTEGRATED";
+            break;
+
+        case Sysman::device_type_t::DISCRETE:
+            str = "Sysman::device_type_t::DISCRETE";
+            break;
+
+        default:
+            str = "Sysman::device_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::sched_mode_t to std::string
     std::string to_string( const Sysman::sched_mode_t val )
     {
@@ -5382,6 +5571,10 @@ namespace zet
             str = "Sysman::event_type_t::ENERGY_THRESHOLD_CROSSED";
             break;
 
+        case Sysman::event_type_t::MAX_TEMPERATURE:
+            str = "Sysman::event_type_t::MAX_TEMPERATURE";
+            break;
+
         case Sysman::event_type_t::RAS_ERRORS:
             str = "Sysman::event_type_t::RAS_ERRORS";
             break;
@@ -5410,6 +5603,10 @@ namespace zet
         
         str += "Sysman::properties_t::numSubdevices : ";
         str += std::to_string(val.numSubdevices);
+        str += "\n";
+        
+        str += "Sysman::properties_t::deviceType : ";
+        str += to_string(val.deviceType);
         str += "\n";
         
         str += "Sysman::properties_t::serialNumber : ";
@@ -5727,6 +5924,14 @@ namespace zet
         str += "SysmanPower::power_properties_t::maxLimit : ";
         str += std::to_string(val.maxLimit);
         str += "\n";
+        
+        str += "SysmanPower::power_properties_t::ICCMax : ";
+        str += std::to_string(val.ICCMax);
+        str += "\n";
+        
+        str += "SysmanPower::power_properties_t::TjMax : ";
+        str += std::to_string(val.TjMax);
+        str += "\n";
 
         return str;
     }
@@ -5805,8 +6010,12 @@ namespace zet
     {
         std::string str;
         
-        str += "SysmanPower::power_peak_limit_t::power : ";
-        str += std::to_string(val.power);
+        str += "SysmanPower::power_peak_limit_t::powerAC : ";
+        str += std::to_string(val.powerAC);
+        str += "\n";
+        
+        str += "SysmanPower::power_peak_limit_t::powerDC : ";
+        str += std::to_string(val.powerDC);
         str += "\n";
 
         return str;
@@ -5820,12 +6029,12 @@ namespace zet
 
         switch( val )
         {
-        case SysmanFrequency::oc_mode_t::INTERPOLATIVE:
-            str = "SysmanFrequency::oc_mode_t::INTERPOLATIVE";
+        case SysmanFrequency::oc_mode_t::OVERCLOCKING_INTERPOLATIVE_MODE:
+            str = "SysmanFrequency::oc_mode_t::OVERCLOCKING_INTERPOLATIVE_MODE";
             break;
 
-        case SysmanFrequency::oc_mode_t::OVERRIDE:
-            str = "SysmanFrequency::oc_mode_t::OVERRIDE";
+        case SysmanFrequency::oc_mode_t::OVERCLOCKING_OVERRIDE_MODE:
+            str = "SysmanFrequency::oc_mode_t::OVERCLOCKING_OVERRIDE_MODE";
             break;
 
         default:
@@ -5864,12 +6073,12 @@ namespace zet
             str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_NOT_SUPPORTED";
             break;
 
-        case SysmanFrequency::oc_error_type_t::$OVERCLOCKING_INVALID_VR_ADDRESS:
-            str = "SysmanFrequency::oc_error_type_t::$OVERCLOCKING_INVALID_VR_ADDRESS";
+        case SysmanFrequency::oc_error_type_t::OOVERCLOCKING_INVALID_VR_ADDRESS:
+            str = "SysmanFrequency::oc_error_type_t::OOVERCLOCKING_INVALID_VR_ADDRESS";
             break;
 
-        case SysmanFrequency::oc_error_type_t::$OVERCLOCKING_INVALID_ICCMAX:
-            str = "SysmanFrequency::oc_error_type_t::$OVERCLOCKING_INVALID_ICCMAX";
+        case SysmanFrequency::oc_error_type_t::OOVERCLOCKING_INVALID_ICCMAX:
+            str = "SysmanFrequency::oc_error_type_t::OOVERCLOCKING_INVALID_ICCMAX";
             break;
 
         case SysmanFrequency::oc_error_type_t::OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED:
@@ -5950,51 +6159,6 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_vr_topology to std::string
-    std::string to_string( const SysmanFrequency::oc_vr_topology val )
-    {
-        std::string str;
-        
-        str += "SysmanFrequency::oc_vr_topology::VccInAuxExists : ";
-        str += std::to_string(val.VccInAuxExists);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_vr_topology::VccStgPgExists : ";
-        str += std::to_string(val.VccStgPgExists);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_vr_topology::VccStPgExists : ";
-        str += std::to_string(val.VccStPgExists);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_vr_topology::VccSfrOcPgExists : ";
-        str += std::to_string(val.VccSfrOcPgExists);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_vr_topology::VccInAuxLp : ";
-        str += std::to_string(val.VccInAuxLp);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_vr_topology::VccInSvidAddress : ";
-        str += std::to_string(val.VccInSvidAddress);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_vr_topology::VccInVrType : ";
-        str += std::to_string(val.VccInVrType);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_vr_topology::SvidNotPresent : ";
-        str += std::to_string(val.SvidNotPresent);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_vr_topology::PsysDisabled : ";
-        str += std::to_string(val.PsysDisabled);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::oc_capabilities_t to std::string
     std::string to_string( const SysmanFrequency::oc_capabilities_t val )
     {
@@ -6031,42 +6195,59 @@ namespace zet
         str += "SysmanFrequency::oc_capabilities_t::HighVoltModeEnabled : ";
         str += std::to_string(val.HighVoltModeEnabled);
         str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::oc_configuration_t to std::string
+    std::string to_string( const SysmanFrequency::oc_configuration_t val )
+    {
+        std::string str;
         
-        str += "SysmanFrequency::oc_capabilities_t::OcVrTopology : ";
-        str += to_string(val.OcVrTopology);
+        str += "SysmanFrequency::oc_configuration_t::MaxOcRatio : ";
+        str += std::to_string(val.MaxOcRatio);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_configuration_t::TargetVoltage : ";
+        str += std::to_string(val.TargetVoltage);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_configuration_t::TargetMode : ";
+        str += std::to_string(val.TargetMode);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_configuration_t::VoltageOffset : ";
+        str += std::to_string(val.VoltageOffset);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_settings_override_t to std::string
-    std::string to_string( const SysmanFrequency::oc_settings_override_t val )
+    /// @brief Converts SysmanFrequency::oc_configuration_override_t to std::string
+    std::string to_string( const SysmanFrequency::oc_configuration_override_t val )
     {
         std::string str;
         
-        str += "SysmanFrequency::oc_settings_override_t::MaxOcRatio : ";
-        str += std::to_string(val.MaxOcRatio);
+        str += "SysmanFrequency::oc_configuration_override_t::OcConfigurations : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.OcConfigurations )
+            {
+                tmp += to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
         str += "\n";
         
-        str += "SysmanFrequency::oc_settings_override_t::TargetVoltage : ";
-        str += std::to_string(val.TargetVoltage);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_settings_override_t::TargetMode : ";
-        str += std::to_string(val.TargetMode);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_settings_override_t::VoltageOffset : ";
-        str += std::to_string(val.VoltageOffset);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_settings_override_t::ICCMax : ";
-        str += std::to_string(val.ICCMax);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_settings_override_t::TjMax : ";
-        str += std::to_string(val.TjMax);
+        str += "SysmanFrequency::oc_configuration_override_t::pCurrentConfiguration : ";
+        {
+            std::stringstream ss;
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pCurrentConfiguration);
+            str += ss.str();
+        }
         str += "\n";
 
         return str;

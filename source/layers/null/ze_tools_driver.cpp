@@ -1037,6 +1037,54 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPowerSetOcIccMax
+    ze_result_t __zecall
+    zetSysmanPowerSetOcIccMax(
+        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetOcIccMax = context.zetDdiTable.SysmanPower.pfnSetOcIccMax;
+        if( nullptr != pfnSetOcIccMax )
+        {
+            result = pfnSetOcIccMax( hPower, OcIccMax );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPowerSetOcTjMax
+    ze_result_t __zecall
+    zetSysmanPowerSetOcTjMax(
+        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        uint32_t* OcTjMax                               ///< [in] Pointer to the allocated uint32.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetOcTjMax = context.zetDdiTable.SysmanPower.pfnSetOcTjMax;
+        if( nullptr != pfnSetOcTjMax )
+        {
+            result = pfnSetOcTjMax( hPower, OcTjMax );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGet
     ze_result_t __zecall
     zetSysmanPowerGet(
@@ -1269,20 +1317,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcVrTopology
+    /// @brief Intercept function for zetSysmanFrequencyGetOcMaxRatio
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcVrTopology(
+    zetSysmanFrequencyGetOcMaxRatio(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_vr_topology* pOcVrTopology               ///< [out] Pointer to the allocated structure.
+        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+        uint16_t* pMaxOcRatio                           ///< [out] Max overclocking ratio
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetOcVrTopology = context.zetDdiTable.SysmanFrequency.pfnGetOcVrTopology;
-        if( nullptr != pfnGetOcVrTopology )
+        auto pfnGetOcMaxRatio = context.zetDdiTable.SysmanFrequency.pfnGetOcMaxRatio;
+        if( nullptr != pfnGetOcMaxRatio )
         {
-            result = pfnGetOcVrTopology( hFrequency, pOcVrTopology );
+            result = pfnGetOcMaxRatio( hFrequency, TargetMode, pMaxOcRatio );
         }
         else
         {
@@ -1293,20 +1342,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcOverrideProperties
+    /// @brief Intercept function for zetSysmanFrequencyGetOcTargetVoltage
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcOverrideProperties(
+    zetSysmanFrequencyGetOcTargetVoltage(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_settings_override_t* pOcSettingsOverride ///< [out] Pointer to the allocated structure.
+        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+        uint16_t* pTargetVoltage                        ///< [out] Target Voltage. Units: divide by 2^10 for decimal voltage.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetOcOverrideProperties = context.zetDdiTable.SysmanFrequency.pfnGetOcOverrideProperties;
-        if( nullptr != pfnGetOcOverrideProperties )
+        auto pfnGetOcTargetVoltage = context.zetDdiTable.SysmanFrequency.pfnGetOcTargetVoltage;
+        if( nullptr != pfnGetOcTargetVoltage )
         {
-            result = pfnGetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+            result = pfnGetOcTargetVoltage( hFrequency, TargetMode, pTargetVoltage );
         }
         else
         {
@@ -1317,20 +1367,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcIccMax
+    /// @brief Intercept function for zetSysmanFrequencyGetOcTargetMode
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcIccMax(
+    zetSysmanFrequencyGetOcTargetMode(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        uint32_t* pOcIccMax                             ///< [out] Pointer to the allocated uint32.
+        zet_oc_mode_t* pTargetMode                      ///< [out] Overclock Mode: 0 - Interpolative,  1 - Override.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetOcIccMax = context.zetDdiTable.SysmanFrequency.pfnGetOcIccMax;
-        if( nullptr != pfnGetOcIccMax )
+        auto pfnGetOcTargetMode = context.zetDdiTable.SysmanFrequency.pfnGetOcTargetMode;
+        if( nullptr != pfnGetOcTargetMode )
         {
-            result = pfnGetOcIccMax( hFrequency, pOcIccMax );
+            result = pfnGetOcTargetMode( hFrequency, pTargetMode );
         }
         else
         {
@@ -1341,20 +1391,22 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcTjMax
+    /// @brief Intercept function for zetSysmanFrequencyGetOcVoltageOffset
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcTjMax(
+    zetSysmanFrequencyGetOcVoltageOffset(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        uint32_t* pOcTjMax                              ///< [out] Pointer to the allocated uint32.
+        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+        uint16_t* pVoltageOffset                        ///< [out] Voltage offset +/-999mV (minimum end voltage cannot be lower
+                                                        ///< than 250mV).
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetOcTjMax = context.zetDdiTable.SysmanFrequency.pfnGetOcTjMax;
-        if( nullptr != pfnGetOcTjMax )
+        auto pfnGetOcVoltageOffset = context.zetDdiTable.SysmanFrequency.pfnGetOcVoltageOffset;
+        if( nullptr != pfnGetOcVoltageOffset )
         {
-            result = pfnGetOcTjMax( hFrequency, pOcTjMax );
+            result = pfnGetOcVoltageOffset( hFrequency, TargetMode, pVoltageOffset );
         }
         else
         {
@@ -1365,20 +1417,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcOverrideProperties
+    /// @brief Intercept function for zetSysmanFrequencySetOcMaxRatio
     ze_result_t __zecall
-    zetSysmanFrequencySetOcOverrideProperties(
+    zetSysmanFrequencySetOcMaxRatio(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_settings_override_t* pOcSettingsOverride ///< [in] Pointer to the allocated structure.
+        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+        uint16_t MaxOcRatio                             ///< [in] Max overclocking ratio
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetOcOverrideProperties = context.zetDdiTable.SysmanFrequency.pfnSetOcOverrideProperties;
-        if( nullptr != pfnSetOcOverrideProperties )
+        auto pfnSetOcMaxRatio = context.zetDdiTable.SysmanFrequency.pfnSetOcMaxRatio;
+        if( nullptr != pfnSetOcMaxRatio )
         {
-            result = pfnSetOcOverrideProperties( hFrequency, pOcSettingsOverride );
+            result = pfnSetOcMaxRatio( hFrequency, TargetMode, MaxOcRatio );
         }
         else
         {
@@ -1389,20 +1442,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcIccMax
+    /// @brief Intercept function for zetSysmanFrequencySetOcTargetVoltage
     ze_result_t __zecall
-    zetSysmanFrequencySetOcIccMax(
+    zetSysmanFrequencySetOcTargetVoltage(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        uint32_t* pOcIccMax                             ///< [in] Pointer to the allocated uint32.
+        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+        uint16_t TargetVoltage                          ///< [in] Target Voltage. Units: divide by 2^10 for decimal voltage.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetOcIccMax = context.zetDdiTable.SysmanFrequency.pfnSetOcIccMax;
-        if( nullptr != pfnSetOcIccMax )
+        auto pfnSetOcTargetVoltage = context.zetDdiTable.SysmanFrequency.pfnSetOcTargetVoltage;
+        if( nullptr != pfnSetOcTargetVoltage )
         {
-            result = pfnSetOcIccMax( hFrequency, pOcIccMax );
+            result = pfnSetOcTargetVoltage( hFrequency, TargetMode, TargetVoltage );
         }
         else
         {
@@ -1413,20 +1467,46 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcTjMax
+    /// @brief Intercept function for zetSysmanFrequencySetOcTargetMode
     ze_result_t __zecall
-    zetSysmanFrequencySetOcTjMax(
+    zetSysmanFrequencySetOcTargetMode(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        uint32_t* pOcTjMax                              ///< [in] Pointer to the allocated uint32.
+        zet_oc_mode_t TargetMode                        ///< [in] Overclock Mode: 0 - Interpolative,  1 - Override.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetOcTjMax = context.zetDdiTable.SysmanFrequency.pfnSetOcTjMax;
-        if( nullptr != pfnSetOcTjMax )
+        auto pfnSetOcTargetMode = context.zetDdiTable.SysmanFrequency.pfnSetOcTargetMode;
+        if( nullptr != pfnSetOcTargetMode )
         {
-            result = pfnSetOcTjMax( hFrequency, pOcTjMax );
+            result = pfnSetOcTargetMode( hFrequency, TargetMode );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencySetOcVoltageOffset
+    ze_result_t __zecall
+    zetSysmanFrequencySetOcVoltageOffset(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
+        uint16_t VoltageOffset                          ///< [in] Voltage offset +/-999mV (minimum end voltage cannot be lower than
+                                                        ///< 250mV).
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetOcVoltageOffset = context.zetDdiTable.SysmanFrequency.pfnSetOcVoltageOffset;
+        if( nullptr != pfnSetOcVoltageOffset )
+        {
+            result = pfnSetOcVoltageOffset( hFrequency, TargetMode, VoltageOffset );
         }
         else
         {
@@ -3562,6 +3642,10 @@ zetGetSysmanPowerProcAddrTable(
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
+    pDdiTable->pfnSetOcIccMax                            = driver::zetSysmanPowerSetOcIccMax;
+
+    pDdiTable->pfnSetOcTjMax                             = driver::zetSysmanPowerSetOcTjMax;
+
     pDdiTable->pfnGetProperties                          = driver::zetSysmanPowerGetProperties;
 
     pDdiTable->pfnGetEnergyCounter                       = driver::zetSysmanPowerGetEnergyCounter;
@@ -3606,19 +3690,21 @@ zetGetSysmanFrequencyProcAddrTable(
 
     pDdiTable->pfnGetOcCapabilities                      = driver::zetSysmanFrequencyGetOcCapabilities;
 
-    pDdiTable->pfnGetOcVrTopology                        = driver::zetSysmanFrequencyGetOcVrTopology;
+    pDdiTable->pfnGetOcMaxRatio                          = driver::zetSysmanFrequencyGetOcMaxRatio;
 
-    pDdiTable->pfnGetOcOverrideProperties                = driver::zetSysmanFrequencyGetOcOverrideProperties;
+    pDdiTable->pfnGetOcTargetVoltage                     = driver::zetSysmanFrequencyGetOcTargetVoltage;
 
-    pDdiTable->pfnGetOcIccMax                            = driver::zetSysmanFrequencyGetOcIccMax;
+    pDdiTable->pfnGetOcTargetMode                        = driver::zetSysmanFrequencyGetOcTargetMode;
 
-    pDdiTable->pfnGetOcTjMax                             = driver::zetSysmanFrequencyGetOcTjMax;
+    pDdiTable->pfnGetOcVoltageOffset                     = driver::zetSysmanFrequencyGetOcVoltageOffset;
 
-    pDdiTable->pfnSetOcOverrideProperties                = driver::zetSysmanFrequencySetOcOverrideProperties;
+    pDdiTable->pfnSetOcMaxRatio                          = driver::zetSysmanFrequencySetOcMaxRatio;
 
-    pDdiTable->pfnSetOcIccMax                            = driver::zetSysmanFrequencySetOcIccMax;
+    pDdiTable->pfnSetOcTargetVoltage                     = driver::zetSysmanFrequencySetOcTargetVoltage;
 
-    pDdiTable->pfnSetOcTjMax                             = driver::zetSysmanFrequencySetOcTjMax;
+    pDdiTable->pfnSetOcTargetMode                        = driver::zetSysmanFrequencySetOcTargetMode;
+
+    pDdiTable->pfnSetOcVoltageOffset                     = driver::zetSysmanFrequencySetOcVoltageOffset;
 
     pDdiTable->pfnGetProperties                          = driver::zetSysmanFrequencyGetProperties;
 

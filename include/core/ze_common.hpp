@@ -191,6 +191,7 @@ namespace ze
         ERROR_OUT_OF_DEVICE_MEMORY,                     ///< insufficient device memory to satisfy call
         ERROR_MODULE_BUILD_FAILURE,                     ///< error in building module
         ERROR_INSUFFICENT_PERMISSIONS,                  ///< access denied
+        ERROR_DEVICE_IS_IN_USE,                         ///< the device is already in use
         ERROR_ARRAY_SIZE_TOO_SMALL,                     ///< an array argument doesn't have enough storage
         ERROR_DEVICE_ACCESS,                            ///< there was a problem accessing device data
         ERROR_UNKNOWN = 0x7fffffff,                     ///< unknown or internal error
