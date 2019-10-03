@@ -142,6 +142,7 @@ namespace zet
             ze::Device::properties_t core;                  ///< [out] Core device properties
             uint32_t numSubdevices;                         ///< [out] Number of sub-devices
             device_type_t deviceType;                       ///< [out] Device type
+            uint32_t TjMax;                                 ///< [out] Maximum temperature in °C.
             int8_t serialNumber[ZET_STRING_PROPERTY_SIZE];  ///< [out] Manufacturing serial number (NULL terminated string value)
             int8_t boardNumber[ZET_STRING_PROPERTY_SIZE];   ///< [out] Manufacturing board number (NULL terminated string value)
             int8_t brandName[ZET_STRING_PROPERTY_SIZE];     ///< [out] Brand name of the device (NULL terminated string value)
@@ -887,7 +888,6 @@ namespace zet
             ze::bool_t canControl;                          ///< [out] Software can change the power limits.
             uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
             uint32_t ICCMax;                                ///< [in,out] Maximum desired current.
-            uint32_t TjMax;                                 ///< [in,out] Maximum temperature in °C.
 
         };
 
@@ -968,8 +968,9 @@ namespace zet
         ///       excursions.
         struct power_peak_limit_t
         {
-            uint32_t powerAC;                               ///< [in,out] power limit in milliwatts for the AC power source
-            uint32_t powerDC;                               ///< [in,out] power limit in milliwatts for the DC power source
+            uint32_t powerAC;                               ///< [in,out] power limit in milliwatts for the AC power source.
+            uint32_t powerDC;                               ///< [in,out] power limit in milliwatts for the DC power source. This is
+                                                            ///< ignored if the product does not have a battery.
 
         };
 
@@ -1054,13 +1055,10 @@ namespace zet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - power_energy_threshold_t: The current energy threshold value in joules.
-        /// 
         /// @throws result_t
-        power_energy_threshold_t __zecall
+        void __zecall
         GetEnergyThreshold(
-            void
+            power_energy_threshold_t* pThreshold            ///< [in] The current energy threshold value in joules.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1111,7 +1109,7 @@ namespace zet
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Over cloking modes
+        /// @brief Overclocking modes
         enum class oc_mode_t
         {
             OVERCLOCKING_INTERPOLATIVE_MODE = 0,            ///< Interpolative Mode.
@@ -1128,7 +1126,7 @@ namespace zet
             OVERCLOCKING_RATIO_EXCEEDS_MAX,                 ///< The ratio exceeds maximum overclocking limits.
             OVERCLOCKING_VOLTAGE_EXCEEDS_MAX,               ///< Requested voltage exceeds input regulators max supported voltage.
             OVERCLOCKING_NOT_SUPPORTED,                     ///< No overclocking capability on the Hardware.
-            OOVERCLOCKING_INVALID_VR_ADDRESS,               ///< The VR Address provided is illegal.
+            OVERCLOCKING_INVALID_VR_ADDRESS,                ///< The VR Address provided is illegal.
             OOVERCLOCKING_INVALID_ICCMAX,                   ///< ICCMAX value given is invalid (more than 10 bits) or too low.
             OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED,         ///< Voltage manipulation attempted when it is disabled.
             OVERCLOCKING_INVALID_COMMAND,                   ///< Data setting invalid for the command.
@@ -1168,9 +1166,9 @@ namespace zet
         ///       the device in the current domain.
         struct oc_capabilities_t
         {
-            uint16_t MaxOcRatioLimit;                       ///< [out] Max overclocking ratio limit
-            uint16_t P0Ratio;                               ///< [out] Fused P0 ratio.
-            uint16_t P0Voltage;                             ///< [out] Fused P0 voltage.
+            double MaxOcFrequencyLimit;                     ///< [out] Max overclocking frequency limit in Mhz.
+            double P0Ratio;                                 ///< [out] Fused P0 frequency in Mhz.
+            double P0Voltage;                               ///< [out] Fused P0 voltage in Votls.
             ze::bool_t RatioOcSupported;                    ///< [out] Ratio overclocking supported
             ze::bool_t VoltageOverrideSupported;            ///< [out] Voltage overrides supported
             ze::bool_t VoltageOffsetSupported;              ///< [out] Voltage offset is supported
@@ -1336,13 +1334,22 @@ namespace zet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - oc_fan_control_t: Pointer to the allocated structure.
-        /// 
         /// @throws result_t
-        oc_fan_control_t __zecall
+        void __zecall
         SetFanSpeed(
-            void
+            oc_fan_control_t* pFanControl                   ///< [in] Pointer to the allocated structure.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get overclock error
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetOcError(
+            oc_error_type_t* pOcError                       ///< [in] Error in ::zet_oc_error_type_t .
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1351,43 +1358,36 @@ namespace zet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - oc_capabilities_t: Pointer to the allocated structure.
-        /// 
         /// @throws result_t
-        oc_capabilities_t __zecall
+        void __zecall
         GetOcCapabilities(
-            void
+            oc_capabilities_t* pOcCapabilities              ///< [in] Pointer to the allocated structure.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the Max Oc ratio.
+        /// @brief Get the maximum overclocking frequency in Mhz.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - uint16_t: Max overclocking ratio
-        /// 
         /// @throws result_t
-        uint16_t __zecall
-        GetOcMaxRatio(
-            oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
+        void __zecall
+        GetOcMaxFrequency(
+            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+            double* pMaxOcRatio                             ///< [in] Max overclocking frequency in Mhz.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the Target Voltage.
+        /// @brief Get the target toltage in Volts.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - uint16_t: Target Voltage. Units: divide by 2^10 for decimal voltage.
-        /// 
         /// @throws result_t
-        uint16_t __zecall
+        void __zecall
         GetOcTargetVoltage(
-            oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
+            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+            double* pTargetVoltage                          ///< [in] Target voltage in Volts.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1396,45 +1396,40 @@ namespace zet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - oc_mode_t: Overclock Mode: 0 - Interpolative,  1 - Override.
-        /// 
         /// @throws result_t
-        oc_mode_t __zecall
+        void __zecall
         GetOcTargetMode(
-            void
+            oc_mode_t* pTargetMode                          ///< [in] Overclock Mode ::zet_oc_mode_t
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the Voltage Offset.
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - uint16_t: Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV).
-        /// 
-        /// @throws result_t
-        uint16_t __zecall
-        GetOcVoltageOffset(
-            oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the Max Oc ratio.
+        /// @brief Get the voltage offset in Votls.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetOcMaxRatio(
+        GetOcVoltageOffset(
             oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-            uint16_t MaxOcRatio                             ///< [in] Max overclocking ratio
+            double* pVoltageOffset                          ///< [in] Voltage offset in Volts.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the Target Voltage.
+        /// @brief Set the maximum overclocking frequency in Mhz.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetOcMaxFrequency(
+            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+            double MaxOcFreq                                ///< [in] Max overclocking frequency in Mhz.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set the target voltage in Votls.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1443,7 +1438,7 @@ namespace zet
         void __zecall
         SetOcTargetVoltage(
             oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-            uint16_t TargetVoltage                          ///< [in] Target Voltage. Units: divide by 2^10 for decimal voltage.
+            double TargetVoltage                            ///< [in] Target voltage in Volts.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1455,7 +1450,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         SetOcTargetMode(
-            oc_mode_t TargetMode                            ///< [in] Overclock Mode: 0 - Interpolative,  1 - Override.
+            oc_mode_t TargetMode                            ///< [in] Overclock Mode ::zet_oc_mode_t
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1468,8 +1463,7 @@ namespace zet
         void __zecall
         SetOcVoltageOffset(
             oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-            uint16_t VoltageOffset                          ///< [in] Voltage offset +/-999mV (minimum end voltage cannot be lower than
-                                                            ///< 250mV).
+            double VoltageOffset                            ///< [in] Voltage offset in Volts.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -662,7 +662,7 @@ zetSysmanPowerGetEnergyCounter(
 ze_result_t __zecall
 zetSysmanPowerGetEnergyThreshold(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    zet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
+    zet_power_energy_threshold_t* pThreshold        ///< [in] The current energy threshold value in joules.
     )
 {
     auto pfnGetEnergyThreshold = zet_lib::context.ddiTable.SysmanPower.pfnGetEnergyThreshold;
@@ -780,7 +780,7 @@ zetSysmanPowerSetLimits(
 ze_result_t __zecall
 zetSysmanFrequencySetFanSpeed(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_fan_control_t* pFanControl               ///< [out] Pointer to the allocated structure.
+    zet_oc_fan_control_t* pFanControl               ///< [in] Pointer to the allocated structure.
     )
 {
     auto pfnSetFanSpeed = zet_lib::context.ddiTable.SysmanFrequency.pfnSetFanSpeed;
@@ -788,6 +788,34 @@ zetSysmanFrequencySetFanSpeed(
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetFanSpeed( hFrequency, pFanControl );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get overclock error
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pOcError
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanFrequencyGetOcError(
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    zet_oc_error_type_t* pOcError                   ///< [in] Error in ::zet_oc_error_type_t .
+    )
+{
+    auto pfnGetOcError = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcError;
+    if( nullptr == pfnGetOcError )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetOcError( hFrequency, pOcError );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -808,7 +836,7 @@ zetSysmanFrequencySetFanSpeed(
 ze_result_t __zecall
 zetSysmanFrequencyGetOcCapabilities(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_capabilities_t* pOcCapabilities          ///< [out] Pointer to the allocated structure.
+    zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the allocated structure.
     )
 {
     auto pfnGetOcCapabilities = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcCapabilities;
@@ -819,7 +847,7 @@ zetSysmanFrequencyGetOcCapabilities(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the Max Oc ratio.
+/// @brief Get the maximum overclocking frequency in Mhz.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -834,21 +862,21 @@ zetSysmanFrequencyGetOcCapabilities(
 ///         + nullptr == pMaxOcRatio
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencyGetOcMaxRatio(
+zetSysmanFrequencyGetOcMaxFrequency(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-    uint16_t* pMaxOcRatio                           ///< [out] Max overclocking ratio
+    double* pMaxOcRatio                             ///< [in] Max overclocking frequency in Mhz.
     )
 {
-    auto pfnGetOcMaxRatio = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcMaxRatio;
-    if( nullptr == pfnGetOcMaxRatio )
+    auto pfnGetOcMaxFrequency = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcMaxFrequency;
+    if( nullptr == pfnGetOcMaxFrequency )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetOcMaxRatio( hFrequency, TargetMode, pMaxOcRatio );
+    return pfnGetOcMaxFrequency( hFrequency, TargetMode, pMaxOcRatio );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the Target Voltage.
+/// @brief Get the target toltage in Volts.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -866,7 +894,7 @@ ze_result_t __zecall
 zetSysmanFrequencyGetOcTargetVoltage(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-    uint16_t* pTargetVoltage                        ///< [out] Target Voltage. Units: divide by 2^10 for decimal voltage.
+    double* pTargetVoltage                          ///< [in] Target voltage in Volts.
     )
 {
     auto pfnGetOcTargetVoltage = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcTargetVoltage;
@@ -894,7 +922,7 @@ zetSysmanFrequencyGetOcTargetVoltage(
 ze_result_t __zecall
 zetSysmanFrequencyGetOcTargetMode(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_mode_t* pTargetMode                      ///< [out] Overclock Mode: 0 - Interpolative,  1 - Override.
+    zet_oc_mode_t* pTargetMode                      ///< [in] Overclock Mode ::zet_oc_mode_t
     )
 {
     auto pfnGetOcTargetMode = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcTargetMode;
@@ -905,7 +933,7 @@ zetSysmanFrequencyGetOcTargetMode(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the Voltage Offset.
+/// @brief Get the voltage offset in Votls.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -923,8 +951,7 @@ ze_result_t __zecall
 zetSysmanFrequencyGetOcVoltageOffset(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-    uint16_t* pVoltageOffset                        ///< [out] Voltage offset +/-999mV (minimum end voltage cannot be lower
-                                                    ///< than 250mV).
+    double* pVoltageOffset                          ///< [in] Voltage offset in Volts.
     )
 {
     auto pfnGetOcVoltageOffset = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcVoltageOffset;
@@ -935,7 +962,7 @@ zetSysmanFrequencyGetOcVoltageOffset(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Max Oc ratio.
+/// @brief Set the maximum overclocking frequency in Mhz.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -949,21 +976,21 @@ zetSysmanFrequencyGetOcVoltageOffset(
 ///         + nullptr == hFrequency
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencySetOcMaxRatio(
+zetSysmanFrequencySetOcMaxFrequency(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-    uint16_t MaxOcRatio                             ///< [in] Max overclocking ratio
+    double MaxOcFreq                                ///< [in] Max overclocking frequency in Mhz.
     )
 {
-    auto pfnSetOcMaxRatio = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcMaxRatio;
-    if( nullptr == pfnSetOcMaxRatio )
+    auto pfnSetOcMaxFrequency = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcMaxFrequency;
+    if( nullptr == pfnSetOcMaxFrequency )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetOcMaxRatio( hFrequency, TargetMode, MaxOcRatio );
+    return pfnSetOcMaxFrequency( hFrequency, TargetMode, MaxOcFreq );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Target Voltage.
+/// @brief Set the target voltage in Votls.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -980,7 +1007,7 @@ ze_result_t __zecall
 zetSysmanFrequencySetOcTargetVoltage(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-    uint16_t TargetVoltage                          ///< [in] Target Voltage. Units: divide by 2^10 for decimal voltage.
+    double TargetVoltage                            ///< [in] Target voltage in Volts.
     )
 {
     auto pfnSetOcTargetVoltage = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcTargetVoltage;
@@ -1007,7 +1034,7 @@ zetSysmanFrequencySetOcTargetVoltage(
 ze_result_t __zecall
 zetSysmanFrequencySetOcTargetMode(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_mode_t TargetMode                        ///< [in] Overclock Mode: 0 - Interpolative,  1 - Override.
+    zet_oc_mode_t TargetMode                        ///< [in] Overclock Mode ::zet_oc_mode_t
     )
 {
     auto pfnSetOcTargetMode = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcTargetMode;
@@ -1035,8 +1062,7 @@ ze_result_t __zecall
 zetSysmanFrequencySetOcVoltageOffset(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-    uint16_t VoltageOffset                          ///< [in] Voltage offset +/-999mV (minimum end voltage cannot be lower than
-                                                    ///< 250mV).
+    double VoltageOffset                            ///< [in] Voltage offset in Volts.
     )
 {
     auto pfnSetOcVoltageOffset = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcVoltageOffset;
@@ -3439,25 +3465,18 @@ namespace zet
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @returns
-    ///     - power_energy_threshold_t: The current energy threshold value in joules.
-    /// 
     /// @throws result_t
-    SysmanPower::power_energy_threshold_t __zecall
+    void __zecall
     SysmanPower::GetEnergyThreshold(
-        void
+        power_energy_threshold_t* pThreshold            ///< [in] The current energy threshold value in joules.
         )
     {
-        zet_power_energy_threshold_t threshold;
-
         auto result = static_cast<result_t>( ::zetSysmanPowerGetEnergyThreshold(
             reinterpret_cast<zet_sysman_pwr_handle_t>( getHandle() ),
-            &threshold ) );
+            reinterpret_cast<zet_power_energy_threshold_t*>( pThreshold ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::GetEnergyThreshold" );
-
-        return *reinterpret_cast<power_energy_threshold_t*>( &threshold );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3538,25 +3557,39 @@ namespace zet
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @returns
-    ///     - oc_fan_control_t: Pointer to the allocated structure.
-    /// 
     /// @throws result_t
-    SysmanFrequency::oc_fan_control_t __zecall
+    void __zecall
     SysmanFrequency::SetFanSpeed(
-        void
+        oc_fan_control_t* pFanControl                   ///< [in] Pointer to the allocated structure.
         )
     {
-        zet_oc_fan_control_t fanControl;
-
         auto result = static_cast<result_t>( ::zetSysmanFrequencySetFanSpeed(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            &fanControl ) );
+            reinterpret_cast<zet_oc_fan_control_t*>( pFanControl ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetFanSpeed" );
+    }
 
-        return *reinterpret_cast<oc_fan_control_t*>( &fanControl );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get overclock error
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanFrequency::GetOcError(
+        oc_error_type_t* pOcError                       ///< [in] Error in ::zet_oc_error_type_t .
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcError(
+            reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
+            reinterpret_cast<zet_oc_error_type_t*>( pOcError ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcError" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3566,83 +3599,64 @@ namespace zet
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @returns
-    ///     - oc_capabilities_t: Pointer to the allocated structure.
-    /// 
     /// @throws result_t
-    SysmanFrequency::oc_capabilities_t __zecall
+    void __zecall
     SysmanFrequency::GetOcCapabilities(
-        void
+        oc_capabilities_t* pOcCapabilities              ///< [in] Pointer to the allocated structure.
         )
     {
-        zet_oc_capabilities_t ocCapabilities;
-
         auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcCapabilities(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            &ocCapabilities ) );
+            reinterpret_cast<zet_oc_capabilities_t*>( pOcCapabilities ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcCapabilities" );
-
-        return *reinterpret_cast<oc_capabilities_t*>( &ocCapabilities );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the Max Oc ratio.
+    /// @brief Get the maximum overclocking frequency in Mhz.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @returns
-    ///     - uint16_t: Max overclocking ratio
-    /// 
     /// @throws result_t
-    uint16_t __zecall
-    SysmanFrequency::GetOcMaxRatio(
-        oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
+    void __zecall
+    SysmanFrequency::GetOcMaxFrequency(
+        oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+        double* pMaxOcRatio                             ///< [in] Max overclocking frequency in Mhz.
         )
     {
-        uint16_t maxOcRatio;
-
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcMaxRatio(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcMaxFrequency(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             static_cast<zet_oc_mode_t>( TargetMode ),
-            &maxOcRatio ) );
+            pMaxOcRatio ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcMaxRatio" );
-
-        return maxOcRatio;
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcMaxFrequency" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the Target Voltage.
+    /// @brief Get the target toltage in Volts.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @returns
-    ///     - uint16_t: Target Voltage. Units: divide by 2^10 for decimal voltage.
-    /// 
     /// @throws result_t
-    uint16_t __zecall
+    void __zecall
     SysmanFrequency::GetOcTargetVoltage(
-        oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
+        oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+        double* pTargetVoltage                          ///< [in] Target voltage in Volts.
         )
     {
-        uint16_t targetVoltage;
-
         auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcTargetVoltage(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             static_cast<zet_oc_mode_t>( TargetMode ),
-            &targetVoltage ) );
+            pTargetVoltage ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcTargetVoltage" );
-
-        return targetVoltage;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3652,58 +3666,22 @@ namespace zet
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @returns
-    ///     - oc_mode_t: Overclock Mode: 0 - Interpolative,  1 - Override.
-    /// 
     /// @throws result_t
-    SysmanFrequency::oc_mode_t __zecall
+    void __zecall
     SysmanFrequency::GetOcTargetMode(
-        void
+        oc_mode_t* pTargetMode                          ///< [in] Overclock Mode ::zet_oc_mode_t
         )
     {
-        zet_oc_mode_t targetMode;
-
         auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcTargetMode(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            &targetMode ) );
+            reinterpret_cast<zet_oc_mode_t*>( pTargetMode ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcTargetMode" );
-
-        return *reinterpret_cast<oc_mode_t*>( &targetMode );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the Voltage Offset.
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - uint16_t: Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV).
-    /// 
-    /// @throws result_t
-    uint16_t __zecall
-    SysmanFrequency::GetOcVoltageOffset(
-        oc_mode_t TargetMode                            ///< [in] Mode for the current configuration.
-        )
-    {
-        uint16_t voltageOffset;
-
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcVoltageOffset(
-            reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            static_cast<zet_oc_mode_t>( TargetMode ),
-            &voltageOffset ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcVoltageOffset" );
-
-        return voltageOffset;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the Max Oc ratio.
+    /// @brief Get the voltage offset in Votls.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3711,22 +3689,45 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::SetOcMaxRatio(
+    SysmanFrequency::GetOcVoltageOffset(
         oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-        uint16_t MaxOcRatio                             ///< [in] Max overclocking ratio
+        double* pVoltageOffset                          ///< [in] Voltage offset in Volts.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcMaxRatio(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcVoltageOffset(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             static_cast<zet_oc_mode_t>( TargetMode ),
-            MaxOcRatio ) );
+            pVoltageOffset ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcMaxRatio" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcVoltageOffset" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the Target Voltage.
+    /// @brief Set the maximum overclocking frequency in Mhz.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanFrequency::SetOcMaxFrequency(
+        oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
+        double MaxOcFreq                                ///< [in] Max overclocking frequency in Mhz.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcMaxFrequency(
+            reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
+            static_cast<zet_oc_mode_t>( TargetMode ),
+            MaxOcFreq ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcMaxFrequency" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set the target voltage in Votls.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3736,7 +3737,7 @@ namespace zet
     void __zecall
     SysmanFrequency::SetOcTargetVoltage(
         oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-        uint16_t TargetVoltage                          ///< [in] Target Voltage. Units: divide by 2^10 for decimal voltage.
+        double TargetVoltage                            ///< [in] Target voltage in Volts.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcTargetVoltage(
@@ -3758,7 +3759,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::SetOcTargetMode(
-        oc_mode_t TargetMode                            ///< [in] Overclock Mode: 0 - Interpolative,  1 - Override.
+        oc_mode_t TargetMode                            ///< [in] Overclock Mode ::zet_oc_mode_t
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcTargetMode(
@@ -3780,8 +3781,7 @@ namespace zet
     void __zecall
     SysmanFrequency::SetOcVoltageOffset(
         oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-        uint16_t VoltageOffset                          ///< [in] Voltage offset +/-999mV (minimum end voltage cannot be lower than
-                                                        ///< 250mV).
+        double VoltageOffset                            ///< [in] Voltage offset in Volts.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcVoltageOffset(
@@ -5609,6 +5609,10 @@ namespace zet
         str += to_string(val.deviceType);
         str += "\n";
         
+        str += "Sysman::properties_t::TjMax : ";
+        str += std::to_string(val.TjMax);
+        str += "\n";
+        
         str += "Sysman::properties_t::serialNumber : ";
         {
             std::string tmp;
@@ -5928,10 +5932,6 @@ namespace zet
         str += "SysmanPower::power_properties_t::ICCMax : ";
         str += std::to_string(val.ICCMax);
         str += "\n";
-        
-        str += "SysmanPower::power_properties_t::TjMax : ";
-        str += std::to_string(val.TjMax);
-        str += "\n";
 
         return str;
     }
@@ -6073,8 +6073,8 @@ namespace zet
             str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_NOT_SUPPORTED";
             break;
 
-        case SysmanFrequency::oc_error_type_t::OOVERCLOCKING_INVALID_VR_ADDRESS:
-            str = "SysmanFrequency::oc_error_type_t::OOVERCLOCKING_INVALID_VR_ADDRESS";
+        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_INVALID_VR_ADDRESS:
+            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_INVALID_VR_ADDRESS";
             break;
 
         case SysmanFrequency::oc_error_type_t::OOVERCLOCKING_INVALID_ICCMAX:
@@ -6164,8 +6164,8 @@ namespace zet
     {
         std::string str;
         
-        str += "SysmanFrequency::oc_capabilities_t::MaxOcRatioLimit : ";
-        str += std::to_string(val.MaxOcRatioLimit);
+        str += "SysmanFrequency::oc_capabilities_t::MaxOcFrequencyLimit : ";
+        str += std::to_string(val.MaxOcFrequencyLimit);
         str += "\n";
         
         str += "SysmanFrequency::oc_capabilities_t::P0Ratio : ";

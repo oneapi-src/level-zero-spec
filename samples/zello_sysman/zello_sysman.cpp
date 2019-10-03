@@ -216,14 +216,56 @@ void ShowOcCapabilities(zet_sysman_handle_t hSysmanDevice)
                         zet_oc_capabilities_t oc_caps;
                         if (zetSysmanFrequencyGetOcCapabilities(pFreqHandles[index], &oc_caps) == ZE_RESULT_SUCCESS)
                         {
-                            fprintf(stdout, "    Over clock Capabilities\n");
-                            fprintf(stdout, "    Max Oc Ratio: %d\n",       oc_caps.MaxOcRatioLimit);
-                            fprintf(stdout, "    Fused P0 Ratio: %d\n",     oc_caps.P0Ratio);
-                            fprintf(stdout, "    Fused P0 Voltage: %d\n",   oc_caps.P0Voltage);
-                            fprintf(stdout, "    Is Ratio OC Supported: %s\n", oc_caps.RatioOcSupported ? "yes":"no");
-                            fprintf(stdout, "    Is Voltage Override Supported: %s\n", oc_caps.VoltageOverrideSupported ? "yes" : "no");
-                            fprintf(stdout, "    Is High Voltage Capable: %s\n", oc_caps.HighVoltModeCapable ? "yes" : "no");
-                            fprintf(stdout, "    Is High Voltage Enabled: %s\n", oc_caps.HighVoltModeEnabled ? "yes" : "no");
+                            if (oc_caps.RatioOcSupported)
+                            {
+                                fprintf(stdout, "    Over clock Capabilities\n");
+                                fprintf(stdout, "    Max Oc Frequency: %.3f\n", oc_caps.MaxOcFrequencyLimit);
+                                fprintf(stdout, "    Fused P0 Frequency: %.3f\n", oc_caps.P0Ratio);
+                                fprintf(stdout, "    Fused P0 Voltage: %.3f\n", oc_caps.P0Voltage);
+                                fprintf(stdout, "    Is Voltage Override Supported: %s\n", oc_caps.VoltageOverrideSupported ? "yes" : "no");
+                                fprintf(stdout, "    Is High Voltage Capable: %s\n", oc_caps.HighVoltModeCapable ? "yes" : "no");
+                                fprintf(stdout, "    Is High Voltage Enabled: %s\n", oc_caps.HighVoltModeEnabled ? "yes" : "no");
+
+                                // Get max non overclocking frequency range.
+                                zet_freq_range_t range;
+                                if (zetSysmanFrequencyGetRange(pFreqHandles[index], &range) != ZE_RESULT_SUCCESS)
+                                {
+                                    fprintf(stderr, "ERROR: Problem setting the frequency range for domain with index %u.\n", index);
+                                }
+
+                                // Set Interpolative Mode
+                                zetSysmanFrequencySetOcTargetMode(pFreqHandles[index], zet_oc_mode_t::ZET_OVERCLOCKING_INTERPOLATIVE_MODE);
+
+                                // Set new max Oc frequency only if is not above the maximum Oc frequency limit.
+                                double CurrentMaxFrequencyMhz = range.max;
+                                CurrentMaxFrequencyMhz *= 1.1;
+                                if (CurrentMaxFrequencyMhz <= oc_caps.MaxOcFrequencyLimit)
+                                {
+                                    if(zetSysmanFrequencySetOcMaxFrequency(pFreqHandles[index],
+                                        zet_oc_mode_t::ZET_OVERCLOCKING_INTERPOLATIVE_MODE,
+                                        CurrentMaxFrequencyMhz) == ZE_RESULT_SUCCESS)
+                                        {
+                                            fprintf(stdout, "    Oc Frequency successfully set to: %.3f Mhz\n", CurrentMaxFrequencyMhz);
+                                        }
+                                    else
+                                    {
+                                        zet_oc_error_type_t oc_error;
+                                        if (zetSysmanFrequencyGetOcError(pFreqHandles[index], &oc_error) == ZE_RESULT_SUCCESS)
+                                        {
+                                            fprintf(stderr, "ERROR: Failure to overclock with error %u on domain with index %u.\n", oc_error, index);
+                                        }
+                                        else
+                                        {
+                                            fprintf(stderr, "ERROR: Can't get Or Error and failure to overclock domain with index %u.\n", index);
+                                        }
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                fprintf(stderr, "ERROR: Overclocking is not supported on the current domain with index %u.\n", index);
+                            }
                         }
                     }
                 }

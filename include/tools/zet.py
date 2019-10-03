@@ -433,6 +433,7 @@ class zet_sysman_properties_t(Structure):
         ("core", ze_device_properties_t),                               ## [out] Core device properties
         ("numSubdevices", c_ulong),                                     ## [out] Number of sub-devices
         ("deviceType", zet_device_type_t),                              ## [out] Device type
+        ("TjMax", c_ulong),                                             ## [out] Maximum temperature in °C.
         ("serialNumber", c_int8_t * ZET_STRING_PROPERTY_SIZE),          ## [out] Manufacturing serial number (NULL terminated string value)
         ("boardNumber", c_int8_t * ZET_STRING_PROPERTY_SIZE),           ## [out] Manufacturing board number (NULL terminated string value)
         ("brandName", c_int8_t * ZET_STRING_PROPERTY_SIZE),             ## [out] Brand name of the device (NULL terminated string value)
@@ -609,8 +610,7 @@ class zet_power_properties_t(Structure):
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Software can change the power limits.
         ("maxLimit", c_ulong),                                          ## [out] The maximum power limit in milliwatts that can be requested.
-        ("ICCMax", c_ulong),                                            ## [in,out] Maximum desired current.
-        ("TjMax", c_ulong)                                              ## [in,out] Maximum temperature in °C.
+        ("ICCMax", c_ulong)                                             ## [in,out] Maximum desired current.
     ]
 
 ###############################################################################
@@ -686,12 +686,13 @@ class zet_power_burst_limit_t(Structure):
 ##       excursions.
 class zet_power_peak_limit_t(Structure):
     _fields_ = [
-        ("powerAC", c_ulong),                                           ## [in,out] power limit in milliwatts for the AC power source
-        ("powerDC", c_ulong)                                            ## [in,out] power limit in milliwatts for the DC power source
+        ("powerAC", c_ulong),                                           ## [in,out] power limit in milliwatts for the AC power source.
+        ("powerDC", c_ulong)                                            ## [in,out] power limit in milliwatts for the DC power source. This is
+                                                                        ## ignored if the product does not have a battery.
     ]
 
 ###############################################################################
-## @brief Over cloking modes
+## @brief Overclocking modes
 class zet_oc_mode_v(IntEnum):
     OVERCLOCKING_INTERPOLATIVE_MODE = 0             ## Interpolative Mode.
     OVERCLOCKING_OVERRIDE_MODE = 1                  ## Override Mode.
@@ -709,7 +710,7 @@ class zet_oc_error_type_v(IntEnum):
     OVERCLOCKING_RATIO_EXCEEDS_MAX = auto()         ## The ratio exceeds maximum overclocking limits.
     OVERCLOCKING_VOLTAGE_EXCEEDS_MAX = auto()       ## Requested voltage exceeds input regulators max supported voltage.
     OVERCLOCKING_NOT_SUPPORTED = auto()             ## No overclocking capability on the Hardware.
-    OOVERCLOCKING_INVALID_VR_ADDRESS = auto()       ## The VR Address provided is illegal.
+    OVERCLOCKING_INVALID_VR_ADDRESS = auto()        ## The VR Address provided is illegal.
     OOVERCLOCKING_INVALID_ICCMAX = auto()           ## ICCMAX value given is invalid (more than 10 bits) or too low.
     OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED = auto() ## Voltage manipulation attempted when it is disabled.
     OVERCLOCKING_INVALID_COMMAND = auto()           ## Data setting invalid for the command.
@@ -727,9 +728,9 @@ class zet_oc_error_type_t(c_int):
 ##       the device in the current domain.
 class zet_oc_capabilities_t(Structure):
     _fields_ = [
-        ("MaxOcRatioLimit", c_ushort),                                  ## [out] Max overclocking ratio limit
-        ("P0Ratio", c_ushort),                                          ## [out] Fused P0 ratio.
-        ("P0Voltage", c_ushort),                                        ## [out] Fused P0 voltage.
+        ("MaxOcFrequencyLimit", c_double),                              ## [out] Max overclocking frequency limit in Mhz.
+        ("P0Ratio", c_double),                                          ## [out] Fused P0 frequency in Mhz.
+        ("P0Voltage", c_double),                                        ## [out] Fused P0 voltage in Votls.
         ("RatioOcSupported", ze_bool_t),                                ## [out] Ratio overclocking supported
         ("VoltageOverrideSupported", ze_bool_t),                        ## [out] Voltage overrides supported
         ("VoltageOffsetSupported", ze_bool_t),                          ## [out] Voltage offset is supported
@@ -2099,6 +2100,13 @@ else:
     _zetSysmanFrequencySetFanSpeed_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_fan_control_t) )
 
 ###############################################################################
+## @brief Function-pointer for zetSysmanFrequencyGetOcError
+if __use_win_types:
+    _zetSysmanFrequencyGetOcError_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_error_type_t) )
+else:
+    _zetSysmanFrequencyGetOcError_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_error_type_t) )
+
+###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetOcCapabilities
 if __use_win_types:
     _zetSysmanFrequencyGetOcCapabilities_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_capabilities_t) )
@@ -2106,18 +2114,18 @@ else:
     _zetSysmanFrequencyGetOcCapabilities_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_capabilities_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetOcMaxRatio
+## @brief Function-pointer for zetSysmanFrequencyGetOcMaxFrequency
 if __use_win_types:
-    _zetSysmanFrequencyGetOcMaxRatio_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_ushort) )
+    _zetSysmanFrequencyGetOcMaxFrequency_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_double) )
 else:
-    _zetSysmanFrequencyGetOcMaxRatio_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_ushort) )
+    _zetSysmanFrequencyGetOcMaxFrequency_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_double) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetOcTargetVoltage
 if __use_win_types:
-    _zetSysmanFrequencyGetOcTargetVoltage_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_ushort) )
+    _zetSysmanFrequencyGetOcTargetVoltage_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_double) )
 else:
-    _zetSysmanFrequencyGetOcTargetVoltage_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_ushort) )
+    _zetSysmanFrequencyGetOcTargetVoltage_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_double) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetOcTargetMode
@@ -2129,23 +2137,23 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetOcVoltageOffset
 if __use_win_types:
-    _zetSysmanFrequencyGetOcVoltageOffset_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_ushort) )
+    _zetSysmanFrequencyGetOcVoltageOffset_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_double) )
 else:
-    _zetSysmanFrequencyGetOcVoltageOffset_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_ushort) )
+    _zetSysmanFrequencyGetOcVoltageOffset_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, POINTER(c_double) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencySetOcMaxRatio
+## @brief Function-pointer for zetSysmanFrequencySetOcMaxFrequency
 if __use_win_types:
-    _zetSysmanFrequencySetOcMaxRatio_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_ushort )
+    _zetSysmanFrequencySetOcMaxFrequency_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_double )
 else:
-    _zetSysmanFrequencySetOcMaxRatio_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_ushort )
+    _zetSysmanFrequencySetOcMaxFrequency_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_double )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencySetOcTargetVoltage
 if __use_win_types:
-    _zetSysmanFrequencySetOcTargetVoltage_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_ushort )
+    _zetSysmanFrequencySetOcTargetVoltage_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_double )
 else:
-    _zetSysmanFrequencySetOcTargetVoltage_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_ushort )
+    _zetSysmanFrequencySetOcTargetVoltage_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_double )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencySetOcTargetMode
@@ -2157,9 +2165,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencySetOcVoltageOffset
 if __use_win_types:
-    _zetSysmanFrequencySetOcVoltageOffset_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_ushort )
+    _zetSysmanFrequencySetOcVoltageOffset_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_double )
 else:
-    _zetSysmanFrequencySetOcVoltageOffset_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_ushort )
+    _zetSysmanFrequencySetOcVoltageOffset_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, zet_oc_mode_t, c_double )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetProperties
@@ -2202,12 +2210,13 @@ else:
 class _zet_sysman_frequency_dditable_t(Structure):
     _fields_ = [
         ("pfnSetFanSpeed", c_void_p),                                   ## _zetSysmanFrequencySetFanSpeed_t
+        ("pfnGetOcError", c_void_p),                                    ## _zetSysmanFrequencyGetOcError_t
         ("pfnGetOcCapabilities", c_void_p),                             ## _zetSysmanFrequencyGetOcCapabilities_t
-        ("pfnGetOcMaxRatio", c_void_p),                                 ## _zetSysmanFrequencyGetOcMaxRatio_t
+        ("pfnGetOcMaxFrequency", c_void_p),                             ## _zetSysmanFrequencyGetOcMaxFrequency_t
         ("pfnGetOcTargetVoltage", c_void_p),                            ## _zetSysmanFrequencyGetOcTargetVoltage_t
         ("pfnGetOcTargetMode", c_void_p),                               ## _zetSysmanFrequencyGetOcTargetMode_t
         ("pfnGetOcVoltageOffset", c_void_p),                            ## _zetSysmanFrequencyGetOcVoltageOffset_t
-        ("pfnSetOcMaxRatio", c_void_p),                                 ## _zetSysmanFrequencySetOcMaxRatio_t
+        ("pfnSetOcMaxFrequency", c_void_p),                             ## _zetSysmanFrequencySetOcMaxFrequency_t
         ("pfnSetOcTargetVoltage", c_void_p),                            ## _zetSysmanFrequencySetOcTargetVoltage_t
         ("pfnSetOcTargetMode", c_void_p),                               ## _zetSysmanFrequencySetOcTargetMode_t
         ("pfnSetOcVoltageOffset", c_void_p),                            ## _zetSysmanFrequencySetOcVoltageOffset_t
@@ -2821,12 +2830,13 @@ class ZET_DDI:
 
         # attach function interface to function address
         self.zetSysmanFrequencySetFanSpeed = _zetSysmanFrequencySetFanSpeed_t(self.__dditable.SysmanFrequency.pfnSetFanSpeed)
+        self.zetSysmanFrequencyGetOcError = _zetSysmanFrequencyGetOcError_t(self.__dditable.SysmanFrequency.pfnGetOcError)
         self.zetSysmanFrequencyGetOcCapabilities = _zetSysmanFrequencyGetOcCapabilities_t(self.__dditable.SysmanFrequency.pfnGetOcCapabilities)
-        self.zetSysmanFrequencyGetOcMaxRatio = _zetSysmanFrequencyGetOcMaxRatio_t(self.__dditable.SysmanFrequency.pfnGetOcMaxRatio)
+        self.zetSysmanFrequencyGetOcMaxFrequency = _zetSysmanFrequencyGetOcMaxFrequency_t(self.__dditable.SysmanFrequency.pfnGetOcMaxFrequency)
         self.zetSysmanFrequencyGetOcTargetVoltage = _zetSysmanFrequencyGetOcTargetVoltage_t(self.__dditable.SysmanFrequency.pfnGetOcTargetVoltage)
         self.zetSysmanFrequencyGetOcTargetMode = _zetSysmanFrequencyGetOcTargetMode_t(self.__dditable.SysmanFrequency.pfnGetOcTargetMode)
         self.zetSysmanFrequencyGetOcVoltageOffset = _zetSysmanFrequencyGetOcVoltageOffset_t(self.__dditable.SysmanFrequency.pfnGetOcVoltageOffset)
-        self.zetSysmanFrequencySetOcMaxRatio = _zetSysmanFrequencySetOcMaxRatio_t(self.__dditable.SysmanFrequency.pfnSetOcMaxRatio)
+        self.zetSysmanFrequencySetOcMaxFrequency = _zetSysmanFrequencySetOcMaxFrequency_t(self.__dditable.SysmanFrequency.pfnSetOcMaxFrequency)
         self.zetSysmanFrequencySetOcTargetVoltage = _zetSysmanFrequencySetOcTargetVoltage_t(self.__dditable.SysmanFrequency.pfnSetOcTargetVoltage)
         self.zetSysmanFrequencySetOcTargetMode = _zetSysmanFrequencySetOcTargetMode_t(self.__dditable.SysmanFrequency.pfnSetOcTargetMode)
         self.zetSysmanFrequencySetOcVoltageOffset = _zetSysmanFrequencySetOcVoltageOffset_t(self.__dditable.SysmanFrequency.pfnSetOcVoltageOffset)
