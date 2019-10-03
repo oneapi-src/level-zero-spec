@@ -1435,34 +1435,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetFanSpeed
+    /// @brief Intercept function for zetSysmanFrequencyGetLastOcError
     ze_result_t __zecall
-    zetSysmanFrequencySetFanSpeed(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_fan_control_t* pFanControl               ///< [in] Pointer to the allocated structure.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnSetFanSpeed = dditable->zet.SysmanFrequency.pfnSetFanSpeed;
-        if( nullptr == pfnSetFanSpeed )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
-
-        // forward to device-driver
-        result = pfnSetFanSpeed( hFrequency, pFanControl );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcError
-    ze_result_t __zecall
-    zetSysmanFrequencyGetOcError(
+    zetSysmanFrequencyGetLastOcError(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_error_type_t* pOcError                   ///< [in] Error in ::zet_oc_error_type_t .
         )
@@ -1471,15 +1446,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetOcError = dditable->zet.SysmanFrequency.pfnGetOcError;
-        if( nullptr == pfnGetOcError )
+        auto pfnGetLastOcError = dditable->zet.SysmanFrequency.pfnGetLastOcError;
+        if( nullptr == pfnGetLastOcError )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnGetOcError( hFrequency, pOcError );
+        result = pfnGetLastOcError( hFrequency, pOcError );
 
         return result;
     }
@@ -1489,7 +1464,7 @@ namespace loader
     ze_result_t __zecall
     zetSysmanFrequencyGetOcCapabilities(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the allocated structure.
+        zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1510,207 +1485,151 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcMaxFrequency
+    /// @brief Intercept function for zetSysmanFrequencyGetOcConfig
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcMaxFrequency(
+    zetSysmanFrequencyGetOcConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double* pMaxOcRatio                             ///< [in] Max overclocking frequency in Mhz.
+        zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetOcMaxFrequency = dditable->zet.SysmanFrequency.pfnGetOcMaxFrequency;
-        if( nullptr == pfnGetOcMaxFrequency )
+        auto pfnGetOcConfig = dditable->zet.SysmanFrequency.pfnGetOcConfig;
+        if( nullptr == pfnGetOcConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnGetOcMaxFrequency( hFrequency, TargetMode, pMaxOcRatio );
+        result = pfnGetOcConfig( hFrequency, pOcConfiguration );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcTargetVoltage
+    /// @brief Intercept function for zetSysmanFrequencySetOcConfig
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcTargetVoltage(
+    zetSysmanFrequencySetOcConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double* pTargetVoltage                          ///< [in] Target voltage in Volts.
+        zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetOcTargetVoltage = dditable->zet.SysmanFrequency.pfnGetOcTargetVoltage;
-        if( nullptr == pfnGetOcTargetVoltage )
+        auto pfnSetOcConfig = dditable->zet.SysmanFrequency.pfnSetOcConfig;
+        if( nullptr == pfnSetOcConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnGetOcTargetVoltage( hFrequency, TargetMode, pTargetVoltage );
+        result = pfnSetOcConfig( hFrequency, pOcConfiguration );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcTargetMode
+    /// @brief Intercept function for zetSysmanFrequencyGetOcIccMax
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcTargetMode(
+    zetSysmanFrequencyGetOcIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t* pTargetMode                      ///< [in] Overclock Mode ::zet_oc_mode_t
+        zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetOcTargetMode = dditable->zet.SysmanFrequency.pfnGetOcTargetMode;
-        if( nullptr == pfnGetOcTargetMode )
+        auto pfnGetOcIccMax = dditable->zet.SysmanFrequency.pfnGetOcIccMax;
+        if( nullptr == pfnGetOcIccMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnGetOcTargetMode( hFrequency, pTargetMode );
+        result = pfnGetOcIccMax( hFrequency, pOcIccMax );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcVoltageOffset
+    /// @brief Intercept function for zetSysmanFrequencySetOcIccMax
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcVoltageOffset(
+    zetSysmanFrequencySetOcIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double* pVoltageOffset                          ///< [in] Voltage offset in Volts.
+        zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetOcVoltageOffset = dditable->zet.SysmanFrequency.pfnGetOcVoltageOffset;
-        if( nullptr == pfnGetOcVoltageOffset )
+        auto pfnSetOcIccMax = dditable->zet.SysmanFrequency.pfnSetOcIccMax;
+        if( nullptr == pfnSetOcIccMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnGetOcVoltageOffset( hFrequency, TargetMode, pVoltageOffset );
+        result = pfnSetOcIccMax( hFrequency, pOcIccMax );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcMaxFrequency
+    /// @brief Intercept function for zetSysmanFrequencyGetOcTjMax
     ze_result_t __zecall
-    zetSysmanFrequencySetOcMaxFrequency(
+    zetSysmanFrequencyGetOcTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double MaxOcFreq                                ///< [in] Max overclocking frequency in Mhz.
+        zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnSetOcMaxFrequency = dditable->zet.SysmanFrequency.pfnSetOcMaxFrequency;
-        if( nullptr == pfnSetOcMaxFrequency )
+        auto pfnGetOcTjMax = dditable->zet.SysmanFrequency.pfnGetOcTjMax;
+        if( nullptr == pfnGetOcTjMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnSetOcMaxFrequency( hFrequency, TargetMode, MaxOcFreq );
+        result = pfnGetOcTjMax( hFrequency, pOcTjMax );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcTargetVoltage
+    /// @brief Intercept function for zetSysmanFrequencySetOcTjMax
     ze_result_t __zecall
-    zetSysmanFrequencySetOcTargetVoltage(
+    zetSysmanFrequencySetOcTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double TargetVoltage                            ///< [in] Target voltage in Volts.
+        zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnSetOcTargetVoltage = dditable->zet.SysmanFrequency.pfnSetOcTargetVoltage;
-        if( nullptr == pfnSetOcTargetVoltage )
+        auto pfnSetOcTjMax = dditable->zet.SysmanFrequency.pfnSetOcTjMax;
+        if( nullptr == pfnSetOcTjMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnSetOcTargetVoltage( hFrequency, TargetMode, TargetVoltage );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcTargetMode
-    ze_result_t __zecall
-    zetSysmanFrequencySetOcTargetMode(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode                        ///< [in] Overclock Mode ::zet_oc_mode_t
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnSetOcTargetMode = dditable->zet.SysmanFrequency.pfnSetOcTargetMode;
-        if( nullptr == pfnSetOcTargetMode )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
-
-        // forward to device-driver
-        result = pfnSetOcTargetMode( hFrequency, TargetMode );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcVoltageOffset
-    ze_result_t __zecall
-    zetSysmanFrequencySetOcVoltageOffset(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double VoltageOffset                            ///< [in] Voltage offset in Volts.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnSetOcVoltageOffset = dditable->zet.SysmanFrequency.pfnSetOcVoltageOffset;
-        if( nullptr == pfnSetOcVoltageOffset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
-
-        // forward to device-driver
-        result = pfnSetOcVoltageOffset( hFrequency, TargetMode, VoltageOffset );
+        result = pfnSetOcTjMax( hFrequency, pOcTjMax );
 
         return result;
     }
@@ -4482,17 +4401,14 @@ zetGetSysmanFrequencyProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnSetFanSpeed                              = loader::zetSysmanFrequencySetFanSpeed;
-            pDdiTable->pfnGetOcError                               = loader::zetSysmanFrequencyGetOcError;
+            pDdiTable->pfnGetLastOcError                           = loader::zetSysmanFrequencyGetLastOcError;
             pDdiTable->pfnGetOcCapabilities                        = loader::zetSysmanFrequencyGetOcCapabilities;
-            pDdiTable->pfnGetOcMaxFrequency                        = loader::zetSysmanFrequencyGetOcMaxFrequency;
-            pDdiTable->pfnGetOcTargetVoltage                       = loader::zetSysmanFrequencyGetOcTargetVoltage;
-            pDdiTable->pfnGetOcTargetMode                          = loader::zetSysmanFrequencyGetOcTargetMode;
-            pDdiTable->pfnGetOcVoltageOffset                       = loader::zetSysmanFrequencyGetOcVoltageOffset;
-            pDdiTable->pfnSetOcMaxFrequency                        = loader::zetSysmanFrequencySetOcMaxFrequency;
-            pDdiTable->pfnSetOcTargetVoltage                       = loader::zetSysmanFrequencySetOcTargetVoltage;
-            pDdiTable->pfnSetOcTargetMode                          = loader::zetSysmanFrequencySetOcTargetMode;
-            pDdiTable->pfnSetOcVoltageOffset                       = loader::zetSysmanFrequencySetOcVoltageOffset;
+            pDdiTable->pfnGetOcConfig                              = loader::zetSysmanFrequencyGetOcConfig;
+            pDdiTable->pfnSetOcConfig                              = loader::zetSysmanFrequencySetOcConfig;
+            pDdiTable->pfnGetOcIccMax                              = loader::zetSysmanFrequencyGetOcIccMax;
+            pDdiTable->pfnSetOcIccMax                              = loader::zetSysmanFrequencySetOcIccMax;
+            pDdiTable->pfnGetOcTjMax                               = loader::zetSysmanFrequencyGetOcTjMax;
+            pDdiTable->pfnSetOcTjMax                               = loader::zetSysmanFrequencySetOcTjMax;
             pDdiTable->pfnGetProperties                            = loader::zetSysmanFrequencyGetProperties;
             pDdiTable->pfnGetRange                                 = loader::zetSysmanFrequencyGetRange;
             pDdiTable->pfnSetRange                                 = loader::zetSysmanFrequencySetRange;

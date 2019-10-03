@@ -34,12 +34,6 @@
 #endif // ZET_SCHED_WATCHDOG_DISABLE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_MAX_OVERCLOCKING_MODES
-/// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
-#define ZET_MAX_OVERCLOCKING_MODES  2
-#endif // ZET_MAX_OVERCLOCKING_MODES
-
-///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_FAN_TEMP_SPEED_PAIR_COUNT
 /// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
 #define ZET_FAN_TEMP_SPEED_PAIR_COUNT  32
@@ -1167,9 +1161,11 @@ namespace zet
         struct oc_capabilities_t
         {
             double MaxOcFrequencyLimit;                     ///< [out] Max overclocking frequency limit in Mhz.
-            double P0Ratio;                                 ///< [out] Fused P0 frequency in Mhz.
-            double P0Voltage;                               ///< [out] Fused P0 voltage in Votls.
-            ze::bool_t RatioOcSupported;                    ///< [out] Ratio overclocking supported
+            double MaxFactoryDefaultFrequency;              ///< [out] Maximum factory default frequency in Mhz.
+            double MaxFactoryDefaultVoltage;                ///< [out] Maximum factory default voltage in Votls.
+            ze::bool_t TjMaxSupported;                      ///< [out] is the TjMax supported on this domain.
+            ze::bool_t IccMaxSupported;                     ///< [out] is the Icc supported on this domain.
+            ze::bool_t FrequencyOcSupported;                ///< [out] Frequency overclocking supported
             ze::bool_t VoltageOverrideSupported;            ///< [out] Voltage overrides supported
             ze::bool_t VoltageOffsetSupported;              ///< [out] Voltage offset is supported
             ze::bool_t HighVoltModeCapable;                 ///< [out] Capable of high voltage mode
@@ -1184,49 +1180,34 @@ namespace zet
         ///     - Provide the current settings to be read or changed.
         struct oc_configuration_t
         {
-            uint16_t MaxOcRatio;                            ///< [in,out] Max overclocking ratio
-            uint16_t TargetVoltage;                         ///< [in,out] Target Voltage. Units: divide by 2^10 for decimal voltage.
-            uint16_t TargetMode;                            ///< [in,out] Overclock Mode: 0 - Interpolative,  1 - Override.
-            uint16_t VoltageOffset;                         ///< [in,out] Voltage offset +/-999mV (minimum end voltage cannot be lower
-                                                            ///< than 250mV).
+            double OcFrequency;                             ///< [in,out] Overclocking Frequency
+            double TargetVoltage;                           ///< [in,out] Target voltage in Volts
+            oc_mode_t TargetMode;                           ///< [in,out] Overclock Mode ::zet_oc_mode_t.
+            double VoltageOffset;                           ///< [in,out] Voltage offset in Volts.
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Over clocking configuration override
+        /// @brief Maximum desired current.
         /// 
         /// @details
-        ///     - Provide the current settings to be read or changed per mode.
-        struct oc_configuration_override_t
+        ///     - For overclock-able parts this holds the maximum desired current if the
+        ///       domains supports it.
+        struct oc_icc_max_t
         {
-            oc_configuration_t OcConfigurations[ZET_MAX_OVERCLOCKING_MODES];///< [in,out] Configuration to override.
-            oc_configuration_t* pCurrentConfiguration;      ///< [in,out] Configuration to override.
+            double IccMax;                                  ///< [in,out] Maximum desired current in Amperes
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fan Point.
+        /// @brief Temperature Junction Maximum.
         /// 
         /// @details
-        ///     - Temperature is given in °C and fan speed is given as a percentage
-        ///       value
-        struct oc_fan_point_t
+        ///     - For overclock-able parts this holds the maximum temperature limit at
+        ///       which the part will throttle if the domains supports it.
+        struct oc_tj_max_t
         {
-            uint8_t TemperatureDegreesCelsius;              ///< [in] Temperature for current point.
-            uint8_t FanSpeedPercent;                        ///< [in] Percentage value, where 0% means stop the fan and 100% means run
-                                                            ///< the fan at maximum speed.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fan control settings.
-        /// 
-        /// @details
-        ///     - Provide the means to control the fan speed.
-        struct oc_fan_control_t
-        {
-            uint32_t FanPointsNumber;                       ///< [in] Number of fan points.
-            oc_fan_point_t* pFanPoints;                     ///< [in] Array with FanPointsNumber of points.
+            double TjMax;                                   ///< [in,out] Maximum desired current in degrees celcius.
 
         };
 
@@ -1329,26 +1310,14 @@ namespace zet
         auto getSysman( void ) const { return m_pSysman; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set fan speed
+        /// @brief Get the last overclock error
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetFanSpeed(
-            oc_fan_control_t* pFanControl                   ///< [in] Pointer to the allocated structure.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get overclock error
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetOcError(
+        GetLastOcError(
             oc_error_type_t* pOcError                       ///< [in] Error in ::zet_oc_error_type_t .
             );
 
@@ -1361,109 +1330,79 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetOcCapabilities(
-            oc_capabilities_t* pOcCapabilities              ///< [in] Pointer to the allocated structure.
+            oc_capabilities_t* pOcCapabilities              ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the maximum overclocking frequency in Mhz.
+        /// @brief Get the overclocking configuration.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetOcMaxFrequency(
-            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-            double* pMaxOcRatio                             ///< [in] Max overclocking frequency in Mhz.
+        GetOcConfig(
+            oc_configuration_t* pOcConfiguration            ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the target toltage in Volts.
+        /// @brief Set the overclocking configuration.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetOcTargetVoltage(
-            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-            double* pTargetVoltage                          ///< [in] Target voltage in Volts.
+        SetOcConfig(
+            oc_configuration_t* pOcConfiguration            ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the the current Target Mode.
+        /// @brief Get the Icc Max.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetOcTargetMode(
-            oc_mode_t* pTargetMode                          ///< [in] Overclock Mode ::zet_oc_mode_t
+        GetOcIccMax(
+            oc_icc_max_t* pOcIccMax                         ///< [in] Pointer to the Icc Max.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the voltage offset in Votls.
+        /// @brief Set the Icc Max.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetOcVoltageOffset(
-            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-            double* pVoltageOffset                          ///< [in] Voltage offset in Volts.
+        SetOcIccMax(
+            oc_icc_max_t* pOcIccMax                         ///< [in] Pointer to the Icc Max.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the maximum overclocking frequency in Mhz.
+        /// @brief Get the TjMax.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetOcMaxFrequency(
-            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-            double MaxOcFreq                                ///< [in] Max overclocking frequency in Mhz.
+        GetOcTjMax(
+            oc_tj_max_t* pOcTjMax                           ///< [in] Pointer to the TjMax.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the target voltage in Votls.
+        /// @brief Set the TjMax.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetOcTargetVoltage(
-            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-            double TargetVoltage                            ///< [in] Target voltage in Volts.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the the current Target Mode.
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetOcTargetMode(
-            oc_mode_t TargetMode                            ///< [in] Overclock Mode ::zet_oc_mode_t
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the Voltage Offset.
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetOcVoltageOffset(
-            oc_mode_t TargetMode,                           ///< [in] Mode for the current configuration.
-            double VoltageOffset                            ///< [in] Voltage offset in Volts.
+        SetOcTjMax(
+            oc_tj_max_t* pOcTjMax                           ///< [in] Pointer to the TjMax.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2953,16 +2892,12 @@ namespace zet
     std::string to_string( const SysmanFrequency::oc_configuration_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_configuration_override_t to std::string
-    std::string to_string( const SysmanFrequency::oc_configuration_override_t val );
+    /// @brief Converts SysmanFrequency::oc_icc_max_t to std::string
+    std::string to_string( const SysmanFrequency::oc_icc_max_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_fan_point_t to std::string
-    std::string to_string( const SysmanFrequency::oc_fan_point_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_fan_control_t to std::string
-    std::string to_string( const SysmanFrequency::oc_fan_control_t val );
+    /// @brief Converts SysmanFrequency::oc_tj_max_t to std::string
+    std::string to_string( const SysmanFrequency::oc_tj_max_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::freq_domain_t to std::string

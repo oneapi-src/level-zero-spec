@@ -235,16 +235,12 @@ typedef struct _zet_oc_capabilities_t zet_oc_capabilities_t;
 typedef struct _zet_oc_configuration_t zet_oc_configuration_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_oc_configuration_override_t
-typedef struct _zet_oc_configuration_override_t zet_oc_configuration_override_t;
+/// @brief Forward-declare zet_oc_icc_max_t
+typedef struct _zet_oc_icc_max_t zet_oc_icc_max_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_oc_fan_point_t
-typedef struct _zet_oc_fan_point_t zet_oc_fan_point_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_oc_fan_control_t
-typedef struct _zet_oc_fan_control_t zet_oc_fan_control_t;
+/// @brief Forward-declare zet_oc_tj_max_t
+typedef struct _zet_oc_tj_max_t zet_oc_tj_max_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_freq_properties_t

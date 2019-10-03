@@ -840,14 +840,20 @@ members:
       name: MaxOcFrequencyLimit
       desc: "[out] Max overclocking frequency limit in Mhz."
     - type: double
-      name: P0Ratio
-      desc: "[out] Fused P0 frequency in Mhz."
+      name: MaxFactoryDefaultFrequency
+      desc: "[out] Maximum factory default frequency in Mhz."
     - type: double
-      name: P0Voltage
-      desc: "[out] Fused P0 voltage in Votls."
+      name: MaxFactoryDefaultVoltage
+      desc: "[out] Maximum factory default voltage in Votls."
     - type: $x_bool_t
-      name: RatioOcSupported
-      desc: "[out] Ratio overclocking supported"
+      name: TjMaxSupported
+      desc: "[out] is the TjMax supported on this domain."
+    - type: $x_bool_t
+      name: IccMaxSupported
+      desc: "[out] is the Icc supported on this domain."
+    - type: $x_bool_t
+      name: FrequencyOcSupported
+      desc: "[out] Frequency overclocking supported"
     - type: $x_bool_t
       name: VoltageOverrideSupported
       desc: "[out] Voltage overrides supported"
@@ -868,85 +874,23 @@ name: $t_oc_configuration_t
 details:
     - "Provide the current settings to be read or changed."
 members:
-    - type: uint16_t
-      name: MaxOcRatio
-      desc: "[in,out] Max overclocking ratio"
-    - type: uint16_t
+    - type: double
+      name: OcFrequency
+      desc: "[in,out] Overclocking Frequency"
+    - type: double
       name: TargetVoltage
-      desc: "[in,out] Target Voltage. Units: divide by 2^10 for decimal voltage."
-    - type: uint16_t
+      desc: "[in,out] Target voltage in Volts"
+    - type: $t_oc_mode_t
       name: TargetMode
-      desc: "[in,out] Overclock Mode: 0 - Interpolative,  1 - Override."
-    - type: uint16_t
+      desc: "[in,out] Overclock Mode $t_oc_mode_t."
+    - type: double
       name: VoltageOffset
-      desc: "[in,out] Voltage offset +/-999mV (minimum end voltage cannot be lower than 250mV)." 
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum number of fan temperature/speed pairs in the fan speed table."
-name: $T_MAX_OVERCLOCKING_MODES
-value: "2"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Over clocking configuration override"
-class: $tSysmanFrequency
-name: $t_oc_configuration_override_t
-details:
-    - "Provide the current settings to be read or changed per mode."
-members:
-    - type: $t_oc_configuration_t
-      name: OcConfigurations[$T_MAX_OVERCLOCKING_MODES]
-      desc: "[in,out] Configuration to override."
-    - type: $t_oc_configuration_t*
-      name: pCurrentConfiguration
-      desc: "[in,out] Configuration to override."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Fan Point."
-class: $tSysmanFrequency
-name: $t_oc_fan_point_t
-details:
-    - "Temperature is given in °C and fan speed is given as a percentage value"
-members:
-    - type: uint8_t
-      name: TemperatureDegreesCelsius
-      desc: "[in] Temperature for current point."
-    - type: uint8_t
-      name: FanSpeedPercent
-      desc: "[in] Percentage value, where 0% means stop the fan and 100% means run the fan at maximum speed." 
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Fan control settings."
-class: $tSysmanFrequency
-name: $t_oc_fan_control_t
-details:
-    - "Provide the means to control the fan speed."
-members:
-    - type: uint32_t
-      name: FanPointsNumber
-      desc: "[in] Number of fan points."
-    - type: $t_oc_fan_point_t*
-      name: pFanPoints
-      desc: "[in] Array with FanPointsNumber of points."
+      desc: "[in,out] Voltage offset in Volts." 
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set fan speed"
+desc: "Get the last overclock error"
 class: $tSysmanFrequency
-name: SetFanSpeed
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_oc_fan_control_t*
-      name: pFanControl
-      desc: "[in] Pointer to the allocated structure."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get overclock error"
-class: $tSysmanFrequency
-name: GetOcError
+name: GetLastOcError
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -971,12 +915,12 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_oc_capabilities_t*
       name: pOcCapabilities
-      desc: "[in] Pointer to the allocated structure."
+      desc: "[in] Pointer to the capabilities structure $t_oc_capabilities_t."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the maximum overclocking frequency in Mhz."
+desc: "Get the overclocking configuration."
 class: $tSysmanFrequency
-name: GetOcMaxFrequency
+name: GetOcConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -984,17 +928,14 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_mode_t
-      name: TargetMode
-      desc: "[in] Mode for the current configuration."
-    - type: double*
-      name: pMaxOcRatio
-      desc: "[in] Max overclocking frequency in Mhz."
+    - type: $t_oc_configuration_t*
+      name: pOcConfiguration
+      desc: "[in] Pointer to the configuration structure $t_oc_configuration_t."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the target toltage in Volts."
+desc: "Set the overclocking configuration."
 class: $tSysmanFrequency
-name: GetOcTargetVoltage
+name: SetOcConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1002,86 +943,36 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_mode_t
-      name: TargetMode
-      desc: "[in] Mode for the current configuration."
-    - type: double*
-      name: pTargetVoltage
-      desc: "[in] Target voltage in Volts."
+    - type: $t_oc_configuration_t*
+      name: pOcConfiguration
+      desc: "[in] Pointer to the configuration structure $t_oc_configuration_t."
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Get the the current Target Mode."
+type: struct
+desc: "Maximum desired current."
 class: $tSysmanFrequency
-name: GetOcTargetMode
+name: $t_oc_icc_max_t
 details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_oc_mode_t*
-      name: pTargetMode
-      desc: "[in] Overclock Mode $t_oc_mode_t"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the voltage offset in Votls."
-class: $tSysmanFrequency
-name: GetOcVoltageOffset
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_oc_mode_t
-      name: TargetMode
-      desc: "[in] Mode for the current configuration."
-    - type: double*
-      name: pVoltageOffset
-      desc: "[in] Voltage offset in Volts."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set the maximum overclocking frequency in Mhz."
-class: $tSysmanFrequency
-name: SetOcMaxFrequency
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_oc_mode_t
-      name: TargetMode
-      desc: "[in] Mode for the current configuration."
+    - "For overclock-able parts this holds the maximum desired current if the domains supports it."
+members:
     - type: double
-      name: MaxOcFreq
-      desc: "[in] Max overclocking frequency in Mhz."
+      name: IccMax
+      desc: "[in,out] Maximum desired current in Amperes"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Set the target voltage in Votls."
+type: struct
+desc: "Temperature Junction Maximum."
 class: $tSysmanFrequency
-name: SetOcTargetVoltage
+name: $t_oc_tj_max_t
 details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_oc_mode_t
-      name: TargetMode
-      desc: "[in] Mode for the current configuration."
+    - "For overclock-able parts this holds the maximum temperature limit at which the part will throttle if the domains supports it."
+members:
     - type: double
-      name: TargetVoltage
-      desc: "[in] Target voltage in Volts."
+      name: TjMax
+      desc: "[in,out] Maximum desired current in degrees celcius."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set the the current Target Mode."
+desc: "Get the Icc Max."
 class: $tSysmanFrequency
-name: SetOcTargetMode
+name: GetOcIccMax
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1089,14 +980,14 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_mode_t
-      name: TargetMode
-      desc: "[in] Overclock Mode $t_oc_mode_t"
+    - type: $t_oc_icc_max_t*
+      name: pOcIccMax
+      desc: "[in] Pointer to the Icc Max."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set the Voltage Offset."
+desc: "Set the Icc Max."
 class: $tSysmanFrequency
-name: SetOcVoltageOffset
+name: SetOcIccMax
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1104,12 +995,39 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_mode_t
-      name: TargetMode
-      desc: "[in] Mode for the current configuration."
-    - type: double
-      name: VoltageOffset
-      desc: "[in] Voltage offset in Volts."
+    - type: $t_oc_icc_max_t*
+      name: pOcIccMax
+      desc: "[in] Pointer to the Icc Max."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the TjMax."
+class: $tSysmanFrequency
+name: GetOcTjMax
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_oc_tj_max_t*
+      name: pOcTjMax
+      desc: "[in] Pointer to the TjMax."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the TjMax."
+class: $tSysmanFrequency
+name: SetOcTjMax
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_oc_tj_max_t*
+      name: pOcTjMax
+      desc: "[in] Pointer to the TjMax."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency domains"

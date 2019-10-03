@@ -216,47 +216,110 @@ void ShowOcCapabilities(zet_sysman_handle_t hSysmanDevice)
                         zet_oc_capabilities_t oc_caps;
                         if (zetSysmanFrequencyGetOcCapabilities(pFreqHandles[index], &oc_caps) == ZE_RESULT_SUCCESS)
                         {
-                            if (oc_caps.RatioOcSupported)
+                            if (oc_caps.FrequencyOcSupported)
                             {
                                 fprintf(stdout, "    Over clock Capabilities\n");
                                 fprintf(stdout, "    Max Oc Frequency: %.3f\n", oc_caps.MaxOcFrequencyLimit);
-                                fprintf(stdout, "    Fused P0 Frequency: %.3f\n", oc_caps.P0Ratio);
-                                fprintf(stdout, "    Fused P0 Voltage: %.3f\n", oc_caps.P0Voltage);
+                                fprintf(stdout, "    Max Factory Default Frequency: %.3f\n", oc_caps.MaxFactoryDefaultFrequency);
+                                fprintf(stdout, "    Max Factory Default Voltage: %.3f\n", oc_caps.MaxFactoryDefaultVoltage);
                                 fprintf(stdout, "    Is Voltage Override Supported: %s\n", oc_caps.VoltageOverrideSupported ? "yes" : "no");
                                 fprintf(stdout, "    Is High Voltage Capable: %s\n", oc_caps.HighVoltModeCapable ? "yes" : "no");
                                 fprintf(stdout, "    Is High Voltage Enabled: %s\n", oc_caps.HighVoltModeEnabled ? "yes" : "no");
+                                fprintf(stdout, "    Is TjMax Supported: %s\n", oc_caps.TjMaxSupported ? "yes" : "no");
+                                fprintf(stdout, "    Is IccMax Supported: %s\n", oc_caps.IccMaxSupported ? "yes" : "no");
 
-                                // Get max non overclocking frequency range.
-                                zet_freq_range_t range;
-                                if (zetSysmanFrequencyGetRange(pFreqHandles[index], &range) != ZE_RESULT_SUCCESS)
+                                if (oc_caps.IccMaxSupported)
                                 {
-                                    fprintf(stderr, "ERROR: Problem setting the frequency range for domain with index %u.\n", index);
+                                    zet_oc_icc_max_t iccmax;
+                                    if (zetSysmanFrequencyGetOcIccMax(pFreqHandles[index], &iccmax) == ZE_RESULT_SUCCESS) 
+                                    {
+                                        fprintf(stdout, "    Icc Max: %.3f\n", iccmax.IccMax);
+                                    }
+                                    else 
+                                    {
+                                        zet_oc_error_type_t oc_error;
+                                        if (zetSysmanFrequencyGetLastOcError(pFreqHandles[index], &oc_error) == ZE_RESULT_SUCCESS)
+                                        {
+                                            fprintf(stderr, "ERROR: Failure to get Icc Max with error %u on domain with index %u.\n", oc_error, index);
+                                        }
+                                        else
+                                        {
+                                            fprintf(stderr, "ERROR: Can't get Oc Error and failure to overclock domain with index %u.\n", index);
+                                        }
+                                    }
                                 }
 
-                                // Set Interpolative Mode
-                                zetSysmanFrequencySetOcTargetMode(pFreqHandles[index], zet_oc_mode_t::ZET_OVERCLOCKING_INTERPOLATIVE_MODE);
-
+                                if (oc_caps.TjMaxSupported)
+                                {
+                                    zet_oc_tj_max_t tjmax;
+                                    if (zetSysmanFrequencyGetOcTjMax(pFreqHandles[index], &tjmax) == ZE_RESULT_SUCCESS)
+                                    {
+                                        fprintf(stdout, "    TjMax: %.3f\n", tjmax.TjMax);
+                                    }
+                                    else
+                                    {
+                                        zet_oc_error_type_t oc_error;
+                                        if (zetSysmanFrequencyGetLastOcError(pFreqHandles[index], &oc_error) == ZE_RESULT_SUCCESS)
+                                        {
+                                            fprintf(stderr, "ERROR: Failure to get TjMax with error %u on domain with index %u.\n", oc_error, index);
+                                        }
+                                        else
+                                        {
+                                            fprintf(stderr, "ERROR: Can't get Oc Error and failure to overclock domain with index %u.\n", index);
+                                        }
+                                    }
+                                }
+                                                 
                                 // Set new max Oc frequency only if is not above the maximum Oc frequency limit.
-                                double CurrentMaxFrequencyMhz = range.max;
+                                double CurrentMaxFrequencyMhz = oc_caps.MaxFactoryDefaultFrequency;
                                 CurrentMaxFrequencyMhz *= 1.1;
                                 if (CurrentMaxFrequencyMhz <= oc_caps.MaxOcFrequencyLimit)
                                 {
-                                    if(zetSysmanFrequencySetOcMaxFrequency(pFreqHandles[index],
-                                        zet_oc_mode_t::ZET_OVERCLOCKING_INTERPOLATIVE_MODE,
-                                        CurrentMaxFrequencyMhz) == ZE_RESULT_SUCCESS)
+                                    zet_oc_configuration_t config;
+                                    config.OcFrequency = CurrentMaxFrequencyMhz;
+                                    config.TargetMode = zet_oc_mode_t::ZET_OVERCLOCKING_INTERPOLATIVE_MODE;
+                                    config.TargetVoltage = oc_caps.MaxFactoryDefaultVoltage;
+                                    config.VoltageOffset = 0.0;
+
+                                    if(zetSysmanFrequencySetOcConfig(pFreqHandles[index], &config) == ZE_RESULT_SUCCESS)
                                         {
                                             fprintf(stdout, "    Oc Frequency successfully set to: %.3f Mhz\n", CurrentMaxFrequencyMhz);
                                         }
                                     else
                                     {
                                         zet_oc_error_type_t oc_error;
-                                        if (zetSysmanFrequencyGetOcError(pFreqHandles[index], &oc_error) == ZE_RESULT_SUCCESS)
+                                        if (zetSysmanFrequencyGetLastOcError(pFreqHandles[index], &oc_error) == ZE_RESULT_SUCCESS)
                                         {
                                             fprintf(stderr, "ERROR: Failure to overclock with error %u on domain with index %u.\n", oc_error, index);
                                         }
                                         else
                                         {
-                                            fprintf(stderr, "ERROR: Can't get Or Error and failure to overclock domain with index %u.\n", index);
+                                            fprintf(stderr, "ERROR: Can't get Oc Error and failure to overclock domain with index %u.\n", index);
+                                        }
+                                    }
+                                }
+
+                                {
+                                    // Show current configuration
+                                    zet_oc_configuration_t config;
+                                    if (zetSysmanFrequencyGetOcConfig(pFreqHandles[index], &config) == ZE_RESULT_SUCCESS)
+                                    {
+                                        fprintf(stdout, "    Current Oc Frequency: %.3f Mhz\n", config.OcFrequency);                                        
+                                        fprintf(stdout, "    Current Voltage: %.3f Volts\n", config.TargetVoltage);
+                                        fprintf(stdout, "    Current Voltage Offset: %.3f volts\n", config.VoltageOffset);
+                                        fprintf(stdout, "    Current Target Mode: %s\n", config.TargetMode == zet_oc_mode_t::ZET_OVERCLOCKING_INTERPOLATIVE_MODE ?
+                                                                                        "interpolative mode" : "override mode");
+                                    }
+                                    else
+                                    {
+                                        zet_oc_error_type_t oc_error;
+                                        if (zetSysmanFrequencyGetLastOcError(pFreqHandles[index], &oc_error) == ZE_RESULT_SUCCESS)
+                                        {
+                                            fprintf(stderr, "ERROR: Failure to overclock with error %u on domain with index %u.\n", oc_error, index);
+                                        }
+                                        else
+                                        {
+                                            fprintf(stderr, "ERROR: Can't get Oc Error and failure to overclock domain with index %u.\n", index);
                                         }
                                     }
                                 }

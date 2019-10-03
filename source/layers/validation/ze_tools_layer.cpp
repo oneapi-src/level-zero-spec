@@ -1339,42 +1339,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetFanSpeed
+    /// @brief Intercept function for zetSysmanFrequencyGetLastOcError
     ze_result_t __zecall
-    zetSysmanFrequencySetFanSpeed(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_fan_control_t* pFanControl               ///< [in] Pointer to the allocated structure.
-        )
-    {
-        auto pfnSetFanSpeed = context.zetDdiTable.SysmanFrequency.pfnSetFanSpeed;
-
-        if( nullptr == pfnSetFanSpeed )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pFanControl )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetFanSpeed( hFrequency, pFanControl );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcError
-    ze_result_t __zecall
-    zetSysmanFrequencyGetOcError(
+    zetSysmanFrequencyGetLastOcError(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_error_type_t* pOcError                   ///< [in] Error in ::zet_oc_error_type_t .
         )
     {
-        auto pfnGetOcError = context.zetDdiTable.SysmanFrequency.pfnGetOcError;
+        auto pfnGetLastOcError = context.zetDdiTable.SysmanFrequency.pfnGetLastOcError;
 
-        if( nullptr == pfnGetOcError )
+        if( nullptr == pfnGetLastOcError )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1387,7 +1361,7 @@ namespace layer
 
         }
 
-        return pfnGetOcError( hFrequency, pOcError );
+        return pfnGetLastOcError( hFrequency, pOcError );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1395,7 +1369,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyGetOcCapabilities(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the allocated structure.
+        zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
         )
     {
         auto pfnGetOcCapabilities = context.zetDdiTable.SysmanFrequency.pfnGetOcCapabilities;
@@ -1417,17 +1391,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcMaxFrequency
+    /// @brief Intercept function for zetSysmanFrequencyGetOcConfig
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcMaxFrequency(
+    zetSysmanFrequencyGetOcConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double* pMaxOcRatio                             ///< [in] Max overclocking frequency in Mhz.
+        zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
         )
     {
-        auto pfnGetOcMaxFrequency = context.zetDdiTable.SysmanFrequency.pfnGetOcMaxFrequency;
+        auto pfnGetOcConfig = context.zetDdiTable.SysmanFrequency.pfnGetOcConfig;
 
-        if( nullptr == pfnGetOcMaxFrequency )
+        if( nullptr == pfnGetOcConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1435,26 +1408,25 @@ namespace layer
             if( nullptr == hFrequency )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pMaxOcRatio )
+            if( nullptr == pOcConfiguration )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetOcMaxFrequency( hFrequency, TargetMode, pMaxOcRatio );
+        return pfnGetOcConfig( hFrequency, pOcConfiguration );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcTargetVoltage
+    /// @brief Intercept function for zetSysmanFrequencySetOcConfig
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcTargetVoltage(
+    zetSysmanFrequencySetOcConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double* pTargetVoltage                          ///< [in] Target voltage in Volts.
+        zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
         )
     {
-        auto pfnGetOcTargetVoltage = context.zetDdiTable.SysmanFrequency.pfnGetOcTargetVoltage;
+        auto pfnSetOcConfig = context.zetDdiTable.SysmanFrequency.pfnSetOcConfig;
 
-        if( nullptr == pfnGetOcTargetVoltage )
+        if( nullptr == pfnSetOcConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1462,25 +1434,25 @@ namespace layer
             if( nullptr == hFrequency )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pTargetVoltage )
+            if( nullptr == pOcConfiguration )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetOcTargetVoltage( hFrequency, TargetMode, pTargetVoltage );
+        return pfnSetOcConfig( hFrequency, pOcConfiguration );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcTargetMode
+    /// @brief Intercept function for zetSysmanFrequencyGetOcIccMax
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcTargetMode(
+    zetSysmanFrequencyGetOcIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t* pTargetMode                      ///< [in] Overclock Mode ::zet_oc_mode_t
+        zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
         )
     {
-        auto pfnGetOcTargetMode = context.zetDdiTable.SysmanFrequency.pfnGetOcTargetMode;
+        auto pfnGetOcIccMax = context.zetDdiTable.SysmanFrequency.pfnGetOcIccMax;
 
-        if( nullptr == pfnGetOcTargetMode )
+        if( nullptr == pfnGetOcIccMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1488,26 +1460,25 @@ namespace layer
             if( nullptr == hFrequency )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pTargetMode )
+            if( nullptr == pOcIccMax )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetOcTargetMode( hFrequency, pTargetMode );
+        return pfnGetOcIccMax( hFrequency, pOcIccMax );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcVoltageOffset
+    /// @brief Intercept function for zetSysmanFrequencySetOcIccMax
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcVoltageOffset(
+    zetSysmanFrequencySetOcIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double* pVoltageOffset                          ///< [in] Voltage offset in Volts.
+        zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
         )
     {
-        auto pfnGetOcVoltageOffset = context.zetDdiTable.SysmanFrequency.pfnGetOcVoltageOffset;
+        auto pfnSetOcIccMax = context.zetDdiTable.SysmanFrequency.pfnSetOcIccMax;
 
-        if( nullptr == pfnGetOcVoltageOffset )
+        if( nullptr == pfnSetOcIccMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1515,26 +1486,25 @@ namespace layer
             if( nullptr == hFrequency )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pVoltageOffset )
+            if( nullptr == pOcIccMax )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetOcVoltageOffset( hFrequency, TargetMode, pVoltageOffset );
+        return pfnSetOcIccMax( hFrequency, pOcIccMax );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcMaxFrequency
+    /// @brief Intercept function for zetSysmanFrequencyGetOcTjMax
     ze_result_t __zecall
-    zetSysmanFrequencySetOcMaxFrequency(
+    zetSysmanFrequencyGetOcTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double MaxOcFreq                                ///< [in] Max overclocking frequency in Mhz.
+        zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
         )
     {
-        auto pfnSetOcMaxFrequency = context.zetDdiTable.SysmanFrequency.pfnSetOcMaxFrequency;
+        auto pfnGetOcTjMax = context.zetDdiTable.SysmanFrequency.pfnGetOcTjMax;
 
-        if( nullptr == pfnSetOcMaxFrequency )
+        if( nullptr == pfnGetOcTjMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1542,23 +1512,25 @@ namespace layer
             if( nullptr == hFrequency )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == pOcTjMax )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
         }
 
-        return pfnSetOcMaxFrequency( hFrequency, TargetMode, MaxOcFreq );
+        return pfnGetOcTjMax( hFrequency, pOcTjMax );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcTargetVoltage
+    /// @brief Intercept function for zetSysmanFrequencySetOcTjMax
     ze_result_t __zecall
-    zetSysmanFrequencySetOcTargetVoltage(
+    zetSysmanFrequencySetOcTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double TargetVoltage                            ///< [in] Target voltage in Volts.
+        zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
         )
     {
-        auto pfnSetOcTargetVoltage = context.zetDdiTable.SysmanFrequency.pfnSetOcTargetVoltage;
+        auto pfnSetOcTjMax = context.zetDdiTable.SysmanFrequency.pfnSetOcTjMax;
 
-        if( nullptr == pfnSetOcTargetVoltage )
+        if( nullptr == pfnSetOcTjMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1566,56 +1538,12 @@ namespace layer
             if( nullptr == hFrequency )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        }
-
-        return pfnSetOcTargetVoltage( hFrequency, TargetMode, TargetVoltage );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcTargetMode
-    ze_result_t __zecall
-    zetSysmanFrequencySetOcTargetMode(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode                        ///< [in] Overclock Mode ::zet_oc_mode_t
-        )
-    {
-        auto pfnSetOcTargetMode = context.zetDdiTable.SysmanFrequency.pfnSetOcTargetMode;
-
-        if( nullptr == pfnSetOcTargetMode )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
+            if( nullptr == pOcTjMax )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetOcTargetMode( hFrequency, TargetMode );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcVoltageOffset
-    ze_result_t __zecall
-    zetSysmanFrequencySetOcVoltageOffset(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_mode_t TargetMode,                       ///< [in] Mode for the current configuration.
-        double VoltageOffset                            ///< [in] Voltage offset in Volts.
-        )
-    {
-        auto pfnSetOcVoltageOffset = context.zetDdiTable.SysmanFrequency.pfnSetOcVoltageOffset;
-
-        if( nullptr == pfnSetOcVoltageOffset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetOcVoltageOffset( hFrequency, TargetMode, VoltageOffset );
+        return pfnSetOcTjMax( hFrequency, pOcTjMax );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3956,38 +3884,29 @@ zetGetSysmanFrequencyProcAddrTable(
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
-    dditable.pfnSetFanSpeed                              = pDdiTable->pfnSetFanSpeed;
-    pDdiTable->pfnSetFanSpeed                            = layer::zetSysmanFrequencySetFanSpeed;
-
-    dditable.pfnGetOcError                               = pDdiTable->pfnGetOcError;
-    pDdiTable->pfnGetOcError                             = layer::zetSysmanFrequencyGetOcError;
+    dditable.pfnGetLastOcError                           = pDdiTable->pfnGetLastOcError;
+    pDdiTable->pfnGetLastOcError                         = layer::zetSysmanFrequencyGetLastOcError;
 
     dditable.pfnGetOcCapabilities                        = pDdiTable->pfnGetOcCapabilities;
     pDdiTable->pfnGetOcCapabilities                      = layer::zetSysmanFrequencyGetOcCapabilities;
 
-    dditable.pfnGetOcMaxFrequency                        = pDdiTable->pfnGetOcMaxFrequency;
-    pDdiTable->pfnGetOcMaxFrequency                      = layer::zetSysmanFrequencyGetOcMaxFrequency;
+    dditable.pfnGetOcConfig                              = pDdiTable->pfnGetOcConfig;
+    pDdiTable->pfnGetOcConfig                            = layer::zetSysmanFrequencyGetOcConfig;
 
-    dditable.pfnGetOcTargetVoltage                       = pDdiTable->pfnGetOcTargetVoltage;
-    pDdiTable->pfnGetOcTargetVoltage                     = layer::zetSysmanFrequencyGetOcTargetVoltage;
+    dditable.pfnSetOcConfig                              = pDdiTable->pfnSetOcConfig;
+    pDdiTable->pfnSetOcConfig                            = layer::zetSysmanFrequencySetOcConfig;
 
-    dditable.pfnGetOcTargetMode                          = pDdiTable->pfnGetOcTargetMode;
-    pDdiTable->pfnGetOcTargetMode                        = layer::zetSysmanFrequencyGetOcTargetMode;
+    dditable.pfnGetOcIccMax                              = pDdiTable->pfnGetOcIccMax;
+    pDdiTable->pfnGetOcIccMax                            = layer::zetSysmanFrequencyGetOcIccMax;
 
-    dditable.pfnGetOcVoltageOffset                       = pDdiTable->pfnGetOcVoltageOffset;
-    pDdiTable->pfnGetOcVoltageOffset                     = layer::zetSysmanFrequencyGetOcVoltageOffset;
+    dditable.pfnSetOcIccMax                              = pDdiTable->pfnSetOcIccMax;
+    pDdiTable->pfnSetOcIccMax                            = layer::zetSysmanFrequencySetOcIccMax;
 
-    dditable.pfnSetOcMaxFrequency                        = pDdiTable->pfnSetOcMaxFrequency;
-    pDdiTable->pfnSetOcMaxFrequency                      = layer::zetSysmanFrequencySetOcMaxFrequency;
+    dditable.pfnGetOcTjMax                               = pDdiTable->pfnGetOcTjMax;
+    pDdiTable->pfnGetOcTjMax                             = layer::zetSysmanFrequencyGetOcTjMax;
 
-    dditable.pfnSetOcTargetVoltage                       = pDdiTable->pfnSetOcTargetVoltage;
-    pDdiTable->pfnSetOcTargetVoltage                     = layer::zetSysmanFrequencySetOcTargetVoltage;
-
-    dditable.pfnSetOcTargetMode                          = pDdiTable->pfnSetOcTargetMode;
-    pDdiTable->pfnSetOcTargetMode                        = layer::zetSysmanFrequencySetOcTargetMode;
-
-    dditable.pfnSetOcVoltageOffset                       = pDdiTable->pfnSetOcVoltageOffset;
-    pDdiTable->pfnSetOcVoltageOffset                     = layer::zetSysmanFrequencySetOcVoltageOffset;
+    dditable.pfnSetOcTjMax                               = pDdiTable->pfnSetOcTjMax;
+    pDdiTable->pfnSetOcTjMax                             = layer::zetSysmanFrequencySetOcTjMax;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = layer::zetSysmanFrequencyGetProperties;
