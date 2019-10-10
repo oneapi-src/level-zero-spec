@@ -161,15 +161,15 @@ namespace ze
             flag_t flags;                                   ///< [in] creation flags
             type_t type;                                    ///< [in] image type
             format_desc_t format;                           ///< [in] image format
-            size_t width = 0;                               ///< [in] width in pixels, see
+            uint32_t width = 0;                             ///< [in] width in pixels, see
                                                             ///< ::ze_device_image_properties_t::maxImageDims1D/2D/3D
-            size_t height = 0;                              ///< [in] height in pixels (2D or 3D only), see
+            uint32_t height = 0;                            ///< [in] height in pixels (2D or 3D only), see
                                                             ///< ::ze_device_image_properties_t::maxImageDims2D/3D
-            size_t depth = 0;                               ///< [in] depth in pixels (3D only), see
+            uint32_t depth = 0;                             ///< [in] depth in pixels (3D only), see
                                                             ///< ::ze_device_image_properties_t::maxImageDims3D
-            size_t arraylevels = 1;                         ///< [in] array levels (array types only), see
+            uint32_t arraylevels = 1;                       ///< [in] array levels (array types only), see
                                                             ///< ::ze_device_image_properties_t::maxImageArraySlices
-            size_t miplevels = 0;                           ///< [in] mipmap levels (must be 0)
+            uint32_t miplevels = 0;                         ///< [in] mipmap levels (must be 0)
 
         };
 

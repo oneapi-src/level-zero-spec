@@ -827,15 +827,15 @@ class ze_image_desc_t(Structure):
         ("flags", ze_image_flag_t),                                     ## [in] creation flags
         ("type", ze_image_type_t),                                      ## [in] image type
         ("format", ze_image_format_desc_t),                             ## [in] image format
-        ("width", c_size_t),                                            ## [in] width in pixels, see
+        ("width", c_ulong),                                             ## [in] width in pixels, see
                                                                         ## ::ze_device_image_properties_t::maxImageDims1D/2D/3D
-        ("height", c_size_t),                                           ## [in] height in pixels (2D or 3D only), see
+        ("height", c_ulong),                                            ## [in] height in pixels (2D or 3D only), see
                                                                         ## ::ze_device_image_properties_t::maxImageDims2D/3D
-        ("depth", c_size_t),                                            ## [in] depth in pixels (3D only), see
+        ("depth", c_ulong),                                             ## [in] depth in pixels (3D only), see
                                                                         ## ::ze_device_image_properties_t::maxImageDims3D
-        ("arraylevels", c_size_t),                                      ## [in] array levels (array types only), see
+        ("arraylevels", c_ulong),                                       ## [in] array levels (array types only), see
                                                                         ## ::ze_device_image_properties_t::maxImageArraySlices
-        ("miplevels", c_size_t)                                         ## [in] mipmap levels (must be 0)
+        ("miplevels", c_ulong)                                          ## [in] mipmap levels (must be 0)
     ]
 
 ###############################################################################

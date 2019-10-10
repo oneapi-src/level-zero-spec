@@ -194,23 +194,23 @@ members:
     - type: $x_image_format_desc_t
       name: format
       desc: "[in] image format"
-    - type: size_t
+    - type: uint32_t
       name: width
       desc: "[in] width in pixels, see $x_device_image_properties_t::maxImageDims1D/2D/3D"
       init: "0"
-    - type: size_t
+    - type: uint32_t
       name: height
       desc: "[in] height in pixels (2D or 3D only), see $x_device_image_properties_t::maxImageDims2D/3D"
       init: "0"
-    - type: size_t
+    - type: uint32_t
       name: depth
       desc: "[in] depth in pixels (3D only), see $x_device_image_properties_t::maxImageDims3D"
       init: "0"
-    - type: size_t
+    - type: uint32_t
       name: arraylevels
       desc: "[in] array levels (array types only), see $x_device_image_properties_t::maxImageArraySlices"
       init: "1"
-    - type: size_t
+    - type: uint32_t
       name: miplevels
       desc: "[in] mipmap levels (must be 0)"
       init: "0"

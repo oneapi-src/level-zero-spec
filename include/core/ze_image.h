@@ -141,15 +141,15 @@ typedef struct _ze_image_desc_t
     ze_image_flag_t flags;                          ///< [in] creation flags
     ze_image_type_t type;                           ///< [in] image type
     ze_image_format_desc_t format;                  ///< [in] image format
-    size_t width;                                   ///< [in] width in pixels, see
+    uint32_t width;                                 ///< [in] width in pixels, see
                                                     ///< ::ze_device_image_properties_t::maxImageDims1D/2D/3D
-    size_t height;                                  ///< [in] height in pixels (2D or 3D only), see
+    uint32_t height;                                ///< [in] height in pixels (2D or 3D only), see
                                                     ///< ::ze_device_image_properties_t::maxImageDims2D/3D
-    size_t depth;                                   ///< [in] depth in pixels (3D only), see
+    uint32_t depth;                                 ///< [in] depth in pixels (3D only), see
                                                     ///< ::ze_device_image_properties_t::maxImageDims3D
-    size_t arraylevels;                             ///< [in] array levels (array types only), see
+    uint32_t arraylevels;                           ///< [in] array levels (array types only), see
                                                     ///< ::ze_device_image_properties_t::maxImageArraySlices
-    size_t miplevels;                               ///< [in] mipmap levels (must be 0)
+    uint32_t miplevels;                             ///< [in] mipmap levels (must be 0)
 
 } ze_image_desc_t;
 
