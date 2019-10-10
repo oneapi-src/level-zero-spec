@@ -44,6 +44,16 @@ typedef enum _ze_module_format_t
 } ze_module_format_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Specialization constants - User defined constants
+typedef struct _ze_module_constants_t
+{
+    uint32_t numConstants;                          ///< [in] Number of specialization constants.
+    const uint32_t* pConstantIds;                   ///< [in] Pointer to array of IDs that is sized to numConstants.
+    const uint64_t* pConstantValues;                ///< [in] Pointer to array of values that is sized to numConstants.
+
+} ze_module_constants_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Module descriptor
 typedef struct _ze_module_desc_t
 {
@@ -53,6 +63,7 @@ typedef struct _ze_module_desc_t
     const uint8_t* pInputModule;                    ///< [in] pointer to IL or ISA
     const char* pBuildFlags;                        ///< [in] string containing compiler flags. See programming guide for build
                                                     ///< flags.
+    const ze_module_constants_t* pConstants;        ///< [in] pointer to specialization constants. Valid only for SPIR-V input.
 
 } ze_module_desc_t;
 
@@ -72,6 +83,8 @@ typedef struct _ze_module_desc_t
 ///           available to threads.
 ///     - A build log can optionally be returned to the caller. The caller is
 ///       responsible for destroying build log using ::zeModuleBuildLogDestroy.
+///     - The module descriptor constants are only supported for SPIR-V
+///       specialization constants.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 

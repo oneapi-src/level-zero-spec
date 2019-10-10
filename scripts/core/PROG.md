@@ -634,6 +634,7 @@ The following sample code demonstrates a sequence for creating a module from an 
         ${X}_MODULE_FORMAT_IL_SPIRV,
         ilSize,
         pImageScalingIL,
+        nullptr,
         nullptr
     };
     ${x}_module_handle_t hModule;
@@ -650,6 +651,36 @@ Module build options can be passed with ::${x}_module_desc_t as a string.
 | -${x}-opt-greater-than-4GB-buffer-required    | Use 64-bit offset calculations for buffers.           | Disabled | GPU |
 | -${x}-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled | GPU |
 ## --validate=on
+
+${'###'} Module Specialization Constants
+SPIR-V supports specialization constants that allow certain constants to be updated to new
+values during runtime execution. Each specialization constant in SPIR-V has an identifier
+and default value. The ::${x}ModuleCreate function allows for an array of constants and their
+corresponding identifiers to be passed in to override the constants in the SPIR-V module.
+
+```c
+    // Spec constant overrides for group size.
+    ${x}_module_constants_t specConstants = {
+        3,
+        pGroupSizeIds,
+        pGroupSizeValues
+    };
+    // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
+    ${x}_module_desc_t moduleDesc = {
+        ${X}_MODULE_DESC_VERSION_CURRENT,
+        ${X}_MODULE_FORMAT_IL_SPIRV,
+        ilSize,
+        pImageScalingIL,
+        nullptr,
+        &specConstants
+    };
+    ${x}_module_handle_t hModule;
+    ${x}ModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
+    ...
+```
+
+Note: Specialization constants are only handled at module create time and therefore if
+you need to change them then you'll need to compile a new module.
 
 ${"###"} Module Build Log
 The ::${x}ModuleCreate function can optionally generate a build log object ::${x}_module_build_log_handle_t.

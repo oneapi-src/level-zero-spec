@@ -34,6 +34,8 @@ extern "C" {
 ///           available to threads.
 ///     - A build log can optionally be returned to the caller. The caller is
 ///       responsible for destroying build log using ::zeModuleBuildLogDestroy.
+///     - The module descriptor constants are only supported for SPIR-V
+///       specialization constants.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -827,6 +829,8 @@ namespace ze
     ///           available to threads.
     ///     - A build log can optionally be returned to the caller. The caller is
     ///       responsible for destroying build log using ::zeModuleBuildLogDestroy.
+    ///     - The module descriptor constants are only supported for SPIR-V
+    ///       specialization constants.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -1634,6 +1638,35 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Module::constants_t to std::string
+    std::string to_string( const Module::constants_t val )
+    {
+        std::string str;
+        
+        str += "Module::constants_t::numConstants : ";
+        str += std::to_string(val.numConstants);
+        str += "\n";
+        
+        str += "Module::constants_t::pConstantIds : ";
+        {
+            std::stringstream ss;
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pConstantIds);
+            str += ss.str();
+        }
+        str += "\n";
+        
+        str += "Module::constants_t::pConstantValues : ";
+        {
+            std::stringstream ss;
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pConstantValues);
+            str += ss.str();
+        }
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Module::desc_t to std::string
     std::string to_string( const Module::desc_t val )
     {
@@ -1661,6 +1694,14 @@ namespace ze
         
         str += "Module::desc_t::pBuildFlags : ";
         str += val.pBuildFlags;
+        str += "\n";
+        
+        str += "Module::desc_t::pConstants : ";
+        {
+            std::stringstream ss;
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pConstants);
+            str += ss.str();
+        }
         str += "\n";
 
         return str;

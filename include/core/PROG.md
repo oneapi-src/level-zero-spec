@@ -630,6 +630,7 @@ The following sample code demonstrates a sequence for creating a module from an 
         ZE_MODULE_FORMAT_IL_SPIRV,
         ilSize,
         pImageScalingIL,
+        nullptr,
         nullptr
     };
     ze_module_handle_t hModule;
@@ -644,6 +645,36 @@ Module build options can be passed with ::ze_module_desc_t as a string.
 | -ze-opt-disable                             | Disable optimizations.                                | Disabled | All |
 | -ze-opt-greater-than-4GB-buffer-required    | Use 64-bit offset calculations for buffers.           | Disabled | GPU |
 | -ze-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled | GPU |
+
+### Module Specialization Constants
+SPIR-V supports specialization constants that allow certain constants to be updated to new
+values during runtime execution. Each specialization constant in SPIR-V has an identifier
+and default value. The ::zeModuleCreate function allows for an array of constants and their
+corresponding identifiers to be passed in to override the constants in the SPIR-V module.
+
+```c
+    // Spec constant overrides for group size.
+    ze_module_constants_t specConstants = {
+        3,
+        pGroupSizeIds,
+        pGroupSizeValues
+    };
+    // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
+    ze_module_desc_t moduleDesc = {
+        ZE_MODULE_DESC_VERSION_CURRENT,
+        ZE_MODULE_FORMAT_IL_SPIRV,
+        ilSize,
+        pImageScalingIL,
+        nullptr,
+        &specConstants
+    };
+    ze_module_handle_t hModule;
+    zeModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
+    ...
+```
+
+Note: Specialization constants are only handled at module create time and therefore if
+you need to change them then you'll need to compile a new module.
 
 ### Module Build Log
 The ::zeModuleCreate function can optionally generate a build log object ::ze_module_build_log_handle_t.

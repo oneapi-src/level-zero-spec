@@ -28,6 +28,21 @@ etors:
       desc: "Format is device native format"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Specialization constants - User defined constants"
+class: $xModule
+name: $x_module_constants_t
+members:
+    - type: "uint32_t"
+      name: numConstants
+      desc: "[in] Number of specialization constants."
+    - type: "const uint32_t*"
+      name: pConstantIds
+      desc: "[in] Pointer to array of IDs that is sized to numConstants."
+    - type: "const uint64_t*"
+      name: pConstantValues
+      desc: "[in] Pointer to array of values that is sized to numConstants."
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Module descriptor"
 class: $xModule
 name: $x_module_desc_t
@@ -51,6 +66,10 @@ members:
       name: pBuildFlags
       desc: "[in] string containing compiler flags. See programming guide for build flags."
       init: nullptr
+    - type: "const $x_module_constants_t*"
+      name: pConstants
+      desc: "[in] pointer to specialization constants. Valid only for SPIR-V input."
+      init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates module object from an input IL or native binary."
@@ -69,6 +88,7 @@ details:
         - "\"-$x-opt-greater-than-4GB-buffer-required\" - Use 64-bit offset calculations for buffers."
         - "\"-$x-opt-large-register-file\" - Increase number of registers available to threads."
     - "A build log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
+    - "The module descriptor constants are only supported for SPIR-V specialization constants."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

@@ -958,6 +958,15 @@ class ze_module_format_t(c_int):
 
 
 ###############################################################################
+## @brief Specialization constants - User defined constants
+class ze_module_constants_t(Structure):
+    _fields_ = [
+        ("numConstants", c_ulong),                                      ## [in] Number of specialization constants.
+        ("pConstantIds", POINTER(c_ulong)),                             ## [in] Pointer to array of IDs that is sized to numConstants.
+        ("pConstantValues", POINTER(c_ulonglong))                       ## [in] Pointer to array of values that is sized to numConstants.
+    ]
+
+###############################################################################
 ## @brief Module descriptor
 class ze_module_desc_t(Structure):
     _fields_ = [
@@ -965,8 +974,9 @@ class ze_module_desc_t(Structure):
         ("format", ze_module_format_t),                                 ## [in] Module format passed in with pInputModule
         ("inputSize", c_size_t),                                        ## [in] size of input IL or ISA from pInputModule.
         ("pInputModule", POINTER(c_ubyte)),                             ## [in] pointer to IL or ISA
-        ("pBuildFlags", POINTER(c_char))                                ## [in] string containing compiler flags. See programming guide for build
+        ("pBuildFlags", POINTER(c_char)),                               ## [in] string containing compiler flags. See programming guide for build
                                                                         ## flags.
+        ("pConstants", POINTER(ze_module_constants_t))                  ## [in] pointer to specialization constants. Valid only for SPIR-V input.
     ]
 
 ###############################################################################

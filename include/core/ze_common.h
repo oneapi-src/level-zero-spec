@@ -266,6 +266,10 @@ typedef struct _ze_image_properties_t ze_image_properties_t;
 typedef struct _ze_memory_allocation_properties_t ze_memory_allocation_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ze_module_constants_t
+typedef struct _ze_module_constants_t ze_module_constants_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare ze_module_desc_t
 typedef struct _ze_module_desc_t ze_module_desc_t;
 

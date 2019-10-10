@@ -46,6 +46,16 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Specialization constants - User defined constants
+        struct constants_t
+        {
+            uint32_t numConstants;                          ///< [in] Number of specialization constants.
+            const uint32_t* pConstantIds;                   ///< [in] Pointer to array of IDs that is sized to numConstants.
+            const uint64_t* pConstantValues;                ///< [in] Pointer to array of values that is sized to numConstants.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Module descriptor
         struct desc_t
         {
@@ -55,6 +65,7 @@ namespace ze
             const uint8_t* pInputModule = nullptr;          ///< [in] pointer to IL or ISA
             const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See programming guide for build
                                                             ///< flags.
+            const constants_t* pConstants = nullptr;        ///< [in] pointer to specialization constants. Valid only for SPIR-V input.
 
         };
 
@@ -103,6 +114,8 @@ namespace ze
         ///           available to threads.
         ///     - A build log can optionally be returned to the caller. The caller is
         ///       responsible for destroying build log using ::zeModuleBuildLogDestroy.
+        ///     - The module descriptor constants are only supported for SPIR-V
+        ///       specialization constants.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// 
@@ -520,6 +533,10 @@ namespace ze
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Module::format_t to std::string
     std::string to_string( const Module::format_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Module::constants_t to std::string
+    std::string to_string( const Module::constants_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Module::desc_t to std::string
