@@ -287,29 +287,6 @@ typedef void (__zecall *ze_pfnDeviceCanAccessPeerCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDeviceSetIntermediateCacheConfig 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_device_set_intermediate_cache_config_params_t
-{
-    ze_device_handle_t* phDevice;
-    ze_cache_config_t* pCacheConfig;
-} ze_device_set_intermediate_cache_config_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDeviceSetIntermediateCacheConfig 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDeviceSetIntermediateCacheConfigCb_t)(
-    ze_device_set_intermediate_cache_config_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeDeviceSetLastLevelCacheConfig 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -549,7 +526,6 @@ typedef struct _ze_device_callbacks_t
     ze_pfnDeviceGetImagePropertiesCb_t                              pfnGetImagePropertiesCb;
     ze_pfnDeviceGetP2PPropertiesCb_t                                pfnGetP2PPropertiesCb;
     ze_pfnDeviceCanAccessPeerCb_t                                   pfnCanAccessPeerCb;
-    ze_pfnDeviceSetIntermediateCacheConfigCb_t                      pfnSetIntermediateCacheConfigCb;
     ze_pfnDeviceSetLastLevelCacheConfigCb_t                         pfnSetLastLevelCacheConfigCb;
     ze_pfnDeviceSystemBarrierCb_t                                   pfnSystemBarrierCb;
 #if ZE_ENABLE_OCL_INTEROP
@@ -2359,6 +2335,29 @@ typedef void (__zecall *ze_pfnKernelDestroyCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeKernelSetIntermediateCacheConfig 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_kernel_set_intermediate_cache_config_params_t
+{
+    ze_kernel_handle_t* phKernel;
+    ze_cache_config_t* pCacheConfig;
+} ze_kernel_set_intermediate_cache_config_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeKernelSetIntermediateCacheConfig 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnKernelSetIntermediateCacheConfigCb_t)(
+    ze_kernel_set_intermediate_cache_config_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeKernelSetGroupSize 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -2515,6 +2514,7 @@ typedef struct _ze_kernel_callbacks_t
 {
     ze_pfnKernelCreateCb_t                                          pfnCreateCb;
     ze_pfnKernelDestroyCb_t                                         pfnDestroyCb;
+    ze_pfnKernelSetIntermediateCacheConfigCb_t                      pfnSetIntermediateCacheConfigCb;
     ze_pfnKernelSetGroupSizeCb_t                                    pfnSetGroupSizeCb;
     ze_pfnKernelSuggestGroupSizeCb_t                                pfnSuggestGroupSizeCb;
     ze_pfnKernelSuggestMaxCooperativeGroupCountCb_t                 pfnSuggestMaxCooperativeGroupCountCb;

@@ -482,31 +482,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDeviceSetIntermediateCacheConfig
-    ze_result_t __zecall
-    zeDeviceSetIntermediateCacheConfig(
-        ze_device_handle_t hDevice,                     ///< [in] handle of the device 
-        ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
-        auto pfnSetIntermediateCacheConfig = dditable->ze.Device.pfnSetIntermediateCacheConfig;
-        if( nullptr == pfnSetIntermediateCacheConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
-
-        // forward to device-driver
-        result = pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceSetLastLevelCacheConfig
     ze_result_t __zecall
     zeDeviceSetLastLevelCacheConfig(
@@ -2661,6 +2636,31 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
+    ze_result_t __zecall
+    zeKernelSetIntermediateCacheConfig(
+        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
+        auto pfnSetIntermediateCacheConfig = dditable->ze.Kernel.pfnSetIntermediateCacheConfig;
+        if( nullptr == pfnSetIntermediateCacheConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
+
+        // forward to device-driver
+        result = pfnSetIntermediateCacheConfig( hKernel, CacheConfig );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchKernel
     ze_result_t __zecall
     zeCommandListAppendLaunchKernel(
@@ -3160,7 +3160,6 @@ zeGetDeviceProcAddrTable(
             pDdiTable->pfnGetImageProperties                       = loader::zeDeviceGetImageProperties;
             pDdiTable->pfnGetP2PProperties                         = loader::zeDeviceGetP2PProperties;
             pDdiTable->pfnCanAccessPeer                            = loader::zeDeviceCanAccessPeer;
-            pDdiTable->pfnSetIntermediateCacheConfig               = loader::zeDeviceSetIntermediateCacheConfig;
             pDdiTable->pfnSetLastLevelCacheConfig                  = loader::zeDeviceSetLastLevelCacheConfig;
             pDdiTable->pfnSystemBarrier                            = loader::zeDeviceSystemBarrier;
         #if ZE_ENABLE_OCL_INTEROP
@@ -3875,6 +3874,7 @@ zeGetKernelProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = loader::zeKernelCreate;
             pDdiTable->pfnDestroy                                  = loader::zeKernelDestroy;
+            pDdiTable->pfnSetIntermediateCacheConfig               = loader::zeKernelSetIntermediateCacheConfig;
             pDdiTable->pfnSetGroupSize                             = loader::zeKernelSetGroupSize;
             pDdiTable->pfnSuggestGroupSize                         = loader::zeKernelSuggestGroupSize;
             pDdiTable->pfnSuggestMaxCooperativeGroupCount          = loader::zeKernelSuggestMaxCooperativeGroupCount;

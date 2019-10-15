@@ -349,7 +349,7 @@ zeModuleGetFunctionPointer(
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
-///       threads with the same function handle.
+///       threads with the same kernel handle.
 ///     - The implementation of this function should be lock-free.
 ///     - The implementation will copy the group size information into a command
 ///       list when the function is appended.
@@ -550,6 +550,38 @@ zeKernelGetAttribute(
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnGetAttribute( hKernel, attr, pValue );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets the preferred Intermediate cache configuration for a kernel.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same kernel handle.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaFuncSetCacheConfig **
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hKernel
+///         + devices do not support CacheConfig
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeKernelSetIntermediateCacheConfig(
+    ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
+    )
+{
+    auto pfnSetIntermediateCacheConfig = ze_lib::context.ddiTable.Kernel.pfnSetIntermediateCacheConfig;
+    if( nullptr == pfnSetIntermediateCacheConfig )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetIntermediateCacheConfig( hKernel, CacheConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1155,7 +1187,7 @@ namespace ze
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same function handle.
+    ///       threads with the same kernel handle.
     ///     - The implementation of this function should be lock-free.
     ///     - The implementation will copy the group size information into a command
     ///       list when the function is appended.
@@ -1346,6 +1378,31 @@ namespace ze
             throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Kernel::GetAttribute" );
 
         return value;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Sets the preferred Intermediate cache configuration for a kernel.
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same kernel handle.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cudaFuncSetCacheConfig **
+    /// 
+    /// @throws result_t
+    void __zecall
+    Kernel::SetIntermediateCacheConfig(
+        Device::cache_config_t CacheConfig              ///< [in] CacheConfig
+        )
+    {
+        auto result = static_cast<result_t>( ::zeKernelSetIntermediateCacheConfig(
+            reinterpret_cast<ze_kernel_handle_t>( getHandle() ),
+            static_cast<ze_cache_config_t>( CacheConfig ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Kernel::SetIntermediateCacheConfig" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

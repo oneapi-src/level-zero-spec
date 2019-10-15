@@ -388,38 +388,6 @@ zeDeviceCanAccessPeer(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Sets the preferred Intermediate cache configuration for a device.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same device handle.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaFuncSetCacheConfig **
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + devices do not support CacheConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zeDeviceSetIntermediateCacheConfig(
-    ze_device_handle_t hDevice,                     ///< [in] handle of the device 
-    ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
-    )
-{
-    auto pfnSetIntermediateCacheConfig = ze_lib::context.ddiTable.Device.pfnSetIntermediateCacheConfig;
-    if( nullptr == pfnSetIntermediateCacheConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets the preferred Last Level cache configuration for a device.
 /// 
 /// @details
@@ -813,31 +781,6 @@ namespace ze
             throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Device::CanAccessPeer" );
 
         return *reinterpret_cast<bool_t*>( &value );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Sets the preferred Intermediate cache configuration for a device.
-    /// 
-    /// @details
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same device handle.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cudaFuncSetCacheConfig **
-    /// 
-    /// @throws result_t
-    void __zecall
-    Device::SetIntermediateCacheConfig(
-        cache_config_t CacheConfig                      ///< [in] CacheConfig
-        )
-    {
-        auto result = static_cast<result_t>( ::zeDeviceSetIntermediateCacheConfig(
-            reinterpret_cast<ze_device_handle_t>( getHandle() ),
-            static_cast<ze_cache_config_t>( CacheConfig ) ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Device::SetIntermediateCacheConfig" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

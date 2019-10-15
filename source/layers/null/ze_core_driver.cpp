@@ -413,30 +413,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDeviceSetIntermediateCacheConfig
-    ze_result_t __zecall
-    zeDeviceSetIntermediateCacheConfig(
-        ze_device_handle_t hDevice,                     ///< [in] handle of the device 
-        ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetIntermediateCacheConfig = context.zeDdiTable.Device.pfnSetIntermediateCacheConfig;
-        if( nullptr != pfnSetIntermediateCacheConfig )
-        {
-            result = pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceSetLastLevelCacheConfig
     ze_result_t __zecall
     zeDeviceSetLastLevelCacheConfig(
@@ -2286,6 +2262,30 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
+    ze_result_t __zecall
+    zeKernelSetIntermediateCacheConfig(
+        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetIntermediateCacheConfig = context.zeDdiTable.Kernel.pfnSetIntermediateCacheConfig;
+        if( nullptr != pfnSetIntermediateCacheConfig )
+        {
+            result = pfnSetIntermediateCacheConfig( hKernel, CacheConfig );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchKernel
     ze_result_t __zecall
     zeCommandListAppendLaunchKernel(
@@ -3413,59 +3413,6 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.Device;
                 if( nullptr != table.pfnCanAccessPeerCb )
                     table.pfnCanAccessPeerCb( &out_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDeviceSetIntermediateCacheConfig
-    ze_result_t __zecall
-    zeDeviceSetIntermediateCacheConfig(
-        ze_device_handle_t hDevice,                     ///< [in] handle of the device 
-        ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // capture parameters
-        ze_device_set_intermediate_cache_config_params_t in_params = {
-            &hDevice,
-            &CacheConfig
-        };
-
-        // create storage locations for callbacks
-        std::vector<void*> instanceUserData;
-        instanceUserData.resize( context.tracerData.size() );
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zePrologueCbs.Device;
-                if( nullptr != table.pfnSetIntermediateCacheConfigCb )
-                    table.pfnSetIntermediateCacheConfigCb( &in_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        result = driver::zeDeviceSetIntermediateCacheConfig( hDevice, CacheConfig );
-
-        // capture parameters
-        ze_device_set_intermediate_cache_config_params_t out_params = {
-            &hDevice,
-            &CacheConfig
-        };
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zeEpilogueCbs.Device;
-                if( nullptr != table.pfnSetIntermediateCacheConfigCb )
-                    table.pfnSetIntermediateCacheConfigCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -7502,6 +7449,59 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
+    ze_result_t __zecall
+    zeKernelSetIntermediateCacheConfig(
+        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_kernel_set_intermediate_cache_config_params_t in_params = {
+            &hKernel,
+            &CacheConfig
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Kernel;
+                if( nullptr != table.pfnSetIntermediateCacheConfigCb )
+                    table.pfnSetIntermediateCacheConfigCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeKernelSetIntermediateCacheConfig( hKernel, CacheConfig );
+
+        // capture parameters
+        ze_kernel_set_intermediate_cache_config_params_t out_params = {
+            &hKernel,
+            &CacheConfig
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Kernel;
+                if( nullptr != table.pfnSetIntermediateCacheConfigCb )
+                    table.pfnSetIntermediateCacheConfigCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchKernel
     ze_result_t __zecall
     zeCommandListAppendLaunchKernel(
@@ -8280,11 +8280,6 @@ zeGetDeviceProcAddrTable(
         pDdiTable->pfnCanAccessPeer                          = driver::zeDeviceCanAccessPeer;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnSetIntermediateCacheConfig             = instrumented::zeDeviceSetIntermediateCacheConfig;
-    else
-        pDdiTable->pfnSetIntermediateCacheConfig             = driver::zeDeviceSetIntermediateCacheConfig;
-
-    if( instrumented::context.enableTracing )
         pDdiTable->pfnSetLastLevelCacheConfig                = instrumented::zeDeviceSetLastLevelCacheConfig;
     else
         pDdiTable->pfnSetLastLevelCacheConfig                = driver::zeDeviceSetLastLevelCacheConfig;
@@ -8959,6 +8954,11 @@ zeGetKernelProcAddrTable(
         pDdiTable->pfnDestroy                                = instrumented::zeKernelDestroy;
     else
         pDdiTable->pfnDestroy                                = driver::zeKernelDestroy;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnSetIntermediateCacheConfig             = instrumented::zeKernelSetIntermediateCacheConfig;
+    else
+        pDdiTable->pfnSetIntermediateCacheConfig             = driver::zeKernelSetIntermediateCacheConfig;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnSetGroupSize                           = instrumented::zeKernelSetGroupSize;

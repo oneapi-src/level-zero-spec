@@ -135,13 +135,6 @@ typedef ze_result_t (__zecall *ze_pfnDeviceCanAccessPeer_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDeviceSetIntermediateCacheConfig 
-typedef ze_result_t (__zecall *ze_pfnDeviceSetIntermediateCacheConfig_t)(
-    ze_device_handle_t,
-    ze_cache_config_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeDeviceSetLastLevelCacheConfig 
 typedef ze_result_t (__zecall *ze_pfnDeviceSetLastLevelCacheConfig_t)(
     ze_device_handle_t,
@@ -231,7 +224,6 @@ typedef struct _ze_device_dditable_t
     ze_pfnDeviceGetImageProperties_t                            pfnGetImageProperties;
     ze_pfnDeviceGetP2PProperties_t                              pfnGetP2PProperties;
     ze_pfnDeviceCanAccessPeer_t                                 pfnCanAccessPeer;
-    ze_pfnDeviceSetIntermediateCacheConfig_t                    pfnSetIntermediateCacheConfig;
     ze_pfnDeviceSetLastLevelCacheConfig_t                       pfnSetLastLevelCacheConfig;
     ze_pfnDeviceSystemBarrier_t                                 pfnSystemBarrier;
 #if ZE_ENABLE_OCL_INTEROP
@@ -1177,6 +1169,13 @@ typedef ze_result_t (__zecall *ze_pfnKernelDestroy_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeKernelSetIntermediateCacheConfig 
+typedef ze_result_t (__zecall *ze_pfnKernelSetIntermediateCacheConfig_t)(
+    ze_kernel_handle_t,
+    ze_cache_config_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeKernelSetGroupSize 
 typedef ze_result_t (__zecall *ze_pfnKernelSetGroupSize_t)(
     ze_kernel_handle_t,
@@ -1237,6 +1236,7 @@ typedef struct _ze_kernel_dditable_t
 {
     ze_pfnKernelCreate_t                                        pfnCreate;
     ze_pfnKernelDestroy_t                                       pfnDestroy;
+    ze_pfnKernelSetIntermediateCacheConfig_t                    pfnSetIntermediateCacheConfig;
     ze_pfnKernelSetGroupSize_t                                  pfnSetGroupSize;
     ze_pfnKernelSuggestGroupSize_t                              pfnSuggestGroupSize;
     ze_pfnKernelSuggestMaxCooperativeGroupCount_t               pfnSuggestMaxCooperativeGroupCount;

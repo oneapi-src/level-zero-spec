@@ -909,22 +909,6 @@ namespace ze
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Sets the preferred Intermediate cache configuration for a device.
-        /// 
-        /// @details
-        ///     - The application may **not** call this function from simultaneous
-        ///       threads with the same device handle.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cudaFuncSetCacheConfig **
-        /// @throws result_t
-        void __zecall
-        SetIntermediateCacheConfig(
-            cache_config_t CacheConfig                      ///< [in] CacheConfig
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Sets the preferred Last Level cache configuration for a device.
         /// 
         /// @details

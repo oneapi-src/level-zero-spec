@@ -1215,13 +1215,6 @@ else:
     _zeDeviceCanAccessPeer_t = CFUNCTYPE( ze_result_t, ze_device_handle_t, ze_device_handle_t, POINTER(ze_bool_t) )
 
 ###############################################################################
-## @brief Function-pointer for zeDeviceSetIntermediateCacheConfig
-if __use_win_types:
-    _zeDeviceSetIntermediateCacheConfig_t = WINFUNCTYPE( ze_result_t, ze_device_handle_t, ze_cache_config_t )
-else:
-    _zeDeviceSetIntermediateCacheConfig_t = CFUNCTYPE( ze_result_t, ze_device_handle_t, ze_cache_config_t )
-
-###############################################################################
 ## @brief Function-pointer for zeDeviceSetLastLevelCacheConfig
 if __use_win_types:
     _zeDeviceSetLastLevelCacheConfig_t = WINFUNCTYPE( ze_result_t, ze_device_handle_t, ze_cache_config_t )
@@ -1287,7 +1280,6 @@ class _ze_device_dditable_t(Structure):
         ("pfnGetImageProperties", c_void_p),                            ## _zeDeviceGetImageProperties_t
         ("pfnGetP2PProperties", c_void_p),                              ## _zeDeviceGetP2PProperties_t
         ("pfnCanAccessPeer", c_void_p),                                 ## _zeDeviceCanAccessPeer_t
-        ("pfnSetIntermediateCacheConfig", c_void_p),                    ## _zeDeviceSetIntermediateCacheConfig_t
         ("pfnSetLastLevelCacheConfig", c_void_p),                       ## _zeDeviceSetLastLevelCacheConfig_t
         ("pfnSystemBarrier", c_void_p),                                 ## _zeDeviceSystemBarrier_t
         ("pfnMakeMemoryResident", c_void_p),                            ## _zeDeviceMakeMemoryResident_t
@@ -1910,6 +1902,13 @@ else:
     _zeKernelDestroy_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t )
 
 ###############################################################################
+## @brief Function-pointer for zeKernelSetIntermediateCacheConfig
+if __use_win_types:
+    _zeKernelSetIntermediateCacheConfig_t = WINFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_cache_config_t )
+else:
+    _zeKernelSetIntermediateCacheConfig_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_cache_config_t )
+
+###############################################################################
 ## @brief Function-pointer for zeKernelSetGroupSize
 if __use_win_types:
     _zeKernelSetGroupSize_t = WINFUNCTYPE( ze_result_t, ze_kernel_handle_t, c_ulong, c_ulong, c_ulong )
@@ -1958,6 +1957,7 @@ class _ze_kernel_dditable_t(Structure):
     _fields_ = [
         ("pfnCreate", c_void_p),                                        ## _zeKernelCreate_t
         ("pfnDestroy", c_void_p),                                       ## _zeKernelDestroy_t
+        ("pfnSetIntermediateCacheConfig", c_void_p),                    ## _zeKernelSetIntermediateCacheConfig_t
         ("pfnSetGroupSize", c_void_p),                                  ## _zeKernelSetGroupSize_t
         ("pfnSuggestGroupSize", c_void_p),                              ## _zeKernelSuggestGroupSize_t
         ("pfnSuggestMaxCooperativeGroupCount", c_void_p),               ## _zeKernelSuggestMaxCooperativeGroupCount_t
@@ -2048,7 +2048,6 @@ class ZE_DDI:
         self.zeDeviceGetImageProperties = _zeDeviceGetImageProperties_t(self.__dditable.Device.pfnGetImageProperties)
         self.zeDeviceGetP2PProperties = _zeDeviceGetP2PProperties_t(self.__dditable.Device.pfnGetP2PProperties)
         self.zeDeviceCanAccessPeer = _zeDeviceCanAccessPeer_t(self.__dditable.Device.pfnCanAccessPeer)
-        self.zeDeviceSetIntermediateCacheConfig = _zeDeviceSetIntermediateCacheConfig_t(self.__dditable.Device.pfnSetIntermediateCacheConfig)
         self.zeDeviceSetLastLevelCacheConfig = _zeDeviceSetLastLevelCacheConfig_t(self.__dditable.Device.pfnSetLastLevelCacheConfig)
         self.zeDeviceSystemBarrier = _zeDeviceSystemBarrier_t(self.__dditable.Device.pfnSystemBarrier)
         self.zeDeviceMakeMemoryResident = _zeDeviceMakeMemoryResident_t(self.__dditable.Device.pfnMakeMemoryResident)
@@ -2214,6 +2213,7 @@ class ZE_DDI:
         # attach function interface to function address
         self.zeKernelCreate = _zeKernelCreate_t(self.__dditable.Kernel.pfnCreate)
         self.zeKernelDestroy = _zeKernelDestroy_t(self.__dditable.Kernel.pfnDestroy)
+        self.zeKernelSetIntermediateCacheConfig = _zeKernelSetIntermediateCacheConfig_t(self.__dditable.Kernel.pfnSetIntermediateCacheConfig)
         self.zeKernelSetGroupSize = _zeKernelSetGroupSize_t(self.__dditable.Kernel.pfnSetGroupSize)
         self.zeKernelSuggestGroupSize = _zeKernelSuggestGroupSize_t(self.__dditable.Kernel.pfnSuggestGroupSize)
         self.zeKernelSuggestMaxCooperativeGroupCount = _zeKernelSuggestMaxCooperativeGroupCount_t(self.__dditable.Kernel.pfnSuggestMaxCooperativeGroupCount)

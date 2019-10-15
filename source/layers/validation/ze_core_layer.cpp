@@ -431,29 +431,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDeviceSetIntermediateCacheConfig
-    ze_result_t __zecall
-    zeDeviceSetIntermediateCacheConfig(
-        ze_device_handle_t hDevice,                     ///< [in] handle of the device 
-        ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
-        )
-    {
-        auto pfnSetIntermediateCacheConfig = context.zeDdiTable.Device.pfnSetIntermediateCacheConfig;
-
-        if( nullptr == pfnSetIntermediateCacheConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceSetLastLevelCacheConfig
     ze_result_t __zecall
     zeDeviceSetLastLevelCacheConfig(
@@ -2452,6 +2429,29 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
+    ze_result_t __zecall
+    zeKernelSetIntermediateCacheConfig(
+        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
+        )
+    {
+        auto pfnSetIntermediateCacheConfig = context.zeDdiTable.Kernel.pfnSetIntermediateCacheConfig;
+
+        if( nullptr == pfnSetIntermediateCacheConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hKernel )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetIntermediateCacheConfig( hKernel, CacheConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchKernel
     ze_result_t __zecall
     zeCommandListAppendLaunchKernel(
@@ -2883,9 +2883,6 @@ zeGetDeviceProcAddrTable(
 
     dditable.pfnCanAccessPeer                            = pDdiTable->pfnCanAccessPeer;
     pDdiTable->pfnCanAccessPeer                          = layer::zeDeviceCanAccessPeer;
-
-    dditable.pfnSetIntermediateCacheConfig               = pDdiTable->pfnSetIntermediateCacheConfig;
-    pDdiTable->pfnSetIntermediateCacheConfig             = layer::zeDeviceSetIntermediateCacheConfig;
 
     dditable.pfnSetLastLevelCacheConfig                  = pDdiTable->pfnSetLastLevelCacheConfig;
     pDdiTable->pfnSetLastLevelCacheConfig                = layer::zeDeviceSetLastLevelCacheConfig;
@@ -3426,6 +3423,9 @@ zeGetKernelProcAddrTable(
 
     dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = layer::zeKernelDestroy;
+
+    dditable.pfnSetIntermediateCacheConfig               = pDdiTable->pfnSetIntermediateCacheConfig;
+    pDdiTable->pfnSetIntermediateCacheConfig             = layer::zeKernelSetIntermediateCacheConfig;
 
     dditable.pfnSetGroupSize                             = pDdiTable->pfnSetGroupSize;
     pDdiTable->pfnSetGroupSize                           = layer::zeKernelSetGroupSize;

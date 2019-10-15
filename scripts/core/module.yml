@@ -322,7 +322,7 @@ desc: "Set group size for a kernel"
 class: $xKernel
 name: SetGroupSize
 details:
-    - "The application may **not** call this function from simultaneous threads with the same function handle."
+    - "The application may **not** call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
     - "The implementation will copy the group size information into a command list when the function is appended."
 params:
@@ -505,6 +505,26 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid value for attr"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Sets the preferred Intermediate cache configuration for a kernel."
+class: $xKernel
+name: SetIntermediateCacheConfig
+ordinal: "2"
+details:
+    - "The application may **not** call this function from simultaneous threads with the same kernel handle."
+analogue:
+    - "**cudaFuncSetCacheConfig **"
+params:
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object" 
+    - type: "$x_cache_config_t"
+      name: CacheConfig
+      desc: "[in] CacheConfig"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "devices do not support CacheConfig"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel thread group dimensions."

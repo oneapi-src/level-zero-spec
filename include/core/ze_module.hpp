@@ -410,11 +410,27 @@ namespace ze
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Sets the preferred Intermediate cache configuration for a kernel.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same kernel handle.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaFuncSetCacheConfig **
+        /// @throws result_t
+        void __zecall
+        SetIntermediateCacheConfig(
+            Device::cache_config_t CacheConfig              ///< [in] CacheConfig
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Set group size for a kernel
         /// 
         /// @details
         ///     - The application may **not** call this function from simultaneous
-        ///       threads with the same function handle.
+        ///       threads with the same kernel handle.
         ///     - The implementation of this function should be lock-free.
         ///     - The implementation will copy the group size information into a command
         ///       list when the function is appended.

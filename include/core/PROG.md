@@ -217,20 +217,20 @@ and avoids exposing these details in the API in a backwards compatible fashion.
 ```
 
 ## Device Cache Settings
-For device support cache control and config, there are two methods for cache control:
-1. Cache Size Configuration: Ability to configure larger size for SLM vs Data globally for Device
-2. Runtime Hint/prefrence for application to allow access to be Cached or not in Device Caches. For GPU device this is provided via two ways  
+There are two methods for device and kernel cache control:
+1. Cache Size Configuration: Ability to configure larger size for SLM vs Data globally for Device or per Kernel instance.
+2. Runtime Hint/preference for application to allow access to be Cached or not in Device Caches. For GPU device this is provided via two ways:
       -  During Image creation via Flag
       -  Kernel instruction 
 
 The following sample code demonstrates a basic sequence for Cache size configuration:
 ```c
-    // Large SLM for Intermediate and Last Level cache
-    zeDeviceSetIntermediateCacheConfig(hDevice, ZE_CACHE_CONFIG_LARGE_SLM);
+    // Large SLM for Intermediate and Last Level cache.
+    // Note: The intermediate cache setting is applied to each kernel. Last level is applied for the device.
+    zeKernelSetIntermediateCacheConfig(hKernel, ZE_CACHE_CONFIG_LARGE_SLM);
     zeDeviceSetLastLevelCacheConfig(hDevice, ZE_CACHE_CONFIG_LARGE_SLM);
     ...
 ```
-The following sample code demonstrates a basic sequence for Runtime Hint/Prefrence for Cache:
 
 # <a name="cnc">Command Queues and Command Lists</a>
 The following are the motivations for seperating a command queue from a command list:
