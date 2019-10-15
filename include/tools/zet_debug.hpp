@@ -222,6 +222,22 @@ namespace zet
             void* buffer                                    ///< [in,out] a buffer to hold the event data
             );
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Interrupt device threads.
+        /// @throws result_t
+        void __zecall
+        Interrupt(
+            uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Resume device threads.
+        /// @throws result_t
+        void __zecall
+        Resume(
+            uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+            );
+
     };
 
     ///////////////////////////////////////////////////////////////////////////////

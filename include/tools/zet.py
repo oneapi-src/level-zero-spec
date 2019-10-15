@@ -2878,6 +2878,20 @@ if __use_win_types:
 else:
     _zetDebugReadEvent_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_size_t, c_void_p )
 
+###############################################################################
+## @brief Function-pointer for zetDebugInterrupt
+if __use_win_types:
+    _zetDebugInterrupt_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+else:
+    _zetDebugInterrupt_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+
+###############################################################################
+## @brief Function-pointer for zetDebugResume
+if __use_win_types:
+    _zetDebugResume_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+else:
+    _zetDebugResume_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+
 
 ###############################################################################
 ## @brief Table of Debug functions pointers
@@ -2887,7 +2901,9 @@ class _zet_debug_dditable_t(Structure):
         ("pfnDetach", c_void_p),                                        ## _zetDebugDetach_t
         ("pfnGetNumThreads", c_void_p),                                 ## _zetDebugGetNumThreads_t
         ("pfnWaitForEvent", c_void_p),                                  ## _zetDebugWaitForEvent_t
-        ("pfnReadEvent", c_void_p)                                      ## _zetDebugReadEvent_t
+        ("pfnReadEvent", c_void_p),                                     ## _zetDebugReadEvent_t
+        ("pfnInterrupt", c_void_p),                                     ## _zetDebugInterrupt_t
+        ("pfnResume", c_void_p)                                         ## _zetDebugResume_t
     ]
 
 ###############################################################################
@@ -3301,5 +3317,7 @@ class ZET_DDI:
         self.zetDebugGetNumThreads = _zetDebugGetNumThreads_t(self.__dditable.Debug.pfnGetNumThreads)
         self.zetDebugWaitForEvent = _zetDebugWaitForEvent_t(self.__dditable.Debug.pfnWaitForEvent)
         self.zetDebugReadEvent = _zetDebugReadEvent_t(self.__dditable.Debug.pfnReadEvent)
+        self.zetDebugInterrupt = _zetDebugInterrupt_t(self.__dditable.Debug.pfnInterrupt)
+        self.zetDebugResume = _zetDebugResume_t(self.__dditable.Debug.pfnResume)
 
         # success!

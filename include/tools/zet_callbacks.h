@@ -3208,6 +3208,52 @@ typedef void (__zecall *zet_pfnDebugReadEventCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetDebugInterrupt 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_debug_interrupt_params_t
+{
+    zet_debug_session_handle_t* phDebug;
+    uint64_t* pthreadid;
+} zet_debug_interrupt_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetDebugInterrupt 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnDebugInterruptCb_t)(
+    zet_debug_interrupt_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetDebugResume 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_debug_resume_params_t
+{
+    zet_debug_session_handle_t* phDebug;
+    uint64_t* pthreadid;
+} zet_debug_resume_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetDebugResume 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnDebugResumeCb_t)(
+    zet_debug_resume_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Debug callback functions pointers
 typedef struct _zet_debug_callbacks_t
 {
@@ -3216,6 +3262,8 @@ typedef struct _zet_debug_callbacks_t
     zet_pfnDebugGetNumThreadsCb_t                                   pfnGetNumThreadsCb;
     zet_pfnDebugWaitForEventCb_t                                    pfnWaitForEventCb;
     zet_pfnDebugReadEventCb_t                                       pfnReadEventCb;
+    zet_pfnDebugInterruptCb_t                                       pfnInterruptCb;
+    zet_pfnDebugResumeCb_t                                          pfnResumeCb;
 } zet_debug_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////

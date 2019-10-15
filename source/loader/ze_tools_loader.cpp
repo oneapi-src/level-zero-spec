@@ -3636,6 +3636,38 @@ namespace loader
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugInterrupt
+    ze_result_t __zecall
+    zetDebugInterrupt(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnInterrupt( hDebug, threadid );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugResume
+    ze_result_t __zecall
+    zetDebugResume(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnResume( hDebug, threadid );
+
+        return result;
+    }
+
 } // namespace loader
 
 #if defined(__cplusplus)
@@ -5448,6 +5480,8 @@ zetGetDebugProcAddrTable(
             pDdiTable->pfnGetNumThreads                            = loader::zetDebugGetNumThreads;
             pDdiTable->pfnWaitForEvent                             = loader::zetDebugWaitForEvent;
             pDdiTable->pfnReadEvent                                = loader::zetDebugReadEvent;
+            pDdiTable->pfnInterrupt                                = loader::zetDebugInterrupt;
+            pDdiTable->pfnResume                                   = loader::zetDebugResume;
         }
         else
         {

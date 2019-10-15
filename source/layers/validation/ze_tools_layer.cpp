@@ -3467,6 +3467,52 @@ namespace layer
         return pfnReadEvent( hDebug, size, buffer );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugInterrupt
+    ze_result_t __zecall
+    zetDebugInterrupt(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        auto pfnInterrupt = context.zetDdiTable.Debug.pfnInterrupt;
+
+        if( nullptr == pfnInterrupt )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnInterrupt( hDebug, threadid );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugResume
+    ze_result_t __zecall
+    zetDebugResume(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        auto pfnResume = context.zetDdiTable.Debug.pfnResume;
+
+        if( nullptr == pfnResume )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnResume( hDebug, threadid );
+    }
+
 } // namespace layer
 
 #if defined(__cplusplus)
@@ -4651,6 +4697,12 @@ zetGetDebugProcAddrTable(
 
     dditable.pfnReadEvent                                = pDdiTable->pfnReadEvent;
     pDdiTable->pfnReadEvent                              = layer::zetDebugReadEvent;
+
+    dditable.pfnInterrupt                                = pDdiTable->pfnInterrupt;
+    pDdiTable->pfnInterrupt                              = layer::zetDebugInterrupt;
+
+    dditable.pfnResume                                   = pDdiTable->pfnResume;
+    pDdiTable->pfnResume                                 = layer::zetDebugResume;
 
     return result;
 }

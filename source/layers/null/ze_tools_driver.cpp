@@ -3298,6 +3298,54 @@ namespace driver
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugInterrupt
+    ze_result_t __zecall
+    zetDebugInterrupt(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnInterrupt = context.zetDdiTable.Debug.pfnInterrupt;
+        if( nullptr != pfnInterrupt )
+        {
+            result = pfnInterrupt( hDebug, threadid );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugResume
+    ze_result_t __zecall
+    zetDebugResume(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnResume = context.zetDdiTable.Debug.pfnResume;
+        if( nullptr != pfnResume )
+        {
+            result = pfnResume( hDebug, threadid );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
 } // namespace driver
 
 #if defined(__cplusplus)
@@ -4304,6 +4352,10 @@ zetGetDebugProcAddrTable(
     pDdiTable->pfnWaitForEvent                           = driver::zetDebugWaitForEvent;
 
     pDdiTable->pfnReadEvent                              = driver::zetDebugReadEvent;
+
+    pDdiTable->pfnInterrupt                              = driver::zetDebugInterrupt;
+
+    pDdiTable->pfnResume                                 = driver::zetDebugResume;
 
     return result;
 }

@@ -802,4 +802,59 @@ fields.
       stack.
 
 
+${"##"} Run Control
+
+The tool may interrupt and resume individual device threads or an entire
+debug session.
+
+To interrupt an individual thread or an entire debug session, call
+::${t}DebugInterrupt with the number of the thread to interrupt or
+::${T}_DEBUG_THREAD_ALL to interrupt an entire debug session.
+
+When interupting an entire debug session, threads that are already stopped
+as well as threads that are not available will be ignored.  After threads
+have been interrupted, a ::${T}_DEBUG_EVENT_EXCEPTION event with thread ==
+::${T}_DEBUG_THREAD_ALL is created.
+
+To resume an individual thread or an entire debug session, call
+::${t}DebugResume with the number of the thread to resume or
+::${T}_DEBUG_THREAD_ALL to resume an entire debug session.
+
+Whereas interrupting and resuming an entire debug session will
+transparently handle unavailable threads, interrupting and resuming a
+single unavailable thread will result in
+::${X}_RESULT_ERROR_INVALID_ARGUMENT (see below for an exception to this).
+
+Threads that had been unavailable when interrupting an entire debug
+session will be prevented from entering until either the entire debug
+session or that individual thread is resumed.
+
+The tool does not know whether any individual thread is available until it
+tries to interact with that thread.  Unavailable threads that are being
+prevented from entering may be interrupted.  Only stopped threads may be
+resumed individually.
+
+The following sample code demonstrates how to interrupt and resume an
+entire debug session:
+
+```c
+    ${t}_debug_session_handle_t session = ...;
+    ${x}_result_t errcode;
+
+    errcode = ${t}DebugInterrupt(session, ${T}_DEBUG_THREAD_ALL);
+    if (errcode)
+        return errcode;
+
+    ...
+
+    errcode = ${t}DebugResume(session, ${T}_DEBUG_THREAD_ALL);
+    if (errcode)
+        return errcode;
+```
+
+After interrupting one or all threads, the tool needs to wait for the
+corresponding ::${T}_DEBUG_EVENT_EXCEPTION event.  Note that there may be
+other events preceding that event.
+
+
 (to be continued...)

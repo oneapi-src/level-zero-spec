@@ -1848,6 +1848,20 @@ typedef ze_result_t (__zecall *zet_pfnDebugReadEvent_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetDebugInterrupt 
+typedef ze_result_t (__zecall *zet_pfnDebugInterrupt_t)(
+    zet_debug_session_handle_t,
+    uint64_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetDebugResume 
+typedef ze_result_t (__zecall *zet_pfnDebugResume_t)(
+    zet_debug_session_handle_t,
+    uint64_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Debug functions pointers
 typedef struct _zet_debug_dditable_t
 {
@@ -1856,6 +1870,8 @@ typedef struct _zet_debug_dditable_t
     zet_pfnDebugGetNumThreads_t                                 pfnGetNumThreads;
     zet_pfnDebugWaitForEvent_t                                  pfnWaitForEvent;
     zet_pfnDebugReadEvent_t                                     pfnReadEvent;
+    zet_pfnDebugInterrupt_t                                     pfnInterrupt;
+    zet_pfnDebugResume_t                                        pfnResume;
 } zet_debug_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

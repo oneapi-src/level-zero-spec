@@ -249,6 +249,42 @@ zetDebugReadEvent(
     void* buffer                                    ///< [in,out] a buffer to hold the event data
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Interrupt device threads.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is already stopped or unavailable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugInterrupt(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Resume device threads.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is already running or unavailable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugResume(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

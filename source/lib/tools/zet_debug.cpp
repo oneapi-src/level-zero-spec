@@ -155,6 +155,56 @@ zetDebugReadEvent(
     return pfnReadEvent( hDebug, size, buffer );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Interrupt device threads.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is already stopped or unavailable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugInterrupt(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+    )
+{
+    auto pfnInterrupt = zet_lib::context.ddiTable.Debug.pfnInterrupt;
+    if( nullptr == pfnInterrupt )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnInterrupt( hDebug, threadid );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Resume device threads.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is already running or unavailable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugResume(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+    )
+{
+    auto pfnResume = zet_lib::context.ddiTable.Debug.pfnResume;
+    if( nullptr == pfnResume )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnResume( hDebug, threadid );
+}
+
 } // extern "C"
 
 namespace zet
@@ -281,6 +331,40 @@ namespace zet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::ReadEvent" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Interrupt device threads.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Debug::Interrupt(
+        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        auto result = static_cast<result_t>( ::zetDebugInterrupt(
+            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            threadid ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::Interrupt" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Resume device threads.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Debug::Resume(
+        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        auto result = static_cast<result_t>( ::zetDebugResume(
+            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            threadid ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::Resume" );
     }
 
 } // namespace zet
