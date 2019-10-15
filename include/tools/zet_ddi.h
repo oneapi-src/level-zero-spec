@@ -1824,11 +1824,19 @@ typedef ze_result_t (__zecall *zet_pfnDebugDetach_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetDebugGetNumThreads 
+typedef ze_result_t (__zecall *zet_pfnDebugGetNumThreads_t)(
+    zet_debug_session_handle_t,
+    uint64_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Debug functions pointers
 typedef struct _zet_debug_dditable_t
 {
     zet_pfnDebugAttach_t                                        pfnAttach;
     zet_pfnDebugDetach_t                                        pfnDetach;
+    zet_pfnDebugGetNumThreads_t                                 pfnGetNumThreads;
 } zet_debug_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

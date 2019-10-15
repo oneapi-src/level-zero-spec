@@ -74,6 +74,30 @@ zetDebugDetach(
     return pfnDetach( hDebug );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Query the number of device threads for a debug session.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + an invalid debug handle has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugGetNumThreads(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t numThreads                             ///< [out] the maximal number of threads
+    )
+{
+    auto pfnGetNumThreads = zet_lib::context.ddiTable.Debug.pfnGetNumThreads;
+    if( nullptr == pfnGetNumThreads )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetNumThreads( hDebug, numThreads );
+}
+
 } // extern "C"
 
 namespace zet
@@ -128,6 +152,30 @@ namespace zet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::Detach" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Query the number of device threads for a debug session.
+    /// 
+    /// @returns
+    ///     - uint64_t: the maximal number of threads
+    /// 
+    /// @throws result_t
+    uint64_t __zecall
+    Debug::GetNumThreads(
+        void
+        )
+    {
+        uint64_t numThreads;
+
+        auto result = static_cast<result_t>( ::zetDebugGetNumThreads(
+            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            &numThreads ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::GetNumThreads" );
+
+        return numThreads;
     }
 
 } // namespace zet

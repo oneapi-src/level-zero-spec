@@ -611,4 +611,23 @@ allow attaching to devices.  Any attempt to attach to a sub-device results
 in ::ZE_RESULT_ERROR_UNSUPPORTED.
 
 
+### Device Thread Identification and Resource Restriction
+
+Device threads are identified by their ordinal number starting from one
+until the maximum number of threads on that device.  Device thread
+identifiers are unique within the same debug session.
+
+If a tool attached to a device, device threads are enumerated for all
+sub-devices below that device.
+
+Implementations that allow restricting the number of device threads may
+enumerate less than the total number of threads supported by the device.
+They may enumerate more threads than had been requested based on hardware
+limitations and to allow for oversubmission.  Not all enumerated threads
+may be available.
+
+The number of device threads can be queried for each debug session using
+the ::zetDebugGetNumThreads call.
+
+
 (to be continued...)

@@ -80,6 +80,17 @@ namespace zet
             void
             );
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Query the number of device threads for a debug session.
+        /// @returns
+        ///     - uint64_t: the maximal number of threads
+        /// 
+        /// @throws result_t
+        uint64_t __zecall
+        GetNumThreads(
+            void
+            );
+
     };
 
     ///////////////////////////////////////////////////////////////////////////////

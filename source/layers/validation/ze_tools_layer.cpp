@@ -3389,6 +3389,29 @@ namespace layer
         return pfnDetach( hDebug );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugGetNumThreads
+    ze_result_t __zecall
+    zetDebugGetNumThreads(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t numThreads                             ///< [out] the maximal number of threads
+        )
+    {
+        auto pfnGetNumThreads = context.zetDdiTable.Debug.pfnGetNumThreads;
+
+        if( nullptr == pfnGetNumThreads )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetNumThreads( hDebug, numThreads );
+    }
+
 } // namespace layer
 
 #if defined(__cplusplus)
@@ -4564,6 +4587,9 @@ zetGetDebugProcAddrTable(
 
     dditable.pfnDetach                                   = pDdiTable->pfnDetach;
     pDdiTable->pfnDetach                                 = layer::zetDebugDetach;
+
+    dditable.pfnGetNumThreads                            = pDdiTable->pfnGetNumThreads;
+    pDdiTable->pfnGetNumThreads                          = layer::zetDebugGetNumThreads;
 
     return result;
 }

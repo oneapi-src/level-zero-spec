@@ -81,6 +81,23 @@ zetDebugDetach(
     zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Query the number of device threads for a debug session.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + an invalid debug handle has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugGetNumThreads(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t numThreads                             ///< [out] the maximal number of threads
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

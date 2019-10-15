@@ -3585,6 +3585,22 @@ namespace loader
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugGetNumThreads
+    ze_result_t __zecall
+    zetDebugGetNumThreads(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t numThreads                             ///< [out] the maximal number of threads
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnGetNumThreads( hDebug, numThreads );
+
+        return result;
+    }
+
 } // namespace loader
 
 #if defined(__cplusplus)
@@ -5394,6 +5410,7 @@ zetGetDebugProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnAttach                                   = loader::zetDebugAttach;
             pDdiTable->pfnDetach                                   = loader::zetDebugDetach;
+            pDdiTable->pfnGetNumThreads                            = loader::zetDebugGetNumThreads;
         }
         else
         {

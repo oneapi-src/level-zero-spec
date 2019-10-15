@@ -2752,13 +2752,21 @@ if __use_win_types:
 else:
     _zetDebugDetach_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t )
 
+###############################################################################
+## @brief Function-pointer for zetDebugGetNumThreads
+if __use_win_types:
+    _zetDebugGetNumThreads_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+else:
+    _zetDebugGetNumThreads_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+
 
 ###############################################################################
 ## @brief Table of Debug functions pointers
 class _zet_debug_dditable_t(Structure):
     _fields_ = [
         ("pfnAttach", c_void_p),                                        ## _zetDebugAttach_t
-        ("pfnDetach", c_void_p)                                         ## _zetDebugDetach_t
+        ("pfnDetach", c_void_p),                                        ## _zetDebugDetach_t
+        ("pfnGetNumThreads", c_void_p)                                  ## _zetDebugGetNumThreads_t
     ]
 
 ###############################################################################
@@ -3169,5 +3177,6 @@ class ZET_DDI:
         # attach function interface to function address
         self.zetDebugAttach = _zetDebugAttach_t(self.__dditable.Debug.pfnAttach)
         self.zetDebugDetach = _zetDebugDetach_t(self.__dditable.Debug.pfnDetach)
+        self.zetDebugGetNumThreads = _zetDebugGetNumThreads_t(self.__dditable.Debug.pfnGetNumThreads)
 
         # success!
