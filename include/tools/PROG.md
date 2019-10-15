@@ -847,4 +847,45 @@ corresponding ::ZET_DEBUG_EVENT_EXCEPTION event.  Note that there may be
 other events preceding that event.
 
 
+## Memory Access
+
+A tool may read and write memory in the context of a stopped device thread
+as if that thread had read or written the memory.  Global memory may also
+be accessed in the context of the special ::ZET_DEBUG_THREAD_NONE thread.
+
+To read and write uncompressed memory, call the ::zetDebugReadMemory and
+::zetDebugWriteMemory function, respectively.  The functions take a
+::zet_debug_session_handle_t, a thread handle, the virtual address of the
+memory to access, the size of the access, and an input or output buffer.
+
+To read and write compressed memory, call the
+::zetDebugReadCompressedMemory and ::zetDebugWriteCompressedMemory
+function, respectively.  In addition to the above arguments, those
+functions take the virtual address of the compression descriptor as
+additional argument.
+
+The following example copies 16 bytes of memory from one location in the
+context of one thread to another location in global memory.
+
+```c
+    zet_debug_session_handle_t session = ...;
+    uint64_t src = ..., dst = ...;
+    uint64_t threadid = ...;
+    uint8_t buffer[16];
+    ze_result_t errcode;
+
+    errcode = zetDebugReadMemory(session, threadid, src, sizeof(buffer),
+                                  buffer);
+    if (errcode)
+        return errcode;
+
+    ...
+
+    errcode = zetDebugWriteMemory(session, ZET_DEBUG_THREAD_NONE, dst,
+                                   sizeof(buffer), buffer);
+    if (errcode)
+        return errcode;
+```
+
+
 (to be continued...)

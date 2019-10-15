@@ -238,6 +238,52 @@ namespace zet
             uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
             );
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Read uncompressed memory.
+        /// @throws result_t
+        void __zecall
+        ReadMemory(
+            uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+            uint64_t address,                               ///< [in] the virtual address of the memory to read from
+            size_t size,                                    ///< [in] the number of bytes to read
+            void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Write uncompressed memory.
+        /// @throws result_t
+        void __zecall
+        WriteMemory(
+            uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+            uint64_t address,                               ///< [in] the virtual address of the memory to write to
+            size_t size,                                    ///< [in] the number of bytes to write
+            const void* buffer                              ///< [in] a buffer holding the pattern to write
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Read compressed memory.
+        /// @throws result_t
+        void __zecall
+        ReadCompressedMemory(
+            uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+            uint64_t address,                               ///< [in] the virtual address of the memory to read from
+            size_t size,                                    ///< [in] the number of bytes to read
+            uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+            void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Write compressed memory.
+        /// @throws result_t
+        void __zecall
+        WriteCompressedMemory(
+            uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+            uint64_t address,                               ///< [in] the virtual address of the memory to write to
+            size_t size,                                    ///< [in] the number of bytes to write
+            uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+            const void* buffer                              ///< [in] a buffer holding the pattern to write
+            );
+
     };
 
     ///////////////////////////////////////////////////////////////////////////////

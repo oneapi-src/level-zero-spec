@@ -205,6 +205,138 @@ zetDebugResume(
     return pfnResume( hDebug, threadid );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Read uncompressed memory.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + nullptr == buffer
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is running or unavailable
+///         + an invalid address has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
+///         + the memory cannot be accessed from the supplied thread
+ze_result_t __zecall
+zetDebugReadMemory(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+    uint64_t address,                               ///< [in] the virtual address of the memory to read from
+    size_t size,                                    ///< [in] the number of bytes to read
+    void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+    )
+{
+    auto pfnReadMemory = zet_lib::context.ddiTable.Debug.pfnReadMemory;
+    if( nullptr == pfnReadMemory )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnReadMemory( hDebug, threadid, address, size, buffer );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Write uncompressed memory.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + nullptr == buffer
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is running or unavailable
+///         + an invalid address has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
+///         + the memory cannot be accessed from the supplied thread
+ze_result_t __zecall
+zetDebugWriteMemory(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+    uint64_t address,                               ///< [in] the virtual address of the memory to write to
+    size_t size,                                    ///< [in] the number of bytes to write
+    const void* buffer                              ///< [in] a buffer holding the pattern to write
+    )
+{
+    auto pfnWriteMemory = zet_lib::context.ddiTable.Debug.pfnWriteMemory;
+    if( nullptr == pfnWriteMemory )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnWriteMemory( hDebug, threadid, address, size, buffer );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Read compressed memory.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + nullptr == buffer
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is running or unavailable
+///         + an invalid memory or descriptor address has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
+///         + the memory cannot be accessed from the supplied thread
+///         + the memory cannot be accessed using the supplied descriptor
+ze_result_t __zecall
+zetDebugReadCompressedMemory(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+    uint64_t address,                               ///< [in] the virtual address of the memory to read from
+    size_t size,                                    ///< [in] the number of bytes to read
+    uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+    void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+    )
+{
+    auto pfnReadCompressedMemory = zet_lib::context.ddiTable.Debug.pfnReadCompressedMemory;
+    if( nullptr == pfnReadCompressedMemory )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnReadCompressedMemory( hDebug, threadid, address, size, desc, buffer );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Write compressed memory.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + nullptr == buffer
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is running or unavailable
+///         + an invalid memory or descriptor address has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
+///         + the memory cannot be accessed from the supplied thread
+///         + the memory cannot be accessed using the supplied descriptor
+ze_result_t __zecall
+zetDebugWriteCompressedMemory(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+    uint64_t address,                               ///< [in] the virtual address of the memory to write to
+    size_t size,                                    ///< [in] the number of bytes to write
+    uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+    const void* buffer                              ///< [in] a buffer holding the pattern to write
+    )
+{
+    auto pfnWriteCompressedMemory = zet_lib::context.ddiTable.Debug.pfnWriteCompressedMemory;
+    if( nullptr == pfnWriteCompressedMemory )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnWriteCompressedMemory( hDebug, threadid, address, size, desc, buffer );
+}
+
 } // extern "C"
 
 namespace zet
@@ -365,6 +497,102 @@ namespace zet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::Resume" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Read uncompressed memory.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Debug::ReadMemory(
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        auto result = static_cast<result_t>( ::zetDebugReadMemory(
+            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            threadid,
+            address,
+            size,
+            buffer ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::ReadMemory" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Write uncompressed memory.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Debug::WriteMemory(
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        auto result = static_cast<result_t>( ::zetDebugWriteMemory(
+            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            threadid,
+            address,
+            size,
+            buffer ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::WriteMemory" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Read compressed memory.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Debug::ReadCompressedMemory(
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        auto result = static_cast<result_t>( ::zetDebugReadCompressedMemory(
+            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            threadid,
+            address,
+            size,
+            desc,
+            buffer ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::ReadCompressedMemory" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Write compressed memory.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Debug::WriteCompressedMemory(
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        auto result = static_cast<result_t>( ::zetDebugWriteCompressedMemory(
+            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            threadid,
+            address,
+            size,
+            desc,
+            buffer ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::WriteCompressedMemory" );
     }
 
 } // namespace zet

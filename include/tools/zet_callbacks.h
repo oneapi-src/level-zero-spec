@@ -3254,6 +3254,112 @@ typedef void (__zecall *zet_pfnDebugResumeCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetDebugReadMemory 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_debug_read_memory_params_t
+{
+    zet_debug_session_handle_t* phDebug;
+    uint64_t* pthreadid;
+    uint64_t* paddress;
+    size_t* psize;
+    void** pbuffer;
+} zet_debug_read_memory_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetDebugReadMemory 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnDebugReadMemoryCb_t)(
+    zet_debug_read_memory_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetDebugWriteMemory 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_debug_write_memory_params_t
+{
+    zet_debug_session_handle_t* phDebug;
+    uint64_t* pthreadid;
+    uint64_t* paddress;
+    size_t* psize;
+    const void** pbuffer;
+} zet_debug_write_memory_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetDebugWriteMemory 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnDebugWriteMemoryCb_t)(
+    zet_debug_write_memory_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetDebugReadCompressedMemory 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_debug_read_compressed_memory_params_t
+{
+    zet_debug_session_handle_t* phDebug;
+    uint64_t* pthreadid;
+    uint64_t* paddress;
+    size_t* psize;
+    uint64_t* pdesc;
+    void** pbuffer;
+} zet_debug_read_compressed_memory_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetDebugReadCompressedMemory 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnDebugReadCompressedMemoryCb_t)(
+    zet_debug_read_compressed_memory_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetDebugWriteCompressedMemory 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_debug_write_compressed_memory_params_t
+{
+    zet_debug_session_handle_t* phDebug;
+    uint64_t* pthreadid;
+    uint64_t* paddress;
+    size_t* psize;
+    uint64_t* pdesc;
+    const void** pbuffer;
+} zet_debug_write_compressed_memory_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetDebugWriteCompressedMemory 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnDebugWriteCompressedMemoryCb_t)(
+    zet_debug_write_compressed_memory_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Debug callback functions pointers
 typedef struct _zet_debug_callbacks_t
 {
@@ -3264,6 +3370,10 @@ typedef struct _zet_debug_callbacks_t
     zet_pfnDebugReadEventCb_t                                       pfnReadEventCb;
     zet_pfnDebugInterruptCb_t                                       pfnInterruptCb;
     zet_pfnDebugResumeCb_t                                          pfnResumeCb;
+    zet_pfnDebugReadMemoryCb_t                                      pfnReadMemoryCb;
+    zet_pfnDebugWriteMemoryCb_t                                     pfnWriteMemoryCb;
+    zet_pfnDebugReadCompressedMemoryCb_t                            pfnReadCompressedMemoryCb;
+    zet_pfnDebugWriteCompressedMemoryCb_t                           pfnWriteCompressedMemoryCb;
 } zet_debug_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -2892,6 +2892,34 @@ if __use_win_types:
 else:
     _zetDebugResume_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
 
+###############################################################################
+## @brief Function-pointer for zetDebugReadMemory
+if __use_win_types:
+    _zetDebugReadMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+else:
+    _zetDebugReadMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zetDebugWriteMemory
+if __use_win_types:
+    _zetDebugWriteMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+else:
+    _zetDebugWriteMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zetDebugReadCompressedMemory
+if __use_win_types:
+    _zetDebugReadCompressedMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_ulonglong, c_void_p )
+else:
+    _zetDebugReadCompressedMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_ulonglong, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zetDebugWriteCompressedMemory
+if __use_win_types:
+    _zetDebugWriteCompressedMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_ulonglong, c_void_p )
+else:
+    _zetDebugWriteCompressedMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_ulonglong, c_void_p )
+
 
 ###############################################################################
 ## @brief Table of Debug functions pointers
@@ -2903,7 +2931,11 @@ class _zet_debug_dditable_t(Structure):
         ("pfnWaitForEvent", c_void_p),                                  ## _zetDebugWaitForEvent_t
         ("pfnReadEvent", c_void_p),                                     ## _zetDebugReadEvent_t
         ("pfnInterrupt", c_void_p),                                     ## _zetDebugInterrupt_t
-        ("pfnResume", c_void_p)                                         ## _zetDebugResume_t
+        ("pfnResume", c_void_p),                                        ## _zetDebugResume_t
+        ("pfnReadMemory", c_void_p),                                    ## _zetDebugReadMemory_t
+        ("pfnWriteMemory", c_void_p),                                   ## _zetDebugWriteMemory_t
+        ("pfnReadCompressedMemory", c_void_p),                          ## _zetDebugReadCompressedMemory_t
+        ("pfnWriteCompressedMemory", c_void_p)                          ## _zetDebugWriteCompressedMemory_t
     ]
 
 ###############################################################################
@@ -3319,5 +3351,9 @@ class ZET_DDI:
         self.zetDebugReadEvent = _zetDebugReadEvent_t(self.__dditable.Debug.pfnReadEvent)
         self.zetDebugInterrupt = _zetDebugInterrupt_t(self.__dditable.Debug.pfnInterrupt)
         self.zetDebugResume = _zetDebugResume_t(self.__dditable.Debug.pfnResume)
+        self.zetDebugReadMemory = _zetDebugReadMemory_t(self.__dditable.Debug.pfnReadMemory)
+        self.zetDebugWriteMemory = _zetDebugWriteMemory_t(self.__dditable.Debug.pfnWriteMemory)
+        self.zetDebugReadCompressedMemory = _zetDebugReadCompressedMemory_t(self.__dditable.Debug.pfnReadCompressedMemory)
+        self.zetDebugWriteCompressedMemory = _zetDebugWriteCompressedMemory_t(self.__dditable.Debug.pfnWriteCompressedMemory)
 
         # success!

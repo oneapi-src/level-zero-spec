@@ -1862,6 +1862,48 @@ typedef ze_result_t (__zecall *zet_pfnDebugResume_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetDebugReadMemory 
+typedef ze_result_t (__zecall *zet_pfnDebugReadMemory_t)(
+    zet_debug_session_handle_t,
+    uint64_t,
+    uint64_t,
+    size_t,
+    void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetDebugWriteMemory 
+typedef ze_result_t (__zecall *zet_pfnDebugWriteMemory_t)(
+    zet_debug_session_handle_t,
+    uint64_t,
+    uint64_t,
+    size_t,
+    const void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetDebugReadCompressedMemory 
+typedef ze_result_t (__zecall *zet_pfnDebugReadCompressedMemory_t)(
+    zet_debug_session_handle_t,
+    uint64_t,
+    uint64_t,
+    size_t,
+    uint64_t,
+    void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetDebugWriteCompressedMemory 
+typedef ze_result_t (__zecall *zet_pfnDebugWriteCompressedMemory_t)(
+    zet_debug_session_handle_t,
+    uint64_t,
+    uint64_t,
+    size_t,
+    uint64_t,
+    const void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Debug functions pointers
 typedef struct _zet_debug_dditable_t
 {
@@ -1872,6 +1914,10 @@ typedef struct _zet_debug_dditable_t
     zet_pfnDebugReadEvent_t                                     pfnReadEvent;
     zet_pfnDebugInterrupt_t                                     pfnInterrupt;
     zet_pfnDebugResume_t                                        pfnResume;
+    zet_pfnDebugReadMemory_t                                    pfnReadMemory;
+    zet_pfnDebugWriteMemory_t                                   pfnWriteMemory;
+    zet_pfnDebugReadCompressedMemory_t                          pfnReadCompressedMemory;
+    zet_pfnDebugWriteCompressedMemory_t                         pfnWriteCompressedMemory;
 } zet_debug_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

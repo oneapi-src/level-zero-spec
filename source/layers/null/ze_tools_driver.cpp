@@ -3346,6 +3346,116 @@ namespace driver
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadMemory
+    ze_result_t __zecall
+    zetDebugReadMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnReadMemory = context.zetDdiTable.Debug.pfnReadMemory;
+        if( nullptr != pfnReadMemory )
+        {
+            result = pfnReadMemory( hDebug, threadid, address, size, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteMemory
+    ze_result_t __zecall
+    zetDebugWriteMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnWriteMemory = context.zetDdiTable.Debug.pfnWriteMemory;
+        if( nullptr != pfnWriteMemory )
+        {
+            result = pfnWriteMemory( hDebug, threadid, address, size, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadCompressedMemory
+    ze_result_t __zecall
+    zetDebugReadCompressedMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnReadCompressedMemory = context.zetDdiTable.Debug.pfnReadCompressedMemory;
+        if( nullptr != pfnReadCompressedMemory )
+        {
+            result = pfnReadCompressedMemory( hDebug, threadid, address, size, desc, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteCompressedMemory
+    ze_result_t __zecall
+    zetDebugWriteCompressedMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnWriteCompressedMemory = context.zetDdiTable.Debug.pfnWriteCompressedMemory;
+        if( nullptr != pfnWriteCompressedMemory )
+        {
+            result = pfnWriteCompressedMemory( hDebug, threadid, address, size, desc, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
 } // namespace driver
 
 #if defined(__cplusplus)
@@ -4356,6 +4466,14 @@ zetGetDebugProcAddrTable(
     pDdiTable->pfnInterrupt                              = driver::zetDebugInterrupt;
 
     pDdiTable->pfnResume                                 = driver::zetDebugResume;
+
+    pDdiTable->pfnReadMemory                             = driver::zetDebugReadMemory;
+
+    pDdiTable->pfnWriteMemory                            = driver::zetDebugWriteMemory;
+
+    pDdiTable->pfnReadCompressedMemory                   = driver::zetDebugReadCompressedMemory;
+
+    pDdiTable->pfnWriteCompressedMemory                  = driver::zetDebugWriteCompressedMemory;
 
     return result;
 }

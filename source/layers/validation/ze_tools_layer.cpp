@@ -3513,6 +3513,124 @@ namespace layer
         return pfnResume( hDebug, threadid );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadMemory
+    ze_result_t __zecall
+    zetDebugReadMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        auto pfnReadMemory = context.zetDdiTable.Debug.pfnReadMemory;
+
+        if( nullptr == pfnReadMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnReadMemory( hDebug, threadid, address, size, buffer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteMemory
+    ze_result_t __zecall
+    zetDebugWriteMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        auto pfnWriteMemory = context.zetDdiTable.Debug.pfnWriteMemory;
+
+        if( nullptr == pfnWriteMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnWriteMemory( hDebug, threadid, address, size, buffer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadCompressedMemory
+    ze_result_t __zecall
+    zetDebugReadCompressedMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        auto pfnReadCompressedMemory = context.zetDdiTable.Debug.pfnReadCompressedMemory;
+
+        if( nullptr == pfnReadCompressedMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnReadCompressedMemory( hDebug, threadid, address, size, desc, buffer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteCompressedMemory
+    ze_result_t __zecall
+    zetDebugWriteCompressedMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        auto pfnWriteCompressedMemory = context.zetDdiTable.Debug.pfnWriteCompressedMemory;
+
+        if( nullptr == pfnWriteCompressedMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnWriteCompressedMemory( hDebug, threadid, address, size, desc, buffer );
+    }
+
 } // namespace layer
 
 #if defined(__cplusplus)
@@ -4703,6 +4821,18 @@ zetGetDebugProcAddrTable(
 
     dditable.pfnResume                                   = pDdiTable->pfnResume;
     pDdiTable->pfnResume                                 = layer::zetDebugResume;
+
+    dditable.pfnReadMemory                               = pDdiTable->pfnReadMemory;
+    pDdiTable->pfnReadMemory                             = layer::zetDebugReadMemory;
+
+    dditable.pfnWriteMemory                              = pDdiTable->pfnWriteMemory;
+    pDdiTable->pfnWriteMemory                            = layer::zetDebugWriteMemory;
+
+    dditable.pfnReadCompressedMemory                     = pDdiTable->pfnReadCompressedMemory;
+    pDdiTable->pfnReadCompressedMemory                   = layer::zetDebugReadCompressedMemory;
+
+    dditable.pfnWriteCompressedMemory                    = pDdiTable->pfnWriteCompressedMemory;
+    pDdiTable->pfnWriteCompressedMemory                  = layer::zetDebugWriteCompressedMemory;
 
     return result;
 }
