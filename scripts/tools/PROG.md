@@ -640,4 +640,30 @@ The number of device threads can be queried for each debug session using
 the ::${t}DebugGetNumThreads call.
 
 
+${"###"} Thread Availability
+
+For some devices not all threads may be available at all times.  Some
+threads may even not be available at any time.  This may have various
+reasons, including:
+
+  * the thread may be idle
+
+  * the thread may be assigned to a different process
+
+  * the thread may be part of an unused oversubmission buffer
+
+
+For the purpose of this debug tool API, threads may be in one of three
+states:
+
+  * running
+
+  * stopped
+
+  * unavailable
+
+
+Most API functions require the thread they operate on to be stopped.
+
+
 (to be continued...)
