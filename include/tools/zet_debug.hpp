@@ -94,6 +94,18 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Register file types for Intel Graphics devices.
+        enum class state_intel_graphics_t
+        {
+            DEBUG_STATE_GEN_INVALID = 0,                    ///< An invalid register file
+            DEBUG_STATE_GEN_GRF,                            ///< The general register file
+            DEBUG_STATE_GEN_ACC,                            ///< The accumulator register file
+            DEBUG_STATE_GEN_ADDR,                           ///< The address register file
+            DEBUG_STATE_GEN_FLAG,                           ///< The flags register file
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Event information for ::ZET_DEBUG_EVENT_DETACHED
         struct event_info_detached_t
         {
@@ -141,6 +153,28 @@ namespace zet
             uint64_t flags;                                 ///< A bit-vector of ::zet_debug_event_flags_t
             uint64_t thread;                                ///< The thread reporting the event
             event_info_t info;                              ///< Event type specific information
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief A register file descriptor.
+        struct state_section_t
+        {
+            uint16_t type;                                  ///< The register file type type
+            uint16_t version;                               ///< The register file version
+            uint32_t size;                                  ///< The size of the register file in bytes
+            uint64_t offset;                                ///< The offset into the register state area
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief A register state descriptor.
+        struct state_t
+        {
+            uint32_t size;                                  ///< The size of the register state object in bytes
+            uint8_t headerSize;                             ///< The size of the register state descriptor in bytes
+            uint8_t secSize;                                ///< The size of the register file descriptors in bytes
+            uint16_t numSec;                                ///< The number of register file descriptors
 
         };
 
@@ -284,6 +318,28 @@ namespace zet
             const void* buffer                              ///< [in] a buffer holding the pattern to write
             );
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Read register state.
+        /// @throws result_t
+        void __zecall
+        ReadState(
+            uint64_t threadid,                              ///< [in] the thread context
+            uint64_t offset,                                ///< [in] the offset into the register state area
+            size_t size,                                    ///< [in] the number of bytes to read
+            void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Write register state.
+        /// @throws result_t
+        void __zecall
+        WriteState(
+            uint64_t threadid,                              ///< [in] the thread context
+            uint64_t offset,                                ///< [in] the offset into the register state area
+            size_t size,                                    ///< [in] the number of bytes to write
+            const void* buffer                              ///< [in] a buffer holding the pattern to write
+            );
+
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -334,6 +390,18 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::event_t to std::string
     std::string to_string( const Debug::event_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::state_intel_graphics_t to std::string
+    std::string to_string( const Debug::state_intel_graphics_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::state_section_t to std::string
+    std::string to_string( const Debug::state_section_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::state_t to std::string
+    std::string to_string( const Debug::state_t val );
 
 } // namespace zet
 #endif // defined(__cplusplus)

@@ -418,3 +418,108 @@ returns:
     - $X_RESULT_ERROR_DEVICE_ACCESS:
         - "the memory cannot be accessed from the supplied thread"
         - "the memory cannot be accessed using the supplied descriptor"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Register file types for Intel Graphics devices."
+class: $tDebug
+name: $t_debug_state_intel_graphics_t
+etors:
+    - name: $T_DEBUG_STATE_GEN_INVALID
+      desc: "An invalid register file"
+      value: "0"
+    - name: $T_DEBUG_STATE_GEN_GRF
+      desc: "The general register file"
+    - name: $T_DEBUG_STATE_GEN_ACC
+      desc: "The accumulator register file"
+    - name: $T_DEBUG_STATE_GEN_ADDR
+      desc: "The address register file"
+    - name: $T_DEBUG_STATE_GEN_FLAG
+      desc: "The flags register file"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "A register file descriptor."
+class: $tDebug
+name: $t_debug_state_section_t
+members:
+    - type: "uint16_t"
+      name: type
+      desc: "The register file type type"
+    - type: "uint16_t"
+      name: version
+      desc: "The register file version"
+    - type: "uint32_t"
+      name: size
+      desc: "The size of the register file in bytes"
+    - type: "uint64_t"
+      name: offset
+      desc: "The offset into the register state area"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "A register state descriptor."
+class: $tDebug
+name: $t_debug_state_t
+members:
+    - type: "uint32_t"
+      name: size
+      desc: "The size of the register state object in bytes"
+    - type: "uint8_t"
+      name: headerSize
+      desc: "The size of the register state descriptor in bytes"
+    - type: "uint8_t"
+      name: secSize
+      desc: "The size of the register file descriptors in bytes"
+    - type: "uint16_t"
+      name: numSec
+      desc: "The number of register file descriptors"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Read register state."
+class: $tDebug
+name: ReadState
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: threadid
+      desc: "[in] the thread context"
+    - type: "uint64_t"
+      name: offset
+      desc: "[in] the offset into the register state area"
+    - type: "size_t"
+      name: size
+      desc: "[in] the number of bytes to read"
+    - type: "void*"
+      name: buffer
+      desc: "[in,out] a buffer to hold a copy of the register state"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or thread identifier has been supplied"
+        - "the thread is running or unavailable"
+        - "an invalid offset or size has been supplied"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Write register state."
+class: $tDebug
+name: WriteState
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: threadid
+      desc: "[in] the thread context"
+    - type: "uint64_t"
+      name: offset
+      desc: "[in] the offset into the register state area"
+    - type: "size_t"
+      name: size
+      desc: "[in] the number of bytes to write"
+    - type: "const void*"
+      name: buffer
+      desc: "[in] a buffer holding the pattern to write"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or thread identifier has been supplied"
+        - "the thread is running or unavailable"
+        - "an invalid offset or size has been supplied"

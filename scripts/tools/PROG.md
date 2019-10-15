@@ -898,4 +898,112 @@ context of one thread to another location in global memory.
 ```
 
 
+${"##"} Register State Access
+
+A tool may read and write the register state of a stopped device thread.
+The register state is represented as a randomly accessible range of
+memory.  It starts with a description of the memory layout followed by the
+actual register state content.  The layout is fixed per device thread.
+
+To read and write the register state, use the ::${t}DebugReadState and
+::${t}DebugWriteState function, respectively.  They take a
+::${t}_debug_session_handle_t, a thread handle, an offset into the
+register state area, an access size in bytes, and an input or output
+buffer.
+
+The register state area starts with a ::${t}_debug_state_t descriptor
+containing the following fields:
+
+  * the size of the register state object in bytes
+
+  * the size of the state descriptor in bytes.
+
+    This also defines the offset of the register file descriptor array.
+
+  * the size of each register file descriptor in bytes.
+
+  * the number of register files contained in this state object.
+
+
+The state descriptor is followed by an array of register file descriptors
+starting at offset ::${t}_debug_state_t.headerSize of the register state
+object.  Each describes one register file contained in the state object
+via the following fields:
+
+  * the register file type
+
+    This is a device-specific enumeration.  See below for examples.
+
+  * the register file version
+
+    This defines variations of the same basic register file as it evolves
+    over time.
+
+    Version numbers start at one with zero reserved to denote an invalid
+    or unsupported version of this register file.
+
+    New registers are typically added to the end of a register file
+    allowing tools to skip unknown portions while still providing limited
+    support for that device.
+
+  * The size of the register file in the register state object in bytes.
+
+  * The offset of the register file in the register state object.
+
+
+The following sample code demonstrates iterating over register files:
+
+```c
+    ${t}_debug_session_handle_t session = ...;
+    uint64_t threadid = ...;
+    ${t}_debug_state_t state;
+    ${x}_result_t errcode;
+    uint16_t sec;
+
+    errcode = ${t}DebugReadState(session, threadid, 0ull, sizeof(state),
+                                 &state);
+    if (errcode)
+        return errcode;
+
+    for (sec = 0; sec < state.numSec; ++i) {
+        ${t}_debug_state_section_t section;
+        uint64_t offset;
+
+        offset = state.headerSize + (state.secSize * sec);
+
+        errcode = ${t}DebugReadState(session, threadid, offset,
+                                     sizeof(section), &section);
+        if (errcode)
+            return errcode;
+
+        ...
+    }
+```
+
+
+Intel graphics devices, for example, provides:
+
+  * ::${T}_DEBUG_STATE_GEN_GRF, the general register file.
+
+    In version one, this register file consists of a homogeneous array of
+    256 bit wide registers starting at `r0`.
+
+  * ::${T}_DEBUG_STATE_GEN_ACC, the accumulator register file.
+
+    In version one, this register file consists of a homogeneous array of
+    256 bit wide registers starting at `acc0`.
+
+  * ::${T}_DEBUG_STATE_GEN_ADDR, the address register file.
+
+    In version one, this register file consists of a homogeneous array of
+    256 bit wide registers starting at `a0`.  Each register is split into
+    16 elements, each 16 bit wide.
+
+  * ::${T}_DEBUG_STATE_GEN_FLAG, the flags register file.
+
+    In version one, this register file consists of a homogeneous array of
+    32 bit wide registers starting at `flag0`.  Each register is split
+    into 2 elements, each 16 bit wide.
+
+
 (to be continued...)

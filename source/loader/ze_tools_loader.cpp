@@ -3746,6 +3746,44 @@ namespace loader
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadState
+    ze_result_t __zecall
+    zetDebugReadState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnReadState( hDebug, threadid, offset, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteState
+    ze_result_t __zecall
+    zetDebugWriteState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnWriteState( hDebug, threadid, offset, size, buffer );
+
+        return result;
+    }
+
 } // namespace loader
 
 #if defined(__cplusplus)
@@ -5564,6 +5602,8 @@ zetGetDebugProcAddrTable(
             pDdiTable->pfnWriteMemory                              = loader::zetDebugWriteMemory;
             pDdiTable->pfnReadCompressedMemory                     = loader::zetDebugReadCompressedMemory;
             pDdiTable->pfnWriteCompressedMemory                    = loader::zetDebugWriteCompressedMemory;
+            pDdiTable->pfnReadState                                = loader::zetDebugReadState;
+            pDdiTable->pfnWriteState                               = loader::zetDebugWriteState;
         }
         else
         {

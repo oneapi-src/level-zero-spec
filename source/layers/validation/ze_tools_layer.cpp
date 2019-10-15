@@ -3631,6 +3631,64 @@ namespace layer
         return pfnWriteCompressedMemory( hDebug, threadid, address, size, desc, buffer );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadState
+    ze_result_t __zecall
+    zetDebugReadState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+        )
+    {
+        auto pfnReadState = context.zetDdiTable.Debug.pfnReadState;
+
+        if( nullptr == pfnReadState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnReadState( hDebug, threadid, offset, size, buffer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteState
+    ze_result_t __zecall
+    zetDebugWriteState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        auto pfnWriteState = context.zetDdiTable.Debug.pfnWriteState;
+
+        if( nullptr == pfnWriteState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnWriteState( hDebug, threadid, offset, size, buffer );
+    }
+
 } // namespace layer
 
 #if defined(__cplusplus)
@@ -4833,6 +4891,12 @@ zetGetDebugProcAddrTable(
 
     dditable.pfnWriteCompressedMemory                    = pDdiTable->pfnWriteCompressedMemory;
     pDdiTable->pfnWriteCompressedMemory                  = layer::zetDebugWriteCompressedMemory;
+
+    dditable.pfnReadState                                = pDdiTable->pfnReadState;
+    pDdiTable->pfnReadState                              = layer::zetDebugReadState;
+
+    dditable.pfnWriteState                               = pDdiTable->pfnWriteState;
+    pDdiTable->pfnWriteState                             = layer::zetDebugWriteState;
 
     return result;
 }

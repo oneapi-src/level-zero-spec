@@ -389,6 +389,86 @@ zetDebugWriteCompressedMemory(
     const void* buffer                              ///< [in] a buffer holding the pattern to write
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Register file types for Intel Graphics devices.
+typedef enum _zet_debug_state_intel_graphics_t
+{
+    ZET_DEBUG_STATE_GEN_INVALID = 0,                ///< An invalid register file
+    ZET_DEBUG_STATE_GEN_GRF,                        ///< The general register file
+    ZET_DEBUG_STATE_GEN_ACC,                        ///< The accumulator register file
+    ZET_DEBUG_STATE_GEN_ADDR,                       ///< The address register file
+    ZET_DEBUG_STATE_GEN_FLAG,                       ///< The flags register file
+
+} zet_debug_state_intel_graphics_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief A register file descriptor.
+typedef struct _zet_debug_state_section_t
+{
+    uint16_t type;                                  ///< The register file type type
+    uint16_t version;                               ///< The register file version
+    uint32_t size;                                  ///< The size of the register file in bytes
+    uint64_t offset;                                ///< The offset into the register state area
+
+} zet_debug_state_section_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief A register state descriptor.
+typedef struct _zet_debug_state_t
+{
+    uint32_t size;                                  ///< The size of the register state object in bytes
+    uint8_t headerSize;                             ///< The size of the register state descriptor in bytes
+    uint8_t secSize;                                ///< The size of the register file descriptors in bytes
+    uint16_t numSec;                                ///< The number of register file descriptors
+
+} zet_debug_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Read register state.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + nullptr == buffer
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is running or unavailable
+///         + an invalid offset or size has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugReadState(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid,                              ///< [in] the thread context
+    uint64_t offset,                                ///< [in] the offset into the register state area
+    size_t size,                                    ///< [in] the number of bytes to read
+    void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Write register state.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + nullptr == buffer
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is running or unavailable
+///         + an invalid offset or size has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugWriteState(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid,                              ///< [in] the thread context
+    uint64_t offset,                                ///< [in] the offset into the register state area
+    size_t size,                                    ///< [in] the number of bytes to write
+    const void* buffer                              ///< [in] a buffer holding the pattern to write
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

@@ -390,6 +390,14 @@ typedef struct _zet_debug_event_info_exception_t zet_debug_event_info_exception_
 /// @brief Forward-declare zet_debug_event_t
 typedef struct _zet_debug_event_t zet_debug_event_t;
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_state_section_t
+typedef struct _zet_debug_state_section_t zet_debug_state_section_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_state_t
+typedef struct _zet_debug_state_t zet_debug_state_t;
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

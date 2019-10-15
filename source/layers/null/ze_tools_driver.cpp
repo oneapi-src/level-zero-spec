@@ -3456,6 +3456,60 @@ namespace driver
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadState
+    ze_result_t __zecall
+    zetDebugReadState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnReadState = context.zetDdiTable.Debug.pfnReadState;
+        if( nullptr != pfnReadState )
+        {
+            result = pfnReadState( hDebug, threadid, offset, size, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteState
+    ze_result_t __zecall
+    zetDebugWriteState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnWriteState = context.zetDdiTable.Debug.pfnWriteState;
+        if( nullptr != pfnWriteState )
+        {
+            result = pfnWriteState( hDebug, threadid, offset, size, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
 } // namespace driver
 
 #if defined(__cplusplus)
@@ -4474,6 +4528,10 @@ zetGetDebugProcAddrTable(
     pDdiTable->pfnReadCompressedMemory                   = driver::zetDebugReadCompressedMemory;
 
     pDdiTable->pfnWriteCompressedMemory                  = driver::zetDebugWriteCompressedMemory;
+
+    pDdiTable->pfnReadState                              = driver::zetDebugReadState;
+
+    pDdiTable->pfnWriteState                             = driver::zetDebugWriteState;
 
     return result;
 }

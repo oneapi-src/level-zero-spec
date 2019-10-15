@@ -1692,6 +1692,40 @@ class zet_debug_event_t(Structure):
     ]
 
 ###############################################################################
+## @brief Register file types for Intel Graphics devices.
+class zet_debug_state_intel_graphics_v(IntEnum):
+    DEBUG_STATE_GEN_INVALID = 0                     ## An invalid register file
+    DEBUG_STATE_GEN_GRF = auto()                    ## The general register file
+    DEBUG_STATE_GEN_ACC = auto()                    ## The accumulator register file
+    DEBUG_STATE_GEN_ADDR = auto()                   ## The address register file
+    DEBUG_STATE_GEN_FLAG = auto()                   ## The flags register file
+
+class zet_debug_state_intel_graphics_t(c_int):
+    def __str__(self):
+        return str(zet_debug_state_intel_graphics_v(value))
+
+
+###############################################################################
+## @brief A register file descriptor.
+class zet_debug_state_section_t(Structure):
+    _fields_ = [
+        ("type", c_ushort),                                             ## The register file type type
+        ("version", c_ushort),                                          ## The register file version
+        ("size", c_ulong),                                              ## The size of the register file in bytes
+        ("offset", c_ulonglong)                                         ## The offset into the register state area
+    ]
+
+###############################################################################
+## @brief A register state descriptor.
+class zet_debug_state_t(Structure):
+    _fields_ = [
+        ("size", c_ulong),                                              ## The size of the register state object in bytes
+        ("headerSize", c_ubyte),                                        ## The size of the register state descriptor in bytes
+        ("secSize", c_ubyte),                                           ## The size of the register file descriptors in bytes
+        ("numSec", c_ushort)                                            ## The number of register file descriptors
+    ]
+
+###############################################################################
 """
 class cl_context(c_void_p):
     pass
@@ -2920,6 +2954,20 @@ if __use_win_types:
 else:
     _zetDebugWriteCompressedMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_ulonglong, c_void_p )
 
+###############################################################################
+## @brief Function-pointer for zetDebugReadState
+if __use_win_types:
+    _zetDebugReadState_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+else:
+    _zetDebugReadState_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zetDebugWriteState
+if __use_win_types:
+    _zetDebugWriteState_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+else:
+    _zetDebugWriteState_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+
 
 ###############################################################################
 ## @brief Table of Debug functions pointers
@@ -2935,7 +2983,9 @@ class _zet_debug_dditable_t(Structure):
         ("pfnReadMemory", c_void_p),                                    ## _zetDebugReadMemory_t
         ("pfnWriteMemory", c_void_p),                                   ## _zetDebugWriteMemory_t
         ("pfnReadCompressedMemory", c_void_p),                          ## _zetDebugReadCompressedMemory_t
-        ("pfnWriteCompressedMemory", c_void_p)                          ## _zetDebugWriteCompressedMemory_t
+        ("pfnWriteCompressedMemory", c_void_p),                         ## _zetDebugWriteCompressedMemory_t
+        ("pfnReadState", c_void_p),                                     ## _zetDebugReadState_t
+        ("pfnWriteState", c_void_p)                                     ## _zetDebugWriteState_t
     ]
 
 ###############################################################################
@@ -3355,5 +3405,7 @@ class ZET_DDI:
         self.zetDebugWriteMemory = _zetDebugWriteMemory_t(self.__dditable.Debug.pfnWriteMemory)
         self.zetDebugReadCompressedMemory = _zetDebugReadCompressedMemory_t(self.__dditable.Debug.pfnReadCompressedMemory)
         self.zetDebugWriteCompressedMemory = _zetDebugWriteCompressedMemory_t(self.__dditable.Debug.pfnWriteCompressedMemory)
+        self.zetDebugReadState = _zetDebugReadState_t(self.__dditable.Debug.pfnReadState)
+        self.zetDebugWriteState = _zetDebugWriteState_t(self.__dditable.Debug.pfnWriteState)
 
         # success!

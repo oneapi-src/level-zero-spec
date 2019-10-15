@@ -337,6 +337,66 @@ zetDebugWriteCompressedMemory(
     return pfnWriteCompressedMemory( hDebug, threadid, address, size, desc, buffer );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Read register state.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + nullptr == buffer
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is running or unavailable
+///         + an invalid offset or size has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugReadState(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid,                              ///< [in] the thread context
+    uint64_t offset,                                ///< [in] the offset into the register state area
+    size_t size,                                    ///< [in] the number of bytes to read
+    void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+    )
+{
+    auto pfnReadState = zet_lib::context.ddiTable.Debug.pfnReadState;
+    if( nullptr == pfnReadState )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnReadState( hDebug, threadid, offset, size, buffer );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Write register state.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDebug
+///         + nullptr == buffer
+///         + an invalid debug handle or thread identifier has been supplied
+///         + the thread is running or unavailable
+///         + an invalid offset or size has been supplied
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetDebugWriteState(
+    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t threadid,                              ///< [in] the thread context
+    uint64_t offset,                                ///< [in] the offset into the register state area
+    size_t size,                                    ///< [in] the number of bytes to write
+    const void* buffer                              ///< [in] a buffer holding the pattern to write
+    )
+{
+    auto pfnWriteState = zet_lib::context.ddiTable.Debug.pfnWriteState;
+    if( nullptr == pfnWriteState )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnWriteState( hDebug, threadid, offset, size, buffer );
+}
+
 } // extern "C"
 
 namespace zet
@@ -595,6 +655,52 @@ namespace zet
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::WriteCompressedMemory" );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Read register state.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Debug::ReadState(
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+        )
+    {
+        auto result = static_cast<result_t>( ::zetDebugReadState(
+            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            threadid,
+            offset,
+            size,
+            buffer ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::ReadState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Write register state.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Debug::WriteState(
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        auto result = static_cast<result_t>( ::zetDebugWriteState(
+            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            threadid,
+            offset,
+            size,
+            buffer ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::WriteState" );
+    }
+
 } // namespace zet
 
 namespace zet
@@ -728,6 +834,42 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::state_intel_graphics_t to std::string
+    std::string to_string( const Debug::state_intel_graphics_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Debug::state_intel_graphics_t::DEBUG_STATE_GEN_INVALID:
+            str = "Debug::state_intel_graphics_t::DEBUG_STATE_GEN_INVALID";
+            break;
+
+        case Debug::state_intel_graphics_t::DEBUG_STATE_GEN_GRF:
+            str = "Debug::state_intel_graphics_t::DEBUG_STATE_GEN_GRF";
+            break;
+
+        case Debug::state_intel_graphics_t::DEBUG_STATE_GEN_ACC:
+            str = "Debug::state_intel_graphics_t::DEBUG_STATE_GEN_ACC";
+            break;
+
+        case Debug::state_intel_graphics_t::DEBUG_STATE_GEN_ADDR:
+            str = "Debug::state_intel_graphics_t::DEBUG_STATE_GEN_ADDR";
+            break;
+
+        case Debug::state_intel_graphics_t::DEBUG_STATE_GEN_FLAG:
+            str = "Debug::state_intel_graphics_t::DEBUG_STATE_GEN_FLAG";
+            break;
+
+        default:
+            str = "Debug::state_intel_graphics_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::event_info_detached_t to std::string
     std::string to_string( const Debug::event_info_detached_t val )
     {
@@ -831,6 +973,56 @@ namespace zet
         
         str += "Debug::event_t::info : ";
         str += to_string(val.info);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::state_section_t to std::string
+    std::string to_string( const Debug::state_section_t val )
+    {
+        std::string str;
+        
+        str += "Debug::state_section_t::type : ";
+        str += std::to_string(val.type);
+        str += "\n";
+        
+        str += "Debug::state_section_t::version : ";
+        str += std::to_string(val.version);
+        str += "\n";
+        
+        str += "Debug::state_section_t::size : ";
+        str += std::to_string(val.size);
+        str += "\n";
+        
+        str += "Debug::state_section_t::offset : ";
+        str += std::to_string(val.offset);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::state_t to std::string
+    std::string to_string( const Debug::state_t val )
+    {
+        std::string str;
+        
+        str += "Debug::state_t::size : ";
+        str += std::to_string(val.size);
+        str += "\n";
+        
+        str += "Debug::state_t::headerSize : ";
+        str += std::to_string(val.headerSize);
+        str += "\n";
+        
+        str += "Debug::state_t::secSize : ";
+        str += std::to_string(val.secSize);
+        str += "\n";
+        
+        str += "Debug::state_t::numSec : ";
+        str += std::to_string(val.numSec);
         str += "\n";
 
         return str;
