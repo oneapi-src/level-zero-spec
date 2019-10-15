@@ -31,6 +31,7 @@ extern "C" {
 ///         + an invalid process identifier has been supplied
 ///         + an invalid flag has been supplied
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + attaching to this device is not supported
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + caller is not authorized to debug that process
 ///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS

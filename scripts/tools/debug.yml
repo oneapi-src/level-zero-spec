@@ -46,6 +46,8 @@ returns:
         - "an invalid device handle has been supplied"
         - "an invalid process identifier has been supplied"
         - "an invalid flag has been supplied"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "attaching to this device is not supported"
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "caller is not authorized to debug that process"
     - $X_RESULT_ERROR_DEVICE_ACCESS:

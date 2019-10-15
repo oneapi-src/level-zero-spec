@@ -598,4 +598,27 @@ The following sample code demonstrates attaching and detaching:
         return errcode;
 ```
 
+
+${"###"} Devices and Sub-Devices
+
+A tool may attach to any device and will implicitly be attached to all
+sub-devices below that device.
+
+Implementations that use separate code segments per sub-device may further
+allow attaching to sub-devices individually.  In that case, a tool may
+choose to either attach to the device or to one or more sub-devices.
+
+When attached to a sub-device, writes to the code segment will not be
+broadcast to sibling sub-devices, even though they may share the same
+address space range.  This allows breakpoints to be contained within one
+sub-device.
+
+Once a tool is attached to a sub-device, any attempt to attach to an
+ancestor device results in ::${X}_RESULT_ERROR_DEVICE_ACCESS.
+
+Implementations that share code segments across sub-devices will only
+allow attaching to devices.  Any attempt to attach to a sub-device results
+in ::${X}_RESULT_ERROR_UNSUPPORTED.
+
+
 (to be continued...)
