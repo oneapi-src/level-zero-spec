@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include "ze_api.hpp"
+#include "zex_api.hpp"
 #include "zet_api.hpp"
 
 //////////////////////////////////////////////////////////////////////////
@@ -37,6 +38,24 @@ inline bool init_ze( void )
     catch( const ze::exception_t& e )
     {
         std::cout << "Driver not initialized!\n";
+        std::cout << e.what();
+        return false;
+    }
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+inline bool init_zex( void )
+{
+    try
+    {
+        // Initialize the driver
+        zex::Init( ze::init_flag_t::NONE );
+        std::cout << "Experimental Driver initialized.\n";
+    }
+    catch( const ze::exception_t& e )
+    {
+        std::cout << "Experimental Driver not initialized!\n";
         std::cout << e.what();
         return false;
     }

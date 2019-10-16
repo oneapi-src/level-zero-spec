@@ -82,7 +82,7 @@ int main( int argc, char *argv[] )
         // signal the event from the device and wait for completion
         pCommandList->AppendSignalEvent( pEvent.get() );
         pEvent->HostSynchronize( UINT32_MAX );
-        std::cout << "Congratulations, the device completed ezecution!\n";
+        std::cout << "Congratulations, the device completed execution!\n";
     }
     catch( const ze::exception_t& e )
     {
