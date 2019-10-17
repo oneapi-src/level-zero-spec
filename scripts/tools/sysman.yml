@@ -549,25 +549,7 @@ members:
       desc: "[out] Software can change the power limits."
     - type: uint32_t
       name: "maxLimit"
-      desc: "[out] The maximum power limit in milliwatts that can be requested."
-    - type: uint32_t
-      name: ICCMax
-      desc: "[in,out] Maximum desired current."   
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set the Oc Icc Max."
-class: $tSysmanPower
-name: SetOcIccMax
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_pwr_handle_t
-      name: hPower
-      desc: "[in] Handle for the component."
-    - type: uint32_t*
-      name: OcIccMax
-      desc: "[in] Pointer to the allocated uint32."
+      desc: "[out] The maximum power limit in milliwatts that can be requested."  
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Energy counter snapshot"

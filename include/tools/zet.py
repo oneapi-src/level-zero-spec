@@ -608,8 +608,7 @@ class zet_power_properties_t(Structure):
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Software can change the power limits.
-        ("maxLimit", c_ulong),                                          ## [out] The maximum power limit in milliwatts that can be requested.
-        ("ICCMax", c_ulong)                                             ## [in,out] Maximum desired current.
+        ("maxLimit", c_ulong)                                           ## [out] The maximum power limit in milliwatts that can be requested.
     ]
 
 ###############################################################################
@@ -2005,13 +2004,6 @@ class _zet_sysman_dditable_t(Structure):
     ]
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanPowerSetOcIccMax
-if __use_win_types:
-    _zetSysmanPowerSetOcIccMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(c_ulong) )
-else:
-    _zetSysmanPowerSetOcIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(c_ulong) )
-
-###############################################################################
 ## @brief Function-pointer for zetSysmanPowerGetProperties
 if __use_win_types:
     _zetSysmanPowerGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_power_properties_t) )
@@ -2058,7 +2050,6 @@ else:
 ## @brief Table of SysmanPower functions pointers
 class _zet_sysman_power_dditable_t(Structure):
     _fields_ = [
-        ("pfnSetOcIccMax", c_void_p),                                   ## _zetSysmanPowerSetOcIccMax_t
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanPowerGetProperties_t
         ("pfnGetEnergyCounter", c_void_p),                              ## _zetSysmanPowerGetEnergyCounter_t
         ("pfnGetEnergyThreshold", c_void_p),                            ## _zetSysmanPowerGetEnergyThreshold_t
@@ -2763,7 +2754,6 @@ class ZET_DDI:
         self.__dditable.SysmanPower = _SysmanPower
 
         # attach function interface to function address
-        self.zetSysmanPowerSetOcIccMax = _zetSysmanPowerSetOcIccMax_t(self.__dditable.SysmanPower.pfnSetOcIccMax)
         self.zetSysmanPowerGetProperties = _zetSysmanPowerGetProperties_t(self.__dditable.SysmanPower.pfnGetProperties)
         self.zetSysmanPowerGetEnergyCounter = _zetSysmanPowerGetEnergyCounter_t(self.__dditable.SysmanPower.pfnGetEnergyCounter)
         self.zetSysmanPowerGetEnergyThreshold = _zetSysmanPowerGetEnergyThreshold_t(self.__dditable.SysmanPower.pfnGetEnergyThreshold)

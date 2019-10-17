@@ -606,30 +606,8 @@ typedef struct _zet_power_properties_t
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     ze_bool_t canControl;                           ///< [out] Software can change the power limits.
     uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
-    uint32_t ICCMax;                                ///< [in,out] Maximum desired current.
 
 } zet_power_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Oc Icc Max.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == OcIccMax
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanPowerSetOcIccMax(
-    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
-    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Energy counter snapshot

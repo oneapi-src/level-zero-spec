@@ -1098,32 +1098,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPowerSetOcIccMax
-    ze_result_t __zecall
-    zetSysmanPowerSetOcIccMax(
-        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
-        )
-    {
-        auto pfnSetOcIccMax = context.zetDdiTable.SysmanPower.pfnSetOcIccMax;
-
-        if( nullptr == pfnSetOcIccMax )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPower )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == OcIccMax )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetOcIccMax( hPower, OcIccMax );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGet
     ze_result_t __zecall
     zetSysmanPowerGet(
@@ -3803,9 +3777,6 @@ zetGetSysmanPowerProcAddrTable(
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
-
-    dditable.pfnSetOcIccMax                              = pDdiTable->pfnSetOcIccMax;
-    pDdiTable->pfnSetOcIccMax                            = layer::zetSysmanPowerSetOcIccMax;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = layer::zetSysmanPowerGetProperties;

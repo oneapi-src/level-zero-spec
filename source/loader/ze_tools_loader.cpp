@@ -1185,31 +1185,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPowerSetOcIccMax
-    ze_result_t __zecall
-    zetSysmanPowerSetOcIccMax(
-        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->dditable;
-        auto pfnSetOcIccMax = dditable->zet.SysmanPower.pfnSetOcIccMax;
-        if( nullptr == pfnSetOcIccMax )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hPower = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->handle;
-
-        // forward to device-driver
-        result = pfnSetOcIccMax( hPower, OcIccMax );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGet
     ze_result_t __zecall
     zetSysmanPowerGet(
@@ -4305,7 +4280,6 @@ zetGetSysmanPowerProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnSetOcIccMax                              = loader::zetSysmanPowerSetOcIccMax;
             pDdiTable->pfnGetProperties                            = loader::zetSysmanPowerGetProperties;
             pDdiTable->pfnGetEnergyCounter                         = loader::zetSysmanPowerGetEnergyCounter;
             pDdiTable->pfnGetEnergyThreshold                       = loader::zetSysmanPowerGetEnergyThreshold;

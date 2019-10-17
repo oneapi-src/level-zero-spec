@@ -1037,30 +1037,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPowerSetOcIccMax
-    ze_result_t __zecall
-    zetSysmanPowerSetOcIccMax(
-        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetOcIccMax = context.zetDdiTable.SysmanPower.pfnSetOcIccMax;
-        if( nullptr != pfnSetOcIccMax )
-        {
-            result = pfnSetOcIccMax( hPower, OcIccMax );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGet
     ze_result_t __zecall
     zetSysmanPowerGet(
@@ -3561,8 +3537,6 @@ zetGetSysmanPowerProcAddrTable(
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
-
-    pDdiTable->pfnSetOcIccMax                            = driver::zetSysmanPowerSetOcIccMax;
 
     pDdiTable->pfnGetProperties                          = driver::zetSysmanPowerGetProperties;
 

@@ -880,7 +880,6 @@ namespace zet
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Software can change the power limits.
             uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
-            uint32_t ICCMax;                                ///< [in,out] Maximum desired current.
 
         };
 
@@ -992,18 +991,6 @@ namespace zet
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
         auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the Oc Icc Max.
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetOcIccMax(
-            uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
-            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get properties related to a power domain

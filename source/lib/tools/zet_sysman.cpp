@@ -496,34 +496,6 @@ zetSysmanPciGetStats(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Oc Icc Max.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == OcIccMax
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanPowerSetOcIccMax(
-    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
-    )
-{
-    auto pfnSetOcIccMax = zet_lib::context.ddiTable.SysmanPower.pfnSetOcIccMax;
-    if( nullptr == pfnSetOcIccMax )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnSetOcIccMax( hPower, OcIccMax );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle of power domains
 /// 
 /// @details
@@ -3208,27 +3180,6 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the Oc Icc Max.
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __zecall
-    SysmanPower::SetOcIccMax(
-        uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
-        )
-    {
-        auto result = static_cast<result_t>( ::zetSysmanPowerSetOcIccMax(
-            reinterpret_cast<zet_sysman_pwr_handle_t>( getHandle() ),
-            OcIccMax ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::SetOcIccMax" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get handle of power domains
     /// 
     /// @details
@@ -5713,10 +5664,6 @@ namespace zet
         
         str += "SysmanPower::power_properties_t::maxLimit : ";
         str += std::to_string(val.maxLimit);
-        str += "\n";
-        
-        str += "SysmanPower::power_properties_t::ICCMax : ";
-        str += std::to_string(val.ICCMax);
         str += "\n";
 
         return str;
