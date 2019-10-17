@@ -1620,29 +1620,6 @@ typedef void (__zecall *zet_pfnSysmanPowerSetOcIccMaxCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanPowerSetOcTjMax 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_power_set_oc_tj_max_params_t
-{
-    zet_sysman_pwr_handle_t* phPower;
-    uint32_t** pOcTjMax;
-} zet_sysman_power_set_oc_tj_max_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanPowerSetOcTjMax 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanPowerSetOcTjMaxCb_t)(
-    zet_sysman_power_set_oc_tj_max_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanPowerGetProperties 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1789,7 +1766,6 @@ typedef void (__zecall *zet_pfnSysmanPowerSetLimitsCb_t)(
 typedef struct _zet_sysman_power_callbacks_t
 {
     zet_pfnSysmanPowerSetOcIccMaxCb_t                               pfnSetOcIccMaxCb;
-    zet_pfnSysmanPowerSetOcTjMaxCb_t                                pfnSetOcTjMaxCb;
     zet_pfnSysmanPowerGetPropertiesCb_t                             pfnGetPropertiesCb;
     zet_pfnSysmanPowerGetEnergyCounterCb_t                          pfnGetEnergyCounterCb;
     zet_pfnSysmanPowerGetEnergyThresholdCb_t                        pfnGetEnergyThresholdCb;

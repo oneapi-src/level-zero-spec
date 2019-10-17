@@ -524,34 +524,6 @@ zetSysmanPowerSetOcIccMax(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Oc Tj Max.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == OcTjMax
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanPowerSetOcTjMax(
-    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    uint32_t* OcTjMax                               ///< [in] Pointer to the allocated uint32.
-    )
-{
-    auto pfnSetOcTjMax = zet_lib::context.ddiTable.SysmanPower.pfnSetOcTjMax;
-    if( nullptr == pfnSetOcTjMax )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnSetOcTjMax( hPower, OcTjMax );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle of power domains
 /// 
 /// @details
@@ -3257,27 +3229,6 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the Oc Tj Max.
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __zecall
-    SysmanPower::SetOcTjMax(
-        uint32_t* OcTjMax                               ///< [in] Pointer to the allocated uint32.
-        )
-    {
-        auto result = static_cast<result_t>( ::zetSysmanPowerSetOcTjMax(
-            reinterpret_cast<zet_sysman_pwr_handle_t>( getHandle() ),
-            OcTjMax ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::SetOcTjMax" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get handle of power domains
     /// 
     /// @details
@@ -5446,10 +5397,6 @@ namespace zet
         
         str += "Sysman::properties_t::deviceType : ";
         str += to_string(val.deviceType);
-        str += "\n";
-        
-        str += "Sysman::properties_t::TjMax : ";
-        str += std::to_string(val.TjMax);
         str += "\n";
         
         str += "Sysman::properties_t::serialNumber : ";

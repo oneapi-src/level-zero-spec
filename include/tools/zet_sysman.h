@@ -77,7 +77,6 @@ typedef struct _zet_sysman_properties_t
     ze_device_properties_t core;                    ///< [out] Core device properties
     uint32_t numSubdevices;                         ///< [out] Number of sub-devices
     zet_device_type_t deviceType;                   ///< [out] Device type
-    uint32_t TjMax;                                 ///< [out] Maximum temperature in °C.
     int8_t serialNumber[ZET_STRING_PROPERTY_SIZE];  ///< [out] Manufacturing serial number (NULL terminated string value)
     int8_t boardNumber[ZET_STRING_PROPERTY_SIZE];   ///< [out] Manufacturing board number (NULL terminated string value)
     int8_t brandName[ZET_STRING_PROPERTY_SIZE];     ///< [out] Brand name of the device (NULL terminated string value)
@@ -630,27 +629,6 @@ ze_result_t __zecall
 zetSysmanPowerSetOcIccMax(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Oc Tj Max.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == OcTjMax
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanPowerSetOcTjMax(
-    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    uint32_t* OcTjMax                               ///< [in] Pointer to the allocated uint32.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

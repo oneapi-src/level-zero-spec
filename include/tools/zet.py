@@ -433,7 +433,6 @@ class zet_sysman_properties_t(Structure):
         ("core", ze_device_properties_t),                               ## [out] Core device properties
         ("numSubdevices", c_ulong),                                     ## [out] Number of sub-devices
         ("deviceType", zet_device_type_t),                              ## [out] Device type
-        ("TjMax", c_ulong),                                             ## [out] Maximum temperature in °C.
         ("serialNumber", c_int8_t * ZET_STRING_PROPERTY_SIZE),          ## [out] Manufacturing serial number (NULL terminated string value)
         ("boardNumber", c_int8_t * ZET_STRING_PROPERTY_SIZE),           ## [out] Manufacturing board number (NULL terminated string value)
         ("brandName", c_int8_t * ZET_STRING_PROPERTY_SIZE),             ## [out] Brand name of the device (NULL terminated string value)
@@ -2013,13 +2012,6 @@ else:
     _zetSysmanPowerSetOcIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanPowerSetOcTjMax
-if __use_win_types:
-    _zetSysmanPowerSetOcTjMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(c_ulong) )
-else:
-    _zetSysmanPowerSetOcTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(c_ulong) )
-
-###############################################################################
 ## @brief Function-pointer for zetSysmanPowerGetProperties
 if __use_win_types:
     _zetSysmanPowerGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_power_properties_t) )
@@ -2067,7 +2059,6 @@ else:
 class _zet_sysman_power_dditable_t(Structure):
     _fields_ = [
         ("pfnSetOcIccMax", c_void_p),                                   ## _zetSysmanPowerSetOcIccMax_t
-        ("pfnSetOcTjMax", c_void_p),                                    ## _zetSysmanPowerSetOcTjMax_t
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanPowerGetProperties_t
         ("pfnGetEnergyCounter", c_void_p),                              ## _zetSysmanPowerGetEnergyCounter_t
         ("pfnGetEnergyThreshold", c_void_p),                            ## _zetSysmanPowerGetEnergyThreshold_t
@@ -2773,7 +2764,6 @@ class ZET_DDI:
 
         # attach function interface to function address
         self.zetSysmanPowerSetOcIccMax = _zetSysmanPowerSetOcIccMax_t(self.__dditable.SysmanPower.pfnSetOcIccMax)
-        self.zetSysmanPowerSetOcTjMax = _zetSysmanPowerSetOcTjMax_t(self.__dditable.SysmanPower.pfnSetOcTjMax)
         self.zetSysmanPowerGetProperties = _zetSysmanPowerGetProperties_t(self.__dditable.SysmanPower.pfnGetProperties)
         self.zetSysmanPowerGetEnergyCounter = _zetSysmanPowerGetEnergyCounter_t(self.__dditable.SysmanPower.pfnGetEnergyCounter)
         self.zetSysmanPowerGetEnergyThreshold = _zetSysmanPowerGetEnergyThreshold_t(self.__dditable.SysmanPower.pfnGetEnergyThreshold)

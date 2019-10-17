@@ -136,7 +136,6 @@ namespace zet
             ze::Device::properties_t core;                  ///< [out] Core device properties
             uint32_t numSubdevices;                         ///< [out] Number of sub-devices
             device_type_t deviceType;                       ///< [out] Device type
-            uint32_t TjMax;                                 ///< [out] Maximum temperature in °C.
             int8_t serialNumber[ZET_STRING_PROPERTY_SIZE];  ///< [out] Manufacturing serial number (NULL terminated string value)
             int8_t boardNumber[ZET_STRING_PROPERTY_SIZE];   ///< [out] Manufacturing board number (NULL terminated string value)
             int8_t brandName[ZET_STRING_PROPERTY_SIZE];     ///< [out] Brand name of the device (NULL terminated string value)
@@ -1004,18 +1003,6 @@ namespace zet
         void __zecall
         SetOcIccMax(
             uint32_t* OcIccMax                              ///< [in] Pointer to the allocated uint32.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the Oc Tj Max.
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetOcTjMax(
-            uint32_t* OcTjMax                               ///< [in] Pointer to the allocated uint32.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

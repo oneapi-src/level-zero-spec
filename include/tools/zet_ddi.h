@@ -916,13 +916,6 @@ typedef ze_result_t (__zecall *zet_pfnSysmanPowerSetOcIccMax_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanPowerSetOcTjMax 
-typedef ze_result_t (__zecall *zet_pfnSysmanPowerSetOcTjMax_t)(
-    zet_sysman_pwr_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanPowerGetProperties 
 typedef ze_result_t (__zecall *zet_pfnSysmanPowerGetProperties_t)(
     zet_sysman_pwr_handle_t,
@@ -973,7 +966,6 @@ typedef ze_result_t (__zecall *zet_pfnSysmanPowerSetLimits_t)(
 typedef struct _zet_sysman_power_dditable_t
 {
     zet_pfnSysmanPowerSetOcIccMax_t                             pfnSetOcIccMax;
-    zet_pfnSysmanPowerSetOcTjMax_t                              pfnSetOcTjMax;
     zet_pfnSysmanPowerGetProperties_t                           pfnGetProperties;
     zet_pfnSysmanPowerGetEnergyCounter_t                        pfnGetEnergyCounter;
     zet_pfnSysmanPowerGetEnergyThreshold_t                      pfnGetEnergyThreshold;
