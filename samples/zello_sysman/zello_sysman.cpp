@@ -17,16 +17,16 @@
 
 void PrintRasDetails(zet_ras_details_t* pDetails)
 {
-    fprintf(stdout, "        Number new resets:                %llu\n", pDetails->numResets);
-    fprintf(stdout, "        Number new programming errors:    %llu\n", pDetails->numProgrammingErrors);
-    fprintf(stdout, "        Number new driver errors:         %llu\n", pDetails->numDriverErrors);
-    fprintf(stdout, "        Number new compute errors:        %llu\n", pDetails->numComputeErrors);
-    fprintf(stdout, "        Number new non-compute errors:    %llu\n", pDetails->numNonComputeErrors);
-    fprintf(stdout, "        Number new cache errors:          %llu\n", pDetails->numCacheErrors);
-    fprintf(stdout, "        Number new memory errors:         %llu\n", pDetails->numMemoryErrors);
-    fprintf(stdout, "        Number new PCI errors:            %llu\n", pDetails->numPciErrors);
-    fprintf(stdout, "        Number new switch errors:         %llu\n", pDetails->numSwitchErrors);
-    fprintf(stdout, "        Number new display errors:        %llu\n", pDetails->numDisplayErrors);
+    fprintf(stdout, "        Number new resets:                %llu\n", (long long unsigned int)pDetails->numResets);
+    fprintf(stdout, "        Number new programming errors:    %llu\n", (long long unsigned int)pDetails->numProgrammingErrors);
+    fprintf(stdout, "        Number new driver errors:         %llu\n", (long long unsigned int)pDetails->numDriverErrors);
+    fprintf(stdout, "        Number new compute errors:        %llu\n", (long long unsigned int)pDetails->numComputeErrors);
+    fprintf(stdout, "        Number new non-compute errors:    %llu\n", (long long unsigned int)pDetails->numNonComputeErrors);
+    fprintf(stdout, "        Number new cache errors:          %llu\n", (long long unsigned int)pDetails->numCacheErrors);
+    fprintf(stdout, "        Number new memory errors:         %llu\n", (long long unsigned int)pDetails->numMemoryErrors);
+    fprintf(stdout, "        Number new PCI errors:            %llu\n", (long long unsigned int)pDetails->numPciErrors);
+    fprintf(stdout, "        Number new switch errors:         %llu\n", (long long unsigned int)pDetails->numSwitchErrors);
+    fprintf(stdout, "        Number new display errors:        %llu\n", (long long unsigned int)pDetails->numDisplayErrors);
 }
 
 void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
@@ -70,7 +70,7 @@ void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
                         if (zetSysmanRasGetErrors(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
                             == ZE_RESULT_SUCCESS)
                         {
-                            fprintf(stdout, "    Number new errors: %llu\n", newErrors);
+                            fprintf(stdout, "    Number new errors: %llu\n", (long long unsigned int)newErrors);
                             if (newErrors)
                             {
                                 PrintRasDetails(&errorDetails);
