@@ -211,7 +211,7 @@ void ShowOcCapabilities(zet_sysman_handle_t hSysmanDevice)
                 if (zetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == ZE_RESULT_SUCCESS)
                 {
                     // Only control GPU frequency domains
-                    if (props.type == ZET_FREQ_DOMAIN_GPU)
+                    if (props.type == ZET_DOMAIN_GPU)
                     {
                         zet_oc_capabilities_t oc_caps;
                         if (zetSysmanFrequencyGetOcCapabilities(pFreqHandles[index], &oc_caps) == ZE_RESULT_SUCCESS)
@@ -352,7 +352,7 @@ void FixGpuFrequency(zet_sysman_handle_t hSysmanDevice, double FreqMHz)
                 if (zetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == ZE_RESULT_SUCCESS)
                 {
                     // Only control GPU frequency domains
-                    if (props.type == ZET_FREQ_DOMAIN_GPU)
+                    if (props.type == ZET_DOMAIN_GPU)
                     {
                         if (props.canControl)
                         {
@@ -390,7 +390,7 @@ void FixSubdeviceGpuFrequency(zet_sysman_handle_t hSysmanDevice, uint32_t subdev
                 if (zetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == ZE_RESULT_SUCCESS)
                 {
                     // Only control GPU frequency domains
-                    if (props.type == ZET_FREQ_DOMAIN_GPU)
+                    if (props.type == ZET_DOMAIN_GPU)
                     {
                         // Only control the GPU frequency domain for a specific sub-device
                         if (props.onSubdevice && (props.subdeviceId == subdeviceId))
