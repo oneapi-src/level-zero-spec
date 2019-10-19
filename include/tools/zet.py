@@ -416,6 +416,48 @@ class zet_sysman_version_t(c_int):
 ZET_STRING_PROPERTY_SIZE = 32
 
 ###############################################################################
+## @brief Data Type
+class zet_data_type_v(IntEnum):
+    DATA_INT8 = 0                                   ## 8 bit signed integer.
+    DATA_INT16 = auto()                             ## 16 bit signed integer.
+    DATA_INT32 = auto()                             ## 32 bit signed integer.
+    DATA_INT64 = auto()                             ## 64 bit signed integer.
+    DATA_UINT8 = auto()                             ## 8 bit unsigned integer.
+    DATA_UINT16 = auto()                            ## 16 bit unsigned integer.
+    DATA_UINT32 = auto()                            ## 32 bit unsigned integer.
+    DATA_UINT64 = auto()                            ## 64 bit unsigned integer.
+    DATA_FLOAT = auto()                             ## Single precision floating point.
+    DATA_DOUBLE = auto()                            ## Double precision floating point.
+
+class zet_data_type_t(c_int):
+    def __str__(self):
+        return str(zet_data_type_v(value))
+
+
+###############################################################################
+## @brief Operation Type
+class zet_operation_type_v(IntEnum):
+    SET = 0                                         ## This enum represent a Set Type Operation.
+    GET = auto()                                    ## This enum represent a Get Type Operation.
+    REGISTER_EVENT = auto()                         ## This enum used to register an event.
+
+class zet_operation_type_t(c_int):
+    def __str__(self):
+        return str(zet_operation_type_v(value))
+
+
+###############################################################################
+## @brief Domains for Power and Frequency.
+class zet_domain_v(IntEnum):
+    GPU = 0                                         ## GPU Core Domain.
+    MEMORY = auto()                                 ## Local Memory Domain.
+
+class zet_domain_t(c_int):
+    def __str__(self):
+        return str(zet_domain_v(value))
+
+
+###############################################################################
 ## @brief Device Type
 class zet_device_type_v(IntEnum):
     INTEGRATED = 0                                  ## The device is an integrated GPU
@@ -774,17 +816,6 @@ class zet_oc_tj_max_t(Structure):
     ]
 
 ###############################################################################
-## @brief Frequency domains
-class zet_freq_domain_v(IntEnum):
-    GPU = 0                                         ## Frequency of the GPU.
-    MEMORY = auto()                                 ## Frequency of the local memory.
-
-class zet_freq_domain_t(c_int):
-    def __str__(self):
-        return str(zet_freq_domain_v(value))
-
-
-###############################################################################
 ## @brief Frequency properties
 ## 
 ## @details
@@ -794,7 +825,7 @@ class zet_freq_domain_t(c_int):
 ##       using the range/steps provided.
 class zet_freq_properties_t(Structure):
     _fields_ = [
-        ("type", zet_freq_domain_t),                                    ## [out] The type of frequency domain (GPU, memory, ...)
+        ("type", zet_domain_t),                                         ## [out] The type of frequency domain (GPU, memory, ...)
         ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device

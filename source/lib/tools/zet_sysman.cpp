@@ -5189,6 +5189,114 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::data_type_t to std::string
+    std::string to_string( const Sysman::data_type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::data_type_t::DATA_INT8:
+            str = "Sysman::data_type_t::DATA_INT8";
+            break;
+
+        case Sysman::data_type_t::DATA_INT16:
+            str = "Sysman::data_type_t::DATA_INT16";
+            break;
+
+        case Sysman::data_type_t::DATA_INT32:
+            str = "Sysman::data_type_t::DATA_INT32";
+            break;
+
+        case Sysman::data_type_t::DATA_INT64:
+            str = "Sysman::data_type_t::DATA_INT64";
+            break;
+
+        case Sysman::data_type_t::DATA_UINT8:
+            str = "Sysman::data_type_t::DATA_UINT8";
+            break;
+
+        case Sysman::data_type_t::DATA_UINT16:
+            str = "Sysman::data_type_t::DATA_UINT16";
+            break;
+
+        case Sysman::data_type_t::DATA_UINT32:
+            str = "Sysman::data_type_t::DATA_UINT32";
+            break;
+
+        case Sysman::data_type_t::DATA_UINT64:
+            str = "Sysman::data_type_t::DATA_UINT64";
+            break;
+
+        case Sysman::data_type_t::DATA_FLOAT:
+            str = "Sysman::data_type_t::DATA_FLOAT";
+            break;
+
+        case Sysman::data_type_t::DATA_DOUBLE:
+            str = "Sysman::data_type_t::DATA_DOUBLE";
+            break;
+
+        default:
+            str = "Sysman::data_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::operation_type_t to std::string
+    std::string to_string( const Sysman::operation_type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::operation_type_t::SET:
+            str = "Sysman::operation_type_t::SET";
+            break;
+
+        case Sysman::operation_type_t::GET:
+            str = "Sysman::operation_type_t::GET";
+            break;
+
+        case Sysman::operation_type_t::REGISTER_EVENT:
+            str = "Sysman::operation_type_t::REGISTER_EVENT";
+            break;
+
+        default:
+            str = "Sysman::operation_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::domain_t to std::string
+    std::string to_string( const Sysman::domain_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::domain_t::GPU:
+            str = "Sysman::domain_t::GPU";
+            break;
+
+        case Sysman::domain_t::MEMORY:
+            str = "Sysman::domain_t::MEMORY";
+            break;
+
+        default:
+            str = "Sysman::domain_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::device_type_t to std::string
     std::string to_string( const Sysman::device_type_t val )
     {
@@ -5824,30 +5932,6 @@ namespace zet
 
         default:
             str = "SysmanFrequency::oc_error_type_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_domain_t to std::string
-    std::string to_string( const SysmanFrequency::freq_domain_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case SysmanFrequency::freq_domain_t::GPU:
-            str = "SysmanFrequency::freq_domain_t::GPU";
-            break;
-
-        case SysmanFrequency::freq_domain_t::MEMORY:
-            str = "SysmanFrequency::freq_domain_t::MEMORY";
-            break;
-
-        default:
-            str = "SysmanFrequency::freq_domain_t::?";
             break;
         };
 

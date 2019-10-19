@@ -607,7 +607,7 @@ The following functions are provided to manage the frequency domains on the devi
 | Function                               | Description |
 | :---                                   | :---        |
 | ::${t}SysmanFrequencyGet()             | Enumerate all the frequency domains on the device and sub-devices. |
-| ::${t}SysmanFrequencyGetProperties()   | Find out the part of the device (one of ::${t}_freq_domain_t) that is controlled by a frequency domain. |
+| ::${t}SysmanFrequencyGetProperties()   | Find out the part of the device (one of ::${t}_domain_t) that is controlled by a frequency domain. |
 | ::${t}SysmanFrequencyGetRange()        | Get the current min/max frequency between which the hardware can operate for a frequency domain. |
 | ::${t}SysmanFrequencySetRange()        | Set the min/max frequency between which the hardware can operate for a frequency domain. |
 | ::${t}SysmanFrequencyGetState()        | Get the current frequency request, actual frequency, TDP frequency and throttle reasons for a frequency domain. |

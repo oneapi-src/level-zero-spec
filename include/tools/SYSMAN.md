@@ -601,7 +601,7 @@ The following functions are provided to manage the frequency domains on the devi
 | Function                               | Description |
 | :---                                   | :---        |
 | ::zetSysmanFrequencyGet()             | Enumerate all the frequency domains on the device and sub-devices. |
-| ::zetSysmanFrequencyGetProperties()   | Find out the part of the device (one of ::zet_freq_domain_t) that is controlled by a frequency domain. |
+| ::zetSysmanFrequencyGetProperties()   | Find out the part of the device (one of ::zet_domain_t) that is controlled by a frequency domain. |
 | ::zetSysmanFrequencyGetRange()        | Get the current min/max frequency between which the hardware can operate for a frequency domain. |
 | ::zetSysmanFrequencySetRange()        | Set the min/max frequency between which the hardware can operate for a frequency domain. |
 | ::zetSysmanFrequencyGetState()        | Get the current frequency request, actual frequency, TDP frequency and throttle reasons for a frequency domain. |

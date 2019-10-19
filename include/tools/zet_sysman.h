@@ -62,6 +62,42 @@ zetSysmanGet(
 #endif // ZET_STRING_PROPERTY_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Data Type
+typedef enum _zet_data_type_t
+{
+    ZET_DATA_INT8 = 0,                              ///< 8 bit signed integer.
+    ZET_DATA_INT16,                                 ///< 16 bit signed integer.
+    ZET_DATA_INT32,                                 ///< 32 bit signed integer.
+    ZET_DATA_INT64,                                 ///< 64 bit signed integer.
+    ZET_DATA_UINT8,                                 ///< 8 bit unsigned integer.
+    ZET_DATA_UINT16,                                ///< 16 bit unsigned integer.
+    ZET_DATA_UINT32,                                ///< 32 bit unsigned integer.
+    ZET_DATA_UINT64,                                ///< 64 bit unsigned integer.
+    ZET_DATA_FLOAT,                                 ///< Single precision floating point.
+    ZET_DATA_DOUBLE,                                ///< Double precision floating point.
+
+} zet_data_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Operation Type
+typedef enum _zet_operation_type_t
+{
+    ZET_OPERATION_TYPE_SET = 0,                     ///< This enum represent a Set Type Operation.
+    ZET_OPERATION_TYPE_GET,                         ///< This enum represent a Get Type Operation.
+    ZET_OPERATION_TYPE_REGISTER_EVENT,              ///< This enum used to register an event.
+
+} zet_operation_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Domains for Power and Frequency.
+typedef enum _zet_domain_t
+{
+    ZET_DOMAIN_GPU = 0,                             ///< GPU Core Domain.
+    ZET_DOMAIN_MEMORY,                              ///< Local Memory Domain.
+
+} zet_domain_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Device Type
 typedef enum _zet_device_type_t
 {
@@ -1107,15 +1143,6 @@ zetSysmanFrequencySetOcTjMax(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Frequency domains
-typedef enum _zet_freq_domain_t
-{
-    ZET_FREQ_DOMAIN_GPU = 0,                        ///< Frequency of the GPU.
-    ZET_FREQ_DOMAIN_MEMORY,                         ///< Frequency of the local memory.
-
-} zet_freq_domain_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Frequency properties
 /// 
 /// @details
@@ -1125,7 +1152,7 @@ typedef enum _zet_freq_domain_t
 ///       using the range/steps provided.
 typedef struct _zet_freq_properties_t
 {
-    zet_freq_domain_t type;                         ///< [out] The type of frequency domain (GPU, memory, ...)
+    zet_domain_t type;                              ///< [out] The type of frequency domain (GPU, memory, ...)
     ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device

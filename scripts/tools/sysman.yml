@@ -36,6 +36,57 @@ name: $T_STRING_PROPERTY_SIZE
 value: "32"
 --- #--------------------------------------------------------------------------
 type: enum
+desc: "Data Type"
+class: $tSysman
+name: $t_data_type_t
+etors:
+    - name: $T_DATA_INT8
+      value: "0"
+      desc: "8 bit signed integer."
+    - name: $T_DATA_INT16
+      desc: "16 bit signed integer."
+    - name: $T_DATA_INT32
+      desc: "32 bit signed integer."
+    - name: $T_DATA_INT64
+      desc: "64 bit signed integer."
+    - name: $T_DATA_UINT8
+      desc: "8 bit unsigned integer."
+    - name: $T_DATA_UINT16
+      desc: "16 bit unsigned integer."
+    - name: $T_DATA_UINT32
+      desc: "32 bit unsigned integer."
+    - name: $T_DATA_UINT64
+      desc: "64 bit unsigned integer."
+    - name: $T_DATA_FLOAT
+      desc: "Single precision floating point."
+    - name: $T_DATA_DOUBLE
+      desc: "Double precision floating point."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Operation Type"
+class: $tSysman
+name: $t_operation_type_t
+etors:
+    - name: $T_OPERATION_TYPE_SET
+      value: "0"
+      desc: "This enum represent a Set Type Operation."
+    - name: $T_OPERATION_TYPE_GET
+      desc: "This enum represent a Get Type Operation."
+    - name: $T_OPERATION_TYPE_REGISTER_EVENT
+      desc: "This enum used to register an event."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Domains for Power and Frequency."
+class: $tSysman
+name: $t_domain_t
+etors:
+    - name: $T_DOMAIN_GPU
+      value: "0"
+      desc: "GPU Core Domain."
+    - name: $T_DOMAIN_MEMORY
+      desc: "Local Memory Domain."
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "Device Type"
 class: $tSysman
 name: $t_device_type_t
@@ -993,17 +1044,6 @@ params:
       name: pOcTjMax
       desc: "[in] Pointer to the TjMax."
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Frequency domains"
-class: $tSysmanFrequency
-name: $t_freq_domain_t
-etors:
-    - name: $T_FREQ_DOMAIN_GPU
-      value: "0"
-      desc: "Frequency of the GPU."
-    - name: $T_FREQ_DOMAIN_MEMORY
-      desc: "Frequency of the local memory."
---- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency properties"
 class: $tSysmanFrequency
@@ -1012,7 +1052,7 @@ details:
     - "Provides the set of frequencies as a list and as a range/step."
     - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
 members:
-    - type: $t_freq_domain_t
+    - type: $t_domain_t
       name: "type"
       desc: "[out] The type of frequency domain (GPU, memory, ...)"
     - type: $x_bool_t

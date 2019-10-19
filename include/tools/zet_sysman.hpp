@@ -73,6 +73,42 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data Type
+        enum class data_type_t
+        {
+            DATA_INT8 = 0,                                  ///< 8 bit signed integer.
+            DATA_INT16,                                     ///< 16 bit signed integer.
+            DATA_INT32,                                     ///< 32 bit signed integer.
+            DATA_INT64,                                     ///< 64 bit signed integer.
+            DATA_UINT8,                                     ///< 8 bit unsigned integer.
+            DATA_UINT16,                                    ///< 16 bit unsigned integer.
+            DATA_UINT32,                                    ///< 32 bit unsigned integer.
+            DATA_UINT64,                                    ///< 64 bit unsigned integer.
+            DATA_FLOAT,                                     ///< Single precision floating point.
+            DATA_DOUBLE,                                    ///< Double precision floating point.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Operation Type
+        enum class operation_type_t
+        {
+            SET = 0,                                        ///< This enum represent a Set Type Operation.
+            GET,                                            ///< This enum represent a Get Type Operation.
+            REGISTER_EVENT,                                 ///< This enum used to register an event.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Domains for Power and Frequency.
+        enum class domain_t
+        {
+            GPU = 0,                                        ///< GPU Core Domain.
+            MEMORY,                                         ///< Local Memory Domain.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Device Type
         enum class device_type_t
         {
@@ -1102,15 +1138,6 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Frequency domains
-        enum class freq_domain_t
-        {
-            GPU = 0,                                        ///< Frequency of the GPU.
-            MEMORY,                                         ///< Frequency of the local memory.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Frequency throttle reasons
         enum class freq_throttle_reasons_t
         {
@@ -1195,7 +1222,7 @@ namespace zet
         ///       using the range/steps provided.
         struct freq_properties_t
         {
-            freq_domain_t type;                             ///< [out] The type of frequency domain (GPU, memory, ...)
+            Sysman::domain_t type;                          ///< [out] The type of frequency domain (GPU, memory, ...)
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling SMI handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
@@ -2762,6 +2789,18 @@ namespace zet
     std::string to_string( const Sysman::version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::data_type_t to std::string
+    std::string to_string( const Sysman::data_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::operation_type_t to std::string
+    std::string to_string( const Sysman::operation_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::domain_t to std::string
+    std::string to_string( const Sysman::domain_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::device_type_t to std::string
     std::string to_string( const Sysman::device_type_t val );
 
@@ -2872,10 +2911,6 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::oc_tj_max_t to std::string
     std::string to_string( const SysmanFrequency::oc_tj_max_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_domain_t to std::string
-    std::string to_string( const SysmanFrequency::freq_domain_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::freq_properties_t to std::string
