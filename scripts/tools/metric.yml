@@ -190,7 +190,7 @@ params:
     - type: size_t
       name: rawDataSize
       desc: "[in] size in bytes of raw data buffer"
-    - type: "uint8_t*"
+    - type: "const uint8_t*"
       name: pRawData
       desc: "[in][range(0, rawDataSize)] buffer of raw data to calculate"
     - type: uint32_t*

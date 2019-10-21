@@ -327,7 +327,7 @@ typedef struct _zet_metric_group_calculate_metric_values_params_t
 {
     zet_metric_group_handle_t* phMetricGroup;
     size_t* prawDataSize;
-    uint8_t** ppRawData;
+    const uint8_t** ppRawData;
     uint32_t** ppMetricValueCount;
     zet_typed_value_t** ppMetricValues;
 } zet_metric_group_calculate_metric_values_params_t;

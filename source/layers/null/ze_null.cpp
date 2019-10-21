@@ -230,7 +230,7 @@ namespace driver
         zetDdiTable.MetricGroup.pfnCalculateMetricValues = [](
             zet_metric_group_handle_t,
             size_t,
-            uint8_t*,
+            const uint8_t*,
             uint32_t* pMetricValueCount,
             zet_typed_value_t* pMetricValues )
         {

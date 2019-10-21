@@ -268,7 +268,7 @@ typedef ze_result_t (__zecall *zet_pfnMetricGroupGetProperties_t)(
 typedef ze_result_t (__zecall *zet_pfnMetricGroupCalculateMetricValues_t)(
     zet_metric_group_handle_t,
     size_t,
-    uint8_t*,
+    const uint8_t*,
     uint32_t*,
     zet_typed_value_t*
     );

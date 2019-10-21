@@ -101,7 +101,7 @@ ze_result_t __zecall
 zetMetricGroupCalculateMetricValues(
     zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
-    uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
+    const uint8_t* pRawData,                        ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
     uint32_t* pMetricValueCount,                    ///< [in,out] pointer to number of metric values calculated.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of metric values to be calculated.
@@ -756,7 +756,7 @@ namespace zet
     MetricGroup::CalculateMetricValues(
         MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
         size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
-        uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
+        const uint8_t* pRawData,                        ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
         uint32_t* pMetricValueCount,                    ///< [in,out] pointer to number of metric values calculated.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of metric values to be calculated.
