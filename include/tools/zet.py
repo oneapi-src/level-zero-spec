@@ -1188,7 +1188,7 @@ class zet_psu_state_t(Structure):
     _fields_ = [
         ("voltStatus", zet_psu_voltage_status_t),                       ## [out] The current PSU voltage status
         ("fanFailed", ze_bool_t),                                       ## [out] Indicates if the fan has failed
-        ("temperature", c_ulong),                                       ## [out] Read the current heatsink temperature in degrees celcius
+        ("temperature", c_ulong),                                       ## [out] Read the current heatsink temperature in degrees Celsius.
         ("current", c_ulong)                                            ## [out] The amps being drawn in amperes
     ]
 
@@ -1220,7 +1220,7 @@ class zet_fan_speed_units_t(c_int):
 ## @brief Fan temperature/speed pair
 class zet_fan_temp_speed_t(Structure):
     _fields_ = [
-        ("temperature", c_ulong),                                       ## [in,out] Temperature in degrees celcius
+        ("temperature", c_ulong),                                       ## [in,out] Temperature in degrees Celsius.
         ("speed", c_ulong),                                             ## [in,out] The speed of the fan
         ("units", zet_fan_speed_units_t)                                ## [in,out] The units of the member speed
     ]

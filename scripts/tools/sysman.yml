@@ -2114,7 +2114,7 @@ members:
       desc: "[out] Indicates if the fan has failed"
     - type: uint32_t
       name: "temperature"
-      desc: "[out] Read the current heatsink temperature in degrees celcius"
+      desc: "[out] Read the current heatsink temperature in degrees Celsius."
     - type: uint32_t
       name: "current"
       desc: "[out] The amps being drawn in amperes"
@@ -2203,7 +2203,7 @@ name: $t_fan_temp_speed_t
 members:
     - type: uint32_t
       name: "temperature"
-      desc: "[in,out] Temperature in degrees celcius"
+      desc: "[in,out] Temperature in degrees Celsius."
     - type: uint32_t
       name: "speed"
       desc: "[in,out] The speed of the fan"

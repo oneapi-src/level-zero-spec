@@ -2273,7 +2273,7 @@ namespace zet
         {
             psu_voltage_status_t voltStatus;                ///< [out] The current PSU voltage status
             ze::bool_t fanFailed;                           ///< [out] Indicates if the fan has failed
-            uint32_t temperature;                           ///< [out] Read the current heatsink temperature in degrees celcius
+            uint32_t temperature;                           ///< [out] Read the current heatsink temperature in degrees Celsius.
             uint32_t current;                               ///< [out] The amps being drawn in amperes
 
         };
@@ -2359,7 +2359,7 @@ namespace zet
         /// @brief Fan temperature/speed pair
         struct fan_temp_speed_t
         {
-            uint32_t temperature;                           ///< [in,out] Temperature in degrees celcius
+            uint32_t temperature;                           ///< [in,out] Temperature in degrees Celsius.
             uint32_t speed;                                 ///< [in,out] The speed of the fan
             fan_speed_units_t units;                        ///< [in,out] The units of the member speed
 
