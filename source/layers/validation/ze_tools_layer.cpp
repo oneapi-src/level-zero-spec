@@ -3344,8 +3344,7 @@ namespace layer
     ze_result_t __zecall
     zetDebugAttach(
         zet_device_handle_t hDevice,                    ///< [in] device handle
-        int pid,                                        ///< [in] host process identifier
-        uint64_t flags,                                 ///< [in] a bit-vector of ::zet_debug_attach_flags_t
+        const zet_debug_config_t* config,               ///< [in] the debug configuration
         zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
         )
     {
@@ -3359,12 +3358,15 @@ namespace layer
             if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == config )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
             if( nullptr == hDebug )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnAttach( hDevice, pid, flags, hDebug );
+        return pfnAttach( hDevice, config, hDebug );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

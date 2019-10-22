@@ -1812,8 +1812,7 @@ typedef ze_result_t (__zecall *zet_pfnGetSysmanEventProcAddrTable_t)(
 /// @brief Function-pointer for zetDebugAttach 
 typedef ze_result_t (__zecall *zet_pfnDebugAttach_t)(
     zet_device_handle_t,
-    int,
-    uint64_t,
+    const zet_debug_config_t*,
     zet_debug_session_handle_t*
     );
 

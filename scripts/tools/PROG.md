@@ -567,13 +567,43 @@ ${"##"} Attach and Detach
 
 In order to use most of the program debug APIs, a tool needs to attach to
 a device by calling ::${t}DebugAttach.  As arguments it passes the
-::${x}_device_handle_t, the host process identifier, and a set of flags.
-The tool does not need to be attached to the host process itself, yet it
-does need permission to attach to the host process.
+::${x}_device_handle_t and a pointer to a ::${t}_debug_config_t object
+that contains the following fields:
+
+  * the requested program debug API version.  Version numbers start at one
+    with zero reserved to denote an invalid version.
+
+    All other fields depend on the requested version.  Version one defines
+    the following fields:
+
+      * the host process identifier.
+
+
+If the requested API version is not supported,
+::${X}_RESULT_ERROR_UNSUPPORTED is returned.  If the tools supports
+different API versions it may try to request a different version.
+
+If the requested API version is supported the following properties are
+checked:
+
+  * the requested host process must exist.
+
+  * the tool process must be allowed to debug the requested host process.
+
+    Note that the tool does not need to be attached to the host process
+    itself, yet it must have permission to debug the host process.
+
+  * there must be no other tool attached for the requested host process.
+
+    Note that this refers to the device code of that host process, not to
+    the host process itself.
+
+  * device debug must be enabled on this system.
+
 
 If permission is granted, a ::${t}_debug_session_handle_t is provided,
 which can be used in other program debug APIs until the tool detaches
-again.
+again.  The requested API version will be used for all API functions.
 
 To detach a debug session, a tool calls ::${t}DebugDetach passing the
 ::${t}_debug_session_handle_t that had been provided on the corresponding
@@ -583,11 +613,15 @@ The following sample code demonstrates attaching and detaching:
 
 ```c
     ${x}_device_handle_t device = ...;
-    int pid = ...;
     ${t}_debug_session_handle_t session;
+    ${t}_debug_config_t config;
     ${x}_result_t errcode;
 
-    errcode = ${t}DebugAttach(device, pid, ${T}_DEBUG_ATTACH_NONE, &session);
+    memset(&config, 0, sizeof(config));
+    config.version = 1;
+    config.variant.v1.pid = ...;
+
+    errcode = ${t}DebugAttach(device, &config, &session);
     if (errcode)
         return errcode;
 

@@ -3179,8 +3179,7 @@ namespace driver
     ze_result_t __zecall
     zetDebugAttach(
         zet_device_handle_t hDevice,                    ///< [in] device handle
-        int pid,                                        ///< [in] host process identifier
-        uint64_t flags,                                 ///< [in] a bit-vector of ::zet_debug_attach_flags_t
+        const zet_debug_config_t* config,               ///< [in] the debug configuration
         zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
         )
     {
@@ -3190,7 +3189,7 @@ namespace driver
         auto pfnAttach = context.zetDdiTable.Debug.pfnAttach;
         if( nullptr != pfnAttach )
         {
-            result = pfnAttach( hDevice, pid, flags, hDebug );
+            result = pfnAttach( hDevice, config, hDebug );
         }
         else
         {

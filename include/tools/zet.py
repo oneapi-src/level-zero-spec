@@ -1577,14 +1577,26 @@ class zet_debug_session_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Debug attach flags.
-class zet_debug_attach_flags_v(IntEnum):
-    DEBUG_ATTACH_NONE = 0                           ## No attach flags
+## @brief Debug configuration: version 1
+class zet_debug_config_v1_t(Structure):
+    _fields_ = [
+        ("pid", c_int)                                                  ## The host process identifier
+    ]
 
-class zet_debug_attach_flags_t(c_int):
-    def __str__(self):
-        return str(zet_debug_attach_flags_v(value))
+###############################################################################
+## @brief Debug configuration: version-dependent fields
+class zet_debug_config_variants_t(Structure):
+    _fields_ = [
+        ("v1", zet_debug_config_v1_t)                                   ## Version 1
+    ]
 
+###############################################################################
+## @brief Debug configuration
+class zet_debug_config_t(Structure):
+    _fields_ = [
+        ("version", c_ushort),                                          ## The requested program debug API version
+        ("variant", zet_debug_config_variants_t)                        ## Version-specific fields
+    ]
 
 ###############################################################################
 ## @brief Debug wait flags.
@@ -2880,9 +2892,9 @@ class _zet_sysman_event_dditable_t(Structure):
 ###############################################################################
 ## @brief Function-pointer for zetDebugAttach
 if __use_win_types:
-    _zetDebugAttach_t = WINFUNCTYPE( ze_result_t, zet_device_handle_t, c_int, c_ulonglong, POINTER(zet_debug_session_handle_t) )
+    _zetDebugAttach_t = WINFUNCTYPE( ze_result_t, zet_device_handle_t, POINTER(zet_debug_config_t), POINTER(zet_debug_session_handle_t) )
 else:
-    _zetDebugAttach_t = CFUNCTYPE( ze_result_t, zet_device_handle_t, c_int, c_ulonglong, POINTER(zet_debug_session_handle_t) )
+    _zetDebugAttach_t = CFUNCTYPE( ze_result_t, zet_device_handle_t, POINTER(zet_debug_config_t), POINTER(zet_debug_session_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetDebugDetach

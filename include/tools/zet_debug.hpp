@@ -47,14 +47,6 @@ namespace zet
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Debug attach flags.
-        enum class attach_flags_t
-        {
-            DEBUG_ATTACH_NONE = 0,                          ///< No attach flags
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Debug wait flags.
         enum class wait_flags_t
         {
@@ -102,6 +94,31 @@ namespace zet
             DEBUG_STATE_GEN_ACC,                            ///< The accumulator register file
             DEBUG_STATE_GEN_ADDR,                           ///< The address register file
             DEBUG_STATE_GEN_FLAG,                           ///< The flags register file
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Debug configuration: version 1
+        struct config_v1_t
+        {
+            int pid;                                        ///< The host process identifier
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Debug configuration: version-dependent fields
+        union config_variants_t
+        {
+            config_v1_t v1;                                 ///< Version 1
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Debug configuration
+        struct config_t
+        {
+            uint16_t version;                               ///< The requested program debug API version
+            config_variants_t variant;                      ///< Version-specific fields
 
         };
 
@@ -210,8 +227,7 @@ namespace zet
         static debug_session_handle_t __zecall
         Attach(
             Device* pDevice,                                ///< [in] device handle
-            int pid,                                        ///< [in] host process identifier
-            uint64_t flags                                  ///< [in] a bit-vector of ::zet_debug_attach_flags_t
+            const config_t* config                          ///< [in] the debug configuration
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -352,8 +368,16 @@ namespace zet
 namespace zet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Debug::attach_flags_t to std::string
-    std::string to_string( const Debug::attach_flags_t val );
+    /// @brief Converts Debug::config_v1_t to std::string
+    std::string to_string( const Debug::config_v1_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::config_variants_t to std::string
+    std::string to_string( const Debug::config_variants_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::config_t to std::string
+    std::string to_string( const Debug::config_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::wait_flags_t to std::string

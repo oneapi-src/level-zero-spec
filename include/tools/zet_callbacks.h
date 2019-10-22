@@ -3095,8 +3095,7 @@ typedef struct _zet_sysman_event_callbacks_t
 typedef struct _zet_debug_attach_params_t
 {
     zet_device_handle_t* phDevice;
-    int* ppid;
-    uint64_t* pflags;
+    const zet_debug_config_t** pconfig;
     zet_debug_session_handle_t** phDebug;
 } zet_debug_attach_params_t;
 

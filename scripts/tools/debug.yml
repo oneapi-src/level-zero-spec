@@ -14,14 +14,35 @@ type: handle
 desc: "Debug session handle"
 name: $t_debug_session_handle_t
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Debug attach flags."
+type: struct
+desc: "Debug configuration: version 1"
 class: $tDebug
-name: $t_debug_attach_flags_t
-etors:
-    - name: $T_DEBUG_ATTACH_NONE
-      desc: "No attach flags"
-      value: "0"
+name: $t_debug_config_v1_t
+members:
+    - type: "int"
+      name: pid
+      desc: "The host process identifier"
+--- #--------------------------------------------------------------------------
+type: union
+desc: "Debug configuration: version-dependent fields"
+class: $tDebug
+name: $t_debug_config_variants_t
+members:
+    - type: $t_debug_config_v1_t
+      name: v1
+      desc: "Version 1"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Debug configuration"
+class: $tDebug
+name: $t_debug_config_t
+members:
+    - type: "uint16_t"
+      name: version
+      desc: "The requested program debug API version"
+    - type: $t_debug_config_variants_t
+      name: variant
+      desc: "Version-specific fields"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Attach to a device."
@@ -32,24 +53,20 @@ params:
     - type: $t_device_handle_t
       name: hDevice
       desc: "[in] device handle"
-    - type: "int"
-      name: pid
-      desc: "[in] host process identifier"
-    - type: "uint64_t"
-      name: flags
-      desc: "[in] a bit-vector of $t_debug_attach_flags_t"
+    - type: "const $t_debug_config_t*"
+      name: config
+      desc: "[in] the debug configuration"
     - type: "$t_debug_session_handle_t*"
       name: hDebug
       desc: "[out] debug session handle"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid device handle has been supplied"
-        - "an invalid process identifier has been supplied"
-        - "an invalid flag has been supplied"
+        - "an invalid configuration has been supplied"
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "attaching to this device is not supported"
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
-        - "caller is not authorized to debug that process"
+        - "caller does not have sufficient permissions"
     - $X_RESULT_ERROR_DEVICE_ACCESS:
         - "a debugger is already attached"
 --- #--------------------------------------------------------------------------

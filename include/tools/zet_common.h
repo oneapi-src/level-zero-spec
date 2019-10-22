@@ -375,6 +375,14 @@ typedef struct _zet_profile_register_sequence_t zet_profile_register_sequence_t;
 typedef struct _zet_tracer_desc_t zet_tracer_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_config_v1_t
+typedef struct _zet_debug_config_v1_t zet_debug_config_v1_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_config_t
+typedef struct _zet_debug_config_t zet_debug_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_debug_event_info_detached_t
 typedef struct _zet_debug_event_info_detached_t zet_debug_event_info_detached_t;
 
