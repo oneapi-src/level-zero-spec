@@ -3158,37 +3158,13 @@ typedef void (__zecall *zet_pfnDebugGetNumThreadsCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetDebugWaitForEvent 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_debug_wait_for_event_params_t
-{
-    zet_debug_session_handle_t* phDebug;
-    uint64_t* ptimeout;
-    uint64_t* pflags;
-    size_t** psize;
-} zet_debug_wait_for_event_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetDebugWaitForEvent 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnDebugWaitForEventCb_t)(
-    zet_debug_wait_for_event_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetDebugReadEvent 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
 typedef struct _zet_debug_read_event_params_t
 {
     zet_debug_session_handle_t* phDebug;
+    uint64_t* ptimeout;
     size_t* psize;
     void** pbuffer;
 } zet_debug_read_event_params_t;
@@ -3417,7 +3393,6 @@ typedef struct _zet_debug_callbacks_t
     zet_pfnDebugAttachCb_t                                          pfnAttachCb;
     zet_pfnDebugDetachCb_t                                          pfnDetachCb;
     zet_pfnDebugGetNumThreadsCb_t                                   pfnGetNumThreadsCb;
-    zet_pfnDebugWaitForEventCb_t                                    pfnWaitForEventCb;
     zet_pfnDebugReadEventCb_t                                       pfnReadEventCb;
     zet_pfnDebugInterruptCb_t                                       pfnInterruptCb;
     zet_pfnDebugResumeCb_t                                          pfnResumeCb;

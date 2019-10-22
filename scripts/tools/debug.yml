@@ -97,40 +97,10 @@ returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid debug handle has been supplied"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Debug wait flags."
-class: $tDebug
-name: $t_debug_wait_flags_t
-etors:
-    - name: $T_DEBUG_WAIT_NONE
-      desc: "No wait flags"
-      value: "0"
---- #--------------------------------------------------------------------------
 type: macro
 desc: "An infinite timeout."
 name: $T_DEBUG_TIMEOUT_INFINITE
 value: "0xffffffffffffffffull"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Wait for a debug event on the device."
-class: $tDebug
-name: WaitForEvent
-params:
-    - type: $t_debug_session_handle_t
-      name: hDebug
-      desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: timeout
-      desc: "[in] timeout in milliseconds (UINT64_MAX for infinite)"
-    - type: "uint64_t"
-      name: flags
-      desc: "[in] a bit-vector of $t_debug_wait_flags_t"
-    - type: "size_t*"
-      name: size
-      desc: "[out] size of the topmost event in bytes"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or size pointer has been supplied"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug event flags."
@@ -246,18 +216,15 @@ desc: "A debug event on the device."
 class: $tDebug
 name: $t_debug_event_t
 members:
-    - type: "uint16_t"
-      name: size
-      desc: "The size of the event object in bytes"
     - type: "uint8_t"
       name: type
       desc: "The event type"
     - type: "uint64_t"
-      name: flags
-      desc: "A bit-vector of $t_debug_event_flags_t"
-    - type: "uint64_t"
       name: thread
       desc: "The thread reporting the event"
+    - type: "uint64_t"
+      name: flags
+      desc: "A bit-vector of $t_debug_event_flags_t"
     - type: $t_debug_event_info_t
       name: info
       desc: "Event type specific information"
@@ -270,6 +237,9 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: timeout
+      desc: "[in] timeout in milliseconds (or $T_DEBUG_TIMEOUT_INFINITE)"
     - type: "size_t"
       name: size
       desc: "[in] the size of the buffer in bytes"
@@ -282,7 +252,7 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY:
         - "the output buffer is too small to hold the event"
     - $X_RESULT_NOT_READY:
-        - "there is no event"
+        - "the timeout expired"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Interrupt device threads."

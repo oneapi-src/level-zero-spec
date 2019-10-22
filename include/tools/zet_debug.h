@@ -115,38 +115,10 @@ zetDebugGetNumThreads(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Debug wait flags.
-typedef enum _zet_debug_wait_flags_t
-{
-    ZET_DEBUG_WAIT_NONE = 0,                        ///< No wait flags
-
-} zet_debug_wait_flags_t;
-
-///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_DEBUG_TIMEOUT_INFINITE
 /// @brief An infinite timeout.
 #define ZET_DEBUG_TIMEOUT_INFINITE  0xffffffffffffffffull
 #endif // ZET_DEBUG_TIMEOUT_INFINITE
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Wait for a debug event on the device.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == size
-///         + an invalid debug handle or size pointer has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetDebugWaitForEvent(
-    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-    uint64_t timeout,                               ///< [in] timeout in milliseconds (UINT64_MAX for infinite)
-    uint64_t flags,                                 ///< [in] a bit-vector of ::zet_debug_wait_flags_t
-    size_t* size                                    ///< [out] size of the topmost event in bytes
-    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Debug event flags.
@@ -234,10 +206,9 @@ typedef union _zet_debug_event_info_t
 /// @brief A debug event on the device.
 typedef struct _zet_debug_event_t
 {
-    uint16_t size;                                  ///< The size of the event object in bytes
     uint8_t type;                                   ///< The event type
-    uint64_t flags;                                 ///< A bit-vector of ::zet_debug_event_flags_t
     uint64_t thread;                                ///< The thread reporting the event
+    uint64_t flags;                                 ///< A bit-vector of ::zet_debug_event_flags_t
     zet_debug_event_info_t info;                    ///< Event type specific information
 
 } zet_debug_event_t;
@@ -257,10 +228,11 @@ typedef struct _zet_debug_event_t
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///         + the output buffer is too small to hold the event
 ///     - ::ZE_RESULT_NOT_READY
-///         + there is no event
+///         + the timeout expired
 ze_result_t __zecall
 zetDebugReadEvent(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
     size_t size,                                    ///< [in] the size of the buffer in bytes
     void* buffer                                    ///< [in,out] a buffer to hold the event data
     );

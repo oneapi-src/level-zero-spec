@@ -98,33 +98,6 @@ zetDebugGetNumThreads(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Wait for a debug event on the device.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == size
-///         + an invalid debug handle or size pointer has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetDebugWaitForEvent(
-    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-    uint64_t timeout,                               ///< [in] timeout in milliseconds (UINT64_MAX for infinite)
-    uint64_t flags,                                 ///< [in] a bit-vector of ::zet_debug_wait_flags_t
-    size_t* size                                    ///< [out] size of the topmost event in bytes
-    )
-{
-    auto pfnWaitForEvent = zet_lib::context.ddiTable.Debug.pfnWaitForEvent;
-    if( nullptr == pfnWaitForEvent )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnWaitForEvent( hDebug, timeout, flags, size );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Read the topmost debug event.
 /// 
 /// @returns
@@ -139,10 +112,11 @@ zetDebugWaitForEvent(
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///         + the output buffer is too small to hold the event
 ///     - ::ZE_RESULT_NOT_READY
-///         + there is no event
+///         + the timeout expired
 ze_result_t __zecall
 zetDebugReadEvent(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+    uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
     size_t size,                                    ///< [in] the size of the buffer in bytes
     void* buffer                                    ///< [in,out] a buffer to hold the event data
     )
@@ -151,7 +125,7 @@ zetDebugReadEvent(
     if( nullptr == pfnReadEvent )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnReadEvent( hDebug, size, buffer );
+    return pfnReadEvent( hDebug, timeout, size, buffer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -475,33 +449,6 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Wait for a debug event on the device.
-    /// 
-    /// @returns
-    ///     - size_t: size of the topmost event in bytes
-    /// 
-    /// @throws result_t
-    size_t __zecall
-    Debug::WaitForEvent(
-        uint64_t timeout,                               ///< [in] timeout in milliseconds (UINT64_MAX for infinite)
-        uint64_t flags                                  ///< [in] a bit-vector of ::zet_debug_wait_flags_t
-        )
-    {
-        size_t size;
-
-        auto result = static_cast<result_t>( ::zetDebugWaitForEvent(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
-            timeout,
-            flags,
-            &size ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::WaitForEvent" );
-
-        return size;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Read the topmost debug event.
     /// 
     /// @returns
@@ -509,12 +456,14 @@ namespace zet
     /// @throws result_t
     ze::bool_t __zecall
     Debug::ReadEvent(
+        uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
         size_t size,                                    ///< [in] the size of the buffer in bytes
         void* buffer                                    ///< [in,out] a buffer to hold the event data
         )
     {
         auto result = static_cast<result_t>( ::zetDebugReadEvent(
             reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            timeout,
             size,
             buffer ) );
 
@@ -702,26 +651,6 @@ namespace zet
 
 namespace zet
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Debug::wait_flags_t to std::string
-    std::string to_string( const Debug::wait_flags_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Debug::wait_flags_t::DEBUG_WAIT_NONE:
-            str = "Debug::wait_flags_t::DEBUG_WAIT_NONE";
-            break;
-
-        default:
-            str = "Debug::wait_flags_t::?";
-            break;
-        };
-
-        return str;
-    }
-
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::event_flags_t to std::string
     std::string to_string( const Debug::event_flags_t val )
@@ -975,20 +904,16 @@ namespace zet
     {
         std::string str;
         
-        str += "Debug::event_t::size : ";
-        str += std::to_string(val.size);
-        str += "\n";
-        
         str += "Debug::event_t::type : ";
         str += std::to_string(val.type);
         str += "\n";
         
-        str += "Debug::event_t::flags : ";
-        str += std::to_string(val.flags);
-        str += "\n";
-        
         str += "Debug::event_t::thread : ";
         str += std::to_string(val.thread);
+        str += "\n";
+        
+        str += "Debug::event_t::flags : ";
+        str += std::to_string(val.flags);
         str += "\n";
         
         str += "Debug::event_t::info : ";

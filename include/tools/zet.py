@@ -1599,16 +1599,6 @@ class zet_debug_config_t(Structure):
     ]
 
 ###############################################################################
-## @brief Debug wait flags.
-class zet_debug_wait_flags_v(IntEnum):
-    DEBUG_WAIT_NONE = 0                             ## No wait flags
-
-class zet_debug_wait_flags_t(c_int):
-    def __str__(self):
-        return str(zet_debug_wait_flags_v(value))
-
-
-###############################################################################
 ## @brief An infinite timeout.
 ZET_DEBUG_TIMEOUT_INFINITE = 0xffffffffffffffffull
 
@@ -1696,10 +1686,9 @@ class zet_debug_event_info_t(Structure):
 ## @brief A debug event on the device.
 class zet_debug_event_t(Structure):
     _fields_ = [
-        ("size", c_ushort),                                             ## The size of the event object in bytes
         ("type", c_ubyte),                                              ## The event type
-        ("flags", c_ulonglong),                                         ## A bit-vector of ::zet_debug_event_flags_t
         ("thread", c_ulonglong),                                        ## The thread reporting the event
+        ("flags", c_ulonglong),                                         ## A bit-vector of ::zet_debug_event_flags_t
         ("info", zet_debug_event_info_t)                                ## Event type specific information
     ]
 
@@ -2911,18 +2900,11 @@ else:
     _zetDebugGetNumThreads_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
 
 ###############################################################################
-## @brief Function-pointer for zetDebugWaitForEvent
-if __use_win_types:
-    _zetDebugWaitForEvent_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, POINTER(c_size_t) )
-else:
-    _zetDebugWaitForEvent_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, POINTER(c_size_t) )
-
-###############################################################################
 ## @brief Function-pointer for zetDebugReadEvent
 if __use_win_types:
-    _zetDebugReadEvent_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_size_t, c_void_p )
+    _zetDebugReadEvent_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_size_t, c_void_p )
 else:
-    _zetDebugReadEvent_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_size_t, c_void_p )
+    _zetDebugReadEvent_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_size_t, c_void_p )
 
 ###############################################################################
 ## @brief Function-pointer for zetDebugInterrupt
@@ -2988,7 +2970,6 @@ class _zet_debug_dditable_t(Structure):
         ("pfnAttach", c_void_p),                                        ## _zetDebugAttach_t
         ("pfnDetach", c_void_p),                                        ## _zetDebugDetach_t
         ("pfnGetNumThreads", c_void_p),                                 ## _zetDebugGetNumThreads_t
-        ("pfnWaitForEvent", c_void_p),                                  ## _zetDebugWaitForEvent_t
         ("pfnReadEvent", c_void_p),                                     ## _zetDebugReadEvent_t
         ("pfnInterrupt", c_void_p),                                     ## _zetDebugInterrupt_t
         ("pfnResume", c_void_p),                                        ## _zetDebugResume_t
@@ -3409,7 +3390,6 @@ class ZET_DDI:
         self.zetDebugAttach = _zetDebugAttach_t(self.__dditable.Debug.pfnAttach)
         self.zetDebugDetach = _zetDebugDetach_t(self.__dditable.Debug.pfnDetach)
         self.zetDebugGetNumThreads = _zetDebugGetNumThreads_t(self.__dditable.Debug.pfnGetNumThreads)
-        self.zetDebugWaitForEvent = _zetDebugWaitForEvent_t(self.__dditable.Debug.pfnWaitForEvent)
         self.zetDebugReadEvent = _zetDebugReadEvent_t(self.__dditable.Debug.pfnReadEvent)
         self.zetDebugInterrupt = _zetDebugInterrupt_t(self.__dditable.Debug.pfnInterrupt)
         self.zetDebugResume = _zetDebugResume_t(self.__dditable.Debug.pfnResume)

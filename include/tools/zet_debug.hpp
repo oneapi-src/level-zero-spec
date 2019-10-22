@@ -47,14 +47,6 @@ namespace zet
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Debug wait flags.
-        enum class wait_flags_t
-        {
-            DEBUG_WAIT_NONE = 0,                            ///< No wait flags
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Debug event flags.
         enum class event_flags_t
         {
@@ -165,10 +157,9 @@ namespace zet
         /// @brief A debug event on the device.
         struct event_t
         {
-            uint16_t size;                                  ///< The size of the event object in bytes
             uint8_t type;                                   ///< The event type
-            uint64_t flags;                                 ///< A bit-vector of ::zet_debug_event_flags_t
             uint64_t thread;                                ///< The thread reporting the event
+            uint64_t flags;                                 ///< A bit-vector of ::zet_debug_event_flags_t
             event_info_t info;                              ///< Event type specific information
 
         };
@@ -250,24 +241,13 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Wait for a debug event on the device.
-        /// @returns
-        ///     - size_t: size of the topmost event in bytes
-        /// 
-        /// @throws result_t
-        size_t __zecall
-        WaitForEvent(
-            uint64_t timeout,                               ///< [in] timeout in milliseconds (UINT64_MAX for infinite)
-            uint64_t flags                                  ///< [in] a bit-vector of ::zet_debug_wait_flags_t
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Read the topmost debug event.
         /// @returns
         ///     - ze::bool_t:'0' when ZE::RESULT_NOT_READY
         /// @throws result_t
         ze::bool_t __zecall
         ReadEvent(
+            uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
             size_t size,                                    ///< [in] the size of the buffer in bytes
             void* buffer                                    ///< [in,out] a buffer to hold the event data
             );
@@ -378,10 +358,6 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::config_t to std::string
     std::string to_string( const Debug::config_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Debug::wait_flags_t to std::string
-    std::string to_string( const Debug::wait_flags_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::event_flags_t to std::string

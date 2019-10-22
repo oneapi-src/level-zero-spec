@@ -703,57 +703,33 @@ Most API functions require the thread they operate on to be stopped.
 ${"##"} Debug Events
 
 As long as the tool is attached, it will receive debug events from the
-device.  There are separate APIs for waiting for an event and for reading
-the topmost event.
+device.  To read the topmost event, the tool passes a pointer to a buffer
+and its size in bytes.  The size of an event object is defined by the API
+version requested on attach.
 
-To wait for events, the tool passes the ::${t}_debug_session_handle_t, a
-timeout in milliseconds, and a bit-vector of wait flags.  A timeout of
-zero does not wait and immediately returns if no events are available.  A
-timeout of ::${T}_DEBUG_TIMEOUT_INFINITE waits indefinitely.  On success,
-the API provides the size of the topmost event in bytes.  If the timeout
-expires, ::${X}_RESULT_NOT_READY is returned.
+It also passses a timeout in milliseconds.  A timeout of zero does not
+wait and immediately returns if no events are available.  A timeout of
+::${T}_DEBUG_TIMEOUT_INFINITE waits indefinitely.  If the timeout expires,
+::${X}_RESULT_NOT_READY is returned.
 
-To read the topmost event, the tool passes a pointer to a buffer and its
-size in bytes.  The buffer needs to be big enough to hold the topmost
-event.  On success, the topmost event is copied into the buffer.
+On success, the topmost event is copied into the buffer.
 
-The following sample code demonstrates waiting for and reading an event:
+The following sample code demonstrates reading an event:
 
 ```c
     ${t}_debug_session_handle_t session = ...;
-    uint8_t buffer[...], *pbuffer = buffer;
-    size_t size;
+    ${t}_debug_event_t event;
     ${x}_result_t errcode;
 
-    errcode = ${t}DebugWaitForEvent(session, ${T}_DEBUG_TIMEOUT_INFINITE,
-                                    ${T}_DEBUG_WAIT_NONE, &size);
+    errcode = ${t}DebugReadEvent(session, ${T}_DEBUG_TIMEOUT_INFINITE, sizeof(event), &event);
     if (errcode)
         return errcode;
-
-    if (sizeof(buffer) < size) {
-        pbuffer = malloc(size);
-        if (!pbuffer)
-            return ${X}_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-
-    errcode = ${t}DebugReadEvent(session, size, pbuffer);
-    if (errcode) {
-        if (pbuffer != buffer)
-            free(pbuffer);
-        return errcode;
-    }
-
-    ...
-
-    if (pbuffer != buffer)
-        free(pbuffer);
 ```
 
 
-A debug event is described by the ::${t}_debug_event_t structure.  It
-contains:
-
-  * The size of the event object in bytes.
+A debug event is described by the ::${t}_debug_event_t structure.  Note
+that the declaration of this structure depends on the API version
+requested on attach.  The current version contains:
 
   * The event type as ::${t}_debug_event_type_t.
 
