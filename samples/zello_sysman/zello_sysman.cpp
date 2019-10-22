@@ -163,8 +163,9 @@ void ShowSwitchInfo(zet_sysman_link_switch_handle_t hSwitch)
                                 if (portstate.isConnected)
                                 {
                                     fprintf(stdout,
-                                        "connected, max rx/tx bandwidth: %u/%u bytes/sec\n",
-                                        portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
+                                        "connected, max rx/tx bandwidth: %llu/%llu bytes/sec\n",
+                                        (long long unsigned int)portstate.rxSpeed.maxBandwidth,
+                                        (long long unsigned int)portstate.txSpeed.maxBandwidth);
                                 }
                                 else
                                 {

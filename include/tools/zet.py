@@ -551,7 +551,7 @@ class zet_pci_speed_t(Structure):
     _fields_ = [
         ("gen", c_ulong),                                               ## [out] The link generation
         ("width", c_ulong),                                             ## [out] The number of lanes
-        ("maxBandwidth", c_ulong),                                      ## [out] The maximum bandwidth in bytes/sec
+        ("maxBandwidth", c_ulonglong),                                  ## [out] The maximum bandwidth in bytes/sec
         ("maxPacketSize", c_ulong)                                      ## [out] Maximum packet size in bytes.
     ]
 
@@ -618,7 +618,7 @@ class zet_pci_throughput_t(Structure):
         ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
         ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted (including
                                                                         ## replays)
-        ("maxBandwidth", c_ulong)                                       ## [out] The maximum bandwidth in bytes/sec under the current
+        ("maxBandwidth", c_ulonglong)                                   ## [out] The maximum bandwidth in bytes/sec under the current
                                                                         ## configuration
     ]
 
@@ -905,8 +905,9 @@ class zet_freq_throttle_time_t(Structure):
 ## @brief Accelerator engine groups
 class zet_engine_group_v(IntEnum):
     ALL = 0                                         ## Access information about all engines combined.
-    COMPUTE = auto()                                ## Access information about compute engines.
-    MEDIA = auto()                                  ## Access information about media engines.
+    COMPUTE_ALL = auto()                            ## Access information about all compute engines combined.
+    MEDIA_ALL = auto()                              ## Access information about all media engines combined.
+    COPY_ALL = auto()                               ## Access information about all copy (blitter) engines combined.
 
 class zet_engine_group_t(c_int):
     def __str__(self):
@@ -1067,9 +1068,9 @@ class zet_link_switch_state_t(Structure):
 ## @brief Connectivity port speed
 class zet_link_port_speed_t(Structure):
     _fields_ = [
-        ("bitRate", c_ulong),                                           ## [out] Bits/sec that the link is operating at
+        ("bitRate", c_ulonglong),                                       ## [out] Bits/sec that the link is operating at
         ("width", c_ulong),                                             ## [out] The number of lanes
-        ("maxBandwidth", c_ulong)                                       ## [out] The maximum bandwidth in bytes/sec
+        ("maxBandwidth", c_ulonglong)                                   ## [out] The maximum bandwidth in bytes/sec
     ]
 
 ###############################################################################
@@ -1110,8 +1111,8 @@ class zet_link_port_throughput_t(Structure):
                                                                         ## different structure.
         ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
         ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted
-        ("rxMaxBandwidth", c_ulong),                                    ## [out] The current maximum bandwidth in bytes/sec for receiving packats
-        ("txMaxBandwidth", c_ulong)                                     ## [out] The current maximum bandwidth in bytes/sec for transmitting
+        ("rxMaxBandwidth", c_ulonglong),                                ## [out] The current maximum bandwidth in bytes/sec for receiving packats
+        ("txMaxBandwidth", c_ulonglong)                                 ## [out] The current maximum bandwidth in bytes/sec for transmitting
                                                                         ## packets
     ]
 

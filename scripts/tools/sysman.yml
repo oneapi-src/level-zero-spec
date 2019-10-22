@@ -389,7 +389,7 @@ members:
     - type: uint32_t
       name: "width"
       desc: "[out] The number of lanes"
-    - type: uint32_t
+    - type: uint64_t
       name: "maxBandwidth"
       desc: "[out] The maximum bandwidth in bytes/sec"
     - type: uint32_t
@@ -480,7 +480,7 @@ members:
     - type: uint64_t
       name: "txCounter"
       desc: "[out] Monotonic counter for the number of bytes transmitted (including replays)"
-    - type: uint32_t
+    - type: uint64_t
       name: "maxBandwidth"
       desc: "[out] The maximum bandwidth in bytes/sec under the current configuration"
 --- #--------------------------------------------------------------------------
@@ -1270,10 +1270,12 @@ etors:
     - name: $T_ENGINE_GROUP_ALL
       value: "0"
       desc: "Access information about all engines combined."
-    - name: $T_ENGINE_GROUP_COMPUTE
-      desc: "Access information about compute engines."
-    - name: $T_ENGINE_GROUP_MEDIA
-      desc: "Access information about media engines."
+    - name: $T_ENGINE_GROUP_COMPUTE_ALL
+      desc: "Access information about all compute engines combined."
+    - name: $T_ENGINE_GROUP_MEDIA_ALL
+      desc: "Access information about all media engines combined."
+    - name: $T_ENGINE_GROUP_COPY_ALL
+      desc: "Access information about all copy (blitter) engines combined."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Engine group properties"
@@ -1796,13 +1798,13 @@ desc: "Connectivity port speed"
 class: $tSysmanLinkPort
 name: $t_link_port_speed_t
 members:
-    - type: uint32_t
+    - type: uint64_t
       name: "bitRate"
       desc: "[out] Bits/sec that the link is operating at"
     - type: uint32_t
       name: "width"
       desc: "[out] The number of lanes"
-    - type: uint32_t
+    - type: uint64_t
       name: "maxBandwidth"
       desc: "[out] The maximum bandwidth in bytes/sec"
 --- #--------------------------------------------------------------------------
@@ -1855,10 +1857,10 @@ members:
     - type: uint64_t
       name: "txCounter"
       desc: "[out] Monotonic counter for the number of bytes transmitted"
-    - type: uint32_t
+    - type: uint64_t
       name: "rxMaxBandwidth"
       desc: "[out] The current maximum bandwidth in bytes/sec for receiving packats"
-    - type: uint32_t
+    - type: uint64_t
       name: "txMaxBandwidth"
       desc: "[out] The current maximum bandwidth in bytes/sec for transmitting packets"
 --- #--------------------------------------------------------------------------

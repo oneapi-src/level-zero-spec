@@ -6203,12 +6203,16 @@ namespace zet
             str = "SysmanEngine::engine_group_t::ALL";
             break;
 
-        case SysmanEngine::engine_group_t::COMPUTE:
-            str = "SysmanEngine::engine_group_t::COMPUTE";
+        case SysmanEngine::engine_group_t::COMPUTE_ALL:
+            str = "SysmanEngine::engine_group_t::COMPUTE_ALL";
             break;
 
-        case SysmanEngine::engine_group_t::MEDIA:
-            str = "SysmanEngine::engine_group_t::MEDIA";
+        case SysmanEngine::engine_group_t::MEDIA_ALL:
+            str = "SysmanEngine::engine_group_t::MEDIA_ALL";
+            break;
+
+        case SysmanEngine::engine_group_t::COPY_ALL:
+            str = "SysmanEngine::engine_group_t::COPY_ALL";
             break;
 
         default:

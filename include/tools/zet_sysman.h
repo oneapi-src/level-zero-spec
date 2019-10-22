@@ -431,7 +431,7 @@ typedef struct _zet_pci_speed_t
 {
     uint32_t gen;                                   ///< [out] The link generation
     uint32_t width;                                 ///< [out] The number of lanes
-    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
+    uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
     uint32_t maxPacketSize;                         ///< [out] Maximum packet size in bytes.
 
 } zet_pci_speed_t;
@@ -500,7 +500,7 @@ typedef struct _zet_pci_throughput_t
     uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
     uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
                                                     ///< replays)
-    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
+    uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
                                                     ///< configuration
 
 } zet_pci_throughput_t;
@@ -1373,8 +1373,9 @@ zetSysmanFrequencyGetThrottleTime(
 typedef enum _zet_engine_group_t
 {
     ZET_ENGINE_GROUP_ALL = 0,                       ///< Access information about all engines combined.
-    ZET_ENGINE_GROUP_COMPUTE,                       ///< Access information about compute engines.
-    ZET_ENGINE_GROUP_MEDIA,                         ///< Access information about media engines.
+    ZET_ENGINE_GROUP_COMPUTE_ALL,                   ///< Access information about all compute engines combined.
+    ZET_ENGINE_GROUP_MEDIA_ALL,                     ///< Access information about all media engines combined.
+    ZET_ENGINE_GROUP_COPY_ALL,                      ///< Access information about all copy (blitter) engines combined.
 
 } zet_engine_group_t;
 
@@ -1973,9 +1974,9 @@ zetSysmanLinkSwitchSetState(
 /// @brief Connectivity port speed
 typedef struct _zet_link_port_speed_t
 {
-    uint32_t bitRate;                               ///< [out] Bits/sec that the link is operating at
+    uint64_t bitRate;                               ///< [out] Bits/sec that the link is operating at
     uint32_t width;                                 ///< [out] The number of lanes
-    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
+    uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
 
 } zet_link_port_speed_t;
 
@@ -2019,8 +2020,8 @@ typedef struct _zet_link_port_throughput_t
                                                     ///< different structure.
     uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
     uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted
-    uint32_t rxMaxBandwidth;                        ///< [out] The current maximum bandwidth in bytes/sec for receiving packats
-    uint32_t txMaxBandwidth;                        ///< [out] The current maximum bandwidth in bytes/sec for transmitting
+    uint64_t rxMaxBandwidth;                        ///< [out] The current maximum bandwidth in bytes/sec for receiving packats
+    uint64_t txMaxBandwidth;                        ///< [out] The current maximum bandwidth in bytes/sec for transmitting
                                                     ///< packets
 
 } zet_link_port_throughput_t;

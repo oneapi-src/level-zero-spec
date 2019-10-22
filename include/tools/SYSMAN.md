@@ -345,7 +345,7 @@ The following operations permit getting properties about the entire device:
 | Function                                                   | Description |
 | :---                                                       | :---        |
 | ::zetSysmanDeviceGetProperties()                          | Get static device properties -  device UUID, sub-device ID, device brand/model/vendor strings |
-| ::zetSysmanDeviceWasRepaired()                            | Performs a warm reset of the device which includes unloading the driver. |
+| ::zetSysmanDeviceWasRepaired()                            | Determine if the device has undergone repairs, either through the running of diagnostics or by manufacturing. |
 
 The example below shows how to display general information about a device:
 
@@ -483,8 +483,8 @@ down when power exceeds some limits. Three limits are monitored by the Punit:
 | Limit     | Window        | Description                                                                                                                                                                                                                |
 | :---      | :---          | :---                                                                                                                                                                                                                       |
 | Peak      | Instantaneous | Punit tracks the instantaneous power. When this exceeds a programmable threshold, the Punit will aggressively throttle frequencies/voltages. The threshold is referred to as PL4 - Power Limit 4 - or peak power.          |
-| Burst     | 2ms           | Punit tracks the 2ms weighted moving average of power. When this exceeds a programmable threshold, the Punit starts throttling frequencies/voltages. The threshold is referred to as PL2 - Power Limit 2 - or burst power. |
-| Sustained | 28sec         | Punit tracks the 28sec weighted moving average of power. When this exceeds a programmable threshold, the Punit throttles frequencies/voltages. The threshold is referred to as PL1 - Power Limit 1 - or sustained power.   |
+| Burst     | 2ms           | Punit tracks the 2ms moving average of power. When this exceeds a programmable threshold, the Punit starts throttling frequencies/voltages. The threshold is referred to as PL2 - Power Limit 2 - or burst power. |
+| Sustained | 28sec         | Punit tracks the 28sec moving average of power. When this exceeds a programmable threshold, the Punit throttles frequencies/voltages. The threshold is referred to as PL1 - Power Limit 1 - or sustained power.   |
 
 Peak power limit is generally greater than the burst power limit which is generally greater than the sustained power limit. The default factory values
 are tuned assuming the device is operating at normal temperatures running significant workloads:
@@ -492,7 +492,7 @@ are tuned assuming the device is operating at normal temperatures running signif
 - The peak power limit is tuned to avoid tripping the PSU over-current signal for all but the most intensive compute workloads. Most workloads should
 be able to run at maximum frequencies without hitting this condition.
 - The burst power limit permits most workloads to run at maximum frequencies for short periods.
-- The sustained power limit will be triggered if high frequencies are requested for lengthy periods (28sec) and the frequencies will be throttled
+- The sustained power limit will be triggered if high frequencies are requested for lengthy periods (configurable, default is 28sec) and the frequencies will be throttled
 if the high requests and utilization of the device continue.
 
 The following functions are provided to manage the power of the device:
@@ -663,7 +663,7 @@ The following functions are provided to manage firmwares on the device:
 | ::zetSysmanFirmwareFlash()            | Flash a new firmware image. |
 
 ## <a name="mem">Querying memory modules</a>
-The following functions provide access to information about the local memory modules on the device:
+The following functions provide access to information about the device memory modules:
 
 | Function                               | Description |
 | :---                                   | :---        |
@@ -925,7 +925,7 @@ breakdown of the main device components where the errors occurred. The categorie
 | ::zet_ras_details_t.numComputeErrors     | The number of errors that have occurred in the compute accelerator hardware. |
 | ::zet_ras_details_t.numNonComputeErrors  | The number of errors that have occurred in the fixed-function accelerator hardware. |
 | ::zet_ras_details_t.numCacheErrors       | The number of errors that have occurred in caches (L1/L3/register file/shared local memory/sampler). |
-| ::zet_ras_details_t.numMemoryErrors      | The number of errors that have occurred in the local memory. |
+| ::zet_ras_details_t.numMemoryErrors      | The number of errors that have occurred in the device memory. |
 | ::zet_ras_details_t.numPciErrors:        | The number of errors that have occurred in the PCI link. |
 | ::zet_ras_details_t.numSwitchErrors      | The number of errors that have occurred in the high-speed connectivity links. |
 | ::zet_ras_details_t.numDisplayErrors     | The number of errors that have occurred in the display. |
