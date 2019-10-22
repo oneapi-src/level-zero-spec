@@ -75,6 +75,7 @@ typedef enum _zet_data_type_t
     ZET_DATA_UINT64,                                ///< 64 bit unsigned integer.
     ZET_DATA_FLOAT,                                 ///< Single precision floating point.
     ZET_DATA_DOUBLE,                                ///< Double precision floating point.
+    ZET_DATA_STRING,                                ///< Null terminated Strings.
 
 } zet_data_type_t;
 

@@ -61,6 +61,8 @@ etors:
       desc: "Single precision floating point."
     - name: $T_DATA_DOUBLE
       desc: "Double precision floating point."
+    - name: $T_DATA_STRING
+      desc: "Null terminated Strings."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Operation Type"

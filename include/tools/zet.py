@@ -428,6 +428,7 @@ class zet_data_type_v(IntEnum):
     DATA_UINT64 = auto()                            ## 64 bit unsigned integer.
     DATA_FLOAT = auto()                             ## Single precision floating point.
     DATA_DOUBLE = auto()                            ## Double precision floating point.
+    DATA_STRING = auto()                            ## Null terminated Strings.
 
 class zet_data_type_t(c_int):
     def __str__(self):

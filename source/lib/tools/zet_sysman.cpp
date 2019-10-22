@@ -5236,6 +5236,10 @@ namespace zet
             str = "Sysman::data_type_t::DATA_DOUBLE";
             break;
 
+        case Sysman::data_type_t::DATA_STRING:
+            str = "Sysman::data_type_t::DATA_STRING";
+            break;
+
         default:
             str = "Sysman::data_type_t::?";
             break;

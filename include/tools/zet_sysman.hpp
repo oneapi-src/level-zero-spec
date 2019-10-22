@@ -86,6 +86,7 @@ namespace zet
             DATA_UINT64,                                    ///< 64 bit unsigned integer.
             DATA_FLOAT,                                     ///< Single precision floating point.
             DATA_DOUBLE,                                    ///< Double precision floating point.
+            DATA_STRING,                                    ///< Null terminated Strings.
 
         };
 
