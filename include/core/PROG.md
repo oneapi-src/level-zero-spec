@@ -21,7 +21,7 @@ NOTE: Sample code in this document contains little or no error checking for brev
     + [Fences](#fnc)
     + [Events](#evnt)
 * [Barriers](#brr)
-* [Modules and Kernelss](#mnk)
+* [Modules and Kernels](#mnk)
     + [Modules](#mod)
     + [Kernels](#kern)
     + [Execution](#exe)
@@ -748,18 +748,8 @@ The following sample code demonstrates a sequence for creating a kernel from a m
     ...
 ```
 
-### Kernel Attributes
-Use ::zeKernelGetAttribute to query attributes from a kernel object.
+### Kernel Attributes and Properties
 
-```c
-    ...
-    uint32_t numRegisters;
-
-    // Number of program registers used by kernel.
-    zeKernelGetAttribute(hKernel, ZE_KERNEL_GET_ATTR_MAX_REGS_USED, &numRegisters);
-    ...
-```
-See ::ze_kernel_get_attribute_t for more information on the "get" attributes.
 
 Use ::zeKernelSetAttribute to set attributes for a kernel object.
 
@@ -770,6 +760,18 @@ Use ::zeKernelSetAttribute to set attributes for a kernel object.
 ```
 
 See ::ze_kernel_set_attribute_t for more information on the "set" attributes.
+
+Use ::zeKernelGetProperties to query invariant properties from a kernel object.
+
+```c
+    ...
+    ze_kernel_properties_t kernelProperties;
+
+    // 
+    zeKernelGetAttribute(hKernel, &kernelProperties);
+    ...
+```
+See ::ze_kernel_properties_t for more information for kernel properties.
 
 ## <a name="exe">Execution</a>
 

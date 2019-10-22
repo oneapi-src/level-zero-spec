@@ -1223,11 +1223,10 @@ typedef ze_result_t (__zecall *ze_pfnKernelSetAttribute_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeKernelGetAttribute 
-typedef ze_result_t (__zecall *ze_pfnKernelGetAttribute_t)(
+/// @brief Function-pointer for zeKernelGetProperties 
+typedef ze_result_t (__zecall *ze_pfnKernelGetProperties_t)(
     ze_kernel_handle_t,
-    ze_kernel_get_attribute_t,
-    uint32_t*
+    ze_kernel_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1242,7 +1241,7 @@ typedef struct _ze_kernel_dditable_t
     ze_pfnKernelSuggestMaxCooperativeGroupCount_t               pfnSuggestMaxCooperativeGroupCount;
     ze_pfnKernelSetArgumentValue_t                              pfnSetArgumentValue;
     ze_pfnKernelSetAttribute_t                                  pfnSetAttribute;
-    ze_pfnKernelGetAttribute_t                                  pfnGetAttribute;
+    ze_pfnKernelGetProperties_t                                 pfnGetProperties;
 } ze_kernel_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

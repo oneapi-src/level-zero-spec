@@ -1029,31 +1029,36 @@ class ze_kernel_set_attribute_t(c_int):
 
 
 ###############################################################################
-## @brief Kernel attributes
-## 
-## @remarks
-##   _Analogues_
-##     - **CUfunction_attribute**
-class ze_kernel_get_attribute_v(IntEnum):
-    KERNEL_GET_ATTR_MAX_REGS_USED = 0               ## Maximum device registers used for this kernel
-    KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS = auto()  ## Maximum dimensions for group for this kernel
-    KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE = auto()    ## Maximum shared memory required for this kernel
-    KERNEL_GET_ATTR_HAS_SPILL_FILL = auto()         ## Kernel required spill/fills
-    KERNEL_GET_ATTR_HAS_BARRIERS = auto()           ## Kernel contains barriers
-    KERNEL_GET_ATTR_HAS_DPAS = auto()               ## Kernel contains DPAS
-
-class ze_kernel_get_attribute_t(c_int):
-    def __str__(self):
-        return str(ze_kernel_get_attribute_v(value))
-
-
-###############################################################################
 ## @brief Kernel thread group dimensions.
 class ze_thread_group_dimensions_t(Structure):
     _fields_ = [
         ("groupCountX", c_ulong),                                       ## [in] size of thread group in X dimension
         ("groupCountY", c_ulong),                                       ## [in] size of thread group in Y dimension
         ("groupCountZ", c_ulong)                                        ## [in] size of thread group in Z dimension
+    ]
+
+###############################################################################
+## @brief API version of ::ze_kernel_properties_t
+class ze_kernel_properties_version_v(IntEnum):
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class ze_kernel_properties_version_t(c_int):
+    def __str__(self):
+        return str(ze_kernel_properties_version_v(value))
+
+
+###############################################################################
+## @brief Maximum device name string size
+ZE_MAX_KERNEL_NAME = 256
+
+###############################################################################
+## @brief Kernel properties
+class ze_kernel_properties_t(Structure):
+    _fields_ = [
+        ("version", ze_kernel_properties_version_t),                    ## [in] ::ZE_KERNEL_PROPERTIES_VERSION_CURRENT
+        ("name", c_char * ZE_MAX_KERNEL_NAME),                          ## [out] Kernel name
+        ("numKernelArgs", c_ulong),                                     ## [out] number of kernel arguments.
+        ("compileGroupSize", ze_thread_group_dimensions_t)              ## [out] group size from kernel attribute.
     ]
 
 ###############################################################################
@@ -1944,11 +1949,11 @@ else:
     _zeKernelSetAttribute_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_kernel_set_attribute_t, c_ulong )
 
 ###############################################################################
-## @brief Function-pointer for zeKernelGetAttribute
+## @brief Function-pointer for zeKernelGetProperties
 if __use_win_types:
-    _zeKernelGetAttribute_t = WINFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_kernel_get_attribute_t, POINTER(c_ulong) )
+    _zeKernelGetProperties_t = WINFUNCTYPE( ze_result_t, ze_kernel_handle_t, POINTER(ze_kernel_properties_t) )
 else:
-    _zeKernelGetAttribute_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_kernel_get_attribute_t, POINTER(c_ulong) )
+    _zeKernelGetProperties_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t, POINTER(ze_kernel_properties_t) )
 
 
 ###############################################################################
@@ -1963,7 +1968,7 @@ class _ze_kernel_dditable_t(Structure):
         ("pfnSuggestMaxCooperativeGroupCount", c_void_p),               ## _zeKernelSuggestMaxCooperativeGroupCount_t
         ("pfnSetArgumentValue", c_void_p),                              ## _zeKernelSetArgumentValue_t
         ("pfnSetAttribute", c_void_p),                                  ## _zeKernelSetAttribute_t
-        ("pfnGetAttribute", c_void_p)                                   ## _zeKernelGetAttribute_t
+        ("pfnGetProperties", c_void_p)                                  ## _zeKernelGetProperties_t
     ]
 
 ###############################################################################
@@ -2219,7 +2224,7 @@ class ZE_DDI:
         self.zeKernelSuggestMaxCooperativeGroupCount = _zeKernelSuggestMaxCooperativeGroupCount_t(self.__dditable.Kernel.pfnSuggestMaxCooperativeGroupCount)
         self.zeKernelSetArgumentValue = _zeKernelSetArgumentValue_t(self.__dditable.Kernel.pfnSetArgumentValue)
         self.zeKernelSetAttribute = _zeKernelSetAttribute_t(self.__dditable.Kernel.pfnSetAttribute)
-        self.zeKernelGetAttribute = _zeKernelGetAttribute_t(self.__dditable.Kernel.pfnGetAttribute)
+        self.zeKernelGetProperties = _zeKernelGetProperties_t(self.__dditable.Kernel.pfnGetProperties)
 
         # call driver to get function pointers
         _Sampler = _ze_sampler_dditable_t()

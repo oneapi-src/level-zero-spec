@@ -2610,32 +2610,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeKernelGetAttribute
-    ze_result_t __zecall
-    zeKernelGetAttribute(
-        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        ze_kernel_get_attribute_t attr,                 ///< [in] attribute to query
-        uint32_t* pValue                                ///< [out] returned attribute value
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
-        auto pfnGetAttribute = dditable->ze.Kernel.pfnGetAttribute;
-        if( nullptr == pfnGetAttribute )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
-
-        // forward to device-driver
-        result = pfnGetAttribute( hKernel, attr, pValue );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
     ze_result_t __zecall
     zeKernelSetIntermediateCacheConfig(
@@ -2656,6 +2630,31 @@ namespace loader
 
         // forward to device-driver
         result = pfnSetIntermediateCacheConfig( hKernel, CacheConfig );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeKernelGetProperties
+    ze_result_t __zecall
+    zeKernelGetProperties(
+        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        ze_kernel_properties_t* pKernelProperties       ///< [in,out] query result for kernel properties.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
+        auto pfnGetProperties = dditable->ze.Kernel.pfnGetProperties;
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
+
+        // forward to device-driver
+        result = pfnGetProperties( hKernel, pKernelProperties );
 
         return result;
     }
@@ -3880,7 +3879,7 @@ zeGetKernelProcAddrTable(
             pDdiTable->pfnSuggestMaxCooperativeGroupCount          = loader::zeKernelSuggestMaxCooperativeGroupCount;
             pDdiTable->pfnSetArgumentValue                         = loader::zeKernelSetArgumentValue;
             pDdiTable->pfnSetAttribute                             = loader::zeKernelSetAttribute;
-            pDdiTable->pfnGetAttribute                             = loader::zeKernelGetAttribute;
+            pDdiTable->pfnGetProperties                            = loader::zeKernelGetProperties;
         }
         else
         {

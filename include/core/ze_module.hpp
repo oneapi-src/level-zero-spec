@@ -21,6 +21,12 @@
 #pragma message("warning: this file is not intended to be included directly")
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZE_MAX_KERNEL_NAME
+/// @brief Maximum device name string size
+#define ZE_MAX_KERNEL_NAME  256
+#endif // ZE_MAX_KERNEL_NAME
+
 namespace ze
 {
     ///////////////////////////////////////////////////////////////////////////////
@@ -316,19 +322,10 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Kernel attributes
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **CUfunction_attribute**
-        enum class get_attribute_t
+        /// @brief API version of ::ze_kernel_properties_t
+        enum class properties_version_t
         {
-            KERNEL_GET_ATTR_MAX_REGS_USED = 0,              ///< Maximum device registers used for this kernel
-            KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS,          ///< Maximum dimensions for group for this kernel
-            KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE,            ///< Maximum shared memory required for this kernel
-            KERNEL_GET_ATTR_HAS_SPILL_FILL,                 ///< Kernel required spill/fills
-            KERNEL_GET_ATTR_HAS_BARRIERS,                   ///< Kernel contains barriers
-            KERNEL_GET_ATTR_HAS_DPAS,                       ///< Kernel contains DPAS
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -339,6 +336,17 @@ namespace ze
             desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::ZE_KERNEL_DESC_VERSION_CURRENT
             flag_t flags = flag_t::NONE;                    ///< [in] creation flags
             const char* pKernelName = nullptr;              ///< [in] null-terminated name of kernel in module
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Kernel properties
+        struct properties_t
+        {
+            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::ZE_KERNEL_PROPERTIES_VERSION_CURRENT
+            char name[ZE_MAX_KERNEL_NAME];                  ///< [out] Kernel name
+            uint32_t numKernelArgs;                         ///< [out] number of kernel arguments.
+            CommandList::thread_group_dimensions_t compileGroupSize;///< [out] group size from kernel attribute.
 
         };
 
@@ -518,7 +526,7 @@ namespace ze
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Query a kernel attribute.
+        /// @brief Retrieve kernel properties.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -527,13 +535,10 @@ namespace ze
         /// @remarks
         ///   _Analogues_
         ///     - **cuFuncGetAttribute**
-        /// @returns
-        ///     - uint32_t: returned attribute value
-        /// 
         /// @throws result_t
-        uint32_t __zecall
-        GetAttribute(
-            get_attribute_t attr                            ///< [in] attribute to query
+        void __zecall
+        GetProperties(
+            properties_t* pKernelProperties                 ///< [in,out] query result for kernel properties.
             );
 
     };
@@ -575,8 +580,12 @@ namespace ze
     std::string to_string( const Kernel::set_attribute_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Kernel::get_attribute_t to std::string
-    std::string to_string( const Kernel::get_attribute_t val );
+    /// @brief Converts Kernel::properties_version_t to std::string
+    std::string to_string( const Kernel::properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Kernel::properties_t to std::string
+    std::string to_string( const Kernel::properties_t val );
 
 } // namespace ze
 #endif // defined(__cplusplus)

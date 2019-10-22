@@ -519,40 +519,6 @@ zeKernelSetAttribute(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Query a kernel attribute.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuFuncGetAttribute**
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///         + nullptr == pValue
-///         + invalid value for attr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zeKernelGetAttribute(
-    ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    ze_kernel_get_attribute_t attr,                 ///< [in] attribute to query
-    uint32_t* pValue                                ///< [out] returned attribute value
-    )
-{
-    auto pfnGetAttribute = ze_lib::context.ddiTable.Kernel.pfnGetAttribute;
-    if( nullptr == pfnGetAttribute )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetAttribute( hKernel, attr, pValue );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets the preferred Intermediate cache configuration for a kernel.
 /// 
 /// @details
@@ -582,6 +548,38 @@ zeKernelSetIntermediateCacheConfig(
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetIntermediateCacheConfig( hKernel, CacheConfig );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve kernel properties.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuFuncGetAttribute**
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hKernel
+///         + nullptr == pKernelProperties
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeKernelGetProperties(
+    ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    ze_kernel_properties_t* pKernelProperties       ///< [in,out] query result for kernel properties.
+    )
+{
+    auto pfnGetProperties = ze_lib::context.ddiTable.Kernel.pfnGetProperties;
+    if( nullptr == pfnGetProperties )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetProperties( hKernel, pKernelProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1348,39 +1346,6 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Query a kernel attribute.
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuFuncGetAttribute**
-    /// 
-    /// @returns
-    ///     - uint32_t: returned attribute value
-    /// 
-    /// @throws result_t
-    uint32_t __zecall
-    Kernel::GetAttribute(
-        get_attribute_t attr                            ///< [in] attribute to query
-        )
-    {
-        uint32_t value;
-
-        auto result = static_cast<result_t>( ::zeKernelGetAttribute(
-            reinterpret_cast<ze_kernel_handle_t>( getHandle() ),
-            static_cast<ze_kernel_get_attribute_t>( attr ),
-            &value ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Kernel::GetAttribute" );
-
-        return value;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Sets the preferred Intermediate cache configuration for a kernel.
     /// 
     /// @details
@@ -1403,6 +1368,31 @@ namespace ze
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Kernel::SetIntermediateCacheConfig" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieve kernel properties.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuFuncGetAttribute**
+    /// 
+    /// @throws result_t
+    void __zecall
+    Kernel::GetProperties(
+        properties_t* pKernelProperties                 ///< [in,out] query result for kernel properties.
+        )
+    {
+        auto result = static_cast<result_t>( ::zeKernelGetProperties(
+            reinterpret_cast<ze_kernel_handle_t>( getHandle() ),
+            reinterpret_cast<ze_kernel_properties_t*>( pKernelProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Kernel::GetProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1837,39 +1827,19 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Kernel::get_attribute_t to std::string
-    std::string to_string( const Kernel::get_attribute_t val )
+    /// @brief Converts Kernel::properties_version_t to std::string
+    std::string to_string( const Kernel::properties_version_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Kernel::get_attribute_t::KERNEL_GET_ATTR_MAX_REGS_USED:
-            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_MAX_REGS_USED";
-            break;
-
-        case Kernel::get_attribute_t::KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS:
-            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS";
-            break;
-
-        case Kernel::get_attribute_t::KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE:
-            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE";
-            break;
-
-        case Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_SPILL_FILL:
-            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_SPILL_FILL";
-            break;
-
-        case Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_BARRIERS:
-            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_BARRIERS";
-            break;
-
-        case Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_DPAS:
-            str = "Kernel::get_attribute_t::KERNEL_GET_ATTR_HAS_DPAS";
+        case Kernel::properties_version_t::CURRENT:
+            str = "Kernel::properties_version_t::CURRENT";
             break;
 
         default:
-            str = "Kernel::get_attribute_t::?";
+            str = "Kernel::properties_version_t::?";
             break;
         };
 
@@ -1892,6 +1862,31 @@ namespace ze
         
         str += "Kernel::desc_t::pKernelName : ";
         str += val.pKernelName;
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Kernel::properties_t to std::string
+    std::string to_string( const Kernel::properties_t val )
+    {
+        std::string str;
+        
+        str += "Kernel::properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Kernel::properties_t::name : ";
+        str += val.name;
+        str += "\n";
+        
+        str += "Kernel::properties_t::numKernelArgs : ";
+        str += std::to_string(val.numKernelArgs);
+        str += "\n";
+        
+        str += "Kernel::properties_t::compileGroupSize : ";
+        str += to_string(val.compileGroupSize);
         str += "\n";
 
         return str;

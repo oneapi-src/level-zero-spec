@@ -462,50 +462,6 @@ returns:
         - "invalid value for attr"
         - "invalid value for value"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Kernel attributes"
-class: $xKernel
-name: $x_kernel_get_attribute_t
-analogue:
-    - "**CUfunction_attribute**"
-etors:
-    - name: $X_KERNEL_GET_ATTR_MAX_REGS_USED
-      value: "0"
-      desc: "Maximum device registers used for this kernel"
-    - name: $X_KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS
-      desc: "Maximum dimensions for group for this kernel"
-    - name: $X_KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE
-      desc: "Maximum shared memory required for this kernel"
-    - name: $X_KERNEL_GET_ATTR_HAS_SPILL_FILL
-      desc: "Kernel required spill/fills"
-    - name: $X_KERNEL_GET_ATTR_HAS_BARRIERS
-      desc: "Kernel contains barriers"
-    - name: $X_KERNEL_GET_ATTR_HAS_DPAS
-      desc: "Kernel contains DPAS"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Query a kernel attribute."
-class: $xKernel
-name: GetAttribute
-analogue:
-    - "**cuFuncGetAttribute**"
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: "$x_kernel_handle_t"
-      name: hKernel
-      desc: "[in] handle of the kernel object"
-    - type: "$x_kernel_get_attribute_t"
-      name: attr
-      desc: "[in] attribute to query"
-    - type: "uint32_t*"
-      name: pValue
-      desc: "[out] returned attribute value"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid value for attr"
---- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the preferred Intermediate cache configuration for a kernel."
 class: $xKernel
@@ -543,6 +499,56 @@ members:
       name: groupCountZ
       desc: "[in] size of thread group in Z dimension"
       init: "0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: API version of $x_kernel_properties_t
+class: $xKernel
+name: $x_kernel_properties_version_t
+etors:
+    - name: $X_KERNEL_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device name string size"
+name: $X_MAX_KERNEL_NAME
+value: "256"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Kernel properties"
+class: $xKernel
+name: $x_kernel_properties_t
+members:
+    - type: $x_kernel_properties_version_t
+      name: version
+      desc: "[in] $X_KERNEL_PROPERTIES_VERSION_CURRENT"
+      init: $X_KERNEL_PROPERTIES_VERSION_CURRENT
+    - type: char
+      name: "name[$X_MAX_KERNEL_NAME]"
+      desc: "[out] Kernel name"
+    - type: "uint32_t"
+      name: numKernelArgs
+      desc: "[out] number of kernel arguments."
+    - type: "$x_thread_group_dimensions_t"
+      name: compileGroupSize
+      desc: "[out] group size from kernel attribute."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve kernel properties."
+class: $xKernel
+name: GetProperties
+analogue:
+    - "**cuFuncGetAttribute**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
+    - type: "$x_kernel_properties_t*"
+      name: pKernelProperties
+      desc: "[in,out] query result for kernel properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch kernel over one or more work groups."

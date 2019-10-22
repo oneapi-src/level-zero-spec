@@ -25,7 +25,7 @@ ${"##"} Table of Contents
     + [Fences](#fnc)
     + [Events](#evnt)
 * [Barriers](#brr)
-* [Modules and Kernelss](#mnk)
+* [Modules and Kernels](#mnk)
     + [Modules](#mod)
     + [Kernels](#kern)
     + [Execution](#exe)
@@ -754,18 +754,8 @@ The following sample code demonstrates a sequence for creating a kernel from a m
     ...
 ```
 
-${"###"} Kernel Attributes
-Use ::${x}KernelGetAttribute to query attributes from a kernel object.
+${"###"} Kernel Attributes and Properties
 
-```c
-    ...
-    uint32_t numRegisters;
-
-    // Number of program registers used by kernel.
-    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_GET_ATTR_MAX_REGS_USED, &numRegisters);
-    ...
-```
-See ::${x}_kernel_get_attribute_t for more information on the "get" attributes.
 
 Use ::${x}KernelSetAttribute to set attributes for a kernel object.
 
@@ -776,6 +766,18 @@ Use ::${x}KernelSetAttribute to set attributes for a kernel object.
 ```
 
 See ::${x}_kernel_set_attribute_t for more information on the "set" attributes.
+
+Use ::${x}KernelGetProperties to query invariant properties from a kernel object.
+
+```c
+    ...
+    ${x}_kernel_properties_t kernelProperties;
+
+    // 
+    ${x}KernelGetAttribute(hKernel, &kernelProperties);
+    ...
+```
+See ::${x}_kernel_properties_t for more information for kernel properties.
 
 ${"##"} <a name="exe">Execution</a>
 

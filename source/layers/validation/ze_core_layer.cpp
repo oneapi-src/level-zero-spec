@@ -2402,33 +2402,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeKernelGetAttribute
-    ze_result_t __zecall
-    zeKernelGetAttribute(
-        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        ze_kernel_get_attribute_t attr,                 ///< [in] attribute to query
-        uint32_t* pValue                                ///< [out] returned attribute value
-        )
-    {
-        auto pfnGetAttribute = context.zeDdiTable.Kernel.pfnGetAttribute;
-
-        if( nullptr == pfnGetAttribute )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValue )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetAttribute( hKernel, attr, pValue );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
     ze_result_t __zecall
     zeKernelSetIntermediateCacheConfig(
@@ -2449,6 +2422,32 @@ namespace layer
         }
 
         return pfnSetIntermediateCacheConfig( hKernel, CacheConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeKernelGetProperties
+    ze_result_t __zecall
+    zeKernelGetProperties(
+        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        ze_kernel_properties_t* pKernelProperties       ///< [in,out] query result for kernel properties.
+        )
+    {
+        auto pfnGetProperties = context.zeDdiTable.Kernel.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hKernel )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pKernelProperties )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hKernel, pKernelProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3442,8 +3441,8 @@ zeGetKernelProcAddrTable(
     dditable.pfnSetAttribute                             = pDdiTable->pfnSetAttribute;
     pDdiTable->pfnSetAttribute                           = layer::zeKernelSetAttribute;
 
-    dditable.pfnGetAttribute                             = pDdiTable->pfnGetAttribute;
-    pDdiTable->pfnGetAttribute                           = layer::zeKernelGetAttribute;
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zeKernelGetProperties;
 
     return result;
 }

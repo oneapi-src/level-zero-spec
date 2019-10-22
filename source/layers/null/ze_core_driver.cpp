@@ -2237,31 +2237,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeKernelGetAttribute
-    ze_result_t __zecall
-    zeKernelGetAttribute(
-        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        ze_kernel_get_attribute_t attr,                 ///< [in] attribute to query
-        uint32_t* pValue                                ///< [out] returned attribute value
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetAttribute = context.zeDdiTable.Kernel.pfnGetAttribute;
-        if( nullptr != pfnGetAttribute )
-        {
-            result = pfnGetAttribute( hKernel, attr, pValue );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
     ze_result_t __zecall
     zeKernelSetIntermediateCacheConfig(
@@ -2276,6 +2251,30 @@ namespace driver
         if( nullptr != pfnSetIntermediateCacheConfig )
         {
             result = pfnSetIntermediateCacheConfig( hKernel, CacheConfig );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeKernelGetProperties
+    ze_result_t __zecall
+    zeKernelGetProperties(
+        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        ze_kernel_properties_t* pKernelProperties       ///< [in,out] query result for kernel properties.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.zeDdiTable.Kernel.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hKernel, pKernelProperties );
         }
         else
         {
@@ -7393,62 +7392,6 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeKernelGetAttribute
-    ze_result_t __zecall
-    zeKernelGetAttribute(
-        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        ze_kernel_get_attribute_t attr,                 ///< [in] attribute to query
-        uint32_t* pValue                                ///< [out] returned attribute value
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // capture parameters
-        ze_kernel_get_attribute_params_t in_params = {
-            &hKernel,
-            &attr,
-            &pValue
-        };
-
-        // create storage locations for callbacks
-        std::vector<void*> instanceUserData;
-        instanceUserData.resize( context.tracerData.size() );
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zePrologueCbs.Kernel;
-                if( nullptr != table.pfnGetAttributeCb )
-                    table.pfnGetAttributeCb( &in_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        result = driver::zeKernelGetAttribute( hKernel, attr, pValue );
-
-        // capture parameters
-        ze_kernel_get_attribute_params_t out_params = {
-            &hKernel,
-            &attr,
-            &pValue
-        };
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zeEpilogueCbs.Kernel;
-                if( nullptr != table.pfnGetAttributeCb )
-                    table.pfnGetAttributeCb( &out_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
     ze_result_t __zecall
     zeKernelSetIntermediateCacheConfig(
@@ -7494,6 +7437,59 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.Kernel;
                 if( nullptr != table.pfnSetIntermediateCacheConfigCb )
                     table.pfnSetIntermediateCacheConfigCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeKernelGetProperties
+    ze_result_t __zecall
+    zeKernelGetProperties(
+        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        ze_kernel_properties_t* pKernelProperties       ///< [in,out] query result for kernel properties.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_kernel_get_properties_params_t in_params = {
+            &hKernel,
+            &pKernelProperties
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Kernel;
+                if( nullptr != table.pfnGetPropertiesCb )
+                    table.pfnGetPropertiesCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeKernelGetProperties( hKernel, pKernelProperties );
+
+        // capture parameters
+        ze_kernel_get_properties_params_t out_params = {
+            &hKernel,
+            &pKernelProperties
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Kernel;
+                if( nullptr != table.pfnGetPropertiesCb )
+                    table.pfnGetPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8986,9 +8982,9 @@ zeGetKernelProcAddrTable(
         pDdiTable->pfnSetAttribute                           = driver::zeKernelSetAttribute;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetAttribute                           = instrumented::zeKernelGetAttribute;
+        pDdiTable->pfnGetProperties                          = instrumented::zeKernelGetProperties;
     else
-        pDdiTable->pfnGetAttribute                           = driver::zeKernelGetAttribute;
+        pDdiTable->pfnGetProperties                          = driver::zeKernelGetProperties;
 
     return result;
 }

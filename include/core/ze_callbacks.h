@@ -2485,24 +2485,23 @@ typedef void (__zecall *ze_pfnKernelSetAttributeCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeKernelGetAttribute 
+/// @brief Callback function parameters for zeKernelGetProperties 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_kernel_get_attribute_params_t
+typedef struct _ze_kernel_get_properties_params_t
 {
     ze_kernel_handle_t* phKernel;
-    ze_kernel_get_attribute_t* pattr;
-    uint32_t** ppValue;
-} ze_kernel_get_attribute_params_t;
+    ze_kernel_properties_t** ppKernelProperties;
+} ze_kernel_get_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeKernelGetAttribute 
+/// @brief Callback function-pointer for zeKernelGetProperties 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnKernelGetAttributeCb_t)(
-    ze_kernel_get_attribute_params_t* params,
+typedef void (__zecall *ze_pfnKernelGetPropertiesCb_t)(
+    ze_kernel_get_properties_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -2520,7 +2519,7 @@ typedef struct _ze_kernel_callbacks_t
     ze_pfnKernelSuggestMaxCooperativeGroupCountCb_t                 pfnSuggestMaxCooperativeGroupCountCb;
     ze_pfnKernelSetArgumentValueCb_t                                pfnSetArgumentValueCb;
     ze_pfnKernelSetAttributeCb_t                                    pfnSetAttributeCb;
-    ze_pfnKernelGetAttributeCb_t                                    pfnGetAttributeCb;
+    ze_pfnKernelGetPropertiesCb_t                                   pfnGetPropertiesCb;
 } ze_kernel_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////

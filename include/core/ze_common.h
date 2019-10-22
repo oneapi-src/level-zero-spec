@@ -282,6 +282,10 @@ typedef struct _ze_kernel_desc_t ze_kernel_desc_t;
 typedef struct _ze_thread_group_dimensions_t ze_thread_group_dimensions_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ze_kernel_properties_t
+typedef struct _ze_kernel_properties_t ze_kernel_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare ze_sampler_desc_t
 typedef struct _ze_sampler_desc_t ze_sampler_desc_t;
 

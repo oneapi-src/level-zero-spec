@@ -514,50 +514,6 @@ zeKernelSetAttribute(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Kernel attributes
-/// 
-/// @remarks
-///   _Analogues_
-///     - **CUfunction_attribute**
-typedef enum _ze_kernel_get_attribute_t
-{
-    ZE_KERNEL_GET_ATTR_MAX_REGS_USED = 0,           ///< Maximum device registers used for this kernel
-    ZE_KERNEL_GET_ATTR_NUM_THREAD_DIMENSIONS,       ///< Maximum dimensions for group for this kernel
-    ZE_KERNEL_GET_ATTR_MAX_SHARED_MEM_SIZE,         ///< Maximum shared memory required for this kernel
-    ZE_KERNEL_GET_ATTR_HAS_SPILL_FILL,              ///< Kernel required spill/fills
-    ZE_KERNEL_GET_ATTR_HAS_BARRIERS,                ///< Kernel contains barriers
-    ZE_KERNEL_GET_ATTR_HAS_DPAS,                    ///< Kernel contains DPAS
-
-} ze_kernel_get_attribute_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Query a kernel attribute.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuFuncGetAttribute**
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///         + nullptr == pValue
-///         + invalid value for attr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zeKernelGetAttribute(
-    ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    ze_kernel_get_attribute_t attr,                 ///< [in] attribute to query
-    uint32_t* pValue                                ///< [out] returned attribute value
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets the preferred Intermediate cache configuration for a kernel.
 /// 
 /// @details
@@ -591,6 +547,56 @@ typedef struct _ze_thread_group_dimensions_t
     uint32_t groupCountZ;                           ///< [in] size of thread group in Z dimension
 
 } ze_thread_group_dimensions_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::ze_kernel_properties_t
+typedef enum _ze_kernel_properties_version_t
+{
+    ZE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+
+} ze_kernel_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZE_MAX_KERNEL_NAME
+/// @brief Maximum device name string size
+#define ZE_MAX_KERNEL_NAME  256
+#endif // ZE_MAX_KERNEL_NAME
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Kernel properties
+typedef struct _ze_kernel_properties_t
+{
+    ze_kernel_properties_version_t version;         ///< [in] ::ZE_KERNEL_PROPERTIES_VERSION_CURRENT
+    char name[ZE_MAX_KERNEL_NAME];                  ///< [out] Kernel name
+    uint32_t numKernelArgs;                         ///< [out] number of kernel arguments.
+    ze_thread_group_dimensions_t compileGroupSize;  ///< [out] group size from kernel attribute.
+
+} ze_kernel_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve kernel properties.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuFuncGetAttribute**
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hKernel
+///         + nullptr == pKernelProperties
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeKernelGetProperties(
+    ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    ze_kernel_properties_t* pKernelProperties       ///< [in,out] query result for kernel properties.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Launch kernel over one or more work groups.
