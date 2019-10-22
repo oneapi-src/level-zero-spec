@@ -2533,9 +2533,7 @@ namespace loader
     ze_result_t __zecall
     zeKernelSuggestMaxCooperativeGroupCount(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
-        uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
-        uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
+        uint32_t* totalGroupCount                       ///< [out] recommended total group count.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -2550,7 +2548,7 @@ namespace loader
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnSuggestMaxCooperativeGroupCount( hKernel, groupCountX, groupCountY, groupCountZ );
+        result = pfnSuggestMaxCooperativeGroupCount( hKernel, totalGroupCount );
 
         return result;
     }

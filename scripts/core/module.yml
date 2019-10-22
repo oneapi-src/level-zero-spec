@@ -385,14 +385,8 @@ params:
       name: hKernel
       desc: "[in] handle of the kernel object" 
     - type: "uint32_t*"
-      name: groupCountX
-      desc: "[out] recommend group count X dimension."
-    - type: "uint32_t*"
-      name: groupCountY
-      desc: "[out] recommend group count Y dimension."
-    - type: "uint32_t*"
-      name: groupCountZ
-      desc: "[out] recommend group count Z dimension."
+      name: totalGroupCount
+      desc: "[out] recommended total group count."
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid number of threads."        

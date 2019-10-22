@@ -2417,9 +2417,7 @@ typedef void (__zecall *ze_pfnKernelSuggestGroupSizeCb_t)(
 typedef struct _ze_kernel_suggest_max_cooperative_group_count_params_t
 {
     ze_kernel_handle_t* phKernel;
-    uint32_t** pgroupCountX;
-    uint32_t** pgroupCountY;
-    uint32_t** pgroupCountZ;
+    uint32_t** ptotalGroupCount;
 } ze_kernel_suggest_max_cooperative_group_count_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////

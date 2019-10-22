@@ -479,12 +479,10 @@ namespace ze
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - uint32_t: recommend group count X dimension.
-        ///     - uint32_t: recommend group count Y dimension.
-        ///     - uint32_t: recommend group count Z dimension.
+        ///     - uint32_t: recommended total group count.
         /// 
         /// @throws result_t
-        std::tuple<uint32_t, uint32_t, uint32_t> __zecall
+        uint32_t __zecall
         SuggestMaxCooperativeGroupCount(
             void
             );

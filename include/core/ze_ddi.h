@@ -1200,8 +1200,6 @@ typedef ze_result_t (__zecall *ze_pfnKernelSuggestGroupSize_t)(
 /// @brief Function-pointer for zeKernelSuggestMaxCooperativeGroupCount 
 typedef ze_result_t (__zecall *ze_pfnKernelSuggestMaxCooperativeGroupCount_t)(
     ze_kernel_handle_t,
-    uint32_t*,
-    uint32_t*,
     uint32_t*
     );
 

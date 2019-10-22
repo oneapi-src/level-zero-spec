@@ -1930,9 +1930,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zeKernelSuggestMaxCooperativeGroupCount
 if __use_win_types:
-    _zeKernelSuggestMaxCooperativeGroupCount_t = WINFUNCTYPE( ze_result_t, ze_kernel_handle_t, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
+    _zeKernelSuggestMaxCooperativeGroupCount_t = WINFUNCTYPE( ze_result_t, ze_kernel_handle_t, POINTER(c_ulong) )
 else:
-    _zeKernelSuggestMaxCooperativeGroupCount_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t, POINTER(c_ulong), POINTER(c_ulong), POINTER(c_ulong) )
+    _zeKernelSuggestMaxCooperativeGroupCount_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
 ## @brief Function-pointer for zeKernelSetArgumentValue

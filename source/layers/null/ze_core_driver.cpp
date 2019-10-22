@@ -2163,9 +2163,7 @@ namespace driver
     ze_result_t __zecall
     zeKernelSuggestMaxCooperativeGroupCount(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
-        uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
-        uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
+        uint32_t* totalGroupCount                       ///< [out] recommended total group count.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -2174,7 +2172,7 @@ namespace driver
         auto pfnSuggestMaxCooperativeGroupCount = context.zeDdiTable.Kernel.pfnSuggestMaxCooperativeGroupCount;
         if( nullptr != pfnSuggestMaxCooperativeGroupCount )
         {
-            result = pfnSuggestMaxCooperativeGroupCount( hKernel, groupCountX, groupCountY, groupCountZ );
+            result = pfnSuggestMaxCooperativeGroupCount( hKernel, totalGroupCount );
         }
         else
         {
@@ -7221,9 +7219,7 @@ namespace instrumented
     ze_result_t __zecall
     zeKernelSuggestMaxCooperativeGroupCount(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
-        uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
-        uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
+        uint32_t* totalGroupCount                       ///< [out] recommended total group count.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -7231,9 +7227,7 @@ namespace instrumented
         // capture parameters
         ze_kernel_suggest_max_cooperative_group_count_params_t in_params = {
             &hKernel,
-            &groupCountX,
-            &groupCountY,
-            &groupCountZ
+            &totalGroupCount
         };
 
         // create storage locations for callbacks
@@ -7251,14 +7245,12 @@ namespace instrumented
                         &instanceUserData[ i ] );
             }
 
-        result = driver::zeKernelSuggestMaxCooperativeGroupCount( hKernel, groupCountX, groupCountY, groupCountZ );
+        result = driver::zeKernelSuggestMaxCooperativeGroupCount( hKernel, totalGroupCount );
 
         // capture parameters
         ze_kernel_suggest_max_cooperative_group_count_params_t out_params = {
             &hKernel,
-            &groupCountX,
-            &groupCountY,
-            &groupCountZ
+            &totalGroupCount
         };
 
         // call each callback registered

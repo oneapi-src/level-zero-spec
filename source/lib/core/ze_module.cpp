@@ -428,24 +428,20 @@ zeKernelSuggestGroupSize(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hKernel
-///         + nullptr == groupCountX
-///         + nullptr == groupCountY
-///         + nullptr == groupCountZ
+///         + nullptr == totalGroupCount
 ///         + invalid number of threads.
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zeKernelSuggestMaxCooperativeGroupCount(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    uint32_t* groupCountX,                          ///< [out] recommend group count X dimension.
-    uint32_t* groupCountY,                          ///< [out] recommend group count Y dimension.
-    uint32_t* groupCountZ                           ///< [out] recommend group count Z dimension.
+    uint32_t* totalGroupCount                       ///< [out] recommended total group count.
     )
 {
     auto pfnSuggestMaxCooperativeGroupCount = ze_lib::context.ddiTable.Kernel.pfnSuggestMaxCooperativeGroupCount;
     if( nullptr == pfnSuggestMaxCooperativeGroupCount )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSuggestMaxCooperativeGroupCount( hKernel, groupCountX, groupCountY, groupCountZ );
+    return pfnSuggestMaxCooperativeGroupCount( hKernel, totalGroupCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1260,32 +1256,24 @@ namespace ze
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - uint32_t: recommend group count X dimension.
-    ///     - uint32_t: recommend group count Y dimension.
-    ///     - uint32_t: recommend group count Z dimension.
+    ///     - uint32_t: recommended total group count.
     /// 
     /// @throws result_t
-    std::tuple<uint32_t, uint32_t, uint32_t> __zecall
+    uint32_t __zecall
     Kernel::SuggestMaxCooperativeGroupCount(
         void
         )
     {
-        uint32_t groupCountX;
-
-        uint32_t groupCountY;
-
-        uint32_t groupCountZ;
+        uint32_t totalGroupCount;
 
         auto result = static_cast<result_t>( ::zeKernelSuggestMaxCooperativeGroupCount(
             reinterpret_cast<ze_kernel_handle_t>( getHandle() ),
-            &groupCountX,
-            &groupCountY,
-            &groupCountZ ) );
+            &totalGroupCount ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Kernel::SuggestMaxCooperativeGroupCount" );
 
-        return std::make_tuple( groupCountX, groupCountY, groupCountZ );
+        return totalGroupCount;
     }
 
     ///////////////////////////////////////////////////////////////////////////////

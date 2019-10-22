@@ -774,7 +774,7 @@ Use ::${x}KernelGetProperties to query invariant properties from a kernel object
     ${x}_kernel_properties_t kernelProperties;
 
     // 
-    ${x}KernelGetAttribute(hKernel, &kernelProperties);
+    ${x}KernelGetProperties(hKernel, &kernelProperties);
     ...
 ```
 See ::${x}_kernel_properties_t for more information for kernel properties.

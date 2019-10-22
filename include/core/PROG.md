@@ -768,7 +768,7 @@ Use ::zeKernelGetProperties to query invariant properties from a kernel object.
     ze_kernel_properties_t kernelProperties;
 
     // 
-    zeKernelGetAttribute(hKernel, &kernelProperties);
+    zeKernelGetProperties(hKernel, &kernelProperties);
     ...
 ```
 See ::ze_kernel_properties_t for more information for kernel properties.
