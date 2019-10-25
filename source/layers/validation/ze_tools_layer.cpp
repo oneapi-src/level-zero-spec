@@ -2082,9 +2082,9 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGet
+    /// @brief Intercept function for zetSysmanFabricPortGet
     ze_result_t __zecall
-    zetSysmanLinkSwitchGet(
+    zetSysmanFabricPortGet(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -2093,13 +2093,13 @@ namespace layer
                                                         ///< if count is larger than the number of components available, then the
                                                         ///< driver will update the value with the correct number of components
                                                         ///< that are returned.
-        zet_sysman_link_switch_handle_t* phSwitch       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+        zet_sysman_fabric_port_handle_t* phPort         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                         ///< this type
         )
     {
-        auto pfnLinkSwitchGet = context.zetDdiTable.Sysman.pfnLinkSwitchGet;
+        auto pfnFabricPortGet = context.zetDdiTable.Sysman.pfnFabricPortGet;
 
-        if( nullptr == pfnLinkSwitchGet )
+        if( nullptr == pfnFabricPortGet )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2112,127 +2112,18 @@ namespace layer
 
         }
 
-        return pfnLinkSwitchGet( hSysman, pCount, phSwitch );
+        return pfnFabricPortGet( hSysman, pCount, phPort );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGetProperties
+    /// @brief Intercept function for zetSysmanFabricPortGetProperties
     ze_result_t __zecall
-    zetSysmanLinkSwitchGetProperties(
-        zet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
-        zet_link_switch_properties_t* pProperties       ///< [in] Will contain the Switch properties.
+    zetSysmanFabricPortGetProperties(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_properties_t* pProperties       ///< [in] Will contain properties of the Fabric Port.
         )
     {
-        auto pfnGetProperties = context.zetDdiTable.SysmanLinkSwitch.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSwitch )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetProperties( hSwitch, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGetState
-    ze_result_t __zecall
-    zetSysmanLinkSwitchGetState(
-        zet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
-        zet_link_switch_state_t* pState                 ///< [in] Will contain the current state of the switch (enabled/disabled).
-        )
-    {
-        auto pfnGetState = context.zetDdiTable.SysmanLinkSwitch.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSwitch )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pState )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetState( hSwitch, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchSetState
-    ze_result_t __zecall
-    zetSysmanLinkSwitchSetState(
-        zet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
-        ze_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
-        )
-    {
-        auto pfnSetState = context.zetDdiTable.SysmanLinkSwitch.pfnSetState;
-
-        if( nullptr == pfnSetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSwitch )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetState( hSwitch, enable );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGetPorts
-    ze_result_t __zecall
-    zetSysmanLinkSwitchGetPorts(
-        zet_sysman_link_switch_handle_t hSysmanLinkSwitch,  ///< [in] SMI handle of the connectivity switch.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zet_sysman_link_port_handle_t* phPort           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnGetPorts = context.zetDdiTable.SysmanLinkSwitch.pfnGetPorts;
-
-        if( nullptr == pfnGetPorts )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysmanLinkSwitch )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetPorts( hSysmanLinkSwitch, pCount, phPort );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetProperties
-    ze_result_t __zecall
-    zetSysmanLinkPortGetProperties(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_properties_t* pProperties         ///< [in] Will contain properties of the Switch Port
-        )
-    {
-        auto pfnGetProperties = context.zetDdiTable.SysmanLinkPort.pfnGetProperties;
+        auto pfnGetProperties = context.zetDdiTable.SysmanFabricPort.pfnGetProperties;
 
         if( nullptr == pfnGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED;
@@ -2251,14 +2142,93 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetState
+    /// @brief Intercept function for zetSysmanFabricPortGetLinkType
     ze_result_t __zecall
-    zetSysmanLinkPortGetState(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_state_t* pState                   ///< [in] Will contain the current state of the Switch Port
+    zetSysmanFabricPortGetLinkType(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
+        zet_fabric_link_type_t* pLinkType               ///< [in] Will contain details about the link attached to the Fabric port.
         )
     {
-        auto pfnGetState = context.zetDdiTable.SysmanLinkPort.pfnGetState;
+        auto pfnGetLinkType = context.zetDdiTable.SysmanFabricPort.pfnGetLinkType;
+
+        if( nullptr == pfnGetLinkType )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pLinkType )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetLinkType( hPort, verbose, pLinkType );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFabricPortGetConfig
+    ze_result_t __zecall
+    zetSysmanFabricPortGetConfig(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_config_t* pConfig               ///< [in] Will contain configuration of the Fabric Port.
+        )
+    {
+        auto pfnGetConfig = context.zetDdiTable.SysmanFabricPort.pfnGetConfig;
+
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetConfig( hPort, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFabricPortSetConfig
+    ze_result_t __zecall
+    zetSysmanFabricPortSetConfig(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_config_t* pConfig               ///< [in] Contains new configuration of the Fabric Port.
+        )
+    {
+        auto pfnSetConfig = context.zetDdiTable.SysmanFabricPort.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetConfig( hPort, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFabricPortGetState
+    ze_result_t __zecall
+    zetSysmanFabricPortGetState(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_state_t* pState                 ///< [in] Will contain the current state of the Fabric Port
+        )
+    {
+        auto pfnGetState = context.zetDdiTable.SysmanFabricPort.pfnGetState;
 
         if( nullptr == pfnGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED;
@@ -2277,14 +2247,15 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetThroughput
+    /// @brief Intercept function for zetSysmanFabricPortGetThroughput
     ze_result_t __zecall
-    zetSysmanLinkPortGetThroughput(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_throughput_t* pThroughput         ///< [in] Will contain the Switch port throughput counters.
+    zetSysmanFabricPortGetThroughput(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_throughput_t* pThroughput       ///< [in] Will contain the Fabric port throughput counters and maximum
+                                                        ///< bandwidth.
         )
     {
-        auto pfnGetThroughput = context.zetDdiTable.SysmanLinkPort.pfnGetThroughput;
+        auto pfnGetThroughput = context.zetDdiTable.SysmanFabricPort.pfnGetThroughput;
 
         if( nullptr == pfnGetThroughput )
             return ZE_RESULT_ERROR_UNSUPPORTED;
@@ -2300,62 +2271,6 @@ namespace layer
         }
 
         return pfnGetThroughput( hPort, pThroughput );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetStats
-    ze_result_t __zecall
-    zetSysmanLinkPortGetStats(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_stats_t* pStats                   ///< [in] Will contain the Switch port stats.
-        )
-    {
-        auto pfnGetStats = context.zetDdiTable.SysmanLinkPort.pfnGetStats;
-
-        if( nullptr == pfnGetStats )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPort )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pStats )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetStats( hPort, pStats );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortIsConnected
-    ze_result_t __zecall
-    zetSysmanLinkPortIsConnected(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle of the local connectivity port.
-        zet_sysman_link_port_handle_t hRemotePort,      ///< [in] Handle of the remote connectivity port.
-        ze_bool_t* pConnected                           ///< [in] Will indicate connected to the remote port.
-        )
-    {
-        auto pfnIsConnected = context.zetDdiTable.SysmanLinkPort.pfnIsConnected;
-
-        if( nullptr == pfnIsConnected )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPort )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == hRemotePort )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pConnected )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnIsConnected( hPort, hRemotePort, pConnected );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3715,8 +3630,8 @@ zetGetSysmanProcAddrTable(
     dditable.pfnMemoryGet                                = pDdiTable->pfnMemoryGet;
     pDdiTable->pfnMemoryGet                              = layer::zetSysmanMemoryGet;
 
-    dditable.pfnLinkSwitchGet                            = pDdiTable->pfnLinkSwitchGet;
-    pDdiTable->pfnLinkSwitchGet                          = layer::zetSysmanLinkSwitchGet;
+    dditable.pfnFabricPortGet                            = pDdiTable->pfnFabricPortGet;
+    pDdiTable->pfnFabricPortGet                          = layer::zetSysmanFabricPortGet;
 
     dditable.pfnTemperatureGet                           = pDdiTable->pfnTemperatureGet;
     pDdiTable->pfnTemperatureGet                         = layer::zetSysmanTemperatureGet;
@@ -4022,7 +3937,7 @@ zetGetSysmanMemoryProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanLinkSwitch table
+/// @brief Exported function for filling application's SysmanFabricPort table
 ///        with current process' addresses
 ///
 /// @returns
@@ -4033,12 +3948,12 @@ zetGetSysmanMemoryProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __zedllexport ze_result_t __zecall
-zetGetSysmanLinkSwitchProcAddrTable(
+zetGetSysmanFabricPortProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zet_sysman_link_switch_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    zet_sysman_fabric_port_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zetDdiTable.SysmanLinkSwitch;
+    auto& dditable = layer::context.zetDdiTable.SysmanFabricPort;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -4049,61 +3964,22 @@ zetGetSysmanLinkSwitchProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zetSysmanLinkSwitchGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zetSysmanFabricPortGetProperties;
+
+    dditable.pfnGetLinkType                              = pDdiTable->pfnGetLinkType;
+    pDdiTable->pfnGetLinkType                            = layer::zetSysmanFabricPortGetLinkType;
+
+    dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zetSysmanFabricPortGetConfig;
+
+    dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zetSysmanFabricPortSetConfig;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zetSysmanLinkSwitchGetState;
-
-    dditable.pfnSetState                                 = pDdiTable->pfnSetState;
-    pDdiTable->pfnSetState                               = layer::zetSysmanLinkSwitchSetState;
-
-    dditable.pfnGetPorts                                 = pDdiTable->pfnGetPorts;
-    pDdiTable->pfnGetPorts                               = layer::zetSysmanLinkSwitchGetPorts;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanLinkPort table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__zedllexport ze_result_t __zecall
-zetGetSysmanLinkPortProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zet_sysman_link_port_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    auto& dditable = layer::context.zetDdiTable.SysmanLinkPort;
-
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zetSysmanLinkPortGetProperties;
-
-    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zetSysmanLinkPortGetState;
+    pDdiTable->pfnGetState                               = layer::zetSysmanFabricPortGetState;
 
     dditable.pfnGetThroughput                            = pDdiTable->pfnGetThroughput;
-    pDdiTable->pfnGetThroughput                          = layer::zetSysmanLinkPortGetThroughput;
-
-    dditable.pfnGetStats                                 = pDdiTable->pfnGetStats;
-    pDdiTable->pfnGetStats                               = layer::zetSysmanLinkPortGetStats;
-
-    dditable.pfnIsConnected                              = pDdiTable->pfnIsConnected;
-    pDdiTable->pfnIsConnected                            = layer::zetSysmanLinkPortIsConnected;
+    pDdiTable->pfnGetThroughput                          = layer::zetSysmanFabricPortGetThroughput;
 
     return result;
 }

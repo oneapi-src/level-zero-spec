@@ -25,7 +25,7 @@ void PrintRasDetails(zet_ras_details_t* pDetails)
     fprintf(stdout, "        Number new cache errors:          %llu\n", (long long unsigned int)pDetails->numCacheErrors);
     fprintf(stdout, "        Number new memory errors:         %llu\n", (long long unsigned int)pDetails->numMemoryErrors);
     fprintf(stdout, "        Number new PCI errors:            %llu\n", (long long unsigned int)pDetails->numPciErrors);
-    fprintf(stdout, "        Number new switch errors:         %llu\n", (long long unsigned int)pDetails->numSwitchErrors);
+    fprintf(stdout, "        Number new fabric errors:         %llu\n", (long long unsigned int)pDetails->numFabricErrors);
     fprintf(stdout, "        Number new display errors:        %llu\n", (long long unsigned int)pDetails->numDisplayErrors);
 }
 
@@ -130,49 +130,67 @@ void ResetDevice(zet_sysman_handle_t hSysmanDevice)
     }
 }
 
-void ShowSwitchInfo(zet_sysman_link_switch_handle_t hSwitch)
+void ShowFabricPortInfo(zet_sysman_fabric_port_handle_t hPort)
 {
-    zet_link_switch_properties_t swprops;
-    if (zetSysmanLinkSwitchGetProperties(hSwitch, &swprops) == ZE_RESULT_SUCCESS)
+    zet_fabric_port_properties_t props;
+    if (zetSysmanFabricPortGetProperties(hPort, &props) == ZE_RESULT_SUCCESS)
     {
-        zet_link_switch_state_t swstate;
-        if (zetSysmanLinkSwitchGetState(hSwitch, &swstate) == ZE_RESULT_SUCCESS)
+        zet_fabric_port_state_t state;
+        if (zetSysmanFabricPortGetState(hPort, &state) == ZE_RESULT_SUCCESS)
         {
-            if (swprops.onSubdevice)
+            zet_fabric_link_type_t link;
+            if (zetSysmanFabricPortGetLinkType(hPort, false, &link) == ZE_RESULT_SUCCESS)
             {
-                fprintf(stdout, "        On sub-device: %u\n", swprops.subdeviceId);
-            }
-            fprintf(stdout, "        State:         %s\n", swstate.enabled ? "Enabled" : "Disabled");
-            if (swstate.enabled)
-            {
-                uint32_t numPorts;
-                if (zetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, NULL) == ZE_RESULT_SUCCESS)
+                zet_fabric_port_config_t config;
+                if (zetSysmanFabricPortGetConfig(hPort, &config) == ZE_RESULT_SUCCESS)
                 {
-                    zet_sysman_link_port_handle_t* phPorts =
-                        (zet_sysman_link_port_handle_t*)malloc(numPorts * sizeof(zet_sysman_link_port_handle_t));
-                    if (zetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, phPorts) == ZE_RESULT_SUCCESS)
+                    fprintf(stdout,
+                        "        Model:                 %s\n", props.model);
+                    if (props.onSubdevice)
                     {
-                        fprintf(stdout, "        Ports:\n");
-                        for (uint32_t portIndex = 0; portIndex < numPorts; portIndex++)
+                        fprintf(stdout,
+                            "        On sub-device:         %u\n", props.subdeviceId);
+                    }
+                    if (config.enabled)
+                    {
+                        const char* status;
+                        fprintf(stdout,
+                            "        Config:                UP\n");
+                        switch (state.status)
                         {
-                            zet_link_port_state_t portstate;
-                            if (zetSysmanLinkPortGetState(phPorts[portIndex], &portstate)
-                                == ZE_RESULT_SUCCESS)
-                            {
-                                fprintf(stdout, "            %u: ", portIndex);
-                                if (portstate.isConnected)
-                                {
-                                    fprintf(stdout,
-                                        "connected, max rx/tx bandwidth: %llu/%llu bytes/sec\n",
-                                        (long long unsigned int)portstate.rxSpeed.maxBandwidth,
-                                        (long long unsigned int)portstate.txSpeed.maxBandwidth);
-                                }
-                                else
-                                {
-                                    fprintf(stdout, "not connected\n");
-                                }
-                            }
+                        case ZET_FABRIC_PORT_STATUS_GREEN:
+                            status = "GREEN - The port is up and operating as expected";
+                            break;
+                        case ZET_FABRIC_PORT_STATUS_YELLOW:
+                            status = "YELLOW - The port is up but has quality and/or bandwidth degradation";
+                            break;
+                        case ZET_FABRIC_PORT_STATUS_RED:
+                            status = "RED - Port connection instabilities";
+                            break;
+                        case ZET_FABRIC_PORT_STATUS_BLACK:
+                            status = "BLACK - The port is configured down";
+                            break;
+                        default:
+                            status = "UNKNOWN";
+                            break;
                         }
+                        fprintf(stdout,
+                            "        Status:                %s\n", status);
+                        fprintf(stdout,
+                            "        Link type:             %s\n", link.desc);
+                        fprintf(stdout,
+                            "        Max speed (rx/tx):     %llu/%llu bytes/sec\n",
+                            (long long unsigned int)props.maxRxSpeed.maxBandwidth,
+                            (long long unsigned int)props.maxTxSpeed.maxBandwidth);
+                        fprintf(stdout,
+                            "        Current speed (rx/tx): %llu/%llu bytes/sec\n",
+                            (long long unsigned int)state.rxSpeed.maxBandwidth,
+                            (long long unsigned int)state.txSpeed.maxBandwidth);
+                    }
+                    else
+                    {
+                        fprintf(stdout,
+                            "        Config:                DOWN\n");
                     }
                 }
             }
@@ -180,21 +198,22 @@ void ShowSwitchInfo(zet_sysman_link_switch_handle_t hSwitch)
     }
 }
 
-void ShowSwitches(zet_sysman_handle_t hSysmanDevice)
+void ShowFabricPorts(zet_sysman_handle_t hSysmanDevice)
 {
-    uint32_t numSwitches;
-    if ((zetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, NULL) == ZE_RESULT_SUCCESS) && numSwitches)
+    uint32_t numPorts;
+    if ((zetSysmanFabricPortGet(hSysmanDevice, &numPorts, NULL) == ZE_RESULT_SUCCESS) && numPorts)
     {
-        zet_sysman_link_switch_handle_t* phSwitches =
-            (zet_sysman_link_switch_handle_t*)malloc(numSwitches * sizeof(zet_sysman_link_switch_handle_t));
-        if (zetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, phSwitches) == ZE_RESULT_SUCCESS)
+        zet_sysman_fabric_port_handle_t* phPorts =
+            (zet_sysman_fabric_port_handle_t*)malloc(numPorts * sizeof(zet_sysman_fabric_port_handle_t));
+        if (zetSysmanFabricPortGet(hSysmanDevice, &numPorts, phPorts) == ZE_RESULT_SUCCESS)
         {
-            for (uint32_t index = 0; index < numSwitches; index++)
+            for (uint32_t index = 0; index < numPorts; index++)
             {
-                fprintf(stdout, "    Switch %u:\n", index);
-                ShowSwitchInfo(phSwitches[index]);
+                fprintf(stdout, "    Port %u:\n", index);
+                ShowFabricPortInfo(phPorts[index]);
             }
         }
+        free(phPorts);
     }
 }
 

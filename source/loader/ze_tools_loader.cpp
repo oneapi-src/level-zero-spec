@@ -34,8 +34,7 @@ namespace loader
     zet_sysman_standby_factory_t        zet_sysman_standby_factory;
     zet_sysman_firmware_factory_t       zet_sysman_firmware_factory;
     zet_sysman_mem_factory_t            zet_sysman_mem_factory;
-    zet_sysman_link_switch_factory_t    zet_sysman_link_switch_factory;
-    zet_sysman_link_port_factory_t      zet_sysman_link_port_factory;
+    zet_sysman_fabric_port_factory_t    zet_sysman_fabric_port_factory;
     zet_sysman_temp_factory_t           zet_sysman_temp_factory;
     zet_sysman_psu_factory_t            zet_sysman_psu_factory;
     zet_sysman_fan_factory_t            zet_sysman_fan_factory;
@@ -2214,9 +2213,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGet
+    /// @brief Intercept function for zetSysmanFabricPortGet
     ze_result_t __zecall
-    zetSysmanLinkSwitchGet(
+    zetSysmanFabricPortGet(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -2225,7 +2224,7 @@ namespace loader
                                                         ///< if count is larger than the number of components available, then the
                                                         ///< driver will update the value with the correct number of components
                                                         ///< that are returned.
-        zet_sysman_link_switch_handle_t* phSwitch       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+        zet_sysman_fabric_port_handle_t* phPort         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                         ///< this type
         )
     {
@@ -2233,142 +2232,22 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnLinkSwitchGet = dditable->zet.Sysman.pfnLinkSwitchGet;
-        if( nullptr == pfnLinkSwitchGet )
+        auto pfnFabricPortGet = dditable->zet.Sysman.pfnFabricPortGet;
+        if( nullptr == pfnFabricPortGet )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnLinkSwitchGet( hSysman, pCount, phSwitch );
-
-        try
-        {
-            // convert driver handles to loader handles
-            for( size_t i = 0; ( nullptr != phSwitch ) && ( i < *pCount ); ++i )
-                phSwitch[ i ] = reinterpret_cast<zet_sysman_link_switch_handle_t>(
-                    zet_sysman_link_switch_factory.getInstance( phSwitch[ i ], dditable ) );
-        }
-        catch( std::bad_alloc& )
-        {
-            result = ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGetProperties
-    ze_result_t __zecall
-    zetSysmanLinkSwitchGetProperties(
-        zet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
-        zet_link_switch_properties_t* pProperties       ///< [in] Will contain the Switch properties.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_link_switch_object_t*>( hSwitch )->dditable;
-        auto pfnGetProperties = dditable->zet.SysmanLinkSwitch.pfnGetProperties;
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hSwitch = reinterpret_cast<zet_sysman_link_switch_object_t*>( hSwitch )->handle;
-
-        // forward to device-driver
-        result = pfnGetProperties( hSwitch, pProperties );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGetState
-    ze_result_t __zecall
-    zetSysmanLinkSwitchGetState(
-        zet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
-        zet_link_switch_state_t* pState                 ///< [in] Will contain the current state of the switch (enabled/disabled).
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_link_switch_object_t*>( hSwitch )->dditable;
-        auto pfnGetState = dditable->zet.SysmanLinkSwitch.pfnGetState;
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hSwitch = reinterpret_cast<zet_sysman_link_switch_object_t*>( hSwitch )->handle;
-
-        // forward to device-driver
-        result = pfnGetState( hSwitch, pState );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchSetState
-    ze_result_t __zecall
-    zetSysmanLinkSwitchSetState(
-        zet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
-        ze_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_link_switch_object_t*>( hSwitch )->dditable;
-        auto pfnSetState = dditable->zet.SysmanLinkSwitch.pfnSetState;
-        if( nullptr == pfnSetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hSwitch = reinterpret_cast<zet_sysman_link_switch_object_t*>( hSwitch )->handle;
-
-        // forward to device-driver
-        result = pfnSetState( hSwitch, enable );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGetPorts
-    ze_result_t __zecall
-    zetSysmanLinkSwitchGetPorts(
-        zet_sysman_link_switch_handle_t hSysmanLinkSwitch,  ///< [in] SMI handle of the connectivity switch.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zet_sysman_link_port_handle_t* phPort           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_link_switch_object_t*>( hSysmanLinkSwitch )->dditable;
-        auto pfnGetPorts = dditable->zet.SysmanLinkSwitch.pfnGetPorts;
-        if( nullptr == pfnGetPorts )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hSysmanLinkSwitch = reinterpret_cast<zet_sysman_link_switch_object_t*>( hSysmanLinkSwitch )->handle;
-
-        // forward to device-driver
-        result = pfnGetPorts( hSysmanLinkSwitch, pCount, phPort );
+        result = pfnFabricPortGet( hSysman, pCount, phPort );
 
         try
         {
             // convert driver handles to loader handles
             for( size_t i = 0; ( nullptr != phPort ) && ( i < *pCount ); ++i )
-                phPort[ i ] = reinterpret_cast<zet_sysman_link_port_handle_t>(
-                    zet_sysman_link_port_factory.getInstance( phPort[ i ], dditable ) );
+                phPort[ i ] = reinterpret_cast<zet_sysman_fabric_port_handle_t>(
+                    zet_sysman_fabric_port_factory.getInstance( phPort[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -2379,23 +2258,23 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetProperties
+    /// @brief Intercept function for zetSysmanFabricPortGetProperties
     ze_result_t __zecall
-    zetSysmanLinkPortGetProperties(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_properties_t* pProperties         ///< [in] Will contain properties of the Switch Port
+    zetSysmanFabricPortGetProperties(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_properties_t* pProperties       ///< [in] Will contain properties of the Fabric Port.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->dditable;
-        auto pfnGetProperties = dditable->zet.SysmanLinkPort.pfnGetProperties;
+        auto dditable = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->dditable;
+        auto pfnGetProperties = dditable->zet.SysmanFabricPort.pfnGetProperties;
         if( nullptr == pfnGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hPort = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->handle;
+        hPort = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->handle;
 
         // forward to device-driver
         result = pfnGetProperties( hPort, pProperties );
@@ -2404,23 +2283,99 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetState
+    /// @brief Intercept function for zetSysmanFabricPortGetLinkType
     ze_result_t __zecall
-    zetSysmanLinkPortGetState(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_state_t* pState                   ///< [in] Will contain the current state of the Switch Port
+    zetSysmanFabricPortGetLinkType(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
+        zet_fabric_link_type_t* pLinkType               ///< [in] Will contain details about the link attached to the Fabric port.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->dditable;
-        auto pfnGetState = dditable->zet.SysmanLinkPort.pfnGetState;
+        auto dditable = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->dditable;
+        auto pfnGetLinkType = dditable->zet.SysmanFabricPort.pfnGetLinkType;
+        if( nullptr == pfnGetLinkType )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hPort = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->handle;
+
+        // forward to device-driver
+        result = pfnGetLinkType( hPort, verbose, pLinkType );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFabricPortGetConfig
+    ze_result_t __zecall
+    zetSysmanFabricPortGetConfig(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_config_t* pConfig               ///< [in] Will contain configuration of the Fabric Port.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->dditable;
+        auto pfnGetConfig = dditable->zet.SysmanFabricPort.pfnGetConfig;
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hPort = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->handle;
+
+        // forward to device-driver
+        result = pfnGetConfig( hPort, pConfig );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFabricPortSetConfig
+    ze_result_t __zecall
+    zetSysmanFabricPortSetConfig(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_config_t* pConfig               ///< [in] Contains new configuration of the Fabric Port.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->dditable;
+        auto pfnSetConfig = dditable->zet.SysmanFabricPort.pfnSetConfig;
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hPort = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->handle;
+
+        // forward to device-driver
+        result = pfnSetConfig( hPort, pConfig );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFabricPortGetState
+    ze_result_t __zecall
+    zetSysmanFabricPortGetState(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_state_t* pState                 ///< [in] Will contain the current state of the Fabric Port
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->dditable;
+        auto pfnGetState = dditable->zet.SysmanFabricPort.pfnGetState;
         if( nullptr == pfnGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hPort = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->handle;
+        hPort = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->handle;
 
         // forward to device-driver
         result = pfnGetState( hPort, pState );
@@ -2429,80 +2384,27 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetThroughput
+    /// @brief Intercept function for zetSysmanFabricPortGetThroughput
     ze_result_t __zecall
-    zetSysmanLinkPortGetThroughput(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_throughput_t* pThroughput         ///< [in] Will contain the Switch port throughput counters.
+    zetSysmanFabricPortGetThroughput(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_throughput_t* pThroughput       ///< [in] Will contain the Fabric port throughput counters and maximum
+                                                        ///< bandwidth.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->dditable;
-        auto pfnGetThroughput = dditable->zet.SysmanLinkPort.pfnGetThroughput;
+        auto dditable = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->dditable;
+        auto pfnGetThroughput = dditable->zet.SysmanFabricPort.pfnGetThroughput;
         if( nullptr == pfnGetThroughput )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hPort = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->handle;
+        hPort = reinterpret_cast<zet_sysman_fabric_port_object_t*>( hPort )->handle;
 
         // forward to device-driver
         result = pfnGetThroughput( hPort, pThroughput );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetStats
-    ze_result_t __zecall
-    zetSysmanLinkPortGetStats(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_stats_t* pStats                   ///< [in] Will contain the Switch port stats.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->dditable;
-        auto pfnGetStats = dditable->zet.SysmanLinkPort.pfnGetStats;
-        if( nullptr == pfnGetStats )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hPort = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->handle;
-
-        // forward to device-driver
-        result = pfnGetStats( hPort, pStats );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortIsConnected
-    ze_result_t __zecall
-    zetSysmanLinkPortIsConnected(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle of the local connectivity port.
-        zet_sysman_link_port_handle_t hRemotePort,      ///< [in] Handle of the remote connectivity port.
-        ze_bool_t* pConnected                           ///< [in] Will indicate connected to the remote port.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->dditable;
-        auto pfnIsConnected = dditable->zet.SysmanLinkPort.pfnIsConnected;
-        if( nullptr == pfnIsConnected )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hPort = reinterpret_cast<zet_sysman_link_port_object_t*>( hPort )->handle;
-
-        // convert loader handle to driver handle
-        hRemotePort = reinterpret_cast<zet_sysman_link_port_object_t*>( hRemotePort )->handle;
-
-        // forward to device-driver
-        result = pfnIsConnected( hPort, hRemotePort, pConnected );
 
         return result;
     }
@@ -4206,7 +4108,7 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnStandbyGet                               = loader::zetSysmanStandbyGet;
             pDdiTable->pfnFirmwareGet                              = loader::zetSysmanFirmwareGet;
             pDdiTable->pfnMemoryGet                                = loader::zetSysmanMemoryGet;
-            pDdiTable->pfnLinkSwitchGet                            = loader::zetSysmanLinkSwitchGet;
+            pDdiTable->pfnFabricPortGet                            = loader::zetSysmanFabricPortGet;
             pDdiTable->pfnTemperatureGet                           = loader::zetSysmanTemperatureGet;
             pDdiTable->pfnPsuGet                                   = loader::zetSysmanPsuGet;
             pDdiTable->pfnFanGet                                   = loader::zetSysmanFanGet;
@@ -4645,7 +4547,7 @@ zetGetSysmanMemoryProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanLinkSwitch table
+/// @brief Exported function for filling application's SysmanFabricPort table
 ///        with current process' addresses
 ///
 /// @returns
@@ -4656,9 +4558,9 @@ zetGetSysmanMemoryProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __zedllexport ze_result_t __zecall
-zetGetSysmanLinkSwitchProcAddrTable(
+zetGetSysmanFabricPortProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zet_sysman_link_switch_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    zet_sysman_fabric_port_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
     )
 {
     if( loader::context.drivers.size() < 1 )
@@ -4677,9 +4579,9 @@ zetGetSysmanLinkSwitchProcAddrTable(
     {
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zet_pfnGetSysmanLinkSwitchProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "zetGetSysmanLinkSwitchProcAddrTable") );
-            result = getTable( version, &drv.dditable.zet.SysmanLinkSwitch );
+            auto getTable = reinterpret_cast<zet_pfnGetSysmanFabricPortProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "zetGetSysmanFabricPortProcAddrTable") );
+            result = getTable( version, &drv.dditable.zet.SysmanFabricPort );
         }
     }
 
@@ -4688,91 +4590,25 @@ zetGetSysmanLinkSwitchProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnGetProperties                            = loader::zetSysmanLinkSwitchGetProperties;
-            pDdiTable->pfnGetState                                 = loader::zetSysmanLinkSwitchGetState;
-            pDdiTable->pfnSetState                                 = loader::zetSysmanLinkSwitchSetState;
-            pDdiTable->pfnGetPorts                                 = loader::zetSysmanLinkSwitchGetPorts;
+            pDdiTable->pfnGetProperties                            = loader::zetSysmanFabricPortGetProperties;
+            pDdiTable->pfnGetLinkType                              = loader::zetSysmanFabricPortGetLinkType;
+            pDdiTable->pfnGetConfig                                = loader::zetSysmanFabricPortGetConfig;
+            pDdiTable->pfnSetConfig                                = loader::zetSysmanFabricPortSetConfig;
+            pDdiTable->pfnGetState                                 = loader::zetSysmanFabricPortGetState;
+            pDdiTable->pfnGetThroughput                            = loader::zetSysmanFabricPortGetThroughput;
         }
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.zet.SysmanLinkSwitch;
+            *pDdiTable = loader::context.drivers.front().dditable.zet.SysmanFabricPort;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        auto getTable = reinterpret_cast<zet_pfnGetSysmanLinkSwitchProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanLinkSwitchProcAddrTable") );
-        result = getTable( version, pDdiTable );
-    }
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanLinkPort table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__zedllexport ze_result_t __zecall
-zetGetSysmanLinkPortProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zet_sysman_link_port_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( loader::context.drivers.size() < 1 )
-        return ZE_RESULT_ERROR_UNINITIALIZED;
-
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    // Load the device-driver DDI tables
-    for( auto& drv : loader::context.drivers )
-    {
-        if( ZE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<zet_pfnGetSysmanLinkPortProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "zetGetSysmanLinkPortProcAddrTable") );
-            result = getTable( version, &drv.dditable.zet.SysmanLinkPort );
-        }
-    }
-
-    if( ZE_RESULT_SUCCESS == result )
-    {
-        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
-        {
-            // return pointers to loader's DDIs
-            pDdiTable->pfnGetProperties                            = loader::zetSysmanLinkPortGetProperties;
-            pDdiTable->pfnGetState                                 = loader::zetSysmanLinkPortGetState;
-            pDdiTable->pfnGetThroughput                            = loader::zetSysmanLinkPortGetThroughput;
-            pDdiTable->pfnGetStats                                 = loader::zetSysmanLinkPortGetStats;
-            pDdiTable->pfnIsConnected                              = loader::zetSysmanLinkPortIsConnected;
-        }
-        else
-        {
-            // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.zet.SysmanLinkPort;
-        }
-    }
-
-    // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
-    {
-        auto getTable = reinterpret_cast<zet_pfnGetSysmanLinkPortProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanLinkPortProcAddrTable") );
+        auto getTable = reinterpret_cast<zet_pfnGetSysmanFabricPortProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanFabricPortProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

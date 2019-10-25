@@ -758,11 +758,11 @@ typedef ze_result_t (__zecall *zet_pfnSysmanMemoryGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkSwitchGet 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkSwitchGet_t)(
+/// @brief Function-pointer for zetSysmanFabricPortGet 
+typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortGet_t)(
     zet_sysman_handle_t,
     uint32_t*,
-    zet_sysman_link_switch_handle_t*
+    zet_sysman_fabric_port_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -871,7 +871,7 @@ typedef struct _zet_sysman_dditable_t
     zet_pfnSysmanStandbyGet_t                                   pfnStandbyGet;
     zet_pfnSysmanFirmwareGet_t                                  pfnFirmwareGet;
     zet_pfnSysmanMemoryGet_t                                    pfnMemoryGet;
-    zet_pfnSysmanLinkSwitchGet_t                                pfnLinkSwitchGet;
+    zet_pfnSysmanFabricPortGet_t                                pfnFabricPortGet;
     zet_pfnSysmanTemperatureGet_t                               pfnTemperatureGet;
     zet_pfnSysmanPsuGet_t                                       pfnPsuGet;
     zet_pfnSysmanFanGet_t                                       pfnFanGet;
@@ -1334,46 +1334,62 @@ typedef ze_result_t (__zecall *zet_pfnGetSysmanMemoryProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkSwitchGetProperties 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkSwitchGetProperties_t)(
-    zet_sysman_link_switch_handle_t,
-    zet_link_switch_properties_t*
+/// @brief Function-pointer for zetSysmanFabricPortGetProperties 
+typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortGetProperties_t)(
+    zet_sysman_fabric_port_handle_t,
+    zet_fabric_port_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkSwitchGetState 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkSwitchGetState_t)(
-    zet_sysman_link_switch_handle_t,
-    zet_link_switch_state_t*
+/// @brief Function-pointer for zetSysmanFabricPortGetLinkType 
+typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortGetLinkType_t)(
+    zet_sysman_fabric_port_handle_t,
+    ze_bool_t,
+    zet_fabric_link_type_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkSwitchSetState 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkSwitchSetState_t)(
-    zet_sysman_link_switch_handle_t,
-    ze_bool_t
+/// @brief Function-pointer for zetSysmanFabricPortGetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortGetConfig_t)(
+    zet_sysman_fabric_port_handle_t,
+    zet_fabric_port_config_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkSwitchGetPorts 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkSwitchGetPorts_t)(
-    zet_sysman_link_switch_handle_t,
-    uint32_t*,
-    zet_sysman_link_port_handle_t*
+/// @brief Function-pointer for zetSysmanFabricPortSetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortSetConfig_t)(
+    zet_sysman_fabric_port_handle_t,
+    zet_fabric_port_config_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of SysmanLinkSwitch functions pointers
-typedef struct _zet_sysman_link_switch_dditable_t
+/// @brief Function-pointer for zetSysmanFabricPortGetState 
+typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortGetState_t)(
+    zet_sysman_fabric_port_handle_t,
+    zet_fabric_port_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanFabricPortGetThroughput 
+typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortGetThroughput_t)(
+    zet_sysman_fabric_port_handle_t,
+    zet_fabric_port_throughput_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of SysmanFabricPort functions pointers
+typedef struct _zet_sysman_fabric_port_dditable_t
 {
-    zet_pfnSysmanLinkSwitchGetProperties_t                      pfnGetProperties;
-    zet_pfnSysmanLinkSwitchGetState_t                           pfnGetState;
-    zet_pfnSysmanLinkSwitchSetState_t                           pfnSetState;
-    zet_pfnSysmanLinkSwitchGetPorts_t                           pfnGetPorts;
-} zet_sysman_link_switch_dditable_t;
+    zet_pfnSysmanFabricPortGetProperties_t                      pfnGetProperties;
+    zet_pfnSysmanFabricPortGetLinkType_t                        pfnGetLinkType;
+    zet_pfnSysmanFabricPortGetConfig_t                          pfnGetConfig;
+    zet_pfnSysmanFabricPortSetConfig_t                          pfnSetConfig;
+    zet_pfnSysmanFabricPortGetState_t                           pfnGetState;
+    zet_pfnSysmanFabricPortGetThroughput_t                      pfnGetThroughput;
+} zet_sysman_fabric_port_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanLinkSwitch table
+/// @brief Exported function for filling application's SysmanFabricPort table
 ///        with current process' addresses
 ///
 /// @returns
@@ -1384,87 +1400,16 @@ typedef struct _zet_sysman_link_switch_dditable_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __zedllexport ze_result_t __zecall
-zetGetSysmanLinkSwitchProcAddrTable(
+zetGetSysmanFabricPortProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zet_sysman_link_switch_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    zet_sysman_fabric_port_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetGetSysmanLinkSwitchProcAddrTable
-typedef ze_result_t (__zecall *zet_pfnGetSysmanLinkSwitchProcAddrTable_t)(
+/// @brief Function-pointer for zetGetSysmanFabricPortProcAddrTable
+typedef ze_result_t (__zecall *zet_pfnGetSysmanFabricPortProcAddrTable_t)(
     ze_api_version_t,
-    zet_sysman_link_switch_dditable_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkPortGetProperties 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkPortGetProperties_t)(
-    zet_sysman_link_port_handle_t,
-    zet_link_port_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkPortGetState 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkPortGetState_t)(
-    zet_sysman_link_port_handle_t,
-    zet_link_port_state_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkPortGetThroughput 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkPortGetThroughput_t)(
-    zet_sysman_link_port_handle_t,
-    zet_link_port_throughput_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkPortGetStats 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkPortGetStats_t)(
-    zet_sysman_link_port_handle_t,
-    zet_link_port_stats_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanLinkPortIsConnected 
-typedef ze_result_t (__zecall *zet_pfnSysmanLinkPortIsConnected_t)(
-    zet_sysman_link_port_handle_t,
-    zet_sysman_link_port_handle_t,
-    ze_bool_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of SysmanLinkPort functions pointers
-typedef struct _zet_sysman_link_port_dditable_t
-{
-    zet_pfnSysmanLinkPortGetProperties_t                        pfnGetProperties;
-    zet_pfnSysmanLinkPortGetState_t                             pfnGetState;
-    zet_pfnSysmanLinkPortGetThroughput_t                        pfnGetThroughput;
-    zet_pfnSysmanLinkPortGetStats_t                             pfnGetStats;
-    zet_pfnSysmanLinkPortIsConnected_t                          pfnIsConnected;
-} zet_sysman_link_port_dditable_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanLinkPort table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__zedllexport ze_result_t __zecall
-zetGetSysmanLinkPortProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zet_sysman_link_port_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetGetSysmanLinkPortProcAddrTable
-typedef ze_result_t (__zecall *zet_pfnGetSysmanLinkPortProcAddrTable_t)(
-    ze_api_version_t,
-    zet_sysman_link_port_dditable_t*
+    zet_sysman_fabric_port_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1794,8 +1739,7 @@ typedef struct _zet_dditable_t
     zet_sysman_standby_dditable_t       SysmanStandby;
     zet_sysman_firmware_dditable_t      SysmanFirmware;
     zet_sysman_memory_dditable_t        SysmanMemory;
-    zet_sysman_link_switch_dditable_t   SysmanLinkSwitch;
-    zet_sysman_link_port_dditable_t     SysmanLinkPort;
+    zet_sysman_fabric_port_dditable_t   SysmanFabricPort;
     zet_sysman_temperature_dditable_t   SysmanTemperature;
     zet_sysman_psu_dditable_t           SysmanPsu;
     zet_sysman_fan_dditable_t           SysmanFan;

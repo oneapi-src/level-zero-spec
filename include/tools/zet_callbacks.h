@@ -1294,24 +1294,24 @@ typedef void (__zecall *zet_pfnSysmanMemoryGetCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkSwitchGet 
+/// @brief Callback function parameters for zetSysmanFabricPortGet 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_switch_get_params_t
+typedef struct _zet_sysman_fabric_port_get_params_t
 {
     zet_sysman_handle_t* phSysman;
     uint32_t** ppCount;
-    zet_sysman_link_switch_handle_t** pphSwitch;
-} zet_sysman_link_switch_get_params_t;
+    zet_sysman_fabric_port_handle_t** pphPort;
+} zet_sysman_fabric_port_get_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkSwitchGet 
+/// @brief Callback function-pointer for zetSysmanFabricPortGet 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkSwitchGetCb_t)(
-    zet_sysman_link_switch_get_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFabricPortGetCb_t)(
+    zet_sysman_fabric_port_get_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1583,7 +1583,7 @@ typedef struct _zet_sysman_callbacks_t
     zet_pfnSysmanStandbyGetCb_t                                     pfnStandbyGetCb;
     zet_pfnSysmanFirmwareGetCb_t                                    pfnFirmwareGetCb;
     zet_pfnSysmanMemoryGetCb_t                                      pfnMemoryGetCb;
-    zet_pfnSysmanLinkSwitchGetCb_t                                  pfnLinkSwitchGetCb;
+    zet_pfnSysmanFabricPortGetCb_t                                  pfnFabricPortGetCb;
     zet_pfnSysmanTemperatureGetCb_t                                 pfnTemperatureGetCb;
     zet_pfnSysmanPsuGetCb_t                                         pfnPsuGetCb;
     zet_pfnSysmanFanGetCb_t                                         pfnFanGetCb;
@@ -2358,234 +2358,155 @@ typedef struct _zet_sysman_memory_callbacks_t
 } zet_sysman_memory_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkSwitchGetProperties 
+/// @brief Callback function parameters for zetSysmanFabricPortGetProperties 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_switch_get_properties_params_t
+typedef struct _zet_sysman_fabric_port_get_properties_params_t
 {
-    zet_sysman_link_switch_handle_t* phSwitch;
-    zet_link_switch_properties_t** ppProperties;
-} zet_sysman_link_switch_get_properties_params_t;
+    zet_sysman_fabric_port_handle_t* phPort;
+    zet_fabric_port_properties_t** ppProperties;
+} zet_sysman_fabric_port_get_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkSwitchGetProperties 
+/// @brief Callback function-pointer for zetSysmanFabricPortGetProperties 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkSwitchGetPropertiesCb_t)(
-    zet_sysman_link_switch_get_properties_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFabricPortGetPropertiesCb_t)(
+    zet_sysman_fabric_port_get_properties_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkSwitchGetState 
+/// @brief Callback function parameters for zetSysmanFabricPortGetLinkType 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_switch_get_state_params_t
+typedef struct _zet_sysman_fabric_port_get_link_type_params_t
 {
-    zet_sysman_link_switch_handle_t* phSwitch;
-    zet_link_switch_state_t** ppState;
-} zet_sysman_link_switch_get_state_params_t;
+    zet_sysman_fabric_port_handle_t* phPort;
+    ze_bool_t* pverbose;
+    zet_fabric_link_type_t** ppLinkType;
+} zet_sysman_fabric_port_get_link_type_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkSwitchGetState 
+/// @brief Callback function-pointer for zetSysmanFabricPortGetLinkType 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkSwitchGetStateCb_t)(
-    zet_sysman_link_switch_get_state_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFabricPortGetLinkTypeCb_t)(
+    zet_sysman_fabric_port_get_link_type_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkSwitchSetState 
+/// @brief Callback function parameters for zetSysmanFabricPortGetConfig 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_switch_set_state_params_t
+typedef struct _zet_sysman_fabric_port_get_config_params_t
 {
-    zet_sysman_link_switch_handle_t* phSwitch;
-    ze_bool_t* penable;
-} zet_sysman_link_switch_set_state_params_t;
+    zet_sysman_fabric_port_handle_t* phPort;
+    zet_fabric_port_config_t** ppConfig;
+} zet_sysman_fabric_port_get_config_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkSwitchSetState 
+/// @brief Callback function-pointer for zetSysmanFabricPortGetConfig 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkSwitchSetStateCb_t)(
-    zet_sysman_link_switch_set_state_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFabricPortGetConfigCb_t)(
+    zet_sysman_fabric_port_get_config_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkSwitchGetPorts 
+/// @brief Callback function parameters for zetSysmanFabricPortSetConfig 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_switch_get_ports_params_t
+typedef struct _zet_sysman_fabric_port_set_config_params_t
 {
-    zet_sysman_link_switch_handle_t* phSysmanLinkSwitch;
-    uint32_t** ppCount;
-    zet_sysman_link_port_handle_t** pphPort;
-} zet_sysman_link_switch_get_ports_params_t;
+    zet_sysman_fabric_port_handle_t* phPort;
+    zet_fabric_port_config_t** ppConfig;
+} zet_sysman_fabric_port_set_config_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkSwitchGetPorts 
+/// @brief Callback function-pointer for zetSysmanFabricPortSetConfig 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkSwitchGetPortsCb_t)(
-    zet_sysman_link_switch_get_ports_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFabricPortSetConfigCb_t)(
+    zet_sysman_fabric_port_set_config_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of SysmanLinkSwitch callback functions pointers
-typedef struct _zet_sysman_link_switch_callbacks_t
-{
-    zet_pfnSysmanLinkSwitchGetPropertiesCb_t                        pfnGetPropertiesCb;
-    zet_pfnSysmanLinkSwitchGetStateCb_t                             pfnGetStateCb;
-    zet_pfnSysmanLinkSwitchSetStateCb_t                             pfnSetStateCb;
-    zet_pfnSysmanLinkSwitchGetPortsCb_t                             pfnGetPortsCb;
-} zet_sysman_link_switch_callbacks_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkPortGetProperties 
+/// @brief Callback function parameters for zetSysmanFabricPortGetState 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_port_get_properties_params_t
+typedef struct _zet_sysman_fabric_port_get_state_params_t
 {
-    zet_sysman_link_port_handle_t* phPort;
-    zet_link_port_properties_t** ppProperties;
-} zet_sysman_link_port_get_properties_params_t;
+    zet_sysman_fabric_port_handle_t* phPort;
+    zet_fabric_port_state_t** ppState;
+} zet_sysman_fabric_port_get_state_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkPortGetProperties 
+/// @brief Callback function-pointer for zetSysmanFabricPortGetState 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkPortGetPropertiesCb_t)(
-    zet_sysman_link_port_get_properties_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFabricPortGetStateCb_t)(
+    zet_sysman_fabric_port_get_state_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkPortGetState 
+/// @brief Callback function parameters for zetSysmanFabricPortGetThroughput 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_port_get_state_params_t
+typedef struct _zet_sysman_fabric_port_get_throughput_params_t
 {
-    zet_sysman_link_port_handle_t* phPort;
-    zet_link_port_state_t** ppState;
-} zet_sysman_link_port_get_state_params_t;
+    zet_sysman_fabric_port_handle_t* phPort;
+    zet_fabric_port_throughput_t** ppThroughput;
+} zet_sysman_fabric_port_get_throughput_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkPortGetState 
+/// @brief Callback function-pointer for zetSysmanFabricPortGetThroughput 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkPortGetStateCb_t)(
-    zet_sysman_link_port_get_state_params_t* params,
+typedef void (__zecall *zet_pfnSysmanFabricPortGetThroughputCb_t)(
+    zet_sysman_fabric_port_get_throughput_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkPortGetThroughput 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_port_get_throughput_params_t
+/// @brief Table of SysmanFabricPort callback functions pointers
+typedef struct _zet_sysman_fabric_port_callbacks_t
 {
-    zet_sysman_link_port_handle_t* phPort;
-    zet_link_port_throughput_t** ppThroughput;
-} zet_sysman_link_port_get_throughput_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkPortGetThroughput 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkPortGetThroughputCb_t)(
-    zet_sysman_link_port_get_throughput_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkPortGetStats 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_port_get_stats_params_t
-{
-    zet_sysman_link_port_handle_t* phPort;
-    zet_link_port_stats_t** ppStats;
-} zet_sysman_link_port_get_stats_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkPortGetStats 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkPortGetStatsCb_t)(
-    zet_sysman_link_port_get_stats_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanLinkPortIsConnected 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_link_port_is_connected_params_t
-{
-    zet_sysman_link_port_handle_t* phPort;
-    zet_sysman_link_port_handle_t* phRemotePort;
-    ze_bool_t** ppConnected;
-} zet_sysman_link_port_is_connected_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanLinkPortIsConnected 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanLinkPortIsConnectedCb_t)(
-    zet_sysman_link_port_is_connected_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of SysmanLinkPort callback functions pointers
-typedef struct _zet_sysman_link_port_callbacks_t
-{
-    zet_pfnSysmanLinkPortGetPropertiesCb_t                          pfnGetPropertiesCb;
-    zet_pfnSysmanLinkPortGetStateCb_t                               pfnGetStateCb;
-    zet_pfnSysmanLinkPortGetThroughputCb_t                          pfnGetThroughputCb;
-    zet_pfnSysmanLinkPortGetStatsCb_t                               pfnGetStatsCb;
-    zet_pfnSysmanLinkPortIsConnectedCb_t                            pfnIsConnectedCb;
-} zet_sysman_link_port_callbacks_t;
+    zet_pfnSysmanFabricPortGetPropertiesCb_t                        pfnGetPropertiesCb;
+    zet_pfnSysmanFabricPortGetLinkTypeCb_t                          pfnGetLinkTypeCb;
+    zet_pfnSysmanFabricPortGetConfigCb_t                            pfnGetConfigCb;
+    zet_pfnSysmanFabricPortSetConfigCb_t                            pfnSetConfigCb;
+    zet_pfnSysmanFabricPortGetStateCb_t                             pfnGetStateCb;
+    zet_pfnSysmanFabricPortGetThroughputCb_t                        pfnGetThroughputCb;
+} zet_sysman_fabric_port_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanTemperatureGetProperties 
@@ -3010,8 +2931,7 @@ typedef struct _zet_callbacks_t
     zet_sysman_standby_callbacks_t      SysmanStandby;
     zet_sysman_firmware_callbacks_t     SysmanFirmware;
     zet_sysman_memory_callbacks_t       SysmanMemory;
-    zet_sysman_link_switch_callbacks_t  SysmanLinkSwitch;
-    zet_sysman_link_port_callbacks_t    SysmanLinkPort;
+    zet_sysman_fabric_port_callbacks_t  SysmanFabricPort;
     zet_sysman_temperature_callbacks_t  SysmanTemperature;
     zet_sysman_psu_callbacks_t          SysmanPsu;
     zet_sysman_fan_callbacks_t          SysmanFan;

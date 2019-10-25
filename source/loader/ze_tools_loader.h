@@ -70,11 +70,8 @@ namespace loader
     using zet_sysman_mem_object_t             = object_t < zet_sysman_mem_handle_t >;
     using zet_sysman_mem_factory_t            = singleton_factory_t < zet_sysman_mem_object_t, zet_sysman_mem_handle_t >;
 
-    using zet_sysman_link_switch_object_t     = object_t < zet_sysman_link_switch_handle_t >;
-    using zet_sysman_link_switch_factory_t    = singleton_factory_t < zet_sysman_link_switch_object_t, zet_sysman_link_switch_handle_t >;
-
-    using zet_sysman_link_port_object_t       = object_t < zet_sysman_link_port_handle_t >;
-    using zet_sysman_link_port_factory_t      = singleton_factory_t < zet_sysman_link_port_object_t, zet_sysman_link_port_handle_t >;
+    using zet_sysman_fabric_port_object_t     = object_t < zet_sysman_fabric_port_handle_t >;
+    using zet_sysman_fabric_port_factory_t    = singleton_factory_t < zet_sysman_fabric_port_object_t, zet_sysman_fabric_port_handle_t >;
 
     using zet_sysman_temp_object_t            = object_t < zet_sysman_temp_handle_t >;
     using zet_sysman_temp_factory_t           = singleton_factory_t < zet_sysman_temp_object_t, zet_sysman_temp_handle_t >;

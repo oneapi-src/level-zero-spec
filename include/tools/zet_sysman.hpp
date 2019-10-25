@@ -34,6 +34,25 @@
 #endif // ZET_SCHED_WATCHDOG_DISABLE
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef ZET_MAX_FABRIC_PORT_MODEL_SIZE
+/// @brief Maximum Fabric port model string size
+#define ZET_MAX_FABRIC_PORT_MODEL_SIZE  256
+#endif // ZET_MAX_FABRIC_PORT_MODEL_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZET_MAX_FABRIC_PORT_UUID_SIZE
+/// @brief Maximum fabric port uuid size in bytes
+#define ZET_MAX_FABRIC_PORT_UUID_SIZE  72
+#endif // ZET_MAX_FABRIC_PORT_UUID_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZET_MAX_FABRIC_LINK_TYPE_SIZE
+/// @brief Maximum size of the buffer that will return information about link
+///        types
+#define ZET_MAX_FABRIC_LINK_TYPE_SIZE  256
+#endif // ZET_MAX_FABRIC_LINK_TYPE_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_FAN_TEMP_SPEED_PAIR_COUNT
 /// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
 #define ZET_FAN_TEMP_SPEED_PAIR_COUNT  32
@@ -689,14 +708,14 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of connectivity switches
+        /// @brief Get handle of Fabric ports in a device
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        LinkSwitchGet(
+        FabricPortGet(
             uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of components of this type.
@@ -704,7 +723,7 @@ namespace zet
                                                             ///< if count is larger than the number of components available, then the
                                                             ///< driver will update the value with the correct number of components
                                                             ///< that are returned.
-            SysmanLinkSwitch** ppSwitch = nullptr           ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+            SysmanFabricPort** ppPort = nullptr             ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
             );
 
@@ -1885,120 +1904,55 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device connectivity switch
-    class SysmanLinkSwitch
+    /// @brief C++ wrapper for a SMI device Fabric port
+    class SysmanFabricPort
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Connectivity switch properties
-        struct link_switch_properties_t
+        /// @brief Fabric port status
+        enum class fabric_port_status_t
         {
-            ze::bool_t onSubdevice;                         ///< [out] True if the switch is located on a sub-device; false means that
-                                                            ///< the switch is on the device of the calling SMI handle
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            GREEN = 0,                                      ///< The port is up and operating as expected
+            YELLOW,                                         ///< The port is up but has quality and/or bandwidth degradation
+            RED,                                            ///< Port connection instabilities are preventing workloads making forward
+                                                            ///< progress
+            BLACK,                                          ///< The port is configured down
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Connectivity switch state
-        struct link_switch_state_t
+        /// @brief Fabric port quality degradation reasons
+        enum class fabric_port_qual_issues_t
         {
-            ze::bool_t enabled;                             ///< [out] Indicates if the switch is enabled/disabled
+            NONE = 0,                                       ///< There are no quality issues with the link at this time
+            FEC = ZE_BIT( 0 ),                              ///< Excessive FEC (forward error correction) are occurring
+            LTP_CRC = ZE_BIT( 1 ),                          ///< Excessive LTP CRC failure induced replays are occurring
+            SPEED = ZE_BIT( 2 ),                            ///< There is a degradation in the maximum bandwidth of the port
 
         };
 
-
-    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_link_switch_handle_t m_handle = nullptr; ///< [in] handle of SMI object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+        /// @brief Fabric port stability issues
+        enum class fabric_port_stab_issues_t
+        {
+            NONE = 0,                                       ///< There are no connection stability issues at this time
+            TOO_MANY_REPLAYS = ZE_BIT( 0 ),                 ///< Sequential replay failure is inducing link retraining
+            NO_CONNECT = ZE_BIT( 1 ),                       ///< A connection was never able to be established through the link
+            FLAPPING = ZE_BIT( 2 ),                         ///< The port is flapping
 
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanLinkSwitch( void ) = delete;
-        SysmanLinkSwitch( 
-            sysman_link_switch_handle_t handle,             ///< [in] handle of SMI object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanLinkSwitch( void ) = default;
-
-        SysmanLinkSwitch( SysmanLinkSwitch const& other ) = delete;
-        void operator=( SysmanLinkSwitch const& other ) = delete;
-
-        SysmanLinkSwitch( SysmanLinkSwitch&& other ) = delete;
-        void operator=( SysmanLinkSwitch&& other ) = delete;
+        };
 
         ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
+        /// @brief Fabric port universal unique id (UUID)
+        struct fabric_port_uuid_t
+        {
+            uint8_t id[ZET_MAX_FABRIC_PORT_UUID_SIZE];      ///< [out] Frabric port universal unique id
+
+        };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get connectivity switch properties
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            link_switch_properties_t* pProperties           ///< [in] Will contain the Switch properties.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get connectivity switch state
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetState(
-            link_switch_state_t* pState                     ///< [in] Will contain the current state of the switch (enabled/disabled).
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set connectivity switch state
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetState(
-            ze::bool_t enable                               ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of connectivity ports in a switch
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetPorts(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of components of this type.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                            ///< if count is larger than the number of components available, then the
-                                                            ///< driver will update the value with the correct number of components
-                                                            ///< that are returned.
-            SysmanLinkPort** ppPort = nullptr               ///< [in,out][optional][range(0, *pCount)] array of pointer to components
-                                                            ///< of this type
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device connectivity port
-    class SysmanLinkPort
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Connectivity port speed
-        struct link_port_speed_t
+        /// @brief Fabric port speed in one direction
+        struct fabric_port_speed_t
         {
             uint64_t bitRate;                               ///< [out] Bits/sec that the link is operating at
             uint32_t width;                                 ///< [out] The number of lanes
@@ -2007,26 +1961,64 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Connectivity port properties
-        struct link_port_properties_t
+        /// @brief Fabric port properties
+        struct fabric_port_properties_t
         {
-            uint32_t portNum;                               ///< [out] The port number on the switch
-            link_port_speed_t maxSpeed;                     ///< [out] Maximum bandwidth supported by the port
+            int8_t model[ZET_MAX_FABRIC_PORT_MODEL_SIZE];   ///< [out] Description of port technology
+            ze::bool_t onSubdevice;                         ///< [out] True if the port is located on a sub-device; false means that
+                                                            ///< the port is on the device of the calling SMI handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            fabric_port_uuid_t portUuid;                    ///< [out] The port universal unique id
+            fabric_port_speed_t maxRxSpeed;                 ///< [out] Maximum bandwidth supported by the receive side of the port
+            fabric_port_speed_t maxTxSpeed;                 ///< [out] Maximum bandwidth supported by the transmit side of the port
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Connectivity port state
-        struct link_port_state_t
+        /// @brief Provides information about the fabric link attached to a port
+        struct fabric_link_type_t
         {
-            ze::bool_t isConnected;                         ///< [out] Indicates if the port is connected to a remote Switch
-            link_port_speed_t rxSpeed;                      ///< [out] Current maximum receive speed
-            link_port_speed_t txSpeed;                      ///< [out] Current maximum transmit speed
+            int8_t desc[ZET_MAX_FABRIC_LINK_TYPE_SIZE];     ///< [out] This provides a textural description of a link attached to a
+                                                            ///< port. It contains the following information:
+                                                            ///< - Link material
+                                                            ///< - Link technology
+                                                            ///< - Cable manufacturer
+                                                            ///< - Temperature
+                                                            ///< - Power
+                                                            ///< - Attachment type:
+                                                            ///<    - Disconnected
+                                                            ///<    - Hardwired/fixed/etched connector
+                                                            ///<    - Active copper
+                                                            ///<    - QSOP
+                                                            ///<    - AOC
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Connectivity port throughput
+        /// @brief Fabric port configuration
+        struct fabric_port_config_t
+        {
+            ze::bool_t enabled;                             ///< [in,out] Port is configured up/down
+            ze::bool_t beaconing;                           ///< [in,out] Beaconing is configured on/off
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port state
+        struct fabric_port_state_t
+        {
+            fabric_port_status_t status;                    ///< [out] The current status of the port
+            fabric_port_qual_issues_t qualityIssues;        ///< [out] If status is ::ZET_FABRIC_PORT_STATUS_YELLOW, this gives a
+                                                            ///< bitfield of quality issues that have been detected
+            fabric_port_stab_issues_t stabilityIssues;      ///< [out] If status is ::ZET_FABRIC_PORT_STATUS_RED, this gives a bitfield
+                                                            ///< of reasons for the connection instability
+            fabric_port_speed_t rxSpeed;                    ///< [out] Current maximum receive speed
+            fabric_port_speed_t txSpeed;                    ///< [out] Current maximum transmit speed
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port throughput
         /// 
         /// @details
         ///     - Percent throughput is calculated by taking two snapshots (s1, s2) and
@@ -2035,7 +2027,7 @@ namespace zet
         ///       (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))
         ///     -     %tx_bandwidth = 10^6 * (s2.txCounter - s1.txCounter) /
         ///       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
-        struct link_port_throughput_t
+        struct fabric_port_throughput_t
         {
             uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
                                                             ///< was made.
@@ -2052,55 +2044,34 @@ namespace zet
 
         };
 
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Connectivity port stats counters
-        /// 
-        /// @details
-        ///     - Percent replays is calculated by taking two snapshots (s1, s2) and
-        ///       using the equation: %replay = 10^6 * (s2.replayCounter -
-        ///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
-        struct link_port_stats_t
-        {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
-                                                            ///< was made.
-                                                            ///< No assumption should be made about the absolute value of the timestamp.
-                                                            ///< It should only be used to calculate delta time between two snapshots
-                                                            ///< of the same structure.
-                                                            ///< Never take the delta of this timestamp with the timestamp from a
-                                                            ///< different structure.
-            uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
-            uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
-
-        };
-
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_link_port_handle_t m_handle = nullptr;   ///< [in] handle of SMI object
-        SysmanLinkSwitch* m_pSysmanLinkSwitch;          ///< [in] pointer to owner object
+        sysman_fabric_port_handle_t m_handle = nullptr; ///< [in] handle of SMI object
+        Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        SysmanLinkPort( void ) = delete;
-        SysmanLinkPort( 
-            sysman_link_port_handle_t handle,               ///< [in] handle of SMI object
-            SysmanLinkSwitch* pSysmanLinkSwitch             ///< [in] pointer to owner object
+        SysmanFabricPort( void ) = delete;
+        SysmanFabricPort( 
+            sysman_fabric_port_handle_t handle,             ///< [in] handle of SMI object
+            Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
-        ~SysmanLinkPort( void ) = default;
+        ~SysmanFabricPort( void ) = default;
 
-        SysmanLinkPort( SysmanLinkPort const& other ) = delete;
-        void operator=( SysmanLinkPort const& other ) = delete;
+        SysmanFabricPort( SysmanFabricPort const& other ) = delete;
+        void operator=( SysmanFabricPort const& other ) = delete;
 
-        SysmanLinkPort( SysmanLinkPort&& other ) = delete;
-        void operator=( SysmanLinkPort&& other ) = delete;
+        SysmanFabricPort( SysmanFabricPort&& other ) = delete;
+        void operator=( SysmanFabricPort&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getSysmanlinkswitch( void ) const { return m_pSysmanLinkSwitch; }
+        auto getSysman( void ) const { return m_pSysman; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get connectivity port properties
+        /// @brief Get Fabric port properties
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2108,11 +2079,48 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            link_port_properties_t* pProperties             ///< [in] Will contain properties of the Switch Port
+            fabric_port_properties_t* pProperties           ///< [in] Will contain properties of the Fabric Port.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get connectivity port state
+        /// @brief Get Fabric port link type
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetLinkType(
+            ze::bool_t verbose,                             ///< [in] Set to true to get a more detailed report.
+            fabric_link_type_t* pLinkType                   ///< [in] Will contain details about the link attached to the Fabric port.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get Fabric port configuration
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetConfig(
+            fabric_port_config_t* pConfig                   ///< [in] Will contain configuration of the Fabric Port.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set Fabric port configuration
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetConfig(
+            fabric_port_config_t* pConfig                   ///< [in] Contains new configuration of the Fabric Port.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get Fabric port state
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2120,11 +2128,11 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetState(
-            link_port_state_t* pState                       ///< [in] Will contain the current state of the Switch Port
+            fabric_port_state_t* pState                     ///< [in] Will contain the current state of the Fabric Port
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get connectivity port throughput
+        /// @brief Get Fabric port throughput
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2132,32 +2140,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetThroughput(
-            link_port_throughput_t* pThroughput             ///< [in] Will contain the Switch port throughput counters.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get connectivity port stats
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetStats(
-            link_port_stats_t* pStats                       ///< [in] Will contain the Switch port stats.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Check if two connectivity ports are physically connected
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        IsConnected(
-            SysmanLinkPort* pRemotePort,                    ///< [in] Handle of the remote connectivity port.
-            ze::bool_t* pConnected                          ///< [in] Will indicate connected to the remote port.
+            fabric_port_throughput_t* pThroughput           ///< [in] Will contain the Fabric port throughput counters and maximum
+                                                            ///< bandwidth.
             );
 
     };
@@ -2614,8 +2598,8 @@ namespace zet
                                                             ///< (L1/L3/register file/shared local memory/sampler)
             uint64_t numMemoryErrors;                       ///< [out] The number of errors that have occurred in the local memory
             uint64_t numPciErrors;                          ///< [out] The number of errors that have occurred in the PCI link
-            uint64_t numSwitchErrors;                       ///< [out] The number of errors that have occurred in the high-speed
-                                                            ///< connectivity links
+            uint64_t numFabricErrors;                       ///< [out] The number of errors that have occurred in the high-speed fabric
+                                                            ///< ports
             uint64_t numDisplayErrors;                      ///< [out] The number of errors that have occurred in the display
 
         };
@@ -2979,32 +2963,44 @@ namespace zet
     std::string to_string( const SysmanMemory::mem_alloc_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanLinkSwitch::link_switch_properties_t to std::string
-    std::string to_string( const SysmanLinkSwitch::link_switch_properties_t val );
+    /// @brief Converts SysmanFabricPort::fabric_port_status_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_status_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanLinkSwitch::link_switch_state_t to std::string
-    std::string to_string( const SysmanLinkSwitch::link_switch_state_t val );
+    /// @brief Converts SysmanFabricPort::fabric_port_qual_issues_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_qual_issues_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanLinkPort::link_port_speed_t to std::string
-    std::string to_string( const SysmanLinkPort::link_port_speed_t val );
+    /// @brief Converts SysmanFabricPort::fabric_port_stab_issues_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_stab_issues_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanLinkPort::link_port_properties_t to std::string
-    std::string to_string( const SysmanLinkPort::link_port_properties_t val );
+    /// @brief Converts SysmanFabricPort::fabric_port_uuid_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_uuid_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanLinkPort::link_port_state_t to std::string
-    std::string to_string( const SysmanLinkPort::link_port_state_t val );
+    /// @brief Converts SysmanFabricPort::fabric_port_speed_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_speed_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanLinkPort::link_port_throughput_t to std::string
-    std::string to_string( const SysmanLinkPort::link_port_throughput_t val );
+    /// @brief Converts SysmanFabricPort::fabric_port_properties_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanLinkPort::link_port_stats_t to std::string
-    std::string to_string( const SysmanLinkPort::link_port_stats_t val );
+    /// @brief Converts SysmanFabricPort::fabric_link_type_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_link_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFabricPort::fabric_port_config_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_config_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFabricPort::fabric_port_state_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFabricPort::fabric_port_throughput_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_throughput_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanTemperature::temp_sensors_t to std::string

@@ -1976,9 +1976,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGet
+    /// @brief Intercept function for zetSysmanFabricPortGet
     ze_result_t __zecall
-    zetSysmanLinkSwitchGet(
+    zetSysmanFabricPortGet(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -1987,130 +1987,23 @@ namespace driver
                                                         ///< if count is larger than the number of components available, then the
                                                         ///< driver will update the value with the correct number of components
                                                         ///< that are returned.
-        zet_sysman_link_switch_handle_t* phSwitch       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+        zet_sysman_fabric_port_handle_t* phPort         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                         ///< this type
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnLinkSwitchGet = context.zetDdiTable.Sysman.pfnLinkSwitchGet;
-        if( nullptr != pfnLinkSwitchGet )
+        auto pfnFabricPortGet = context.zetDdiTable.Sysman.pfnFabricPortGet;
+        if( nullptr != pfnFabricPortGet )
         {
-            result = pfnLinkSwitchGet( hSysman, pCount, phSwitch );
-        }
-        else
-        {
-            // generic implementation
-            for( size_t i = 0; ( nullptr != phSwitch ) && ( i < *pCount ); ++i )
-                phSwitch[ i ] = reinterpret_cast<zet_sysman_link_switch_handle_t>( context.get() );
-
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGetProperties
-    ze_result_t __zecall
-    zetSysmanLinkSwitchGetProperties(
-        zet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
-        zet_link_switch_properties_t* pProperties       ///< [in] Will contain the Switch properties.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetProperties = context.zetDdiTable.SysmanLinkSwitch.pfnGetProperties;
-        if( nullptr != pfnGetProperties )
-        {
-            result = pfnGetProperties( hSwitch, pProperties );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGetState
-    ze_result_t __zecall
-    zetSysmanLinkSwitchGetState(
-        zet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
-        zet_link_switch_state_t* pState                 ///< [in] Will contain the current state of the switch (enabled/disabled).
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetState = context.zetDdiTable.SysmanLinkSwitch.pfnGetState;
-        if( nullptr != pfnGetState )
-        {
-            result = pfnGetState( hSwitch, pState );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchSetState
-    ze_result_t __zecall
-    zetSysmanLinkSwitchSetState(
-        zet_sysman_link_switch_handle_t hSwitch,        ///< [in] Handle for the component.
-        ze_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetState = context.zetDdiTable.SysmanLinkSwitch.pfnSetState;
-        if( nullptr != pfnSetState )
-        {
-            result = pfnSetState( hSwitch, enable );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkSwitchGetPorts
-    ze_result_t __zecall
-    zetSysmanLinkSwitchGetPorts(
-        zet_sysman_link_switch_handle_t hSysmanLinkSwitch,  ///< [in] SMI handle of the connectivity switch.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zet_sysman_link_port_handle_t* phPort           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetPorts = context.zetDdiTable.SysmanLinkSwitch.pfnGetPorts;
-        if( nullptr != pfnGetPorts )
-        {
-            result = pfnGetPorts( hSysmanLinkSwitch, pCount, phPort );
+            result = pfnFabricPortGet( hSysman, pCount, phPort );
         }
         else
         {
             // generic implementation
             for( size_t i = 0; ( nullptr != phPort ) && ( i < *pCount ); ++i )
-                phPort[ i ] = reinterpret_cast<zet_sysman_link_port_handle_t>( context.get() );
+                phPort[ i ] = reinterpret_cast<zet_sysman_fabric_port_handle_t>( context.get() );
 
         }
 
@@ -2118,17 +2011,17 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetProperties
+    /// @brief Intercept function for zetSysmanFabricPortGetProperties
     ze_result_t __zecall
-    zetSysmanLinkPortGetProperties(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_properties_t* pProperties         ///< [in] Will contain properties of the Switch Port
+    zetSysmanFabricPortGetProperties(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_properties_t* pProperties       ///< [in] Will contain properties of the Fabric Port.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetProperties = context.zetDdiTable.SysmanLinkPort.pfnGetProperties;
+        auto pfnGetProperties = context.zetDdiTable.SysmanFabricPort.pfnGetProperties;
         if( nullptr != pfnGetProperties )
         {
             result = pfnGetProperties( hPort, pProperties );
@@ -2142,17 +2035,90 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetState
+    /// @brief Intercept function for zetSysmanFabricPortGetLinkType
     ze_result_t __zecall
-    zetSysmanLinkPortGetState(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_state_t* pState                   ///< [in] Will contain the current state of the Switch Port
+    zetSysmanFabricPortGetLinkType(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
+        zet_fabric_link_type_t* pLinkType               ///< [in] Will contain details about the link attached to the Fabric port.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetState = context.zetDdiTable.SysmanLinkPort.pfnGetState;
+        auto pfnGetLinkType = context.zetDdiTable.SysmanFabricPort.pfnGetLinkType;
+        if( nullptr != pfnGetLinkType )
+        {
+            result = pfnGetLinkType( hPort, verbose, pLinkType );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFabricPortGetConfig
+    ze_result_t __zecall
+    zetSysmanFabricPortGetConfig(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_config_t* pConfig               ///< [in] Will contain configuration of the Fabric Port.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetConfig = context.zetDdiTable.SysmanFabricPort.pfnGetConfig;
+        if( nullptr != pfnGetConfig )
+        {
+            result = pfnGetConfig( hPort, pConfig );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFabricPortSetConfig
+    ze_result_t __zecall
+    zetSysmanFabricPortSetConfig(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_config_t* pConfig               ///< [in] Contains new configuration of the Fabric Port.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetConfig = context.zetDdiTable.SysmanFabricPort.pfnSetConfig;
+        if( nullptr != pfnSetConfig )
+        {
+            result = pfnSetConfig( hPort, pConfig );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFabricPortGetState
+    ze_result_t __zecall
+    zetSysmanFabricPortGetState(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_state_t* pState                 ///< [in] Will contain the current state of the Fabric Port
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetState = context.zetDdiTable.SysmanFabricPort.pfnGetState;
         if( nullptr != pfnGetState )
         {
             result = pfnGetState( hPort, pState );
@@ -2166,69 +2132,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetThroughput
+    /// @brief Intercept function for zetSysmanFabricPortGetThroughput
     ze_result_t __zecall
-    zetSysmanLinkPortGetThroughput(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_throughput_t* pThroughput         ///< [in] Will contain the Switch port throughput counters.
+    zetSysmanFabricPortGetThroughput(
+        zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
+        zet_fabric_port_throughput_t* pThroughput       ///< [in] Will contain the Fabric port throughput counters and maximum
+                                                        ///< bandwidth.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetThroughput = context.zetDdiTable.SysmanLinkPort.pfnGetThroughput;
+        auto pfnGetThroughput = context.zetDdiTable.SysmanFabricPort.pfnGetThroughput;
         if( nullptr != pfnGetThroughput )
         {
             result = pfnGetThroughput( hPort, pThroughput );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortGetStats
-    ze_result_t __zecall
-    zetSysmanLinkPortGetStats(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle for the component.
-        zet_link_port_stats_t* pStats                   ///< [in] Will contain the Switch port stats.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetStats = context.zetDdiTable.SysmanLinkPort.pfnGetStats;
-        if( nullptr != pfnGetStats )
-        {
-            result = pfnGetStats( hPort, pStats );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanLinkPortIsConnected
-    ze_result_t __zecall
-    zetSysmanLinkPortIsConnected(
-        zet_sysman_link_port_handle_t hPort,            ///< [in] Handle of the local connectivity port.
-        zet_sysman_link_port_handle_t hRemotePort,      ///< [in] Handle of the remote connectivity port.
-        ze_bool_t* pConnected                           ///< [in] Will indicate connected to the remote port.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnIsConnected = context.zetDdiTable.SysmanLinkPort.pfnIsConnected;
-        if( nullptr != pfnIsConnected )
-        {
-            result = pfnIsConnected( hPort, hRemotePort, pConnected );
         }
         else
         {
@@ -3488,7 +3406,7 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnMemoryGet                              = driver::zetSysmanMemoryGet;
 
-    pDdiTable->pfnLinkSwitchGet                          = driver::zetSysmanLinkSwitchGet;
+    pDdiTable->pfnFabricPortGet                          = driver::zetSysmanFabricPortGet;
 
     pDdiTable->pfnTemperatureGet                         = driver::zetSysmanTemperatureGet;
 
@@ -3742,7 +3660,7 @@ zetGetSysmanMemoryProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanLinkSwitch table
+/// @brief Exported function for filling application's SysmanFabricPort table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3753,9 +3671,9 @@ zetGetSysmanMemoryProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __zedllexport ze_result_t __zecall
-zetGetSysmanLinkSwitchProcAddrTable(
+zetGetSysmanFabricPortProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zet_sysman_link_switch_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    zet_sysman_fabric_port_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
     )
 {
     if( nullptr == pDdiTable )
@@ -3766,51 +3684,17 @@ zetGetSysmanLinkSwitchProcAddrTable(
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
-    pDdiTable->pfnGetProperties                          = driver::zetSysmanLinkSwitchGetProperties;
+    pDdiTable->pfnGetProperties                          = driver::zetSysmanFabricPortGetProperties;
 
-    pDdiTable->pfnGetState                               = driver::zetSysmanLinkSwitchGetState;
+    pDdiTable->pfnGetLinkType                            = driver::zetSysmanFabricPortGetLinkType;
 
-    pDdiTable->pfnSetState                               = driver::zetSysmanLinkSwitchSetState;
+    pDdiTable->pfnGetConfig                              = driver::zetSysmanFabricPortGetConfig;
 
-    pDdiTable->pfnGetPorts                               = driver::zetSysmanLinkSwitchGetPorts;
+    pDdiTable->pfnSetConfig                              = driver::zetSysmanFabricPortSetConfig;
 
-    return result;
-}
+    pDdiTable->pfnGetState                               = driver::zetSysmanFabricPortGetState;
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanLinkPort table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__zedllexport ze_result_t __zecall
-zetGetSysmanLinkPortProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zet_sysman_link_port_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    pDdiTable->pfnGetProperties                          = driver::zetSysmanLinkPortGetProperties;
-
-    pDdiTable->pfnGetState                               = driver::zetSysmanLinkPortGetState;
-
-    pDdiTable->pfnGetThroughput                          = driver::zetSysmanLinkPortGetThroughput;
-
-    pDdiTable->pfnGetStats                               = driver::zetSysmanLinkPortGetStats;
-
-    pDdiTable->pfnIsConnected                            = driver::zetSysmanLinkPortIsConnected;
+    pDdiTable->pfnGetThroughput                          = driver::zetSysmanFabricPortGetThroughput;
 
     return result;
 }

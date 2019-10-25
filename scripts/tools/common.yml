@@ -104,14 +104,9 @@ class: $tSysmanMemory
 name: "$t_sysman_mem_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device connectivity switch"
-class: $tSysmanLinkSwitch
-name: "$t_sysman_link_switch_handle_t"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle for a SMI device connectivity port"
-class: $tSysmanLinkPort
-name: "$t_sysman_link_port_handle_t"
+desc: "Handle for a SMI fabric port"
+class: $tSysmanFabricPort
+name: "$t_sysman_fabric_port_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle for a SMI device temperature sensor"

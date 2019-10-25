@@ -26,7 +26,7 @@ The following documents the high-level programming models and guidelines.
 	+ [Operations on standby domains](#sby)
 	+ [Operations on firmware](#fmw)
 	+ [Querying memory modules](#mem)
-	+ [Operations on connectivity switches and ports](#con)
+	+ [Operations on fabric ports](#con)
 	+ [Querying temperature](#tmp)
 	+ [Operations on power supplies](#psu)
 	+ [Operations on fans](#fan)
@@ -191,8 +191,7 @@ sub-devices. The table shows the operations (queries) that will be provided for 
 | [Engines](#eng)       | Sub-device 0: All engines<br />Sub-device 0: Compute engines<br />Sub-device 0: Media engines<br />Sub-device 1: All engines<br />Sub-device 1: Compute engines<br />Sub-device 1: Media engines | Get busy time |
 | [Firmware](#fmw)      | Sub-device 0: Enumerates each firmware<br />Sub-device 1: Enumerates each firmware | Get firmware  name and version<br />Verify firmware checksum |
 | [Mermory](#mem)       | Sub-device 0: HBM memory<br />Sub-device 1: HBM memory | Get maximum supported bandwidth<br />Get current allocation size<br />Get current bandwidth |
-| [Link Switch](#con)   | Sub-device 0: One connectivity switch<br />Sub-device 1: One connectivity switch | Get state (enabled/disabled) | 
-| [Port Switch](#con)   | Sub-device 0: Enumerates each port in a connectivity switch<br />Sub-device 1: Enumerates each port in a connectivity switch | Get max supported bandwidth per port<br />Get per-port state (connected, remote device/port, max supported bandwidth)<br />Get per-port current bandwidth<br />Get per-port stats (replay counters) | 
+| [Fabric port](#con)   | Sub-device 0: Enumerates each port<br />Sub-device 1: Enumerates each port | Get port configuration (UP/DOWN)<br />Get physical link details<br />Get port health (green/yellow/red/black)<br />Get remote port UUID<br />Get port max rx/tx speed<br />Get port current rx/tx bandwidth | 
 | [Temperature](#tmp)   | Package: temperature<br />Sub-device 0: GPU temperature<br />Sub-device 0: HBM temperature<br />Sub-device 1: GPU temperature<br />Sub-device 1: HBM temperature | Get current temperature sensor reading |
 | [RAS](#ras)           | Sub-device 0: One set of RAS error counters<br />Sub-device 1: One set of RAS error counters | Read RAS total correctable and uncorrectable error counter.<br />Read breakdown of errors by category:<br />- no. resets<br />- no. programming errors<br />- no. driver errors<br />- no. compute errors<br />- no. cache errors<br />- no. memory errors<br />- no. PCI errors<br />- no. switch errors<br />- no. display errors<br />- no. non-compute errors | 
 | [Diagnostics](#dag)   | Package: SCAN test suite<br />Package: ARRAY test suite | Get list of all diagnostics tests in the test suite | 
@@ -206,7 +205,7 @@ sub-devices. The table shows the operations (controls) that will be provided for
 | [Frequency](#frq)     | Sub-device 0: GPU frequency<br />Sub-device 0: HBM frequency<br />Sub-device 1: GPU frequency<br />Sub-device 1: HBM frequency | Set frequency range |
 | [Standby](#sby)       | Sub-device 0: Control entire sub-device<br />Sub-device 1: Control entire sub-device | Disable opportunistic standby |
 | [Firmware](#fmw)      | Sub-device 0: Enumerates each firmware<br />Sub-device 1: Enumerates each firmware | Flash new firmware |
-| [Link Switch](#con)   | Sub-device 0: One connectivity switch<br />Sub-device 1: One connectivity switch | Enable/disable the connectivity switch | 
+| [Fabric port](#con)   | Sub-device 0: Control each port<br />Sub-device 1: Control each port | Configure port UP/DOWN<br />Turn beaconing ON/OFF | 
 | [Diagnostics](#con)   | SCAN test suite<br />ARRAY test suite | Run all or a subset of diagnostic tests in the test suite | 
 
 ## <a name="dce">Device component enumeration</a>
@@ -673,79 +672,122 @@ The following functions provide access to information about the device memory mo
 | ::zetSysmanMemoryGetAllocated()       | Returns the currently allocated memory size for a module. |
 
 
-## <a name="con">Operations on connectivity switches and ports</a>
-A device is able to access memory and resources on a remote device using a high-speed data fabric rather than using the PCI bus. This is achieved through
-a connectivity switch. If ::zetSysmanLinkSwitchGet() returns one or more switches, high-speed connectivity to other devices is possible.
+## <a name="con">Operations on Fabric ports</a>
+**Fabric** is the term given to describe high-speed interconnections between accelerator devices, primarily used to provide low latency fast
+access to remote device memory. Devices have one or more **fabric ports** that transmit and receive data over physical links. Links connect
+fabric ports, thus permitting data to travel between devices. Routing rules determine the flow of traffic through the fabric.
 
-The following functions can be used to manage the switch:
+The figure below shows four devices, each with two fabric ports. Each port has a link that connects it to a port on another device.
+In this example, the devices are connected in a ring. Device A and D can access each other's memory through either device B or device C
+depending on how the fabric routing rules are configured. If the connection between device B and D goes down, the routing rules can be
+modified such that device B and D can still access each other's memory by going through two hops in the fabric (device A and C).
+
+![Fabric ports](../images/tools_sysman_fabric.png?raw=true)
+
+The API permits enumerating all the ports available on a device. Each port has a universal unique identifier (UUID). If the port is connected
+to another port, the API will provide the remote port's UUID. By enumerating all ports on all devices that are connected to the fabric,
+an application can build a topology map of connectivity.
+
+For each port, the API permits querying its configuration (UP/DOWN) and its health which can take one of the following values:
+
+| Fabric port health                     | Description |
+| :---                                   | :---        |
+| ::ZET_FABRIC_PORT_STATUS_GREEN        | The port is up and operating as expected. |
+| ::ZET_FABRIC_PORT_STATUS_YELLOW       | The port is up but has quality and/or bandwidth degradation. |
+| ::ZET_FABRIC_PORT_STATUS_RED          | Port connection instabilities are preventing workloads making forward progress. |
+| ::ZET_FABRIC_PORT_STATUS_BLACK        | The port is configured down. |
+
+If the port is in a yellow state, the API provides additional information about the types of quality degradation that are being observed.
+If the port is in a red state, the API provides additional information about the causes of the instability.
+
+The API permits measuring the receive and transmit bandwidth flowing through each port. It also provides the maximum receive and transmit
+speed (frequency/number of lanes) of each port and the current speeds which can be lower if operating in a degraded state. Note that a
+port's receive and transmit speeds are not necessarily the same.
+
+Since ports are contained inside a switch, the measured bandwidth at a port can be higher than the actual bandwidth generated by
+the accelerators directly connected by two ports. As such, bandwidth metrics at each port are more relevant for determining points of
+congestion in the fabric and less relevant for measuring the total bandwidth passing between two accelerators.
+
+The following functions can be used to manage Fabric ports:
 
 | Function                               | Description |
 | :---                                   | :---        |
-| ::zetSysmanLinkSwitchGet()            | Enumerate connectivity switches on the device. |
-| ::zetSysmanLinkSwitchGetProperties()  | Get static properties about the switch. |
-| ::zetSysmanLinkSwitchGetState()       | Get the current state of the switch (enabled/disabled). |
-| ::zetSysmanLinkSwitchSetState()       | Enables/disabled the switch. |
-| ::zetSysmanLinkSwitchGetPorts()       | Enumerate the ports on the switch. |
+| ::zetSysmanFabricPortGet()            | Enumerate all fabric ports on the device. |
+| ::zetSysmanFabricPortGetProperties()  | Get static properties about the switch (model, UUID, max receive/transmit speed). |
+| ::zetSysmanFabricPortGetLinkType()    | Get details about the physical link connected to the port. |
+| ::zetSysmanFabricPortGetConfig()      | Determine if the port is configured UP and if beaconing is on or off. |
+| ::zetSysmanFabricPortSetConfig()      | Configure the port UP or DOWN and turn beaconing on or off. |
+| ::zetSysmanFabricPortGetState()       | Determine the health of the port connection, reasons for link degradation or connection issues and the current receive/transmit speed. |
+| ::zetSysmanFabricPortGetThroughput()  | Get port receive/transmit counters along with current receive/transmit port speed. |
 
-Each switch has one or more ports, each of which can be configured with a point-to-point connection to another port on another device's switch. A handle for
-each port on the switch is obtained using the function ::zetSysmanLinkSwitchGetPorts().
+For devices with sub-devices, the fabric ports are usually located in the sub-device. Given a device handle, ::zetSysmanFabricPortGet() will
+include the ports on each sub-device. In this case, ::zet_fabric_port_properties_t.onSubdevice will be set to true and
+::zet_fabric_port_properties_t.subdeviceId will give the subdevice ID where that port is located.
 
-The following functions can be used to manage each connectivity port:
-
-| ::zetSysmanLinkPortGetProperties()    | Get the properties of a port on the switch - maximum supported bandwidth. |
-| ::zetSysmanLinkPortGetState()         | Get the current state of a port on the switch - connected, remote switch device/index/port, current maximum bandwidth. |
-| ::zetSysmanLinkPortGetThroughput()    | Get the throughput counters of a port on the switch. |
-| ::zetSysmanLinkPortGetStats()         | Gets telemetry counters of a port on the switch - number of replays. |
-
-For devices with sub-devices, the switch is usually located in the sub-device. Given a device handle, ::zetSysmanLinkSwitchGet() will
-include the switches on each sub-device. In this case, ::zet_link_switch_properties_t.onSubdevice will be set to true and
-::zet_link_switch_properties_t.subdeviceId will give the subdevice ID where that switch is located.
-
-The example below shows how to get the state of all switches in the device and sub-devices:
+The example below shows how to get the state of all fabric ports in the device and sub-devices:
 
 ```c
-void ShowSwitchInfo(zet_sysman_link_switch_handle_t hSwitch)
+void ShowFabricPortInfo(zet_sysman_fabric_port_handle_t hPort)
 {
-    zet_link_switch_properties_t swprops;
-    if (zetSysmanLinkSwitchGetProperties(hSwitch, &swprops) == ZE_RESULT_SUCCESS)
+    zet_fabric_port_properties_t props;
+    if (zetSysmanFabricPortGetProperties(hPort, &props) == ZE_RESULT_SUCCESS)
     {
-        zet_link_switch_state_t swstate;
-        if (zetSysmanLinkSwitchGetState(hSwitch, &swstate) == ZE_RESULT_SUCCESS)
+        zet_fabric_port_state_t state;
+        if (zetSysmanFabricPortGetState(hPort, &state) == ZE_RESULT_SUCCESS)
         {
-            if (swprops.onSubdevice)
+            zet_fabric_link_type_t link;
+            if (zetSysmanFabricPortGetLinkType(hPort, false, &link) == ZE_RESULT_SUCCESS)
             {
-                fprintf(stdout, "        On sub-device: %u\n", swprops.subdeviceId);
-            }
-            fprintf(stdout, "        State:         %s\n", swstate.enabled ? "Enabled" : "Disabled");
-            if (swstate.enabled)
-            {
-                uint32_t numPorts;
-                if (zetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, NULL) == ZE_RESULT_SUCCESS)
+                zet_fabric_port_config_t config;
+                if (zetSysmanFabricPortGetConfig(hPort, &config) == ZE_RESULT_SUCCESS)
                 {
-                    zet_sysman_link_port_handle_t* phPorts =
-                        (zet_sysman_link_port_handle_t*)malloc(numPorts * sizeof(zet_sysman_link_port_handle_t));
-                    if (zetSysmanLinkSwitchGetPorts(hSwitch, &numPorts, phPorts) == ZE_RESULT_SUCCESS)
+                    fprintf(stdout,
+                        "        Model:                 %s\n", props.model);
+                    if (props.onSubdevice)
                     {
-                        fprintf(stdout, "        Ports:\n");
-                        for (uint32_t portIndex = 0; portIndex < numPorts; portIndex++)
+                        fprintf(stdout,
+                            "        On sub-device:         %u\n", props.subdeviceId);
+                    }
+                    if (config.enabled)
+                    {
+                        const char* status;
+                        fprintf(stdout,
+                            "        Config:                UP\n");
+                        switch (state.status)
                         {
-                            zet_link_port_state_t portstate;
-                            if (zetSysmanLinkPortGetState(phPorts[portIndex], &portstate)
-                                == ZE_RESULT_SUCCESS)
-                            {
-                                fprintf(stdout, "            %u: ", portIndex);
-                                if (portstate.isConnected)
-                                {
-                                    fprintf(stdout,
-                                        "connected, max rx/tx bandwidth: %u/%u bytes/sec\n",
-                                        portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
-                                }
-                                else
-                                {
-                                    fprintf(stdout, "not connected\n");
-                                }
-                            }
+                        case ZET_FABRIC_PORT_STATUS_GREEN:
+                            status = "GREEN - The port is up and operating as expected";
+                            break;
+                        case ZET_FABRIC_PORT_STATUS_YELLOW:
+                            status = "YELLOW - The port is up but has quality and/or bandwidth degradation";
+                            break;
+                        case ZET_FABRIC_PORT_STATUS_RED:
+                            status = "RED - Port connection instabilities";
+                            break;
+                        case ZET_FABRIC_PORT_STATUS_BLACK:
+                            status = "BLACK - The port is configured down";
+                            break;
+                        default:
+                            status = "UNKNOWN";
+                            break;
                         }
+                        fprintf(stdout,
+                            "        Status:                %s\n", status);
+                        fprintf(stdout,
+                            "        Link type:             %s\n", link.desc);
+                        fprintf(stdout,
+                            "        Max speed (rx/tx):     %llu/%llu bytes/sec\n",
+                            (long long unsigned int)props.maxRxSpeed.maxBandwidth,
+                            (long long unsigned int)props.maxTxSpeed.maxBandwidth);
+                        fprintf(stdout,
+                            "        Current speed (rx/tx): %llu/%llu bytes/sec\n",
+                            (long long unsigned int)state.rxSpeed.maxBandwidth,
+                            (long long unsigned int)state.txSpeed.maxBandwidth);
+                    }
+                    else
+                    {
+                        fprintf(stdout,
+                            "        Config:                DOWN\n");
                     }
                 }
             }
@@ -753,21 +795,22 @@ void ShowSwitchInfo(zet_sysman_link_switch_handle_t hSwitch)
     }
 }
 
-void ShowSwitches(zet_sysman_handle_t hSysmanDevice)
+void ShowFabricPorts(zet_sysman_handle_t hSysmanDevice)
 {
-    uint32_t numSwitches;
-    if ((zetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, NULL) == ZE_RESULT_SUCCESS) && numSwitches)
+    uint32_t numPorts;
+    if ((zetSysmanFabricPortGet(hSysmanDevice, &numPorts, NULL) == ZE_RESULT_SUCCESS) && numPorts)
     {
-        zet_sysman_link_switch_handle_t* phSwitches =
-            (zet_sysman_link_switch_handle_t*)malloc(numSwitches * sizeof(zet_sysman_link_switch_handle_t));
-        if (zetSysmanLinkSwitchGet(hSysmanDevice, &numSwitches, phSwitches) == ZE_RESULT_SUCCESS)
+        zet_sysman_fabric_port_handle_t* phPorts =
+            (zet_sysman_fabric_port_handle_t*)malloc(numPorts * sizeof(zet_sysman_fabric_port_handle_t));
+        if (zetSysmanFabricPortGet(hSysmanDevice, &numPorts, phPorts) == ZE_RESULT_SUCCESS)
         {
-            for (uint32_t index = 0; index < numSwitches; index++)
+            for (uint32_t index = 0; index < numPorts; index++)
             {
-                fprintf(stdout, "    Switch %u:\n", index);
-                ShowSwitchInfo(phSwitches[index]);
+                fprintf(stdout, "    Port %u:\n", index);
+                ShowFabricPortInfo(phPorts[index]);
             }
         }
+        free(phPorts);
     }
 }
 ```
@@ -927,7 +970,7 @@ breakdown of the main device components where the errors occurred. The categorie
 | ::zet_ras_details_t.numCacheErrors       | The number of errors that have occurred in caches (L1/L3/register file/shared local memory/sampler). |
 | ::zet_ras_details_t.numMemoryErrors      | The number of errors that have occurred in the device memory. |
 | ::zet_ras_details_t.numPciErrors:        | The number of errors that have occurred in the PCI link. |
-| ::zet_ras_details_t.numSwitchErrors      | The number of errors that have occurred in the high-speed connectivity links. |
+| ::zet_ras_details_t.numFabricErrors      | The number of errors that have occurred in the fabric ports. |
 | ::zet_ras_details_t.numDisplayErrors     | The number of errors that have occurred in the display. |
 
 The code below shows how to determine if RAS is supported and the current state of RAS errors:

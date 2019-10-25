@@ -132,16 +132,10 @@ namespace zet
     using sysman_mem_handle_t = _sysman_mem_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device connectivity switch
-    class SysmanLinkSwitch;
-    struct _sysman_link_switch_handle_t;
-    using sysman_link_switch_handle_t = _sysman_link_switch_handle_t*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device connectivity port
-    class SysmanLinkPort;
-    struct _sysman_link_port_handle_t;
-    using sysman_link_port_handle_t = _sysman_link_port_handle_t*;
+    /// @brief Handle for a SMI fabric port
+    class SysmanFabricPort;
+    struct _sysman_fabric_port_handle_t;
+    using sysman_fabric_port_handle_t = _sysman_fabric_port_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a SMI device temperature sensor

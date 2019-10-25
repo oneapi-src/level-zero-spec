@@ -153,16 +153,9 @@ namespace zet_lib
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zet_pfnGetSysmanLinkSwitchProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zetGetSysmanLinkSwitchProcAddrTable") );
-            result = getTable( ZE_API_VERSION_1_0, &ddiTable.SysmanLinkSwitch );
-        }
-
-        if( ZE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<zet_pfnGetSysmanLinkPortProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zetGetSysmanLinkPortProcAddrTable") );
-            result = getTable( ZE_API_VERSION_1_0, &ddiTable.SysmanLinkPort );
+            auto getTable = reinterpret_cast<zet_pfnGetSysmanFabricPortProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zetGetSysmanFabricPortProcAddrTable") );
+            result = getTable( ZE_API_VERSION_1_0, &ddiTable.SysmanFabricPort );
         }
 
         if( ZE_RESULT_SUCCESS == result )

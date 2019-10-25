@@ -99,12 +99,8 @@ typedef struct _zet_sysman_firmware_handle_t *zet_sysman_firmware_handle_t;
 typedef struct _zet_sysman_mem_handle_t *zet_sysman_mem_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device connectivity switch
-typedef struct _zet_sysman_link_switch_handle_t *zet_sysman_link_switch_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device connectivity port
-typedef struct _zet_sysman_link_port_handle_t *zet_sysman_link_port_handle_t;
+/// @brief Handle for a SMI fabric port
+typedef struct _zet_sysman_fabric_port_handle_t *zet_sysman_fabric_port_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a SMI device temperature sensor
@@ -287,32 +283,32 @@ typedef struct _zet_mem_bandwidth_t zet_mem_bandwidth_t;
 typedef struct _zet_mem_alloc_t zet_mem_alloc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_link_switch_properties_t
-typedef struct _zet_link_switch_properties_t zet_link_switch_properties_t;
+/// @brief Forward-declare zet_fabric_port_uuid_t
+typedef struct _zet_fabric_port_uuid_t zet_fabric_port_uuid_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_link_switch_state_t
-typedef struct _zet_link_switch_state_t zet_link_switch_state_t;
+/// @brief Forward-declare zet_fabric_port_speed_t
+typedef struct _zet_fabric_port_speed_t zet_fabric_port_speed_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_link_port_speed_t
-typedef struct _zet_link_port_speed_t zet_link_port_speed_t;
+/// @brief Forward-declare zet_fabric_port_properties_t
+typedef struct _zet_fabric_port_properties_t zet_fabric_port_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_link_port_properties_t
-typedef struct _zet_link_port_properties_t zet_link_port_properties_t;
+/// @brief Forward-declare zet_fabric_link_type_t
+typedef struct _zet_fabric_link_type_t zet_fabric_link_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_link_port_state_t
-typedef struct _zet_link_port_state_t zet_link_port_state_t;
+/// @brief Forward-declare zet_fabric_port_config_t
+typedef struct _zet_fabric_port_config_t zet_fabric_port_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_link_port_throughput_t
-typedef struct _zet_link_port_throughput_t zet_link_port_throughput_t;
+/// @brief Forward-declare zet_fabric_port_state_t
+typedef struct _zet_fabric_port_state_t zet_fabric_port_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_link_port_stats_t
-typedef struct _zet_link_port_stats_t zet_link_port_stats_t;
+/// @brief Forward-declare zet_fabric_port_throughput_t
+typedef struct _zet_fabric_port_throughput_t zet_fabric_port_throughput_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_temp_properties_t

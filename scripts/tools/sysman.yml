@@ -1706,99 +1706,85 @@ params:
       desc: "[in] Will contain the current allocated memory."
 
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum Fabric port model string size"
+name: $T_MAX_FABRIC_PORT_MODEL_SIZE
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum fabric port uuid size in bytes"
+name: $T_MAX_FABRIC_PORT_UUID_SIZE
+value: "72"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum size of the buffer that will return information about link types"
+name: $T_MAX_FABRIC_LINK_TYPE_SIZE
+value: "256"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fabric port status"
+class: $tSysmanFabricPort
+name: $t_fabric_port_status_t
+etors:
+    - name: $T_FABRIC_PORT_STATUS_GREEN
+      value: "0"
+      desc: "The port is up and operating as expected"
+    - name: $T_FABRIC_PORT_STATUS_YELLOW
+      desc: "The port is up but has quality and/or bandwidth degradation"
+    - name: $T_FABRIC_PORT_STATUS_RED
+      desc: "Port connection instabilities are preventing workloads making forward progress"
+    - name: $T_FABRIC_PORT_STATUS_BLACK
+      desc: "The port is configured down"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fabric port quality degradation reasons"
+class: $tSysmanFabricPort
+name: $t_fabric_port_qual_issues_t
+etors:
+    - name: $T_FABRIC_PORT_QUAL_ISSUES_NONE
+      value: "0"
+      desc: "There are no quality issues with the link at this time"
+    - name: $T_FABRIC_PORT_QUAL_ISSUES_FEC
+      value: "$X_BIT( 0 )"
+      desc: "Excessive FEC (forward error correction) are occurring"
+    - name: $T_FABRIC_PORT_QUAL_ISSUES_LTP_CRC
+      value: "$X_BIT( 1 )"
+      desc: "Excessive LTP CRC failure induced replays are occurring"
+    - name: $T_FABRIC_PORT_QUAL_ISSUES_SPEED
+      value: "$X_BIT( 2 )"
+      desc: "There is a degradation in the maximum bandwidth of the port"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fabric port stability issues"
+class: $tSysmanFabricPort
+name: $t_fabric_port_stab_issues_t
+etors:
+    - name: $T_FABRIC_PORT_STAB_ISSUES_NONE
+      value: "0"
+      desc: "There are no connection stability issues at this time"
+    - name: $T_FABRIC_PORT_STAB_ISSUES_TOO_MANY_REPLAYS
+      value: "$X_BIT( 0 )"
+      desc: "Sequential replay failure is inducing link retraining"
+    - name: $T_FABRIC_PORT_STAB_ISSUES_NO_CONNECT
+      value: "$X_BIT( 1 )"
+      desc: "A connection was never able to be established through the link"
+    - name: $T_FABRIC_PORT_STAB_ISSUES_FLAPPING
+      value: "$X_BIT( 2 )"
+      desc: "The port is flapping"
+--- #--------------------------------------------------------------------------
 type: struct
-desc: "Connectivity switch properties"
-class: $tSysmanLinkSwitch
-name: $t_link_switch_properties_t
+desc: "Fabric port universal unique id (UUID)"
+class: $tSysmanFabricPort
+name: $t_fabric_port_uuid_t
 members:
-    - type: $x_bool_t
-      name: "onSubdevice"
-      desc: "[out] True if the switch is located on a sub-device; false means that the switch is on the device of the calling SMI handle"
-    - type: uint32_t
-      name: "subdeviceId"
-      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: uint8_t
+      name: "id[$T_MAX_FABRIC_PORT_UUID_SIZE]"
+      desc: "[out] Frabric port universal unique id"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Connectivity switch state"
-class: $tSysmanLinkSwitch
-name: $t_link_switch_state_t
-members:
-    - type: $x_bool_t
-      name: "enabled"
-      desc: "[out] Indicates if the switch is enabled/disabled"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get handle of connectivity switches"
-class: $tSysman
-name: LinkSwitchGet
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: "uint32_t*"
-      name: pCount
-      desc: |
-            [in,out] pointer to the number of components of this type.
-            if count is zero, then the driver will update the value with the total number of components of this type.
-            if count is non-zero, then driver will only retrieve that number of components.
-            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_link_switch_handle_t*"
-      name: phSwitch
-      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get connectivity switch properties"
-class: $tSysmanLinkSwitch
-name: GetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_link_switch_handle_t
-      name: hSwitch
-      desc: "[in] Handle for the component."
-    - type: $t_link_switch_properties_t*
-      name: pProperties
-      desc: "[in] Will contain the Switch properties."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get connectivity switch state"
-class: $tSysmanLinkSwitch
-name: GetState
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_link_switch_handle_t
-      name: hSwitch
-      desc: "[in] Handle for the component."
-    - type: $t_link_switch_state_t*
-      name: pState
-      desc: "[in] Will contain the current state of the switch (enabled/disabled)."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set connectivity switch state"
-class: $tSysmanLinkSwitch
-name: SetState
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_link_switch_handle_t
-      name: hSwitch
-      desc: "[in] Handle for the component."
-    - type: $x_bool_t
-      name: enable
-      desc: "[in] Set to true to enable the Switch, otherwise it will be disabled."
-
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Connectivity port speed"
-class: $tSysmanLinkPort
-name: $t_link_port_speed_t
+desc: "Fabric port speed in one direction"
+class: $tSysmanFabricPort
+name: $t_fabric_port_speed_t
 members:
     - type: uint64_t
       name: "bitRate"
@@ -1811,36 +1797,87 @@ members:
       desc: "[out] The maximum bandwidth in bytes/sec"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Connectivity port properties"
-class: $tSysmanLinkPort
-name: $t_link_port_properties_t
+desc: "Fabric port properties"
+class: $tSysmanFabricPort
+name: $t_fabric_port_properties_t
 members:
+    - type: int8_t
+      name: "model[$T_MAX_FABRIC_PORT_MODEL_SIZE]"
+      desc: "[out] Description of port technology"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the port is located on a sub-device; false means that the port is on the device of the calling SMI handle"
     - type: uint32_t
-      name: "portNum"
-      desc: "[out] The port number on the switch"
-    - type: $t_link_port_speed_t
-      name: "maxSpeed"
-      desc: "[out] Maximum bandwidth supported by the port"
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $t_fabric_port_uuid_t
+      name: "portUuid"
+      desc: "[out] The port universal unique id"
+    - type: $t_fabric_port_speed_t
+      name: "maxRxSpeed"
+      desc: "[out] Maximum bandwidth supported by the receive side of the port"
+    - type: $t_fabric_port_speed_t
+      name: "maxTxSpeed"
+      desc: "[out] Maximum bandwidth supported by the transmit side of the port"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Connectivity port state"
-class: $tSysmanLinkPort
-name: $t_link_port_state_t
+desc: "Provides information about the fabric link attached to a port"
+class: $tSysmanFabricPort
+name: $t_fabric_link_type_t
+members:
+    - type: int8_t
+      name: "desc[$T_MAX_FABRIC_LINK_TYPE_SIZE]"
+      desc: |
+            [out] This provides a textural description of a link attached to a port. It contains the following information:
+            - Link material
+            - Link technology
+            - Cable manufacturer
+            - Temperature
+            - Power
+            - Attachment type:
+                - Disconnected
+                - Hardwired/fixed/etched connector
+                - Active copper
+                - QSOP
+                - AOC
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric port configuration"
+class: $tSysmanFabricPort
+name: $t_fabric_port_config_t
 members:
     - type: $x_bool_t
-      name: "isConnected"
-      desc: "[out] Indicates if the port is connected to a remote Switch"
-    - type: $t_link_port_speed_t
+      name: "enabled"
+      desc: "[in,out] Port is configured up/down"
+    - type: $x_bool_t
+      name: "beaconing"
+      desc: "[in,out] Beaconing is configured on/off"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric port state"
+class: $tSysmanFabricPort
+name: $t_fabric_port_state_t
+members:
+    - type: $t_fabric_port_status_t
+      name: "status"
+      desc: "[out] The current status of the port"
+    - type: $t_fabric_port_qual_issues_t
+      name: "qualityIssues"
+      desc: "[out] If status is $T_FABRIC_PORT_STATUS_YELLOW, this gives a bitfield of quality issues that have been detected"
+    - type: $t_fabric_port_stab_issues_t
+      name: "stabilityIssues"
+      desc: "[out] If status is $T_FABRIC_PORT_STATUS_RED, this gives a bitfield of reasons for the connection instability"
+    - type: $t_fabric_port_speed_t
       name: "rxSpeed"
       desc: "[out] Current maximum receive speed"
-    - type: $t_link_port_speed_t
+    - type: $t_fabric_port_speed_t
       name: "txSpeed"
       desc: "[out] Current maximum transmit speed"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Connectivity port throughput"
-class: $tSysmanLinkPort
-name: $t_link_port_throughput_t
+desc: "Fabric port throughput"
+class: $tSysmanFabricPort
+name: $t_fabric_port_throughput_t
 details:
     - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation:"
     - "    %rx_bandwidth = 10^6 * (s2.rxCounter - s1.rxCounter) / (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))"
@@ -1866,38 +1903,17 @@ members:
       name: "txMaxBandwidth"
       desc: "[out] The current maximum bandwidth in bytes/sec for transmitting packets"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Connectivity port stats counters"
-class: $tSysmanLinkPort
-name: $t_link_port_stats_t
-details:
-    - "Percent replays is calculated by taking two snapshots (s1, s2) and using the equation: %replay = 10^6 * (s2.replayCounter - s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
-members:
-    - type: uint64_t
-      name: "timestamp"
-      desc: |
-            [out] Monotonic timestamp counter in microseconds when the measurement was made.
-            No assumption should be made about the absolute value of the timestamp.
-            It should only be used to calculate delta time between two snapshots of the same structure.
-            Never take the delta of this timestamp with the timestamp from a different structure.
-    - type: uint64_t
-      name: "replayCounter"
-      desc: "[out] Monotonic counter for the number of replay packets"
-    - type: uint64_t
-      name: "packetCounter"
-      desc: "[out] Monotonic counter for the number of packets"
---- #--------------------------------------------------------------------------
 type: function
-desc: "Get handle of connectivity ports in a switch"
-class: $tSysmanLinkSwitch
-name: GetPorts
+desc: "Get handle of Fabric ports in a device"
+class: $tSysman
+name: FabricPortGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_link_switch_handle_t
-      name: hSysmanLinkSwitch
-      desc: "[in] SMI handle of the connectivity switch."
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -1905,87 +1921,102 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_link_port_handle_t*"
+    - type: "$t_sysman_fabric_port_handle_t*"
       name: phPort
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get connectivity port properties"
-class: $tSysmanLinkPort
+desc: "Get Fabric port properties"
+class: $tSysmanFabricPort
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_link_port_handle_t
+    - type: $t_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: $t_link_port_properties_t*
+    - type: $t_fabric_port_properties_t*
       name: pProperties
-      desc: "[in] Will contain properties of the Switch Port"
+      desc: "[in] Will contain properties of the Fabric Port."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get connectivity port state"
-class: $tSysmanLinkPort
+desc: "Get Fabric port link type"
+class: $tSysmanFabricPort
+name: GetLinkType
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_fabric_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $x_bool_t
+      name: verbose
+      desc: "[in] Set to true to get a more detailed report."
+    - type: $t_fabric_link_type_t*
+      name: pLinkType
+      desc: "[in] Will contain details about the link attached to the Fabric port."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Fabric port configuration"
+class: $tSysmanFabricPort
+name: GetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_fabric_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $t_fabric_port_config_t*
+      name: pConfig
+      desc: "[in] Will contain configuration of the Fabric Port."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set Fabric port configuration"
+class: $tSysmanFabricPort
+name: SetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_fabric_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $t_fabric_port_config_t*
+      name: pConfig
+      desc: "[in] Contains new configuration of the Fabric Port."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Fabric port state"
+class: $tSysmanFabricPort
 name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_link_port_handle_t
+    - type: $t_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: $t_link_port_state_t*
+    - type: $t_fabric_port_state_t*
       name: pState
-      desc: "[in] Will contain the current state of the Switch Port"
+      desc: "[in] Will contain the current state of the Fabric Port"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get connectivity port throughput"
-class: $tSysmanLinkPort
+desc: "Get Fabric port throughput"
+class: $tSysmanFabricPort
 name: GetThroughput
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_link_port_handle_t
+    - type: $t_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: $t_link_port_throughput_t*
+    - type: $t_fabric_port_throughput_t*
       name: pThroughput
-      desc: "[in] Will contain the Switch port throughput counters."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get connectivity port stats"
-class: $tSysmanLinkPort
-name: GetStats
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_link_port_handle_t
-      name: hPort
-      desc: "[in] Handle for the component."
-    - type: $t_link_port_stats_t*
-      name: pStats
-      desc: "[in] Will contain the Switch port stats."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Check if two connectivity ports are physically connected"
-class: $tSysmanLinkPort
-name: IsConnected
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_link_port_handle_t
-      name: hPort
-      desc: "[in] Handle of the local connectivity port."
-    - type: $t_sysman_link_port_handle_t
-      name: hRemotePort
-      desc: "[in] Handle of the remote connectivity port."
-    - type: $x_bool_t*
-      name: pConnected
-      desc: "[in] Will indicate connected to the remote port."
+      desc: "[in] Will contain the Fabric port throughput counters and maximum bandwidth."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2527,8 +2558,8 @@ members:
       name: "numPciErrors"
       desc: "[out] The number of errors that have occurred in the PCI link"
     - type: uint64_t
-      name: "numSwitchErrors"
-      desc: "[out] The number of errors that have occurred in the high-speed connectivity links"
+      name: "numFabricErrors"
+      desc: "[out] The number of errors that have occurred in the high-speed fabric ports"
     - type: uint64_t
       name: "numDisplayErrors"
       desc: "[out] The number of errors that have occurred in the display"
@@ -2944,29 +2975,16 @@ members:
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device connectivity switch"
-name: $tSysmanLinkSwitch
+desc: "C++ wrapper for a SMI device Fabric port"
+name: $tSysmanFabricPort
 owner: $tSysman
 members:
-    - type: $t_sysman_link_switch_handle_t
+    - type: $t_sysman_fabric_port_handle_t
       name: handle
       desc: "[in] handle of SMI object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
-      desc: "[in] pointer to owner object"
---- #--------------------------------------------------------------------------
-type: class
-desc: "C++ wrapper for a SMI device connectivity port"
-name: $tSysmanLinkPort
-owner: $tSysmanLinkSwitch
-members:
-    - type: $t_sysman_link_port_handle_t
-      name: handle
-      desc: "[in] handle of SMI object" 
-      init: nullptr
-    - type: $tSysmanLinkSwitch*
-      name: pSysmanLinkSwitch
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class

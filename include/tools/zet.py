@@ -108,13 +108,8 @@ class zet_sysman_mem_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device connectivity switch
-class zet_sysman_link_switch_handle_t(c_void_p):
-    pass
-
-###############################################################################
-## @brief Handle for a SMI device connectivity port
-class zet_sysman_link_port_handle_t(c_void_p):
+## @brief Handle for a SMI fabric port
+class zet_sysman_fabric_port_handle_t(c_void_p):
     pass
 
 ###############################################################################
@@ -1050,24 +1045,68 @@ class zet_mem_alloc_t(Structure):
     ]
 
 ###############################################################################
-## @brief Connectivity switch properties
-class zet_link_switch_properties_t(Structure):
+## @brief Maximum Fabric port model string size
+ZET_MAX_FABRIC_PORT_MODEL_SIZE = 256
+
+###############################################################################
+## @brief Maximum fabric port uuid size in bytes
+ZET_MAX_FABRIC_PORT_UUID_SIZE = 72
+
+###############################################################################
+## @brief Maximum size of the buffer that will return information about link
+##        types
+ZET_MAX_FABRIC_LINK_TYPE_SIZE = 256
+
+###############################################################################
+## @brief Fabric port status
+class zet_fabric_port_status_v(IntEnum):
+    GREEN = 0                                       ## The port is up and operating as expected
+    YELLOW = auto()                                 ## The port is up but has quality and/or bandwidth degradation
+    RED = auto()                                    ## Port connection instabilities are preventing workloads making forward
+                                                    ## progress
+    BLACK = auto()                                  ## The port is configured down
+
+class zet_fabric_port_status_t(c_int):
+    def __str__(self):
+        return str(zet_fabric_port_status_v(value))
+
+
+###############################################################################
+## @brief Fabric port quality degradation reasons
+class zet_fabric_port_qual_issues_v(IntEnum):
+    NONE = 0                                        ## There are no quality issues with the link at this time
+    FEC = ZE_BIT( 0 )                               ## Excessive FEC (forward error correction) are occurring
+    LTP_CRC = ZE_BIT( 1 )                           ## Excessive LTP CRC failure induced replays are occurring
+    SPEED = ZE_BIT( 2 )                             ## There is a degradation in the maximum bandwidth of the port
+
+class zet_fabric_port_qual_issues_t(c_int):
+    def __str__(self):
+        return str(zet_fabric_port_qual_issues_v(value))
+
+
+###############################################################################
+## @brief Fabric port stability issues
+class zet_fabric_port_stab_issues_v(IntEnum):
+    NONE = 0                                        ## There are no connection stability issues at this time
+    TOO_MANY_REPLAYS = ZE_BIT( 0 )                  ## Sequential replay failure is inducing link retraining
+    NO_CONNECT = ZE_BIT( 1 )                        ## A connection was never able to be established through the link
+    FLAPPING = ZE_BIT( 2 )                          ## The port is flapping
+
+class zet_fabric_port_stab_issues_t(c_int):
+    def __str__(self):
+        return str(zet_fabric_port_stab_issues_v(value))
+
+
+###############################################################################
+## @brief Fabric port universal unique id (UUID)
+class zet_fabric_port_uuid_t(Structure):
     _fields_ = [
-        ("onSubdevice", ze_bool_t),                                     ## [out] True if the switch is located on a sub-device; false means that
-                                                                        ## the switch is on the device of the calling SMI handle
-        ("subdeviceId", c_ulong)                                        ## [out] If onSubdevice is true, this gives the ID of the sub-device
+        ("id", c_ubyte * ZET_MAX_FABRIC_PORT_UUID_SIZE)                 ## [out] Frabric port universal unique id
     ]
 
 ###############################################################################
-## @brief Connectivity switch state
-class zet_link_switch_state_t(Structure):
-    _fields_ = [
-        ("enabled", ze_bool_t)                                          ## [out] Indicates if the switch is enabled/disabled
-    ]
-
-###############################################################################
-## @brief Connectivity port speed
-class zet_link_port_speed_t(Structure):
+## @brief Fabric port speed in one direction
+class zet_fabric_port_speed_t(Structure):
     _fields_ = [
         ("bitRate", c_ulonglong),                                       ## [out] Bits/sec that the link is operating at
         ("width", c_ulong),                                             ## [out] The number of lanes
@@ -1075,24 +1114,60 @@ class zet_link_port_speed_t(Structure):
     ]
 
 ###############################################################################
-## @brief Connectivity port properties
-class zet_link_port_properties_t(Structure):
+## @brief Fabric port properties
+class zet_fabric_port_properties_t(Structure):
     _fields_ = [
-        ("portNum", c_ulong),                                           ## [out] The port number on the switch
-        ("maxSpeed", zet_link_port_speed_t)                             ## [out] Maximum bandwidth supported by the port
+        ("model", c_int8_t * ZET_MAX_FABRIC_PORT_MODEL_SIZE),           ## [out] Description of port technology
+        ("onSubdevice", ze_bool_t),                                     ## [out] True if the port is located on a sub-device; false means that
+                                                                        ## the port is on the device of the calling SMI handle
+        ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
+        ("portUuid", zet_fabric_port_uuid_t),                           ## [out] The port universal unique id
+        ("maxRxSpeed", zet_fabric_port_speed_t),                        ## [out] Maximum bandwidth supported by the receive side of the port
+        ("maxTxSpeed", zet_fabric_port_speed_t)                         ## [out] Maximum bandwidth supported by the transmit side of the port
     ]
 
 ###############################################################################
-## @brief Connectivity port state
-class zet_link_port_state_t(Structure):
+## @brief Provides information about the fabric link attached to a port
+class zet_fabric_link_type_t(Structure):
     _fields_ = [
-        ("isConnected", ze_bool_t),                                     ## [out] Indicates if the port is connected to a remote Switch
-        ("rxSpeed", zet_link_port_speed_t),                             ## [out] Current maximum receive speed
-        ("txSpeed", zet_link_port_speed_t)                              ## [out] Current maximum transmit speed
+        ("desc", c_int8_t * ZET_MAX_FABRIC_LINK_TYPE_SIZE)              ## [out] This provides a textural description of a link attached to a
+                                                                        ## port. It contains the following information:
+                                                                        ## - Link material
+                                                                        ## - Link technology
+                                                                        ## - Cable manufacturer
+                                                                        ## - Temperature
+                                                                        ## - Power
+                                                                        ## - Attachment type:
+                                                                        ##    - Disconnected
+                                                                        ##    - Hardwired/fixed/etched connector
+                                                                        ##    - Active copper
+                                                                        ##    - QSOP
+                                                                        ##    - AOC
     ]
 
 ###############################################################################
-## @brief Connectivity port throughput
+## @brief Fabric port configuration
+class zet_fabric_port_config_t(Structure):
+    _fields_ = [
+        ("enabled", ze_bool_t),                                         ## [in,out] Port is configured up/down
+        ("beaconing", ze_bool_t)                                        ## [in,out] Beaconing is configured on/off
+    ]
+
+###############################################################################
+## @brief Fabric port state
+class zet_fabric_port_state_t(Structure):
+    _fields_ = [
+        ("status", zet_fabric_port_status_t),                           ## [out] The current status of the port
+        ("qualityIssues", zet_fabric_port_qual_issues_t),               ## [out] If status is ::ZET_FABRIC_PORT_STATUS_YELLOW, this gives a
+                                                                        ## bitfield of quality issues that have been detected
+        ("stabilityIssues", zet_fabric_port_stab_issues_t),             ## [out] If status is ::ZET_FABRIC_PORT_STATUS_RED, this gives a bitfield
+                                                                        ## of reasons for the connection instability
+        ("rxSpeed", zet_fabric_port_speed_t),                           ## [out] Current maximum receive speed
+        ("txSpeed", zet_fabric_port_speed_t)                            ## [out] Current maximum transmit speed
+    ]
+
+###############################################################################
+## @brief Fabric port throughput
 ## 
 ## @details
 ##     - Percent throughput is calculated by taking two snapshots (s1, s2) and
@@ -1101,7 +1176,7 @@ class zet_link_port_state_t(Structure):
 ##       (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))
 ##     -     %tx_bandwidth = 10^6 * (s2.txCounter - s1.txCounter) /
 ##       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
-class zet_link_port_throughput_t(Structure):
+class zet_fabric_port_throughput_t(Structure):
     _fields_ = [
         ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
                                                                         ## was made.
@@ -1115,26 +1190,6 @@ class zet_link_port_throughput_t(Structure):
         ("rxMaxBandwidth", c_ulonglong),                                ## [out] The current maximum bandwidth in bytes/sec for receiving packats
         ("txMaxBandwidth", c_ulonglong)                                 ## [out] The current maximum bandwidth in bytes/sec for transmitting
                                                                         ## packets
-    ]
-
-###############################################################################
-## @brief Connectivity port stats counters
-## 
-## @details
-##     - Percent replays is calculated by taking two snapshots (s1, s2) and
-##       using the equation: %replay = 10^6 * (s2.replayCounter -
-##       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
-class zet_link_port_stats_t(Structure):
-    _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
-                                                                        ## was made.
-                                                                        ## No assumption should be made about the absolute value of the timestamp.
-                                                                        ## It should only be used to calculate delta time between two snapshots
-                                                                        ## of the same structure.
-                                                                        ## Never take the delta of this timestamp with the timestamp from a
-                                                                        ## different structure.
-        ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
-        ("packetCounter", c_ulonglong)                                  ## [out] Monotonic counter for the number of packets
     ]
 
 ###############################################################################
@@ -1323,8 +1378,8 @@ class zet_ras_details_t(Structure):
                                                                         ## (L1/L3/register file/shared local memory/sampler)
         ("numMemoryErrors", c_ulonglong),                               ## [out] The number of errors that have occurred in the local memory
         ("numPciErrors", c_ulonglong),                                  ## [out] The number of errors that have occurred in the PCI link
-        ("numSwitchErrors", c_ulonglong),                               ## [out] The number of errors that have occurred in the high-speed
-                                                                        ## connectivity links
+        ("numFabricErrors", c_ulonglong),                               ## [out] The number of errors that have occurred in the high-speed fabric
+                                                                        ## ports
         ("numDisplayErrors", c_ulonglong)                               ## [out] The number of errors that have occurred in the display
     ]
 
@@ -1920,11 +1975,11 @@ else:
     _zetSysmanMemoryGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_mem_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanLinkSwitchGet
+## @brief Function-pointer for zetSysmanFabricPortGet
 if __use_win_types:
-    _zetSysmanLinkSwitchGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_link_switch_handle_t) )
+    _zetSysmanFabricPortGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_fabric_port_handle_t) )
 else:
-    _zetSysmanLinkSwitchGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_link_switch_handle_t) )
+    _zetSysmanFabricPortGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_fabric_port_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanTemperatureGet
@@ -2023,7 +2078,7 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnStandbyGet", c_void_p),                                    ## _zetSysmanStandbyGet_t
         ("pfnFirmwareGet", c_void_p),                                   ## _zetSysmanFirmwareGet_t
         ("pfnMemoryGet", c_void_p),                                     ## _zetSysmanMemoryGet_t
-        ("pfnLinkSwitchGet", c_void_p),                                 ## _zetSysmanLinkSwitchGet_t
+        ("pfnFabricPortGet", c_void_p),                                 ## _zetSysmanFabricPortGet_t
         ("pfnTemperatureGet", c_void_p),                                ## _zetSysmanTemperatureGet_t
         ("pfnPsuGet", c_void_p),                                        ## _zetSysmanPsuGet_t
         ("pfnFanGet", c_void_p),                                        ## _zetSysmanFanGet_t
@@ -2319,89 +2374,58 @@ class _zet_sysman_memory_dditable_t(Structure):
     ]
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanLinkSwitchGetProperties
+## @brief Function-pointer for zetSysmanFabricPortGetProperties
 if __use_win_types:
-    _zetSysmanLinkSwitchGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_link_switch_handle_t, POINTER(zet_link_switch_properties_t) )
+    _zetSysmanFabricPortGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_properties_t) )
 else:
-    _zetSysmanLinkSwitchGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_link_switch_handle_t, POINTER(zet_link_switch_properties_t) )
+    _zetSysmanFabricPortGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanLinkSwitchGetState
+## @brief Function-pointer for zetSysmanFabricPortGetLinkType
 if __use_win_types:
-    _zetSysmanLinkSwitchGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_link_switch_handle_t, POINTER(zet_link_switch_state_t) )
+    _zetSysmanFabricPortGetLinkType_t = WINFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, ze_bool_t, POINTER(zet_fabric_link_type_t) )
 else:
-    _zetSysmanLinkSwitchGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_link_switch_handle_t, POINTER(zet_link_switch_state_t) )
+    _zetSysmanFabricPortGetLinkType_t = CFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, ze_bool_t, POINTER(zet_fabric_link_type_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanLinkSwitchSetState
+## @brief Function-pointer for zetSysmanFabricPortGetConfig
 if __use_win_types:
-    _zetSysmanLinkSwitchSetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_link_switch_handle_t, ze_bool_t )
+    _zetSysmanFabricPortGetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_config_t) )
 else:
-    _zetSysmanLinkSwitchSetState_t = CFUNCTYPE( ze_result_t, zet_sysman_link_switch_handle_t, ze_bool_t )
+    _zetSysmanFabricPortGetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_config_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanLinkSwitchGetPorts
+## @brief Function-pointer for zetSysmanFabricPortSetConfig
 if __use_win_types:
-    _zetSysmanLinkSwitchGetPorts_t = WINFUNCTYPE( ze_result_t, zet_sysman_link_switch_handle_t, POINTER(c_ulong), POINTER(zet_sysman_link_port_handle_t) )
+    _zetSysmanFabricPortSetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_config_t) )
 else:
-    _zetSysmanLinkSwitchGetPorts_t = CFUNCTYPE( ze_result_t, zet_sysman_link_switch_handle_t, POINTER(c_ulong), POINTER(zet_sysman_link_port_handle_t) )
+    _zetSysmanFabricPortSetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_config_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanFabricPortGetState
+if __use_win_types:
+    _zetSysmanFabricPortGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_state_t) )
+else:
+    _zetSysmanFabricPortGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_state_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanFabricPortGetThroughput
+if __use_win_types:
+    _zetSysmanFabricPortGetThroughput_t = WINFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_throughput_t) )
+else:
+    _zetSysmanFabricPortGetThroughput_t = CFUNCTYPE( ze_result_t, zet_sysman_fabric_port_handle_t, POINTER(zet_fabric_port_throughput_t) )
 
 
 ###############################################################################
-## @brief Table of SysmanLinkSwitch functions pointers
-class _zet_sysman_link_switch_dditable_t(Structure):
+## @brief Table of SysmanFabricPort functions pointers
+class _zet_sysman_fabric_port_dditable_t(Structure):
     _fields_ = [
-        ("pfnGetProperties", c_void_p),                                 ## _zetSysmanLinkSwitchGetProperties_t
-        ("pfnGetState", c_void_p),                                      ## _zetSysmanLinkSwitchGetState_t
-        ("pfnSetState", c_void_p),                                      ## _zetSysmanLinkSwitchSetState_t
-        ("pfnGetPorts", c_void_p)                                       ## _zetSysmanLinkSwitchGetPorts_t
-    ]
-
-###############################################################################
-## @brief Function-pointer for zetSysmanLinkPortGetProperties
-if __use_win_types:
-    _zetSysmanLinkPortGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, POINTER(zet_link_port_properties_t) )
-else:
-    _zetSysmanLinkPortGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, POINTER(zet_link_port_properties_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanLinkPortGetState
-if __use_win_types:
-    _zetSysmanLinkPortGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, POINTER(zet_link_port_state_t) )
-else:
-    _zetSysmanLinkPortGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, POINTER(zet_link_port_state_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanLinkPortGetThroughput
-if __use_win_types:
-    _zetSysmanLinkPortGetThroughput_t = WINFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, POINTER(zet_link_port_throughput_t) )
-else:
-    _zetSysmanLinkPortGetThroughput_t = CFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, POINTER(zet_link_port_throughput_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanLinkPortGetStats
-if __use_win_types:
-    _zetSysmanLinkPortGetStats_t = WINFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, POINTER(zet_link_port_stats_t) )
-else:
-    _zetSysmanLinkPortGetStats_t = CFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, POINTER(zet_link_port_stats_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanLinkPortIsConnected
-if __use_win_types:
-    _zetSysmanLinkPortIsConnected_t = WINFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, zet_sysman_link_port_handle_t, POINTER(ze_bool_t) )
-else:
-    _zetSysmanLinkPortIsConnected_t = CFUNCTYPE( ze_result_t, zet_sysman_link_port_handle_t, zet_sysman_link_port_handle_t, POINTER(ze_bool_t) )
-
-
-###############################################################################
-## @brief Table of SysmanLinkPort functions pointers
-class _zet_sysman_link_port_dditable_t(Structure):
-    _fields_ = [
-        ("pfnGetProperties", c_void_p),                                 ## _zetSysmanLinkPortGetProperties_t
-        ("pfnGetState", c_void_p),                                      ## _zetSysmanLinkPortGetState_t
-        ("pfnGetThroughput", c_void_p),                                 ## _zetSysmanLinkPortGetThroughput_t
-        ("pfnGetStats", c_void_p),                                      ## _zetSysmanLinkPortGetStats_t
-        ("pfnIsConnected", c_void_p)                                    ## _zetSysmanLinkPortIsConnected_t
+        ("pfnGetProperties", c_void_p),                                 ## _zetSysmanFabricPortGetProperties_t
+        ("pfnGetLinkType", c_void_p),                                   ## _zetSysmanFabricPortGetLinkType_t
+        ("pfnGetConfig", c_void_p),                                     ## _zetSysmanFabricPortGetConfig_t
+        ("pfnSetConfig", c_void_p),                                     ## _zetSysmanFabricPortSetConfig_t
+        ("pfnGetState", c_void_p),                                      ## _zetSysmanFabricPortGetState_t
+        ("pfnGetThroughput", c_void_p)                                  ## _zetSysmanFabricPortGetThroughput_t
     ]
 
 ###############################################################################
@@ -2587,8 +2611,7 @@ class _zet_dditable_t(Structure):
         ("SysmanStandby", _zet_sysman_standby_dditable_t),
         ("SysmanFirmware", _zet_sysman_firmware_dditable_t),
         ("SysmanMemory", _zet_sysman_memory_dditable_t),
-        ("SysmanLinkSwitch", _zet_sysman_link_switch_dditable_t),
-        ("SysmanLinkPort", _zet_sysman_link_port_dditable_t),
+        ("SysmanFabricPort", _zet_sysman_fabric_port_dditable_t),
         ("SysmanTemperature", _zet_sysman_temperature_dditable_t),
         ("SysmanPsu", _zet_sysman_psu_dditable_t),
         ("SysmanFan", _zet_sysman_fan_dditable_t),
@@ -2767,7 +2790,7 @@ class ZET_DDI:
         self.zetSysmanStandbyGet = _zetSysmanStandbyGet_t(self.__dditable.Sysman.pfnStandbyGet)
         self.zetSysmanFirmwareGet = _zetSysmanFirmwareGet_t(self.__dditable.Sysman.pfnFirmwareGet)
         self.zetSysmanMemoryGet = _zetSysmanMemoryGet_t(self.__dditable.Sysman.pfnMemoryGet)
-        self.zetSysmanLinkSwitchGet = _zetSysmanLinkSwitchGet_t(self.__dditable.Sysman.pfnLinkSwitchGet)
+        self.zetSysmanFabricPortGet = _zetSysmanFabricPortGet_t(self.__dditable.Sysman.pfnFabricPortGet)
         self.zetSysmanTemperatureGet = _zetSysmanTemperatureGet_t(self.__dditable.Sysman.pfnTemperatureGet)
         self.zetSysmanPsuGet = _zetSysmanPsuGet_t(self.__dditable.Sysman.pfnPsuGet)
         self.zetSysmanFanGet = _zetSysmanFanGet_t(self.__dditable.Sysman.pfnFanGet)
@@ -2864,31 +2887,19 @@ class ZET_DDI:
         self.zetSysmanMemoryGetAllocated = _zetSysmanMemoryGetAllocated_t(self.__dditable.SysmanMemory.pfnGetAllocated)
 
         # call driver to get function pointers
-        _SysmanLinkSwitch = _zet_sysman_link_switch_dditable_t()
-        r = ze_result_v(self.__dll.zetGetSysmanLinkSwitchProcAddrTable(version, byref(_SysmanLinkSwitch)))
+        _SysmanFabricPort = _zet_sysman_fabric_port_dditable_t()
+        r = ze_result_v(self.__dll.zetGetSysmanFabricPortProcAddrTable(version, byref(_SysmanFabricPort)))
         if r != ze_result_v.SUCCESS:
             raise Exception(r)
-        self.__dditable.SysmanLinkSwitch = _SysmanLinkSwitch
+        self.__dditable.SysmanFabricPort = _SysmanFabricPort
 
         # attach function interface to function address
-        self.zetSysmanLinkSwitchGetProperties = _zetSysmanLinkSwitchGetProperties_t(self.__dditable.SysmanLinkSwitch.pfnGetProperties)
-        self.zetSysmanLinkSwitchGetState = _zetSysmanLinkSwitchGetState_t(self.__dditable.SysmanLinkSwitch.pfnGetState)
-        self.zetSysmanLinkSwitchSetState = _zetSysmanLinkSwitchSetState_t(self.__dditable.SysmanLinkSwitch.pfnSetState)
-        self.zetSysmanLinkSwitchGetPorts = _zetSysmanLinkSwitchGetPorts_t(self.__dditable.SysmanLinkSwitch.pfnGetPorts)
-
-        # call driver to get function pointers
-        _SysmanLinkPort = _zet_sysman_link_port_dditable_t()
-        r = ze_result_v(self.__dll.zetGetSysmanLinkPortProcAddrTable(version, byref(_SysmanLinkPort)))
-        if r != ze_result_v.SUCCESS:
-            raise Exception(r)
-        self.__dditable.SysmanLinkPort = _SysmanLinkPort
-
-        # attach function interface to function address
-        self.zetSysmanLinkPortGetProperties = _zetSysmanLinkPortGetProperties_t(self.__dditable.SysmanLinkPort.pfnGetProperties)
-        self.zetSysmanLinkPortGetState = _zetSysmanLinkPortGetState_t(self.__dditable.SysmanLinkPort.pfnGetState)
-        self.zetSysmanLinkPortGetThroughput = _zetSysmanLinkPortGetThroughput_t(self.__dditable.SysmanLinkPort.pfnGetThroughput)
-        self.zetSysmanLinkPortGetStats = _zetSysmanLinkPortGetStats_t(self.__dditable.SysmanLinkPort.pfnGetStats)
-        self.zetSysmanLinkPortIsConnected = _zetSysmanLinkPortIsConnected_t(self.__dditable.SysmanLinkPort.pfnIsConnected)
+        self.zetSysmanFabricPortGetProperties = _zetSysmanFabricPortGetProperties_t(self.__dditable.SysmanFabricPort.pfnGetProperties)
+        self.zetSysmanFabricPortGetLinkType = _zetSysmanFabricPortGetLinkType_t(self.__dditable.SysmanFabricPort.pfnGetLinkType)
+        self.zetSysmanFabricPortGetConfig = _zetSysmanFabricPortGetConfig_t(self.__dditable.SysmanFabricPort.pfnGetConfig)
+        self.zetSysmanFabricPortSetConfig = _zetSysmanFabricPortSetConfig_t(self.__dditable.SysmanFabricPort.pfnSetConfig)
+        self.zetSysmanFabricPortGetState = _zetSysmanFabricPortGetState_t(self.__dditable.SysmanFabricPort.pfnGetState)
+        self.zetSysmanFabricPortGetThroughput = _zetSysmanFabricPortGetThroughput_t(self.__dditable.SysmanFabricPort.pfnGetThroughput)
 
         # call driver to get function pointers
         _SysmanTemperature = _zet_sysman_temperature_dditable_t()
