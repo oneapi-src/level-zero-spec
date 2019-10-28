@@ -34,6 +34,12 @@ The following documents the high-level programming models and guidelines.
 	+ [Querying RAS errors](#ras)
 	+ [Performing diagnostics](#dag)
     + [Events](#evd)
+* [Security](#se)
+    + [Linux](#sel)
+    + [Windows](#sew)
+    + [Privileged telemetry](#set)
+    + [Privileged controls](#sec)
+    + [Virtualization](#sev)
 
 
 # <a name="in">Introduction</a>
@@ -1137,3 +1143,64 @@ The first argument of ::zetSysmanEventsListen() specifies the SMI handle for the
 can be set to NULL in order to query event notifications across all devices for which the application has created SMI handles. When querying across
 multiple devices, it is suggested not to request event status clearing. In this way, the application can know when any event has occurred and can then
 make individual requests to each device, this time requesting that the event status be cleared.
+
+# <a name="se">Security</a>
+
+## <a name="sel">Linux</a>
+The default security provided by the accelerator driver is to permit querying and controlling of system resources to the UNIX user **root**, querying
+only for users that are members of the UNIX group **root** and no access to any other user.
+
+It is the responsibility of the Linux distribution or the systems administrator to relax these permissions. This is typically done by adding udev
+daemon rules. For example, many distributions of Linux have the following rule:
+
+```c
+root	video	/dev/dri/card0
+``` 
+
+This will permit all users in the UNIX group **video** to query information about system resources. In order to open up control access to users
+of the video group, udev rules need to be added for each relevant control. For example, to permit someone in the video group to disable standby,
+the following udev daemon rule would be needed:
+
+```c
+chmod g+w /sys/class/drm/card0/rc6_enable
+```
+
+The full list of sysfs files used by the API are described in the table below. For each file, the list of affected API functions is given.
+
+| sysfs file                            | Description | Functions  |
+| :---                                  | :---      | :---        |
+| /sys/class/drm/card0/rc6_enable       | Used to enable/disable standby. | ::zetSysmanStandbyGet()<br/>::zetSysmanStandbyGetProperties()<br />::zetSysmanStandbyGetMode()<br />::zetSysmanStandbySetMode()<br />|
+| TBD | In development | TBD |
+
+## <a name="sew">Windows</a>
+At this time, Level0 Sysman does not support Windows.
+
+
+## <a name="set">Privileged telemetry</a>
+Certain telemetry make a system vulnerable to side-channel attacks. By default, these will only be available to the administrator user on the
+system. It is up to the administrator to relax those requirements, as described in the preceeding sections. This is the case for the following API
+calls:
+
+| Function                              | Description |
+| :---                                  | :---        |
+| ::zetSysmanPciGetThroughput()        | Access to realtime PCI throughput data can reveal useful information about the workload |
+| ::zetSysmanPciGetStats()             | Access to total PCI packets can reveal useful information about the workload |
+| ::zetSysmanMemoryGetBandwidth()      | Access to realtime device local memory bandwidth can reveal useful information about the workload |
+| ::zetSysmanFabricPortGetThroughput() | Access to realtime fabric data bandwidth can reveal useful information about the workload |
+
+
+## <a name="sec">Privileged controls</a>
+Certain controls can be used in denial-of-service attacks. By default, these will only be available to the administrator user on the
+system. It is up to the administrator to relax those requirements, as described in the preceeding sections. This is the case for the following API
+calls:
+
+| Function                              | Description |
+| :---                                  | :---        |
+| ::zetSysmanFirmwareFlash()           | Firmware flashing must be handled with care. |
+| ::zetSysmanFabricPortSetConfig()     | Putting fabric ports offline can distrupt workloads, causing uncorrectable errors. |
+| ::zetSysmanDiagnosticsRunTests()     | Diagnostics take a device offline. |
+
+
+## <a name="sev">Virtualization</a>
+In virtualization environments, only the host is permitted to access any features of the API. Attempts to use the API in virtual machines will
+fail.
