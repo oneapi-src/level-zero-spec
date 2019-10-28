@@ -263,6 +263,25 @@ namespace ze
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves an extension function for the specified driver
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **clGetExtensionFunctionAddressForPlatform**
+        /// @returns
+        ///     - void*: pointer to extension function
+        /// 
+        /// @throws result_t
+        void* __zecall
+        GetExtensionFunctionAddress(
+            const char* pFuncName                           ///< [in] name of the extension function
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Allocates memory that is shared between the host and one or more
         ///        devices
         /// 

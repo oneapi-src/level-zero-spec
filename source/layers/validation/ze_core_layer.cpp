@@ -142,6 +142,36 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDriverGetExtensionFunctionAddress
+    ze_result_t __zecall
+    zeDriverGetExtensionFunctionAddress(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        const char* pFuncName,                          ///< [in] name of the extension function
+        void** pfunc                                    ///< [out] pointer to extension function
+        )
+    {
+        auto pfnGetExtensionFunctionAddress = context.zeDdiTable.Driver.pfnGetExtensionFunctionAddress;
+
+        if( nullptr == pfnGetExtensionFunctionAddress )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDriver )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pFuncName )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pfunc )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetExtensionFunctionAddress( hDriver, pFuncName, pfunc );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGet
     ze_result_t __zecall
     zeDeviceGet(
@@ -2949,6 +2979,9 @@ zeGetDriverProcAddrTable(
 
     dditable.pfnGetIPCProperties                         = pDdiTable->pfnGetIPCProperties;
     pDdiTable->pfnGetIPCProperties                       = layer::zeDriverGetIPCProperties;
+
+    dditable.pfnGetExtensionFunctionAddress              = pDdiTable->pfnGetExtensionFunctionAddress;
+    pDdiTable->pfnGetExtensionFunctionAddress            = layer::zeDriverGetExtensionFunctionAddress;
 
     dditable.pfnAllocSharedMem                           = pDdiTable->pfnAllocSharedMem;
     pDdiTable->pfnAllocSharedMem                         = layer::zeDriverAllocSharedMem;
