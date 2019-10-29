@@ -675,7 +675,7 @@ The following functions provide access to information about the device memory mo
 | ::zetSysmanMemoryGet()                | Enumerate the memory modules. |
 | ::zetSysmanMemoryGetProperties()      | Find out the type of memory and maximum physical memory of a module. |
 | ::zetSysmanMemoryGetBandwidth()       | Returns memory bandwidth counters for a module. |
-| ::zetSysmanMemoryGetAllocated()       | Returns the currently allocated memory size for a module. |
+| ::zetSysmanMemoryGetState()           | Returns the currently health and allocated memory size for a module. |
 
 
 ## <a name="con">Operations on Fabric ports</a>

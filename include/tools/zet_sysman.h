@@ -1724,6 +1724,19 @@ typedef enum _zet_mem_type_t
 } zet_mem_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Memory health
+typedef enum _zet_mem_health_t
+{
+    ZET_MEM_HEALTH_OK = 0,                          ///< All memory channels are healthy
+    ZET_MEM_HEALTH_DEGRADED,                        ///< Excessive correctable errors have been detected on one or more
+                                                    ///< channels. Device should be reset.
+    ZET_MEM_HEALTH_CRITICAL,                        ///< Operating with reduced memory to cover banks with too many
+                                                    ///< uncorrectable errors.
+    ZET_MEM_HEALTH_REPLACE,                         ///< Device should be replaced due to excessive uncorrectable errors.
+
+} zet_mem_health_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Memory properties
 typedef struct _zet_mem_properties_t
 {
@@ -1731,9 +1744,24 @@ typedef struct _zet_mem_properties_t
     ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    uint64_t size;                                  ///< [out] Physical memory size in bytes
+    uint64_t physicalSize;                          ///< [out] Physical memory size in bytes
 
 } zet_mem_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Memory state - health, allocated
+/// 
+/// @details
+///     - Percent allocation is given by 100 * allocatedSize / maxSize.
+///     - Percent free is given by 100 * (maxSize - allocatedSize) / maxSize.
+typedef struct _zet_mem_state_t
+{
+    zet_mem_health_t health;                        ///< [out] Indicates the health of the memory
+    uint64_t allocatedSize;                         ///< [out] The total allocated bytes
+    uint64_t maxSize;                               ///< [out] The total allocatable memory in bytes (can be less than
+                                                    ///< ::zet_mem_properties_t.physicalSize)
+
+} zet_mem_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Memory bandwidth
@@ -1756,19 +1784,6 @@ typedef struct _zet_mem_bandwidth_t
                                                     ///< different structure.
 
 } zet_mem_bandwidth_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Memory allocation
-/// 
-/// @details
-///     - Percent allocation is given by 100 * allocated / total.
-///     - Percent free is given by 100 * (total - allocated) / total.
-typedef struct _zet_mem_alloc_t
-{
-    uint64_t allocated;                             ///< [out] The total allocated bytes
-    uint64_t total;                                 ///< [out] The total physical memory in bytes
-
-} zet_mem_alloc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle of memory modules
@@ -1821,6 +1836,27 @@ zetSysmanMemoryGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get memory state - health, allocated
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hMemory
+///         + nullptr == pState
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanMemoryGetState(
+    zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+    zet_mem_state_t* pState                         ///< [in] Will contain the current health and allocated memory.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get memory bandwidth
 /// 
 /// @details
@@ -1839,27 +1875,6 @@ ze_result_t __zecall
 zetSysmanMemoryGetBandwidth(
     zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
     zet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get memory allocation
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMemory
-///         + nullptr == pAllocated
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanMemoryGetAllocated(
-    zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-    zet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

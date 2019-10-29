@@ -681,7 +681,7 @@ The following functions provide access to information about the device memory mo
 | ::${t}SysmanMemoryGet()                | Enumerate the memory modules. |
 | ::${t}SysmanMemoryGetProperties()      | Find out the type of memory and maximum physical memory of a module. |
 | ::${t}SysmanMemoryGetBandwidth()       | Returns memory bandwidth counters for a module. |
-| ::${t}SysmanMemoryGetAllocated()       | Returns the currently allocated memory size for a module. |
+| ::${t}SysmanMemoryGetState()           | Returns the currently health and allocated memory size for a module. |
 
 
 ${"##"} <a name="con">Operations on Fabric ports</a>

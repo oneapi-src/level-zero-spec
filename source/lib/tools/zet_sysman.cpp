@@ -1507,6 +1507,34 @@ zetSysmanMemoryGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get memory state - health, allocated
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hMemory
+///         + nullptr == pState
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanMemoryGetState(
+    zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+    zet_mem_state_t* pState                         ///< [in] Will contain the current health and allocated memory.
+    )
+{
+    auto pfnGetState = zet_lib::context.ddiTable.SysmanMemory.pfnGetState;
+    if( nullptr == pfnGetState )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetState( hMemory, pState );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get memory bandwidth
 /// 
 /// @details
@@ -1532,34 +1560,6 @@ zetSysmanMemoryGetBandwidth(
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnGetBandwidth( hMemory, pBandwidth );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get memory allocation
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMemory
-///         + nullptr == pAllocated
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanMemoryGetAllocated(
-    zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-    zet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
-    )
-{
-    auto pfnGetAllocated = zet_lib::context.ddiTable.SysmanMemory.pfnGetAllocated;
-    if( nullptr == pfnGetAllocated )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetAllocated( hMemory, pAllocated );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3994,6 +3994,27 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get memory state - health, allocated
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanMemory::GetState(
+        mem_state_t* pState                             ///< [in] Will contain the current health and allocated memory.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanMemoryGetState(
+            reinterpret_cast<zet_sysman_mem_handle_t>( getHandle() ),
+            reinterpret_cast<zet_mem_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanMemory::GetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get memory bandwidth
     /// 
     /// @details
@@ -4012,27 +4033,6 @@ namespace zet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanMemory::GetBandwidth" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get memory allocation
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __zecall
-    SysmanMemory::GetAllocated(
-        mem_alloc_t* pAllocated                         ///< [in] Will contain the current allocated memory.
-        )
-    {
-        auto result = static_cast<result_t>( ::zetSysmanMemoryGetAllocated(
-            reinterpret_cast<zet_sysman_mem_handle_t>( getHandle() ),
-            reinterpret_cast<zet_mem_alloc_t*>( pAllocated ) ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanMemory::GetAllocated" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -6226,6 +6226,38 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanMemory::mem_health_t to std::string
+    std::string to_string( const SysmanMemory::mem_health_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case SysmanMemory::mem_health_t::OK:
+            str = "SysmanMemory::mem_health_t::OK";
+            break;
+
+        case SysmanMemory::mem_health_t::DEGRADED:
+            str = "SysmanMemory::mem_health_t::DEGRADED";
+            break;
+
+        case SysmanMemory::mem_health_t::CRITICAL:
+            str = "SysmanMemory::mem_health_t::CRITICAL";
+            break;
+
+        case SysmanMemory::mem_health_t::REPLACE:
+            str = "SysmanMemory::mem_health_t::REPLACE";
+            break;
+
+        default:
+            str = "SysmanMemory::mem_health_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanMemory::mem_properties_t to std::string
     std::string to_string( const SysmanMemory::mem_properties_t val )
     {
@@ -6243,8 +6275,29 @@ namespace zet
         str += std::to_string(val.subdeviceId);
         str += "\n";
         
-        str += "SysmanMemory::mem_properties_t::size : ";
-        str += std::to_string(val.size);
+        str += "SysmanMemory::mem_properties_t::physicalSize : ";
+        str += std::to_string(val.physicalSize);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanMemory::mem_state_t to std::string
+    std::string to_string( const SysmanMemory::mem_state_t val )
+    {
+        std::string str;
+        
+        str += "SysmanMemory::mem_state_t::health : ";
+        str += to_string(val.health);
+        str += "\n";
+        
+        str += "SysmanMemory::mem_state_t::allocatedSize : ";
+        str += std::to_string(val.allocatedSize);
+        str += "\n";
+        
+        str += "SysmanMemory::mem_state_t::maxSize : ";
+        str += std::to_string(val.maxSize);
         str += "\n";
 
         return str;
@@ -6270,23 +6323,6 @@ namespace zet
         
         str += "SysmanMemory::mem_bandwidth_t::timestamp : ";
         str += std::to_string(val.timestamp);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanMemory::mem_alloc_t to std::string
-    std::string to_string( const SysmanMemory::mem_alloc_t val )
-    {
-        std::string str;
-        
-        str += "SysmanMemory::mem_alloc_t::allocated : ";
-        str += std::to_string(val.allocated);
-        str += "\n";
-        
-        str += "SysmanMemory::mem_alloc_t::total : ";
-        str += std::to_string(val.total);
         str += "\n";
 
         return str;

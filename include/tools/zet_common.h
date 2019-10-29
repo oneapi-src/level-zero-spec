@@ -275,12 +275,12 @@ typedef struct _zet_firmware_properties_t zet_firmware_properties_t;
 typedef struct _zet_mem_properties_t zet_mem_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_mem_bandwidth_t
-typedef struct _zet_mem_bandwidth_t zet_mem_bandwidth_t;
+/// @brief Forward-declare zet_mem_state_t
+typedef struct _zet_mem_state_t zet_mem_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_mem_alloc_t
-typedef struct _zet_mem_alloc_t zet_mem_alloc_t;
+/// @brief Forward-declare zet_mem_bandwidth_t
+typedef struct _zet_mem_bandwidth_t zet_mem_bandwidth_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_fabric_port_uuid_t

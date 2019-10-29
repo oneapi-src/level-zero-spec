@@ -1581,6 +1581,21 @@ etors:
     - name: $T_MEM_TYPE_SLM
       desc: "Execution unit shared local memory"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory health"
+class: $tSysmanMemory
+name: $t_mem_health_t
+etors:
+    - name: $T_MEM_HEALTH_OK
+      value: "0"
+      desc: "All memory channels are healthy"
+    - name: $T_MEM_HEALTH_DEGRADED
+      desc: "Excessive correctable errors have been detected on one or more channels. Device should be reset."
+    - name: $T_MEM_HEALTH_CRITICAL
+      desc: "Operating with reduced memory to cover banks with too many uncorrectable errors."
+    - name: $T_MEM_HEALTH_REPLACE
+      desc: "Device should be replaced due to excessive uncorrectable errors."
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory properties"
 class: $tSysmanMemory
@@ -1596,8 +1611,26 @@ members:
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: uint64_t
-      name: size
+      name: physicalSize
       desc: "[out] Physical memory size in bytes"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory state - health, allocated"
+class: $tSysmanMemory
+name: $t_mem_state_t
+details:
+    - "Percent allocation is given by 100 * allocatedSize / maxSize."
+    - "Percent free is given by 100 * (maxSize - allocatedSize) / maxSize."
+members:
+    - type: $t_mem_health_t
+      name: health
+      desc: "[out] Indicates the health of the memory"
+    - type: uint64_t
+      name: allocatedSize
+      desc: "[out] The total allocated bytes"
+    - type: uint64_t
+      name: maxSize
+      desc: "[out] The total allocatable memory in bytes (can be less than $t_mem_properties_t.physicalSize)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory bandwidth"
@@ -1622,21 +1655,6 @@ members:
             No assumption should be made about the absolute value of the timestamp.
             It should only be used to calculate delta time between two snapshots of the same structure.
             Never take the delta of this timestamp with the timestamp from a different structure.
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Memory allocation"
-class: $tSysmanMemory
-name: $t_mem_alloc_t
-details:
-    - "Percent allocation is given by 100 * allocated / total."
-    - "Percent free is given by 100 * (total - allocated) / total."
-members:
-    - type: uint64_t
-      name: allocated
-      desc: "[out] The total allocated bytes"
-    - type: uint64_t
-      name: total
-      desc: "[out] The total physical memory in bytes"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of memory modules"
@@ -1676,6 +1694,21 @@ params:
       desc: "[in] Will contain memory properties."
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Get memory state - health, allocated"
+class: $tSysmanMemory
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_mem_handle_t
+      name: hMemory
+      desc: "[in] Handle for the component."
+    - type: $t_mem_state_t*
+      name: pState
+      desc: "[in] Will contain the current health and allocated memory."
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Get memory bandwidth"
 class: $tSysmanMemory
 name: GetBandwidth
@@ -1689,21 +1722,6 @@ params:
     - type: $t_mem_bandwidth_t*
       name: pBandwidth
       desc: "[in] Will contain a snapshot of the bandwidth counters."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get memory allocation"
-class: $tSysmanMemory
-name: GetAllocated
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_mem_handle_t
-      name: hMemory
-      desc: "[in] Handle for the component."
-    - type: $t_mem_alloc_t*
-      name: pAllocated
-      desc: "[in] Will contain the current allocated memory."
 
 --- #--------------------------------------------------------------------------
 type: macro

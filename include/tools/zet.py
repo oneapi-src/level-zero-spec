@@ -1001,6 +1001,21 @@ class zet_mem_type_t(c_int):
 
 
 ###############################################################################
+## @brief Memory health
+class zet_mem_health_v(IntEnum):
+    OK = 0                                          ## All memory channels are healthy
+    DEGRADED = auto()                               ## Excessive correctable errors have been detected on one or more
+                                                    ## channels. Device should be reset.
+    CRITICAL = auto()                               ## Operating with reduced memory to cover banks with too many
+                                                    ## uncorrectable errors.
+    REPLACE = auto()                                ## Device should be replaced due to excessive uncorrectable errors.
+
+class zet_mem_health_t(c_int):
+    def __str__(self):
+        return str(zet_mem_health_v(value))
+
+
+###############################################################################
 ## @brief Memory properties
 class zet_mem_properties_t(Structure):
     _fields_ = [
@@ -1008,7 +1023,21 @@ class zet_mem_properties_t(Structure):
         ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
-        ("size", c_ulonglong)                                           ## [out] Physical memory size in bytes
+        ("physicalSize", c_ulonglong)                                   ## [out] Physical memory size in bytes
+    ]
+
+###############################################################################
+## @brief Memory state - health, allocated
+## 
+## @details
+##     - Percent allocation is given by 100 * allocatedSize / maxSize.
+##     - Percent free is given by 100 * (maxSize - allocatedSize) / maxSize.
+class zet_mem_state_t(Structure):
+    _fields_ = [
+        ("health", zet_mem_health_t),                                   ## [out] Indicates the health of the memory
+        ("allocatedSize", c_ulonglong),                                 ## [out] The total allocated bytes
+        ("maxSize", c_ulonglong)                                        ## [out] The total allocatable memory in bytes (can be less than
+                                                                        ## ::zet_mem_properties_t.physicalSize)
     ]
 
 ###############################################################################
@@ -1030,18 +1059,6 @@ class zet_mem_bandwidth_t(Structure):
                                                                         ## of the same structure.
                                                                         ## Never take the delta of this timestamp with the timestamp from a
                                                                         ## different structure.
-    ]
-
-###############################################################################
-## @brief Memory allocation
-## 
-## @details
-##     - Percent allocation is given by 100 * allocated / total.
-##     - Percent free is given by 100 * (total - allocated) / total.
-class zet_mem_alloc_t(Structure):
-    _fields_ = [
-        ("allocated", c_ulonglong),                                     ## [out] The total allocated bytes
-        ("total", c_ulonglong)                                          ## [out] The total physical memory in bytes
     ]
 
 ###############################################################################
@@ -2350,18 +2367,18 @@ else:
     _zetSysmanMemoryGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_mem_handle_t, POINTER(zet_mem_properties_t) )
 
 ###############################################################################
+## @brief Function-pointer for zetSysmanMemoryGetState
+if __use_win_types:
+    _zetSysmanMemoryGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_mem_handle_t, POINTER(zet_mem_state_t) )
+else:
+    _zetSysmanMemoryGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_mem_handle_t, POINTER(zet_mem_state_t) )
+
+###############################################################################
 ## @brief Function-pointer for zetSysmanMemoryGetBandwidth
 if __use_win_types:
     _zetSysmanMemoryGetBandwidth_t = WINFUNCTYPE( ze_result_t, zet_sysman_mem_handle_t, POINTER(zet_mem_bandwidth_t) )
 else:
     _zetSysmanMemoryGetBandwidth_t = CFUNCTYPE( ze_result_t, zet_sysman_mem_handle_t, POINTER(zet_mem_bandwidth_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanMemoryGetAllocated
-if __use_win_types:
-    _zetSysmanMemoryGetAllocated_t = WINFUNCTYPE( ze_result_t, zet_sysman_mem_handle_t, POINTER(zet_mem_alloc_t) )
-else:
-    _zetSysmanMemoryGetAllocated_t = CFUNCTYPE( ze_result_t, zet_sysman_mem_handle_t, POINTER(zet_mem_alloc_t) )
 
 
 ###############################################################################
@@ -2369,8 +2386,8 @@ else:
 class _zet_sysman_memory_dditable_t(Structure):
     _fields_ = [
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanMemoryGetProperties_t
-        ("pfnGetBandwidth", c_void_p),                                  ## _zetSysmanMemoryGetBandwidth_t
-        ("pfnGetAllocated", c_void_p)                                   ## _zetSysmanMemoryGetAllocated_t
+        ("pfnGetState", c_void_p),                                      ## _zetSysmanMemoryGetState_t
+        ("pfnGetBandwidth", c_void_p)                                   ## _zetSysmanMemoryGetBandwidth_t
     ]
 
 ###############################################################################
@@ -2883,8 +2900,8 @@ class ZET_DDI:
 
         # attach function interface to function address
         self.zetSysmanMemoryGetProperties = _zetSysmanMemoryGetProperties_t(self.__dditable.SysmanMemory.pfnGetProperties)
+        self.zetSysmanMemoryGetState = _zetSysmanMemoryGetState_t(self.__dditable.SysmanMemory.pfnGetState)
         self.zetSysmanMemoryGetBandwidth = _zetSysmanMemoryGetBandwidth_t(self.__dditable.SysmanMemory.pfnGetBandwidth)
-        self.zetSysmanMemoryGetAllocated = _zetSysmanMemoryGetAllocated_t(self.__dditable.SysmanMemory.pfnGetAllocated)
 
         # call driver to get function pointers
         _SysmanFabricPort = _zet_sysman_fabric_port_dditable_t()

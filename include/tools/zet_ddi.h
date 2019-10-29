@@ -1287,6 +1287,13 @@ typedef ze_result_t (__zecall *zet_pfnSysmanMemoryGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanMemoryGetState 
+typedef ze_result_t (__zecall *zet_pfnSysmanMemoryGetState_t)(
+    zet_sysman_mem_handle_t,
+    zet_mem_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanMemoryGetBandwidth 
 typedef ze_result_t (__zecall *zet_pfnSysmanMemoryGetBandwidth_t)(
     zet_sysman_mem_handle_t,
@@ -1294,19 +1301,12 @@ typedef ze_result_t (__zecall *zet_pfnSysmanMemoryGetBandwidth_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanMemoryGetAllocated 
-typedef ze_result_t (__zecall *zet_pfnSysmanMemoryGetAllocated_t)(
-    zet_sysman_mem_handle_t,
-    zet_mem_alloc_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of SysmanMemory functions pointers
 typedef struct _zet_sysman_memory_dditable_t
 {
     zet_pfnSysmanMemoryGetProperties_t                          pfnGetProperties;
+    zet_pfnSysmanMemoryGetState_t                               pfnGetState;
     zet_pfnSysmanMemoryGetBandwidth_t                           pfnGetBandwidth;
-    zet_pfnSysmanMemoryGetAllocated_t                           pfnGetAllocated;
 } zet_sysman_memory_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

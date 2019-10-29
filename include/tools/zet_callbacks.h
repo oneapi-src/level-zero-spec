@@ -2303,6 +2303,29 @@ typedef void (__zecall *zet_pfnSysmanMemoryGetPropertiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanMemoryGetState 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_memory_get_state_params_t
+{
+    zet_sysman_mem_handle_t* phMemory;
+    zet_mem_state_t** ppState;
+} zet_sysman_memory_get_state_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanMemoryGetState 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanMemoryGetStateCb_t)(
+    zet_sysman_memory_get_state_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanMemoryGetBandwidth 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -2326,35 +2349,12 @@ typedef void (__zecall *zet_pfnSysmanMemoryGetBandwidthCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanMemoryGetAllocated 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_memory_get_allocated_params_t
-{
-    zet_sysman_mem_handle_t* phMemory;
-    zet_mem_alloc_t** ppAllocated;
-} zet_sysman_memory_get_allocated_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanMemoryGetAllocated 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanMemoryGetAllocatedCb_t)(
-    zet_sysman_memory_get_allocated_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of SysmanMemory callback functions pointers
 typedef struct _zet_sysman_memory_callbacks_t
 {
     zet_pfnSysmanMemoryGetPropertiesCb_t                            pfnGetPropertiesCb;
+    zet_pfnSysmanMemoryGetStateCb_t                                 pfnGetStateCb;
     zet_pfnSysmanMemoryGetBandwidthCb_t                             pfnGetBandwidthCb;
-    zet_pfnSysmanMemoryGetAllocatedCb_t                             pfnGetAllocatedCb;
 } zet_sysman_memory_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////

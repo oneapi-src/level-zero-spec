@@ -1928,6 +1928,30 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanMemoryGetState
+    ze_result_t __zecall
+    zetSysmanMemoryGetState(
+        zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+        zet_mem_state_t* pState                         ///< [in] Will contain the current health and allocated memory.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetState = context.zetDdiTable.SysmanMemory.pfnGetState;
+        if( nullptr != pfnGetState )
+        {
+            result = pfnGetState( hMemory, pState );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanMemoryGetBandwidth
     ze_result_t __zecall
     zetSysmanMemoryGetBandwidth(
@@ -1942,30 +1966,6 @@ namespace driver
         if( nullptr != pfnGetBandwidth )
         {
             result = pfnGetBandwidth( hMemory, pBandwidth );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanMemoryGetAllocated
-    ze_result_t __zecall
-    zetSysmanMemoryGetAllocated(
-        zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetAllocated = context.zetDdiTable.SysmanMemory.pfnGetAllocated;
-        if( nullptr != pfnGetAllocated )
-        {
-            result = pfnGetAllocated( hMemory, pAllocated );
         }
         else
         {
@@ -3652,9 +3652,9 @@ zetGetSysmanMemoryProcAddrTable(
 
     pDdiTable->pfnGetProperties                          = driver::zetSysmanMemoryGetProperties;
 
-    pDdiTable->pfnGetBandwidth                           = driver::zetSysmanMemoryGetBandwidth;
+    pDdiTable->pfnGetState                               = driver::zetSysmanMemoryGetState;
 
-    pDdiTable->pfnGetAllocated                           = driver::zetSysmanMemoryGetAllocated;
+    pDdiTable->pfnGetBandwidth                           = driver::zetSysmanMemoryGetBandwidth;
 
     return result;
 }

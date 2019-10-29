@@ -1793,6 +1793,19 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Memory health
+        enum class mem_health_t
+        {
+            OK = 0,                                         ///< All memory channels are healthy
+            DEGRADED,                                       ///< Excessive correctable errors have been detected on one or more
+                                                            ///< channels. Device should be reset.
+            CRITICAL,                                       ///< Operating with reduced memory to cover banks with too many
+                                                            ///< uncorrectable errors.
+            REPLACE,                                        ///< Device should be replaced due to excessive uncorrectable errors.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Memory properties
         struct mem_properties_t
         {
@@ -1800,7 +1813,22 @@ namespace zet
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling SMI handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            uint64_t size;                                  ///< [out] Physical memory size in bytes
+            uint64_t physicalSize;                          ///< [out] Physical memory size in bytes
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Memory state - health, allocated
+        /// 
+        /// @details
+        ///     - Percent allocation is given by 100 * allocatedSize / maxSize.
+        ///     - Percent free is given by 100 * (maxSize - allocatedSize) / maxSize.
+        struct mem_state_t
+        {
+            mem_health_t health;                            ///< [out] Indicates the health of the memory
+            uint64_t allocatedSize;                         ///< [out] The total allocated bytes
+            uint64_t maxSize;                               ///< [out] The total allocatable memory in bytes (can be less than
+                                                            ///< ::zet_mem_properties_t.physicalSize)
 
         };
 
@@ -1823,19 +1851,6 @@ namespace zet
                                                             ///< of the same structure.
                                                             ///< Never take the delta of this timestamp with the timestamp from a
                                                             ///< different structure.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Memory allocation
-        /// 
-        /// @details
-        ///     - Percent allocation is given by 100 * allocated / total.
-        ///     - Percent free is given by 100 * (total - allocated) / total.
-        struct mem_alloc_t
-        {
-            uint64_t allocated;                             ///< [out] The total allocated bytes
-            uint64_t total;                                 ///< [out] The total physical memory in bytes
 
         };
 
@@ -1878,6 +1893,18 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get memory state - health, allocated
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetState(
+            mem_state_t* pState                             ///< [in] Will contain the current health and allocated memory.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get memory bandwidth
         /// 
         /// @details
@@ -1887,18 +1914,6 @@ namespace zet
         void __zecall
         GetBandwidth(
             mem_bandwidth_t* pBandwidth                     ///< [in] Will contain a snapshot of the bandwidth counters.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get memory allocation
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetAllocated(
-            mem_alloc_t* pAllocated                         ///< [in] Will contain the current allocated memory.
             );
 
     };
@@ -2951,16 +2966,20 @@ namespace zet
     std::string to_string( const SysmanMemory::mem_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanMemory::mem_health_t to std::string
+    std::string to_string( const SysmanMemory::mem_health_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanMemory::mem_properties_t to std::string
     std::string to_string( const SysmanMemory::mem_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanMemory::mem_bandwidth_t to std::string
-    std::string to_string( const SysmanMemory::mem_bandwidth_t val );
+    /// @brief Converts SysmanMemory::mem_state_t to std::string
+    std::string to_string( const SysmanMemory::mem_state_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanMemory::mem_alloc_t to std::string
-    std::string to_string( const SysmanMemory::mem_alloc_t val );
+    /// @brief Converts SysmanMemory::mem_bandwidth_t to std::string
+    std::string to_string( const SysmanMemory::mem_bandwidth_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFabricPort::fabric_port_status_t to std::string

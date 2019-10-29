@@ -2030,6 +2030,32 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanMemoryGetState
+    ze_result_t __zecall
+    zetSysmanMemoryGetState(
+        zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+        zet_mem_state_t* pState                         ///< [in] Will contain the current health and allocated memory.
+        )
+    {
+        auto pfnGetState = context.zetDdiTable.SysmanMemory.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMemory )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pState )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetState( hMemory, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanMemoryGetBandwidth
     ze_result_t __zecall
     zetSysmanMemoryGetBandwidth(
@@ -2053,32 +2079,6 @@ namespace layer
         }
 
         return pfnGetBandwidth( hMemory, pBandwidth );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanMemoryGetAllocated
-    ze_result_t __zecall
-    zetSysmanMemoryGetAllocated(
-        zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
-        )
-    {
-        auto pfnGetAllocated = context.zetDdiTable.SysmanMemory.pfnGetAllocated;
-
-        if( nullptr == pfnGetAllocated )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hMemory )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pAllocated )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetAllocated( hMemory, pAllocated );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3927,11 +3927,11 @@ zetGetSysmanMemoryProcAddrTable(
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = layer::zetSysmanMemoryGetProperties;
 
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::zetSysmanMemoryGetState;
+
     dditable.pfnGetBandwidth                             = pDdiTable->pfnGetBandwidth;
     pDdiTable->pfnGetBandwidth                           = layer::zetSysmanMemoryGetBandwidth;
-
-    dditable.pfnGetAllocated                             = pDdiTable->pfnGetAllocated;
-    pDdiTable->pfnGetAllocated                           = layer::zetSysmanMemoryGetAllocated;
 
     return result;
 }

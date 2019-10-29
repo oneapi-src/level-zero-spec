@@ -2163,6 +2163,31 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanMemoryGetState
+    ze_result_t __zecall
+    zetSysmanMemoryGetState(
+        zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+        zet_mem_state_t* pState                         ///< [in] Will contain the current health and allocated memory.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_mem_object_t*>( hMemory )->dditable;
+        auto pfnGetState = dditable->zet.SysmanMemory.pfnGetState;
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hMemory = reinterpret_cast<zet_sysman_mem_object_t*>( hMemory )->handle;
+
+        // forward to device-driver
+        result = pfnGetState( hMemory, pState );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanMemoryGetBandwidth
     ze_result_t __zecall
     zetSysmanMemoryGetBandwidth(
@@ -2183,31 +2208,6 @@ namespace loader
 
         // forward to device-driver
         result = pfnGetBandwidth( hMemory, pBandwidth );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanMemoryGetAllocated
-    ze_result_t __zecall
-    zetSysmanMemoryGetAllocated(
-        zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_mem_object_t*>( hMemory )->dditable;
-        auto pfnGetAllocated = dditable->zet.SysmanMemory.pfnGetAllocated;
-        if( nullptr == pfnGetAllocated )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hMemory = reinterpret_cast<zet_sysman_mem_object_t*>( hMemory )->handle;
-
-        // forward to device-driver
-        result = pfnGetAllocated( hMemory, pAllocated );
 
         return result;
     }
@@ -4525,8 +4525,8 @@ zetGetSysmanMemoryProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetProperties                            = loader::zetSysmanMemoryGetProperties;
+            pDdiTable->pfnGetState                                 = loader::zetSysmanMemoryGetState;
             pDdiTable->pfnGetBandwidth                             = loader::zetSysmanMemoryGetBandwidth;
-            pDdiTable->pfnGetAllocated                             = loader::zetSysmanMemoryGetAllocated;
         }
         else
         {
