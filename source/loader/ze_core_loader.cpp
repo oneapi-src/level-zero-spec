@@ -179,6 +179,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDriverGetExtensionFunctionAddress
+    ze_result_t __zecall
+    zeDriverGetExtensionFunctionAddress(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        const char* pFuncName,                          ///< [in] name of the extension function
+        void** pfunc                                    ///< [out] pointer to extension function
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
+        auto pfnGetExtensionFunctionAddress = dditable->ze.Driver.pfnGetExtensionFunctionAddress;
+        if( nullptr == pfnGetExtensionFunctionAddress )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
+
+        // forward to device-driver
+        result = pfnGetExtensionFunctionAddress( hDriver, pFuncName, pfunc );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGet
     ze_result_t __zecall
     zeDeviceGet(
@@ -3239,6 +3265,7 @@ zeGetDriverProcAddrTable(
             pDdiTable->pfnGetDriverVersion                         = loader::zeDriverGetDriverVersion;
             pDdiTable->pfnGetApiVersion                            = loader::zeDriverGetApiVersion;
             pDdiTable->pfnGetIPCProperties                         = loader::zeDriverGetIPCProperties;
+            pDdiTable->pfnGetExtensionFunctionAddress              = loader::zeDriverGetExtensionFunctionAddress;
             pDdiTable->pfnAllocSharedMem                           = loader::zeDriverAllocSharedMem;
             pDdiTable->pfnAllocDeviceMem                           = loader::zeDriverAllocDeviceMem;
             pDdiTable->pfnAllocHostMem                             = loader::zeDriverAllocHostMem;

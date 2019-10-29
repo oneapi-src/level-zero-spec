@@ -1322,6 +1322,13 @@ else:
     _zeDriverGetIPCProperties_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_driver_ipc_properties_t) )
 
 ###############################################################################
+## @brief Function-pointer for zeDriverGetExtensionFunctionAddress
+if __use_win_types:
+    _zeDriverGetExtensionFunctionAddress_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_char), POINTER(c_void_p) )
+else:
+    _zeDriverGetExtensionFunctionAddress_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_char), POINTER(c_void_p) )
+
+###############################################################################
 ## @brief Function-pointer for zeDriverAllocSharedMem
 if __use_win_types:
     _zeDriverAllocSharedMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
@@ -1393,6 +1400,7 @@ class _ze_driver_dditable_t(Structure):
         ("pfnGetDriverVersion", c_void_p),                              ## _zeDriverGetDriverVersion_t
         ("pfnGetApiVersion", c_void_p),                                 ## _zeDriverGetApiVersion_t
         ("pfnGetIPCProperties", c_void_p),                              ## _zeDriverGetIPCProperties_t
+        ("pfnGetExtensionFunctionAddress", c_void_p),                   ## _zeDriverGetExtensionFunctionAddress_t
         ("pfnAllocSharedMem", c_void_p),                                ## _zeDriverAllocSharedMem_t
         ("pfnAllocDeviceMem", c_void_p),                                ## _zeDriverAllocDeviceMem_t
         ("pfnAllocHostMem", c_void_p),                                  ## _zeDriverAllocHostMem_t
@@ -2072,6 +2080,7 @@ class ZE_DDI:
         self.zeDriverGetDriverVersion = _zeDriverGetDriverVersion_t(self.__dditable.Driver.pfnGetDriverVersion)
         self.zeDriverGetApiVersion = _zeDriverGetApiVersion_t(self.__dditable.Driver.pfnGetApiVersion)
         self.zeDriverGetIPCProperties = _zeDriverGetIPCProperties_t(self.__dditable.Driver.pfnGetIPCProperties)
+        self.zeDriverGetExtensionFunctionAddress = _zeDriverGetExtensionFunctionAddress_t(self.__dditable.Driver.pfnGetExtensionFunctionAddress)
         self.zeDriverAllocSharedMem = _zeDriverAllocSharedMem_t(self.__dditable.Driver.pfnAllocSharedMem)
         self.zeDriverAllocDeviceMem = _zeDriverAllocDeviceMem_t(self.__dditable.Driver.pfnAllocDeviceMem)
         self.zeDriverAllocHostMem = _zeDriverAllocHostMem_t(self.__dditable.Driver.pfnAllocHostMem)

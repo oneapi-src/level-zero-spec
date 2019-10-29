@@ -636,6 +636,30 @@ typedef void (__zecall *ze_pfnDriverGetIPCPropertiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGetExtensionFunctionAddress 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_extension_function_address_params_t
+{
+    ze_driver_handle_t* phDriver;
+    const char** ppFuncName;
+    void*** ppfunc;
+} ze_driver_get_extension_function_address_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGetExtensionFunctionAddress 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetExtensionFunctionAddressCb_t)(
+    ze_driver_get_extension_function_address_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeDriverAllocSharedMem 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -872,6 +896,7 @@ typedef struct _ze_driver_callbacks_t
     ze_pfnDriverGetDriverVersionCb_t                                pfnGetDriverVersionCb;
     ze_pfnDriverGetApiVersionCb_t                                   pfnGetApiVersionCb;
     ze_pfnDriverGetIPCPropertiesCb_t                                pfnGetIPCPropertiesCb;
+    ze_pfnDriverGetExtensionFunctionAddressCb_t                     pfnGetExtensionFunctionAddressCb;
     ze_pfnDriverAllocSharedMemCb_t                                  pfnAllocSharedMemCb;
     ze_pfnDriverAllocDeviceMemCb_t                                  pfnAllocDeviceMemCb;
     ze_pfnDriverAllocHostMemCb_t                                    pfnAllocHostMemCb;

@@ -144,6 +144,31 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDriverGetExtensionFunctionAddress
+    ze_result_t __zecall
+    zeDriverGetExtensionFunctionAddress(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        const char* pFuncName,                          ///< [in] name of the extension function
+        void** pfunc                                    ///< [out] pointer to extension function
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetExtensionFunctionAddress = context.zeDdiTable.Driver.pfnGetExtensionFunctionAddress;
+        if( nullptr != pfnGetExtensionFunctionAddress )
+        {
+            result = pfnGetExtensionFunctionAddress( hDriver, pFuncName, pfunc );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGet
     ze_result_t __zecall
     zeDeviceGet(
@@ -2847,6 +2872,62 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.Driver;
                 if( nullptr != table.pfnGetIPCPropertiesCb )
                     table.pfnGetIPCPropertiesCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDriverGetExtensionFunctionAddress
+    ze_result_t __zecall
+    zeDriverGetExtensionFunctionAddress(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        const char* pFuncName,                          ///< [in] name of the extension function
+        void** pfunc                                    ///< [out] pointer to extension function
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_driver_get_extension_function_address_params_t in_params = {
+            &hDriver,
+            &pFuncName,
+            &pfunc
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Driver;
+                if( nullptr != table.pfnGetExtensionFunctionAddressCb )
+                    table.pfnGetExtensionFunctionAddressCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeDriverGetExtensionFunctionAddress( hDriver, pFuncName, pfunc );
+
+        // capture parameters
+        ze_driver_get_extension_function_address_params_t out_params = {
+            &hDriver,
+            &pFuncName,
+            &pfunc
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Driver;
+                if( nullptr != table.pfnGetExtensionFunctionAddressCb )
+                    table.pfnGetExtensionFunctionAddressCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8365,6 +8446,11 @@ zeGetDriverProcAddrTable(
         pDdiTable->pfnGetIPCProperties                       = instrumented::zeDriverGetIPCProperties;
     else
         pDdiTable->pfnGetIPCProperties                       = driver::zeDriverGetIPCProperties;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetExtensionFunctionAddress            = instrumented::zeDriverGetExtensionFunctionAddress;
+    else
+        pDdiTable->pfnGetExtensionFunctionAddress            = driver::zeDriverGetExtensionFunctionAddress;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnAllocSharedMem                         = instrumented::zeDriverAllocSharedMem;

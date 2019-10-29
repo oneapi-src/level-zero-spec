@@ -156,3 +156,24 @@ params:
     - type: "$x_driver_ipc_properties_t*"
       name: pIPCProperties
       desc: "[out] query result for IPC properties"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves an extension function for the specified driver"
+class: $xDriver
+name: GetExtensionFunctionAddress
+ordinal: "1"
+analogue:
+    - "**clGetExtensionFunctionAddressForPlatform**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
+    - type: "const char*"
+      name: pFuncName
+      desc: "[in] name of the extension function"
+    - type: "void**"
+      name: pfunc
+      desc: "[out] pointer to extension function"

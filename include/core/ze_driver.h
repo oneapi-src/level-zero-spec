@@ -205,6 +205,33 @@ zeDriverGetIPCProperties(
     ze_driver_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves an extension function for the specified driver
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **clGetExtensionFunctionAddressForPlatform**
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDriver
+///         + nullptr == pFuncName
+///         + nullptr == pfunc
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeDriverGetExtensionFunctionAddress(
+    ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+    const char* pFuncName,                          ///< [in] name of the extension function
+    void** pfunc                                    ///< [out] pointer to extension function
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

@@ -294,6 +294,14 @@ typedef ze_result_t (__zecall *ze_pfnDriverGetIPCProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGetExtensionFunctionAddress 
+typedef ze_result_t (__zecall *ze_pfnDriverGetExtensionFunctionAddress_t)(
+    ze_driver_handle_t,
+    const char*,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeDriverAllocSharedMem 
 typedef ze_result_t (__zecall *ze_pfnDriverAllocSharedMem_t)(
     ze_driver_handle_t,
@@ -386,6 +394,7 @@ typedef struct _ze_driver_dditable_t
     ze_pfnDriverGetDriverVersion_t                              pfnGetDriverVersion;
     ze_pfnDriverGetApiVersion_t                                 pfnGetApiVersion;
     ze_pfnDriverGetIPCProperties_t                              pfnGetIPCProperties;
+    ze_pfnDriverGetExtensionFunctionAddress_t                   pfnGetExtensionFunctionAddress;
     ze_pfnDriverAllocSharedMem_t                                pfnAllocSharedMem;
     ze_pfnDriverAllocDeviceMem_t                                pfnAllocDeviceMem;
     ze_pfnDriverAllocHostMem_t                                  pfnAllocHostMem;

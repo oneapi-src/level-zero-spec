@@ -194,6 +194,40 @@ zeDriverGetIPCProperties(
     return pfnGetIPCProperties( hDriver, pIPCProperties );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves an extension function for the specified driver
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **clGetExtensionFunctionAddressForPlatform**
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDriver
+///         + nullptr == pFuncName
+///         + nullptr == pfunc
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeDriverGetExtensionFunctionAddress(
+    ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+    const char* pFuncName,                          ///< [in] name of the extension function
+    void** pfunc                                    ///< [out] pointer to extension function
+    )
+{
+    auto pfnGetExtensionFunctionAddress = ze_lib::context.ddiTable.Driver.pfnGetExtensionFunctionAddress;
+    if( nullptr == pfnGetExtensionFunctionAddress )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetExtensionFunctionAddress( hDriver, pFuncName, pfunc );
+}
+
 } // extern "C"
 
 namespace ze
@@ -373,6 +407,39 @@ namespace ze
             throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Driver::GetIPCProperties" );
 
         return *reinterpret_cast<ipc_properties_t*>( &iPCProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves an extension function for the specified driver
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clGetExtensionFunctionAddressForPlatform**
+    /// 
+    /// @returns
+    ///     - void*: pointer to extension function
+    /// 
+    /// @throws result_t
+    void* __zecall
+    Driver::GetExtensionFunctionAddress(
+        const char* pFuncName                           ///< [in] name of the extension function
+        )
+    {
+        void* pfunc;
+
+        auto result = static_cast<result_t>( ::zeDriverGetExtensionFunctionAddress(
+            reinterpret_cast<ze_driver_handle_t>( getHandle() ),
+            pFuncName,
+            &pfunc ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Driver::GetExtensionFunctionAddress" );
+
+        return pfunc;
     }
 
 } // namespace ze
