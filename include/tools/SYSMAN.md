@@ -1148,10 +1148,11 @@ make individual requests to each device, this time requesting that the event sta
 
 ## <a name="sel">Linux</a>
 The default security provided by the accelerator driver is to permit querying and controlling of system resources to the UNIX user **root**, querying
-only for users that are members of the UNIX group **root** and no access to any other user.
+only for users that are members of the UNIX group **root** and no access to any other user. Some queries are permitted from any user (e.g requesting
+current frequency, checking standby state).
 
-It is the responsibility of the Linux distribution or the systems administrator to relax these permissions. This is typically done by adding udev
-daemon rules. For example, many distributions of Linux have the following rule:
+It is the responsibility of the Linux distribution or the systems administrator to relax or tighten these permissions. This is typically done
+by adding udev daemon rules. For example, many distributions of Linux have the following rule:
 
 ```c
 root	video	/dev/dri/card0
@@ -1172,12 +1173,13 @@ The full list of sysfs files used by the API are described in the table below. F
 | /sys/class/drm/card0/rc6_enable       | Used to enable/disable standby. | ::zetSysmanStandbyGet()<br/>::zetSysmanStandbyGetProperties()<br />::zetSysmanStandbyGetMode()<br />::zetSysmanStandbySetMode()<br />|
 | TBD | In development | TBD |
 
+
 ## <a name="sew">Windows</a>
 At this time, Level0 Sysman does not support Windows.
 
 
 ## <a name="set">Privileged telemetry</a>
-Certain telemetry make a system vulnerable to side-channel attacks. By default, these will only be available to the administrator user on the
+Certain telemetry makes a system vulnerable to side-channel attacks. By default, these will only be available to the administrator user on the
 system. It is up to the administrator to relax those requirements, as described in the preceeding sections. This is the case for the following API
 calls:
 
