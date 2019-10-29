@@ -1134,31 +1134,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPciGetThroughput
-    ze_result_t __zecall
-    zetSysmanPciGetThroughput(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        zet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnPciGetThroughput = dditable->zet.Sysman.pfnPciGetThroughput;
-        if( nullptr == pfnPciGetThroughput )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
-
-        // forward to device-driver
-        result = pfnPciGetThroughput( hSysman, pThroughput );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPciGetStats
     ze_result_t __zecall
     zetSysmanPciGetStats(
@@ -1384,6 +1359,211 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGet
+    ze_result_t __zecall
+    zetSysmanFrequencyGet(
+        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnFrequencyGet = dditable->zet.Sysman.pfnFrequencyGet;
+        if( nullptr == pfnFrequencyGet )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnFrequencyGet( hSysman, pCount, phFrequency );
+
+        try
+        {
+            // convert driver handles to loader handles
+            for( size_t i = 0; ( nullptr != phFrequency ) && ( i < *pCount ); ++i )
+                phFrequency[ i ] = reinterpret_cast<zet_sysman_freq_handle_t>(
+                    zet_sysman_freq_factory.getInstance( phFrequency[ i ], dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetProperties
+    ze_result_t __zecall
+    zetSysmanFrequencyGetProperties(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetProperties = dditable->zet.SysmanFrequency.pfnGetProperties;
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnGetProperties( hFrequency, pProperties );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetAvailableClocks
+    ze_result_t __zecall
+    zetSysmanFrequencyGetAvailableClocks(
+        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of frequencies available.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of frequencies.
+                                                        ///< If count is larger than the number of frequencies available, then the
+                                                        ///< driver will update the value with the correct number of frequencies available.
+        double* phFrequency                             ///< [in,out][optional][range(0, *pCount)] array of frequencies in units of
+                                                        ///< MHz and sorted from slowest to fastest
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnFrequencyGetAvailableClocks = dditable->zet.Sysman.pfnFrequencyGetAvailableClocks;
+        if( nullptr == pfnFrequencyGetAvailableClocks )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnFrequencyGetAvailableClocks( hSysman, pCount, phFrequency );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetRange
+    ze_result_t __zecall
+    zetSysmanFrequencyGetRange(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetRange = dditable->zet.SysmanFrequency.pfnGetRange;
+        if( nullptr == pfnGetRange )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnGetRange( hFrequency, pLimits );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencySetRange
+    ze_result_t __zecall
+    zetSysmanFrequencySetRange(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnSetRange = dditable->zet.SysmanFrequency.pfnSetRange;
+        if( nullptr == pfnSetRange )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnSetRange( hFrequency, pLimits );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetState
+    ze_result_t __zecall
+    zetSysmanFrequencyGetState(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetState = dditable->zet.SysmanFrequency.pfnGetState;
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnGetState( hFrequency, pState );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetThrottleTime
+    ze_result_t __zecall
+    zetSysmanFrequencyGetThrottleTime(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                        ///< specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetThrottleTime = dditable->zet.SysmanFrequency.pfnGetThrottleTime;
+        if( nullptr == pfnGetThrottleTime )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
+
+        // forward to device-driver
+        result = pfnGetThrottleTime( hFrequency, pThrottleTime );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetLastOcError
     ze_result_t __zecall
     zetSysmanFrequencyGetLastOcError(
@@ -1579,179 +1759,6 @@ namespace loader
 
         // forward to device-driver
         result = pfnSetOcTjMax( hFrequency, pOcTjMax );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGet
-    ze_result_t __zecall
-    zetSysmanFrequencyGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnFrequencyGet = dditable->zet.Sysman.pfnFrequencyGet;
-        if( nullptr == pfnFrequencyGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
-
-        // forward to device-driver
-        result = pfnFrequencyGet( hSysman, pCount, phFrequency );
-
-        try
-        {
-            // convert driver handles to loader handles
-            for( size_t i = 0; ( nullptr != phFrequency ) && ( i < *pCount ); ++i )
-                phFrequency[ i ] = reinterpret_cast<zet_sysman_freq_handle_t>(
-                    zet_sysman_freq_factory.getInstance( phFrequency[ i ], dditable ) );
-        }
-        catch( std::bad_alloc& )
-        {
-            result = ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetProperties
-    ze_result_t __zecall
-    zetSysmanFrequencyGetProperties(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetProperties = dditable->zet.SysmanFrequency.pfnGetProperties;
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
-
-        // forward to device-driver
-        result = pfnGetProperties( hFrequency, pProperties );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetRange
-    ze_result_t __zecall
-    zetSysmanFrequencyGetRange(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetRange = dditable->zet.SysmanFrequency.pfnGetRange;
-        if( nullptr == pfnGetRange )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
-
-        // forward to device-driver
-        result = pfnGetRange( hFrequency, pLimits );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetRange
-    ze_result_t __zecall
-    zetSysmanFrequencySetRange(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnSetRange = dditable->zet.SysmanFrequency.pfnSetRange;
-        if( nullptr == pfnSetRange )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
-
-        // forward to device-driver
-        result = pfnSetRange( hFrequency, pLimits );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetState
-    ze_result_t __zecall
-    zetSysmanFrequencyGetState(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetState = dditable->zet.SysmanFrequency.pfnGetState;
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
-
-        // forward to device-driver
-        result = pfnGetState( hFrequency, pState );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetThrottleTime
-    ze_result_t __zecall
-    zetSysmanFrequencyGetThrottleTime(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
-                                                        ///< specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetThrottleTime = dditable->zet.SysmanFrequency.pfnGetThrottleTime;
-        if( nullptr == pfnGetThrottleTime )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
-
-        // forward to device-driver
-        result = pfnGetThrottleTime( hFrequency, pThrottleTime );
 
         return result;
     }
@@ -4100,10 +4107,10 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnPciGetProperties                         = loader::zetSysmanPciGetProperties;
             pDdiTable->pfnPciGetState                              = loader::zetSysmanPciGetState;
             pDdiTable->pfnPciGetBarProperties                      = loader::zetSysmanPciGetBarProperties;
-            pDdiTable->pfnPciGetThroughput                         = loader::zetSysmanPciGetThroughput;
             pDdiTable->pfnPciGetStats                              = loader::zetSysmanPciGetStats;
             pDdiTable->pfnPowerGet                                 = loader::zetSysmanPowerGet;
             pDdiTable->pfnFrequencyGet                             = loader::zetSysmanFrequencyGet;
+            pDdiTable->pfnFrequencyGetAvailableClocks              = loader::zetSysmanFrequencyGetAvailableClocks;
             pDdiTable->pfnEngineGet                                = loader::zetSysmanEngineGet;
             pDdiTable->pfnStandbyGet                               = loader::zetSysmanStandbyGet;
             pDdiTable->pfnFirmwareGet                              = loader::zetSysmanFirmwareGet;
@@ -4251,6 +4258,11 @@ zetGetSysmanFrequencyProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
+            pDdiTable->pfnGetProperties                            = loader::zetSysmanFrequencyGetProperties;
+            pDdiTable->pfnGetRange                                 = loader::zetSysmanFrequencyGetRange;
+            pDdiTable->pfnSetRange                                 = loader::zetSysmanFrequencySetRange;
+            pDdiTable->pfnGetState                                 = loader::zetSysmanFrequencyGetState;
+            pDdiTable->pfnGetThrottleTime                          = loader::zetSysmanFrequencyGetThrottleTime;
             pDdiTable->pfnGetLastOcError                           = loader::zetSysmanFrequencyGetLastOcError;
             pDdiTable->pfnGetOcCapabilities                        = loader::zetSysmanFrequencyGetOcCapabilities;
             pDdiTable->pfnGetOcConfig                              = loader::zetSysmanFrequencyGetOcConfig;
@@ -4259,11 +4271,6 @@ zetGetSysmanFrequencyProcAddrTable(
             pDdiTable->pfnSetOcIccMax                              = loader::zetSysmanFrequencySetOcIccMax;
             pDdiTable->pfnGetOcTjMax                               = loader::zetSysmanFrequencyGetOcTjMax;
             pDdiTable->pfnSetOcTjMax                               = loader::zetSysmanFrequencySetOcTjMax;
-            pDdiTable->pfnGetProperties                            = loader::zetSysmanFrequencyGetProperties;
-            pDdiTable->pfnGetRange                                 = loader::zetSysmanFrequencyGetRange;
-            pDdiTable->pfnSetRange                                 = loader::zetSysmanFrequencySetRange;
-            pDdiTable->pfnGetState                                 = loader::zetSysmanFrequencyGetState;
-            pDdiTable->pfnGetThrottleTime                          = loader::zetSysmanFrequencyGetThrottleTime;
         }
         else
         {

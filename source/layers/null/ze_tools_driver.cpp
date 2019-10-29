@@ -989,30 +989,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPciGetThroughput
-    ze_result_t __zecall
-    zetSysmanPciGetThroughput(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        zet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnPciGetThroughput = context.zetDdiTable.Sysman.pfnPciGetThroughput;
-        if( nullptr != pfnPciGetThroughput )
-        {
-            result = pfnPciGetThroughput( hSysman, pThroughput );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPciGetStats
     ze_result_t __zecall
     zetSysmanPciGetStats(
@@ -1221,6 +1197,195 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGet
+    ze_result_t __zecall
+    zetSysmanFrequencyGet(
+        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFrequencyGet = context.zetDdiTable.Sysman.pfnFrequencyGet;
+        if( nullptr != pfnFrequencyGet )
+        {
+            result = pfnFrequencyGet( hSysman, pCount, phFrequency );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phFrequency ) && ( i < *pCount ); ++i )
+                phFrequency[ i ] = reinterpret_cast<zet_sysman_freq_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetProperties
+    ze_result_t __zecall
+    zetSysmanFrequencyGetProperties(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.zetDdiTable.SysmanFrequency.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hFrequency, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetAvailableClocks
+    ze_result_t __zecall
+    zetSysmanFrequencyGetAvailableClocks(
+        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of frequencies available.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of frequencies.
+                                                        ///< If count is larger than the number of frequencies available, then the
+                                                        ///< driver will update the value with the correct number of frequencies available.
+        double* phFrequency                             ///< [in,out][optional][range(0, *pCount)] array of frequencies in units of
+                                                        ///< MHz and sorted from slowest to fastest
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFrequencyGetAvailableClocks = context.zetDdiTable.Sysman.pfnFrequencyGetAvailableClocks;
+        if( nullptr != pfnFrequencyGetAvailableClocks )
+        {
+            result = pfnFrequencyGetAvailableClocks( hSysman, pCount, phFrequency );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetRange
+    ze_result_t __zecall
+    zetSysmanFrequencyGetRange(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetRange = context.zetDdiTable.SysmanFrequency.pfnGetRange;
+        if( nullptr != pfnGetRange )
+        {
+            result = pfnGetRange( hFrequency, pLimits );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencySetRange
+    ze_result_t __zecall
+    zetSysmanFrequencySetRange(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetRange = context.zetDdiTable.SysmanFrequency.pfnSetRange;
+        if( nullptr != pfnSetRange )
+        {
+            result = pfnSetRange( hFrequency, pLimits );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetState
+    ze_result_t __zecall
+    zetSysmanFrequencyGetState(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetState = context.zetDdiTable.SysmanFrequency.pfnGetState;
+        if( nullptr != pfnGetState )
+        {
+            result = pfnGetState( hFrequency, pState );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetThrottleTime
+    ze_result_t __zecall
+    zetSysmanFrequencyGetThrottleTime(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                        ///< specified domain.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetThrottleTime = context.zetDdiTable.SysmanFrequency.pfnGetThrottleTime;
+        if( nullptr != pfnGetThrottleTime )
+        {
+            result = pfnGetThrottleTime( hFrequency, pThrottleTime );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetLastOcError
     ze_result_t __zecall
     zetSysmanFrequencyGetLastOcError(
@@ -1403,164 +1568,6 @@ namespace driver
         if( nullptr != pfnSetOcTjMax )
         {
             result = pfnSetOcTjMax( hFrequency, pOcTjMax );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGet
-    ze_result_t __zecall
-    zetSysmanFrequencyGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFrequencyGet = context.zetDdiTable.Sysman.pfnFrequencyGet;
-        if( nullptr != pfnFrequencyGet )
-        {
-            result = pfnFrequencyGet( hSysman, pCount, phFrequency );
-        }
-        else
-        {
-            // generic implementation
-            for( size_t i = 0; ( nullptr != phFrequency ) && ( i < *pCount ); ++i )
-                phFrequency[ i ] = reinterpret_cast<zet_sysman_freq_handle_t>( context.get() );
-
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetProperties
-    ze_result_t __zecall
-    zetSysmanFrequencyGetProperties(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetProperties = context.zetDdiTable.SysmanFrequency.pfnGetProperties;
-        if( nullptr != pfnGetProperties )
-        {
-            result = pfnGetProperties( hFrequency, pProperties );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetRange
-    ze_result_t __zecall
-    zetSysmanFrequencyGetRange(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetRange = context.zetDdiTable.SysmanFrequency.pfnGetRange;
-        if( nullptr != pfnGetRange )
-        {
-            result = pfnGetRange( hFrequency, pLimits );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetRange
-    ze_result_t __zecall
-    zetSysmanFrequencySetRange(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetRange = context.zetDdiTable.SysmanFrequency.pfnSetRange;
-        if( nullptr != pfnSetRange )
-        {
-            result = pfnSetRange( hFrequency, pLimits );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetState
-    ze_result_t __zecall
-    zetSysmanFrequencyGetState(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetState = context.zetDdiTable.SysmanFrequency.pfnGetState;
-        if( nullptr != pfnGetState )
-        {
-            result = pfnGetState( hFrequency, pState );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetThrottleTime
-    ze_result_t __zecall
-    zetSysmanFrequencyGetThrottleTime(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
-                                                        ///< specified domain.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetThrottleTime = context.zetDdiTable.SysmanFrequency.pfnGetThrottleTime;
-        if( nullptr != pfnGetThrottleTime )
-        {
-            result = pfnGetThrottleTime( hFrequency, pThrottleTime );
         }
         else
         {
@@ -3390,13 +3397,13 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnPciGetBarProperties                    = driver::zetSysmanPciGetBarProperties;
 
-    pDdiTable->pfnPciGetThroughput                       = driver::zetSysmanPciGetThroughput;
-
     pDdiTable->pfnPciGetStats                            = driver::zetSysmanPciGetStats;
 
     pDdiTable->pfnPowerGet                               = driver::zetSysmanPowerGet;
 
     pDdiTable->pfnFrequencyGet                           = driver::zetSysmanFrequencyGet;
+
+    pDdiTable->pfnFrequencyGetAvailableClocks            = driver::zetSysmanFrequencyGetAvailableClocks;
 
     pDdiTable->pfnEngineGet                              = driver::zetSysmanEngineGet;
 
@@ -3496,6 +3503,16 @@ zetGetSysmanFrequencyProcAddrTable(
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
+    pDdiTable->pfnGetProperties                          = driver::zetSysmanFrequencyGetProperties;
+
+    pDdiTable->pfnGetRange                               = driver::zetSysmanFrequencyGetRange;
+
+    pDdiTable->pfnSetRange                               = driver::zetSysmanFrequencySetRange;
+
+    pDdiTable->pfnGetState                               = driver::zetSysmanFrequencyGetState;
+
+    pDdiTable->pfnGetThrottleTime                        = driver::zetSysmanFrequencyGetThrottleTime;
+
     pDdiTable->pfnGetLastOcError                         = driver::zetSysmanFrequencyGetLastOcError;
 
     pDdiTable->pfnGetOcCapabilities                      = driver::zetSysmanFrequencyGetOcCapabilities;
@@ -3511,16 +3528,6 @@ zetGetSysmanFrequencyProcAddrTable(
     pDdiTable->pfnGetOcTjMax                             = driver::zetSysmanFrequencyGetOcTjMax;
 
     pDdiTable->pfnSetOcTjMax                             = driver::zetSysmanFrequencySetOcTjMax;
-
-    pDdiTable->pfnGetProperties                          = driver::zetSysmanFrequencyGetProperties;
-
-    pDdiTable->pfnGetRange                               = driver::zetSysmanFrequencyGetRange;
-
-    pDdiTable->pfnSetRange                               = driver::zetSysmanFrequencySetRange;
-
-    pDdiTable->pfnGetState                               = driver::zetSysmanFrequencyGetState;
-
-    pDdiTable->pfnGetThrottleTime                        = driver::zetSysmanFrequencyGetThrottleTime;
 
     return result;
 }

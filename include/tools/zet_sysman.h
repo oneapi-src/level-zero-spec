@@ -38,7 +38,10 @@ typedef enum _zet_sysman_version_t
 /// @brief Get the handle to access SMI features for a device
 /// 
 /// @details
-///     - The returned handle is unique
+///     - The returned handle is unique.
+///     - ::zet_device_handle_t returned by ::zeDeviceGetSubDevices() are not
+///       support. Only use handles returned by ::zeDeviceGet(). All resources
+///       on sub-devices can be enumerated through the primary device.
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -48,6 +51,7 @@ typedef enum _zet_sysman_version_t
 ///         + nullptr == hDevice
 ///         + nullptr == phSysman
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Sub-device handles are not supported. Use the device handle.
 ze_result_t __zecall
 zetSysmanGet(
     zet_device_handle_t hDevice,                    ///< [in] Handle of the device
@@ -290,6 +294,8 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimeoutMode(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
@@ -319,6 +325,8 @@ zetSysmanSchedulerSetTimeoutMode(
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimesliceMode(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
@@ -347,6 +355,8 @@ zetSysmanSchedulerSetTimesliceMode(
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetExclusiveMode(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
@@ -374,6 +384,8 @@ zetSysmanSchedulerSetExclusiveMode(
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetComputeUnitDebugMode(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
@@ -391,6 +403,8 @@ zetSysmanSchedulerSetComputeUnitDebugMode(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
 zetSysmanDeviceReset(
     zet_sysman_handle_t hSysman                     ///< [in] SMI handle for the device
@@ -409,6 +423,8 @@ zetSysmanDeviceReset(
 ///         + nullptr == pWasRepaired
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + This device does not record this information or does not support repair features.
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to query this property.
 ze_result_t __zecall
 zetSysmanDeviceWasRepaired(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
@@ -482,34 +498,13 @@ typedef struct _zet_pci_bar_properties_t
 } zet_pci_bar_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief PCI throughput
+/// @brief PCI stats counters
 /// 
 /// @details
 ///     - Percent throughput is calculated by taking two snapshots (s1, s2) and
 ///       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
 ///       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
 ///       s1.timestamp))
-typedef struct _zet_pci_throughput_t
-{
-    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
-                                                    ///< was made.
-                                                    ///< No assumption should be made about the absolute value of the timestamp.
-                                                    ///< It should only be used to calculate delta time between two snapshots
-                                                    ///< of the same structure.
-                                                    ///< Never take the delta of this timestamp with the timestamp from a
-                                                    ///< different structure.
-    uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
-    uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
-                                                    ///< replays)
-    uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
-                                                    ///< configuration
-
-} zet_pci_throughput_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief PCI stats counters
-/// 
-/// @details
 ///     - Percent replays is calculated by taking two snapshots (s1, s2) and
 ///       using the equation: %replay = 10^6 * (s2.replayCounter -
 ///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
@@ -524,6 +519,11 @@ typedef struct _zet_pci_stats_t
                                                     ///< different structure.
     uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
     uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
+    uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
+    uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
+                                                    ///< replays)
+    uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
+                                                    ///< configuration
 
 } zet_pci_stats_t;
 
@@ -593,28 +593,7 @@ zetSysmanPciGetBarProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get PCI throughput
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pThroughput
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanPciGetThroughput(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    zet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get PCI stats
+/// @brief Get PCI stats - bandwidth, number of packets, number of replays
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -628,6 +607,8 @@ zetSysmanPciGetThroughput(
 ///         + nullptr == hSysman
 ///         + nullptr == pStats
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
 zetSysmanPciGetStats(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
@@ -837,6 +818,8 @@ zetSysmanPowerGetEnergyThreshold(
 ///         + nullptr == hPower
 ///         + nullptr == pThreshold
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to request this feature.
 ///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
 ///         + The device is in use, meaning that the GPU is under Over clocking, applying energy threshold under overclocking is not supported.
 ze_result_t __zecall
@@ -881,6 +864,8 @@ zetSysmanPowerGetLimits(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
 ///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
 ///         + The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported.
 ze_result_t __zecall
@@ -890,6 +875,101 @@ zetSysmanPowerSetLimits(
     const zet_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
     const zet_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frequency properties
+/// 
+/// @details
+///     - Indicates if this frequency domain can be overclocked (if true,
+///       functions such as ::zetSysmanFrequencySetOcConfig() are supported).
+///     - The min/max hardware frequencies are specified for non-overclock
+///       configurations. For overclock configurations, use
+///       ::zetSysmanFrequencyGetOcConfig() to determine the maximum frequency
+///       that can be requested.
+///     - If step is non-zero, the available frequencies are (min, min + step,
+///       min + 2xstep, ..., max). Otherwise, call
+///       ::zetSysmanFrequencyGetAvailableClocks() to get the list of
+///       frequencies that can be requested.
+typedef struct _zet_freq_properties_t
+{
+    zet_domain_t type;                              ///< [out] The hardware block that this frequency domain controls (GPU,
+                                                    ///< memory, ...)
+    ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling SMI handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    ze_bool_t canControl;                           ///< [out] Indicates if software can control the frequency of this domain
+    ze_bool_t canOverclock;                         ///< [out] Indicates if software can overclock this frequency domain
+    double min;                                     ///< [out] The minimum hardware clock frequency in units of MHz
+    double max;                                     ///< [out] The maximum non-overclock hardware clock frequency in units of
+                                                    ///< MHz.
+    double step;                                    ///< [out] The minimum step-size for clock frequencies in units of MHz. The
+                                                    ///< hardware will clamp intermediate frequencies to lowest multiplier of
+                                                    ///< this number.
+
+} zet_freq_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frequency range between which the hardware can operate.
+typedef struct _zet_freq_range_t
+{
+    double min;                                     ///< [in,out] The min frequency in MHz below which hardware frequency
+                                                    ///< management will not request frequencies. Setting to 0 will use the
+                                                    ///< hardware default value.
+    double max;                                     ///< [in,out] The max frequency in MHz above which hardware frequency
+                                                    ///< management will not request frequencies. Setting to 0 will use the
+                                                    ///< hardware default value.
+
+} zet_freq_range_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frequency throttle reasons
+typedef enum _zet_freq_throttle_reasons_t
+{
+    ZET_FREQ_THROTTLE_REASONS_NONE = 0,             ///< frequency not throttled
+    ZET_FREQ_THROTTLE_REASONS_AVE_PWR_CAP = ZE_BIT( 0 ),///< frequency throttled due to average power excursion (PL1)
+    ZET_FREQ_THROTTLE_REASONS_BURST_PWR_CAP = ZE_BIT( 1 ),  ///< frequency throttled due to burst power excursion (PL2)
+    ZET_FREQ_THROTTLE_REASONS_CURRENT_LIMIT = ZE_BIT( 2 ),  ///< frequency throttled due to current excursion (PL4)
+    ZET_FREQ_THROTTLE_REASONS_THERMAL_LIMIT = ZE_BIT( 3 ),  ///< frequency throttled due to thermal excursion (T > TjMax)
+    ZET_FREQ_THROTTLE_REASONS_PSU_ALERT = ZE_BIT( 4 ),  ///< frequency throttled due to power supply assertion
+    ZET_FREQ_THROTTLE_REASONS_SW_RANGE = ZE_BIT( 5 ),   ///< frequency throttled due to software supplied frequency range
+    ZET_FREQ_THROTTLE_REASONS_HW_RANGE = ZE_BIT( 6 ),   ///< frequency throttled due to a sub block that has a lower frequency
+                                                    ///< range when it receives clocks
+
+} zet_freq_throttle_reasons_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frequency state
+typedef struct _zet_freq_state_t
+{
+    double request;                                 ///< [out] The current frequency request in MHz.
+    double tdp;                                     ///< [out] The maximum frequency in MHz supported under the current TDP
+                                                    ///< conditions
+    double efficient;                               ///< [out] The efficient minimum frequency in MHz
+    double actual;                                  ///< [out] The resolved frequency in MHz
+    uint32_t throttleReasons;                       ///< [out] The reasons that the frequency is being limited by the hardware
+                                                    ///< (Bitfield of (1<<::zet_freq_throttle_reasons_t)).
+
+} zet_freq_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frequency throttle time snapshot
+/// 
+/// @details
+///     - Percent time throttled is calculated by taking two snapshots (s1, s2)
+///       and using the equation: %throttled = (s2.throttleTime -
+///       s1.throttleTime) / (s2.timestamp - s1.timestamp)
+typedef struct _zet_freq_throttle_time_t
+{
+    uint64_t throttleTime;                          ///< [out] The monotonic counter of time in microseconds that the frequency
+                                                    ///< has been limited by the hardware.
+    uint64_t timestamp;                             ///< [out] Microsecond timestamp when throttleTime was captured.
+                                                    ///< No assumption should be made about the absolute value of the timestamp.
+                                                    ///< It should only be used to calculate delta time between two snapshots
+                                                    ///< of the same structure.
+                                                    ///< Never take the delta of this timestamp with the timestamp from a
+                                                    ///< different structure.
+
+} zet_freq_throttle_time_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Overclocking modes
@@ -950,6 +1030,201 @@ typedef struct _zet_oc_configuration_t
     double VoltageOffset;                           ///< [in,out] Voltage offset in Volts.
 
 } zet_oc_configuration_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Maximum desired current.
+/// 
+/// @details
+///     - For overclock-able parts this holds the maximum desired current if the
+///       domains supports it.
+typedef struct _zet_oc_icc_max_t
+{
+    double IccMax;                                  ///< [in,out] Maximum desired current in Amperes
+
+} zet_oc_icc_max_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Temperature Junction Maximum.
+/// 
+/// @details
+///     - For overclock-able parts this holds the maximum temperature limit at
+///       which the part will throttle if the domains supports it.
+typedef struct _zet_oc_tj_max_t
+{
+    double TjMax;                                   ///< [in,out] Maximum desired current in degrees celcius.
+
+} zet_oc_tj_max_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of frequency domains
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCount
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanFrequencyGet(
+    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get frequency properties - available frequencies
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pProperties
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanFrequencyGetProperties(
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get available non-overclocked hardware clock frequencies for the
+///        frequency domain
+/// 
+/// @details
+///     - The list of available frequencies is returned in order of slowest to
+///       fastest.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCount
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanFrequencyGetAvailableClocks(
+    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
+                                                    ///< If count is zero, then the driver will update the value with the total
+                                                    ///< number of frequencies available.
+                                                    ///< If count is non-zero, then driver will only retrieve that number of frequencies.
+                                                    ///< If count is larger than the number of frequencies available, then the
+                                                    ///< driver will update the value with the correct number of frequencies available.
+    double* phFrequency                             ///< [in,out][optional][range(0, *pCount)] array of frequencies in units of
+                                                    ///< MHz and sorted from slowest to fastest
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current frequency limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pLimits
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanFrequencyGetRange(
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
+                                                    ///< specified domain.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set frequency range between which the hardware can operate.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pLimits
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
+ze_result_t __zecall
+zetSysmanFrequencySetRange(
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
+                                                    ///< specified domain.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current frequency state - frequency request, actual frequency, TDP
+///        limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pState
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanFrequencyGetState(
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get frequency throttle time
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFrequency
+///         + nullptr == pThrottleTime
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanFrequencyGetThrottleTime(
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+    zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                    ///< specified domain.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Get the last overclock error
@@ -1029,35 +1304,13 @@ zetSysmanFrequencyGetOcConfig(
 ///         + nullptr == hFrequency
 ///         + nullptr == pOcConfiguration
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencySetOcConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Maximum desired current.
-/// 
-/// @details
-///     - For overclock-able parts this holds the maximum desired current if the
-///       domains supports it.
-typedef struct _zet_oc_icc_max_t
-{
-    double IccMax;                                  ///< [in,out] Maximum desired current in Amperes
-
-} zet_oc_icc_max_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Temperature Junction Maximum.
-/// 
-/// @details
-///     - For overclock-able parts this holds the maximum temperature limit at
-///       which the part will throttle if the domains supports it.
-typedef struct _zet_oc_tj_max_t
-{
-    double TjMax;                                   ///< [in,out] Maximum desired current in degrees celcius.
-
-} zet_oc_tj_max_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Get the Icc Max.
@@ -1095,6 +1348,8 @@ zetSysmanFrequencyGetOcIccMax(
 ///         + nullptr == hFrequency
 ///         + nullptr == pOcIccMax
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencySetOcIccMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
@@ -1137,236 +1392,12 @@ zetSysmanFrequencyGetOcTjMax(
 ///         + nullptr == hFrequency
 ///         + nullptr == pOcTjMax
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencySetOcTjMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Frequency properties
-/// 
-/// @details
-///     - Provides the set of frequencies as a list and as a range/step.
-///     - It is generally recommended that applications choose frequencies from
-///       the list. However applications can also construct the list themselves
-///       using the range/steps provided.
-typedef struct _zet_freq_properties_t
-{
-    zet_domain_t type;                              ///< [out] The type of frequency domain (GPU, memory, ...)
-    ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
-    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Indicates if software can control the frequency of this domain
-    ze_bool_t canOverclock;                         ///< [out] Indicates if software can overclock this frequency domain
-    double min;                                     ///< [out] The minimum clock frequency in units of MHz
-    double max;                                     ///< [out] The maximum clock frequency in units of MHz
-    double step;                                    ///< [out] The step clock frequency in units of MHz
-    uint32_t num;                                   ///< [out] The number of clocks in the array pClocks
-    const double* pClocks;                          ///< [out] Array of clock frequencies in units of MHz ordered from smallest
-                                                    ///< to largest.
-
-} zet_freq_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Frequency range between which the hardware can operate.
-typedef struct _zet_freq_range_t
-{
-    double min;                                     ///< [in,out] The min frequency in MHz below which hardware frequency
-                                                    ///< management will not request frequencies. Setting to 0 will use the
-                                                    ///< hardware default value.
-    double max;                                     ///< [in,out] The max frequency in MHz above which hardware frequency
-                                                    ///< management will not request frequencies. Setting to 0 will use the
-                                                    ///< hardware default value.
-
-} zet_freq_range_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Frequency throttle reasons
-typedef enum _zet_freq_throttle_reasons_t
-{
-    ZET_FREQ_THROTTLE_REASONS_NONE = 0,             ///< frequency not throttled
-    ZET_FREQ_THROTTLE_REASONS_AVE_PWR_CAP = ZE_BIT( 0 ),///< frequency throttled due to average power excursion (PL1)
-    ZET_FREQ_THROTTLE_REASONS_BURST_PWR_CAP = ZE_BIT( 1 ),  ///< frequency throttled due to burst power excursion (PL2)
-    ZET_FREQ_THROTTLE_REASONS_CURRENT_LIMIT = ZE_BIT( 2 ),  ///< frequency throttled due to current excursion (PL4)
-    ZET_FREQ_THROTTLE_REASONS_THERMAL_LIMIT = ZE_BIT( 3 ),  ///< frequency throttled due to thermal excursion (T > TjMax)
-    ZET_FREQ_THROTTLE_REASONS_PSU_ALERT = ZE_BIT( 4 ),  ///< frequency throttled due to power supply assertion
-    ZET_FREQ_THROTTLE_REASONS_SW_RANGE = ZE_BIT( 5 ),   ///< frequency throttled due to software supplied frequency range
-    ZET_FREQ_THROTTLE_REASONS_HW_RANGE = ZE_BIT( 6 ),   ///< frequency throttled due to a sub block that has a lower frequency
-                                                    ///< range when it receives clocks
-
-} zet_freq_throttle_reasons_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Frequency state
-typedef struct _zet_freq_state_t
-{
-    double request;                                 ///< [out] The current frequency request in MHz.
-    double tdp;                                     ///< [out] The maximum frequency in MHz supported under the current TDP
-                                                    ///< conditions
-    double efficient;                               ///< [out] The efficient minimum frequency in MHz
-    double actual;                                  ///< [out] The resolved frequency in MHz
-    uint32_t throttleReasons;                       ///< [out] The reasons that the frequency is being limited by the hardware
-                                                    ///< (Bitfield of (1<<::zet_freq_throttle_reasons_t)).
-
-} zet_freq_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Frequency throttle time snapshot
-/// 
-/// @details
-///     - Percent time throttled is calculated by taking two snapshots (s1, s2)
-///       and using the equation: %throttled = (s2.throttleTime -
-///       s1.throttleTime) / (s2.timestamp - s1.timestamp)
-typedef struct _zet_freq_throttle_time_t
-{
-    uint64_t throttleTime;                          ///< [out] The monotonic counter of time in microseconds that the frequency
-                                                    ///< has been limited by the hardware.
-    uint64_t timestamp;                             ///< [out] Microsecond timestamp when throttleTime was captured.
-                                                    ///< No assumption should be made about the absolute value of the timestamp.
-                                                    ///< It should only be used to calculate delta time between two snapshots
-                                                    ///< of the same structure.
-                                                    ///< Never take the delta of this timestamp with the timestamp from a
-                                                    ///< different structure.
-
-} zet_freq_throttle_time_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of frequency domains
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanFrequencyGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of components of this type.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                    ///< if count is larger than the number of components available, then the
-                                                    ///< driver will update the value with the correct number of components
-                                                    ///< that are returned.
-    zet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                    ///< this type
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get frequency properties - available frequencies
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanFrequencyGetProperties(
-    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current frequency limits
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pLimits
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanFrequencyGetRange(
-    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
-                                                    ///< specified domain.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set frequency range between which the hardware can operate.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pLimits
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanFrequencySetRange(
-    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
-                                                    ///< specified domain.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current frequency state - frequency request, actual frequency, TDP
-///        limits
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pState
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanFrequencyGetState(
-    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get frequency throttle time
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pThrottleTime
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanFrequencyGetThrottleTime(
-    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
-                                                    ///< specified domain.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1597,6 +1628,8 @@ zetSysmanStandbyGetMode(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hStandby
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanStandbySetMode(
     zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
@@ -1681,6 +1714,8 @@ zetSysmanFirmwareGetProperties(
 ///         + nullptr == hFirmware
 ///         + nullptr == pChecksum
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
 zetSysmanFirmwareGetChecksum(
     zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
@@ -1702,6 +1737,8 @@ zetSysmanFirmwareGetChecksum(
 ///         + nullptr == hFirmware
 ///         + nullptr == pImage
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
 zetSysmanFirmwareFlash(
     zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
@@ -1871,6 +1908,8 @@ zetSysmanMemoryGetState(
 ///         + nullptr == hMemory
 ///         + nullptr == pBandwidth
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
 zetSysmanMemoryGetBandwidth(
     zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
@@ -2140,6 +2179,8 @@ zetSysmanFabricPortGetConfig(
 ///         + nullptr == hPort
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFabricPortSetConfig(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
@@ -2147,7 +2188,8 @@ zetSysmanFabricPortSetConfig(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Fabric port state
+/// @brief Get Fabric port state - status (green/yellow/red/black), reasons for
+///        link degradation or instability, current rx/tx speed
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2182,6 +2224,8 @@ zetSysmanFabricPortGetState(
 ///         + nullptr == hPort
 ///         + nullptr == pThroughput
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
 zetSysmanFabricPortGetThroughput(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
@@ -2543,6 +2587,8 @@ zetSysmanFanGetConfig(
 ///         + nullptr == hFan
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFanSetConfig(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
@@ -2680,6 +2726,8 @@ zetSysmanLedGetState(
 ///         + nullptr == hLed
 ///         + nullptr == pState
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanLedSetState(
     zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
@@ -2879,6 +2927,8 @@ zetSysmanEventsGetProperties(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to register to receive notifications for this event.
 ze_result_t __zecall
 zetSysmanEventsRegister(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
@@ -2940,6 +2990,8 @@ zetSysmanEventsUnregister(
 ///         + nullptr == hSysman
 ///         + nullptr == pEvents
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to listen to events.
 ze_result_t __zecall
 zetSysmanEventsListen(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for a device. Set to nullptr to get events from any
@@ -3074,6 +3126,8 @@ zetSysmanDiagnosticsGetProperties(
 ///         + nullptr == hDiagnostics
 ///         + nullptr == pResult
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to perform diagnostics.
 ze_result_t __zecall
 zetSysmanDiagnosticsRunTests(
     zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.

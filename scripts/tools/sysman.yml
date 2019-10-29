@@ -17,7 +17,8 @@ class: $tSysman
 name: Get
 decl: static
 details:
-    - "The returned handle is unique"
+    - "The returned handle is unique."
+    - "$t_device_handle_t returned by $xDeviceGetSubDevices() are not support. Only use handles returned by $xDeviceGet(). All resources on sub-devices can be enumerated through the primary device."
 params:
     - type: "$t_device_handle_t"
       name: hDevice
@@ -28,6 +29,9 @@ params:
     - type: "$t_sysman_handle_t*"
       name: phSysman
       desc: "[out] Handle for accessing SMI features"
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Sub-device handles are not supported. Use the device handle."
 
 --- #--------------------------------------------------------------------------
 type: macro
@@ -274,6 +278,8 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change scheduler mode to $T_SCHED_MODE_TIMESLICE or update scheduler mode parameters if already running in this mode."
@@ -296,6 +302,8 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change scheduler mode to $T_SCHED_MODE_EXCLUSIVE"
@@ -315,6 +323,8 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change scheduler mode to $T_SCHED_MODE_COMPUTE_UNIT_DEBUG"
@@ -334,6 +344,8 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make this modification."
 
 --- #--------------------------------------------------------------------------
 type: function
@@ -344,6 +356,9 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle for the device"
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to perform this operation."
 
 --- #--------------------------------------------------------------------------
 type: function
@@ -360,6 +375,8 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "This device does not record this information or does not support repair features."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to query this property."
 
 --- #--------------------------------------------------------------------------
 type: struct
@@ -463,34 +480,11 @@ members:
       desc: "[out] Size of the bar."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "PCI throughput"
-class: $tSysman
-name: $t_pci_throughput_t
-details:
-    - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) + (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
-members:
-    - type: uint64_t
-      name: "timestamp"
-      desc: |
-            [out] Monotonic timestamp counter in microseconds when the measurement was made.
-            No assumption should be made about the absolute value of the timestamp.
-            It should only be used to calculate delta time between two snapshots of the same structure.
-            Never take the delta of this timestamp with the timestamp from a different structure.
-    - type: uint64_t
-      name: "rxCounter"
-      desc: "[out] Monotonic counter for the number of bytes received"
-    - type: uint64_t
-      name: "txCounter"
-      desc: "[out] Monotonic counter for the number of bytes transmitted (including replays)"
-    - type: uint64_t
-      name: "maxBandwidth"
-      desc: "[out] The maximum bandwidth in bytes/sec under the current configuration"
---- #--------------------------------------------------------------------------
-type: struct
 desc: "PCI stats counters"
 class: $tSysman
 name: $t_pci_stats_t
 details:
+    - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) + (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
     - "Percent replays is calculated by taking two snapshots (s1, s2) and using the equation: %replay = 10^6 * (s2.replayCounter - s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
 members:
     - type: uint64_t
@@ -506,6 +500,15 @@ members:
     - type: uint64_t
       name: "packetCounter"
       desc: "[out] Monotonic counter for the number of packets"
+    - type: uint64_t
+      name: "rxCounter"
+      desc: "[out] Monotonic counter for the number of bytes received"
+    - type: uint64_t
+      name: "txCounter"
+      desc: "[out] Monotonic counter for the number of bytes transmitted (including replays)"
+    - type: uint64_t
+      name: "maxBandwidth"
+      desc: "[out] The maximum bandwidth in bytes/sec under the current configuration"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get PCI properties - address, max speed"
@@ -556,22 +559,7 @@ params:
       desc: "[in] Will contain properties of the specified bar"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get PCI throughput"
-class: $tSysman
-name: PciGetThroughput
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: $t_pci_throughput_t*
-      name: pThroughput
-      desc: "[in] Will contain a snapshot of the latest throughput counters."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get PCI stats"
+desc: "Get PCI stats - bandwidth, number of packets, number of replays"
 class: $tSysman
 name: PciGetStats
 details:
@@ -584,6 +572,9 @@ params:
     - type: $t_pci_stats_t*
       name: pStats
       desc: "[in] Will contain a snapshot of the latest stats."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to query this telemetry."
 
 --- #--------------------------------------------------------------------------
 type: struct
@@ -761,6 +752,8 @@ params:
       name: pThreshold
       desc: "[in] The energy threshold to be set in joules."
 returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
     - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
         - "The device is in use, meaning that the GPU is under Over clocking, applying energy threshold under overclocking is not supported."
 --- #--------------------------------------------------------------------------
@@ -806,8 +799,126 @@ params:
       name: pPeak
       desc: "[in][optional] The peak power limit."
 returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
     - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
         - "The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported."
+
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency properties"
+class: $tSysmanFrequency
+name: $t_freq_properties_t
+details:
+    - "Indicates if this frequency domain can be overclocked (if true, functions such as $tSysmanFrequencySetOcConfig() are supported)."
+    - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $tSysmanFrequencyGetOcConfig() to determine the maximum frequency that can be requested."
+    - "If step is non-zero, the available frequencies are (min, min + step, min + 2xstep, ..., max). Otherwise, call $tSysmanFrequencyGetAvailableClocks() to get the list of frequencies that can be requested."
+members:
+    - type: $t_domain_t
+      name: "type"
+      desc: "[out] The hardware block that this frequency domain controls (GPU, memory, ...)"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: canControl
+      desc: "[out] Indicates if software can control the frequency of this domain"
+    - type: $x_bool_t
+      name: canOverclock
+      desc: "[out] Indicates if software can overclock this frequency domain"
+    - type: double
+      name: min
+      desc: "[out] The minimum hardware clock frequency in units of MHz"
+    - type: double
+      name: max
+      desc: "[out] The maximum non-overclock hardware clock frequency in units of MHz."
+    - type: double
+      name: step
+      desc: "[out] The minimum step-size for clock frequencies in units of MHz. The hardware will clamp intermediate frequencies to lowest multiplier of this number."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency range between which the hardware can operate."
+class: $tSysmanFrequency
+name: $t_freq_range_t
+members:
+    - type: double
+      name: "min"
+      desc: "[in,out] The min frequency in MHz below which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
+    - type: double
+      name: "max"
+      desc: "[in,out] The max frequency in MHz above which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Frequency throttle reasons"
+class: $tSysmanFrequency
+name: $t_freq_throttle_reasons_t
+etors:
+    - name: $T_FREQ_THROTTLE_REASONS_NONE
+      value: "0"
+      desc: "frequency not throttled"
+    - name: $T_FREQ_THROTTLE_REASONS_AVE_PWR_CAP
+      value: "$X_BIT( 0 )"
+      desc: "frequency throttled due to average power excursion (PL1)"
+    - name: $T_FREQ_THROTTLE_REASONS_BURST_PWR_CAP
+      value: "$X_BIT( 1 )"
+      desc: "frequency throttled due to burst power excursion (PL2)"
+    - name: $T_FREQ_THROTTLE_REASONS_CURRENT_LIMIT
+      value: "$X_BIT( 2 )"
+      desc: "frequency throttled due to current excursion (PL4)"
+    - name: $T_FREQ_THROTTLE_REASONS_THERMAL_LIMIT
+      value: "$X_BIT( 3 )"
+      desc: "frequency throttled due to thermal excursion (T > TjMax)"
+    - name: $T_FREQ_THROTTLE_REASONS_PSU_ALERT
+      value: "$X_BIT( 4 )"
+      desc: "frequency throttled due to power supply assertion"
+    - name: $T_FREQ_THROTTLE_REASONS_SW_RANGE
+      value: "$X_BIT( 5 )"
+      desc: "frequency throttled due to software supplied frequency range"
+    - name: $T_FREQ_THROTTLE_REASONS_HW_RANGE
+      value: "$X_BIT( 6 )"
+      desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency state"
+class: $tSysmanFrequency
+name: $t_freq_state_t
+members:
+    - type: double
+      name: "request"
+      desc: "[out] The current frequency request in MHz."
+    - type: double
+      name: "tdp"
+      desc: "[out] The maximum frequency in MHz supported under the current TDP conditions"
+    - type: double
+      name: "efficient"
+      desc: "[out] The efficient minimum frequency in MHz"
+    - type: double
+      name: "actual"
+      desc: "[out] The resolved frequency in MHz"
+    - type: uint32_t
+      name: "throttleReasons"
+      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of (1<<$t_freq_throttle_reasons_t))."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency throttle time snapshot"
+class: $tSysmanFrequency
+name: $t_freq_throttle_time_t
+details:
+    - "Percent time throttled is calculated by taking two snapshots (s1, s2) and using the equation: %throttled = (s2.throttleTime - s1.throttleTime) / (s2.timestamp - s1.timestamp)"
+members:
+    - type: uint64_t
+      name: "throttleTime"
+      desc: "[out] The monotonic counter of time in microseconds that the frequency has been limited by the hardware."
+    - type: uint64_t
+      name: "timestamp"
+      desc: |
+            [out] Microsecond timestamp when throttleTime was captured.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Overclocking modes"
@@ -904,6 +1015,151 @@ members:
       name: VoltageOffset
       desc: "[in,out] Voltage offset in Volts." 
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Maximum desired current."
+class: $tSysmanFrequency
+name: $t_oc_icc_max_t
+details:
+    - "For overclock-able parts this holds the maximum desired current if the domains supports it."
+members:
+    - type: double
+      name: IccMax
+      desc: "[in,out] Maximum desired current in Amperes"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Temperature Junction Maximum."
+class: $tSysmanFrequency
+name: $t_oc_tj_max_t
+details:
+    - "For overclock-able parts this holds the maximum temperature limit at which the part will throttle if the domains supports it."
+members:
+    - type: double
+      name: TjMax
+      desc: "[in,out] Maximum desired current in degrees celcius."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of frequency domains"
+class: $tSysman
+name: FrequencyGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$t_sysman_freq_handle_t*"
+      name: phFrequency
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get frequency properties - available frequencies"
+class: $tSysmanFrequency
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_freq_properties_t*
+      name: pProperties
+      desc: "[in] The frequency properties for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get available non-overclocked hardware clock frequencies for the frequency domain"
+class: $tSysman
+name: FrequencyGetAvailableClocks
+details:
+    - "The list of available frequencies is returned in order of slowest to fastest."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of frequencies.
+            If count is zero, then the driver will update the value with the total number of frequencies available.
+            If count is non-zero, then driver will only retrieve that number of frequencies.
+            If count is larger than the number of frequencies available, then the driver will update the value with the correct number of frequencies available.
+    - type: "double*"
+      name: phFrequency
+      desc: "[in,out][optional][range(0, *pCount)] array of frequencies in units of MHz and sorted from slowest to fastest"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current frequency limits"
+class: $tSysmanFrequency
+name: GetRange
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_freq_range_t*
+      name: pLimits
+      desc: "[in] The range between which the hardware can operate for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set frequency range between which the hardware can operate."
+class: $tSysmanFrequency
+name: SetRange
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: const $t_freq_range_t*
+      name: pLimits
+      desc: "[in] The limits between which the hardware can operate for the specified domain."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current frequency state - frequency request, actual frequency, TDP limits"
+class: $tSysmanFrequency
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_freq_state_t*
+      name: pState
+      desc: "[in] Frequency state for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get frequency throttle time"
+class: $tSysmanFrequency
+name: GetThrottleTime
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $t_freq_throttle_time_t*
+      name: pThrottleTime
+      desc: "[in] Will contain a snapshot of the throttle time counters for the specified domain."
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Get the last overclock error"
 class: $tSysmanFrequency
@@ -963,28 +1219,9 @@ params:
     - type: $t_oc_configuration_t*
       name: pOcConfiguration
       desc: "[in] Pointer to the configuration structure $t_oc_configuration_t."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Maximum desired current."
-class: $tSysmanFrequency
-name: $t_oc_icc_max_t
-details:
-    - "For overclock-able parts this holds the maximum desired current if the domains supports it."
-members:
-    - type: double
-      name: IccMax
-      desc: "[in,out] Maximum desired current in Amperes"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Temperature Junction Maximum."
-class: $tSysmanFrequency
-name: $t_oc_tj_max_t
-details:
-    - "For overclock-able parts this holds the maximum temperature limit at which the part will throttle if the domains supports it."
-members:
-    - type: double
-      name: TjMax
-      desc: "[in,out] Maximum desired current in degrees celcius."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the Icc Max."
@@ -1015,6 +1252,9 @@ params:
     - type: $t_oc_icc_max_t*
       name: pOcIccMax
       desc: "[in] Pointer to the Icc Max."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the TjMax."
@@ -1045,223 +1285,9 @@ params:
     - type: $t_oc_tj_max_t*
       name: pOcTjMax
       desc: "[in] Pointer to the TjMax."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Frequency properties"
-class: $tSysmanFrequency
-name: $t_freq_properties_t
-details:
-    - "Provides the set of frequencies as a list and as a range/step."
-    - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
-members:
-    - type: $t_domain_t
-      name: "type"
-      desc: "[out] The type of frequency domain (GPU, memory, ...)"
-    - type: $x_bool_t
-      name: "onSubdevice"
-      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
-    - type: uint32_t
-      name: "subdeviceId"
-      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
-    - type: $x_bool_t
-      name: canControl
-      desc: "[out] Indicates if software can control the frequency of this domain"
-    - type: $x_bool_t
-      name: canOverclock
-      desc: "[out] Indicates if software can overclock this frequency domain"
-    - type: double
-      name: min
-      desc: "[out] The minimum clock frequency in units of MHz"
-    - type: double
-      name: max
-      desc: "[out] The maximum clock frequency in units of MHz"
-    - type: double
-      name: step
-      desc: "[out] The step clock frequency in units of MHz"
-    - type: uint32_t
-      name: num
-      desc: "[out] The number of clocks in the array pClocks"
-    - type: "const double*"
-      name: "pClocks"
-      desc: "[out] Array of clock frequencies in units of MHz ordered from smallest to largest."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Frequency range between which the hardware can operate."
-class: $tSysmanFrequency
-name: $t_freq_range_t
-members:
-    - type: double
-      name: "min"
-      desc: "[in,out] The min frequency in MHz below which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
-    - type: double
-      name: "max"
-      desc: "[in,out] The max frequency in MHz above which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Frequency throttle reasons"
-class: $tSysmanFrequency
-name: $t_freq_throttle_reasons_t
-etors:
-    - name: $T_FREQ_THROTTLE_REASONS_NONE
-      value: "0"
-      desc: "frequency not throttled"
-    - name: $T_FREQ_THROTTLE_REASONS_AVE_PWR_CAP
-      value: "$X_BIT( 0 )"
-      desc: "frequency throttled due to average power excursion (PL1)"
-    - name: $T_FREQ_THROTTLE_REASONS_BURST_PWR_CAP
-      value: "$X_BIT( 1 )"
-      desc: "frequency throttled due to burst power excursion (PL2)"
-    - name: $T_FREQ_THROTTLE_REASONS_CURRENT_LIMIT
-      value: "$X_BIT( 2 )"
-      desc: "frequency throttled due to current excursion (PL4)"
-    - name: $T_FREQ_THROTTLE_REASONS_THERMAL_LIMIT
-      value: "$X_BIT( 3 )"
-      desc: "frequency throttled due to thermal excursion (T > TjMax)"
-    - name: $T_FREQ_THROTTLE_REASONS_PSU_ALERT
-      value: "$X_BIT( 4 )"
-      desc: "frequency throttled due to power supply assertion"
-    - name: $T_FREQ_THROTTLE_REASONS_SW_RANGE
-      value: "$X_BIT( 5 )"
-      desc: "frequency throttled due to software supplied frequency range"
-    - name: $T_FREQ_THROTTLE_REASONS_HW_RANGE
-      value: "$X_BIT( 6 )"
-      desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Frequency state"
-class: $tSysmanFrequency
-name: $t_freq_state_t
-members:
-    - type: double
-      name: "request"
-      desc: "[out] The current frequency request in MHz."
-    - type: double
-      name: "tdp"
-      desc: "[out] The maximum frequency in MHz supported under the current TDP conditions"
-    - type: double
-      name: "efficient"
-      desc: "[out] The efficient minimum frequency in MHz"
-    - type: double
-      name: "actual"
-      desc: "[out] The resolved frequency in MHz"
-    - type: uint32_t
-      name: "throttleReasons"
-      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of (1<<$t_freq_throttle_reasons_t))."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Frequency throttle time snapshot"
-class: $tSysmanFrequency
-name: $t_freq_throttle_time_t
-details:
-    - "Percent time throttled is calculated by taking two snapshots (s1, s2) and using the equation: %throttled = (s2.throttleTime - s1.throttleTime) / (s2.timestamp - s1.timestamp)"
-members:
-    - type: uint64_t
-      name: "throttleTime"
-      desc: "[out] The monotonic counter of time in microseconds that the frequency has been limited by the hardware."
-    - type: uint64_t
-      name: "timestamp"
-      desc: |
-            [out] Microsecond timestamp when throttleTime was captured.
-            No assumption should be made about the absolute value of the timestamp.
-            It should only be used to calculate delta time between two snapshots of the same structure.
-            Never take the delta of this timestamp with the timestamp from a different structure.
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get handle of frequency domains"
-class: $tSysman
-name: FrequencyGet
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: "uint32_t*"
-      name: pCount
-      desc: |
-            [in,out] pointer to the number of components of this type.
-            if count is zero, then the driver will update the value with the total number of components of this type.
-            if count is non-zero, then driver will only retrieve that number of components.
-            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_freq_handle_t*"
-      name: phFrequency
-      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get frequency properties - available frequencies"
-class: $tSysmanFrequency
-name: GetProperties
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_freq_properties_t*
-      name: pProperties
-      desc: "[in] The frequency properties for the specified domain."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get current frequency limits"
-class: $tSysmanFrequency
-name: GetRange
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_freq_range_t*
-      name: pLimits
-      desc: "[in] The range between which the hardware can operate for the specified domain."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set frequency range between which the hardware can operate."
-class: $tSysmanFrequency
-name: SetRange
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: const $t_freq_range_t*
-      name: pLimits
-      desc: "[in] The limits between which the hardware can operate for the specified domain."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get current frequency state - frequency request, actual frequency, TDP limits"
-class: $tSysmanFrequency
-name: GetState
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_freq_state_t*
-      name: pState
-      desc: "[in] Frequency state for the specified domain."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get frequency throttle time"
-class: $tSysmanFrequency
-name: GetThrottleTime
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_freq_throttle_time_t*
-      name: pThrottleTime
-      desc: "[in] Will contain a snapshot of the throttle time counters for the specified domain."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -1466,6 +1492,9 @@ params:
     - type: $t_standby_promo_mode_t
       name: mode
       desc: "[in] New standby mode."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
 
 --- #--------------------------------------------------------------------------
 type: struct
@@ -1540,6 +1569,9 @@ params:
     - type: uint32_t*
       name: pChecksum
       desc: "[in] Calculated checksum of the installed firmware."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to perform this operation."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Flash a new firmware image"
@@ -1558,6 +1590,9 @@ params:
     - type: uint32_t
       name: size
       desc: "[in] Size of the flash image."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to perform this operation."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -1722,6 +1757,9 @@ params:
     - type: $t_mem_bandwidth_t*
       name: pBandwidth
       desc: "[in] Will contain a snapshot of the bandwidth counters."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to query this telemetry."
 
 --- #--------------------------------------------------------------------------
 type: macro
@@ -2005,9 +2043,12 @@ params:
     - type: $t_fabric_port_config_t*
       name: pConfig
       desc: "[in] Contains new configuration of the Fabric Port."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get Fabric port state"
+desc: "Get Fabric port state - status (green/yellow/red/black), reasons for link degradation or instability, current rx/tx speed"
 class: $tSysmanFabricPort
 name: GetState
 details:
@@ -2035,6 +2076,9 @@ params:
     - type: $t_fabric_port_throughput_t*
       name: pThroughput
       desc: "[in] Will contain the Fabric port throughput counters and maximum bandwidth."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to query this telemetry."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2390,6 +2434,9 @@ params:
     - type: const $t_fan_config_t*
       name: pConfig
       desc: "[in] New fan configuration."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current state of a fan - current mode and speed"
@@ -2512,6 +2559,9 @@ params:
     - type: const $t_led_state_t*
       name: pState
       desc: "[in] New state of the LED."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2720,6 +2770,9 @@ params:
     - type: $t_event_request_t*
       name: pEvents
       desc: "[in][optional] Events to register."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to register to receive notifications for this event."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Unregister events"
@@ -2769,6 +2822,9 @@ params:
     - type: "uint32_t*"
       name: pEvents
       desc: "[in] Bitfield of events (1<<$t_sysman_event_type_t) that have been triggered."
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to listen to events."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2899,6 +2955,9 @@ params:
     - type: $t_diag_result_t*
       name: pResult
       desc: "[in] The result of the diagnostics"
+returns:
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to perform diagnostics."
 
 --- #--------------------------------------------------------------------------
 type: class

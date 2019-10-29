@@ -1046,32 +1046,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPciGetThroughput
-    ze_result_t __zecall
-    zetSysmanPciGetThroughput(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        zet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
-        )
-    {
-        auto pfnPciGetThroughput = context.zetDdiTable.Sysman.pfnPciGetThroughput;
-
-        if( nullptr == pfnPciGetThroughput )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pThroughput )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnPciGetThroughput( hSysman, pThroughput );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPciGetStats
     ze_result_t __zecall
     zetSysmanPciGetStats(
@@ -1287,6 +1261,206 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGet
+    ze_result_t __zecall
+    zetSysmanFrequencyGet(
+        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnFrequencyGet = context.zetDdiTable.Sysman.pfnFrequencyGet;
+
+        if( nullptr == pfnFrequencyGet )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnFrequencyGet( hSysman, pCount, phFrequency );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetProperties
+    ze_result_t __zecall
+    zetSysmanFrequencyGetProperties(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
+        )
+    {
+        auto pfnGetProperties = context.zetDdiTable.SysmanFrequency.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hFrequency, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetAvailableClocks
+    ze_result_t __zecall
+    zetSysmanFrequencyGetAvailableClocks(
+        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of frequencies available.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of frequencies.
+                                                        ///< If count is larger than the number of frequencies available, then the
+                                                        ///< driver will update the value with the correct number of frequencies available.
+        double* phFrequency                             ///< [in,out][optional][range(0, *pCount)] array of frequencies in units of
+                                                        ///< MHz and sorted from slowest to fastest
+        )
+    {
+        auto pfnFrequencyGetAvailableClocks = context.zetDdiTable.Sysman.pfnFrequencyGetAvailableClocks;
+
+        if( nullptr == pfnFrequencyGetAvailableClocks )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnFrequencyGetAvailableClocks( hSysman, pCount, phFrequency );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetRange
+    ze_result_t __zecall
+    zetSysmanFrequencyGetRange(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        auto pfnGetRange = context.zetDdiTable.SysmanFrequency.pfnGetRange;
+
+        if( nullptr == pfnGetRange )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pLimits )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetRange( hFrequency, pLimits );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencySetRange
+    ze_result_t __zecall
+    zetSysmanFrequencySetRange(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        auto pfnSetRange = context.zetDdiTable.SysmanFrequency.pfnSetRange;
+
+        if( nullptr == pfnSetRange )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pLimits )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetRange( hFrequency, pLimits );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetState
+    ze_result_t __zecall
+    zetSysmanFrequencyGetState(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
+        )
+    {
+        auto pfnGetState = context.zetDdiTable.SysmanFrequency.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pState )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetState( hFrequency, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanFrequencyGetThrottleTime
+    ze_result_t __zecall
+    zetSysmanFrequencyGetThrottleTime(
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+        zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                        ///< specified domain.
+        )
+    {
+        auto pfnGetThrottleTime = context.zetDdiTable.SysmanFrequency.pfnGetThrottleTime;
+
+        if( nullptr == pfnGetThrottleTime )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pThrottleTime )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetThrottleTime( hFrequency, pThrottleTime );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetLastOcError
     ze_result_t __zecall
     zetSysmanFrequencyGetLastOcError(
@@ -1492,173 +1666,6 @@ namespace layer
         }
 
         return pfnSetOcTjMax( hFrequency, pOcTjMax );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGet
-    ze_result_t __zecall
-    zetSysmanFrequencyGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zet_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnFrequencyGet = context.zetDdiTable.Sysman.pfnFrequencyGet;
-
-        if( nullptr == pfnFrequencyGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFrequencyGet( hSysman, pCount, phFrequency );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetProperties
-    ze_result_t __zecall
-    zetSysmanFrequencyGetProperties(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
-        )
-    {
-        auto pfnGetProperties = context.zetDdiTable.SysmanFrequency.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetProperties( hFrequency, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetRange
-    ze_result_t __zecall
-    zetSysmanFrequencyGetRange(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        auto pfnGetRange = context.zetDdiTable.SysmanFrequency.pfnGetRange;
-
-        if( nullptr == pfnGetRange )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pLimits )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetRange( hFrequency, pLimits );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetRange
-    ze_result_t __zecall
-    zetSysmanFrequencySetRange(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        auto pfnSetRange = context.zetDdiTable.SysmanFrequency.pfnSetRange;
-
-        if( nullptr == pfnSetRange )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pLimits )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetRange( hFrequency, pLimits );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetState
-    ze_result_t __zecall
-    zetSysmanFrequencyGetState(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
-        )
-    {
-        auto pfnGetState = context.zetDdiTable.SysmanFrequency.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pState )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetState( hFrequency, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetThrottleTime
-    ze_result_t __zecall
-    zetSysmanFrequencyGetThrottleTime(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
-                                                        ///< specified domain.
-        )
-    {
-        auto pfnGetThrottleTime = context.zetDdiTable.SysmanFrequency.pfnGetThrottleTime;
-
-        if( nullptr == pfnGetThrottleTime )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pThrottleTime )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetThrottleTime( hFrequency, pThrottleTime );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3606,9 +3613,6 @@ zetGetSysmanProcAddrTable(
     dditable.pfnPciGetBarProperties                      = pDdiTable->pfnPciGetBarProperties;
     pDdiTable->pfnPciGetBarProperties                    = layer::zetSysmanPciGetBarProperties;
 
-    dditable.pfnPciGetThroughput                         = pDdiTable->pfnPciGetThroughput;
-    pDdiTable->pfnPciGetThroughput                       = layer::zetSysmanPciGetThroughput;
-
     dditable.pfnPciGetStats                              = pDdiTable->pfnPciGetStats;
     pDdiTable->pfnPciGetStats                            = layer::zetSysmanPciGetStats;
 
@@ -3617,6 +3621,9 @@ zetGetSysmanProcAddrTable(
 
     dditable.pfnFrequencyGet                             = pDdiTable->pfnFrequencyGet;
     pDdiTable->pfnFrequencyGet                           = layer::zetSysmanFrequencyGet;
+
+    dditable.pfnFrequencyGetAvailableClocks              = pDdiTable->pfnFrequencyGetAvailableClocks;
+    pDdiTable->pfnFrequencyGetAvailableClocks            = layer::zetSysmanFrequencyGetAvailableClocks;
 
     dditable.pfnEngineGet                                = pDdiTable->pfnEngineGet;
     pDdiTable->pfnEngineGet                              = layer::zetSysmanEngineGet;
@@ -3741,6 +3748,21 @@ zetGetSysmanFrequencyProcAddrTable(
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zetSysmanFrequencyGetProperties;
+
+    dditable.pfnGetRange                                 = pDdiTable->pfnGetRange;
+    pDdiTable->pfnGetRange                               = layer::zetSysmanFrequencyGetRange;
+
+    dditable.pfnSetRange                                 = pDdiTable->pfnSetRange;
+    pDdiTable->pfnSetRange                               = layer::zetSysmanFrequencySetRange;
+
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::zetSysmanFrequencyGetState;
+
+    dditable.pfnGetThrottleTime                          = pDdiTable->pfnGetThrottleTime;
+    pDdiTable->pfnGetThrottleTime                        = layer::zetSysmanFrequencyGetThrottleTime;
+
     dditable.pfnGetLastOcError                           = pDdiTable->pfnGetLastOcError;
     pDdiTable->pfnGetLastOcError                         = layer::zetSysmanFrequencyGetLastOcError;
 
@@ -3764,21 +3786,6 @@ zetGetSysmanFrequencyProcAddrTable(
 
     dditable.pfnSetOcTjMax                               = pDdiTable->pfnSetOcTjMax;
     pDdiTable->pfnSetOcTjMax                             = layer::zetSysmanFrequencySetOcTjMax;
-
-    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zetSysmanFrequencyGetProperties;
-
-    dditable.pfnGetRange                                 = pDdiTable->pfnGetRange;
-    pDdiTable->pfnGetRange                               = layer::zetSysmanFrequencyGetRange;
-
-    dditable.pfnSetRange                                 = pDdiTable->pfnSetRange;
-    pDdiTable->pfnSetRange                               = layer::zetSysmanFrequencySetRange;
-
-    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zetSysmanFrequencyGetState;
-
-    dditable.pfnGetThrottleTime                          = pDdiTable->pfnGetThrottleTime;
-    pDdiTable->pfnGetThrottleTime                        = layer::zetSysmanFrequencyGetThrottleTime;
 
     return result;
 }

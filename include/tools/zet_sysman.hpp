@@ -280,34 +280,13 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief PCI throughput
+        /// @brief PCI stats counters
         /// 
         /// @details
         ///     - Percent throughput is calculated by taking two snapshots (s1, s2) and
         ///       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
         ///       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
         ///       s1.timestamp))
-        struct pci_throughput_t
-        {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
-                                                            ///< was made.
-                                                            ///< No assumption should be made about the absolute value of the timestamp.
-                                                            ///< It should only be used to calculate delta time between two snapshots
-                                                            ///< of the same structure.
-                                                            ///< Never take the delta of this timestamp with the timestamp from a
-                                                            ///< different structure.
-            uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
-            uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
-                                                            ///< replays)
-            uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
-                                                            ///< configuration
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief PCI stats counters
-        /// 
-        /// @details
         ///     - Percent replays is calculated by taking two snapshots (s1, s2) and
         ///       using the equation: %replay = 10^6 * (s2.replayCounter -
         ///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
@@ -322,6 +301,11 @@ namespace zet
                                                             ///< different structure.
             uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
             uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
+            uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
+            uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
+                                                            ///< replays)
+            uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
+                                                            ///< configuration
 
         };
 
@@ -374,7 +358,10 @@ namespace zet
         /// @brief Get the handle to access SMI features for a device
         /// 
         /// @details
-        ///     - The returned handle is unique
+        ///     - The returned handle is unique.
+        ///     - ::zet_device_handle_t returned by ::zeDeviceGetSubDevices() are not
+        ///       support. Only use handles returned by ::zeDeviceGet(). All resources
+        ///       on sub-devices can be enumerated through the primary device.
         /// @returns
         ///     - Sysman*: Handle for accessing SMI features
         /// 
@@ -564,19 +551,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get PCI throughput
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        PciGetThroughput(
-            pci_throughput_t* pThroughput                   ///< [in] Will contain a snapshot of the latest throughput counters.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get PCI stats
+        /// @brief Get PCI stats - bandwidth, number of packets, number of replays
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -625,6 +600,28 @@ namespace zet
                                                             ///< that are returned.
             SysmanFrequency** ppFrequency = nullptr         ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get available non-overclocked hardware clock frequencies for the
+        ///        frequency domain
+        /// 
+        /// @details
+        ///     - The list of available frequencies is returned in order of slowest to
+        ///       fastest.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        FrequencyGetAvailableClocks(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
+                                                            ///< If count is zero, then the driver will update the value with the total
+                                                            ///< number of frequencies available.
+                                                            ///< If count is non-zero, then driver will only retrieve that number of frequencies.
+                                                            ///< If count is larger than the number of frequencies available, then the
+                                                            ///< driver will update the value with the correct number of frequencies available.
+            double* phFrequency = nullptr                   ///< [in,out][optional][range(0, *pCount)] array of frequencies in units of
+                                                            ///< MHz and sorted from slowest to fastest
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1133,6 +1130,22 @@ namespace zet
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Frequency throttle reasons
+        enum class freq_throttle_reasons_t
+        {
+            NONE = 0,                                       ///< frequency not throttled
+            AVE_PWR_CAP = ZE_BIT( 0 ),                      ///< frequency throttled due to average power excursion (PL1)
+            BURST_PWR_CAP = ZE_BIT( 1 ),                    ///< frequency throttled due to burst power excursion (PL2)
+            CURRENT_LIMIT = ZE_BIT( 2 ),                    ///< frequency throttled due to current excursion (PL4)
+            THERMAL_LIMIT = ZE_BIT( 3 ),                    ///< frequency throttled due to thermal excursion (T > TjMax)
+            PSU_ALERT = ZE_BIT( 4 ),                        ///< frequency throttled due to power supply assertion
+            SW_RANGE = ZE_BIT( 5 ),                         ///< frequency throttled due to software supplied frequency range
+            HW_RANGE = ZE_BIT( 6 ),                         ///< frequency throttled due to a sub block that has a lower frequency
+                                                            ///< range when it receives clocks
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Overclocking modes
         enum class oc_mode_t
         {
@@ -1158,18 +1171,81 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Frequency throttle reasons
-        enum class freq_throttle_reasons_t
+        /// @brief Frequency properties
+        /// 
+        /// @details
+        ///     - Indicates if this frequency domain can be overclocked (if true,
+        ///       functions such as ::zetSysmanFrequencySetOcConfig() are supported).
+        ///     - The min/max hardware frequencies are specified for non-overclock
+        ///       configurations. For overclock configurations, use
+        ///       ::zetSysmanFrequencyGetOcConfig() to determine the maximum frequency
+        ///       that can be requested.
+        ///     - If step is non-zero, the available frequencies are (min, min + step,
+        ///       min + 2xstep, ..., max). Otherwise, call
+        ///       ::zetSysmanFrequencyGetAvailableClocks() to get the list of
+        ///       frequencies that can be requested.
+        struct freq_properties_t
         {
-            NONE = 0,                                       ///< frequency not throttled
-            AVE_PWR_CAP = ZE_BIT( 0 ),                      ///< frequency throttled due to average power excursion (PL1)
-            BURST_PWR_CAP = ZE_BIT( 1 ),                    ///< frequency throttled due to burst power excursion (PL2)
-            CURRENT_LIMIT = ZE_BIT( 2 ),                    ///< frequency throttled due to current excursion (PL4)
-            THERMAL_LIMIT = ZE_BIT( 3 ),                    ///< frequency throttled due to thermal excursion (T > TjMax)
-            PSU_ALERT = ZE_BIT( 4 ),                        ///< frequency throttled due to power supply assertion
-            SW_RANGE = ZE_BIT( 5 ),                         ///< frequency throttled due to software supplied frequency range
-            HW_RANGE = ZE_BIT( 6 ),                         ///< frequency throttled due to a sub block that has a lower frequency
-                                                            ///< range when it receives clocks
+            Sysman::domain_t type;                          ///< [out] The hardware block that this frequency domain controls (GPU,
+                                                            ///< memory, ...)
+            ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
+                                                            ///< that the resource is on the device of the calling SMI handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            ze::bool_t canControl;                          ///< [out] Indicates if software can control the frequency of this domain
+            ze::bool_t canOverclock;                        ///< [out] Indicates if software can overclock this frequency domain
+            double min;                                     ///< [out] The minimum hardware clock frequency in units of MHz
+            double max;                                     ///< [out] The maximum non-overclock hardware clock frequency in units of
+                                                            ///< MHz.
+            double step;                                    ///< [out] The minimum step-size for clock frequencies in units of MHz. The
+                                                            ///< hardware will clamp intermediate frequencies to lowest multiplier of
+                                                            ///< this number.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Frequency range between which the hardware can operate.
+        struct freq_range_t
+        {
+            double min;                                     ///< [in,out] The min frequency in MHz below which hardware frequency
+                                                            ///< management will not request frequencies. Setting to 0 will use the
+                                                            ///< hardware default value.
+            double max;                                     ///< [in,out] The max frequency in MHz above which hardware frequency
+                                                            ///< management will not request frequencies. Setting to 0 will use the
+                                                            ///< hardware default value.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Frequency state
+        struct freq_state_t
+        {
+            double request;                                 ///< [out] The current frequency request in MHz.
+            double tdp;                                     ///< [out] The maximum frequency in MHz supported under the current TDP
+                                                            ///< conditions
+            double efficient;                               ///< [out] The efficient minimum frequency in MHz
+            double actual;                                  ///< [out] The resolved frequency in MHz
+            uint32_t throttleReasons;                       ///< [out] The reasons that the frequency is being limited by the hardware
+                                                            ///< (Bitfield of (1<<::zet_freq_throttle_reasons_t)).
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Frequency throttle time snapshot
+        /// 
+        /// @details
+        ///     - Percent time throttled is calculated by taking two snapshots (s1, s2)
+        ///       and using the equation: %throttled = (s2.throttleTime -
+        ///       s1.throttleTime) / (s2.timestamp - s1.timestamp)
+        struct freq_throttle_time_t
+        {
+            uint64_t throttleTime;                          ///< [out] The monotonic counter of time in microseconds that the frequency
+                                                            ///< has been limited by the hardware.
+            uint64_t timestamp;                             ///< [out] Microsecond timestamp when throttleTime was captured.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
 
         };
 
@@ -1232,78 +1308,6 @@ namespace zet
 
         };
 
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Frequency properties
-        /// 
-        /// @details
-        ///     - Provides the set of frequencies as a list and as a range/step.
-        ///     - It is generally recommended that applications choose frequencies from
-        ///       the list. However applications can also construct the list themselves
-        ///       using the range/steps provided.
-        struct freq_properties_t
-        {
-            Sysman::domain_t type;                          ///< [out] The type of frequency domain (GPU, memory, ...)
-            ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            ze::bool_t canControl;                          ///< [out] Indicates if software can control the frequency of this domain
-            ze::bool_t canOverclock;                        ///< [out] Indicates if software can overclock this frequency domain
-            double min;                                     ///< [out] The minimum clock frequency in units of MHz
-            double max;                                     ///< [out] The maximum clock frequency in units of MHz
-            double step;                                    ///< [out] The step clock frequency in units of MHz
-            uint32_t num;                                   ///< [out] The number of clocks in the array pClocks
-            const double* pClocks;                          ///< [out] Array of clock frequencies in units of MHz ordered from smallest
-                                                            ///< to largest.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Frequency range between which the hardware can operate.
-        struct freq_range_t
-        {
-            double min;                                     ///< [in,out] The min frequency in MHz below which hardware frequency
-                                                            ///< management will not request frequencies. Setting to 0 will use the
-                                                            ///< hardware default value.
-            double max;                                     ///< [in,out] The max frequency in MHz above which hardware frequency
-                                                            ///< management will not request frequencies. Setting to 0 will use the
-                                                            ///< hardware default value.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Frequency state
-        struct freq_state_t
-        {
-            double request;                                 ///< [out] The current frequency request in MHz.
-            double tdp;                                     ///< [out] The maximum frequency in MHz supported under the current TDP
-                                                            ///< conditions
-            double efficient;                               ///< [out] The efficient minimum frequency in MHz
-            double actual;                                  ///< [out] The resolved frequency in MHz
-            uint32_t throttleReasons;                       ///< [out] The reasons that the frequency is being limited by the hardware
-                                                            ///< (Bitfield of (1<<::zet_freq_throttle_reasons_t)).
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Frequency throttle time snapshot
-        /// 
-        /// @details
-        ///     - Percent time throttled is calculated by taking two snapshots (s1, s2)
-        ///       and using the equation: %throttled = (s2.throttleTime -
-        ///       s1.throttleTime) / (s2.timestamp - s1.timestamp)
-        struct freq_throttle_time_t
-        {
-            uint64_t throttleTime;                          ///< [out] The monotonic counter of time in microseconds that the frequency
-                                                            ///< has been limited by the hardware.
-            uint64_t timestamp;                             ///< [out] Microsecond timestamp when throttleTime was captured.
-                                                            ///< No assumption should be made about the absolute value of the timestamp.
-                                                            ///< It should only be used to calculate delta time between two snapshots
-                                                            ///< of the same structure.
-                                                            ///< Never take the delta of this timestamp with the timestamp from a
-                                                            ///< different structure.
-
-        };
-
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
@@ -1329,6 +1333,70 @@ namespace zet
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
         auto getSysman( void ) const { return m_pSysman; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get frequency properties - available frequencies
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetProperties(
+            freq_properties_t* pProperties                  ///< [in] The frequency properties for the specified domain.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get current frequency limits
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetRange(
+            freq_range_t* pLimits                           ///< [in] The range between which the hardware can operate for the
+                                                            ///< specified domain.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set frequency range between which the hardware can operate.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetRange(
+            const freq_range_t* pLimits                     ///< [in] The limits between which the hardware can operate for the
+                                                            ///< specified domain.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get current frequency state - frequency request, actual frequency, TDP
+        ///        limits
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetState(
+            freq_state_t* pState                            ///< [in] Frequency state for the specified domain.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get frequency throttle time
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetThrottleTime(
+            freq_throttle_time_t* pThrottleTime             ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                            ///< specified domain.
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get the last overclock error
@@ -1424,70 +1492,6 @@ namespace zet
         void __zecall
         SetOcTjMax(
             oc_tj_max_t* pOcTjMax                           ///< [in] Pointer to the TjMax.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get frequency properties - available frequencies
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            freq_properties_t* pProperties                  ///< [in] The frequency properties for the specified domain.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current frequency limits
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetRange(
-            freq_range_t* pLimits                           ///< [in] The range between which the hardware can operate for the
-                                                            ///< specified domain.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set frequency range between which the hardware can operate.
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetRange(
-            const freq_range_t* pLimits                     ///< [in] The limits between which the hardware can operate for the
-                                                            ///< specified domain.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current frequency state - frequency request, actual frequency, TDP
-        ///        limits
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetState(
-            freq_state_t* pState                            ///< [in] Frequency state for the specified domain.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get frequency throttle time
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetThrottleTime(
-            freq_throttle_time_t* pThrottleTime             ///< [in] Will contain a snapshot of the throttle time counters for the
-                                                            ///< specified domain.
             );
 
     };
@@ -2135,7 +2139,8 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get Fabric port state
+        /// @brief Get Fabric port state - status (green/yellow/red/black), reasons for
+        ///        link degradation or instability, current rx/tx speed
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2846,10 +2851,6 @@ namespace zet
     std::string to_string( const Sysman::pci_bar_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_throughput_t to std::string
-    std::string to_string( const Sysman::pci_throughput_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_stats_t to std::string
     std::string to_string( const Sysman::pci_stats_t val );
 
@@ -2890,6 +2891,26 @@ namespace zet
     std::string to_string( const SysmanPower::power_peak_limit_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::freq_properties_t to std::string
+    std::string to_string( const SysmanFrequency::freq_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::freq_range_t to std::string
+    std::string to_string( const SysmanFrequency::freq_range_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::freq_throttle_reasons_t to std::string
+    std::string to_string( const SysmanFrequency::freq_throttle_reasons_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::freq_state_t to std::string
+    std::string to_string( const SysmanFrequency::freq_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanFrequency::freq_throttle_time_t to std::string
+    std::string to_string( const SysmanFrequency::freq_throttle_time_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::oc_mode_t to std::string
     std::string to_string( const SysmanFrequency::oc_mode_t val );
 
@@ -2912,26 +2933,6 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::oc_tj_max_t to std::string
     std::string to_string( const SysmanFrequency::oc_tj_max_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_properties_t to std::string
-    std::string to_string( const SysmanFrequency::freq_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_range_t to std::string
-    std::string to_string( const SysmanFrequency::freq_range_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_throttle_reasons_t to std::string
-    std::string to_string( const SysmanFrequency::freq_throttle_reasons_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_state_t to std::string
-    std::string to_string( const SysmanFrequency::freq_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_throttle_time_t to std::string
-    std::string to_string( const SysmanFrequency::freq_throttle_time_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanEngine::engine_group_t to std::string

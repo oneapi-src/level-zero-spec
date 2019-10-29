@@ -462,8 +462,7 @@ The following functions permit getting data about the PCI endpoint for the devic
 | ::${t}SysmanPciGetProperties()                             | Get static properties for the PCI port - BDF address, number of bars, maximum supported speed |
 | ::${t}SysmanPciGetState()                                  | Get current PCI port speed (number of lanes, generation) |
 | ::${t}SysmanPciGetBarProperties()                          | Get information about each configured PCI bar |
-| ::${t}SysmanPciGetThroughput()                             | Get current PCI throughput |
-| ::${t}SysmanPciGetStats()                                  | Get PCI statistics - total packets, number of packet replays |
+| ::${t}SysmanPciGetStats()                                  | Get PCI statistics - throughput, total packets, number of packet replays |
 
 The example below shows how to output the PCI BDF address:
 
@@ -609,14 +608,15 @@ The hardware manages frequencies to achieve a balance between best performance a
 
 The following functions are provided to manage the frequency domains on the device:
 
-| Function                               | Description |
-| :---                                   | :---        |
-| ::${t}SysmanFrequencyGet()             | Enumerate all the frequency domains on the device and sub-devices. |
-| ::${t}SysmanFrequencyGetProperties()   | Find out the part of the device (one of ::${t}_domain_t) that is controlled by a frequency domain. |
-| ::${t}SysmanFrequencyGetRange()        | Get the current min/max frequency between which the hardware can operate for a frequency domain. |
-| ::${t}SysmanFrequencySetRange()        | Set the min/max frequency between which the hardware can operate for a frequency domain. |
-| ::${t}SysmanFrequencyGetState()        | Get the current frequency request, actual frequency, TDP frequency and throttle reasons for a frequency domain. |
-| ::${t}SysmanFrequencyGetThrottleTime() | Gets the amount of time a frequency domain has been throttled. |
+| Function                                  | Description |
+| :---                                      | :---        |
+| ::${t}SysmanFrequencyGet()                | Enumerate all the frequency domains on the device and sub-devices. |
+| ::${t}SysmanFrequencyGetProperties()      | Find out which domain ::${t}_domain_t is controlled by this frequency and min/max hardware frequencies.  |
+| ::${t}SysmanFrequencyGetAvailableClocks() | Get an array of all available frequencies that can be requested on this domain. |
+| ::${t}SysmanFrequencyGetRange()           | Get the current min/max frequency between which the hardware can operate for a frequency domain. |
+| ::${t}SysmanFrequencySetRange()           | Set the min/max frequency between which the hardware can operate for a frequency domain. |
+| ::${t}SysmanFrequencyGetState()           | Get the current frequency request, actual frequency, TDP frequency and throttle reasons for a frequency domain. |
+| ::${t}SysmanFrequencyGetThrottleTime()    | Gets the amount of time a frequency domain has been throttled. |
 
 It is only permitted to set the frequency range if the device property ::${t}_freq_properties_t.canControl is true for the specific frequency
 domain.
@@ -955,8 +955,7 @@ If a device supports RAS, it maintains counters for hardware and software errors
 | ::${T}_RAS_ERROR_TYPE_UNCORRECTABLE | Hardware errors occurred which most likely resulted in loss of data or even a device hang. If an error results in device lockup, a warm boot is required before those errors will be reported. |
 | ::${T}_RAS_ERROR_TYPE_CORRECTABLE   | These are errors that were corrected by the hardware and did not cause data corruption. |
 
-Software can use the function ::${t}SysmanRasGetProperties() to find out if the device supports RAS and if it is enabled. This will also indicate
-if the device had hardware repairs applied in the past. This information is returned in the structure ::${t}_ras_properties_t.
+Software can use the function ::${t}SysmanRasGetProperties() to find out if the device supports RAS and if it is enabled. This information is returned in the structure ::${t}_ras_properties_t.
 
 The function ::${t}SysmanRasGet() enumerates the available sets of RAS errors. If no handles are returned, the device does not support RAS.
 A device without sub-devices will return one handle if RAS is supported. A device with sub-devices will return a handle for each sub-device.
@@ -1191,8 +1190,7 @@ calls:
 
 | Function                              | Description |
 | :---                                  | :---        |
-| ::${t}SysmanPciGetThroughput()        | Access to realtime PCI throughput data can reveal useful information about the workload |
-| ::${t}SysmanPciGetStats()             | Access to total PCI packets can reveal useful information about the workload |
+| ::${t}SysmanPciGetStats()             | Access to total PCI thoughtput and number of packets can reveal useful information about the workload |
 | ::${t}SysmanMemoryGetBandwidth()      | Access to realtime device local memory bandwidth can reveal useful information about the workload |
 | ::${t}SysmanFabricPortGetThroughput() | Access to realtime fabric data bandwidth can reveal useful information about the workload |
 

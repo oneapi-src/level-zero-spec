@@ -191,10 +191,6 @@ typedef struct _zet_pci_state_t zet_pci_state_t;
 typedef struct _zet_pci_bar_properties_t zet_pci_bar_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_pci_throughput_t
-typedef struct _zet_pci_throughput_t zet_pci_throughput_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_pci_stats_t
 typedef struct _zet_pci_stats_t zet_pci_stats_t;
 
@@ -223,22 +219,6 @@ typedef struct _zet_power_burst_limit_t zet_power_burst_limit_t;
 typedef struct _zet_power_peak_limit_t zet_power_peak_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_oc_capabilities_t
-typedef struct _zet_oc_capabilities_t zet_oc_capabilities_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_oc_configuration_t
-typedef struct _zet_oc_configuration_t zet_oc_configuration_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_oc_icc_max_t
-typedef struct _zet_oc_icc_max_t zet_oc_icc_max_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_oc_tj_max_t
-typedef struct _zet_oc_tj_max_t zet_oc_tj_max_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_freq_properties_t
 typedef struct _zet_freq_properties_t zet_freq_properties_t;
 
@@ -253,6 +233,22 @@ typedef struct _zet_freq_state_t zet_freq_state_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_freq_throttle_time_t
 typedef struct _zet_freq_throttle_time_t zet_freq_throttle_time_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_oc_capabilities_t
+typedef struct _zet_oc_capabilities_t zet_oc_capabilities_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_oc_configuration_t
+typedef struct _zet_oc_configuration_t zet_oc_configuration_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_oc_icc_max_t
+typedef struct _zet_oc_icc_max_t zet_oc_icc_max_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_oc_tj_max_t
+typedef struct _zet_oc_tj_max_t zet_oc_tj_max_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_engine_properties_t

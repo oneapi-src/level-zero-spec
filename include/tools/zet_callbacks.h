@@ -1104,29 +1104,6 @@ typedef void (__zecall *zet_pfnSysmanPciGetBarPropertiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanPciGetThroughput 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_pci_get_throughput_params_t
-{
-    zet_sysman_handle_t* phSysman;
-    zet_pci_throughput_t** ppThroughput;
-} zet_sysman_pci_get_throughput_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanPciGetThroughput 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanPciGetThroughputCb_t)(
-    zet_sysman_pci_get_throughput_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanPciGetStats 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1192,6 +1169,30 @@ typedef struct _zet_sysman_frequency_get_params_t
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
 typedef void (__zecall *zet_pfnSysmanFrequencyGetCb_t)(
     zet_sysman_frequency_get_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanFrequencyGetAvailableClocks 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_frequency_get_available_clocks_params_t
+{
+    zet_sysman_handle_t* phSysman;
+    uint32_t** ppCount;
+    double** pphFrequency;
+} zet_sysman_frequency_get_available_clocks_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanFrequencyGetAvailableClocks 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanFrequencyGetAvailableClocksCb_t)(
+    zet_sysman_frequency_get_available_clocks_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1575,10 +1576,10 @@ typedef struct _zet_sysman_callbacks_t
     zet_pfnSysmanPciGetPropertiesCb_t                               pfnPciGetPropertiesCb;
     zet_pfnSysmanPciGetStateCb_t                                    pfnPciGetStateCb;
     zet_pfnSysmanPciGetBarPropertiesCb_t                            pfnPciGetBarPropertiesCb;
-    zet_pfnSysmanPciGetThroughputCb_t                               pfnPciGetThroughputCb;
     zet_pfnSysmanPciGetStatsCb_t                                    pfnPciGetStatsCb;
     zet_pfnSysmanPowerGetCb_t                                       pfnPowerGetCb;
     zet_pfnSysmanFrequencyGetCb_t                                   pfnFrequencyGetCb;
+    zet_pfnSysmanFrequencyGetAvailableClocksCb_t                    pfnFrequencyGetAvailableClocksCb;
     zet_pfnSysmanEngineGetCb_t                                      pfnEngineGetCb;
     zet_pfnSysmanStandbyGetCb_t                                     pfnStandbyGetCb;
     zet_pfnSysmanFirmwareGetCb_t                                    pfnFirmwareGetCb;
@@ -1749,6 +1750,121 @@ typedef struct _zet_sysman_power_callbacks_t
     zet_pfnSysmanPowerGetLimitsCb_t                                 pfnGetLimitsCb;
     zet_pfnSysmanPowerSetLimitsCb_t                                 pfnSetLimitsCb;
 } zet_sysman_power_callbacks_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanFrequencyGetProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_frequency_get_properties_params_t
+{
+    zet_sysman_freq_handle_t* phFrequency;
+    zet_freq_properties_t** ppProperties;
+} zet_sysman_frequency_get_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanFrequencyGetProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanFrequencyGetPropertiesCb_t)(
+    zet_sysman_frequency_get_properties_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanFrequencyGetRange 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_frequency_get_range_params_t
+{
+    zet_sysman_freq_handle_t* phFrequency;
+    zet_freq_range_t** ppLimits;
+} zet_sysman_frequency_get_range_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanFrequencyGetRange 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanFrequencyGetRangeCb_t)(
+    zet_sysman_frequency_get_range_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanFrequencySetRange 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_frequency_set_range_params_t
+{
+    zet_sysman_freq_handle_t* phFrequency;
+    const zet_freq_range_t** ppLimits;
+} zet_sysman_frequency_set_range_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanFrequencySetRange 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanFrequencySetRangeCb_t)(
+    zet_sysman_frequency_set_range_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanFrequencyGetState 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_frequency_get_state_params_t
+{
+    zet_sysman_freq_handle_t* phFrequency;
+    zet_freq_state_t** ppState;
+} zet_sysman_frequency_get_state_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanFrequencyGetState 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanFrequencyGetStateCb_t)(
+    zet_sysman_frequency_get_state_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanFrequencyGetThrottleTime 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_frequency_get_throttle_time_params_t
+{
+    zet_sysman_freq_handle_t* phFrequency;
+    zet_freq_throttle_time_t** ppThrottleTime;
+} zet_sysman_frequency_get_throttle_time_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanFrequencyGetThrottleTime 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanFrequencyGetThrottleTimeCb_t)(
+    zet_sysman_frequency_get_throttle_time_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanFrequencyGetLastOcError 
@@ -1935,124 +2051,14 @@ typedef void (__zecall *zet_pfnSysmanFrequencySetOcTjMaxCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetProperties 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_properties_params_t
-{
-    zet_sysman_freq_handle_t* phFrequency;
-    zet_freq_properties_t** ppProperties;
-} zet_sysman_frequency_get_properties_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetProperties 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetPropertiesCb_t)(
-    zet_sysman_frequency_get_properties_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetRange 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_range_params_t
-{
-    zet_sysman_freq_handle_t* phFrequency;
-    zet_freq_range_t** ppLimits;
-} zet_sysman_frequency_get_range_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetRange 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetRangeCb_t)(
-    zet_sysman_frequency_get_range_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencySetRange 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_set_range_params_t
-{
-    zet_sysman_freq_handle_t* phFrequency;
-    const zet_freq_range_t** ppLimits;
-} zet_sysman_frequency_set_range_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencySetRange 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencySetRangeCb_t)(
-    zet_sysman_frequency_set_range_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetState 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_state_params_t
-{
-    zet_sysman_freq_handle_t* phFrequency;
-    zet_freq_state_t** ppState;
-} zet_sysman_frequency_get_state_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetState 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetStateCb_t)(
-    zet_sysman_frequency_get_state_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetThrottleTime 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_throttle_time_params_t
-{
-    zet_sysman_freq_handle_t* phFrequency;
-    zet_freq_throttle_time_t** ppThrottleTime;
-} zet_sysman_frequency_get_throttle_time_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetThrottleTime 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetThrottleTimeCb_t)(
-    zet_sysman_frequency_get_throttle_time_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of SysmanFrequency callback functions pointers
 typedef struct _zet_sysman_frequency_callbacks_t
 {
+    zet_pfnSysmanFrequencyGetPropertiesCb_t                         pfnGetPropertiesCb;
+    zet_pfnSysmanFrequencyGetRangeCb_t                              pfnGetRangeCb;
+    zet_pfnSysmanFrequencySetRangeCb_t                              pfnSetRangeCb;
+    zet_pfnSysmanFrequencyGetStateCb_t                              pfnGetStateCb;
+    zet_pfnSysmanFrequencyGetThrottleTimeCb_t                       pfnGetThrottleTimeCb;
     zet_pfnSysmanFrequencyGetLastOcErrorCb_t                        pfnGetLastOcErrorCb;
     zet_pfnSysmanFrequencyGetOcCapabilitiesCb_t                     pfnGetOcCapabilitiesCb;
     zet_pfnSysmanFrequencyGetOcConfigCb_t                           pfnGetOcConfigCb;
@@ -2061,11 +2067,6 @@ typedef struct _zet_sysman_frequency_callbacks_t
     zet_pfnSysmanFrequencySetOcIccMaxCb_t                           pfnSetOcIccMaxCb;
     zet_pfnSysmanFrequencyGetOcTjMaxCb_t                            pfnGetOcTjMaxCb;
     zet_pfnSysmanFrequencySetOcTjMaxCb_t                            pfnSetOcTjMaxCb;
-    zet_pfnSysmanFrequencyGetPropertiesCb_t                         pfnGetPropertiesCb;
-    zet_pfnSysmanFrequencyGetRangeCb_t                              pfnGetRangeCb;
-    zet_pfnSysmanFrequencySetRangeCb_t                              pfnSetRangeCb;
-    zet_pfnSysmanFrequencyGetStateCb_t                              pfnGetStateCb;
-    zet_pfnSysmanFrequencyGetThrottleTimeCb_t                       pfnGetThrottleTimeCb;
 } zet_sysman_frequency_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////

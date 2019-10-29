@@ -595,33 +595,13 @@ class zet_pci_bar_properties_t(Structure):
     ]
 
 ###############################################################################
-## @brief PCI throughput
+## @brief PCI stats counters
 ## 
 ## @details
 ##     - Percent throughput is calculated by taking two snapshots (s1, s2) and
 ##       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
 ##       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
 ##       s1.timestamp))
-class zet_pci_throughput_t(Structure):
-    _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
-                                                                        ## was made.
-                                                                        ## No assumption should be made about the absolute value of the timestamp.
-                                                                        ## It should only be used to calculate delta time between two snapshots
-                                                                        ## of the same structure.
-                                                                        ## Never take the delta of this timestamp with the timestamp from a
-                                                                        ## different structure.
-        ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
-        ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted (including
-                                                                        ## replays)
-        ("maxBandwidth", c_ulonglong)                                   ## [out] The maximum bandwidth in bytes/sec under the current
-                                                                        ## configuration
-    ]
-
-###############################################################################
-## @brief PCI stats counters
-## 
-## @details
 ##     - Percent replays is calculated by taking two snapshots (s1, s2) and
 ##       using the equation: %replay = 10^6 * (s2.replayCounter -
 ##       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
@@ -635,7 +615,12 @@ class zet_pci_stats_t(Structure):
                                                                         ## Never take the delta of this timestamp with the timestamp from a
                                                                         ## different structure.
         ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
-        ("packetCounter", c_ulonglong)                                  ## [out] Monotonic counter for the number of packets
+        ("packetCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of packets
+        ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
+        ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted (including
+                                                                        ## replays)
+        ("maxBandwidth", c_ulonglong)                                   ## [out] The maximum bandwidth in bytes/sec under the current
+                                                                        ## configuration
     ]
 
 ###############################################################################
@@ -728,6 +713,99 @@ class zet_power_peak_limit_t(Structure):
     ]
 
 ###############################################################################
+## @brief Frequency properties
+## 
+## @details
+##     - Indicates if this frequency domain can be overclocked (if true,
+##       functions such as ::zetSysmanFrequencySetOcConfig() are supported).
+##     - The min/max hardware frequencies are specified for non-overclock
+##       configurations. For overclock configurations, use
+##       ::zetSysmanFrequencyGetOcConfig() to determine the maximum frequency
+##       that can be requested.
+##     - If step is non-zero, the available frequencies are (min, min + step,
+##       min + 2xstep, ..., max). Otherwise, call
+##       ::zetSysmanFrequencyGetAvailableClocks() to get the list of
+##       frequencies that can be requested.
+class zet_freq_properties_t(Structure):
+    _fields_ = [
+        ("type", zet_domain_t),                                         ## [out] The hardware block that this frequency domain controls (GPU,
+                                                                        ## memory, ...)
+        ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
+        ("canControl", ze_bool_t),                                      ## [out] Indicates if software can control the frequency of this domain
+        ("canOverclock", ze_bool_t),                                    ## [out] Indicates if software can overclock this frequency domain
+        ("min", c_double),                                              ## [out] The minimum hardware clock frequency in units of MHz
+        ("max", c_double),                                              ## [out] The maximum non-overclock hardware clock frequency in units of
+                                                                        ## MHz.
+        ("step", c_double)                                              ## [out] The minimum step-size for clock frequencies in units of MHz. The
+                                                                        ## hardware will clamp intermediate frequencies to lowest multiplier of
+                                                                        ## this number.
+    ]
+
+###############################################################################
+## @brief Frequency range between which the hardware can operate.
+class zet_freq_range_t(Structure):
+    _fields_ = [
+        ("min", c_double),                                              ## [in,out] The min frequency in MHz below which hardware frequency
+                                                                        ## management will not request frequencies. Setting to 0 will use the
+                                                                        ## hardware default value.
+        ("max", c_double)                                               ## [in,out] The max frequency in MHz above which hardware frequency
+                                                                        ## management will not request frequencies. Setting to 0 will use the
+                                                                        ## hardware default value.
+    ]
+
+###############################################################################
+## @brief Frequency throttle reasons
+class zet_freq_throttle_reasons_v(IntEnum):
+    NONE = 0                                        ## frequency not throttled
+    AVE_PWR_CAP = ZE_BIT( 0 )                       ## frequency throttled due to average power excursion (PL1)
+    BURST_PWR_CAP = ZE_BIT( 1 )                     ## frequency throttled due to burst power excursion (PL2)
+    CURRENT_LIMIT = ZE_BIT( 2 )                     ## frequency throttled due to current excursion (PL4)
+    THERMAL_LIMIT = ZE_BIT( 3 )                     ## frequency throttled due to thermal excursion (T > TjMax)
+    PSU_ALERT = ZE_BIT( 4 )                         ## frequency throttled due to power supply assertion
+    SW_RANGE = ZE_BIT( 5 )                          ## frequency throttled due to software supplied frequency range
+    HW_RANGE = ZE_BIT( 6 )                          ## frequency throttled due to a sub block that has a lower frequency
+                                                    ## range when it receives clocks
+
+class zet_freq_throttle_reasons_t(c_int):
+    def __str__(self):
+        return str(zet_freq_throttle_reasons_v(value))
+
+
+###############################################################################
+## @brief Frequency state
+class zet_freq_state_t(Structure):
+    _fields_ = [
+        ("request", c_double),                                          ## [out] The current frequency request in MHz.
+        ("tdp", c_double),                                              ## [out] The maximum frequency in MHz supported under the current TDP
+                                                                        ## conditions
+        ("efficient", c_double),                                        ## [out] The efficient minimum frequency in MHz
+        ("actual", c_double),                                           ## [out] The resolved frequency in MHz
+        ("throttleReasons", c_ulong)                                    ## [out] The reasons that the frequency is being limited by the hardware
+                                                                        ## (Bitfield of (1<<::zet_freq_throttle_reasons_t)).
+    ]
+
+###############################################################################
+## @brief Frequency throttle time snapshot
+## 
+## @details
+##     - Percent time throttled is calculated by taking two snapshots (s1, s2)
+##       and using the equation: %throttled = (s2.throttleTime -
+##       s1.throttleTime) / (s2.timestamp - s1.timestamp)
+class zet_freq_throttle_time_t(Structure):
+    _fields_ = [
+        ("throttleTime", c_ulonglong),                                  ## [out] The monotonic counter of time in microseconds that the frequency
+                                                                        ## has been limited by the hardware.
+        ("timestamp", c_ulonglong)                                      ## [out] Microsecond timestamp when throttleTime was captured.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
+    ]
+
+###############################################################################
 ## @brief Overclocking modes
 class zet_oc_mode_v(IntEnum):
     OVERCLOCKING_INTERPOLATIVE_MODE = 0             ## Interpolative Mode.
@@ -809,92 +887,6 @@ class zet_oc_icc_max_t(Structure):
 class zet_oc_tj_max_t(Structure):
     _fields_ = [
         ("TjMax", c_double)                                             ## [in,out] Maximum desired current in degrees celcius.
-    ]
-
-###############################################################################
-## @brief Frequency properties
-## 
-## @details
-##     - Provides the set of frequencies as a list and as a range/step.
-##     - It is generally recommended that applications choose frequencies from
-##       the list. However applications can also construct the list themselves
-##       using the range/steps provided.
-class zet_freq_properties_t(Structure):
-    _fields_ = [
-        ("type", zet_domain_t),                                         ## [out] The type of frequency domain (GPU, memory, ...)
-        ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
-        ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
-        ("canControl", ze_bool_t),                                      ## [out] Indicates if software can control the frequency of this domain
-        ("canOverclock", ze_bool_t),                                    ## [out] Indicates if software can overclock this frequency domain
-        ("min", c_double),                                              ## [out] The minimum clock frequency in units of MHz
-        ("max", c_double),                                              ## [out] The maximum clock frequency in units of MHz
-        ("step", c_double),                                             ## [out] The step clock frequency in units of MHz
-        ("num", c_ulong),                                               ## [out] The number of clocks in the array pClocks
-        ("pClocks", POINTER(c_double))                                  ## [out] Array of clock frequencies in units of MHz ordered from smallest
-                                                                        ## to largest.
-    ]
-
-###############################################################################
-## @brief Frequency range between which the hardware can operate.
-class zet_freq_range_t(Structure):
-    _fields_ = [
-        ("min", c_double),                                              ## [in,out] The min frequency in MHz below which hardware frequency
-                                                                        ## management will not request frequencies. Setting to 0 will use the
-                                                                        ## hardware default value.
-        ("max", c_double)                                               ## [in,out] The max frequency in MHz above which hardware frequency
-                                                                        ## management will not request frequencies. Setting to 0 will use the
-                                                                        ## hardware default value.
-    ]
-
-###############################################################################
-## @brief Frequency throttle reasons
-class zet_freq_throttle_reasons_v(IntEnum):
-    NONE = 0                                        ## frequency not throttled
-    AVE_PWR_CAP = ZE_BIT( 0 )                       ## frequency throttled due to average power excursion (PL1)
-    BURST_PWR_CAP = ZE_BIT( 1 )                     ## frequency throttled due to burst power excursion (PL2)
-    CURRENT_LIMIT = ZE_BIT( 2 )                     ## frequency throttled due to current excursion (PL4)
-    THERMAL_LIMIT = ZE_BIT( 3 )                     ## frequency throttled due to thermal excursion (T > TjMax)
-    PSU_ALERT = ZE_BIT( 4 )                         ## frequency throttled due to power supply assertion
-    SW_RANGE = ZE_BIT( 5 )                          ## frequency throttled due to software supplied frequency range
-    HW_RANGE = ZE_BIT( 6 )                          ## frequency throttled due to a sub block that has a lower frequency
-                                                    ## range when it receives clocks
-
-class zet_freq_throttle_reasons_t(c_int):
-    def __str__(self):
-        return str(zet_freq_throttle_reasons_v(value))
-
-
-###############################################################################
-## @brief Frequency state
-class zet_freq_state_t(Structure):
-    _fields_ = [
-        ("request", c_double),                                          ## [out] The current frequency request in MHz.
-        ("tdp", c_double),                                              ## [out] The maximum frequency in MHz supported under the current TDP
-                                                                        ## conditions
-        ("efficient", c_double),                                        ## [out] The efficient minimum frequency in MHz
-        ("actual", c_double),                                           ## [out] The resolved frequency in MHz
-        ("throttleReasons", c_ulong)                                    ## [out] The reasons that the frequency is being limited by the hardware
-                                                                        ## (Bitfield of (1<<::zet_freq_throttle_reasons_t)).
-    ]
-
-###############################################################################
-## @brief Frequency throttle time snapshot
-## 
-## @details
-##     - Percent time throttled is calculated by taking two snapshots (s1, s2)
-##       and using the equation: %throttled = (s2.throttleTime -
-##       s1.throttleTime) / (s2.timestamp - s1.timestamp)
-class zet_freq_throttle_time_t(Structure):
-    _fields_ = [
-        ("throttleTime", c_ulonglong),                                  ## [out] The monotonic counter of time in microseconds that the frequency
-                                                                        ## has been limited by the hardware.
-        ("timestamp", c_ulonglong)                                      ## [out] Microsecond timestamp when throttleTime was captured.
-                                                                        ## No assumption should be made about the absolute value of the timestamp.
-                                                                        ## It should only be used to calculate delta time between two snapshots
-                                                                        ## of the same structure.
-                                                                        ## Never take the delta of this timestamp with the timestamp from a
-                                                                        ## different structure.
     ]
 
 ###############################################################################
@@ -1936,13 +1928,6 @@ else:
     _zetSysmanPciGetBarProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, c_ulong, POINTER(zet_pci_bar_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanPciGetThroughput
-if __use_win_types:
-    _zetSysmanPciGetThroughput_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_pci_throughput_t) )
-else:
-    _zetSysmanPciGetThroughput_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_pci_throughput_t) )
-
-###############################################################################
 ## @brief Function-pointer for zetSysmanPciGetStats
 if __use_win_types:
     _zetSysmanPciGetStats_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_pci_stats_t) )
@@ -1962,6 +1947,13 @@ if __use_win_types:
     _zetSysmanFrequencyGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_freq_handle_t) )
 else:
     _zetSysmanFrequencyGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_freq_handle_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanFrequencyGetAvailableClocks
+if __use_win_types:
+    _zetSysmanFrequencyGetAvailableClocks_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(c_double) )
+else:
+    _zetSysmanFrequencyGetAvailableClocks_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(c_double) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanEngineGet
@@ -2087,10 +2079,10 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnPciGetProperties", c_void_p),                              ## _zetSysmanPciGetProperties_t
         ("pfnPciGetState", c_void_p),                                   ## _zetSysmanPciGetState_t
         ("pfnPciGetBarProperties", c_void_p),                           ## _zetSysmanPciGetBarProperties_t
-        ("pfnPciGetThroughput", c_void_p),                              ## _zetSysmanPciGetThroughput_t
         ("pfnPciGetStats", c_void_p),                                   ## _zetSysmanPciGetStats_t
         ("pfnPowerGet", c_void_p),                                      ## _zetSysmanPowerGet_t
         ("pfnFrequencyGet", c_void_p),                                  ## _zetSysmanFrequencyGet_t
+        ("pfnFrequencyGetAvailableClocks", c_void_p),                   ## _zetSysmanFrequencyGetAvailableClocks_t
         ("pfnEngineGet", c_void_p),                                     ## _zetSysmanEngineGet_t
         ("pfnStandbyGet", c_void_p),                                    ## _zetSysmanStandbyGet_t
         ("pfnFirmwareGet", c_void_p),                                   ## _zetSysmanFirmwareGet_t
@@ -2164,6 +2156,41 @@ class _zet_sysman_power_dditable_t(Structure):
     ]
 
 ###############################################################################
+## @brief Function-pointer for zetSysmanFrequencyGetProperties
+if __use_win_types:
+    _zetSysmanFrequencyGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_properties_t) )
+else:
+    _zetSysmanFrequencyGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanFrequencyGetRange
+if __use_win_types:
+    _zetSysmanFrequencyGetRange_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_range_t) )
+else:
+    _zetSysmanFrequencyGetRange_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_range_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanFrequencySetRange
+if __use_win_types:
+    _zetSysmanFrequencySetRange_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_range_t) )
+else:
+    _zetSysmanFrequencySetRange_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_range_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanFrequencyGetState
+if __use_win_types:
+    _zetSysmanFrequencyGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_state_t) )
+else:
+    _zetSysmanFrequencyGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_state_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanFrequencyGetThrottleTime
+if __use_win_types:
+    _zetSysmanFrequencyGetThrottleTime_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_throttle_time_t) )
+else:
+    _zetSysmanFrequencyGetThrottleTime_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_throttle_time_t) )
+
+###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetLastOcError
 if __use_win_types:
     _zetSysmanFrequencyGetLastOcError_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_error_type_t) )
@@ -2219,46 +2246,16 @@ if __use_win_types:
 else:
     _zetSysmanFrequencySetOcTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_tj_max_t) )
 
-###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetProperties
-if __use_win_types:
-    _zetSysmanFrequencyGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_properties_t) )
-else:
-    _zetSysmanFrequencyGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_properties_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetRange
-if __use_win_types:
-    _zetSysmanFrequencyGetRange_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_range_t) )
-else:
-    _zetSysmanFrequencyGetRange_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_range_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanFrequencySetRange
-if __use_win_types:
-    _zetSysmanFrequencySetRange_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_range_t) )
-else:
-    _zetSysmanFrequencySetRange_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_range_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetState
-if __use_win_types:
-    _zetSysmanFrequencyGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_state_t) )
-else:
-    _zetSysmanFrequencyGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_state_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetThrottleTime
-if __use_win_types:
-    _zetSysmanFrequencyGetThrottleTime_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_throttle_time_t) )
-else:
-    _zetSysmanFrequencyGetThrottleTime_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_throttle_time_t) )
-
 
 ###############################################################################
 ## @brief Table of SysmanFrequency functions pointers
 class _zet_sysman_frequency_dditable_t(Structure):
     _fields_ = [
+        ("pfnGetProperties", c_void_p),                                 ## _zetSysmanFrequencyGetProperties_t
+        ("pfnGetRange", c_void_p),                                      ## _zetSysmanFrequencyGetRange_t
+        ("pfnSetRange", c_void_p),                                      ## _zetSysmanFrequencySetRange_t
+        ("pfnGetState", c_void_p),                                      ## _zetSysmanFrequencyGetState_t
+        ("pfnGetThrottleTime", c_void_p),                               ## _zetSysmanFrequencyGetThrottleTime_t
         ("pfnGetLastOcError", c_void_p),                                ## _zetSysmanFrequencyGetLastOcError_t
         ("pfnGetOcCapabilities", c_void_p),                             ## _zetSysmanFrequencyGetOcCapabilities_t
         ("pfnGetOcConfig", c_void_p),                                   ## _zetSysmanFrequencyGetOcConfig_t
@@ -2266,12 +2263,7 @@ class _zet_sysman_frequency_dditable_t(Structure):
         ("pfnGetOcIccMax", c_void_p),                                   ## _zetSysmanFrequencyGetOcIccMax_t
         ("pfnSetOcIccMax", c_void_p),                                   ## _zetSysmanFrequencySetOcIccMax_t
         ("pfnGetOcTjMax", c_void_p),                                    ## _zetSysmanFrequencyGetOcTjMax_t
-        ("pfnSetOcTjMax", c_void_p),                                    ## _zetSysmanFrequencySetOcTjMax_t
-        ("pfnGetProperties", c_void_p),                                 ## _zetSysmanFrequencyGetProperties_t
-        ("pfnGetRange", c_void_p),                                      ## _zetSysmanFrequencyGetRange_t
-        ("pfnSetRange", c_void_p),                                      ## _zetSysmanFrequencySetRange_t
-        ("pfnGetState", c_void_p),                                      ## _zetSysmanFrequencyGetState_t
-        ("pfnGetThrottleTime", c_void_p)                                ## _zetSysmanFrequencyGetThrottleTime_t
+        ("pfnSetOcTjMax", c_void_p)                                     ## _zetSysmanFrequencySetOcTjMax_t
     ]
 
 ###############################################################################
@@ -2799,10 +2791,10 @@ class ZET_DDI:
         self.zetSysmanPciGetProperties = _zetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)
         self.zetSysmanPciGetState = _zetSysmanPciGetState_t(self.__dditable.Sysman.pfnPciGetState)
         self.zetSysmanPciGetBarProperties = _zetSysmanPciGetBarProperties_t(self.__dditable.Sysman.pfnPciGetBarProperties)
-        self.zetSysmanPciGetThroughput = _zetSysmanPciGetThroughput_t(self.__dditable.Sysman.pfnPciGetThroughput)
         self.zetSysmanPciGetStats = _zetSysmanPciGetStats_t(self.__dditable.Sysman.pfnPciGetStats)
         self.zetSysmanPowerGet = _zetSysmanPowerGet_t(self.__dditable.Sysman.pfnPowerGet)
         self.zetSysmanFrequencyGet = _zetSysmanFrequencyGet_t(self.__dditable.Sysman.pfnFrequencyGet)
+        self.zetSysmanFrequencyGetAvailableClocks = _zetSysmanFrequencyGetAvailableClocks_t(self.__dditable.Sysman.pfnFrequencyGetAvailableClocks)
         self.zetSysmanEngineGet = _zetSysmanEngineGet_t(self.__dditable.Sysman.pfnEngineGet)
         self.zetSysmanStandbyGet = _zetSysmanStandbyGet_t(self.__dditable.Sysman.pfnStandbyGet)
         self.zetSysmanFirmwareGet = _zetSysmanFirmwareGet_t(self.__dditable.Sysman.pfnFirmwareGet)
@@ -2842,6 +2834,11 @@ class ZET_DDI:
         self.__dditable.SysmanFrequency = _SysmanFrequency
 
         # attach function interface to function address
+        self.zetSysmanFrequencyGetProperties = _zetSysmanFrequencyGetProperties_t(self.__dditable.SysmanFrequency.pfnGetProperties)
+        self.zetSysmanFrequencyGetRange = _zetSysmanFrequencyGetRange_t(self.__dditable.SysmanFrequency.pfnGetRange)
+        self.zetSysmanFrequencySetRange = _zetSysmanFrequencySetRange_t(self.__dditable.SysmanFrequency.pfnSetRange)
+        self.zetSysmanFrequencyGetState = _zetSysmanFrequencyGetState_t(self.__dditable.SysmanFrequency.pfnGetState)
+        self.zetSysmanFrequencyGetThrottleTime = _zetSysmanFrequencyGetThrottleTime_t(self.__dditable.SysmanFrequency.pfnGetThrottleTime)
         self.zetSysmanFrequencyGetLastOcError = _zetSysmanFrequencyGetLastOcError_t(self.__dditable.SysmanFrequency.pfnGetLastOcError)
         self.zetSysmanFrequencyGetOcCapabilities = _zetSysmanFrequencyGetOcCapabilities_t(self.__dditable.SysmanFrequency.pfnGetOcCapabilities)
         self.zetSysmanFrequencyGetOcConfig = _zetSysmanFrequencyGetOcConfig_t(self.__dditable.SysmanFrequency.pfnGetOcConfig)
@@ -2850,11 +2847,6 @@ class ZET_DDI:
         self.zetSysmanFrequencySetOcIccMax = _zetSysmanFrequencySetOcIccMax_t(self.__dditable.SysmanFrequency.pfnSetOcIccMax)
         self.zetSysmanFrequencyGetOcTjMax = _zetSysmanFrequencyGetOcTjMax_t(self.__dditable.SysmanFrequency.pfnGetOcTjMax)
         self.zetSysmanFrequencySetOcTjMax = _zetSysmanFrequencySetOcTjMax_t(self.__dditable.SysmanFrequency.pfnSetOcTjMax)
-        self.zetSysmanFrequencyGetProperties = _zetSysmanFrequencyGetProperties_t(self.__dditable.SysmanFrequency.pfnGetProperties)
-        self.zetSysmanFrequencyGetRange = _zetSysmanFrequencyGetRange_t(self.__dditable.SysmanFrequency.pfnGetRange)
-        self.zetSysmanFrequencySetRange = _zetSysmanFrequencySetRange_t(self.__dditable.SysmanFrequency.pfnSetRange)
-        self.zetSysmanFrequencyGetState = _zetSysmanFrequencyGetState_t(self.__dditable.SysmanFrequency.pfnGetState)
-        self.zetSysmanFrequencyGetThrottleTime = _zetSysmanFrequencyGetThrottleTime_t(self.__dditable.SysmanFrequency.pfnGetThrottleTime)
 
         # call driver to get function pointers
         _SysmanEngine = _zet_sysman_engine_dditable_t()
