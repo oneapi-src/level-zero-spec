@@ -19,6 +19,7 @@ The following documents the high-level programming models and guidelines.
     + [Global operations](#glo)
         + [Device properties](#glod)
         + [Scheduler operations](#glos)
+        + [Device reset](#glor)
         + [PCI properties](#glop)
     + [Operations on power domains](#pwr)
 	+ [Operations on frequency domains](#frq)
@@ -40,6 +41,7 @@ The following documents the high-level programming models and guidelines.
     + [Privileged telemetry](#set)
     + [Privileged controls](#sec)
     + [Virtualization](#sev)
+    + [Function summary](#sef)
 
 
 # <a name="in">Introduction</a>
@@ -394,10 +396,10 @@ The following functions are available for changing the behavior of the scheduler
 | ::zetSysmanSchedulerGetCurrentMode()                | Get the current scheduler mode (timeout, timeslice, exclusive, single command queue) |
 | ::zetSysmanSchedulerGetTimeoutModeProperties()      | Get the settings for the timeout scheduler mode |
 | ::zetSysmanSchedulerGetTimesliceModeProperties()    | Get the settings for the timeslice scheduler mode |
-| ::zetSysmanSchedulerSetTimeoutMode                  | Change to timeout scheduler mode and/or change properties |
-| ::zetSysmanSchedulerSetTimesliceMode                | Change to timeslice scheduler mode and/or change properties |
-| ::zetSysmanSchedulerSetExclusiveMode                | Change to exclusive scheduler mode and/or change properties |
-| ::zetSysmanSchedulerSetComputeUnitDebugMode         | Change to compute unit debug scheduler mode and/or change properties |
+| ::zetSysmanSchedulerSetTimeoutMode()                | Change to timeout scheduler mode and/or change properties |
+| ::zetSysmanSchedulerSetTimesliceMode()              | Change to timeslice scheduler mode and/or change properties |
+| ::zetSysmanSchedulerSetExclusiveMode()              | Change to exclusive scheduler mode and/or change properties |
+| ::zetSysmanSchedulerSetComputeUnitDebugMode()       | Change to compute unit debug scheduler mode and/or change properties |
 
 The example below shows how to stop the scheduler enforcing fairness while permitting other work to attempt to run:
 
@@ -447,6 +449,14 @@ void DisableSchedulerWatchdog(zet_sysman_handle_t hSysmanDevice)
     }
 }
 ```
+
+### <a name="glor">Device reset</a>
+The device can be reset using the following function:
+
+| Function                                                   | Description |
+| :---                                                       | :---        |
+| ::zetSysmanDeviceReset()                                  | Requests that the driver reset the device. If the hardware is hung, this will perform an PCI bus reset. |
+
 
 ### <a name="glop">PCI properties</a>
 The following functions permit getting data about the PCI endpoint for the device:
@@ -1197,7 +1207,11 @@ calls:
 
 | Function                              | Description |
 | :---                                  | :---        |
-| ::zetSysmanFirmwareFlash()           | Firmware flashing must be handled with care. |
+| ::zetSysmanDeviceReset()             | Device resets cause loss of data for running workloads. |
+| ::zetSysmanFirmwareGet()             | All firmware operations must be handled with care. |
+| ::zetSysmanFirmwareGetProperties()   | All firmware operations must be handled with care. |
+| ::zetSysmanFirmwareGetChecksum()     | All firmware operations must be handled with care. |
+| ::zetSysmanFirmwareFlash()           | All firmware operations must be handled with care. |
 | ::zetSysmanFabricPortSetConfig()     | Putting fabric ports offline can distrupt workloads, causing uncorrectable errors. |
 | ::zetSysmanDiagnosticsRunTests()     | Diagnostics take a device offline. |
 
@@ -1205,3 +1219,84 @@ calls:
 ## <a name="sev">Virtualization</a>
 In virtualization environments, only the host is permitted to access any features of the API. Attempts to use the API in virtual machines will
 fail.
+
+
+## <a name="sef">Function summary</a>
+The table below summarizes the default permissions for each API function:
+
+| Function                                              | Administrator access | Group access         | Other access         | Virtual machine      |
+| :---                                                  | :---                 | :---                 | :---                 | :---                 |
+| ::zetSysmanDeviceGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanDeviceWasRepaired()                       | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanSchedulerGetCurrentMode()                 | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanSchedulerGetTimeoutModeProperties()       | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanSchedulerGetTimesliceModeProperties()     | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanSchedulerSetTimeoutMode()                 | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanSchedulerSetTimesliceMode()               | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanSchedulerSetExclusiveMode()               | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanSchedulerSetComputeUnitDebugMode()        | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanDeviceReset()                             | read-write           | no-access            | no-access            | no-access            |
+| ::zetSysmanPciGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPciGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPciGetBarProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPciGetStats()                             | read-only            | no-access            | no-access            | no-access            |
+| ::zetSysmanPowerGet()                                | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPowerGetProperties()                      | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPowerGetEnergyCounter()                   | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPowerGetLimits()                          | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPowerSetLimits()                          | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanFrequencyGet()                            | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencyGetProperties()                  | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencyGetAvailableClocks()             | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencyGetRange()                       | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencySetRange()                       | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanFrequencyGetState()                       | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencyGetThrottleTime()                | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEngineGet()                               | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEngineGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEngineGetActivity()                       | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanStandbyGet()                              | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanStandbyGetProperties()                    | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanStandbyGetMode()                          | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanStandbySetMode()                          | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanFirmwareGet()                             | read-only            | no-access            | no-access            | no-access            |
+| ::zetSysmanFirmwareGetProperties()                   | read-only            | no-access            | no-access            | no-access            |
+| ::zetSysmanFirmwareGetChecksum()                     | read-only            | no-access            | no-access            | no-access            |
+| ::zetSysmanFirmwareFlash()                           | read-write           | no-access            | no-access            | no-access            |
+| ::zetSysmanMemoryGet()                               | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanMemoryGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanMemoryGetBandwidth()                      | read-only            | no-access            | no-access            | no-access            |
+| ::zetSysmanMemoryGetState()                          | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFabricPortGet()                           | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFabricPortGetProperties()                 | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFabricPortGetLinkType()                   | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFabricPortGetConfig()                     | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFabricPortSetConfig()                     | read-write           | no-access            | no-access            | no-access            |
+| ::zetSysmanFabricPortGetState()                      | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFabricPortGetThroughput()                 | read-only            | no-access            | no-access            | no-access            |
+| ::zetSysmanTemperatureGet()                          | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanTemperatureGetProperties()                | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanTemperatureRead()                         | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPsuGet()                                  | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPsuGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPsuGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFanGet()                                  | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFanGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFanGetConfig()                            | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFanSetConfig()                            | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanFanGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanLedGet()                                  | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanLedGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanLedGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanLedSetState()                             | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanRasGet()                                  | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanRasGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanRasGetErrors()                            | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEventsGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEventsRegister()                          | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEventsUnregister()                        | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEventsListen()                            | read-write           | read-write           | read-write           | no-access            |
+| ::zetSysmanDiagnosticsGet()                          | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanDiagnosticsGetProperties()                | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanDiagnosticsRunTests()                     | read-write           | no-access            | no-access            | no-access            |
+

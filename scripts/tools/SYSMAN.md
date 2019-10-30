@@ -25,6 +25,7 @@ ${"##"} Table of Contents
     + [Global operations](#glo)
         + [Device properties](#glod)
         + [Scheduler operations](#glos)
+        + [Device reset](#glor)
         + [PCI properties](#glop)
     + [Operations on power domains](#pwr)
 	+ [Operations on frequency domains](#frq)
@@ -46,6 +47,7 @@ ${"##"} Table of Contents
     + [Privileged telemetry](#set)
     + [Privileged controls](#sec)
     + [Virtualization](#sev)
+    + [Function summary](#sef)
 
 
 ${"#"} <a name="in">Introduction</a>
@@ -400,10 +402,10 @@ The following functions are available for changing the behavior of the scheduler
 | ::${t}SysmanSchedulerGetCurrentMode()                | Get the current scheduler mode (timeout, timeslice, exclusive, single command queue) |
 | ::${t}SysmanSchedulerGetTimeoutModeProperties()      | Get the settings for the timeout scheduler mode |
 | ::${t}SysmanSchedulerGetTimesliceModeProperties()    | Get the settings for the timeslice scheduler mode |
-| ::${t}SysmanSchedulerSetTimeoutMode                  | Change to timeout scheduler mode and/or change properties |
-| ::${t}SysmanSchedulerSetTimesliceMode                | Change to timeslice scheduler mode and/or change properties |
-| ::${t}SysmanSchedulerSetExclusiveMode                | Change to exclusive scheduler mode and/or change properties |
-| ::${t}SysmanSchedulerSetComputeUnitDebugMode         | Change to compute unit debug scheduler mode and/or change properties |
+| ::${t}SysmanSchedulerSetTimeoutMode()                | Change to timeout scheduler mode and/or change properties |
+| ::${t}SysmanSchedulerSetTimesliceMode()              | Change to timeslice scheduler mode and/or change properties |
+| ::${t}SysmanSchedulerSetExclusiveMode()              | Change to exclusive scheduler mode and/or change properties |
+| ::${t}SysmanSchedulerSetComputeUnitDebugMode()       | Change to compute unit debug scheduler mode and/or change properties |
 
 The example below shows how to stop the scheduler enforcing fairness while permitting other work to attempt to run:
 
@@ -453,6 +455,14 @@ void DisableSchedulerWatchdog(zet_sysman_handle_t hSysmanDevice)
     }
 }
 ```
+
+${"###"} <a name="glor">Device reset</a>
+The device can be reset using the following function:
+
+| Function                                                   | Description |
+| :---                                                       | :---        |
+| ::${t}SysmanDeviceReset()                                  | Requests that the driver reset the device. If the hardware is hung, this will perform an PCI bus reset. |
+
 
 ${"###"} <a name="glop">PCI properties</a>
 The following functions permit getting data about the PCI endpoint for the device:
@@ -1203,7 +1213,11 @@ calls:
 
 | Function                              | Description |
 | :---                                  | :---        |
-| ::${t}SysmanFirmwareFlash()           | Firmware flashing must be handled with care. |
+| ::${t}SysmanDeviceReset()             | Device resets cause loss of data for running workloads. |
+| ::${t}SysmanFirmwareGet()             | All firmware operations must be handled with care. |
+| ::${t}SysmanFirmwareGetProperties()   | All firmware operations must be handled with care. |
+| ::${t}SysmanFirmwareGetChecksum()     | All firmware operations must be handled with care. |
+| ::${t}SysmanFirmwareFlash()           | All firmware operations must be handled with care. |
 | ::${t}SysmanFabricPortSetConfig()     | Putting fabric ports offline can distrupt workloads, causing uncorrectable errors. |
 | ::${t}SysmanDiagnosticsRunTests()     | Diagnostics take a device offline. |
 
@@ -1211,3 +1225,84 @@ calls:
 ${"##"} <a name="sev">Virtualization</a>
 In virtualization environments, only the host is permitted to access any features of the API. Attempts to use the API in virtual machines will
 fail.
+
+
+${"##"} <a name="sef">Function summary</a>
+The table below summarizes the default permissions for each API function:
+
+| Function                                              | Administrator access | Group access         | Other access         | Virtual machine      |
+| :---                                                  | :---                 | :---                 | :---                 | :---                 |
+| ::${t}SysmanDeviceGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanDeviceWasRepaired()                       | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanSchedulerGetCurrentMode()                 | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanSchedulerGetTimeoutModeProperties()       | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanSchedulerGetTimesliceModeProperties()     | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanSchedulerSetTimeoutMode()                 | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanSchedulerSetTimesliceMode()               | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanSchedulerSetExclusiveMode()               | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanSchedulerSetComputeUnitDebugMode()        | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanDeviceReset()                             | read-write           | no-access            | no-access            | no-access            |
+| ::${t}SysmanPciGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPciGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPciGetBarProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPciGetStats()                             | read-only            | no-access            | no-access            | no-access            |
+| ::${t}SysmanPowerGet()                                | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPowerGetProperties()                      | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPowerGetEnergyCounter()                   | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPowerGetLimits()                          | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPowerSetLimits()                          | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanFrequencyGet()                            | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFrequencyGetProperties()                  | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFrequencyGetAvailableClocks()             | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFrequencyGetRange()                       | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFrequencySetRange()                       | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanFrequencyGetState()                       | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFrequencyGetThrottleTime()                | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanEngineGet()                               | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanEngineGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanEngineGetActivity()                       | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanStandbyGet()                              | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanStandbyGetProperties()                    | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanStandbyGetMode()                          | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanStandbySetMode()                          | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanFirmwareGet()                             | read-only            | no-access            | no-access            | no-access            |
+| ::${t}SysmanFirmwareGetProperties()                   | read-only            | no-access            | no-access            | no-access            |
+| ::${t}SysmanFirmwareGetChecksum()                     | read-only            | no-access            | no-access            | no-access            |
+| ::${t}SysmanFirmwareFlash()                           | read-write           | no-access            | no-access            | no-access            |
+| ::${t}SysmanMemoryGet()                               | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanMemoryGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanMemoryGetBandwidth()                      | read-only            | no-access            | no-access            | no-access            |
+| ::${t}SysmanMemoryGetState()                          | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFabricPortGet()                           | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFabricPortGetProperties()                 | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFabricPortGetLinkType()                   | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFabricPortGetConfig()                     | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFabricPortSetConfig()                     | read-write           | no-access            | no-access            | no-access            |
+| ::${t}SysmanFabricPortGetState()                      | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFabricPortGetThroughput()                 | read-only            | no-access            | no-access            | no-access            |
+| ::${t}SysmanTemperatureGet()                          | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanTemperatureGetProperties()                | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanTemperatureRead()                         | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPsuGet()                                  | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPsuGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPsuGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFanGet()                                  | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFanGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFanGetConfig()                            | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanFanSetConfig()                            | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanFanGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanLedGet()                                  | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanLedGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanLedGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanLedSetState()                             | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanRasGet()                                  | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanRasGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanRasGetErrors()                            | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanEventsGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanEventsRegister()                          | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanEventsUnregister()                        | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanEventsListen()                            | read-write           | read-write           | read-write           | no-access            |
+| ::${t}SysmanDiagnosticsGet()                          | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanDiagnosticsGetProperties()                | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanDiagnosticsRunTests()                     | read-write           | no-access            | no-access            | no-access            |
+
