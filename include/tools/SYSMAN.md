@@ -18,11 +18,13 @@ The following documents the high-level programming models and guidelines.
 * [Interface details](#id)
     + [Global operations](#glo)
         + [Device properties](#glod)
+        + [Host processes](#gloz)
         + [Scheduler operations](#glos)
         + [Device reset](#glor)
         + [PCI properties](#glop)
     + [Operations on power domains](#pwr)
 	+ [Operations on frequency domains](#frq)
+        + [Frequency/Voltage over-clocking](#fro)
 	+ [Operations on engine groups](#eng)
 	+ [Operations on standby domains](#sby)
 	+ [Operations on firmware](#fmw)
@@ -170,6 +172,7 @@ The following operations are provided to access overall device information and c
 
 - Get device UUID, deviceID, number of sub-devices
 - Get Brand/model/vendor name
+- Query the information about processes using this device
 - Get/set scheduler mode and properties
 - Reset device
 - Query if the device has been repaired
@@ -375,6 +378,16 @@ void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
     }
 }
 ```
+
+### <a name="gloz">Host processes</a>
+The following functions provide information about host processes that are using the device:
+
+| Function                                                   | Description |
+| :---                                                       | :---        |
+| ::zetSysmanProcessesGetState()                            | Get information about all processes that are using this device -  process ID, device memory allocation size, accelerators being used. |
+
+Using the process ID, an application can determine the owner and the path to the executable - this information is not returned by the API.
+
 
 ### <a name="glos">Scheduler operations</a>
 On some devices, it is possible to change the way the scheduler executes workloads. To find out if this is supported, execute the function
@@ -615,7 +628,7 @@ The following functions are provided to manage the frequency domains on the devi
 | Function                                  | Description |
 | :---                                      | :---        |
 | ::zetSysmanFrequencyGet()                | Enumerate all the frequency domains on the device and sub-devices. |
-| ::zetSysmanFrequencyGetProperties()      | Find out which domain ::zet_domain_t is controlled by this frequency and min/max hardware frequencies.  |
+| ::zetSysmanFrequencyGetProperties()      | Find out which domain ::zet_freq_domain_t is controlled by this frequency and min/max hardware frequencies.  |
 | ::zetSysmanFrequencyGetAvailableClocks() | Get an array of all available frequencies that can be requested on this domain. |
 | ::zetSysmanFrequencyGetRange()           | Get the current min/max frequency between which the hardware can operate for a frequency domain. |
 | ::zetSysmanFrequencySetRange()           | Set the min/max frequency between which the hardware can operate for a frequency domain. |
@@ -633,6 +646,49 @@ using the function ::zetSysmanFrequencyGetState() which will indicate the curren
 frequency information that depends on the current conditions. If the actual frequency is below the requested frequency,
 ::zet_freq_state_t.throttleReasons will provide the reasons why the frequency is being limited by the Punit.
 
+### <a name="fro">Frequency/Voltage overclocking</a>
+Overclocking involves modifying the voltage-frequency (V-F) curve to either achieve better performance by permitting the hardware to reach higher frequencies
+or better efficiency by lowering the voltage for the same frequency.
+
+By default, the hardware imposes a factory-fused maximum frequency and a voltage-frequency curve. The voltage-frequency curve specifies how much
+voltage is needed to safely reach a given frequency without hitting overcurrent conditions. If the hardware detects overcurrent (IccMax), it will
+severely throttle frequencies in order to protect itself. Also, if the hardware detects that any part of the chip exceeds a maximum temperature
+limit (TjMax) it will also severely throttle frequencies.
+
+To improve maximum performance, the following modifications can be made:
+
+- Increase the maximum frequency.
+- Increase the voltage to ensure stability at the higher frequency.
+- Increase the maximum current (IccMax).
+- Increase the maximum temperature (TjMax).
+
+All these changes come with the risk of damage the device.
+
+To improve efficiency for a given workload that is not excercising the full circuitry of the device, the following modifications can be made:
+
+- Decrease the voltage
+
+There are two modes for overclocking/under-voltage the voltage:
+
+| Voltage overclock mode                    | Description |
+| :---                                      | :---        |
+| ::ZET_OC_MODE_OFFSET                     | In this mode, a user-supplied voltage offset is applied to the interpolated V-F curve that defines the voltage to use for each possible frequency request. The V-F curve is adjusted such that when the maximum frequency is requested, the total offset is applied, with smaller offsets being applied for lower frequencies. |
+| ::ZET_OC_MODE_OVERRIDE                   | In this mode, a fixed user-supplied voltage is applied at all times, independent of the frequency request. This is not efficient but can improve stability by avoiding power-supply voltage changes as the frequency changes. Generally this mode is used in conjunction with a fixed frequency. |
+
+The following functions are provided to handle overclocking:
+
+| Function                                  | Description |
+| :---                                      | :---        |
+| ::zetSysmanFrequencyGetOcCapabilities()  | Determine the overclock capabilities of the device. |
+| ::zetSysmanFrequencyGetOcConfig()        | Get the overclock configuration in effect. |
+| ::zetSysmanFrequencySetOcConfig()        | Set a new overclock configuration. |
+| ::zetSysmanFrequencyGetOcIccMax()        | Get the maximum current limit in effect. |
+| ::zetSysmanFrequencySetOcIccMax()        | Set a new maximum current limit. |
+| ::zetSysmanFrequencyGetOcTjMax()         | Get the maximum temperature limit in effect. |
+| ::zetSysmanFrequencySetOcTjMax()         | Set a new maximum temperature limit. |
+
+Overclocking can be turned off by calling ::zetSysmanFrequencySetOcConfig() with mode ::ZET_OC_MODE_OFF and by calling
+::zetSysmanFrequencyGetOcIccMax() and ::zetSysmanFrequencySetOcTjMax() with values of 0.0.
 
 ## <a name="eng">Operations on engine groups</a>
 It is possible to monitor the activity of one or engines combined into an **engine group**. A device can have multiple engine groups and the possible

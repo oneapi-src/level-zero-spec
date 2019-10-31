@@ -112,6 +112,10 @@ namespace ze
             str = "result_t::ERROR_DEVICE_ACCESS";
             break;
 
+        case result_t::ERROR_FEATURE_LOCKED:
+            str = "result_t::ERROR_FEATURE_LOCKED";
+            break;
+
         case result_t::ERROR_UNKNOWN:
             str = "result_t::ERROR_UNKNOWN";
             break;

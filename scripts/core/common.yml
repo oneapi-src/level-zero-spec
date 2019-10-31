@@ -168,6 +168,8 @@ etors:
       desc: "an array argument doesn't have enough storage"
     - name: $X_RESULT_ERROR_DEVICE_ACCESS
       desc: "there was a problem accessing device data"
+    - name: $X_RESULT_ERROR_FEATURE_LOCKED
+      desc: "requested operation is not permitted because the feature is locked"
     - name: $X_RESULT_ERROR_UNKNOWN
       value: "0x7fffffff"
       desc: "unknown or internal error"

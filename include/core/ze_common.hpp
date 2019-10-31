@@ -194,6 +194,7 @@ namespace ze
         ERROR_DEVICE_IS_IN_USE,                         ///< the device is already in use
         ERROR_ARRAY_SIZE_TOO_SMALL,                     ///< an array argument doesn't have enough storage
         ERROR_DEVICE_ACCESS,                            ///< there was a problem accessing device data
+        ERROR_FEATURE_LOCKED,                           ///< requested operation is not permitted because the feature is locked
         ERROR_UNKNOWN = 0x7fffffff,                     ///< unknown or internal error
 
     };

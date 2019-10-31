@@ -40,68 +40,21 @@ name: $T_STRING_PROPERTY_SIZE
 value: "32"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Data Type"
+desc: "Types of accelerator engines"
 class: $tSysman
-name: $t_data_type_t
+name: $t_engine_type_t
 etors:
-    - name: $T_DATA_INT8
+    - name: $T_ENGINE_TYPE_OTHER
       value: "0"
-      desc: "8 bit signed integer."
-    - name: $T_DATA_INT16
-      desc: "16 bit signed integer."
-    - name: $T_DATA_INT32
-      desc: "32 bit signed integer."
-    - name: $T_DATA_INT64
-      desc: "64 bit signed integer."
-    - name: $T_DATA_UINT8
-      desc: "8 bit unsigned integer."
-    - name: $T_DATA_UINT16
-      desc: "16 bit unsigned integer."
-    - name: $T_DATA_UINT32
-      desc: "32 bit unsigned integer."
-    - name: $T_DATA_UINT64
-      desc: "64 bit unsigned integer."
-    - name: $T_DATA_FLOAT
-      desc: "Single precision floating point."
-    - name: $T_DATA_DOUBLE
-      desc: "Double precision floating point."
-    - name: $T_DATA_STRING
-      desc: "Null terminated Strings."
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Operation Type"
-class: $tSysman
-name: $t_operation_type_t
-etors:
-    - name: $T_OPERATION_TYPE_SET
-      value: "0"
-      desc: "This enum represent a Set Type Operation."
-    - name: $T_OPERATION_TYPE_GET
-      desc: "This enum represent a Get Type Operation."
-    - name: $T_OPERATION_TYPE_REGISTER_EVENT
-      desc: "This enum used to register an event."
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Domains for Power and Frequency."
-class: $tSysman
-name: $t_domain_t
-etors:
-    - name: $T_DOMAIN_GPU
-      value: "0"
-      desc: "GPU Core Domain."
-    - name: $T_DOMAIN_MEMORY
-      desc: "Local Memory Domain."
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Device Type"
-class: $tSysman
-name: $t_device_type_t
-etors:
-    - name: $T_DEVICE_TYPE_INTEGRATED
-      value: "0"
-      desc: "The device is an integrated GPU"
-    - name: $T_DEVICE_TYPE_DISCRETE
-      desc: "The device is a discrete GPU"
+      desc: "Undefined types of accelerators."
+    - name: $T_ENGINE_TYPE_COMPUTE
+      desc: "Engines that process compute kernels."
+    - name: $T_ENGINE_TYPE_3D
+      desc: "Engines that process 3D content"
+    - name: $T_ENGINE_TYPE_MEDIA
+      desc: "Engines that process media workloads"
+    - name: $T_ENGINE_TYPE_DMA
+      desc: "Engines that copy blocks of data"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties"
@@ -114,9 +67,6 @@ members:
     - type: uint32_t
       name: "numSubdevices"
       desc: "[out] Number of sub-devices"
-    - type: $t_device_type_t
-      name: "deviceType"
-      desc: "[out] Device type"
     - type: int8_t
       name: "serialNumber[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] Manufacturing serial number (NULL terminated string value)"
@@ -346,6 +296,46 @@ returns:
         - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
+
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Contains information about a process that has an open connection with this device"
+class: $tSysman
+name: $t_process_state_t
+details:
+    - "The application can use the process ID to query the OS for the owner and the path to the executable."
+members:
+    - type: uint32_t
+      name: "processId"
+      desc: "[out] Host OS process ID."
+    - type: int64_t
+      name: "memSize"
+      desc: "[out] Device memory size in bytes allocated by this process (may not necessarily be resident on the device at the time of reading)."
+    - type: int64_t
+      name: "engines"
+      desc: "[out] Bitfield of accelerator engines being used by this process (or 1<<$t_engine_type_t together)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get information about host processes using the device"
+class: $tSysman
+name: ProcessesGetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle for the device"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of processes.
+            if count is zero, then the driver will update the value with the total number of processes currently using the device.
+            if count is non-zero, then driver will only retrieve that number of processes.
+            if count is larger than the number of processes, then the driver will update the value with the correct number of processes that are returned.
+    - type: "$t_process_state_t*"
+      name: pProcesses
+      desc: "[in,out][optional][range(0, *pCount)] array of process information, one for each process currently using the device"
 
 --- #--------------------------------------------------------------------------
 type: function
@@ -805,6 +795,17 @@ returns:
         - "The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported."
 
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Frequency domains."
+class: $tSysman
+name: $t_freq_domain_t
+etors:
+    - name: $T_FREQ_DOMAIN_GPU
+      value: "0"
+      desc: "GPU Core Domain."
+    - name: $T_FREQ_DOMAIN_MEMORY
+      desc: "Local Memory Domain."
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency properties"
 class: $tSysmanFrequency
@@ -814,7 +815,7 @@ details:
     - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $tSysmanFrequencyGetOcConfig() to determine the maximum frequency that can be requested."
     - "If step is non-zero, the available frequencies are (min, min + step, min + 2xstep, ..., max). Otherwise, call $tSysmanFrequencyGetAvailableClocks() to get the list of frequencies that can be requested."
 members:
-    - type: $t_domain_t
+    - type: $t_freq_domain_t
       name: "type"
       desc: "[out] The hardware block that this frequency domain controls (GPU, memory, ...)"
     - type: $x_bool_t
@@ -826,9 +827,6 @@ members:
     - type: $x_bool_t
       name: canControl
       desc: "[out] Indicates if software can control the frequency of this domain"
-    - type: $x_bool_t
-      name: canOverclock
-      desc: "[out] Indicates if software can overclock this frequency domain"
     - type: double
       name: min
       desc: "[out] The minimum hardware clock frequency in units of MHz"
@@ -925,117 +923,68 @@ desc: "Overclocking modes"
 class: $tSysmanFrequency
 name: $t_oc_mode_t
 etors:
-    - name: $T_OVERCLOCKING_INTERPOLATIVE_MODE
+    - name: $T_OC_MODE_OFF
       value: "0"
-      desc: "Interpolative Mode."
-    - name: $T_OVERCLOCKING_OVERRIDE_MODE
-      value: "1"
-      desc: "Override Mode."
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Over clocking error type"
-class: $tSysmanFrequency
-name: $t_oc_error_type_t
-etors:
-    - name: $T_OVERCLOCKING_LOCKED
-      value: "225"
-      desc: "The overclocking is locked. Service is read-only."
-    - name: $T_OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED
-      desc: "The specified domain does not support the requested service."
-    - name: $T_OVERCLOCKING_RATIO_EXCEEDS_MAX
-      desc: "The ratio exceeds maximum overclocking limits."
-    - name: $T_OVERCLOCKING_VOLTAGE_EXCEEDS_MAX
-      desc: "Requested voltage exceeds input regulators max supported voltage."
-    - name: $T_OVERCLOCKING_NOT_SUPPORTED
-      desc: "No overclocking capability on the Hardware."
-    - name: $T_OVERCLOCKING_INVALID_VR_ADDRESS
-      desc: "The VR Address provided is illegal."
-    - name: $T_OOVERCLOCKING_INVALID_ICCMAX
-      desc: "ICCMAX value given is invalid (more than 10 bits) or too low."
-    - name: $T_OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED
-      desc: "Voltage manipulation attempted when it is disabled."
-    - name: $T_OVERCLOCKING_INVALID_COMMAND
-      desc: "Data setting invalid for the command."
+      desc: "Overclocking if off - hardware is running using factory default voltages/frequencies."
+    - name: $T_OC_MODE_OFFSET
+      desc: "Overclock offset mode - In this mode, a user-supplied voltage offset is applied to the interpolated V-F curve that defines the voltage to use for each possible frequency request. The maximum permitted frequency can also be increased."
+    - name: $T_OC_MODE_OVERRIDE
+      desc: "Overclock override mode - In this mode, a fixed user-supplied voltage is applied independent of the frequency request. The maximum permitted frequency can also be increased."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Overclocking properties"
 class: $tSysmanFrequency
 name: $t_oc_capabilities_t
 details:
-    - "Provides all the overclocking capabilities and properties supported by the device in the current domain."
+    - "Provides all the overclocking capabilities and properties supported by the device for the frequency domain."
 members:
+    - type: $x_bool_t
+      name: isOcSupported
+      desc: "[out] Indicates if any overclocking features are supported on this frequency domain."
     - type: double
-      name: MaxOcFrequencyLimit
-      desc: "[out] Max overclocking frequency limit in Mhz."
+      name: maxOcFrequencyLimit
+      desc: "[out] Maximum hardware overclocking frequency limit in Mhz."
     - type: double
-      name: MaxFactoryDefaultFrequency
-      desc: "[out] Maximum factory default frequency in Mhz."
+      name: maxFactoryDefaultFrequency
+      desc: "[out] Factory default non-overclock maximum frequency in Mhz."
     - type: double
-      name: MaxFactoryDefaultVoltage
-      desc: "[out] Maximum factory default voltage in Votls."
+      name: maxFactoryDefaultVoltage
+      desc: "[out] Factory default voltage used for the non-overclock maximum frequency in MHz."
     - type: $x_bool_t
-      name: TjMaxSupported
-      desc: "[out] is the TjMax supported on this domain."
+      name: isTjMaxSupported
+      desc: "[out] Indicates if the maximum temperature limit (TjMax) can be changed for this frequency domain."
     - type: $x_bool_t
-      name: IccMaxSupported
-      desc: "[out] is the Icc supported on this domain."
+      name: isIccMaxSupported
+      desc: "[out] Indicates if the maximum current (IccMax) can be changed for this frequency domain."
     - type: $x_bool_t
-      name: FrequencyOcSupported
-      desc: "[out] Frequency overclocking supported"
+      name: isVoltageOverrideSupported
+      desc: "[out] Indicates if the voltage of this frequency domain can be changed to fixed value ($T_OC_MODE_OVERRIDE)."
     - type: $x_bool_t
-      name: VoltageOverrideSupported
-      desc: "[out] Voltage overrides supported"
+      name: isVoltageOffsetSupported
+      desc: "[out] Indicates if this frequency domain supports setting a voltage offset ($T_OC_MODE_OFFSET)."
     - type: $x_bool_t
-      name: VoltageOffsetSupported
-      desc: "[out] Voltage offset is supported"
+      name: isHighVoltModeCapable
+      desc: "[out] Indicates if this frequency domains supports a feature to set very high voltages."
     - type: $x_bool_t
-      name: HighVoltModeCapable
-      desc: "[out] Capable of high voltage mode"
-    - type: $x_bool_t
-      name: HighVoltModeEnabled
-      desc: "[out] High voltage mode is enabled"
+      name: isHighVoltModeEnabled
+      desc: "[out] Indicates if very high voltages are permitted on this frequency domain."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Overclocking configuration"
 class: $tSysmanFrequency
-name: $t_oc_configuration_t
+name: $t_oc_config_t
 details:
     - "Provide the current settings to be read or changed."
 members:
-    - type: double
-      name: OcFrequency
-      desc: "[in,out] Overclocking Frequency"
-    - type: double
-      name: TargetVoltage
-      desc: "[in,out] Target voltage in Volts"
     - type: $t_oc_mode_t
-      name: TargetMode
+      name: mode
       desc: "[in,out] Overclock Mode $t_oc_mode_t."
     - type: double
-      name: VoltageOffset
-      desc: "[in,out] Voltage offset in Volts." 
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Maximum desired current."
-class: $tSysmanFrequency
-name: $t_oc_icc_max_t
-details:
-    - "For overclock-able parts this holds the maximum desired current if the domains supports it."
-members:
+      name: frequency
+      desc: "[in,out] Overclocking Frequency in MHz."
     - type: double
-      name: IccMax
-      desc: "[in,out] Maximum desired current in Amperes"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Temperature Junction Maximum."
-class: $tSysmanFrequency
-name: $t_oc_tj_max_t
-details:
-    - "For overclock-able parts this holds the maximum temperature limit at which the part will throttle if the domains supports it."
-members:
-    - type: double
-      name: TjMax
-      desc: "[in,out] Maximum desired current in degrees celcius."
+      name: voltage
+      desc: "[in,out] Overclock voltage in Volts. This is used either as the fixed voltage for mode $T_OC_MODE_OVERRIDE or as an offset voltage for mode $T_OC_MODE_OFFSET."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of frequency domains"
@@ -1161,21 +1110,6 @@ params:
       desc: "[in] Will contain a snapshot of the throttle time counters for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the last overclock error"
-class: $tSysmanFrequency
-name: GetLastOcError
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $t_oc_error_type_t*
-      name: pOcError
-      desc: "[in] Error in $t_oc_error_type_t ."
---- #--------------------------------------------------------------------------
-type: function
 desc: "Get the overclocking capabilities."
 class: $tSysmanFrequency
 name: GetOcCapabilities
@@ -1191,7 +1125,7 @@ params:
       desc: "[in] Pointer to the capabilities structure $t_oc_capabilities_t."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the overclocking configuration."
+desc: "Get the current overclocking configuration."
 class: $tSysmanFrequency
 name: GetOcConfig
 details:
@@ -1201,30 +1135,42 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_configuration_t*
+    - type: $t_oc_config_t*
       name: pOcConfiguration
-      desc: "[in] Pointer to the configuration structure $t_oc_configuration_t."
+      desc: "[in] Pointer to the configuration structure $t_oc_config_t."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set the overclocking configuration."
+desc: "Change the overclocking configuration."
 class: $tSysmanFrequency
 name: SetOcConfig
 details:
+    - "If $t_oc_config_t.mode is set to $T_OC_MODE_OFF, overclocking will be turned off and the hardware returned to run with factory voltages/frequencies. Call $tSysmanFrequencySetOcIccMax() and $tSysmanFrequencySetOcTjMax() separately with 0.0 to return those settings to factory defaults."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_configuration_t*
+    - type: $t_oc_config_t*
       name: pOcConfiguration
-      desc: "[in] Pointer to the configuration structure $t_oc_configuration_t."
+      desc: "[in] Pointer to the configuration structure $t_oc_config_t."
 returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
+        - "The requested voltage overclock mode is not supported on this frequency domain (see $t_oc_capabilities_t.isVoltageOverrideSupported and $t_oc_capabilities_t.isVoltageOffsetSupported)"
+    - $X_RESULT_ERROR_FEATURE_LOCKED:
+        - "Overclocking feature is locked on this frequency domain"
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $t_oc_capabilities_t.maxOcFrequencyLimit)"
+        - "Requested voltage overclock is very high but $t_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the Icc Max."
+desc: "Get the maximum current limit setting."
 class: $tSysmanFrequency
 name: GetOcIccMax
 details:
@@ -1234,30 +1180,42 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_icc_max_t*
+    - type: double*
       name: pOcIccMax
-      desc: "[in] Pointer to the Icc Max."
+      desc: "[in] Will contain the maximum current limit in Amperes on successful return."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
+        - "Capability $t_oc_capabilities_t.isIccMaxSupported is false for this frequency domain"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set the Icc Max."
+desc: "Change the maximum current limit setting."
 class: $tSysmanFrequency
 name: SetOcIccMax
 details:
+    - "Setting ocIccMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_icc_max_t*
-      name: pOcIccMax
-      desc: "[in] Pointer to the Icc Max."
+    - type: double
+      name: ocIccMax
+      desc: "[in] The new maximum current limit in Amperes."
 returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
+        - "Capability $t_oc_capabilities_t.isIccMaxSupported is false for this frequency domain"
+    - $X_RESULT_ERROR_FEATURE_LOCKED:
+        - "Overclocking feature is locked on this frequency domain"
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "The specified current limit is too low or too high"
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the TjMax."
+desc: "Get the maximum temperature limit setting."
 class: $tSysmanFrequency
 name: GetOcTjMax
 details:
@@ -1267,25 +1225,36 @@ params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_tj_max_t*
+    - type: double*
       name: pOcTjMax
-      desc: "[in] Pointer to the TjMax."
+      desc: "[in] Will contain the maximum temperature limit in degrees Celsius on successful return."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set the TjMax."
+desc: "Change the maximum temperature limit setting."
 class: $tSysmanFrequency
 name: SetOcTjMax
 details:
+    - "Setting ocTjMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_tj_max_t*
-      name: pOcTjMax
-      desc: "[in] Pointer to the TjMax."
+    - type: double
+      name: ocTjMax
+      desc: "[in] The new maximum temperature limit in degrees Celsius."
 returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
+        - "Capability $t_oc_capabilities_t.isTjMaxSupported is false for this frequency domain"
+    - $X_RESULT_ERROR_FEATURE_LOCKED:
+        - "Overclocking feature is locked on this frequency domain"
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "The specified temperature limit is too high"
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 
@@ -1313,6 +1282,9 @@ members:
     - type: $t_engine_group_t
       name: "type"
       desc: "[out] The engine group"
+    - type: int64_t
+      name: "engines"
+      desc: "[out] Bitfield of accelerator engines counted by this group."
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"

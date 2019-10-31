@@ -152,6 +152,7 @@ class ze_result_v(IntEnum):
     ERROR_DEVICE_IS_IN_USE = auto()                 ## the device is already in use
     ERROR_ARRAY_SIZE_TOO_SMALL = auto()             ## an array argument doesn't have enough storage
     ERROR_DEVICE_ACCESS = auto()                    ## there was a problem accessing device data
+    ERROR_FEATURE_LOCKED = auto()                   ## requested operation is not permitted because the feature is locked
     ERROR_UNKNOWN = 0x7fffffff                      ## unknown or internal error
 
 class ze_result_t(c_int):

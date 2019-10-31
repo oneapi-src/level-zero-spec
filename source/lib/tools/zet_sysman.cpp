@@ -318,6 +318,41 @@ zetSysmanSchedulerSetComputeUnitDebugMode(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get information about host processes using the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCount
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanProcessesGetState(
+    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of processes currently using the device.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of processes.
+                                                    ///< if count is larger than the number of processes, then the driver will
+                                                    ///< update the value with the correct number of processes that are returned.
+    zet_process_state_t* pProcesses                 ///< [in,out][optional][range(0, *pCount)] array of process information,
+                                                    ///< one for each process currently using the device
+    )
+{
+    auto pfnProcessesGetState = zet_lib::context.ddiTable.Sysman.pfnProcessesGetState;
+    if( nullptr == pfnProcessesGetState )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnProcessesGetState( hSysman, pCount, pProcesses );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset device
 /// 
 /// @returns
@@ -921,34 +956,6 @@ zetSysmanFrequencyGetThrottleTime(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the last overclock error
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pOcError
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanFrequencyGetLastOcError(
-    zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_error_type_t* pOcError                   ///< [in] Error in ::zet_oc_error_type_t .
-    )
-{
-    auto pfnGetLastOcError = zet_lib::context.ddiTable.SysmanFrequency.pfnGetLastOcError;
-    if( nullptr == pfnGetLastOcError )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetLastOcError( hFrequency, pOcError );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get the overclocking capabilities.
 /// 
 /// @details
@@ -977,7 +984,7 @@ zetSysmanFrequencyGetOcCapabilities(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the overclocking configuration.
+/// @brief Get the current overclocking configuration.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -991,10 +998,11 @@ zetSysmanFrequencyGetOcCapabilities(
 ///         + nullptr == hFrequency
 ///         + nullptr == pOcConfiguration
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ze_result_t __zecall
 zetSysmanFrequencyGetOcConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+    zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
     )
 {
     auto pfnGetOcConfig = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcConfig;
@@ -1005,9 +1013,14 @@ zetSysmanFrequencyGetOcConfig(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the overclocking configuration.
+/// @brief Change the overclocking configuration.
 /// 
 /// @details
+///     - If ::zet_oc_config_t.mode is set to ::ZET_OC_MODE_OFF, overclocking
+///       will be turned off and the hardware returned to run with factory
+///       voltages/frequencies. Call ::zetSysmanFrequencySetOcIccMax() and
+///       ::zetSysmanFrequencySetOcTjMax() separately with 0.0 to return those
+///       settings to factory defaults.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -1018,13 +1031,19 @@ zetSysmanFrequencyGetOcConfig(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
 ///         + nullptr == pOcConfiguration
+///         + The specified voltage and/or frequency overclock settings exceed the hardware values (see ::zet_oc_capabilities_t.maxOcFrequencyLimit)
+///         + Requested voltage overclock is very high but ::zet_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device.
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
+///         + The requested voltage overclock mode is not supported on this frequency domain (see ::zet_oc_capabilities_t.isVoltageOverrideSupported and ::zet_oc_capabilities_t.isVoltageOffsetSupported)
+///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
+///         + Overclocking feature is locked on this frequency domain
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencySetOcConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+    zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
     )
 {
     auto pfnSetOcConfig = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcConfig;
@@ -1035,7 +1054,7 @@ zetSysmanFrequencySetOcConfig(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the Icc Max.
+/// @brief Get the maximum current limit setting.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1049,10 +1068,13 @@ zetSysmanFrequencySetOcConfig(
 ///         + nullptr == hFrequency
 ///         + nullptr == pOcIccMax
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
+///         + Capability ::zet_oc_capabilities_t.isIccMaxSupported is false for this frequency domain
 ze_result_t __zecall
 zetSysmanFrequencyGetOcIccMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
+    double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
+                                                    ///< return.
     )
 {
     auto pfnGetOcIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcIccMax;
@@ -1063,9 +1085,10 @@ zetSysmanFrequencyGetOcIccMax(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the Icc Max.
+/// @brief Change the maximum current limit setting.
 /// 
 /// @details
+///     - Setting ocIccMax to 0.0 will return the value to the factory default.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -1075,25 +1098,29 @@ zetSysmanFrequencyGetOcIccMax(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
-///         + nullptr == pOcIccMax
+///         + The specified current limit is too low or too high
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
+///         + Capability ::zet_oc_capabilities_t.isIccMaxSupported is false for this frequency domain
+///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
+///         + Overclocking feature is locked on this frequency domain
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencySetOcIccMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
+    double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
     )
 {
     auto pfnSetOcIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcIccMax;
     if( nullptr == pfnSetOcIccMax )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetOcIccMax( hFrequency, pOcIccMax );
+    return pfnSetOcIccMax( hFrequency, ocIccMax );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the TjMax.
+/// @brief Get the maximum temperature limit setting.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1107,10 +1134,12 @@ zetSysmanFrequencySetOcIccMax(
 ///         + nullptr == hFrequency
 ///         + nullptr == pOcTjMax
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ze_result_t __zecall
 zetSysmanFrequencyGetOcTjMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
+    double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
+                                                    ///< successful return.
     )
 {
     auto pfnGetOcTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcTjMax;
@@ -1121,9 +1150,10 @@ zetSysmanFrequencyGetOcTjMax(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set the TjMax.
+/// @brief Change the maximum temperature limit setting.
 /// 
 /// @details
+///     - Setting ocTjMax to 0.0 will return the value to the factory default.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -1133,21 +1163,25 @@ zetSysmanFrequencyGetOcTjMax(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
-///         + nullptr == pOcTjMax
+///         + The specified temperature limit is too high
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
+///         + Capability ::zet_oc_capabilities_t.isTjMaxSupported is false for this frequency domain
+///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
+///         + Overclocking feature is locked on this frequency domain
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencySetOcTjMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
+    double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
     )
 {
     auto pfnSetOcTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcTjMax;
     if( nullptr == pfnSetOcTjMax )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetOcTjMax( hFrequency, pOcTjMax );
+    return pfnSetOcTjMax( hFrequency, ocTjMax );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3003,6 +3037,35 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get information about host processes using the device
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Sysman::ProcessesGetState(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of processes currently using the device.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of processes.
+                                                        ///< if count is larger than the number of processes, then the driver will
+                                                        ///< update the value with the correct number of processes that are returned.
+        process_state_t* pProcesses                     ///< [in,out][optional][range(0, *pCount)] array of process information,
+                                                        ///< one for each process currently using the device
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanProcessesGetState(
+            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
+            pCount,
+            reinterpret_cast<zet_process_state_t*>( pProcesses ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::ProcessesGetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Reset device
     /// 
     /// @throws result_t
@@ -3504,27 +3567,6 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the last overclock error
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __zecall
-    SysmanFrequency::GetLastOcError(
-        oc_error_type_t* pOcError                       ///< [in] Error in ::zet_oc_error_type_t .
-        )
-    {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetLastOcError(
-            reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            reinterpret_cast<zet_oc_error_type_t*>( pOcError ) ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetLastOcError" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get the overclocking capabilities.
     /// 
     /// @details
@@ -3546,7 +3588,7 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the overclocking configuration.
+    /// @brief Get the current overclocking configuration.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3555,40 +3597,45 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::GetOcConfig(
-        oc_configuration_t* pOcConfiguration            ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+        oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcConfig(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            reinterpret_cast<zet_oc_configuration_t*>( pOcConfiguration ) ) );
+            reinterpret_cast<zet_oc_config_t*>( pOcConfiguration ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcConfig" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the overclocking configuration.
+    /// @brief Change the overclocking configuration.
     /// 
     /// @details
+    ///     - If ::zet_oc_config_t.mode is set to ::ZET_OC_MODE_OFF, overclocking
+    ///       will be turned off and the hardware returned to run with factory
+    ///       voltages/frequencies. Call ::zetSysmanFrequencySetOcIccMax() and
+    ///       ::zetSysmanFrequencySetOcTjMax() separately with 0.0 to return those
+    ///       settings to factory defaults.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __zecall
     SysmanFrequency::SetOcConfig(
-        oc_configuration_t* pOcConfiguration            ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+        oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcConfig(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            reinterpret_cast<zet_oc_configuration_t*>( pOcConfiguration ) ) );
+            reinterpret_cast<zet_oc_config_t*>( pOcConfiguration ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcConfig" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the Icc Max.
+    /// @brief Get the maximum current limit setting.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3597,40 +3644,42 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::GetOcIccMax(
-        oc_icc_max_t* pOcIccMax                         ///< [in] Pointer to the Icc Max.
+        double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
+                                                        ///< return.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcIccMax(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            reinterpret_cast<zet_oc_icc_max_t*>( pOcIccMax ) ) );
+            pOcIccMax ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcIccMax" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the Icc Max.
+    /// @brief Change the maximum current limit setting.
     /// 
     /// @details
+    ///     - Setting ocIccMax to 0.0 will return the value to the factory default.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __zecall
     SysmanFrequency::SetOcIccMax(
-        oc_icc_max_t* pOcIccMax                         ///< [in] Pointer to the Icc Max.
+        double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcIccMax(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            reinterpret_cast<zet_oc_icc_max_t*>( pOcIccMax ) ) );
+            ocIccMax ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcIccMax" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the TjMax.
+    /// @brief Get the maximum temperature limit setting.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3639,33 +3688,35 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::GetOcTjMax(
-        oc_tj_max_t* pOcTjMax                           ///< [in] Pointer to the TjMax.
+        double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
+                                                        ///< successful return.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcTjMax(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            reinterpret_cast<zet_oc_tj_max_t*>( pOcTjMax ) ) );
+            pOcTjMax ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcTjMax" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set the TjMax.
+    /// @brief Change the maximum temperature limit setting.
     /// 
     /// @details
+    ///     - Setting ocTjMax to 0.0 will return the value to the factory default.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __zecall
     SysmanFrequency::SetOcTjMax(
-        oc_tj_max_t* pOcTjMax                           ///< [in] Pointer to the TjMax.
+        double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcTjMax(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            reinterpret_cast<zet_oc_tj_max_t*>( pOcTjMax ) ) );
+            ocTjMax ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcTjMax" );
@@ -5073,135 +5124,35 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::data_type_t to std::string
-    std::string to_string( const Sysman::data_type_t val )
+    /// @brief Converts Sysman::engine_type_t to std::string
+    std::string to_string( const Sysman::engine_type_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Sysman::data_type_t::DATA_INT8:
-            str = "Sysman::data_type_t::DATA_INT8";
+        case Sysman::engine_type_t::OTHER:
+            str = "Sysman::engine_type_t::OTHER";
             break;
 
-        case Sysman::data_type_t::DATA_INT16:
-            str = "Sysman::data_type_t::DATA_INT16";
+        case Sysman::engine_type_t::COMPUTE:
+            str = "Sysman::engine_type_t::COMPUTE";
             break;
 
-        case Sysman::data_type_t::DATA_INT32:
-            str = "Sysman::data_type_t::DATA_INT32";
+        case Sysman::engine_type_t::_3D:
+            str = "Sysman::engine_type_t::_3D";
             break;
 
-        case Sysman::data_type_t::DATA_INT64:
-            str = "Sysman::data_type_t::DATA_INT64";
+        case Sysman::engine_type_t::MEDIA:
+            str = "Sysman::engine_type_t::MEDIA";
             break;
 
-        case Sysman::data_type_t::DATA_UINT8:
-            str = "Sysman::data_type_t::DATA_UINT8";
-            break;
-
-        case Sysman::data_type_t::DATA_UINT16:
-            str = "Sysman::data_type_t::DATA_UINT16";
-            break;
-
-        case Sysman::data_type_t::DATA_UINT32:
-            str = "Sysman::data_type_t::DATA_UINT32";
-            break;
-
-        case Sysman::data_type_t::DATA_UINT64:
-            str = "Sysman::data_type_t::DATA_UINT64";
-            break;
-
-        case Sysman::data_type_t::DATA_FLOAT:
-            str = "Sysman::data_type_t::DATA_FLOAT";
-            break;
-
-        case Sysman::data_type_t::DATA_DOUBLE:
-            str = "Sysman::data_type_t::DATA_DOUBLE";
-            break;
-
-        case Sysman::data_type_t::DATA_STRING:
-            str = "Sysman::data_type_t::DATA_STRING";
+        case Sysman::engine_type_t::DMA:
+            str = "Sysman::engine_type_t::DMA";
             break;
 
         default:
-            str = "Sysman::data_type_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::operation_type_t to std::string
-    std::string to_string( const Sysman::operation_type_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Sysman::operation_type_t::SET:
-            str = "Sysman::operation_type_t::SET";
-            break;
-
-        case Sysman::operation_type_t::GET:
-            str = "Sysman::operation_type_t::GET";
-            break;
-
-        case Sysman::operation_type_t::REGISTER_EVENT:
-            str = "Sysman::operation_type_t::REGISTER_EVENT";
-            break;
-
-        default:
-            str = "Sysman::operation_type_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::domain_t to std::string
-    std::string to_string( const Sysman::domain_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Sysman::domain_t::GPU:
-            str = "Sysman::domain_t::GPU";
-            break;
-
-        case Sysman::domain_t::MEMORY:
-            str = "Sysman::domain_t::MEMORY";
-            break;
-
-        default:
-            str = "Sysman::domain_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::device_type_t to std::string
-    std::string to_string( const Sysman::device_type_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Sysman::device_type_t::INTEGRATED:
-            str = "Sysman::device_type_t::INTEGRATED";
-            break;
-
-        case Sysman::device_type_t::DISCRETE:
-            str = "Sysman::device_type_t::DISCRETE";
-            break;
-
-        default:
-            str = "Sysman::device_type_t::?";
+            str = "Sysman::engine_type_t::?";
             break;
         };
 
@@ -5293,6 +5244,30 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_domain_t to std::string
+    std::string to_string( const Sysman::freq_domain_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::freq_domain_t::GPU:
+            str = "Sysman::freq_domain_t::GPU";
+            break;
+
+        case Sysman::freq_domain_t::MEMORY:
+            str = "Sysman::freq_domain_t::MEMORY";
+            break;
+
+        default:
+            str = "Sysman::freq_domain_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::event_type_t to std::string
     std::string to_string( const Sysman::event_type_t val )
     {
@@ -5340,10 +5315,6 @@ namespace zet
         
         str += "Sysman::properties_t::numSubdevices : ";
         str += std::to_string(val.numSubdevices);
-        str += "\n";
-        
-        str += "Sysman::properties_t::deviceType : ";
-        str += to_string(val.deviceType);
         str += "\n";
         
         str += "Sysman::properties_t::serialNumber : ";
@@ -5446,6 +5417,27 @@ namespace zet
         
         str += "Sysman::sched_timeslice_properties_t::yieldTimeout : ";
         str += std::to_string(val.yieldTimeout);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::process_state_t to std::string
+    std::string to_string( const Sysman::process_state_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::process_state_t::processId : ";
+        str += std::to_string(val.processId);
+        str += "\n";
+        
+        str += "Sysman::process_state_t::memSize : ";
+        str += std::to_string(val.memSize);
+        str += "\n";
+        
+        str += "Sysman::process_state_t::engines : ";
+        str += std::to_string(val.engines);
         str += "\n";
 
         return str;
@@ -5782,68 +5774,20 @@ namespace zet
 
         switch( val )
         {
-        case SysmanFrequency::oc_mode_t::OVERCLOCKING_INTERPOLATIVE_MODE:
-            str = "SysmanFrequency::oc_mode_t::OVERCLOCKING_INTERPOLATIVE_MODE";
+        case SysmanFrequency::oc_mode_t::OFF:
+            str = "SysmanFrequency::oc_mode_t::OFF";
             break;
 
-        case SysmanFrequency::oc_mode_t::OVERCLOCKING_OVERRIDE_MODE:
-            str = "SysmanFrequency::oc_mode_t::OVERCLOCKING_OVERRIDE_MODE";
+        case SysmanFrequency::oc_mode_t::OFFSET:
+            str = "SysmanFrequency::oc_mode_t::OFFSET";
+            break;
+
+        case SysmanFrequency::oc_mode_t::OVERRIDE:
+            str = "SysmanFrequency::oc_mode_t::OVERRIDE";
             break;
 
         default:
             str = "SysmanFrequency::oc_mode_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_error_type_t to std::string
-    std::string to_string( const SysmanFrequency::oc_error_type_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_LOCKED:
-            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_LOCKED";
-            break;
-
-        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED:
-            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED";
-            break;
-
-        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_RATIO_EXCEEDS_MAX:
-            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_RATIO_EXCEEDS_MAX";
-            break;
-
-        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_VOLTAGE_EXCEEDS_MAX:
-            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_VOLTAGE_EXCEEDS_MAX";
-            break;
-
-        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_NOT_SUPPORTED:
-            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_NOT_SUPPORTED";
-            break;
-
-        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_INVALID_VR_ADDRESS:
-            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_INVALID_VR_ADDRESS";
-            break;
-
-        case SysmanFrequency::oc_error_type_t::OOVERCLOCKING_INVALID_ICCMAX:
-            str = "SysmanFrequency::oc_error_type_t::OOVERCLOCKING_INVALID_ICCMAX";
-            break;
-
-        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED:
-            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED";
-            break;
-
-        case SysmanFrequency::oc_error_type_t::OVERCLOCKING_INVALID_COMMAND:
-            str = "SysmanFrequency::oc_error_type_t::OVERCLOCKING_INVALID_COMMAND";
-            break;
-
-        default:
-            str = "SysmanFrequency::oc_error_type_t::?";
             break;
         };
 
@@ -5870,10 +5814,6 @@ namespace zet
         
         str += "SysmanFrequency::freq_properties_t::canControl : ";
         str += std::to_string(val.canControl);
-        str += "\n";
-        
-        str += "SysmanFrequency::freq_properties_t::canOverclock : ";
-        str += std::to_string(val.canOverclock);
         str += "\n";
         
         str += "SysmanFrequency::freq_properties_t::min : ";
@@ -5960,95 +5900,65 @@ namespace zet
     {
         std::string str;
         
-        str += "SysmanFrequency::oc_capabilities_t::MaxOcFrequencyLimit : ";
-        str += std::to_string(val.MaxOcFrequencyLimit);
+        str += "SysmanFrequency::oc_capabilities_t::isOcSupported : ";
+        str += std::to_string(val.isOcSupported);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::MaxFactoryDefaultFrequency : ";
-        str += std::to_string(val.MaxFactoryDefaultFrequency);
+        str += "SysmanFrequency::oc_capabilities_t::maxOcFrequencyLimit : ";
+        str += std::to_string(val.maxOcFrequencyLimit);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::MaxFactoryDefaultVoltage : ";
-        str += std::to_string(val.MaxFactoryDefaultVoltage);
+        str += "SysmanFrequency::oc_capabilities_t::maxFactoryDefaultFrequency : ";
+        str += std::to_string(val.maxFactoryDefaultFrequency);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::TjMaxSupported : ";
-        str += std::to_string(val.TjMaxSupported);
+        str += "SysmanFrequency::oc_capabilities_t::maxFactoryDefaultVoltage : ";
+        str += std::to_string(val.maxFactoryDefaultVoltage);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::IccMaxSupported : ";
-        str += std::to_string(val.IccMaxSupported);
+        str += "SysmanFrequency::oc_capabilities_t::isTjMaxSupported : ";
+        str += std::to_string(val.isTjMaxSupported);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::FrequencyOcSupported : ";
-        str += std::to_string(val.FrequencyOcSupported);
+        str += "SysmanFrequency::oc_capabilities_t::isIccMaxSupported : ";
+        str += std::to_string(val.isIccMaxSupported);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::VoltageOverrideSupported : ";
-        str += std::to_string(val.VoltageOverrideSupported);
+        str += "SysmanFrequency::oc_capabilities_t::isVoltageOverrideSupported : ";
+        str += std::to_string(val.isVoltageOverrideSupported);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::VoltageOffsetSupported : ";
-        str += std::to_string(val.VoltageOffsetSupported);
+        str += "SysmanFrequency::oc_capabilities_t::isVoltageOffsetSupported : ";
+        str += std::to_string(val.isVoltageOffsetSupported);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::HighVoltModeCapable : ";
-        str += std::to_string(val.HighVoltModeCapable);
+        str += "SysmanFrequency::oc_capabilities_t::isHighVoltModeCapable : ";
+        str += std::to_string(val.isHighVoltModeCapable);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::HighVoltModeEnabled : ";
-        str += std::to_string(val.HighVoltModeEnabled);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_configuration_t to std::string
-    std::string to_string( const SysmanFrequency::oc_configuration_t val )
-    {
-        std::string str;
-        
-        str += "SysmanFrequency::oc_configuration_t::OcFrequency : ";
-        str += std::to_string(val.OcFrequency);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_configuration_t::TargetVoltage : ";
-        str += std::to_string(val.TargetVoltage);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_configuration_t::TargetMode : ";
-        str += to_string(val.TargetMode);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_configuration_t::VoltageOffset : ";
-        str += std::to_string(val.VoltageOffset);
+        str += "SysmanFrequency::oc_capabilities_t::isHighVoltModeEnabled : ";
+        str += std::to_string(val.isHighVoltModeEnabled);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_icc_max_t to std::string
-    std::string to_string( const SysmanFrequency::oc_icc_max_t val )
+    /// @brief Converts SysmanFrequency::oc_config_t to std::string
+    std::string to_string( const SysmanFrequency::oc_config_t val )
     {
         std::string str;
         
-        str += "SysmanFrequency::oc_icc_max_t::IccMax : ";
-        str += std::to_string(val.IccMax);
+        str += "SysmanFrequency::oc_config_t::mode : ";
+        str += to_string(val.mode);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_tj_max_t to std::string
-    std::string to_string( const SysmanFrequency::oc_tj_max_t val )
-    {
-        std::string str;
         
-        str += "SysmanFrequency::oc_tj_max_t::TjMax : ";
-        str += std::to_string(val.TjMax);
+        str += "SysmanFrequency::oc_config_t::frequency : ";
+        str += std::to_string(val.frequency);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_config_t::voltage : ";
+        str += std::to_string(val.voltage);
         str += "\n";
 
         return str;
@@ -6094,6 +6004,10 @@ namespace zet
         
         str += "SysmanEngine::engine_properties_t::type : ";
         str += to_string(val.type);
+        str += "\n";
+        
+        str += "SysmanEngine::engine_properties_t::engines : ";
+        str += std::to_string(val.engines);
         str += "\n";
         
         str += "SysmanEngine::engine_properties_t::onSubdevice : ";

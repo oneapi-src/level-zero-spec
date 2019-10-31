@@ -989,6 +989,30 @@ typedef void (__zecall *zet_pfnSysmanSchedulerSetComputeUnitDebugModeCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanProcessesGetState 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_processes_get_state_params_t
+{
+    zet_sysman_handle_t* phSysman;
+    uint32_t** ppCount;
+    zet_process_state_t** ppProcesses;
+} zet_sysman_processes_get_state_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanProcessesGetState 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanProcessesGetStateCb_t)(
+    zet_sysman_processes_get_state_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanDeviceReset 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1571,6 +1595,7 @@ typedef struct _zet_sysman_callbacks_t
     zet_pfnSysmanSchedulerSetTimesliceModeCb_t                      pfnSchedulerSetTimesliceModeCb;
     zet_pfnSysmanSchedulerSetExclusiveModeCb_t                      pfnSchedulerSetExclusiveModeCb;
     zet_pfnSysmanSchedulerSetComputeUnitDebugModeCb_t               pfnSchedulerSetComputeUnitDebugModeCb;
+    zet_pfnSysmanProcessesGetStateCb_t                              pfnProcessesGetStateCb;
     zet_pfnSysmanDeviceResetCb_t                                    pfnDeviceResetCb;
     zet_pfnSysmanDeviceWasRepairedCb_t                              pfnDeviceWasRepairedCb;
     zet_pfnSysmanPciGetPropertiesCb_t                               pfnPciGetPropertiesCb;
@@ -1867,29 +1892,6 @@ typedef void (__zecall *zet_pfnSysmanFrequencyGetThrottleTimeCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetLastOcError 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_last_oc_error_params_t
-{
-    zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_error_type_t** ppOcError;
-} zet_sysman_frequency_get_last_oc_error_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetLastOcError 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetLastOcErrorCb_t)(
-    zet_sysman_frequency_get_last_oc_error_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanFrequencyGetOcCapabilities 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1919,7 +1921,7 @@ typedef void (__zecall *zet_pfnSysmanFrequencyGetOcCapabilitiesCb_t)(
 typedef struct _zet_sysman_frequency_get_oc_config_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_configuration_t** ppOcConfiguration;
+    zet_oc_config_t** ppOcConfiguration;
 } zet_sysman_frequency_get_oc_config_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1942,7 +1944,7 @@ typedef void (__zecall *zet_pfnSysmanFrequencyGetOcConfigCb_t)(
 typedef struct _zet_sysman_frequency_set_oc_config_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_configuration_t** ppOcConfiguration;
+    zet_oc_config_t** ppOcConfiguration;
 } zet_sysman_frequency_set_oc_config_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1965,7 +1967,7 @@ typedef void (__zecall *zet_pfnSysmanFrequencySetOcConfigCb_t)(
 typedef struct _zet_sysman_frequency_get_oc_icc_max_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_icc_max_t** ppOcIccMax;
+    double** ppOcIccMax;
 } zet_sysman_frequency_get_oc_icc_max_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1988,7 +1990,7 @@ typedef void (__zecall *zet_pfnSysmanFrequencyGetOcIccMaxCb_t)(
 typedef struct _zet_sysman_frequency_set_oc_icc_max_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_icc_max_t** ppOcIccMax;
+    double* pocIccMax;
 } zet_sysman_frequency_set_oc_icc_max_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2011,7 +2013,7 @@ typedef void (__zecall *zet_pfnSysmanFrequencySetOcIccMaxCb_t)(
 typedef struct _zet_sysman_frequency_get_oc_tj_max_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_tj_max_t** ppOcTjMax;
+    double** ppOcTjMax;
 } zet_sysman_frequency_get_oc_tj_max_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2034,7 +2036,7 @@ typedef void (__zecall *zet_pfnSysmanFrequencyGetOcTjMaxCb_t)(
 typedef struct _zet_sysman_frequency_set_oc_tj_max_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
-    zet_oc_tj_max_t** ppOcTjMax;
+    double* pocTjMax;
 } zet_sysman_frequency_set_oc_tj_max_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2059,7 +2061,6 @@ typedef struct _zet_sysman_frequency_callbacks_t
     zet_pfnSysmanFrequencySetRangeCb_t                              pfnSetRangeCb;
     zet_pfnSysmanFrequencyGetStateCb_t                              pfnGetStateCb;
     zet_pfnSysmanFrequencyGetThrottleTimeCb_t                       pfnGetThrottleTimeCb;
-    zet_pfnSysmanFrequencyGetLastOcErrorCb_t                        pfnGetLastOcErrorCb;
     zet_pfnSysmanFrequencyGetOcCapabilitiesCb_t                     pfnGetOcCapabilitiesCb;
     zet_pfnSysmanFrequencyGetOcConfigCb_t                           pfnGetOcConfigCb;
     zet_pfnSysmanFrequencySetOcConfigCb_t                           pfnSetOcConfigCb;

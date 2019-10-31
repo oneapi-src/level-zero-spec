@@ -1008,6 +1008,38 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanProcessesGetState
+    ze_result_t __zecall
+    zetSysmanProcessesGetState(
+        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of processes currently using the device.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of processes.
+                                                        ///< if count is larger than the number of processes, then the driver will
+                                                        ///< update the value with the correct number of processes that are returned.
+        zet_process_state_t* pProcesses                 ///< [in,out][optional][range(0, *pCount)] array of process information,
+                                                        ///< one for each process currently using the device
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnProcessesGetState = dditable->zet.Sysman.pfnProcessesGetState;
+        if( nullptr == pfnProcessesGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnProcessesGetState( hSysman, pCount, pProcesses );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDeviceReset
     ze_result_t __zecall
     zetSysmanDeviceReset(
@@ -1564,31 +1596,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetLastOcError
-    ze_result_t __zecall
-    zetSysmanFrequencyGetLastOcError(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_error_type_t* pOcError                   ///< [in] Error in ::zet_oc_error_type_t .
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
-        auto pfnGetLastOcError = dditable->zet.SysmanFrequency.pfnGetLastOcError;
-        if( nullptr == pfnGetLastOcError )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
-
-        // forward to device-driver
-        result = pfnGetLastOcError( hFrequency, pOcError );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetOcCapabilities
     ze_result_t __zecall
     zetSysmanFrequencyGetOcCapabilities(
@@ -1618,7 +1625,7 @@ namespace loader
     ze_result_t __zecall
     zetSysmanFrequencyGetOcConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+        zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1643,7 +1650,7 @@ namespace loader
     ze_result_t __zecall
     zetSysmanFrequencySetOcConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+        zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1668,7 +1675,8 @@ namespace loader
     ze_result_t __zecall
     zetSysmanFrequencyGetOcIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
+        double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
+                                                        ///< return.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1693,7 +1701,7 @@ namespace loader
     ze_result_t __zecall
     zetSysmanFrequencySetOcIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
+        double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1708,7 +1716,7 @@ namespace loader
         hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnSetOcIccMax( hFrequency, pOcIccMax );
+        result = pfnSetOcIccMax( hFrequency, ocIccMax );
 
         return result;
     }
@@ -1718,7 +1726,8 @@ namespace loader
     ze_result_t __zecall
     zetSysmanFrequencyGetOcTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
+        double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
+                                                        ///< successful return.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1743,7 +1752,7 @@ namespace loader
     ze_result_t __zecall
     zetSysmanFrequencySetOcTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
+        double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1758,7 +1767,7 @@ namespace loader
         hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnSetOcTjMax( hFrequency, pOcTjMax );
+        result = pfnSetOcTjMax( hFrequency, ocTjMax );
 
         return result;
     }
@@ -4102,6 +4111,7 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnSchedulerSetTimesliceMode                = loader::zetSysmanSchedulerSetTimesliceMode;
             pDdiTable->pfnSchedulerSetExclusiveMode                = loader::zetSysmanSchedulerSetExclusiveMode;
             pDdiTable->pfnSchedulerSetComputeUnitDebugMode         = loader::zetSysmanSchedulerSetComputeUnitDebugMode;
+            pDdiTable->pfnProcessesGetState                        = loader::zetSysmanProcessesGetState;
             pDdiTable->pfnDeviceReset                              = loader::zetSysmanDeviceReset;
             pDdiTable->pfnDeviceWasRepaired                        = loader::zetSysmanDeviceWasRepaired;
             pDdiTable->pfnPciGetProperties                         = loader::zetSysmanPciGetProperties;
@@ -4263,7 +4273,6 @@ zetGetSysmanFrequencyProcAddrTable(
             pDdiTable->pfnSetRange                                 = loader::zetSysmanFrequencySetRange;
             pDdiTable->pfnGetState                                 = loader::zetSysmanFrequencyGetState;
             pDdiTable->pfnGetThrottleTime                          = loader::zetSysmanFrequencyGetThrottleTime;
-            pDdiTable->pfnGetLastOcError                           = loader::zetSysmanFrequencyGetLastOcError;
             pDdiTable->pfnGetOcCapabilities                        = loader::zetSysmanFrequencyGetOcCapabilities;
             pDdiTable->pfnGetOcConfig                              = loader::zetSysmanFrequencyGetOcConfig;
             pDdiTable->pfnSetOcConfig                              = loader::zetSysmanFrequencySetOcConfig;

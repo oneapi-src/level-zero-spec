@@ -411,57 +411,17 @@ class zet_sysman_version_t(c_int):
 ZET_STRING_PROPERTY_SIZE = 32
 
 ###############################################################################
-## @brief Data Type
-class zet_data_type_v(IntEnum):
-    DATA_INT8 = 0                                   ## 8 bit signed integer.
-    DATA_INT16 = auto()                             ## 16 bit signed integer.
-    DATA_INT32 = auto()                             ## 32 bit signed integer.
-    DATA_INT64 = auto()                             ## 64 bit signed integer.
-    DATA_UINT8 = auto()                             ## 8 bit unsigned integer.
-    DATA_UINT16 = auto()                            ## 16 bit unsigned integer.
-    DATA_UINT32 = auto()                            ## 32 bit unsigned integer.
-    DATA_UINT64 = auto()                            ## 64 bit unsigned integer.
-    DATA_FLOAT = auto()                             ## Single precision floating point.
-    DATA_DOUBLE = auto()                            ## Double precision floating point.
-    DATA_STRING = auto()                            ## Null terminated Strings.
+## @brief Types of accelerator engines
+class zet_engine_type_v(IntEnum):
+    OTHER = 0                                       ## Undefined types of accelerators.
+    COMPUTE = auto()                                ## Engines that process compute kernels.
+    _3D = auto()                                    ## Engines that process 3D content
+    MEDIA = auto()                                  ## Engines that process media workloads
+    DMA = auto()                                    ## Engines that copy blocks of data
 
-class zet_data_type_t(c_int):
+class zet_engine_type_t(c_int):
     def __str__(self):
-        return str(zet_data_type_v(value))
-
-
-###############################################################################
-## @brief Operation Type
-class zet_operation_type_v(IntEnum):
-    SET = 0                                         ## This enum represent a Set Type Operation.
-    GET = auto()                                    ## This enum represent a Get Type Operation.
-    REGISTER_EVENT = auto()                         ## This enum used to register an event.
-
-class zet_operation_type_t(c_int):
-    def __str__(self):
-        return str(zet_operation_type_v(value))
-
-
-###############################################################################
-## @brief Domains for Power and Frequency.
-class zet_domain_v(IntEnum):
-    GPU = 0                                         ## GPU Core Domain.
-    MEMORY = auto()                                 ## Local Memory Domain.
-
-class zet_domain_t(c_int):
-    def __str__(self):
-        return str(zet_domain_v(value))
-
-
-###############################################################################
-## @brief Device Type
-class zet_device_type_v(IntEnum):
-    INTEGRATED = 0                                  ## The device is an integrated GPU
-    DISCRETE = auto()                               ## The device is a discrete GPU
-
-class zet_device_type_t(c_int):
-    def __str__(self):
-        return str(zet_device_type_v(value))
+        return str(zet_engine_type_v(value))
 
 
 ###############################################################################
@@ -470,7 +430,6 @@ class zet_sysman_properties_t(Structure):
     _fields_ = [
         ("core", ze_device_properties_t),                               ## [out] Core device properties
         ("numSubdevices", c_ulong),                                     ## [out] Number of sub-devices
-        ("deviceType", zet_device_type_t),                              ## [out] Device type
         ("serialNumber", c_int8_t * ZET_STRING_PROPERTY_SIZE),          ## [out] Manufacturing serial number (NULL terminated string value)
         ("boardNumber", c_int8_t * ZET_STRING_PROPERTY_SIZE),           ## [out] Manufacturing board number (NULL terminated string value)
         ("brandName", c_int8_t * ZET_STRING_PROPERTY_SIZE),             ## [out] Brand name of the device (NULL terminated string value)
@@ -529,6 +488,22 @@ class zet_sched_timeslice_properties_t(Structure):
         ("yieldTimeout", c_ulonglong)                                   ## [in,out] The maximum time in microseconds that the scheduler will wait
                                                                         ## to preempt a workload running on an engine before deciding to reset
                                                                         ## the hardware engine and terminating the associated context.
+    ]
+
+###############################################################################
+## @brief Contains information about a process that has an open connection with
+##        this device
+## 
+## @details
+##     - The application can use the process ID to query the OS for the owner
+##       and the path to the executable.
+class zet_process_state_t(Structure):
+    _fields_ = [
+        ("processId", c_ulong),                                         ## [out] Host OS process ID.
+        ("memSize", c_int64_t),                                         ## [out] Device memory size in bytes allocated by this process (may not
+                                                                        ## necessarily be resident on the device at the time of reading).
+        ("engines", c_int64_t)                                          ## [out] Bitfield of accelerator engines being used by this process (or
+                                                                        ## 1<<::zet_engine_type_t together).
     ]
 
 ###############################################################################
@@ -713,6 +688,17 @@ class zet_power_peak_limit_t(Structure):
     ]
 
 ###############################################################################
+## @brief Frequency domains.
+class zet_freq_domain_v(IntEnum):
+    GPU = 0                                         ## GPU Core Domain.
+    MEMORY = auto()                                 ## Local Memory Domain.
+
+class zet_freq_domain_t(c_int):
+    def __str__(self):
+        return str(zet_freq_domain_v(value))
+
+
+###############################################################################
 ## @brief Frequency properties
 ## 
 ## @details
@@ -728,13 +714,12 @@ class zet_power_peak_limit_t(Structure):
 ##       frequencies that can be requested.
 class zet_freq_properties_t(Structure):
     _fields_ = [
-        ("type", zet_domain_t),                                         ## [out] The hardware block that this frequency domain controls (GPU,
+        ("type", zet_freq_domain_t),                                    ## [out] The hardware block that this frequency domain controls (GPU,
                                                                         ## memory, ...)
         ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Indicates if software can control the frequency of this domain
-        ("canOverclock", ze_bool_t),                                    ## [out] Indicates if software can overclock this frequency domain
         ("min", c_double),                                              ## [out] The minimum hardware clock frequency in units of MHz
         ("max", c_double),                                              ## [out] The maximum non-overclock hardware clock frequency in units of
                                                                         ## MHz.
@@ -808,8 +793,15 @@ class zet_freq_throttle_time_t(Structure):
 ###############################################################################
 ## @brief Overclocking modes
 class zet_oc_mode_v(IntEnum):
-    OVERCLOCKING_INTERPOLATIVE_MODE = 0             ## Interpolative Mode.
-    OVERCLOCKING_OVERRIDE_MODE = 1                  ## Override Mode.
+    OFF = 0                                         ## Overclocking if off - hardware is running using factory default
+                                                    ## voltages/frequencies.
+    OFFSET = auto()                                 ## Overclock offset mode - In this mode, a user-supplied voltage offset
+                                                    ## is applied to the interpolated V-F curve that defines the voltage to
+                                                    ## use for each possible frequency request. The maximum permitted
+                                                    ## frequency can also be increased.
+    OVERRIDE = auto()                               ## Overclock override mode - In this mode, a fixed user-supplied voltage
+                                                    ## is applied independent of the frequency request. The maximum permitted
+                                                    ## frequency can also be increased.
 
 class zet_oc_mode_t(c_int):
     def __str__(self):
@@ -817,41 +809,31 @@ class zet_oc_mode_t(c_int):
 
 
 ###############################################################################
-## @brief Over clocking error type
-class zet_oc_error_type_v(IntEnum):
-    OVERCLOCKING_LOCKED = 225                       ## The overclocking is locked. Service is read-only.
-    OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED = auto() ## The specified domain does not support the requested service.
-    OVERCLOCKING_RATIO_EXCEEDS_MAX = auto()         ## The ratio exceeds maximum overclocking limits.
-    OVERCLOCKING_VOLTAGE_EXCEEDS_MAX = auto()       ## Requested voltage exceeds input regulators max supported voltage.
-    OVERCLOCKING_NOT_SUPPORTED = auto()             ## No overclocking capability on the Hardware.
-    OVERCLOCKING_INVALID_VR_ADDRESS = auto()        ## The VR Address provided is illegal.
-    OOVERCLOCKING_INVALID_ICCMAX = auto()           ## ICCMAX value given is invalid (more than 10 bits) or too low.
-    OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED = auto() ## Voltage manipulation attempted when it is disabled.
-    OVERCLOCKING_INVALID_COMMAND = auto()           ## Data setting invalid for the command.
-
-class zet_oc_error_type_t(c_int):
-    def __str__(self):
-        return str(zet_oc_error_type_v(value))
-
-
-###############################################################################
 ## @brief Overclocking properties
 ## 
 ## @details
 ##     - Provides all the overclocking capabilities and properties supported by
-##       the device in the current domain.
+##       the device for the frequency domain.
 class zet_oc_capabilities_t(Structure):
     _fields_ = [
-        ("MaxOcFrequencyLimit", c_double),                              ## [out] Max overclocking frequency limit in Mhz.
-        ("MaxFactoryDefaultFrequency", c_double),                       ## [out] Maximum factory default frequency in Mhz.
-        ("MaxFactoryDefaultVoltage", c_double),                         ## [out] Maximum factory default voltage in Votls.
-        ("TjMaxSupported", ze_bool_t),                                  ## [out] is the TjMax supported on this domain.
-        ("IccMaxSupported", ze_bool_t),                                 ## [out] is the Icc supported on this domain.
-        ("FrequencyOcSupported", ze_bool_t),                            ## [out] Frequency overclocking supported
-        ("VoltageOverrideSupported", ze_bool_t),                        ## [out] Voltage overrides supported
-        ("VoltageOffsetSupported", ze_bool_t),                          ## [out] Voltage offset is supported
-        ("HighVoltModeCapable", ze_bool_t),                             ## [out] Capable of high voltage mode
-        ("HighVoltModeEnabled", ze_bool_t)                              ## [out] High voltage mode is enabled
+        ("isOcSupported", ze_bool_t),                                   ## [out] Indicates if any overclocking features are supported on this
+                                                                        ## frequency domain.
+        ("maxOcFrequencyLimit", c_double),                              ## [out] Maximum hardware overclocking frequency limit in Mhz.
+        ("maxFactoryDefaultFrequency", c_double),                       ## [out] Factory default non-overclock maximum frequency in Mhz.
+        ("maxFactoryDefaultVoltage", c_double),                         ## [out] Factory default voltage used for the non-overclock maximum
+                                                                        ## frequency in MHz.
+        ("isTjMaxSupported", ze_bool_t),                                ## [out] Indicates if the maximum temperature limit (TjMax) can be
+                                                                        ## changed for this frequency domain.
+        ("isIccMaxSupported", ze_bool_t),                               ## [out] Indicates if the maximum current (IccMax) can be changed for
+                                                                        ## this frequency domain.
+        ("isVoltageOverrideSupported", ze_bool_t),                      ## [out] Indicates if the voltage of this frequency domain can be changed
+                                                                        ## to fixed value (::ZET_OC_MODE_OVERRIDE).
+        ("isVoltageOffsetSupported", ze_bool_t),                        ## [out] Indicates if this frequency domain supports setting a voltage
+                                                                        ## offset (::ZET_OC_MODE_OFFSET).
+        ("isHighVoltModeCapable", ze_bool_t),                           ## [out] Indicates if this frequency domains supports a feature to set
+                                                                        ## very high voltages.
+        ("isHighVoltModeEnabled", ze_bool_t)                            ## [out] Indicates if very high voltages are permitted on this frequency
+                                                                        ## domain.
     ]
 
 ###############################################################################
@@ -859,34 +841,13 @@ class zet_oc_capabilities_t(Structure):
 ## 
 ## @details
 ##     - Provide the current settings to be read or changed.
-class zet_oc_configuration_t(Structure):
+class zet_oc_config_t(Structure):
     _fields_ = [
-        ("OcFrequency", c_double),                                      ## [in,out] Overclocking Frequency
-        ("TargetVoltage", c_double),                                    ## [in,out] Target voltage in Volts
-        ("TargetMode", zet_oc_mode_t),                                  ## [in,out] Overclock Mode ::zet_oc_mode_t.
-        ("VoltageOffset", c_double)                                     ## [in,out] Voltage offset in Volts.
-    ]
-
-###############################################################################
-## @brief Maximum desired current.
-## 
-## @details
-##     - For overclock-able parts this holds the maximum desired current if the
-##       domains supports it.
-class zet_oc_icc_max_t(Structure):
-    _fields_ = [
-        ("IccMax", c_double)                                            ## [in,out] Maximum desired current in Amperes
-    ]
-
-###############################################################################
-## @brief Temperature Junction Maximum.
-## 
-## @details
-##     - For overclock-able parts this holds the maximum temperature limit at
-##       which the part will throttle if the domains supports it.
-class zet_oc_tj_max_t(Structure):
-    _fields_ = [
-        ("TjMax", c_double)                                             ## [in,out] Maximum desired current in degrees celcius.
+        ("mode", zet_oc_mode_t),                                        ## [in,out] Overclock Mode ::zet_oc_mode_t.
+        ("frequency", c_double),                                        ## [in,out] Overclocking Frequency in MHz.
+        ("voltage", c_double)                                           ## [in,out] Overclock voltage in Volts. This is used either as the fixed
+                                                                        ## voltage for mode ::ZET_OC_MODE_OVERRIDE or as an offset voltage for
+                                                                        ## mode ::ZET_OC_MODE_OFFSET.
     ]
 
 ###############################################################################
@@ -907,6 +868,7 @@ class zet_engine_group_t(c_int):
 class zet_engine_properties_t(Structure):
     _fields_ = [
         ("type", zet_engine_group_t),                                   ## [out] The engine group
+        ("engines", c_int64_t),                                         ## [out] Bitfield of accelerator engines counted by this group.
         ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceId", c_ulong)                                        ## [out] If onSubdevice is true, this gives the ID of the sub-device
@@ -1893,6 +1855,13 @@ else:
     _zetSysmanSchedulerSetComputeUnitDebugMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
 
 ###############################################################################
+## @brief Function-pointer for zetSysmanProcessesGetState
+if __use_win_types:
+    _zetSysmanProcessesGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_process_state_t) )
+else:
+    _zetSysmanProcessesGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_process_state_t) )
+
+###############################################################################
 ## @brief Function-pointer for zetSysmanDeviceReset
 if __use_win_types:
     _zetSysmanDeviceReset_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t )
@@ -2074,6 +2043,7 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnSchedulerSetTimesliceMode", c_void_p),                     ## _zetSysmanSchedulerSetTimesliceMode_t
         ("pfnSchedulerSetExclusiveMode", c_void_p),                     ## _zetSysmanSchedulerSetExclusiveMode_t
         ("pfnSchedulerSetComputeUnitDebugMode", c_void_p),              ## _zetSysmanSchedulerSetComputeUnitDebugMode_t
+        ("pfnProcessesGetState", c_void_p),                             ## _zetSysmanProcessesGetState_t
         ("pfnDeviceReset", c_void_p),                                   ## _zetSysmanDeviceReset_t
         ("pfnDeviceWasRepaired", c_void_p),                             ## _zetSysmanDeviceWasRepaired_t
         ("pfnPciGetProperties", c_void_p),                              ## _zetSysmanPciGetProperties_t
@@ -2191,13 +2161,6 @@ else:
     _zetSysmanFrequencyGetThrottleTime_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_throttle_time_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetLastOcError
-if __use_win_types:
-    _zetSysmanFrequencyGetLastOcError_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_error_type_t) )
-else:
-    _zetSysmanFrequencyGetLastOcError_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_error_type_t) )
-
-###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetOcCapabilities
 if __use_win_types:
     _zetSysmanFrequencyGetOcCapabilities_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_capabilities_t) )
@@ -2207,44 +2170,44 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetOcConfig
 if __use_win_types:
-    _zetSysmanFrequencyGetOcConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_configuration_t) )
+    _zetSysmanFrequencyGetOcConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
 else:
-    _zetSysmanFrequencyGetOcConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_configuration_t) )
+    _zetSysmanFrequencyGetOcConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencySetOcConfig
 if __use_win_types:
-    _zetSysmanFrequencySetOcConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_configuration_t) )
+    _zetSysmanFrequencySetOcConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
 else:
-    _zetSysmanFrequencySetOcConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_configuration_t) )
+    _zetSysmanFrequencySetOcConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetOcIccMax
 if __use_win_types:
-    _zetSysmanFrequencyGetOcIccMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_icc_max_t) )
+    _zetSysmanFrequencyGetOcIccMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
 else:
-    _zetSysmanFrequencyGetOcIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_icc_max_t) )
+    _zetSysmanFrequencyGetOcIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencySetOcIccMax
 if __use_win_types:
-    _zetSysmanFrequencySetOcIccMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_icc_max_t) )
+    _zetSysmanFrequencySetOcIccMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
 else:
-    _zetSysmanFrequencySetOcIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_icc_max_t) )
+    _zetSysmanFrequencySetOcIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetOcTjMax
 if __use_win_types:
-    _zetSysmanFrequencyGetOcTjMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_tj_max_t) )
+    _zetSysmanFrequencyGetOcTjMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
 else:
-    _zetSysmanFrequencyGetOcTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_tj_max_t) )
+    _zetSysmanFrequencyGetOcTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencySetOcTjMax
 if __use_win_types:
-    _zetSysmanFrequencySetOcTjMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_tj_max_t) )
+    _zetSysmanFrequencySetOcTjMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
 else:
-    _zetSysmanFrequencySetOcTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_tj_max_t) )
+    _zetSysmanFrequencySetOcTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
 
 
 ###############################################################################
@@ -2256,7 +2219,6 @@ class _zet_sysman_frequency_dditable_t(Structure):
         ("pfnSetRange", c_void_p),                                      ## _zetSysmanFrequencySetRange_t
         ("pfnGetState", c_void_p),                                      ## _zetSysmanFrequencyGetState_t
         ("pfnGetThrottleTime", c_void_p),                               ## _zetSysmanFrequencyGetThrottleTime_t
-        ("pfnGetLastOcError", c_void_p),                                ## _zetSysmanFrequencyGetLastOcError_t
         ("pfnGetOcCapabilities", c_void_p),                             ## _zetSysmanFrequencyGetOcCapabilities_t
         ("pfnGetOcConfig", c_void_p),                                   ## _zetSysmanFrequencyGetOcConfig_t
         ("pfnSetOcConfig", c_void_p),                                   ## _zetSysmanFrequencySetOcConfig_t
@@ -2786,6 +2748,7 @@ class ZET_DDI:
         self.zetSysmanSchedulerSetTimesliceMode = _zetSysmanSchedulerSetTimesliceMode_t(self.__dditable.Sysman.pfnSchedulerSetTimesliceMode)
         self.zetSysmanSchedulerSetExclusiveMode = _zetSysmanSchedulerSetExclusiveMode_t(self.__dditable.Sysman.pfnSchedulerSetExclusiveMode)
         self.zetSysmanSchedulerSetComputeUnitDebugMode = _zetSysmanSchedulerSetComputeUnitDebugMode_t(self.__dditable.Sysman.pfnSchedulerSetComputeUnitDebugMode)
+        self.zetSysmanProcessesGetState = _zetSysmanProcessesGetState_t(self.__dditable.Sysman.pfnProcessesGetState)
         self.zetSysmanDeviceReset = _zetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
         self.zetSysmanDeviceWasRepaired = _zetSysmanDeviceWasRepaired_t(self.__dditable.Sysman.pfnDeviceWasRepaired)
         self.zetSysmanPciGetProperties = _zetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)
@@ -2839,7 +2802,6 @@ class ZET_DDI:
         self.zetSysmanFrequencySetRange = _zetSysmanFrequencySetRange_t(self.__dditable.SysmanFrequency.pfnSetRange)
         self.zetSysmanFrequencyGetState = _zetSysmanFrequencyGetState_t(self.__dditable.SysmanFrequency.pfnGetState)
         self.zetSysmanFrequencyGetThrottleTime = _zetSysmanFrequencyGetThrottleTime_t(self.__dditable.SysmanFrequency.pfnGetThrottleTime)
-        self.zetSysmanFrequencyGetLastOcError = _zetSysmanFrequencyGetLastOcError_t(self.__dditable.SysmanFrequency.pfnGetLastOcError)
         self.zetSysmanFrequencyGetOcCapabilities = _zetSysmanFrequencyGetOcCapabilities_t(self.__dditable.SysmanFrequency.pfnGetOcCapabilities)
         self.zetSysmanFrequencyGetOcConfig = _zetSysmanFrequencyGetOcConfig_t(self.__dditable.SysmanFrequency.pfnGetOcConfig)
         self.zetSysmanFrequencySetOcConfig = _zetSysmanFrequencySetOcConfig_t(self.__dditable.SysmanFrequency.pfnSetOcConfig)

@@ -92,48 +92,14 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data Type
-        enum class data_type_t
+        /// @brief Types of accelerator engines
+        enum class engine_type_t
         {
-            DATA_INT8 = 0,                                  ///< 8 bit signed integer.
-            DATA_INT16,                                     ///< 16 bit signed integer.
-            DATA_INT32,                                     ///< 32 bit signed integer.
-            DATA_INT64,                                     ///< 64 bit signed integer.
-            DATA_UINT8,                                     ///< 8 bit unsigned integer.
-            DATA_UINT16,                                    ///< 16 bit unsigned integer.
-            DATA_UINT32,                                    ///< 32 bit unsigned integer.
-            DATA_UINT64,                                    ///< 64 bit unsigned integer.
-            DATA_FLOAT,                                     ///< Single precision floating point.
-            DATA_DOUBLE,                                    ///< Double precision floating point.
-            DATA_STRING,                                    ///< Null terminated Strings.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Operation Type
-        enum class operation_type_t
-        {
-            SET = 0,                                        ///< This enum represent a Set Type Operation.
-            GET,                                            ///< This enum represent a Get Type Operation.
-            REGISTER_EVENT,                                 ///< This enum used to register an event.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Domains for Power and Frequency.
-        enum class domain_t
-        {
-            GPU = 0,                                        ///< GPU Core Domain.
-            MEMORY,                                         ///< Local Memory Domain.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device Type
-        enum class device_type_t
-        {
-            INTEGRATED = 0,                                 ///< The device is an integrated GPU
-            DISCRETE,                                       ///< The device is a discrete GPU
+            OTHER = 0,                                      ///< Undefined types of accelerators.
+            COMPUTE,                                        ///< Engines that process compute kernels.
+            _3D,                                            ///< Engines that process 3D content
+            MEDIA,                                          ///< Engines that process media workloads
+            DMA,                                            ///< Engines that copy blocks of data
 
         };
 
@@ -174,6 +140,15 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Frequency domains.
+        enum class freq_domain_t
+        {
+            GPU = 0,                                        ///< GPU Core Domain.
+            MEMORY,                                         ///< Local Memory Domain.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Event types
         enum class event_type_t
         {
@@ -191,7 +166,6 @@ namespace zet
         {
             ze::Device::properties_t core;                  ///< [out] Core device properties
             uint32_t numSubdevices;                         ///< [out] Number of sub-devices
-            device_type_t deviceType;                       ///< [out] Device type
             int8_t serialNumber[ZET_STRING_PROPERTY_SIZE];  ///< [out] Manufacturing serial number (NULL terminated string value)
             int8_t boardNumber[ZET_STRING_PROPERTY_SIZE];   ///< [out] Manufacturing board number (NULL terminated string value)
             int8_t brandName[ZET_STRING_PROPERTY_SIZE];     ///< [out] Brand name of the device (NULL terminated string value)
@@ -226,6 +200,23 @@ namespace zet
             uint64_t yieldTimeout;                          ///< [in,out] The maximum time in microseconds that the scheduler will wait
                                                             ///< to preempt a workload running on an engine before deciding to reset
                                                             ///< the hardware engine and terminating the associated context.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Contains information about a process that has an open connection with
+        ///        this device
+        /// 
+        /// @details
+        ///     - The application can use the process ID to query the OS for the owner
+        ///       and the path to the executable.
+        struct process_state_t
+        {
+            uint32_t processId;                             ///< [out] Host OS process ID.
+            int64_t memSize;                                ///< [out] Device memory size in bytes allocated by this process (may not
+                                                            ///< necessarily be resident on the device at the time of reading).
+            int64_t engines;                                ///< [out] Bitfield of accelerator engines being used by this process (or
+                                                            ///< 1<<::zet_engine_type_t together).
 
         };
 
@@ -493,6 +484,25 @@ namespace zet
         SchedulerSetComputeUnitDebugMode(
             ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                             ///< scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get information about host processes using the device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        ProcessesGetState(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of processes currently using the device.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of processes.
+                                                            ///< if count is larger than the number of processes, then the driver will
+                                                            ///< update the value with the correct number of processes that are returned.
+            process_state_t* pProcesses = nullptr           ///< [in,out][optional][range(0, *pCount)] array of process information,
+                                                            ///< one for each process currently using the device
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1149,24 +1159,15 @@ namespace zet
         /// @brief Overclocking modes
         enum class oc_mode_t
         {
-            OVERCLOCKING_INTERPOLATIVE_MODE = 0,            ///< Interpolative Mode.
-            OVERCLOCKING_OVERRIDE_MODE = 1,                 ///< Override Mode.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Over clocking error type
-        enum class oc_error_type_t
-        {
-            OVERCLOCKING_LOCKED = 225,                      ///< The overclocking is locked. Service is read-only.
-            OVERCLOCKING_DDOMAIN_SERVICE_NOT_SUPPORTED,     ///< The specified domain does not support the requested service.
-            OVERCLOCKING_RATIO_EXCEEDS_MAX,                 ///< The ratio exceeds maximum overclocking limits.
-            OVERCLOCKING_VOLTAGE_EXCEEDS_MAX,               ///< Requested voltage exceeds input regulators max supported voltage.
-            OVERCLOCKING_NOT_SUPPORTED,                     ///< No overclocking capability on the Hardware.
-            OVERCLOCKING_INVALID_VR_ADDRESS,                ///< The VR Address provided is illegal.
-            OOVERCLOCKING_INVALID_ICCMAX,                   ///< ICCMAX value given is invalid (more than 10 bits) or too low.
-            OVERCLOCKING_VOLTAGE_OVERRIDE_DISABLED,         ///< Voltage manipulation attempted when it is disabled.
-            OVERCLOCKING_INVALID_COMMAND,                   ///< Data setting invalid for the command.
+            OFF = 0,                                        ///< Overclocking if off - hardware is running using factory default
+                                                            ///< voltages/frequencies.
+            OFFSET,                                         ///< Overclock offset mode - In this mode, a user-supplied voltage offset
+                                                            ///< is applied to the interpolated V-F curve that defines the voltage to
+                                                            ///< use for each possible frequency request. The maximum permitted
+                                                            ///< frequency can also be increased.
+            OVERRIDE,                                       ///< Overclock override mode - In this mode, a fixed user-supplied voltage
+                                                            ///< is applied independent of the frequency request. The maximum permitted
+                                                            ///< frequency can also be increased.
 
         };
 
@@ -1186,13 +1187,12 @@ namespace zet
         ///       frequencies that can be requested.
         struct freq_properties_t
         {
-            Sysman::domain_t type;                          ///< [out] The hardware block that this frequency domain controls (GPU,
+            Sysman::freq_domain_t type;                     ///< [out] The hardware block that this frequency domain controls (GPU,
                                                             ///< memory, ...)
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling SMI handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Indicates if software can control the frequency of this domain
-            ze::bool_t canOverclock;                        ///< [out] Indicates if software can overclock this frequency domain
             double min;                                     ///< [out] The minimum hardware clock frequency in units of MHz
             double max;                                     ///< [out] The maximum non-overclock hardware clock frequency in units of
                                                             ///< MHz.
@@ -1254,19 +1254,27 @@ namespace zet
         /// 
         /// @details
         ///     - Provides all the overclocking capabilities and properties supported by
-        ///       the device in the current domain.
+        ///       the device for the frequency domain.
         struct oc_capabilities_t
         {
-            double MaxOcFrequencyLimit;                     ///< [out] Max overclocking frequency limit in Mhz.
-            double MaxFactoryDefaultFrequency;              ///< [out] Maximum factory default frequency in Mhz.
-            double MaxFactoryDefaultVoltage;                ///< [out] Maximum factory default voltage in Votls.
-            ze::bool_t TjMaxSupported;                      ///< [out] is the TjMax supported on this domain.
-            ze::bool_t IccMaxSupported;                     ///< [out] is the Icc supported on this domain.
-            ze::bool_t FrequencyOcSupported;                ///< [out] Frequency overclocking supported
-            ze::bool_t VoltageOverrideSupported;            ///< [out] Voltage overrides supported
-            ze::bool_t VoltageOffsetSupported;              ///< [out] Voltage offset is supported
-            ze::bool_t HighVoltModeCapable;                 ///< [out] Capable of high voltage mode
-            ze::bool_t HighVoltModeEnabled;                 ///< [out] High voltage mode is enabled
+            ze::bool_t isOcSupported;                       ///< [out] Indicates if any overclocking features are supported on this
+                                                            ///< frequency domain.
+            double maxOcFrequencyLimit;                     ///< [out] Maximum hardware overclocking frequency limit in Mhz.
+            double maxFactoryDefaultFrequency;              ///< [out] Factory default non-overclock maximum frequency in Mhz.
+            double maxFactoryDefaultVoltage;                ///< [out] Factory default voltage used for the non-overclock maximum
+                                                            ///< frequency in MHz.
+            ze::bool_t isTjMaxSupported;                    ///< [out] Indicates if the maximum temperature limit (TjMax) can be
+                                                            ///< changed for this frequency domain.
+            ze::bool_t isIccMaxSupported;                   ///< [out] Indicates if the maximum current (IccMax) can be changed for
+                                                            ///< this frequency domain.
+            ze::bool_t isVoltageOverrideSupported;          ///< [out] Indicates if the voltage of this frequency domain can be changed
+                                                            ///< to fixed value (::ZET_OC_MODE_OVERRIDE).
+            ze::bool_t isVoltageOffsetSupported;            ///< [out] Indicates if this frequency domain supports setting a voltage
+                                                            ///< offset (::ZET_OC_MODE_OFFSET).
+            ze::bool_t isHighVoltModeCapable;               ///< [out] Indicates if this frequency domains supports a feature to set
+                                                            ///< very high voltages.
+            ze::bool_t isHighVoltModeEnabled;               ///< [out] Indicates if very high voltages are permitted on this frequency
+                                                            ///< domain.
 
         };
 
@@ -1275,36 +1283,13 @@ namespace zet
         /// 
         /// @details
         ///     - Provide the current settings to be read or changed.
-        struct oc_configuration_t
+        struct oc_config_t
         {
-            double OcFrequency;                             ///< [in,out] Overclocking Frequency
-            double TargetVoltage;                           ///< [in,out] Target voltage in Volts
-            oc_mode_t TargetMode;                           ///< [in,out] Overclock Mode ::zet_oc_mode_t.
-            double VoltageOffset;                           ///< [in,out] Voltage offset in Volts.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Maximum desired current.
-        /// 
-        /// @details
-        ///     - For overclock-able parts this holds the maximum desired current if the
-        ///       domains supports it.
-        struct oc_icc_max_t
-        {
-            double IccMax;                                  ///< [in,out] Maximum desired current in Amperes
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Temperature Junction Maximum.
-        /// 
-        /// @details
-        ///     - For overclock-able parts this holds the maximum temperature limit at
-        ///       which the part will throttle if the domains supports it.
-        struct oc_tj_max_t
-        {
-            double TjMax;                                   ///< [in,out] Maximum desired current in degrees celcius.
+            oc_mode_t mode;                                 ///< [in,out] Overclock Mode ::zet_oc_mode_t.
+            double frequency;                               ///< [in,out] Overclocking Frequency in MHz.
+            double voltage;                                 ///< [in,out] Overclock voltage in Volts. This is used either as the fixed
+                                                            ///< voltage for mode ::ZET_OC_MODE_OVERRIDE or as an offset voltage for
+                                                            ///< mode ::ZET_OC_MODE_OFFSET.
 
         };
 
@@ -1399,18 +1384,6 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the last overclock error
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetLastOcError(
-            oc_error_type_t* pOcError                       ///< [in] Error in ::zet_oc_error_type_t .
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get the overclocking capabilities.
         /// 
         /// @details
@@ -1423,7 +1396,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the overclocking configuration.
+        /// @brief Get the current overclocking configuration.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1431,23 +1404,28 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetOcConfig(
-            oc_configuration_t* pOcConfiguration            ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+            oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the overclocking configuration.
+        /// @brief Change the overclocking configuration.
         /// 
         /// @details
+        ///     - If ::zet_oc_config_t.mode is set to ::ZET_OC_MODE_OFF, overclocking
+        ///       will be turned off and the hardware returned to run with factory
+        ///       voltages/frequencies. Call ::zetSysmanFrequencySetOcIccMax() and
+        ///       ::zetSysmanFrequencySetOcTjMax() separately with 0.0 to return those
+        ///       settings to factory defaults.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
         SetOcConfig(
-            oc_configuration_t* pOcConfiguration            ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+            oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the Icc Max.
+        /// @brief Get the maximum current limit setting.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1455,23 +1433,25 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetOcIccMax(
-            oc_icc_max_t* pOcIccMax                         ///< [in] Pointer to the Icc Max.
+            double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
+                                                            ///< return.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the Icc Max.
+        /// @brief Change the maximum current limit setting.
         /// 
         /// @details
+        ///     - Setting ocIccMax to 0.0 will return the value to the factory default.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
         SetOcIccMax(
-            oc_icc_max_t* pOcIccMax                         ///< [in] Pointer to the Icc Max.
+            double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the TjMax.
+        /// @brief Get the maximum temperature limit setting.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1479,19 +1459,21 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetOcTjMax(
-            oc_tj_max_t* pOcTjMax                           ///< [in] Pointer to the TjMax.
+            double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
+                                                            ///< successful return.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set the TjMax.
+        /// @brief Change the maximum temperature limit setting.
         /// 
         /// @details
+        ///     - Setting ocTjMax to 0.0 will return the value to the factory default.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
         SetOcTjMax(
-            oc_tj_max_t* pOcTjMax                           ///< [in] Pointer to the TjMax.
+            double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
             );
 
     };
@@ -1517,6 +1499,7 @@ namespace zet
         struct engine_properties_t
         {
             engine_group_t type;                            ///< [out] The engine group
+            int64_t engines;                                ///< [out] Bitfield of accelerator engines counted by this group.
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling SMI handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
@@ -2795,20 +2778,8 @@ namespace zet
     std::string to_string( const Sysman::version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::data_type_t to std::string
-    std::string to_string( const Sysman::data_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::operation_type_t to std::string
-    std::string to_string( const Sysman::operation_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::domain_t to std::string
-    std::string to_string( const Sysman::domain_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::device_type_t to std::string
-    std::string to_string( const Sysman::device_type_t val );
+    /// @brief Converts Sysman::engine_type_t to std::string
+    std::string to_string( const Sysman::engine_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::properties_t to std::string
@@ -2825,6 +2796,10 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::sched_timeslice_properties_t to std::string
     std::string to_string( const Sysman::sched_timeslice_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::process_state_t to std::string
+    std::string to_string( const Sysman::process_state_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_address_t to std::string
@@ -2853,6 +2828,10 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_stats_t to std::string
     std::string to_string( const Sysman::pci_stats_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_domain_t to std::string
+    std::string to_string( const Sysman::freq_domain_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::event_type_t to std::string
@@ -2915,24 +2894,12 @@ namespace zet
     std::string to_string( const SysmanFrequency::oc_mode_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_error_type_t to std::string
-    std::string to_string( const SysmanFrequency::oc_error_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFrequency::oc_capabilities_t to std::string
     std::string to_string( const SysmanFrequency::oc_capabilities_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_configuration_t to std::string
-    std::string to_string( const SysmanFrequency::oc_configuration_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_icc_max_t to std::string
-    std::string to_string( const SysmanFrequency::oc_icc_max_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_tj_max_t to std::string
-    std::string to_string( const SysmanFrequency::oc_tj_max_t val );
+    /// @brief Converts SysmanFrequency::oc_config_t to std::string
+    std::string to_string( const SysmanFrequency::oc_config_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanEngine::engine_group_t to std::string

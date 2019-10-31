@@ -868,6 +868,37 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanProcessesGetState
+    ze_result_t __zecall
+    zetSysmanProcessesGetState(
+        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of processes currently using the device.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of processes.
+                                                        ///< if count is larger than the number of processes, then the driver will
+                                                        ///< update the value with the correct number of processes that are returned.
+        zet_process_state_t* pProcesses                 ///< [in,out][optional][range(0, *pCount)] array of process information,
+                                                        ///< one for each process currently using the device
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnProcessesGetState = context.zetDdiTable.Sysman.pfnProcessesGetState;
+        if( nullptr != pfnProcessesGetState )
+        {
+            result = pfnProcessesGetState( hSysman, pCount, pProcesses );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDeviceReset
     ze_result_t __zecall
     zetSysmanDeviceReset(
@@ -1386,30 +1417,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetLastOcError
-    ze_result_t __zecall
-    zetSysmanFrequencyGetLastOcError(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_error_type_t* pOcError                   ///< [in] Error in ::zet_oc_error_type_t .
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetLastOcError = context.zetDdiTable.SysmanFrequency.pfnGetLastOcError;
-        if( nullptr != pfnGetLastOcError )
-        {
-            result = pfnGetLastOcError( hFrequency, pOcError );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetOcCapabilities
     ze_result_t __zecall
     zetSysmanFrequencyGetOcCapabilities(
@@ -1438,7 +1445,7 @@ namespace driver
     ze_result_t __zecall
     zetSysmanFrequencyGetOcConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+        zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1462,7 +1469,7 @@ namespace driver
     ze_result_t __zecall
     zetSysmanFrequencySetOcConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_configuration_t* pOcConfiguration        ///< [in] Pointer to the configuration structure ::zet_oc_configuration_t.
+        zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1486,7 +1493,8 @@ namespace driver
     ze_result_t __zecall
     zetSysmanFrequencyGetOcIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
+        double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
+                                                        ///< return.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1510,7 +1518,7 @@ namespace driver
     ze_result_t __zecall
     zetSysmanFrequencySetOcIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_icc_max_t* pOcIccMax                     ///< [in] Pointer to the Icc Max.
+        double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1519,7 +1527,7 @@ namespace driver
         auto pfnSetOcIccMax = context.zetDdiTable.SysmanFrequency.pfnSetOcIccMax;
         if( nullptr != pfnSetOcIccMax )
         {
-            result = pfnSetOcIccMax( hFrequency, pOcIccMax );
+            result = pfnSetOcIccMax( hFrequency, ocIccMax );
         }
         else
         {
@@ -1534,7 +1542,8 @@ namespace driver
     ze_result_t __zecall
     zetSysmanFrequencyGetOcTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
+        double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
+                                                        ///< successful return.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1558,7 +1567,7 @@ namespace driver
     ze_result_t __zecall
     zetSysmanFrequencySetOcTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_tj_max_t* pOcTjMax                       ///< [in] Pointer to the TjMax.
+        double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1567,7 +1576,7 @@ namespace driver
         auto pfnSetOcTjMax = context.zetDdiTable.SysmanFrequency.pfnSetOcTjMax;
         if( nullptr != pfnSetOcTjMax )
         {
-            result = pfnSetOcTjMax( hFrequency, pOcTjMax );
+            result = pfnSetOcTjMax( hFrequency, ocTjMax );
         }
         else
         {
@@ -3387,6 +3396,8 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnSchedulerSetComputeUnitDebugMode       = driver::zetSysmanSchedulerSetComputeUnitDebugMode;
 
+    pDdiTable->pfnProcessesGetState                      = driver::zetSysmanProcessesGetState;
+
     pDdiTable->pfnDeviceReset                            = driver::zetSysmanDeviceReset;
 
     pDdiTable->pfnDeviceWasRepaired                      = driver::zetSysmanDeviceWasRepaired;
@@ -3512,8 +3523,6 @@ zetGetSysmanFrequencyProcAddrTable(
     pDdiTable->pfnGetState                               = driver::zetSysmanFrequencyGetState;
 
     pDdiTable->pfnGetThrottleTime                        = driver::zetSysmanFrequencyGetThrottleTime;
-
-    pDdiTable->pfnGetLastOcError                         = driver::zetSysmanFrequencyGetLastOcError;
 
     pDdiTable->pfnGetOcCapabilities                      = driver::zetSysmanFrequencyGetOcCapabilities;
 
