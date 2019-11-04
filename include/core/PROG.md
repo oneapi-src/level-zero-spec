@@ -905,13 +905,10 @@ The following is sample for code creating a sampler object and passing it as a k
 
 # <a name="adv">Advanced</a>
 ## <a name="sd">Sub-Device Support</a>
-A multi-tile device consists of tiles that are tied together by high-speed interconnects. Each tile
-has local memory that is shared to other tiles through these interconnects. The API represents tiles
-as sub-devices and there are functions to query and obtain a sub-device. Outside of these functions
-there are no distinction between sub-devices and devices. 
 
-![Subdevice](../images/core_subdevice.png?raw=true)  
-@image latex core_subdevice.png
+The API allows support for sub-devices which can enable finer grained control of scheduling and memory
+allocation to a sub-partition of the device. There are functions to query and obtain a sub-device
+but outside of these functions there are no distinction between sub-devices and devices. 
 
 Use ::zeDeviceGetSubDevices to confirm subdevices are supported and to obtain a sub-device handle.
 There are additional device properties in ::ze_device_properties_t for sub-devices to confirm a
