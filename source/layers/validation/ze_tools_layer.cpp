@@ -1192,58 +1192,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPowerGetEnergyThreshold
-    ze_result_t __zecall
-    zetSysmanPowerGetEnergyThreshold(
-        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_power_energy_threshold_t* pThreshold        ///< [in] The current energy threshold value in joules.
-        )
-    {
-        auto pfnGetEnergyThreshold = context.zetDdiTable.SysmanPower.pfnGetEnergyThreshold;
-
-        if( nullptr == pfnGetEnergyThreshold )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPower )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pThreshold )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetEnergyThreshold( hPower, pThreshold );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPowerSetEnergyThreshold
-    ze_result_t __zecall
-    zetSysmanPowerSetEnergyThreshold(
-        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
-        )
-    {
-        auto pfnSetEnergyThreshold = context.zetDdiTable.SysmanPower.pfnSetEnergyThreshold;
-
-        if( nullptr == pfnSetEnergyThreshold )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPower )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pThreshold )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetEnergyThreshold( hPower, pThreshold );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGetLimits
     ze_result_t __zecall
     zetSysmanPowerGetLimits(
@@ -1291,6 +1239,56 @@ namespace layer
         }
 
         return pfnSetLimits( hPower, pSustained, pBurst, pPeak );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPowerGetEnergyThreshold
+    ze_result_t __zecall
+    zetSysmanPowerGetEnergyThreshold(
+        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        zet_energy_threshold_t* pThreshold              ///< [in] Returns information about the energy threshold setting -
+                                                        ///< enabled/energy threshold/process ID.
+        )
+    {
+        auto pfnGetEnergyThreshold = context.zetDdiTable.SysmanPower.pfnGetEnergyThreshold;
+
+        if( nullptr == pfnGetEnergyThreshold )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pThreshold )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetEnergyThreshold( hPower, pThreshold );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPowerSetEnergyThreshold
+    ze_result_t __zecall
+    zetSysmanPowerSetEnergyThreshold(
+        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        double threshold                                ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        auto pfnSetEnergyThreshold = context.zetDdiTable.SysmanPower.pfnSetEnergyThreshold;
+
+        if( nullptr == pfnSetEnergyThreshold )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetEnergyThreshold( hPower, threshold );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2284,9 +2282,9 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureGet
+    /// @brief Intercept function for zetSysmanTemperatureRead
     ze_result_t __zecall
-    zetSysmanTemperatureGet(
+    zetSysmanTemperatureRead(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -2299,9 +2297,9 @@ namespace layer
                                                         ///< this type
         )
     {
-        auto pfnTemperatureGet = context.zetDdiTable.Sysman.pfnTemperatureGet;
+        auto pfnTemperatureRead = context.zetDdiTable.Sysman.pfnTemperatureRead;
 
-        if( nullptr == pfnTemperatureGet )
+        if( nullptr == pfnTemperatureRead )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2314,7 +2312,7 @@ namespace layer
 
         }
 
-        return pfnTemperatureGet( hSysman, pCount, phTemperature );
+        return pfnTemperatureRead( hSysman, pCount, phTemperature );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2344,16 +2342,17 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureRead
+    /// @brief Intercept function for zetSysmanTemperatureGet
     ze_result_t __zecall
-    zetSysmanTemperatureRead(
+    zetSysmanTemperatureGet(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+        double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
+                                                        ///< degrees Celcius.
         )
     {
-        auto pfnRead = context.zetDdiTable.SysmanTemperature.pfnRead;
+        auto pfnGet = context.zetDdiTable.SysmanTemperature.pfnGet;
 
-        if( nullptr == pfnRead )
+        if( nullptr == pfnGet )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2366,7 +2365,59 @@ namespace layer
 
         }
 
-        return pfnRead( hTemperature, pTemperature );
+        return pfnGet( hTemperature, pTemperature );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureGetThresholds
+    ze_result_t __zecall
+    zetSysmanTemperatureGetThresholds(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        zet_temp_threshold_t* pThreshold1,              ///< [in][optional] Returns information about temperature threshold 1 -
+                                                        ///< enabled/temperature/process ID.
+        zet_temp_threshold_t* pThreshold2               ///< [in][optional] Returns information about temperature threshold 1 -
+                                                        ///< enabled/temperature/process ID.
+        )
+    {
+        auto pfnGetThresholds = context.zetDdiTable.SysmanTemperature.pfnGetThresholds;
+
+        if( nullptr == pfnGetThresholds )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetThresholds( hTemperature, pThreshold1, pThreshold2 );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureSetThresholds
+    ze_result_t __zecall
+    zetSysmanTemperatureSetThresholds(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        double threshold1,                              ///< [in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable
+                                                        ///< threshold 1.
+        double threshold2                               ///< [in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable
+                                                        ///< theshold 2.
+        )
+    {
+        auto pfnSetThresholds = context.zetDdiTable.SysmanTemperature.pfnSetThresholds;
+
+        if( nullptr == pfnSetThresholds )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetThresholds( hTemperature, threshold1, threshold2 );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3646,8 +3697,8 @@ zetGetSysmanProcAddrTable(
     dditable.pfnFabricPortGet                            = pDdiTable->pfnFabricPortGet;
     pDdiTable->pfnFabricPortGet                          = layer::zetSysmanFabricPortGet;
 
-    dditable.pfnTemperatureGet                           = pDdiTable->pfnTemperatureGet;
-    pDdiTable->pfnTemperatureGet                         = layer::zetSysmanTemperatureGet;
+    dditable.pfnTemperatureRead                          = pDdiTable->pfnTemperatureRead;
+    pDdiTable->pfnTemperatureRead                        = layer::zetSysmanTemperatureRead;
 
     dditable.pfnPsuGet                                   = pDdiTable->pfnPsuGet;
     pDdiTable->pfnPsuGet                                 = layer::zetSysmanPsuGet;
@@ -3712,17 +3763,17 @@ zetGetSysmanPowerProcAddrTable(
     dditable.pfnGetEnergyCounter                         = pDdiTable->pfnGetEnergyCounter;
     pDdiTable->pfnGetEnergyCounter                       = layer::zetSysmanPowerGetEnergyCounter;
 
-    dditable.pfnGetEnergyThreshold                       = pDdiTable->pfnGetEnergyThreshold;
-    pDdiTable->pfnGetEnergyThreshold                     = layer::zetSysmanPowerGetEnergyThreshold;
-
-    dditable.pfnSetEnergyThreshold                       = pDdiTable->pfnSetEnergyThreshold;
-    pDdiTable->pfnSetEnergyThreshold                     = layer::zetSysmanPowerSetEnergyThreshold;
-
     dditable.pfnGetLimits                                = pDdiTable->pfnGetLimits;
     pDdiTable->pfnGetLimits                              = layer::zetSysmanPowerGetLimits;
 
     dditable.pfnSetLimits                                = pDdiTable->pfnSetLimits;
     pDdiTable->pfnSetLimits                              = layer::zetSysmanPowerSetLimits;
+
+    dditable.pfnGetEnergyThreshold                       = pDdiTable->pfnGetEnergyThreshold;
+    pDdiTable->pfnGetEnergyThreshold                     = layer::zetSysmanPowerGetEnergyThreshold;
+
+    dditable.pfnSetEnergyThreshold                       = pDdiTable->pfnSetEnergyThreshold;
+    pDdiTable->pfnSetEnergyThreshold                     = layer::zetSysmanPowerSetEnergyThreshold;
 
     return result;
 }
@@ -4024,8 +4075,14 @@ zetGetSysmanTemperatureProcAddrTable(
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = layer::zetSysmanTemperatureGetProperties;
 
-    dditable.pfnRead                                     = pDdiTable->pfnRead;
-    pDdiTable->pfnRead                                   = layer::zetSysmanTemperatureRead;
+    dditable.pfnGet                                      = pDdiTable->pfnGet;
+    pDdiTable->pfnGet                                    = layer::zetSysmanTemperatureGet;
+
+    dditable.pfnGetThresholds                            = pDdiTable->pfnGetThresholds;
+    pDdiTable->pfnGetThresholds                          = layer::zetSysmanTemperatureGetThresholds;
+
+    dditable.pfnSetThresholds                            = pDdiTable->pfnSetThresholds;
+    pDdiTable->pfnSetThresholds                          = layer::zetSysmanTemperatureSetThresholds;
 
     return result;
 }

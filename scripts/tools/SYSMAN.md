@@ -342,7 +342,7 @@ the calling application thread to sleep until new notifications are received.
 
 The API enables registering for events from multiple devices and listening for any events coming from any devices by using one function call.
 
-One notifications have occurred, the application can use the query SMI interface functions to get more details.
+Once notifications have occurred, the application can use the query SMI interface functions to get more details.
 
 The following events are provided:
 
@@ -530,13 +530,15 @@ if the high requests and utilization of the device continue.
 
 The following functions are provided to manage the power of the device:
 
-| Function                            | Description |
-| :---                                | :---        |
-| ::${t}SysmanPowerGet()              | Enumerate the power domains. |
-| ::${t}SysmanPowerGetProperties()    | Get the maximum power limit that can be specified when changing the power limits of a specific power domain. |
-| ::${t}SysmanPowerGetEnergyCounter() | Read the energy consumption of the specific domain. |
-| ::${t}SysmanPowerGetLimits()        | Get the sustained/burst/peak power limits for the specific power domain. |
-| ::${t}SysmanPowerSetLimits()        | Set the sustained/burst/peak power limits for the specific power domain. |
+| Function                              | Description |
+| :---                                  | :---        |
+| ::${t}SysmanPowerGet()                | Enumerate the power domains. |
+| ::${t}SysmanPowerGetProperties()      | Get the maximum power limit that can be specified when changing the power limits of a specific power domain. |
+| ::${t}SysmanPowerGetEnergyCounter()   | Read the energy consumption of the specific domain. |
+| ::${t}SysmanPowerGetLimits()          | Get the sustained/burst/peak power limits for the specific power domain. |
+| ::${t}SysmanPowerSetLimits()          | Set the sustained/burst/peak power limits for the specific power domain. |
+| ::${t}SysmanPowerGetEnergyThreshold() | Get the current energy threshold. |
+| ::${t}SysmanPowerSetEnergyThreshold() | Set the energy threshold. Event ::${T}_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the energy consumed since calling this functions exceeds the specified threshold. |
 
 The example below shows how to output information about each power domain on a device:
 
@@ -901,6 +903,8 @@ A device has multiple temperature sensors embedded at different locations. The f
 | ::${t}SysmanTemperatureGet()           | Enumerate the temperature sensors on the device. |
 | ::${t}SysmanTemperatureGetProperties() | Get static properties for a temperature sensor. In particular, this will indicate which parts of the device the sensor measures (one of ::${t}_temp_sensors_t). |
 | ::${t}SysmanTemperatureRead()          | Read the temperature of a sensor. |
+| ::${t}SysmanTemperatureGetThresholds() | Get information about the current temperature thresholds - enabled/threshold/processID. |
+| ::${t}SysmanTemperatureSetThresholds() | Set new temperature thresholds. Events will be triggered when the temperature crosses these thresholds. |
 
 
 ${"##"} <a name="psu">Operations on power supplies</a>
@@ -1305,6 +1309,8 @@ The table below summarizes the default permissions for each API function:
 | ::${t}SysmanPowerGet()                                | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanPowerGetProperties()                      | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanPowerGetEnergyCounter()                   | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPowerGetEnergyThreshold()                 | read-only            | read-only            | no-access            | no-access            |
+| ::${t}SysmanPowerSetEnergyThreshold()                 | read-write           | read-write           | no-access            | no-access            |
 | ::${t}SysmanPowerGetLimits()                          | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanPowerSetLimits()                          | read-write           | read-write           | read-only            | no-access            |
 | ::${t}SysmanFrequencyGet()                            | read-only            | read-only            | read-only            | no-access            |
@@ -1339,6 +1345,8 @@ The table below summarizes the default permissions for each API function:
 | ::${t}SysmanTemperatureGet()                          | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanTemperatureGetProperties()                | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanTemperatureRead()                         | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanTemperatureGetThresholds()                | read-only            | read-only            | no-access            | no-access            |
+| ::${t}SysmanTemperatureSetThresholds()                | read-write           | read-write           | no-access            | no-access            |
 | ::${t}SysmanPsuGet()                                  | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanPsuGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanPsuGetState()                             | read-only            | read-only            | read-only            | no-access            |

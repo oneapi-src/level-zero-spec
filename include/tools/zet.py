@@ -606,6 +606,8 @@ class zet_power_properties_t(Structure):
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Software can change the power limits.
+        ("isEnergyThresholdSupported", ze_bool_t),                      ## [out] Indicates if this power domain supports the energy threshold
+                                                                        ## event (::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
         ("maxLimit", c_ulong)                                           ## [out] The maximum power limit in milliwatts that can be requested.
     ]
 
@@ -625,17 +627,6 @@ class zet_power_energy_counter_t(Structure):
                                                                         ## of the same structure.
                                                                         ## Never take the delta of this timestamp with the timestamp from a
                                                                         ## different structure.
-    ]
-
-###############################################################################
-## @brief Energy threshold
-## 
-## @details
-##     - Energy threshold value, when this value is crossed, pcu will signal an
-##       interrupt.
-class zet_power_energy_threshold_t(Structure):
-    _fields_ = [
-        ("energy", c_ulong)                                             ## [in,out] The energy threshold in joules.
     ]
 
 ###############################################################################
@@ -685,6 +676,20 @@ class zet_power_peak_limit_t(Structure):
         ("powerAC", c_ulong),                                           ## [in,out] power limit in milliwatts for the AC power source.
         ("powerDC", c_ulong)                                            ## [in,out] power limit in milliwatts for the DC power source. This is
                                                                         ## ignored if the product does not have a battery.
+    ]
+
+###############################################################################
+## @brief Energy threshold
+## 
+## @details
+##     - .
+class zet_energy_threshold_t(Structure):
+    _fields_ = [
+        ("enable", ze_bool_t),                                          ## [in,out] Indicates if the energy threshold is enabled.
+        ("threshold", c_double),                                        ## [in,out] The energy threshold in Joules. Will be 0.0 if no threshold
+                                                                        ## has been set.
+        ("processId", c_ulong)                                          ## [in,out] The host process ID that set the energy threshold. Will be -1
+                                                                        ## if no threshold has been set.
     ]
 
 ###############################################################################
@@ -1182,7 +1187,23 @@ class zet_temp_properties_t(Structure):
         ("type", zet_temp_sensors_t),                                   ## [out] Which part of the device the temperature sensor measures
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling SMI handle
-        ("subdeviceId", c_ulong)                                        ## [out] If onSubdevice is true, this gives the ID of the sub-device
+        ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
+        ("isThreshold1Supported", ze_bool_t),                           ## [out] Indicates if the temperature threshold 1 event
+                                                                        ## ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported
+        ("isThreshold2Supported", ze_bool_t)                            ## [out] Indicates if the temperature threshold 2 event
+                                                                        ## ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 is supported
+    ]
+
+###############################################################################
+## @brief Temperature sensor threshold
+class zet_temp_threshold_t(Structure):
+    _fields_ = [
+        ("enableLowToHigh", ze_bool_t),                                 ## [in,out] Generate an event when the temperature crosses from below the
+                                                                        ## threshold to above.
+        ("enableHighToLow", ze_bool_t),                                 ## [in,out] Generate an event when the temperature crosses from above the
+                                                                        ## threshold to below.
+        ("threshold", ze_bool_t),                                       ## [in,out] The threshold in degrees Celcius.
+        ("processId", c_ulong)                                          ## [in,out] Host processId that set this threshold.
     ]
 
 ###############################################################################
@@ -1358,8 +1379,13 @@ class zet_ras_details_t(Structure):
 ## @brief Event types
 class zet_sysman_event_type_v(IntEnum):
     FREQ_THROTTLED = 0                              ## The frequency is being throttled
-    ENERGY_THRESHOLD_CROSSED = auto()               ## Interrupt from the PCU when the energy threshold is crossed.
-    MAX_TEMPERATURE = auto()                        ## Interrupt from the PCU when the energy Max temperature is reached.
+    ENERGY_THRESHOLD_CROSSED = auto()               ## Event is generated when the energy consumption threshold is reached
+                                                    ## (use ::zetSysmanPowerSetEnergyThreshold() to configure).
+    CRITICAL_TEMPERATURE = auto()                   ## Event is generated when the critical temperature is reached.
+    TEMP_THRESHOLD1 = auto()                        ## Event is generated when the temperature cross threshold 1 (use
+                                                    ## ::zetSysmanTemperatureSetThresholds() to configure).
+    TEMP_THRESHOLD2 = auto()                        ## Event is generated when the temperature cross threshold 1 (use
+                                                    ## ::zetSysmanTemperatureSetThresholds() to configure).
     RAS_ERRORS = auto()                             ## ECC/RAS errors
     NUM = auto()                                    ## The number of event types
 
@@ -1960,11 +1986,11 @@ else:
     _zetSysmanFabricPortGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_fabric_port_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanTemperatureGet
+## @brief Function-pointer for zetSysmanTemperatureRead
 if __use_win_types:
-    _zetSysmanTemperatureGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_temp_handle_t) )
+    _zetSysmanTemperatureRead_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_temp_handle_t) )
 else:
-    _zetSysmanTemperatureGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_temp_handle_t) )
+    _zetSysmanTemperatureRead_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_temp_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanPsuGet
@@ -2058,7 +2084,7 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnFirmwareGet", c_void_p),                                   ## _zetSysmanFirmwareGet_t
         ("pfnMemoryGet", c_void_p),                                     ## _zetSysmanMemoryGet_t
         ("pfnFabricPortGet", c_void_p),                                 ## _zetSysmanFabricPortGet_t
-        ("pfnTemperatureGet", c_void_p),                                ## _zetSysmanTemperatureGet_t
+        ("pfnTemperatureRead", c_void_p),                               ## _zetSysmanTemperatureRead_t
         ("pfnPsuGet", c_void_p),                                        ## _zetSysmanPsuGet_t
         ("pfnFanGet", c_void_p),                                        ## _zetSysmanFanGet_t
         ("pfnLedGet", c_void_p),                                        ## _zetSysmanLedGet_t
@@ -2085,20 +2111,6 @@ else:
     _zetSysmanPowerGetEnergyCounter_t = CFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_power_energy_counter_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanPowerGetEnergyThreshold
-if __use_win_types:
-    _zetSysmanPowerGetEnergyThreshold_t = WINFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_power_energy_threshold_t) )
-else:
-    _zetSysmanPowerGetEnergyThreshold_t = CFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_power_energy_threshold_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanPowerSetEnergyThreshold
-if __use_win_types:
-    _zetSysmanPowerSetEnergyThreshold_t = WINFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_power_energy_threshold_t) )
-else:
-    _zetSysmanPowerSetEnergyThreshold_t = CFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_power_energy_threshold_t) )
-
-###############################################################################
 ## @brief Function-pointer for zetSysmanPowerGetLimits
 if __use_win_types:
     _zetSysmanPowerGetLimits_t = WINFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_power_sustained_limit_t), POINTER(zet_power_burst_limit_t), POINTER(zet_power_peak_limit_t) )
@@ -2112,6 +2124,20 @@ if __use_win_types:
 else:
     _zetSysmanPowerSetLimits_t = CFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_power_sustained_limit_t), POINTER(zet_power_burst_limit_t), POINTER(zet_power_peak_limit_t) )
 
+###############################################################################
+## @brief Function-pointer for zetSysmanPowerGetEnergyThreshold
+if __use_win_types:
+    _zetSysmanPowerGetEnergyThreshold_t = WINFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_energy_threshold_t) )
+else:
+    _zetSysmanPowerGetEnergyThreshold_t = CFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, POINTER(zet_energy_threshold_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanPowerSetEnergyThreshold
+if __use_win_types:
+    _zetSysmanPowerSetEnergyThreshold_t = WINFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, c_double )
+else:
+    _zetSysmanPowerSetEnergyThreshold_t = CFUNCTYPE( ze_result_t, zet_sysman_pwr_handle_t, c_double )
+
 
 ###############################################################################
 ## @brief Table of SysmanPower functions pointers
@@ -2119,10 +2145,10 @@ class _zet_sysman_power_dditable_t(Structure):
     _fields_ = [
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanPowerGetProperties_t
         ("pfnGetEnergyCounter", c_void_p),                              ## _zetSysmanPowerGetEnergyCounter_t
-        ("pfnGetEnergyThreshold", c_void_p),                            ## _zetSysmanPowerGetEnergyThreshold_t
-        ("pfnSetEnergyThreshold", c_void_p),                            ## _zetSysmanPowerSetEnergyThreshold_t
         ("pfnGetLimits", c_void_p),                                     ## _zetSysmanPowerGetLimits_t
-        ("pfnSetLimits", c_void_p)                                      ## _zetSysmanPowerSetLimits_t
+        ("pfnSetLimits", c_void_p),                                     ## _zetSysmanPowerSetLimits_t
+        ("pfnGetEnergyThreshold", c_void_p),                            ## _zetSysmanPowerGetEnergyThreshold_t
+        ("pfnSetEnergyThreshold", c_void_p)                             ## _zetSysmanPowerSetEnergyThreshold_t
     ]
 
 ###############################################################################
@@ -2407,11 +2433,25 @@ else:
     _zetSysmanTemperatureGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanTemperatureRead
+## @brief Function-pointer for zetSysmanTemperatureGet
 if __use_win_types:
-    _zetSysmanTemperatureRead_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(c_ulong) )
+    _zetSysmanTemperatureGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(c_double) )
 else:
-    _zetSysmanTemperatureRead_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(c_ulong) )
+    _zetSysmanTemperatureGet_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(c_double) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanTemperatureGetThresholds
+if __use_win_types:
+    _zetSysmanTemperatureGetThresholds_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_threshold_t), POINTER(zet_temp_threshold_t) )
+else:
+    _zetSysmanTemperatureGetThresholds_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_threshold_t), POINTER(zet_temp_threshold_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanTemperatureSetThresholds
+if __use_win_types:
+    _zetSysmanTemperatureSetThresholds_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, c_double, c_double )
+else:
+    _zetSysmanTemperatureSetThresholds_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, c_double, c_double )
 
 
 ###############################################################################
@@ -2419,7 +2459,9 @@ else:
 class _zet_sysman_temperature_dditable_t(Structure):
     _fields_ = [
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanTemperatureGetProperties_t
-        ("pfnRead", c_void_p)                                           ## _zetSysmanTemperatureRead_t
+        ("pfnGet", c_void_p),                                           ## _zetSysmanTemperatureGet_t
+        ("pfnGetThresholds", c_void_p),                                 ## _zetSysmanTemperatureGetThresholds_t
+        ("pfnSetThresholds", c_void_p)                                  ## _zetSysmanTemperatureSetThresholds_t
     ]
 
 ###############################################################################
@@ -2763,7 +2805,7 @@ class ZET_DDI:
         self.zetSysmanFirmwareGet = _zetSysmanFirmwareGet_t(self.__dditable.Sysman.pfnFirmwareGet)
         self.zetSysmanMemoryGet = _zetSysmanMemoryGet_t(self.__dditable.Sysman.pfnMemoryGet)
         self.zetSysmanFabricPortGet = _zetSysmanFabricPortGet_t(self.__dditable.Sysman.pfnFabricPortGet)
-        self.zetSysmanTemperatureGet = _zetSysmanTemperatureGet_t(self.__dditable.Sysman.pfnTemperatureGet)
+        self.zetSysmanTemperatureRead = _zetSysmanTemperatureRead_t(self.__dditable.Sysman.pfnTemperatureRead)
         self.zetSysmanPsuGet = _zetSysmanPsuGet_t(self.__dditable.Sysman.pfnPsuGet)
         self.zetSysmanFanGet = _zetSysmanFanGet_t(self.__dditable.Sysman.pfnFanGet)
         self.zetSysmanLedGet = _zetSysmanLedGet_t(self.__dditable.Sysman.pfnLedGet)
@@ -2784,10 +2826,10 @@ class ZET_DDI:
         # attach function interface to function address
         self.zetSysmanPowerGetProperties = _zetSysmanPowerGetProperties_t(self.__dditable.SysmanPower.pfnGetProperties)
         self.zetSysmanPowerGetEnergyCounter = _zetSysmanPowerGetEnergyCounter_t(self.__dditable.SysmanPower.pfnGetEnergyCounter)
-        self.zetSysmanPowerGetEnergyThreshold = _zetSysmanPowerGetEnergyThreshold_t(self.__dditable.SysmanPower.pfnGetEnergyThreshold)
-        self.zetSysmanPowerSetEnergyThreshold = _zetSysmanPowerSetEnergyThreshold_t(self.__dditable.SysmanPower.pfnSetEnergyThreshold)
         self.zetSysmanPowerGetLimits = _zetSysmanPowerGetLimits_t(self.__dditable.SysmanPower.pfnGetLimits)
         self.zetSysmanPowerSetLimits = _zetSysmanPowerSetLimits_t(self.__dditable.SysmanPower.pfnSetLimits)
+        self.zetSysmanPowerGetEnergyThreshold = _zetSysmanPowerGetEnergyThreshold_t(self.__dditable.SysmanPower.pfnGetEnergyThreshold)
+        self.zetSysmanPowerSetEnergyThreshold = _zetSysmanPowerSetEnergyThreshold_t(self.__dditable.SysmanPower.pfnSetEnergyThreshold)
 
         # call driver to get function pointers
         _SysmanFrequency = _zet_sysman_frequency_dditable_t()
@@ -2881,7 +2923,9 @@ class ZET_DDI:
 
         # attach function interface to function address
         self.zetSysmanTemperatureGetProperties = _zetSysmanTemperatureGetProperties_t(self.__dditable.SysmanTemperature.pfnGetProperties)
-        self.zetSysmanTemperatureRead = _zetSysmanTemperatureRead_t(self.__dditable.SysmanTemperature.pfnRead)
+        self.zetSysmanTemperatureGet = _zetSysmanTemperatureGet_t(self.__dditable.SysmanTemperature.pfnGet)
+        self.zetSysmanTemperatureGetThresholds = _zetSysmanTemperatureGetThresholds_t(self.__dditable.SysmanTemperature.pfnGetThresholds)
+        self.zetSysmanTemperatureSetThresholds = _zetSysmanTemperatureSetThresholds_t(self.__dditable.SysmanTemperature.pfnSetThresholds)
 
         # call driver to get function pointers
         _SysmanPsu = _zet_sysman_psu_dditable_t()

@@ -1128,54 +1128,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPowerGetEnergyThreshold
-    ze_result_t __zecall
-    zetSysmanPowerGetEnergyThreshold(
-        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_power_energy_threshold_t* pThreshold        ///< [in] The current energy threshold value in joules.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetEnergyThreshold = context.zetDdiTable.SysmanPower.pfnGetEnergyThreshold;
-        if( nullptr != pfnGetEnergyThreshold )
-        {
-            result = pfnGetEnergyThreshold( hPower, pThreshold );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPowerSetEnergyThreshold
-    ze_result_t __zecall
-    zetSysmanPowerSetEnergyThreshold(
-        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetEnergyThreshold = context.zetDdiTable.SysmanPower.pfnSetEnergyThreshold;
-        if( nullptr != pfnSetEnergyThreshold )
-        {
-            result = pfnSetEnergyThreshold( hPower, pThreshold );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGetLimits
     ze_result_t __zecall
     zetSysmanPowerGetLimits(
@@ -1218,6 +1170,55 @@ namespace driver
         if( nullptr != pfnSetLimits )
         {
             result = pfnSetLimits( hPower, pSustained, pBurst, pPeak );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPowerGetEnergyThreshold
+    ze_result_t __zecall
+    zetSysmanPowerGetEnergyThreshold(
+        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        zet_energy_threshold_t* pThreshold              ///< [in] Returns information about the energy threshold setting -
+                                                        ///< enabled/energy threshold/process ID.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetEnergyThreshold = context.zetDdiTable.SysmanPower.pfnGetEnergyThreshold;
+        if( nullptr != pfnGetEnergyThreshold )
+        {
+            result = pfnGetEnergyThreshold( hPower, pThreshold );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPowerSetEnergyThreshold
+    ze_result_t __zecall
+    zetSysmanPowerSetEnergyThreshold(
+        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        double threshold                                ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetEnergyThreshold = context.zetDdiTable.SysmanPower.pfnSetEnergyThreshold;
+        if( nullptr != pfnSetEnergyThreshold )
+        {
+            result = pfnSetEnergyThreshold( hPower, threshold );
         }
         else
         {
@@ -2173,9 +2174,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureGet
+    /// @brief Intercept function for zetSysmanTemperatureRead
     ze_result_t __zecall
-    zetSysmanTemperatureGet(
+    zetSysmanTemperatureRead(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -2191,10 +2192,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnTemperatureGet = context.zetDdiTable.Sysman.pfnTemperatureGet;
-        if( nullptr != pfnTemperatureGet )
+        auto pfnTemperatureRead = context.zetDdiTable.Sysman.pfnTemperatureRead;
+        if( nullptr != pfnTemperatureRead )
         {
-            result = pfnTemperatureGet( hSysman, pCount, phTemperature );
+            result = pfnTemperatureRead( hSysman, pCount, phTemperature );
         }
         else
         {
@@ -2232,20 +2233,75 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureRead
+    /// @brief Intercept function for zetSysmanTemperatureGet
     ze_result_t __zecall
-    zetSysmanTemperatureRead(
+    zetSysmanTemperatureGet(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+        double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
+                                                        ///< degrees Celcius.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnRead = context.zetDdiTable.SysmanTemperature.pfnRead;
-        if( nullptr != pfnRead )
+        auto pfnGet = context.zetDdiTable.SysmanTemperature.pfnGet;
+        if( nullptr != pfnGet )
         {
-            result = pfnRead( hTemperature, pTemperature );
+            result = pfnGet( hTemperature, pTemperature );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureGetThresholds
+    ze_result_t __zecall
+    zetSysmanTemperatureGetThresholds(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        zet_temp_threshold_t* pThreshold1,              ///< [in][optional] Returns information about temperature threshold 1 -
+                                                        ///< enabled/temperature/process ID.
+        zet_temp_threshold_t* pThreshold2               ///< [in][optional] Returns information about temperature threshold 1 -
+                                                        ///< enabled/temperature/process ID.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetThresholds = context.zetDdiTable.SysmanTemperature.pfnGetThresholds;
+        if( nullptr != pfnGetThresholds )
+        {
+            result = pfnGetThresholds( hTemperature, pThreshold1, pThreshold2 );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureSetThresholds
+    ze_result_t __zecall
+    zetSysmanTemperatureSetThresholds(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        double threshold1,                              ///< [in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable
+                                                        ///< threshold 1.
+        double threshold2                               ///< [in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable
+                                                        ///< theshold 2.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetThresholds = context.zetDdiTable.SysmanTemperature.pfnSetThresholds;
+        if( nullptr != pfnSetThresholds )
+        {
+            result = pfnSetThresholds( hTemperature, threshold1, threshold2 );
         }
         else
         {
@@ -3426,7 +3482,7 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnFabricPortGet                          = driver::zetSysmanFabricPortGet;
 
-    pDdiTable->pfnTemperatureGet                         = driver::zetSysmanTemperatureGet;
+    pDdiTable->pfnTemperatureRead                        = driver::zetSysmanTemperatureRead;
 
     pDdiTable->pfnPsuGet                                 = driver::zetSysmanPsuGet;
 
@@ -3478,13 +3534,13 @@ zetGetSysmanPowerProcAddrTable(
 
     pDdiTable->pfnGetEnergyCounter                       = driver::zetSysmanPowerGetEnergyCounter;
 
-    pDdiTable->pfnGetEnergyThreshold                     = driver::zetSysmanPowerGetEnergyThreshold;
-
-    pDdiTable->pfnSetEnergyThreshold                     = driver::zetSysmanPowerSetEnergyThreshold;
-
     pDdiTable->pfnGetLimits                              = driver::zetSysmanPowerGetLimits;
 
     pDdiTable->pfnSetLimits                              = driver::zetSysmanPowerSetLimits;
+
+    pDdiTable->pfnGetEnergyThreshold                     = driver::zetSysmanPowerGetEnergyThreshold;
+
+    pDdiTable->pfnSetEnergyThreshold                     = driver::zetSysmanPowerSetEnergyThreshold;
 
     return result;
 }
@@ -3742,7 +3798,11 @@ zetGetSysmanTemperatureProcAddrTable(
 
     pDdiTable->pfnGetProperties                          = driver::zetSysmanTemperatureGetProperties;
 
-    pDdiTable->pfnRead                                   = driver::zetSysmanTemperatureRead;
+    pDdiTable->pfnGet                                    = driver::zetSysmanTemperatureGet;
+
+    pDdiTable->pfnGetThresholds                          = driver::zetSysmanTemperatureGetThresholds;
+
+    pDdiTable->pfnSetThresholds                          = driver::zetSysmanTemperatureSetThresholds;
 
     return result;
 }

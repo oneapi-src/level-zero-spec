@@ -207,10 +207,6 @@ typedef struct _zet_power_properties_t zet_power_properties_t;
 typedef struct _zet_power_energy_counter_t zet_power_energy_counter_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_power_energy_threshold_t
-typedef struct _zet_power_energy_threshold_t zet_power_energy_threshold_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_power_sustained_limit_t
 typedef struct _zet_power_sustained_limit_t zet_power_sustained_limit_t;
 
@@ -221,6 +217,10 @@ typedef struct _zet_power_burst_limit_t zet_power_burst_limit_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_power_peak_limit_t
 typedef struct _zet_power_peak_limit_t zet_power_peak_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_energy_threshold_t
+typedef struct _zet_energy_threshold_t zet_energy_threshold_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_freq_properties_t
@@ -305,6 +305,10 @@ typedef struct _zet_fabric_port_throughput_t zet_fabric_port_throughput_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_temp_properties_t
 typedef struct _zet_temp_properties_t zet_temp_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_temp_threshold_t
+typedef struct _zet_temp_threshold_t zet_temp_threshold_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_psu_properties_t

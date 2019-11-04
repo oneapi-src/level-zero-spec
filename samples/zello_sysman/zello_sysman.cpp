@@ -566,10 +566,19 @@ void ShowPowerLimits(zet_sysman_pwr_handle_t hPower)
 
 void ShowEnergyThreshold(zet_sysman_pwr_handle_t hPower)
 {
-    zet_power_energy_threshold_t energyThreshold;
+    zet_energy_threshold_t energyThreshold;
     if (zetSysmanPowerGetEnergyThreshold(hPower, &energyThreshold) == ZE_RESULT_SUCCESS)
     {
-        fprintf(stdout, "    Energy Threshold: %d\n", energyThreshold.energy);
+        fprintf(stdout, "    Energy Threshold: ");
+        if (energyThreshold.enable)
+        {
+            fprintf(stdout, "Enabled, %0.3f Joules, Process ID %u\n", energyThreshold.threshold, energyThreshold.processId);
+        }
+        else
+        {
+            fprintf(stdout, "Disabled");
+        }
+        fprintf(stdout, "\n");
     }
 
 }

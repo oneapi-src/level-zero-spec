@@ -1343,24 +1343,24 @@ typedef void (__zecall *zet_pfnSysmanFabricPortGetCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanTemperatureGet 
+/// @brief Callback function parameters for zetSysmanTemperatureRead 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_temperature_get_params_t
+typedef struct _zet_sysman_temperature_read_params_t
 {
     zet_sysman_handle_t* phSysman;
     uint32_t** ppCount;
     zet_sysman_temp_handle_t** pphTemperature;
-} zet_sysman_temperature_get_params_t;
+} zet_sysman_temperature_read_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanTemperatureGet 
+/// @brief Callback function-pointer for zetSysmanTemperatureRead 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanTemperatureGetCb_t)(
-    zet_sysman_temperature_get_params_t* params,
+typedef void (__zecall *zet_pfnSysmanTemperatureReadCb_t)(
+    zet_sysman_temperature_read_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1610,7 +1610,7 @@ typedef struct _zet_sysman_callbacks_t
     zet_pfnSysmanFirmwareGetCb_t                                    pfnFirmwareGetCb;
     zet_pfnSysmanMemoryGetCb_t                                      pfnMemoryGetCb;
     zet_pfnSysmanFabricPortGetCb_t                                  pfnFabricPortGetCb;
-    zet_pfnSysmanTemperatureGetCb_t                                 pfnTemperatureGetCb;
+    zet_pfnSysmanTemperatureReadCb_t                                pfnTemperatureReadCb;
     zet_pfnSysmanPsuGetCb_t                                         pfnPsuGetCb;
     zet_pfnSysmanFanGetCb_t                                         pfnFanGetCb;
     zet_pfnSysmanLedGetCb_t                                         pfnLedGetCb;
@@ -1669,52 +1669,6 @@ typedef void (__zecall *zet_pfnSysmanPowerGetEnergyCounterCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanPowerGetEnergyThreshold 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_power_get_energy_threshold_params_t
-{
-    zet_sysman_pwr_handle_t* phPower;
-    zet_power_energy_threshold_t** ppThreshold;
-} zet_sysman_power_get_energy_threshold_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanPowerGetEnergyThreshold 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanPowerGetEnergyThresholdCb_t)(
-    zet_sysman_power_get_energy_threshold_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanPowerSetEnergyThreshold 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_power_set_energy_threshold_params_t
-{
-    zet_sysman_pwr_handle_t* phPower;
-    zet_power_energy_threshold_t** ppThreshold;
-} zet_sysman_power_set_energy_threshold_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanPowerSetEnergyThreshold 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanPowerSetEnergyThresholdCb_t)(
-    zet_sysman_power_set_energy_threshold_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanPowerGetLimits 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1765,15 +1719,61 @@ typedef void (__zecall *zet_pfnSysmanPowerSetLimitsCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanPowerGetEnergyThreshold 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_power_get_energy_threshold_params_t
+{
+    zet_sysman_pwr_handle_t* phPower;
+    zet_energy_threshold_t** ppThreshold;
+} zet_sysman_power_get_energy_threshold_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanPowerGetEnergyThreshold 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanPowerGetEnergyThresholdCb_t)(
+    zet_sysman_power_get_energy_threshold_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanPowerSetEnergyThreshold 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_power_set_energy_threshold_params_t
+{
+    zet_sysman_pwr_handle_t* phPower;
+    double* pthreshold;
+} zet_sysman_power_set_energy_threshold_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanPowerSetEnergyThreshold 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanPowerSetEnergyThresholdCb_t)(
+    zet_sysman_power_set_energy_threshold_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of SysmanPower callback functions pointers
 typedef struct _zet_sysman_power_callbacks_t
 {
     zet_pfnSysmanPowerGetPropertiesCb_t                             pfnGetPropertiesCb;
     zet_pfnSysmanPowerGetEnergyCounterCb_t                          pfnGetEnergyCounterCb;
-    zet_pfnSysmanPowerGetEnergyThresholdCb_t                        pfnGetEnergyThresholdCb;
-    zet_pfnSysmanPowerSetEnergyThresholdCb_t                        pfnSetEnergyThresholdCb;
     zet_pfnSysmanPowerGetLimitsCb_t                                 pfnGetLimitsCb;
     zet_pfnSysmanPowerSetLimitsCb_t                                 pfnSetLimitsCb;
+    zet_pfnSysmanPowerGetEnergyThresholdCb_t                        pfnGetEnergyThresholdCb;
+    zet_pfnSysmanPowerSetEnergyThresholdCb_t                        pfnSetEnergyThresholdCb;
 } zet_sysman_power_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2534,23 +2534,71 @@ typedef void (__zecall *zet_pfnSysmanTemperatureGetPropertiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanTemperatureRead 
+/// @brief Callback function parameters for zetSysmanTemperatureGet 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_temperature_read_params_t
+typedef struct _zet_sysman_temperature_get_params_t
 {
     zet_sysman_temp_handle_t* phTemperature;
-    uint32_t** ppTemperature;
-} zet_sysman_temperature_read_params_t;
+    double** ppTemperature;
+} zet_sysman_temperature_get_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanTemperatureRead 
+/// @brief Callback function-pointer for zetSysmanTemperatureGet 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanTemperatureReadCb_t)(
-    zet_sysman_temperature_read_params_t* params,
+typedef void (__zecall *zet_pfnSysmanTemperatureGetCb_t)(
+    zet_sysman_temperature_get_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanTemperatureGetThresholds 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_temperature_get_thresholds_params_t
+{
+    zet_sysman_temp_handle_t* phTemperature;
+    zet_temp_threshold_t** ppThreshold1;
+    zet_temp_threshold_t** ppThreshold2;
+} zet_sysman_temperature_get_thresholds_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanTemperatureGetThresholds 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanTemperatureGetThresholdsCb_t)(
+    zet_sysman_temperature_get_thresholds_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanTemperatureSetThresholds 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_temperature_set_thresholds_params_t
+{
+    zet_sysman_temp_handle_t* phTemperature;
+    double* pthreshold1;
+    double* pthreshold2;
+} zet_sysman_temperature_set_thresholds_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanTemperatureSetThresholds 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanTemperatureSetThresholdsCb_t)(
+    zet_sysman_temperature_set_thresholds_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -2561,7 +2609,9 @@ typedef void (__zecall *zet_pfnSysmanTemperatureReadCb_t)(
 typedef struct _zet_sysman_temperature_callbacks_t
 {
     zet_pfnSysmanTemperatureGetPropertiesCb_t                       pfnGetPropertiesCb;
-    zet_pfnSysmanTemperatureReadCb_t                                pfnReadCb;
+    zet_pfnSysmanTemperatureGetCb_t                                 pfnGetCb;
+    zet_pfnSysmanTemperatureGetThresholdsCb_t                       pfnGetThresholdsCb;
+    zet_pfnSysmanTemperatureSetThresholdsCb_t                       pfnSetThresholdsCb;
 } zet_sysman_temperature_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////

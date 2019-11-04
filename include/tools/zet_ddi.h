@@ -775,8 +775,8 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanTemperatureGet 
-typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGet_t)(
+/// @brief Function-pointer for zetSysmanTemperatureRead 
+typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureRead_t)(
     zet_sysman_handle_t,
     uint32_t*,
     zet_sysman_temp_handle_t*
@@ -882,7 +882,7 @@ typedef struct _zet_sysman_dditable_t
     zet_pfnSysmanFirmwareGet_t                                  pfnFirmwareGet;
     zet_pfnSysmanMemoryGet_t                                    pfnMemoryGet;
     zet_pfnSysmanFabricPortGet_t                                pfnFabricPortGet;
-    zet_pfnSysmanTemperatureGet_t                               pfnTemperatureGet;
+    zet_pfnSysmanTemperatureRead_t                              pfnTemperatureRead;
     zet_pfnSysmanPsuGet_t                                       pfnPsuGet;
     zet_pfnSysmanFanGet_t                                       pfnFanGet;
     zet_pfnSysmanLedGet_t                                       pfnLedGet;
@@ -933,20 +933,6 @@ typedef ze_result_t (__zecall *zet_pfnSysmanPowerGetEnergyCounter_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanPowerGetEnergyThreshold 
-typedef ze_result_t (__zecall *zet_pfnSysmanPowerGetEnergyThreshold_t)(
-    zet_sysman_pwr_handle_t,
-    zet_power_energy_threshold_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanPowerSetEnergyThreshold 
-typedef ze_result_t (__zecall *zet_pfnSysmanPowerSetEnergyThreshold_t)(
-    zet_sysman_pwr_handle_t,
-    zet_power_energy_threshold_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanPowerGetLimits 
 typedef ze_result_t (__zecall *zet_pfnSysmanPowerGetLimits_t)(
     zet_sysman_pwr_handle_t,
@@ -965,15 +951,29 @@ typedef ze_result_t (__zecall *zet_pfnSysmanPowerSetLimits_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPowerGetEnergyThreshold 
+typedef ze_result_t (__zecall *zet_pfnSysmanPowerGetEnergyThreshold_t)(
+    zet_sysman_pwr_handle_t,
+    zet_energy_threshold_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPowerSetEnergyThreshold 
+typedef ze_result_t (__zecall *zet_pfnSysmanPowerSetEnergyThreshold_t)(
+    zet_sysman_pwr_handle_t,
+    double
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of SysmanPower functions pointers
 typedef struct _zet_sysman_power_dditable_t
 {
     zet_pfnSysmanPowerGetProperties_t                           pfnGetProperties;
     zet_pfnSysmanPowerGetEnergyCounter_t                        pfnGetEnergyCounter;
-    zet_pfnSysmanPowerGetEnergyThreshold_t                      pfnGetEnergyThreshold;
-    zet_pfnSysmanPowerSetEnergyThreshold_t                      pfnSetEnergyThreshold;
     zet_pfnSysmanPowerGetLimits_t                               pfnGetLimits;
     zet_pfnSysmanPowerSetLimits_t                               pfnSetLimits;
+    zet_pfnSysmanPowerGetEnergyThreshold_t                      pfnGetEnergyThreshold;
+    zet_pfnSysmanPowerSetEnergyThreshold_t                      pfnSetEnergyThreshold;
 } zet_sysman_power_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1422,10 +1422,26 @@ typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanTemperatureRead 
-typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureRead_t)(
+/// @brief Function-pointer for zetSysmanTemperatureGet 
+typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGet_t)(
     zet_sysman_temp_handle_t,
-    uint32_t*
+    double*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanTemperatureGetThresholds 
+typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGetThresholds_t)(
+    zet_sysman_temp_handle_t,
+    zet_temp_threshold_t*,
+    zet_temp_threshold_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanTemperatureSetThresholds 
+typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureSetThresholds_t)(
+    zet_sysman_temp_handle_t,
+    double,
+    double
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1433,7 +1449,9 @@ typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureRead_t)(
 typedef struct _zet_sysman_temperature_dditable_t
 {
     zet_pfnSysmanTemperatureGetProperties_t                     pfnGetProperties;
-    zet_pfnSysmanTemperatureRead_t                              pfnRead;
+    zet_pfnSysmanTemperatureGet_t                               pfnGet;
+    zet_pfnSysmanTemperatureGetThresholds_t                     pfnGetThresholds;
+    zet_pfnSysmanTemperatureSetThresholds_t                     pfnSetThresholds;
 } zet_sysman_temperature_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -614,66 +614,6 @@ zetSysmanPowerGetEnergyCounter(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get energy threshold
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == pThreshold
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zetSysmanPowerGetEnergyThreshold(
-    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    zet_power_energy_threshold_t* pThreshold        ///< [in] The current energy threshold value in joules.
-    )
-{
-    auto pfnGetEnergyThreshold = zet_lib::context.ddiTable.SysmanPower.pfnGetEnergyThreshold;
-    if( nullptr == pfnGetEnergyThreshold )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetEnergyThreshold( hPower, pThreshold );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set energy threshold
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == pThreshold
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
-///         + User does not have permissions to request this feature.
-///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
-///         + The device is in use, meaning that the GPU is under Over clocking, applying energy threshold under overclocking is not supported.
-ze_result_t __zecall
-zetSysmanPowerSetEnergyThreshold(
-    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    zet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
-    )
-{
-    auto pfnSetEnergyThreshold = zet_lib::context.ddiTable.SysmanPower.pfnSetEnergyThreshold;
-    if( nullptr == pfnSetEnergyThreshold )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnSetEnergyThreshold( hPower, pThreshold );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get power limits
 /// 
 /// @details
@@ -733,6 +673,84 @@ zetSysmanPowerSetLimits(
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetLimits( hPower, pSustained, pBurst, pPeak );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get energy threshold
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hPower
+///         + nullptr == pThreshold
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Energy threshold not supported on this power domain.
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to request this feature.
+ze_result_t __zecall
+zetSysmanPowerGetEnergyThreshold(
+    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+    zet_energy_threshold_t* pThreshold              ///< [in] Returns information about the energy threshold setting -
+                                                    ///< enabled/energy threshold/process ID.
+    )
+{
+    auto pfnGetEnergyThreshold = zet_lib::context.ddiTable.SysmanPower.pfnGetEnergyThreshold;
+    if( nullptr == pfnGetEnergyThreshold )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetEnergyThreshold( hPower, pThreshold );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set energy threshold
+/// 
+/// @details
+///     - An event ::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be
+///       generated when the delta energy consumed starting from this call
+///       exceeds the specified threshold. Use the function
+///       ::zetSysmanEventsRegister() to start receiving the event.
+///     - Only one running process can control the energy threshold at a given
+///       time. If another process attempts to change the energy threshold, the
+///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
+///       function ::zetSysmanPowerGetEnergyThreshold() to determine the process
+///       ID currently controlling this setting.
+///     - Calling this function will remove any pending energy thresholds and
+///       start counting from the time of this call.
+///     - Once the energy threshold has been reached and the event generated,
+///       the threshold is automatically removed. It is up to the application to
+///       request a new threshold.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hPower
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Energy threshold not supported on this power domain.
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to request this feature.
+///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///         + Another running process has set the energy threshold.
+ze_result_t __zecall
+zetSysmanPowerSetEnergyThreshold(
+    zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+    double threshold                                ///< [in] The energy threshold to be set in joules.
+    )
+{
+    auto pfnSetEnergyThreshold = zet_lib::context.ddiTable.SysmanPower.pfnSetEnergyThreshold;
+    if( nullptr == pfnSetEnergyThreshold )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetEnergyThreshold( hPower, threshold );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1871,7 +1889,7 @@ zetSysmanFabricPortGetThroughput(
 ///         + nullptr == pCount
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanTemperatureGet(
+zetSysmanTemperatureRead(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
@@ -1884,11 +1902,11 @@ zetSysmanTemperatureGet(
                                                     ///< this type
     )
 {
-    auto pfnTemperatureGet = zet_lib::context.ddiTable.Sysman.pfnTemperatureGet;
-    if( nullptr == pfnTemperatureGet )
+    auto pfnTemperatureRead = zet_lib::context.ddiTable.Sysman.pfnTemperatureRead;
+    if( nullptr == pfnTemperatureRead )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnTemperatureGet( hSysman, pCount, phTemperature );
+    return pfnTemperatureRead( hSysman, pCount, phTemperature );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1935,16 +1953,97 @@ zetSysmanTemperatureGetProperties(
 ///         + nullptr == pTemperature
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanTemperatureRead(
+zetSysmanTemperatureGet(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-    uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+    double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
+                                                    ///< degrees Celcius.
     )
 {
-    auto pfnRead = zet_lib::context.ddiTable.SysmanTemperature.pfnRead;
-    if( nullptr == pfnRead )
+    auto pfnGet = zet_lib::context.ddiTable.SysmanTemperature.pfnGet;
+    if( nullptr == pfnGet )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnRead( hTemperature, pTemperature );
+    return pfnGet( hTemperature, pTemperature );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get state of temperature thresholds
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hTemperature
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
+///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to request this feature.
+ze_result_t __zecall
+zetSysmanTemperatureGetThresholds(
+    zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+    zet_temp_threshold_t* pThreshold1,              ///< [in][optional] Returns information about temperature threshold 1 -
+                                                    ///< enabled/temperature/process ID.
+    zet_temp_threshold_t* pThreshold2               ///< [in][optional] Returns information about temperature threshold 1 -
+                                                    ///< enabled/temperature/process ID.
+    )
+{
+    auto pfnGetThresholds = zet_lib::context.ddiTable.SysmanTemperature.pfnGetThresholds;
+    if( nullptr == pfnGetThresholds )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetThresholds( hTemperature, pThreshold1, pThreshold2 );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set temperature thresholds
+/// 
+/// @details
+///     - Events ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and
+///       ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when
+///       temperature cross the thresholds set using this function. Use the
+///       function ::zetSysmanEventsRegister() to start receiving the event.
+///     - Only one running process can set the temperature thresholds at a time.
+///       If another process attempts to change the temperature thresholds, the
+///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
+///       function ::zetSysmanTemperatureGetThresholds() will return the process
+///       ID currently controlling these settings.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hTemperature
+///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyGetOcTjMax()). Temperature thresholds must be below this value.
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
+///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to request this feature.
+///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///         + Another running process is controlling these settings.
+ze_result_t __zecall
+zetSysmanTemperatureSetThresholds(
+    zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+    double threshold1,                              ///< [in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable
+                                                    ///< threshold 1.
+    double threshold2                               ///< [in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable
+                                                    ///< theshold 2.
+    )
+{
+    auto pfnSetThresholds = zet_lib::context.ddiTable.SysmanTemperature.pfnSetThresholds;
+    if( nullptr == pfnSetThresholds )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSetThresholds( hTemperature, threshold1, threshold2 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3282,48 +3381,6 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get energy threshold
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __zecall
-    SysmanPower::GetEnergyThreshold(
-        power_energy_threshold_t* pThreshold            ///< [in] The current energy threshold value in joules.
-        )
-    {
-        auto result = static_cast<result_t>( ::zetSysmanPowerGetEnergyThreshold(
-            reinterpret_cast<zet_sysman_pwr_handle_t>( getHandle() ),
-            reinterpret_cast<zet_power_energy_threshold_t*>( pThreshold ) ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::GetEnergyThreshold" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set energy threshold
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __zecall
-    SysmanPower::SetEnergyThreshold(
-        power_energy_threshold_t* pThreshold            ///< [in] The energy threshold to be set in joules.
-        )
-    {
-        auto result = static_cast<result_t>( ::zetSysmanPowerSetEnergyThreshold(
-            reinterpret_cast<zet_sysman_pwr_handle_t>( getHandle() ),
-            reinterpret_cast<zet_power_energy_threshold_t*>( pThreshold ) ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::SetEnergyThreshold" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get power limits
     /// 
     /// @details
@@ -3371,6 +3428,63 @@ namespace zet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::SetLimits" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get energy threshold
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanPower::GetEnergyThreshold(
+        energy_threshold_t* pThreshold                  ///< [in] Returns information about the energy threshold setting -
+                                                        ///< enabled/energy threshold/process ID.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanPowerGetEnergyThreshold(
+            reinterpret_cast<zet_sysman_pwr_handle_t>( getHandle() ),
+            reinterpret_cast<zet_energy_threshold_t*>( pThreshold ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::GetEnergyThreshold" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set energy threshold
+    /// 
+    /// @details
+    ///     - An event ::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be
+    ///       generated when the delta energy consumed starting from this call
+    ///       exceeds the specified threshold. Use the function
+    ///       ::zetSysmanEventsRegister() to start receiving the event.
+    ///     - Only one running process can control the energy threshold at a given
+    ///       time. If another process attempts to change the energy threshold, the
+    ///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
+    ///       function ::zetSysmanPowerGetEnergyThreshold() to determine the process
+    ///       ID currently controlling this setting.
+    ///     - Calling this function will remove any pending energy thresholds and
+    ///       start counting from the time of this call.
+    ///     - Once the energy threshold has been reached and the event generated,
+    ///       the threshold is automatically removed. It is up to the application to
+    ///       request a new threshold.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanPower::SetEnergyThreshold(
+        double threshold                                ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanPowerSetEnergyThreshold(
+            reinterpret_cast<zet_sysman_pwr_handle_t>( getHandle() ),
+            threshold ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPower::SetEnergyThreshold" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -4354,7 +4468,7 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::TemperatureGet(
+    Sysman::TemperatureRead(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -4369,13 +4483,13 @@ namespace zet
         thread_local std::vector<zet_sysman_temp_handle_t> hTemperature;
         hTemperature.resize( ( ppTemperature ) ? *pCount : 0 );
 
-        auto result = static_cast<result_t>( ::zetSysmanTemperatureGet(
+        auto result = static_cast<result_t>( ::zetSysmanTemperatureRead(
             reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
             pCount,
             hTemperature.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::TemperatureGet" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::TemperatureRead" );
 
         for( uint32_t i = 0; ( ppTemperature ) && ( i < *pCount ); ++i )
             ppTemperature[ i ] = nullptr;
@@ -4393,7 +4507,7 @@ namespace zet
                 ppTemperature[ i ] = nullptr;
             }
 
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "zet::Sysman::TemperatureGet" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "zet::Sysman::TemperatureRead" );
         }
     }
 
@@ -4427,16 +4541,76 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanTemperature::Read(
-        uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+    SysmanTemperature::Get(
+        double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
+                                                        ///< degrees Celcius.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanTemperatureRead(
+        auto result = static_cast<result_t>( ::zetSysmanTemperatureGet(
             reinterpret_cast<zet_sysman_temp_handle_t>( getHandle() ),
             pTemperature ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanTemperature::Read" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanTemperature::Get" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get state of temperature thresholds
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanTemperature::GetThresholds(
+        temp_threshold_t* pThreshold1,                  ///< [in][optional] Returns information about temperature threshold 1 -
+                                                        ///< enabled/temperature/process ID.
+        temp_threshold_t* pThreshold2                   ///< [in][optional] Returns information about temperature threshold 1 -
+                                                        ///< enabled/temperature/process ID.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanTemperatureGetThresholds(
+            reinterpret_cast<zet_sysman_temp_handle_t>( getHandle() ),
+            reinterpret_cast<zet_temp_threshold_t*>( pThreshold1 ),
+            reinterpret_cast<zet_temp_threshold_t*>( pThreshold2 ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanTemperature::GetThresholds" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set temperature thresholds
+    /// 
+    /// @details
+    ///     - Events ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and
+    ///       ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when
+    ///       temperature cross the thresholds set using this function. Use the
+    ///       function ::zetSysmanEventsRegister() to start receiving the event.
+    ///     - Only one running process can set the temperature thresholds at a time.
+    ///       If another process attempts to change the temperature thresholds, the
+    ///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
+    ///       function ::zetSysmanTemperatureGetThresholds() will return the process
+    ///       ID currently controlling these settings.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanTemperature::SetThresholds(
+        double threshold1,                              ///< [in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable
+                                                        ///< threshold 1.
+        double threshold2                               ///< [in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable
+                                                        ///< theshold 2.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanTemperatureSetThresholds(
+            reinterpret_cast<zet_sysman_temp_handle_t>( getHandle() ),
+            threshold1,
+            threshold2 ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanTemperature::SetThresholds" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -5283,8 +5457,16 @@ namespace zet
             str = "Sysman::event_type_t::ENERGY_THRESHOLD_CROSSED";
             break;
 
-        case Sysman::event_type_t::MAX_TEMPERATURE:
-            str = "Sysman::event_type_t::MAX_TEMPERATURE";
+        case Sysman::event_type_t::CRITICAL_TEMPERATURE:
+            str = "Sysman::event_type_t::CRITICAL_TEMPERATURE";
+            break;
+
+        case Sysman::event_type_t::TEMP_THRESHOLD1:
+            str = "Sysman::event_type_t::TEMP_THRESHOLD1";
+            break;
+
+        case Sysman::event_type_t::TEMP_THRESHOLD2:
+            str = "Sysman::event_type_t::TEMP_THRESHOLD2";
             break;
 
         case Sysman::event_type_t::RAS_ERRORS:
@@ -5637,6 +5819,10 @@ namespace zet
         str += std::to_string(val.canControl);
         str += "\n";
         
+        str += "SysmanPower::power_properties_t::isEnergyThresholdSupported : ";
+        str += std::to_string(val.isEnergyThresholdSupported);
+        str += "\n";
+        
         str += "SysmanPower::power_properties_t::maxLimit : ";
         str += std::to_string(val.maxLimit);
         str += "\n";
@@ -5656,19 +5842,6 @@ namespace zet
         
         str += "SysmanPower::power_energy_counter_t::timestamp : ";
         str += std::to_string(val.timestamp);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPower::power_energy_threshold_t to std::string
-    std::string to_string( const SysmanPower::power_energy_threshold_t val )
-    {
-        std::string str;
-        
-        str += "SysmanPower::power_energy_threshold_t::energy : ";
-        str += std::to_string(val.energy);
         str += "\n";
 
         return str;
@@ -5724,6 +5897,27 @@ namespace zet
         
         str += "SysmanPower::power_peak_limit_t::powerDC : ";
         str += std::to_string(val.powerDC);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanPower::energy_threshold_t to std::string
+    std::string to_string( const SysmanPower::energy_threshold_t val )
+    {
+        std::string str;
+        
+        str += "SysmanPower::energy_threshold_t::enable : ";
+        str += std::to_string(val.enable);
+        str += "\n";
+        
+        str += "SysmanPower::energy_threshold_t::threshold : ";
+        str += std::to_string(val.threshold);
+        str += "\n";
+        
+        str += "SysmanPower::energy_threshold_t::processId : ";
+        str += std::to_string(val.processId);
         str += "\n";
 
         return str;
@@ -6600,6 +6794,39 @@ namespace zet
         
         str += "SysmanTemperature::temp_properties_t::subdeviceId : ";
         str += std::to_string(val.subdeviceId);
+        str += "\n";
+        
+        str += "SysmanTemperature::temp_properties_t::isThreshold1Supported : ";
+        str += std::to_string(val.isThreshold1Supported);
+        str += "\n";
+        
+        str += "SysmanTemperature::temp_properties_t::isThreshold2Supported : ";
+        str += std::to_string(val.isThreshold2Supported);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanTemperature::temp_threshold_t to std::string
+    std::string to_string( const SysmanTemperature::temp_threshold_t val )
+    {
+        std::string str;
+        
+        str += "SysmanTemperature::temp_threshold_t::enableLowToHigh : ";
+        str += std::to_string(val.enableLowToHigh);
+        str += "\n";
+        
+        str += "SysmanTemperature::temp_threshold_t::enableHighToLow : ";
+        str += std::to_string(val.enableHighToLow);
+        str += "\n";
+        
+        str += "SysmanTemperature::temp_threshold_t::threshold : ";
+        str += std::to_string(val.threshold);
+        str += "\n";
+        
+        str += "SysmanTemperature::temp_threshold_t::processId : ";
+        str += std::to_string(val.processId);
         str += "\n";
 
         return str;

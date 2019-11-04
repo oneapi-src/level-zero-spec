@@ -336,7 +336,7 @@ the calling application thread to sleep until new notifications are received.
 
 The API enables registering for events from multiple devices and listening for any events coming from any devices by using one function call.
 
-One notifications have occurred, the application can use the query SMI interface functions to get more details.
+Once notifications have occurred, the application can use the query SMI interface functions to get more details.
 
 The following events are provided:
 
@@ -524,13 +524,15 @@ if the high requests and utilization of the device continue.
 
 The following functions are provided to manage the power of the device:
 
-| Function                            | Description |
-| :---                                | :---        |
-| ::zetSysmanPowerGet()              | Enumerate the power domains. |
-| ::zetSysmanPowerGetProperties()    | Get the maximum power limit that can be specified when changing the power limits of a specific power domain. |
-| ::zetSysmanPowerGetEnergyCounter() | Read the energy consumption of the specific domain. |
-| ::zetSysmanPowerGetLimits()        | Get the sustained/burst/peak power limits for the specific power domain. |
-| ::zetSysmanPowerSetLimits()        | Set the sustained/burst/peak power limits for the specific power domain. |
+| Function                              | Description |
+| :---                                  | :---        |
+| ::zetSysmanPowerGet()                | Enumerate the power domains. |
+| ::zetSysmanPowerGetProperties()      | Get the maximum power limit that can be specified when changing the power limits of a specific power domain. |
+| ::zetSysmanPowerGetEnergyCounter()   | Read the energy consumption of the specific domain. |
+| ::zetSysmanPowerGetLimits()          | Get the sustained/burst/peak power limits for the specific power domain. |
+| ::zetSysmanPowerSetLimits()          | Set the sustained/burst/peak power limits for the specific power domain. |
+| ::zetSysmanPowerGetEnergyThreshold() | Get the current energy threshold. |
+| ::zetSysmanPowerSetEnergyThreshold() | Set the energy threshold. Event ::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the energy consumed since calling this functions exceeds the specified threshold. |
 
 The example below shows how to output information about each power domain on a device:
 
@@ -895,6 +897,8 @@ A device has multiple temperature sensors embedded at different locations. The f
 | ::zetSysmanTemperatureGet()           | Enumerate the temperature sensors on the device. |
 | ::zetSysmanTemperatureGetProperties() | Get static properties for a temperature sensor. In particular, this will indicate which parts of the device the sensor measures (one of ::zet_temp_sensors_t). |
 | ::zetSysmanTemperatureRead()          | Read the temperature of a sensor. |
+| ::zetSysmanTemperatureGetThresholds() | Get information about the current temperature thresholds - enabled/threshold/processID. |
+| ::zetSysmanTemperatureSetThresholds() | Set new temperature thresholds. Events will be triggered when the temperature crosses these thresholds. |
 
 
 ## <a name="psu">Operations on power supplies</a>
@@ -1299,6 +1303,8 @@ The table below summarizes the default permissions for each API function:
 | ::zetSysmanPowerGet()                                | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPowerGetProperties()                      | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPowerGetEnergyCounter()                   | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPowerGetEnergyThreshold()                 | read-only            | read-only            | no-access            | no-access            |
+| ::zetSysmanPowerSetEnergyThreshold()                 | read-write           | read-write           | no-access            | no-access            |
 | ::zetSysmanPowerGetLimits()                          | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPowerSetLimits()                          | read-write           | read-write           | read-only            | no-access            |
 | ::zetSysmanFrequencyGet()                            | read-only            | read-only            | read-only            | no-access            |
@@ -1333,6 +1339,8 @@ The table below summarizes the default permissions for each API function:
 | ::zetSysmanTemperatureGet()                          | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanTemperatureGetProperties()                | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanTemperatureRead()                         | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanTemperatureGetThresholds()                | read-only            | read-only            | no-access            | no-access            |
+| ::zetSysmanTemperatureSetThresholds()                | read-write           | read-write           | no-access            | no-access            |
 | ::zetSysmanPsuGet()                                  | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPsuGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPsuGetState()                             | read-only            | read-only            | read-only            | no-access            |

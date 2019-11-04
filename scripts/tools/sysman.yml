@@ -581,6 +581,9 @@ members:
     - type: $x_bool_t
       name: "canControl"
       desc: "[out] Software can change the power limits."
+    - type: $x_bool_t
+      name: "isEnergyThresholdSupported"
+      desc: "[out] Indicates if this power domain supports the energy threshold event ($T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED)."
     - type: uint32_t
       name: "maxLimit"
       desc: "[out] The maximum power limit in milliwatts that can be requested."  
@@ -602,17 +605,6 @@ members:
             No assumption should be made about the absolute value of the timestamp.
             It should only be used to calculate delta time between two snapshots of the same structure.
             Never take the delta of this timestamp with the timestamp from a different structure.
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Energy threshold"
-class: $tSysmanPower
-name: $t_power_energy_threshold_t
-details:
-    - "Energy threshold value, when this value is crossed, pcu will signal an interrupt."
-members:
-    - type: uint32_t
-      name: "energy"
-      desc: "[in,out] The energy threshold in joules."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Sustained power limits"
@@ -659,6 +651,23 @@ members:
     - type: uint32_t
       name: powerDC
       desc: "[in,out] power limit in milliwatts for the DC power source. This is ignored if the product does not have a battery."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Energy threshold"
+class: $tSysmanPower
+name: $t_energy_threshold_t
+details:
+    - "."
+members:
+    - type: $x_bool_t
+      name: enable
+      desc: "[in,out] Indicates if the energy threshold is enabled."
+    - type: double
+      name: threshold
+      desc: "[in,out] The energy threshold in Joules. Will be 0.0 if no threshold has been set."
+    - type: uint32_t
+      name: processId
+      desc: "[in,out] The host process ID that set the energy threshold. Will be -1 if no threshold has been set."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of power domains"
@@ -713,41 +722,6 @@ params:
       desc: "[in] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get energy threshold"
-class: $tSysmanPower
-name: GetEnergyThreshold
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_pwr_handle_t
-      name: hPower
-      desc: "[in] Handle for the component."
-    - type: $t_power_energy_threshold_t*
-      name: pThreshold
-      desc: "[in] The current energy threshold value in joules."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set energy threshold"
-class: $tSysmanPower
-name: SetEnergyThreshold
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_pwr_handle_t
-      name: hPower
-      desc: "[in] Handle for the component."
-    - type: $t_power_energy_threshold_t*
-      name: pThreshold
-      desc: "[in] The energy threshold to be set in joules."
-returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
-        - "User does not have permissions to request this feature."
-    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
-        - "The device is in use, meaning that the GPU is under Over clocking, applying energy threshold under overclocking is not supported."
---- #--------------------------------------------------------------------------
-type: function
 desc: "Get power limits"
 class: $tSysmanPower
 name: GetLimits
@@ -793,6 +767,52 @@ returns:
         - "User does not have permissions to make these modifications."
     - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
         - "The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get energy threshold"
+class: $tSysmanPower
+name: GetEnergyThreshold
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $t_energy_threshold_t*
+      name: pThreshold
+      desc: "[in] Returns information about the energy threshold setting - enabled/energy threshold/process ID."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Energy threshold not supported on this power domain."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set energy threshold"
+class: $tSysmanPower
+name: SetEnergyThreshold
+details:
+    - "An event $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function $tSysmanEventsRegister() to start receiving the event."
+    - "Only one running process can control the energy threshold at a given time. If another process attempts to change the energy threshold, the error $X_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The function $tSysmanPowerGetEnergyThreshold() to determine the process ID currently controlling this setting."
+    - "Calling this function will remove any pending energy thresholds and start counting from the time of this call."
+    - "Once the energy threshold has been reached and the event generated, the threshold is automatically removed. It is up to the application to request a new threshold."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: double
+      name: threshold
+      desc: "[in] The energy threshold to be set in joules."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Energy threshold not supported on this power domain."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
+    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
+        - "Another running process has set the energy threshold."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2080,11 +2100,35 @@ members:
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: "isThreshold1Supported"
+      desc: "[out] Indicates if the temperature threshold 1 event $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported"
+    - type: $x_bool_t
+      name: "isThreshold2Supported"
+      desc: "[out] Indicates if the temperature threshold 2 event $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 is supported"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Temperature sensor threshold"
+class: $tSysmanTemperature
+name: $t_temp_threshold_t
+members:
+    - type: $x_bool_t
+      name: "enableLowToHigh"
+      desc: "[in,out] Generate an event when the temperature crosses from below the threshold to above."
+    - type: $x_bool_t
+      name: "enableHighToLow"
+      desc: "[in,out] Generate an event when the temperature crosses from above the threshold to below."
+    - type: $x_bool_t
+      name: "threshold"
+      desc: "[in,out] The threshold in degrees Celcius."
+    - type: uint32_t
+      name: "processId"
+      desc: "[in,out] Host processId that set this threshold."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of temperature sensors"
 class: $tSysman
-name: TemperatureGet
+name: TemperatureRead
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -2121,7 +2165,7 @@ params:
 type: function
 desc: "Get the temperature from a specified sensor"
 class: $tSysmanTemperature
-name: Read
+name: Get
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -2129,9 +2173,63 @@ params:
     - type: $t_sysman_temp_handle_t
       name: hTemperature
       desc: "[in] Handle for the component."
-    - type: uint32_t*
+    - type: double*
       name: pTemperature
-      desc: "[in] Will contain the temperature read from the specified sensor."
+      desc: "[in] Will contain the temperature read from the specified sensor in degrees Celcius."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get state of temperature thresholds"
+class: $tSysmanTemperature
+name: GetThresholds
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_temp_handle_t
+      name: hTemperature
+      desc: "[in] Handle for the component."
+    - type: $t_temp_threshold_t*
+      name: pThreshold1
+      desc: "[in][optional] Returns information about temperature threshold 1 - enabled/temperature/process ID."
+    - type: $t_temp_threshold_t*
+      name: pThreshold2
+      desc: "[in][optional] Returns information about temperature threshold 1 - enabled/temperature/process ID."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
+        - "One or both of the thresholds is not supported - check $t_temp_properties_t.isThreshold1Supported and $t_temp_properties_t.isThreshold2Supported"
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set temperature thresholds"
+class: $tSysmanTemperature
+name: SetThresholds
+details:
+    - "Events $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $tSysmanEventsRegister() to start receiving the event."
+    - "Only one running process can set the temperature thresholds at a time. If another process attempts to change the temperature thresholds, the error $X_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The function $tSysmanTemperatureGetThresholds() will return the process ID currently controlling these settings."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_temp_handle_t
+      name: hTemperature
+      desc: "[in] Handle for the component."
+    - type: double
+      name: threshold1
+      desc: "[in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable threshold 1."
+    - type: double
+      name: threshold2
+      desc: "[in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable theshold 2."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
+        - "One or both of the thresholds is not supported - check $t_temp_properties_t.isThreshold1Supported and $t_temp_properties_t.isThreshold2Supported"
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
+    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
+        - "Another running process is controlling these settings."
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "One or both the thresholds is above TjMax (see $tSysmanFrequencyGetOcTjMax()). Temperature thresholds must be below this value."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2679,9 +2777,13 @@ etors:
       value: "0"
       desc: "The frequency is being throttled"
     - name: $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED
-      desc: "Interrupt from the PCU when the energy threshold is crossed."
-    - name: $T_SYSMAN_EVENT_TYPE_MAX_TEMPERATURE
-      desc: "Interrupt from the PCU when the energy Max temperature is reached."
+      desc: "Event is generated when the energy consumption threshold is reached (use $tSysmanPowerSetEnergyThreshold() to configure)."
+    - name: $T_SYSMAN_EVENT_TYPE_CRITICAL_TEMPERATURE
+      desc: "Event is generated when the critical temperature is reached."
+    - name: $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1
+      desc: "Event is generated when the temperature cross threshold 1 (use $tSysmanTemperatureSetThresholds() to configure)."
+    - name: $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2
+      desc: "Event is generated when the temperature cross threshold 1 (use $tSysmanTemperatureSetThresholds() to configure)."
     - name: $T_SYSMAN_EVENT_TYPE_RAS_ERRORS
       desc: "ECC/RAS errors"
     - name: $T_SYSMAN_EVENT_TYPE_NUM

@@ -1287,56 +1287,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPowerGetEnergyThreshold
-    ze_result_t __zecall
-    zetSysmanPowerGetEnergyThreshold(
-        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_power_energy_threshold_t* pThreshold        ///< [in] The current energy threshold value in joules.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->dditable;
-        auto pfnGetEnergyThreshold = dditable->zet.SysmanPower.pfnGetEnergyThreshold;
-        if( nullptr == pfnGetEnergyThreshold )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hPower = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->handle;
-
-        // forward to device-driver
-        result = pfnGetEnergyThreshold( hPower, pThreshold );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPowerSetEnergyThreshold
-    ze_result_t __zecall
-    zetSysmanPowerSetEnergyThreshold(
-        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->dditable;
-        auto pfnSetEnergyThreshold = dditable->zet.SysmanPower.pfnSetEnergyThreshold;
-        if( nullptr == pfnSetEnergyThreshold )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hPower = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->handle;
-
-        // forward to device-driver
-        result = pfnSetEnergyThreshold( hPower, pThreshold );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGetLimits
     ze_result_t __zecall
     zetSysmanPowerGetLimits(
@@ -1386,6 +1336,57 @@ namespace loader
 
         // forward to device-driver
         result = pfnSetLimits( hPower, pSustained, pBurst, pPeak );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPowerGetEnergyThreshold
+    ze_result_t __zecall
+    zetSysmanPowerGetEnergyThreshold(
+        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        zet_energy_threshold_t* pThreshold              ///< [in] Returns information about the energy threshold setting -
+                                                        ///< enabled/energy threshold/process ID.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->dditable;
+        auto pfnGetEnergyThreshold = dditable->zet.SysmanPower.pfnGetEnergyThreshold;
+        if( nullptr == pfnGetEnergyThreshold )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hPower = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->handle;
+
+        // forward to device-driver
+        result = pfnGetEnergyThreshold( hPower, pThreshold );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPowerSetEnergyThreshold
+    ze_result_t __zecall
+    zetSysmanPowerSetEnergyThreshold(
+        zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
+        double threshold                                ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->dditable;
+        auto pfnSetEnergyThreshold = dditable->zet.SysmanPower.pfnSetEnergyThreshold;
+        if( nullptr == pfnSetEnergyThreshold )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hPower = reinterpret_cast<zet_sysman_pwr_object_t*>( hPower )->handle;
+
+        // forward to device-driver
+        result = pfnSetEnergyThreshold( hPower, threshold );
 
         return result;
     }
@@ -2426,9 +2427,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureGet
+    /// @brief Intercept function for zetSysmanTemperatureRead
     ze_result_t __zecall
-    zetSysmanTemperatureGet(
+    zetSysmanTemperatureRead(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -2445,15 +2446,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnTemperatureGet = dditable->zet.Sysman.pfnTemperatureGet;
-        if( nullptr == pfnTemperatureGet )
+        auto pfnTemperatureRead = dditable->zet.Sysman.pfnTemperatureRead;
+        if( nullptr == pfnTemperatureRead )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnTemperatureGet( hSysman, pCount, phTemperature );
+        result = pfnTemperatureRead( hSysman, pCount, phTemperature );
 
         try
         {
@@ -2496,26 +2497,83 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureRead
+    /// @brief Intercept function for zetSysmanTemperatureGet
     ze_result_t __zecall
-    zetSysmanTemperatureRead(
+    zetSysmanTemperatureGet(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+        double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
+                                                        ///< degrees Celcius.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->dditable;
-        auto pfnRead = dditable->zet.SysmanTemperature.pfnRead;
-        if( nullptr == pfnRead )
+        auto pfnGet = dditable->zet.SysmanTemperature.pfnGet;
+        if( nullptr == pfnGet )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hTemperature = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->handle;
 
         // forward to device-driver
-        result = pfnRead( hTemperature, pTemperature );
+        result = pfnGet( hTemperature, pTemperature );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureGetThresholds
+    ze_result_t __zecall
+    zetSysmanTemperatureGetThresholds(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        zet_temp_threshold_t* pThreshold1,              ///< [in][optional] Returns information about temperature threshold 1 -
+                                                        ///< enabled/temperature/process ID.
+        zet_temp_threshold_t* pThreshold2               ///< [in][optional] Returns information about temperature threshold 1 -
+                                                        ///< enabled/temperature/process ID.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->dditable;
+        auto pfnGetThresholds = dditable->zet.SysmanTemperature.pfnGetThresholds;
+        if( nullptr == pfnGetThresholds )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hTemperature = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->handle;
+
+        // forward to device-driver
+        result = pfnGetThresholds( hTemperature, pThreshold1, pThreshold2 );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureSetThresholds
+    ze_result_t __zecall
+    zetSysmanTemperatureSetThresholds(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        double threshold1,                              ///< [in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable
+                                                        ///< threshold 1.
+        double threshold2                               ///< [in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable
+                                                        ///< theshold 2.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->dditable;
+        auto pfnSetThresholds = dditable->zet.SysmanTemperature.pfnSetThresholds;
+        if( nullptr == pfnSetThresholds )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hTemperature = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->handle;
+
+        // forward to device-driver
+        result = pfnSetThresholds( hTemperature, threshold1, threshold2 );
 
         return result;
     }
@@ -4126,7 +4184,7 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnFirmwareGet                              = loader::zetSysmanFirmwareGet;
             pDdiTable->pfnMemoryGet                                = loader::zetSysmanMemoryGet;
             pDdiTable->pfnFabricPortGet                            = loader::zetSysmanFabricPortGet;
-            pDdiTable->pfnTemperatureGet                           = loader::zetSysmanTemperatureGet;
+            pDdiTable->pfnTemperatureRead                          = loader::zetSysmanTemperatureRead;
             pDdiTable->pfnPsuGet                                   = loader::zetSysmanPsuGet;
             pDdiTable->pfnFanGet                                   = loader::zetSysmanFanGet;
             pDdiTable->pfnLedGet                                   = loader::zetSysmanLedGet;
@@ -4201,10 +4259,10 @@ zetGetSysmanPowerProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnGetProperties                            = loader::zetSysmanPowerGetProperties;
             pDdiTable->pfnGetEnergyCounter                         = loader::zetSysmanPowerGetEnergyCounter;
-            pDdiTable->pfnGetEnergyThreshold                       = loader::zetSysmanPowerGetEnergyThreshold;
-            pDdiTable->pfnSetEnergyThreshold                       = loader::zetSysmanPowerSetEnergyThreshold;
             pDdiTable->pfnGetLimits                                = loader::zetSysmanPowerGetLimits;
             pDdiTable->pfnSetLimits                                = loader::zetSysmanPowerSetLimits;
+            pDdiTable->pfnGetEnergyThreshold                       = loader::zetSysmanPowerGetEnergyThreshold;
+            pDdiTable->pfnSetEnergyThreshold                       = loader::zetSysmanPowerSetEnergyThreshold;
         }
         else
         {
@@ -4676,7 +4734,9 @@ zetGetSysmanTemperatureProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetProperties                            = loader::zetSysmanTemperatureGetProperties;
-            pDdiTable->pfnRead                                     = loader::zetSysmanTemperatureRead;
+            pDdiTable->pfnGet                                      = loader::zetSysmanTemperatureGet;
+            pDdiTable->pfnGetThresholds                            = loader::zetSysmanTemperatureGetThresholds;
+            pDdiTable->pfnSetThresholds                            = loader::zetSysmanTemperatureSetThresholds;
         }
         else
         {
