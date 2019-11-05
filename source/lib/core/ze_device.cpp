@@ -353,10 +353,12 @@ zeDeviceGetP2PProperties(
 ///           true.
 ///         + If both are sub-devices and share the same parent device then
 ///           return true.
-///         + If both device and remote device are connected by a scale-up
-///           fabric then true, if pci-e then false.
+///         + If both device and remote device are connected by a direct or
+///           indirect scale-up fabric or over PCIe (same root complex or shared
+///           PCIe switch) then true.
 ///         + If both sub-device and remote parent device (and vice-versa) are
-///           connected by a scale-up fabric then true, if pci-e then false.
+///           connected by a direct or indirect scale-up fabric or over PCIe
+///           (same root complex or shared PCIe switch) then true.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -750,10 +752,12 @@ namespace ze
     ///           true.
     ///         + If both are sub-devices and share the same parent device then
     ///           return true.
-    ///         + If both device and remote device are connected by a scale-up
-    ///           fabric then true, if pci-e then false.
+    ///         + If both device and remote device are connected by a direct or
+    ///           indirect scale-up fabric or over PCIe (same root complex or shared
+    ///           PCIe switch) then true.
     ///         + If both sub-device and remote parent device (and vice-versa) are
-    ///           connected by a scale-up fabric then true, if pci-e then false.
+    ///           connected by a direct or indirect scale-up fabric or over PCIe
+    ///           (same root complex or shared PCIe switch) then true.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
