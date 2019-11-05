@@ -9,7 +9,7 @@ NOTE: The 'One API' Level-Zero specifications are **Intel Confidential**.
 * [API Specification](#spec)
 * [Driver Architecture](#drv)
 * [Tools](#tls)
-* [System Resource Management](#smi)
+* [System Management](#smi)
 
 # <a name="obj">Objective</a>
 The objective of the 'One API' Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
@@ -28,7 +28,7 @@ The Level-Zero API provides the lowest-level, fine-grain and most explicit contr
 - Asynchronous Execution and Scheduling
 - Synchronization Primitives
 - Metrics Reporting
-- System Resource Management (SMI)
+- System Management Interface
 
 Most applications should not require the additional control provided by the Level-Zero API.
 The Level-Zero API is intended for providing explicit controls needed by higher-level runtime APIs and libraries.
@@ -82,7 +82,7 @@ The API allows sharing of memory objects across different device processes.
 Since each process has it's own virtual address space, there is no guarantee that the same virtual address will be available when the memory object is shared in new process. 
 There are a set of APIs that makes it easier to share the memory objects with ease. 
 
-## System Resource Management
+## System Management
 The API provides in-band ability to query the performance, power and health of accelerator resources. It also enables controlling the performance
 and power profile of these resources. Finally it provides access to maintanence facilities such as performing hardware diagnostics or updating
 firmwares.
@@ -311,7 +311,7 @@ The "Tools" APIs provide the following capabilities for 3rd-party tools:
 
 See the "Tools" programming guide for more details.
 
-# <a name="smi">System Resource Management</a>
+# <a name="smi">System Management</a>
 All global management of accelerator resources are separated from "Core" into the "Sysman" API.
 
 The "Sysman" API provides in-band access to the following features for each accelerator device:
