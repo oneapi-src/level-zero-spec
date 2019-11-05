@@ -9,6 +9,7 @@ NOTE: The 'One API' Level-Zero specifications are **Intel Confidential**.
 * [API Specification](#spec)
 * [Driver Architecture](#drv)
 * [Tools](#tls)
+* [System Resource Management](#smi)
 
 # <a name="obj">Objective</a>
 The objective of the 'One API' Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
@@ -27,6 +28,7 @@ The Level-Zero API provides the lowest-level, fine-grain and most explicit contr
 - Asynchronous Execution and Scheduling
 - Synchronization Primitives
 - Metrics Reporting
+- System Resource Management (SMI)
 
 Most applications should not require the additional control provided by the Level-Zero API.
 The Level-Zero API is intended for providing explicit controls needed by higher-level runtime APIs and libraries.
@@ -79,6 +81,11 @@ Data coherency is maintained by the driver with out any explicit involement from
 The API allows sharing of memory objects across different device processes. 
 Since each process has it's own virtual address space, there is no guarantee that the same virtual address will be available when the memory object is shared in new process. 
 There are a set of APIs that makes it easier to share the memory objects with ease. 
+
+## System Resource Management
+The API provides in-band ability to query the performance, power and health of accelerator resources. It also enables controlling the performance
+and power profile of these resources. Finally it provides access to maintanence facilities such as performing hardware diagnostics or updating
+firmwares.
 
 # <a name="spec">API Specification</a>
 The following section provides high-level design philosophy of the APIs.
@@ -303,3 +310,32 @@ The "Tools" APIs provide the following capabilities for 3rd-party tools:
 - Allow for application programs to be debugged using breakpoints and register access.
 
 See the "Tools" programming guide for more details.
+
+# <a name="smi">System Resource Management</a>
+All global management of accelerator resources are separated from "Core" into the "Sysman" API.
+
+The "Sysman" API provides in-band access to the following features for each accelerator device:
+- Query inventory information
+- Query information about host processes using the device
+- Change the accelerator workload scheduling policies
+- Query and control frequency/voltage/power
+- Query temperature sensors
+- Query load on various accelerator engines (overall, media, compute, copy)
+- Query device memory bandwidth and health
+- Query PCI bandwidth and health
+- Query high-speed Fabric bandwidth and health
+- Control the standby policy of the device
+- Query ECC/RAS status of various components on the device
+- Query power supply status
+- Control LEDs
+- Control fans
+- Perform overclocking/under-voltage changes where appropriate
+- Listen for events (temperature excursion, frequency throttling, RAS errors)
+- Flash firmware
+- Run diagnostics
+- Reset the device
+
+By default, only administrator users have permissions to perform control operations on resources. Most queries are available to any user
+with the exception of those that could be used for side-channel attacks. The systems administrator can tighten/relax the default permissions.
+
+See the "Sysman" programming guide for more details.
