@@ -67,7 +67,7 @@ void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
                     {
                         uint64_t newErrors;
                         zet_ras_details_t errorDetails;
-                        if (zetSysmanRasGetErrors(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                        if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
                             == ZE_RESULT_SUCCESS)
                         {
                             fprintf(stdout, "    Number new errors: %llu\n", (long long unsigned int)newErrors);
@@ -116,6 +116,107 @@ void ListDiagnosticTests(zet_sysman_handle_t hSysmanDevice)
         }
         free(phTestSuites);
     }
+}
+
+void WaitForExcessTemperatureEvent(zet_driver_handle_t hDriver, double tempLimit)
+{
+    uint32_t deviceCount = 0;
+    uint32_t numEventHandles = 0;
+    ze_device_handle_t* phDevices;
+    zet_sysman_event_handle_t* phEvents;
+    zet_sysman_event_handle_t* phListenEvents;
+    uint32_t* pListenDeviceIndex;
+
+    // Get list of all devices under this driver
+    zeDeviceGet(hDriver, &deviceCount, nullptr);
+    phDevices = (ze_device_handle_t*)malloc(deviceCount * sizeof(ze_device_handle_t));
+    phEvents = (zet_sysman_event_handle_t*)malloc(deviceCount * sizeof(zet_sysman_event_handle_t));
+    phListenEvents = (zet_sysman_event_handle_t*)malloc(deviceCount * sizeof(zet_sysman_event_handle_t));
+    pListenDeviceIndex = (uint32_t*)malloc(deviceCount * sizeof(uint32_t));
+    zeDeviceGet(hDriver, &deviceCount, phDevices);
+    for(uint32_t d = 0; d < deviceCount; ++d)
+    {
+        // Get Sysman handle, event handle and list of temperature sensors in the device
+        uint32_t numTempSensors = 0;
+        uint32_t numConfiguredTempSensors = 0;
+        zet_sysman_temp_handle_t* allTempSensors;
+        zet_sysman_handle_t hSysmanDevice;
+        if (zetSysmanGet(phDevices[d], ZET_SYSMAN_VERSION_CURRENT, &hSysmanDevice) != ZE_RESULT_SUCCESS)
+        {
+            continue;
+        }
+        if (zetSysmanEventGet(hSysmanDevice, &phEvents[d]) != ZE_RESULT_SUCCESS)
+        {
+            continue;
+        }
+        if (zetSysmanTemperatureGet(hSysmanDevice, &numTempSensors, NULL) != ZE_RESULT_SUCCESS)
+        {
+            continue;
+        }
+        allTempSensors = (zet_sysman_temp_handle_t*)malloc(deviceCount * sizeof(zet_sysman_temp_handle_t));
+        if (zetSysmanTemperatureGet(hSysmanDevice, &numTempSensors, allTempSensors) == ZE_RESULT_SUCCESS)
+        {
+            // Configure each temperature sensor to trigger a critical event and a threshold1 event
+            zet_temp_config_t config;
+            for (uint32_t t = 0; t < numTempSensors; t++)
+            {
+                if (zetSysmanTemperatureGetConfig(allTempSensors[t], &config) != ZE_RESULT_SUCCESS)
+                {
+                    continue;
+                }
+                config.enableCritical = true;
+                config.threshold1.enableHighToLow = false;
+                config.threshold1.enableLowToHigh = true;
+                config.threshold1.threshold = tempLimit;
+                config.threshold2.enableHighToLow = false;
+                config.threshold2.enableLowToHigh = false;
+                if (zetSysmanTemperatureSetConfig(allTempSensors[t], &config) == ZE_RESULT_SUCCESS)
+                {
+                    numConfiguredTempSensors++;
+                }
+            }
+        }
+        if (numConfiguredTempSensors)
+        {
+            zet_event_config_t eventConfig;
+            eventConfig.registered = ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL | ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1;
+            if (zetSysmanEventSetConfig(phEvents[d], &eventConfig) == ZE_RESULT_SUCCESS)
+            {
+                phListenEvents[numEventHandles] = phEvents[d];
+                pListenDeviceIndex[numEventHandles] = d;
+                numEventHandles++;
+            }
+        }
+        free(allTempSensors);
+    }
+
+    if (numEventHandles)
+    {
+        uint32_t events;
+        // Block until we receive events
+        if (zetSysmanEventListen(hDriver, ZET_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events) == ZE_RESULT_SUCCESS)
+        {
+            for (uint32_t e = 0; e < numEventHandles; e++)
+            {
+                if (zetSysmanEventGetState(phListenEvents[e], true, &events) != ZE_RESULT_SUCCESS)
+                {
+                    continue;
+                }
+                if (events & ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL)
+                {
+                    fprintf(stdout, "Device %u: Went above the critical temperature.\n", pListenDeviceIndex[e]);
+                }
+                else if (events & ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1)
+                {
+                    fprintf(stdout, "Device %u: Went above the temperature threshold %f.\n", pListenDeviceIndex[e], tempLimit);
+                }
+            }
+        }
+    }
+
+    free(phDevices);
+    free(phEvents);
+    free(phListenEvents);
 }
 
 void ResetDevice(zet_sysman_handle_t hSysmanDevice)
@@ -709,7 +810,7 @@ int main( int argc, char *argv[] )
                 malloc(deviceCount * sizeof(ze_device_handle_t));
             zeDeviceGet(allDrivers[i], &deviceCount, allDevices);
 
-            for(uint32_t d = 0; d < deviceCount; ++i)
+            for(uint32_t d = 0; d < deviceCount; ++d)
             {
                 ze_device_properties_t device_properties;
                 zeDeviceGetProperties(allDevices[d], &device_properties);

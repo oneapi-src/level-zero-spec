@@ -1355,7 +1355,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanFrequencyGetAvailableClocks
     ze_result_t __zecall
     zetSysmanFrequencyGetAvailableClocks(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
                                                         ///< If count is zero, then the driver will update the value with the total
                                                         ///< number of frequencies available.
@@ -1366,14 +1366,14 @@ namespace layer
                                                         ///< MHz and sorted from slowest to fastest
         )
     {
-        auto pfnFrequencyGetAvailableClocks = context.zetDdiTable.Sysman.pfnFrequencyGetAvailableClocks;
+        auto pfnGetAvailableClocks = context.zetDdiTable.SysmanFrequency.pfnGetAvailableClocks;
 
-        if( nullptr == pfnFrequencyGetAvailableClocks )
+        if( nullptr == pfnGetAvailableClocks )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hFrequency )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCount )
@@ -1381,7 +1381,7 @@ namespace layer
 
         }
 
-        return pfnFrequencyGetAvailableClocks( hSysman, pCount, phFrequency );
+        return pfnGetAvailableClocks( hFrequency, pCount, phFrequency );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2282,9 +2282,9 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureRead
+    /// @brief Intercept function for zetSysmanTemperatureGet
     ze_result_t __zecall
-    zetSysmanTemperatureRead(
+    zetSysmanTemperatureGet(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -2297,9 +2297,9 @@ namespace layer
                                                         ///< this type
         )
     {
-        auto pfnTemperatureRead = context.zetDdiTable.Sysman.pfnTemperatureRead;
+        auto pfnTemperatureGet = context.zetDdiTable.Sysman.pfnTemperatureGet;
 
-        if( nullptr == pfnTemperatureRead )
+        if( nullptr == pfnTemperatureGet )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2312,7 +2312,7 @@ namespace layer
 
         }
 
-        return pfnTemperatureRead( hSysman, pCount, phTemperature );
+        return pfnTemperatureGet( hSysman, pCount, phTemperature );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2342,17 +2342,69 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureGet
+    /// @brief Intercept function for zetSysmanTemperatureGetConfig
     ze_result_t __zecall
-    zetSysmanTemperatureGet(
+    zetSysmanTemperatureGetConfig(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        zet_temp_config_t* pConfig                      ///< [in] Returns current configuration.
+        )
+    {
+        auto pfnGetConfig = context.zetDdiTable.SysmanTemperature.pfnGetConfig;
+
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetConfig( hTemperature, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureSetConfig
+    ze_result_t __zecall
+    zetSysmanTemperatureSetConfig(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        const zet_temp_config_t* pConfig                ///< [in] New configuration.
+        )
+    {
+        auto pfnSetConfig = context.zetDdiTable.SysmanTemperature.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetConfig( hTemperature, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureGetState
+    ze_result_t __zecall
+    zetSysmanTemperatureGetState(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
         double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
                                                         ///< degrees Celcius.
         )
     {
-        auto pfnGet = context.zetDdiTable.SysmanTemperature.pfnGet;
+        auto pfnGetState = context.zetDdiTable.SysmanTemperature.pfnGetState;
 
-        if( nullptr == pfnGet )
+        if( nullptr == pfnGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2365,59 +2417,7 @@ namespace layer
 
         }
 
-        return pfnGet( hTemperature, pTemperature );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureGetThresholds
-    ze_result_t __zecall
-    zetSysmanTemperatureGetThresholds(
-        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        zet_temp_threshold_t* pThreshold1,              ///< [in][optional] Returns information about temperature threshold 1 -
-                                                        ///< enabled/temperature/process ID.
-        zet_temp_threshold_t* pThreshold2               ///< [in][optional] Returns information about temperature threshold 1 -
-                                                        ///< enabled/temperature/process ID.
-        )
-    {
-        auto pfnGetThresholds = context.zetDdiTable.SysmanTemperature.pfnGetThresholds;
-
-        if( nullptr == pfnGetThresholds )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hTemperature )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetThresholds( hTemperature, pThreshold1, pThreshold2 );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureSetThresholds
-    ze_result_t __zecall
-    zetSysmanTemperatureSetThresholds(
-        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        double threshold1,                              ///< [in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable
-                                                        ///< threshold 1.
-        double threshold2                               ///< [in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable
-                                                        ///< theshold 2.
-        )
-    {
-        auto pfnSetThresholds = context.zetDdiTable.SysmanTemperature.pfnSetThresholds;
-
-        if( nullptr == pfnSetThresholds )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hTemperature )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetThresholds( hTemperature, threshold1, threshold2 );
+        return pfnGetState( hTemperature, pTemperature );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2818,18 +2818,71 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanRasGetErrors
+    /// @brief Intercept function for zetSysmanRasGetConfig
     ze_result_t __zecall
-    zetSysmanRasGetErrors(
+    zetSysmanRasGetConfig(
+        zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+        zet_ras_config_t* pConfig                       ///< [in] Will be populed with the current RAS configuration - thresholds
+                                                        ///< used to trigger events
+        )
+    {
+        auto pfnGetConfig = context.zetDdiTable.SysmanRas.pfnGetConfig;
+
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hRas )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetConfig( hRas, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanRasSetConfig
+    ze_result_t __zecall
+    zetSysmanRasSetConfig(
+        zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+        const zet_ras_config_t* pConfig                 ///< [in] Change the RAS configuration - thresholds used to trigger events
+        )
+    {
+        auto pfnSetConfig = context.zetDdiTable.SysmanRas.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hRas )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetConfig( hRas, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanRasGetState
+    ze_result_t __zecall
+    zetSysmanRasGetState(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
         uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
         zet_ras_details_t* pDetails                     ///< [in][optional] Breakdown of where errors have occurred
         )
     {
-        auto pfnGetErrors = context.zetDdiTable.SysmanRas.pfnGetErrors;
+        auto pfnGetState = context.zetDdiTable.SysmanRas.pfnGetState;
 
-        if( nullptr == pfnGetErrors )
+        if( nullptr == pfnGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2842,48 +2895,20 @@ namespace layer
 
         }
 
-        return pfnGetErrors( hRas, clear, pTotalErrors, pDetails );
+        return pfnGetState( hRas, clear, pTotalErrors, pDetails );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsGetProperties
+    /// @brief Intercept function for zetSysmanEventGet
     ze_result_t __zecall
-    zetSysmanEventsGetProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        zet_event_properties_t* pProperties             ///< [in] Structure describing event properties
-        )
-    {
-        auto pfnEventsGetProperties = context.zetDdiTable.Sysman.pfnEventsGetProperties;
-
-        if( nullptr == pfnEventsGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnEventsGetProperties( hSysman, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsRegister
-    ze_result_t __zecall
-    zetSysmanEventsRegister(
+    zetSysmanEventGet(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
-        uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
-                                                        ///< be registered.
-        zet_event_request_t* pEvents                    ///< [in][optional] Events to register.
+        zet_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
         )
     {
-        auto pfnEventsRegister = context.zetDdiTable.Sysman.pfnEventsRegister;
+        auto pfnEventGet = context.zetDdiTable.Sysman.pfnEventGet;
 
-        if( nullptr == pfnEventsRegister )
+        if( nullptr == pfnEventGet )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -2891,59 +2916,85 @@ namespace layer
             if( nullptr == hSysman )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        }
-
-        return pfnEventsRegister( hSysman, count, pEvents );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsUnregister
-    ze_result_t __zecall
-    zetSysmanEventsUnregister(
-        zet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
-                                                        ///< be unregistered.
-        zet_event_request_t* pEvents                    ///< [in][optional] Events to unregister.
-        )
-    {
-        auto pfnEventsUnregister = context.zetDdiTable.Sysman.pfnEventsUnregister;
-
-        if( nullptr == pfnEventsUnregister )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
+            if( nullptr == phEvent )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnEventsUnregister( hSysman, count, pEvents );
+        return pfnEventGet( hSysman, phEvent );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsListen
+    /// @brief Intercept function for zetSysmanEventGetConfig
     ze_result_t __zecall
-    zetSysmanEventsListen(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for a device. Set to nullptr to get events from any
-                                                        ///< device for which the application has registered to receive
-                                                        ///< notifications.
-        ze_bool_t clear,                                ///< [in] Clear the event status.
-        uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Zero will
-                                                        ///< check status and return immediately. Set to ::ZET_EVENT_WAIT_INFINITE
-                                                        ///< to block until events arrive.
-        uint32_t* pEvents                               ///< [in] Bitfield of events (1<<::zet_sysman_event_type_t) that have been
-                                                        ///< triggered.
+    zetSysmanEventGetConfig(
+        zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+        zet_event_config_t* pConfig                     ///< [in] Will contain the current event configuration (list of registered
+                                                        ///< events).
         )
     {
-        auto pfnEventsListen = context.zetDdiTable.Sysman.pfnEventsListen;
+        auto pfnGetConfig = context.zetDdiTable.SysmanEvent.pfnGetConfig;
 
-        if( nullptr == pfnEventsListen )
+        if( nullptr == pfnGetConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hEvent )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetConfig( hEvent, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanEventSetConfig
+    ze_result_t __zecall
+    zetSysmanEventSetConfig(
+        zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+        const zet_event_config_t* pConfig               ///< [in] New event configuration (list of registered events).
+        )
+    {
+        auto pfnSetConfig = context.zetDdiTable.SysmanEvent.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hEvent )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetConfig( hEvent, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanEventGetState
+    ze_result_t __zecall
+    zetSysmanEventGetState(
+        zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
+        ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
+        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+                                                        ///< triggered by this device.
+        )
+    {
+        auto pfnGetState = context.zetDdiTable.SysmanEvent.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hEvent )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pEvents )
@@ -2951,7 +3002,44 @@ namespace layer
 
         }
 
-        return pfnEventsListen( hSysman, clear, timeout, pEvents );
+        return pfnGetState( hEvent, clear, pEvents );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanEventListen
+    ze_result_t __zecall
+    zetSysmanEventListen(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
+                                                        ///< ::ZET_EVENT_WAIT_NONE will check status and return immediately. Set to
+                                                        ///< ::ZET_EVENT_WAIT_INFINITE to block until events arrive.
+        uint32_t count,                                 ///< [in] Number of handles in phEvents
+        zet_sysman_event_handle_t* phEvents,            ///< [in][range(0, count)] Handle of events that should be listened to
+        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+                                                        ///< triggered by any of the supplied event handles. If timeout is not
+                                                        ///< ::ZET_EVENT_WAIT_INFINITE and this value is
+                                                        ///< ::ZET_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
+        )
+    {
+        auto pfnListen = context.zetDdiTable.SysmanEvent.pfnListen;
+
+        if( nullptr == pfnListen )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDriver )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == phEvents )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pEvents )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnListen( hDriver, timeout, count, phEvents, pEvents );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3679,9 +3767,6 @@ zetGetSysmanProcAddrTable(
     dditable.pfnFrequencyGet                             = pDdiTable->pfnFrequencyGet;
     pDdiTable->pfnFrequencyGet                           = layer::zetSysmanFrequencyGet;
 
-    dditable.pfnFrequencyGetAvailableClocks              = pDdiTable->pfnFrequencyGetAvailableClocks;
-    pDdiTable->pfnFrequencyGetAvailableClocks            = layer::zetSysmanFrequencyGetAvailableClocks;
-
     dditable.pfnEngineGet                                = pDdiTable->pfnEngineGet;
     pDdiTable->pfnEngineGet                              = layer::zetSysmanEngineGet;
 
@@ -3697,8 +3782,8 @@ zetGetSysmanProcAddrTable(
     dditable.pfnFabricPortGet                            = pDdiTable->pfnFabricPortGet;
     pDdiTable->pfnFabricPortGet                          = layer::zetSysmanFabricPortGet;
 
-    dditable.pfnTemperatureRead                          = pDdiTable->pfnTemperatureRead;
-    pDdiTable->pfnTemperatureRead                        = layer::zetSysmanTemperatureRead;
+    dditable.pfnTemperatureGet                           = pDdiTable->pfnTemperatureGet;
+    pDdiTable->pfnTemperatureGet                         = layer::zetSysmanTemperatureGet;
 
     dditable.pfnPsuGet                                   = pDdiTable->pfnPsuGet;
     pDdiTable->pfnPsuGet                                 = layer::zetSysmanPsuGet;
@@ -3712,17 +3797,8 @@ zetGetSysmanProcAddrTable(
     dditable.pfnRasGet                                   = pDdiTable->pfnRasGet;
     pDdiTable->pfnRasGet                                 = layer::zetSysmanRasGet;
 
-    dditable.pfnEventsGetProperties                      = pDdiTable->pfnEventsGetProperties;
-    pDdiTable->pfnEventsGetProperties                    = layer::zetSysmanEventsGetProperties;
-
-    dditable.pfnEventsRegister                           = pDdiTable->pfnEventsRegister;
-    pDdiTable->pfnEventsRegister                         = layer::zetSysmanEventsRegister;
-
-    dditable.pfnEventsUnregister                         = pDdiTable->pfnEventsUnregister;
-    pDdiTable->pfnEventsUnregister                       = layer::zetSysmanEventsUnregister;
-
-    dditable.pfnEventsListen                             = pDdiTable->pfnEventsListen;
-    pDdiTable->pfnEventsListen                           = layer::zetSysmanEventsListen;
+    dditable.pfnEventGet                                 = pDdiTable->pfnEventGet;
+    pDdiTable->pfnEventGet                               = layer::zetSysmanEventGet;
 
     dditable.pfnDiagnosticsGet                           = pDdiTable->pfnDiagnosticsGet;
     pDdiTable->pfnDiagnosticsGet                         = layer::zetSysmanDiagnosticsGet;
@@ -3807,6 +3883,9 @@ zetGetSysmanFrequencyProcAddrTable(
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = layer::zetSysmanFrequencyGetProperties;
+
+    dditable.pfnGetAvailableClocks                       = pDdiTable->pfnGetAvailableClocks;
+    pDdiTable->pfnGetAvailableClocks                     = layer::zetSysmanFrequencyGetAvailableClocks;
 
     dditable.pfnGetRange                                 = pDdiTable->pfnGetRange;
     pDdiTable->pfnGetRange                               = layer::zetSysmanFrequencyGetRange;
@@ -4075,14 +4154,14 @@ zetGetSysmanTemperatureProcAddrTable(
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = layer::zetSysmanTemperatureGetProperties;
 
-    dditable.pfnGet                                      = pDdiTable->pfnGet;
-    pDdiTable->pfnGet                                    = layer::zetSysmanTemperatureGet;
+    dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zetSysmanTemperatureGetConfig;
 
-    dditable.pfnGetThresholds                            = pDdiTable->pfnGetThresholds;
-    pDdiTable->pfnGetThresholds                          = layer::zetSysmanTemperatureGetThresholds;
+    dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zetSysmanTemperatureSetConfig;
 
-    dditable.pfnSetThresholds                            = pDdiTable->pfnSetThresholds;
-    pDdiTable->pfnSetThresholds                          = layer::zetSysmanTemperatureSetThresholds;
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::zetSysmanTemperatureGetState;
 
     return result;
 }
@@ -4234,8 +4313,14 @@ zetGetSysmanRasProcAddrTable(
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = layer::zetSysmanRasGetProperties;
 
-    dditable.pfnGetErrors                                = pDdiTable->pfnGetErrors;
-    pDdiTable->pfnGetErrors                              = layer::zetSysmanRasGetErrors;
+    dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zetSysmanRasGetConfig;
+
+    dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zetSysmanRasSetConfig;
+
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::zetSysmanRasGetState;
 
     return result;
 }
@@ -4272,6 +4357,48 @@ zetGetSysmanDiagnosticsProcAddrTable(
 
     dditable.pfnRunTests                                 = pDdiTable->pfnRunTests;
     pDdiTable->pfnRunTests                               = layer::zetSysmanDiagnosticsRunTests;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanEvent table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zetGetSysmanEventProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_sysman_event_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.zetDdiTable.SysmanEvent;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zetSysmanEventGetConfig;
+
+    dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zetSysmanEventSetConfig;
+
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::zetSysmanEventGetState;
+
+    dditable.pfnListen                                   = pDdiTable->pfnListen;
+    pDdiTable->pfnListen                                 = layer::zetSysmanEventListen;
 
     return result;
 }

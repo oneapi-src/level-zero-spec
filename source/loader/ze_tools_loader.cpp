@@ -41,6 +41,7 @@ namespace loader
     zet_sysman_led_factory_t            zet_sysman_led_factory;
     zet_sysman_ras_factory_t            zet_sysman_ras_factory;
     zet_sysman_diag_factory_t           zet_sysman_diag_factory;
+    zet_sysman_event_factory_t          zet_sysman_event_factory;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetInit
@@ -1465,7 +1466,7 @@ namespace loader
     /// @brief Intercept function for zetSysmanFrequencyGetAvailableClocks
     ze_result_t __zecall
     zetSysmanFrequencyGetAvailableClocks(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
                                                         ///< If count is zero, then the driver will update the value with the total
                                                         ///< number of frequencies available.
@@ -1479,16 +1480,16 @@ namespace loader
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnFrequencyGetAvailableClocks = dditable->zet.Sysman.pfnFrequencyGetAvailableClocks;
-        if( nullptr == pfnFrequencyGetAvailableClocks )
+        auto dditable = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->dditable;
+        auto pfnGetAvailableClocks = dditable->zet.SysmanFrequency.pfnGetAvailableClocks;
+        if( nullptr == pfnGetAvailableClocks )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hFrequency = reinterpret_cast<zet_sysman_freq_object_t*>( hFrequency )->handle;
 
         // forward to device-driver
-        result = pfnFrequencyGetAvailableClocks( hSysman, pCount, phFrequency );
+        result = pfnGetAvailableClocks( hFrequency, pCount, phFrequency );
 
         return result;
     }
@@ -2427,9 +2428,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureRead
+    /// @brief Intercept function for zetSysmanTemperatureGet
     ze_result_t __zecall
-    zetSysmanTemperatureRead(
+    zetSysmanTemperatureGet(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -2446,15 +2447,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnTemperatureRead = dditable->zet.Sysman.pfnTemperatureRead;
-        if( nullptr == pfnTemperatureRead )
+        auto pfnTemperatureGet = dditable->zet.Sysman.pfnTemperatureGet;
+        if( nullptr == pfnTemperatureGet )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnTemperatureRead( hSysman, pCount, phTemperature );
+        result = pfnTemperatureGet( hSysman, pCount, phTemperature );
 
         try
         {
@@ -2497,9 +2498,59 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureGet
+    /// @brief Intercept function for zetSysmanTemperatureGetConfig
     ze_result_t __zecall
-    zetSysmanTemperatureGet(
+    zetSysmanTemperatureGetConfig(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        zet_temp_config_t* pConfig                      ///< [in] Returns current configuration.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->dditable;
+        auto pfnGetConfig = dditable->zet.SysmanTemperature.pfnGetConfig;
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hTemperature = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->handle;
+
+        // forward to device-driver
+        result = pfnGetConfig( hTemperature, pConfig );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureSetConfig
+    ze_result_t __zecall
+    zetSysmanTemperatureSetConfig(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        const zet_temp_config_t* pConfig                ///< [in] New configuration.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->dditable;
+        auto pfnSetConfig = dditable->zet.SysmanTemperature.pfnSetConfig;
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hTemperature = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->handle;
+
+        // forward to device-driver
+        result = pfnSetConfig( hTemperature, pConfig );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureGetState
+    ze_result_t __zecall
+    zetSysmanTemperatureGetState(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
         double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
                                                         ///< degrees Celcius.
@@ -2509,71 +2560,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->dditable;
-        auto pfnGet = dditable->zet.SysmanTemperature.pfnGet;
-        if( nullptr == pfnGet )
+        auto pfnGetState = dditable->zet.SysmanTemperature.pfnGetState;
+        if( nullptr == pfnGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hTemperature = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->handle;
 
         // forward to device-driver
-        result = pfnGet( hTemperature, pTemperature );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureGetThresholds
-    ze_result_t __zecall
-    zetSysmanTemperatureGetThresholds(
-        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        zet_temp_threshold_t* pThreshold1,              ///< [in][optional] Returns information about temperature threshold 1 -
-                                                        ///< enabled/temperature/process ID.
-        zet_temp_threshold_t* pThreshold2               ///< [in][optional] Returns information about temperature threshold 1 -
-                                                        ///< enabled/temperature/process ID.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->dditable;
-        auto pfnGetThresholds = dditable->zet.SysmanTemperature.pfnGetThresholds;
-        if( nullptr == pfnGetThresholds )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hTemperature = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->handle;
-
-        // forward to device-driver
-        result = pfnGetThresholds( hTemperature, pThreshold1, pThreshold2 );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureSetThresholds
-    ze_result_t __zecall
-    zetSysmanTemperatureSetThresholds(
-        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        double threshold1,                              ///< [in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable
-                                                        ///< threshold 1.
-        double threshold2                               ///< [in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable
-                                                        ///< theshold 2.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->dditable;
-        auto pfnSetThresholds = dditable->zet.SysmanTemperature.pfnSetThresholds;
-        if( nullptr == pfnSetThresholds )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hTemperature = reinterpret_cast<zet_sysman_temp_object_t*>( hTemperature )->handle;
-
-        // forward to device-driver
-        result = pfnSetThresholds( hTemperature, threshold1, threshold2 );
+        result = pfnGetState( hTemperature, pTemperature );
 
         return result;
     }
@@ -3010,9 +3005,60 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanRasGetErrors
+    /// @brief Intercept function for zetSysmanRasGetConfig
     ze_result_t __zecall
-    zetSysmanRasGetErrors(
+    zetSysmanRasGetConfig(
+        zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+        zet_ras_config_t* pConfig                       ///< [in] Will be populed with the current RAS configuration - thresholds
+                                                        ///< used to trigger events
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_ras_object_t*>( hRas )->dditable;
+        auto pfnGetConfig = dditable->zet.SysmanRas.pfnGetConfig;
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hRas = reinterpret_cast<zet_sysman_ras_object_t*>( hRas )->handle;
+
+        // forward to device-driver
+        result = pfnGetConfig( hRas, pConfig );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanRasSetConfig
+    ze_result_t __zecall
+    zetSysmanRasSetConfig(
+        zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+        const zet_ras_config_t* pConfig                 ///< [in] Change the RAS configuration - thresholds used to trigger events
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_ras_object_t*>( hRas )->dditable;
+        auto pfnSetConfig = dditable->zet.SysmanRas.pfnSetConfig;
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hRas = reinterpret_cast<zet_sysman_ras_object_t*>( hRas )->handle;
+
+        // forward to device-driver
+        result = pfnSetConfig( hRas, pConfig );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanRasGetState
+    ze_result_t __zecall
+    zetSysmanRasGetState(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
         uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
@@ -3023,126 +3069,166 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_ras_object_t*>( hRas )->dditable;
-        auto pfnGetErrors = dditable->zet.SysmanRas.pfnGetErrors;
-        if( nullptr == pfnGetErrors )
+        auto pfnGetState = dditable->zet.SysmanRas.pfnGetState;
+        if( nullptr == pfnGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hRas = reinterpret_cast<zet_sysman_ras_object_t*>( hRas )->handle;
 
         // forward to device-driver
-        result = pfnGetErrors( hRas, clear, pTotalErrors, pDetails );
+        result = pfnGetState( hRas, clear, pTotalErrors, pDetails );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsGetProperties
+    /// @brief Intercept function for zetSysmanEventGet
     ze_result_t __zecall
-    zetSysmanEventsGetProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        zet_event_properties_t* pProperties             ///< [in] Structure describing event properties
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnEventsGetProperties = dditable->zet.Sysman.pfnEventsGetProperties;
-        if( nullptr == pfnEventsGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
-
-        // forward to device-driver
-        result = pfnEventsGetProperties( hSysman, pProperties );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsRegister
-    ze_result_t __zecall
-    zetSysmanEventsRegister(
+    zetSysmanEventGet(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
-        uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
-                                                        ///< be registered.
-        zet_event_request_t* pEvents                    ///< [in][optional] Events to register.
+        zet_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnEventsRegister = dditable->zet.Sysman.pfnEventsRegister;
-        if( nullptr == pfnEventsRegister )
+        auto pfnEventGet = dditable->zet.Sysman.pfnEventGet;
+        if( nullptr == pfnEventGet )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnEventsRegister( hSysman, count, pEvents );
+        result = pfnEventGet( hSysman, phEvent );
+
+        try
+        {
+            // convert driver handle to loader handle
+            *phEvent = reinterpret_cast<zet_sysman_event_handle_t>(
+                zet_sysman_event_factory.getInstance( *phEvent, dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsUnregister
+    /// @brief Intercept function for zetSysmanEventGetConfig
     ze_result_t __zecall
-    zetSysmanEventsUnregister(
-        zet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
-                                                        ///< be unregistered.
-        zet_event_request_t* pEvents                    ///< [in][optional] Events to unregister.
+    zetSysmanEventGetConfig(
+        zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+        zet_event_config_t* pConfig                     ///< [in] Will contain the current event configuration (list of registered
+                                                        ///< events).
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnEventsUnregister = dditable->zet.Sysman.pfnEventsUnregister;
-        if( nullptr == pfnEventsUnregister )
+        auto dditable = reinterpret_cast<zet_sysman_event_object_t*>( hEvent )->dditable;
+        auto pfnGetConfig = dditable->zet.SysmanEvent.pfnGetConfig;
+        if( nullptr == pfnGetConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hEvent = reinterpret_cast<zet_sysman_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        result = pfnEventsUnregister( hSysman, count, pEvents );
+        result = pfnGetConfig( hEvent, pConfig );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsListen
+    /// @brief Intercept function for zetSysmanEventSetConfig
     ze_result_t __zecall
-    zetSysmanEventsListen(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for a device. Set to nullptr to get events from any
-                                                        ///< device for which the application has registered to receive
-                                                        ///< notifications.
-        ze_bool_t clear,                                ///< [in] Clear the event status.
-        uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Zero will
-                                                        ///< check status and return immediately. Set to ::ZET_EVENT_WAIT_INFINITE
-                                                        ///< to block until events arrive.
-        uint32_t* pEvents                               ///< [in] Bitfield of events (1<<::zet_sysman_event_type_t) that have been
-                                                        ///< triggered.
+    zetSysmanEventSetConfig(
+        zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+        const zet_event_config_t* pConfig               ///< [in] New event configuration (list of registered events).
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnEventsListen = dditable->zet.Sysman.pfnEventsListen;
-        if( nullptr == pfnEventsListen )
+        auto dditable = reinterpret_cast<zet_sysman_event_object_t*>( hEvent )->dditable;
+        auto pfnSetConfig = dditable->zet.SysmanEvent.pfnSetConfig;
+        if( nullptr == pfnSetConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hEvent = reinterpret_cast<zet_sysman_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        result = pfnEventsListen( hSysman, clear, timeout, pEvents );
+        result = pfnSetConfig( hEvent, pConfig );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanEventGetState
+    ze_result_t __zecall
+    zetSysmanEventGetState(
+        zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
+        ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
+        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+                                                        ///< triggered by this device.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_event_object_t*>( hEvent )->dditable;
+        auto pfnGetState = dditable->zet.SysmanEvent.pfnGetState;
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hEvent = reinterpret_cast<zet_sysman_event_object_t*>( hEvent )->handle;
+
+        // forward to device-driver
+        result = pfnGetState( hEvent, clear, pEvents );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanEventListen
+    ze_result_t __zecall
+    zetSysmanEventListen(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
+                                                        ///< ::ZET_EVENT_WAIT_NONE will check status and return immediately. Set to
+                                                        ///< ::ZET_EVENT_WAIT_INFINITE to block until events arrive.
+        uint32_t count,                                 ///< [in] Number of handles in phEvents
+        zet_sysman_event_handle_t* phEvents,            ///< [in][range(0, count)] Handle of events that should be listened to
+        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+                                                        ///< triggered by any of the supplied event handles. If timeout is not
+                                                        ///< ::ZET_EVENT_WAIT_INFINITE and this value is
+                                                        ///< ::ZET_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
+        auto pfnListen = dditable->zet.SysmanEvent.pfnListen;
+        if( nullptr == pfnListen )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
+
+        // convert loader handles to driver handles
+        for( size_t i = 0; ( nullptr != phEvents ) && ( i < count ); ++i )
+            phEvents[ i ] = reinterpret_cast<zet_sysman_event_object_t*>( phEvents[ i ] )->handle;
+
+        // forward to device-driver
+        result = pfnListen( hDriver, timeout, count, phEvents, pEvents );
 
         return result;
     }
@@ -4178,21 +4264,17 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnPciGetStats                              = loader::zetSysmanPciGetStats;
             pDdiTable->pfnPowerGet                                 = loader::zetSysmanPowerGet;
             pDdiTable->pfnFrequencyGet                             = loader::zetSysmanFrequencyGet;
-            pDdiTable->pfnFrequencyGetAvailableClocks              = loader::zetSysmanFrequencyGetAvailableClocks;
             pDdiTable->pfnEngineGet                                = loader::zetSysmanEngineGet;
             pDdiTable->pfnStandbyGet                               = loader::zetSysmanStandbyGet;
             pDdiTable->pfnFirmwareGet                              = loader::zetSysmanFirmwareGet;
             pDdiTable->pfnMemoryGet                                = loader::zetSysmanMemoryGet;
             pDdiTable->pfnFabricPortGet                            = loader::zetSysmanFabricPortGet;
-            pDdiTable->pfnTemperatureRead                          = loader::zetSysmanTemperatureRead;
+            pDdiTable->pfnTemperatureGet                           = loader::zetSysmanTemperatureGet;
             pDdiTable->pfnPsuGet                                   = loader::zetSysmanPsuGet;
             pDdiTable->pfnFanGet                                   = loader::zetSysmanFanGet;
             pDdiTable->pfnLedGet                                   = loader::zetSysmanLedGet;
             pDdiTable->pfnRasGet                                   = loader::zetSysmanRasGet;
-            pDdiTable->pfnEventsGetProperties                      = loader::zetSysmanEventsGetProperties;
-            pDdiTable->pfnEventsRegister                           = loader::zetSysmanEventsRegister;
-            pDdiTable->pfnEventsUnregister                         = loader::zetSysmanEventsUnregister;
-            pDdiTable->pfnEventsListen                             = loader::zetSysmanEventsListen;
+            pDdiTable->pfnEventGet                                 = loader::zetSysmanEventGet;
             pDdiTable->pfnDiagnosticsGet                           = loader::zetSysmanDiagnosticsGet;
         }
         else
@@ -4327,6 +4409,7 @@ zetGetSysmanFrequencyProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetProperties                            = loader::zetSysmanFrequencyGetProperties;
+            pDdiTable->pfnGetAvailableClocks                       = loader::zetSysmanFrequencyGetAvailableClocks;
             pDdiTable->pfnGetRange                                 = loader::zetSysmanFrequencyGetRange;
             pDdiTable->pfnSetRange                                 = loader::zetSysmanFrequencySetRange;
             pDdiTable->pfnGetState                                 = loader::zetSysmanFrequencyGetState;
@@ -4734,9 +4817,9 @@ zetGetSysmanTemperatureProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetProperties                            = loader::zetSysmanTemperatureGetProperties;
-            pDdiTable->pfnGet                                      = loader::zetSysmanTemperatureGet;
-            pDdiTable->pfnGetThresholds                            = loader::zetSysmanTemperatureGetThresholds;
-            pDdiTable->pfnSetThresholds                            = loader::zetSysmanTemperatureSetThresholds;
+            pDdiTable->pfnGetConfig                                = loader::zetSysmanTemperatureGetConfig;
+            pDdiTable->pfnSetConfig                                = loader::zetSysmanTemperatureSetConfig;
+            pDdiTable->pfnGetState                                 = loader::zetSysmanTemperatureGetState;
         }
         else
         {
@@ -4999,7 +5082,9 @@ zetGetSysmanRasProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetProperties                            = loader::zetSysmanRasGetProperties;
-            pDdiTable->pfnGetErrors                                = loader::zetSysmanRasGetErrors;
+            pDdiTable->pfnGetConfig                                = loader::zetSysmanRasGetConfig;
+            pDdiTable->pfnSetConfig                                = loader::zetSysmanRasSetConfig;
+            pDdiTable->pfnGetState                                 = loader::zetSysmanRasGetState;
         }
         else
         {
@@ -5078,6 +5163,73 @@ zetGetSysmanDiagnosticsProcAddrTable(
     {
         auto getTable = reinterpret_cast<zet_pfnGetSysmanDiagnosticsProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanDiagnosticsProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanEvent table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zetGetSysmanEventProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_sysman_event_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return ZE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( loader::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( ZE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<zet_pfnGetSysmanEventProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "zetGetSysmanEventProcAddrTable") );
+            result = getTable( version, &drv.dditable.zet.SysmanEvent );
+        }
+    }
+
+    if( ZE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGetConfig                                = loader::zetSysmanEventGetConfig;
+            pDdiTable->pfnSetConfig                                = loader::zetSysmanEventSetConfig;
+            pDdiTable->pfnGetState                                 = loader::zetSysmanEventGetState;
+            pDdiTable->pfnListen                                   = loader::zetSysmanEventListen;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.zet.SysmanEvent;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        auto getTable = reinterpret_cast<zet_pfnGetSysmanEventProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanEventProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

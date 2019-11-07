@@ -1199,30 +1199,6 @@ typedef void (__zecall *zet_pfnSysmanFrequencyGetCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanFrequencyGetAvailableClocks 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_frequency_get_available_clocks_params_t
-{
-    zet_sysman_handle_t* phSysman;
-    uint32_t** ppCount;
-    double** pphFrequency;
-} zet_sysman_frequency_get_available_clocks_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanFrequencyGetAvailableClocks 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanFrequencyGetAvailableClocksCb_t)(
-    zet_sysman_frequency_get_available_clocks_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanEngineGet 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1343,24 +1319,24 @@ typedef void (__zecall *zet_pfnSysmanFabricPortGetCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanTemperatureRead 
+/// @brief Callback function parameters for zetSysmanTemperatureGet 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_temperature_read_params_t
+typedef struct _zet_sysman_temperature_get_params_t
 {
     zet_sysman_handle_t* phSysman;
     uint32_t** ppCount;
     zet_sysman_temp_handle_t** pphTemperature;
-} zet_sysman_temperature_read_params_t;
+} zet_sysman_temperature_get_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanTemperatureRead 
+/// @brief Callback function-pointer for zetSysmanTemperatureGet 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanTemperatureReadCb_t)(
-    zet_sysman_temperature_read_params_t* params,
+typedef void (__zecall *zet_pfnSysmanTemperatureGetCb_t)(
+    zet_sysman_temperature_get_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1463,96 +1439,23 @@ typedef void (__zecall *zet_pfnSysmanRasGetCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanEventsGetProperties 
+/// @brief Callback function parameters for zetSysmanEventGet 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_events_get_properties_params_t
+typedef struct _zet_sysman_event_get_params_t
 {
     zet_sysman_handle_t* phSysman;
-    zet_event_properties_t** ppProperties;
-} zet_sysman_events_get_properties_params_t;
+    zet_sysman_event_handle_t** pphEvent;
+} zet_sysman_event_get_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanEventsGetProperties 
+/// @brief Callback function-pointer for zetSysmanEventGet 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanEventsGetPropertiesCb_t)(
-    zet_sysman_events_get_properties_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanEventsRegister 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_events_register_params_t
-{
-    zet_sysman_handle_t* phSysman;
-    uint32_t* pcount;
-    zet_event_request_t** ppEvents;
-} zet_sysman_events_register_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanEventsRegister 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanEventsRegisterCb_t)(
-    zet_sysman_events_register_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanEventsUnregister 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_events_unregister_params_t
-{
-    zet_sysman_handle_t* phSysman;
-    uint32_t* pcount;
-    zet_event_request_t** ppEvents;
-} zet_sysman_events_unregister_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanEventsUnregister 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanEventsUnregisterCb_t)(
-    zet_sysman_events_unregister_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanEventsListen 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_events_listen_params_t
-{
-    zet_sysman_handle_t* phSysman;
-    ze_bool_t* pclear;
-    uint32_t* ptimeout;
-    uint32_t** ppEvents;
-} zet_sysman_events_listen_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanEventsListen 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanEventsListenCb_t)(
-    zet_sysman_events_listen_params_t* params,
+typedef void (__zecall *zet_pfnSysmanEventGetCb_t)(
+    zet_sysman_event_get_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1604,21 +1507,17 @@ typedef struct _zet_sysman_callbacks_t
     zet_pfnSysmanPciGetStatsCb_t                                    pfnPciGetStatsCb;
     zet_pfnSysmanPowerGetCb_t                                       pfnPowerGetCb;
     zet_pfnSysmanFrequencyGetCb_t                                   pfnFrequencyGetCb;
-    zet_pfnSysmanFrequencyGetAvailableClocksCb_t                    pfnFrequencyGetAvailableClocksCb;
     zet_pfnSysmanEngineGetCb_t                                      pfnEngineGetCb;
     zet_pfnSysmanStandbyGetCb_t                                     pfnStandbyGetCb;
     zet_pfnSysmanFirmwareGetCb_t                                    pfnFirmwareGetCb;
     zet_pfnSysmanMemoryGetCb_t                                      pfnMemoryGetCb;
     zet_pfnSysmanFabricPortGetCb_t                                  pfnFabricPortGetCb;
-    zet_pfnSysmanTemperatureReadCb_t                                pfnTemperatureReadCb;
+    zet_pfnSysmanTemperatureGetCb_t                                 pfnTemperatureGetCb;
     zet_pfnSysmanPsuGetCb_t                                         pfnPsuGetCb;
     zet_pfnSysmanFanGetCb_t                                         pfnFanGetCb;
     zet_pfnSysmanLedGetCb_t                                         pfnLedGetCb;
     zet_pfnSysmanRasGetCb_t                                         pfnRasGetCb;
-    zet_pfnSysmanEventsGetPropertiesCb_t                            pfnEventsGetPropertiesCb;
-    zet_pfnSysmanEventsRegisterCb_t                                 pfnEventsRegisterCb;
-    zet_pfnSysmanEventsUnregisterCb_t                               pfnEventsUnregisterCb;
-    zet_pfnSysmanEventsListenCb_t                                   pfnEventsListenCb;
+    zet_pfnSysmanEventGetCb_t                                       pfnEventGetCb;
     zet_pfnSysmanDiagnosticsGetCb_t                                 pfnDiagnosticsGetCb;
 } zet_sysman_callbacks_t;
 
@@ -1794,6 +1693,30 @@ typedef struct _zet_sysman_frequency_get_properties_params_t
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
 typedef void (__zecall *zet_pfnSysmanFrequencyGetPropertiesCb_t)(
     zet_sysman_frequency_get_properties_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanFrequencyGetAvailableClocks 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_frequency_get_available_clocks_params_t
+{
+    zet_sysman_freq_handle_t* phFrequency;
+    uint32_t** ppCount;
+    double** pphFrequency;
+} zet_sysman_frequency_get_available_clocks_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanFrequencyGetAvailableClocks 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanFrequencyGetAvailableClocksCb_t)(
+    zet_sysman_frequency_get_available_clocks_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -2057,6 +1980,7 @@ typedef void (__zecall *zet_pfnSysmanFrequencySetOcTjMaxCb_t)(
 typedef struct _zet_sysman_frequency_callbacks_t
 {
     zet_pfnSysmanFrequencyGetPropertiesCb_t                         pfnGetPropertiesCb;
+    zet_pfnSysmanFrequencyGetAvailableClocksCb_t                    pfnGetAvailableClocksCb;
     zet_pfnSysmanFrequencyGetRangeCb_t                              pfnGetRangeCb;
     zet_pfnSysmanFrequencySetRangeCb_t                              pfnSetRangeCb;
     zet_pfnSysmanFrequencyGetStateCb_t                              pfnGetStateCb;
@@ -2534,71 +2458,69 @@ typedef void (__zecall *zet_pfnSysmanTemperatureGetPropertiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanTemperatureGet 
+/// @brief Callback function parameters for zetSysmanTemperatureGetConfig 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_temperature_get_params_t
+typedef struct _zet_sysman_temperature_get_config_params_t
+{
+    zet_sysman_temp_handle_t* phTemperature;
+    zet_temp_config_t** ppConfig;
+} zet_sysman_temperature_get_config_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanTemperatureGetConfig 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanTemperatureGetConfigCb_t)(
+    zet_sysman_temperature_get_config_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanTemperatureSetConfig 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_temperature_set_config_params_t
+{
+    zet_sysman_temp_handle_t* phTemperature;
+    const zet_temp_config_t** ppConfig;
+} zet_sysman_temperature_set_config_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanTemperatureSetConfig 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanTemperatureSetConfigCb_t)(
+    zet_sysman_temperature_set_config_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanTemperatureGetState 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_temperature_get_state_params_t
 {
     zet_sysman_temp_handle_t* phTemperature;
     double** ppTemperature;
-} zet_sysman_temperature_get_params_t;
+} zet_sysman_temperature_get_state_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanTemperatureGet 
+/// @brief Callback function-pointer for zetSysmanTemperatureGetState 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanTemperatureGetCb_t)(
-    zet_sysman_temperature_get_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanTemperatureGetThresholds 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_temperature_get_thresholds_params_t
-{
-    zet_sysman_temp_handle_t* phTemperature;
-    zet_temp_threshold_t** ppThreshold1;
-    zet_temp_threshold_t** ppThreshold2;
-} zet_sysman_temperature_get_thresholds_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanTemperatureGetThresholds 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanTemperatureGetThresholdsCb_t)(
-    zet_sysman_temperature_get_thresholds_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanTemperatureSetThresholds 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_temperature_set_thresholds_params_t
-{
-    zet_sysman_temp_handle_t* phTemperature;
-    double* pthreshold1;
-    double* pthreshold2;
-} zet_sysman_temperature_set_thresholds_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanTemperatureSetThresholds 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanTemperatureSetThresholdsCb_t)(
-    zet_sysman_temperature_set_thresholds_params_t* params,
+typedef void (__zecall *zet_pfnSysmanTemperatureGetStateCb_t)(
+    zet_sysman_temperature_get_state_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -2609,9 +2531,9 @@ typedef void (__zecall *zet_pfnSysmanTemperatureSetThresholdsCb_t)(
 typedef struct _zet_sysman_temperature_callbacks_t
 {
     zet_pfnSysmanTemperatureGetPropertiesCb_t                       pfnGetPropertiesCb;
-    zet_pfnSysmanTemperatureGetCb_t                                 pfnGetCb;
-    zet_pfnSysmanTemperatureGetThresholdsCb_t                       pfnGetThresholdsCb;
-    zet_pfnSysmanTemperatureSetThresholdsCb_t                       pfnSetThresholdsCb;
+    zet_pfnSysmanTemperatureGetConfigCb_t                           pfnGetConfigCb;
+    zet_pfnSysmanTemperatureSetConfigCb_t                           pfnSetConfigCb;
+    zet_pfnSysmanTemperatureGetStateCb_t                            pfnGetStateCb;
 } zet_sysman_temperature_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2873,25 +2795,71 @@ typedef void (__zecall *zet_pfnSysmanRasGetPropertiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanRasGetErrors 
+/// @brief Callback function parameters for zetSysmanRasGetConfig 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_ras_get_errors_params_t
+typedef struct _zet_sysman_ras_get_config_params_t
+{
+    zet_sysman_ras_handle_t* phRas;
+    zet_ras_config_t** ppConfig;
+} zet_sysman_ras_get_config_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanRasGetConfig 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanRasGetConfigCb_t)(
+    zet_sysman_ras_get_config_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanRasSetConfig 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_ras_set_config_params_t
+{
+    zet_sysman_ras_handle_t* phRas;
+    const zet_ras_config_t** ppConfig;
+} zet_sysman_ras_set_config_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanRasSetConfig 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanRasSetConfigCb_t)(
+    zet_sysman_ras_set_config_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanRasGetState 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_ras_get_state_params_t
 {
     zet_sysman_ras_handle_t* phRas;
     ze_bool_t* pclear;
     uint64_t** ppTotalErrors;
     zet_ras_details_t** ppDetails;
-} zet_sysman_ras_get_errors_params_t;
+} zet_sysman_ras_get_state_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanRasGetErrors 
+/// @brief Callback function-pointer for zetSysmanRasGetState 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanRasGetErrorsCb_t)(
-    zet_sysman_ras_get_errors_params_t* params,
+typedef void (__zecall *zet_pfnSysmanRasGetStateCb_t)(
+    zet_sysman_ras_get_state_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -2902,7 +2870,9 @@ typedef void (__zecall *zet_pfnSysmanRasGetErrorsCb_t)(
 typedef struct _zet_sysman_ras_callbacks_t
 {
     zet_pfnSysmanRasGetPropertiesCb_t                               pfnGetPropertiesCb;
-    zet_pfnSysmanRasGetErrorsCb_t                                   pfnGetErrorsCb;
+    zet_pfnSysmanRasGetConfigCb_t                                   pfnGetConfigCb;
+    zet_pfnSysmanRasSetConfigCb_t                                   pfnSetConfigCb;
+    zet_pfnSysmanRasGetStateCb_t                                    pfnGetStateCb;
 } zet_sysman_ras_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2962,6 +2932,112 @@ typedef struct _zet_sysman_diagnostics_callbacks_t
 } zet_sysman_diagnostics_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanEventGetConfig 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_event_get_config_params_t
+{
+    zet_sysman_event_handle_t* phEvent;
+    zet_event_config_t** ppConfig;
+} zet_sysman_event_get_config_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanEventGetConfig 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanEventGetConfigCb_t)(
+    zet_sysman_event_get_config_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanEventSetConfig 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_event_set_config_params_t
+{
+    zet_sysman_event_handle_t* phEvent;
+    const zet_event_config_t** ppConfig;
+} zet_sysman_event_set_config_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanEventSetConfig 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanEventSetConfigCb_t)(
+    zet_sysman_event_set_config_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanEventGetState 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_event_get_state_params_t
+{
+    zet_sysman_event_handle_t* phEvent;
+    ze_bool_t* pclear;
+    uint32_t** ppEvents;
+} zet_sysman_event_get_state_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanEventGetState 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanEventGetStateCb_t)(
+    zet_sysman_event_get_state_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanEventListen 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_event_listen_params_t
+{
+    ze_driver_handle_t* phDriver;
+    uint32_t* ptimeout;
+    uint32_t* pcount;
+    zet_sysman_event_handle_t** pphEvents;
+    uint32_t** ppEvents;
+} zet_sysman_event_listen_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanEventListen 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanEventListenCb_t)(
+    zet_sysman_event_listen_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of SysmanEvent callback functions pointers
+typedef struct _zet_sysman_event_callbacks_t
+{
+    zet_pfnSysmanEventGetConfigCb_t                                 pfnGetConfigCb;
+    zet_pfnSysmanEventSetConfigCb_t                                 pfnSetConfigCb;
+    zet_pfnSysmanEventGetStateCb_t                                  pfnGetStateCb;
+    zet_pfnSysmanEventListenCb_t                                    pfnListenCb;
+} zet_sysman_event_callbacks_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Container for all callbacks
 typedef struct _zet_callbacks_t
 {
@@ -2990,6 +3066,7 @@ typedef struct _zet_callbacks_t
     zet_sysman_led_callbacks_t          SysmanLed;
     zet_sysman_ras_callbacks_t          SysmanRas;
     zet_sysman_diagnostics_callbacks_t  SysmanDiagnostics;
+    zet_sysman_event_callbacks_t        SysmanEvent;
 } zet_callbacks_t;
 
 #if defined(__cplusplus)

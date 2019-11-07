@@ -173,6 +173,12 @@ namespace zet
     struct _sysman_diag_handle_t;
     using sysman_diag_handle_t = _sysman_diag_handle_t*;
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a SMI device event
+    class SysmanEvent;
+    struct _sysman_event_handle_t;
+    using sysman_event_handle_t = _sysman_event_handle_t*;
+
 } // namespace zet
 
 namespace zet

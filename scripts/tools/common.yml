@@ -137,3 +137,8 @@ type: handle
 desc: "Handle for a SMI device diagnostics test suite"
 class: $tSysmanDiagnostics
 name: "$t_sysman_diag_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a SMI device event"
+class: $tSysmanEvent
+name: "$t_sysman_event_handle_t"

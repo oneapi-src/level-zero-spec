@@ -727,14 +727,6 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencyGetAvailableClocks 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetAvailableClocks_t)(
-    zet_sysman_handle_t,
-    uint32_t*,
-    double*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanEngineGet 
 typedef ze_result_t (__zecall *zet_pfnSysmanEngineGet_t)(
     zet_sysman_handle_t,
@@ -775,8 +767,8 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanTemperatureRead 
-typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureRead_t)(
+/// @brief Function-pointer for zetSysmanTemperatureGet 
+typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGet_t)(
     zet_sysman_handle_t,
     uint32_t*,
     zet_sysman_temp_handle_t*
@@ -815,35 +807,10 @@ typedef ze_result_t (__zecall *zet_pfnSysmanRasGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanEventsGetProperties 
-typedef ze_result_t (__zecall *zet_pfnSysmanEventsGetProperties_t)(
+/// @brief Function-pointer for zetSysmanEventGet 
+typedef ze_result_t (__zecall *zet_pfnSysmanEventGet_t)(
     zet_sysman_handle_t,
-    zet_event_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanEventsRegister 
-typedef ze_result_t (__zecall *zet_pfnSysmanEventsRegister_t)(
-    zet_sysman_handle_t,
-    uint32_t,
-    zet_event_request_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanEventsUnregister 
-typedef ze_result_t (__zecall *zet_pfnSysmanEventsUnregister_t)(
-    zet_sysman_handle_t,
-    uint32_t,
-    zet_event_request_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanEventsListen 
-typedef ze_result_t (__zecall *zet_pfnSysmanEventsListen_t)(
-    zet_sysman_handle_t,
-    ze_bool_t,
-    uint32_t,
-    uint32_t*
+    zet_sysman_event_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -876,21 +843,17 @@ typedef struct _zet_sysman_dditable_t
     zet_pfnSysmanPciGetStats_t                                  pfnPciGetStats;
     zet_pfnSysmanPowerGet_t                                     pfnPowerGet;
     zet_pfnSysmanFrequencyGet_t                                 pfnFrequencyGet;
-    zet_pfnSysmanFrequencyGetAvailableClocks_t                  pfnFrequencyGetAvailableClocks;
     zet_pfnSysmanEngineGet_t                                    pfnEngineGet;
     zet_pfnSysmanStandbyGet_t                                   pfnStandbyGet;
     zet_pfnSysmanFirmwareGet_t                                  pfnFirmwareGet;
     zet_pfnSysmanMemoryGet_t                                    pfnMemoryGet;
     zet_pfnSysmanFabricPortGet_t                                pfnFabricPortGet;
-    zet_pfnSysmanTemperatureRead_t                              pfnTemperatureRead;
+    zet_pfnSysmanTemperatureGet_t                               pfnTemperatureGet;
     zet_pfnSysmanPsuGet_t                                       pfnPsuGet;
     zet_pfnSysmanFanGet_t                                       pfnFanGet;
     zet_pfnSysmanLedGet_t                                       pfnLedGet;
     zet_pfnSysmanRasGet_t                                       pfnRasGet;
-    zet_pfnSysmanEventsGetProperties_t                          pfnEventsGetProperties;
-    zet_pfnSysmanEventsRegister_t                               pfnEventsRegister;
-    zet_pfnSysmanEventsUnregister_t                             pfnEventsUnregister;
-    zet_pfnSysmanEventsListen_t                                 pfnEventsListen;
+    zet_pfnSysmanEventGet_t                                     pfnEventGet;
     zet_pfnSysmanDiagnosticsGet_t                               pfnDiagnosticsGet;
 } zet_sysman_dditable_t;
 
@@ -1008,6 +971,14 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanFrequencyGetAvailableClocks 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetAvailableClocks_t)(
+    zet_sysman_freq_handle_t,
+    uint32_t*,
+    double*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanFrequencyGetRange 
 typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetRange_t)(
     zet_sysman_freq_handle_t,
@@ -1089,6 +1060,7 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcTjMax_t)(
 typedef struct _zet_sysman_frequency_dditable_t
 {
     zet_pfnSysmanFrequencyGetProperties_t                       pfnGetProperties;
+    zet_pfnSysmanFrequencyGetAvailableClocks_t                  pfnGetAvailableClocks;
     zet_pfnSysmanFrequencyGetRange_t                            pfnGetRange;
     zet_pfnSysmanFrequencySetRange_t                            pfnSetRange;
     zet_pfnSysmanFrequencyGetState_t                            pfnGetState;
@@ -1422,26 +1394,24 @@ typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanTemperatureGet 
-typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGet_t)(
+/// @brief Function-pointer for zetSysmanTemperatureGetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGetConfig_t)(
+    zet_sysman_temp_handle_t,
+    zet_temp_config_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanTemperatureSetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureSetConfig_t)(
+    zet_sysman_temp_handle_t,
+    const zet_temp_config_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanTemperatureGetState 
+typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGetState_t)(
     zet_sysman_temp_handle_t,
     double*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanTemperatureGetThresholds 
-typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureGetThresholds_t)(
-    zet_sysman_temp_handle_t,
-    zet_temp_threshold_t*,
-    zet_temp_threshold_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanTemperatureSetThresholds 
-typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureSetThresholds_t)(
-    zet_sysman_temp_handle_t,
-    double,
-    double
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1449,9 +1419,9 @@ typedef ze_result_t (__zecall *zet_pfnSysmanTemperatureSetThresholds_t)(
 typedef struct _zet_sysman_temperature_dditable_t
 {
     zet_pfnSysmanTemperatureGetProperties_t                     pfnGetProperties;
-    zet_pfnSysmanTemperatureGet_t                               pfnGet;
-    zet_pfnSysmanTemperatureGetThresholds_t                     pfnGetThresholds;
-    zet_pfnSysmanTemperatureSetThresholds_t                     pfnSetThresholds;
+    zet_pfnSysmanTemperatureGetConfig_t                         pfnGetConfig;
+    zet_pfnSysmanTemperatureSetConfig_t                         pfnSetConfig;
+    zet_pfnSysmanTemperatureGetState_t                          pfnGetState;
 } zet_sysman_temperature_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1649,8 +1619,22 @@ typedef ze_result_t (__zecall *zet_pfnSysmanRasGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanRasGetErrors 
-typedef ze_result_t (__zecall *zet_pfnSysmanRasGetErrors_t)(
+/// @brief Function-pointer for zetSysmanRasGetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanRasGetConfig_t)(
+    zet_sysman_ras_handle_t,
+    zet_ras_config_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanRasSetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanRasSetConfig_t)(
+    zet_sysman_ras_handle_t,
+    const zet_ras_config_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanRasGetState 
+typedef ze_result_t (__zecall *zet_pfnSysmanRasGetState_t)(
     zet_sysman_ras_handle_t,
     ze_bool_t,
     uint64_t*,
@@ -1662,7 +1646,9 @@ typedef ze_result_t (__zecall *zet_pfnSysmanRasGetErrors_t)(
 typedef struct _zet_sysman_ras_dditable_t
 {
     zet_pfnSysmanRasGetProperties_t                             pfnGetProperties;
-    zet_pfnSysmanRasGetErrors_t                                 pfnGetErrors;
+    zet_pfnSysmanRasGetConfig_t                                 pfnGetConfig;
+    zet_pfnSysmanRasSetConfig_t                                 pfnSetConfig;
+    zet_pfnSysmanRasGetState_t                                  pfnGetState;
 } zet_sysman_ras_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1738,6 +1724,72 @@ typedef ze_result_t (__zecall *zet_pfnGetSysmanDiagnosticsProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanEventGetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanEventGetConfig_t)(
+    zet_sysman_event_handle_t,
+    zet_event_config_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanEventSetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanEventSetConfig_t)(
+    zet_sysman_event_handle_t,
+    const zet_event_config_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanEventGetState 
+typedef ze_result_t (__zecall *zet_pfnSysmanEventGetState_t)(
+    zet_sysman_event_handle_t,
+    ze_bool_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanEventListen 
+typedef ze_result_t (__zecall *zet_pfnSysmanEventListen_t)(
+    ze_driver_handle_t,
+    uint32_t,
+    uint32_t,
+    zet_sysman_event_handle_t*,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of SysmanEvent functions pointers
+typedef struct _zet_sysman_event_dditable_t
+{
+    zet_pfnSysmanEventGetConfig_t                               pfnGetConfig;
+    zet_pfnSysmanEventSetConfig_t                               pfnSetConfig;
+    zet_pfnSysmanEventGetState_t                                pfnGetState;
+    zet_pfnSysmanEventListen_t                                  pfnListen;
+} zet_sysman_event_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanEvent table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zetGetSysmanEventProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_sysman_event_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetGetSysmanEventProcAddrTable
+typedef ze_result_t (__zecall *zet_pfnGetSysmanEventProcAddrTable_t)(
+    ze_api_version_t,
+    zet_sysman_event_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Container for all DDI tables
 typedef struct _zet_dditable_t
 {
@@ -1766,6 +1818,7 @@ typedef struct _zet_dditable_t
     zet_sysman_led_dditable_t           SysmanLed;
     zet_sysman_ras_dditable_t           SysmanRas;
     zet_sysman_diagnostics_dditable_t   SysmanDiagnostics;
+    zet_sysman_event_dditable_t         SysmanEvent;
 } zet_dditable_t;
 
 #if defined(__cplusplus)

@@ -1291,7 +1291,7 @@ namespace driver
     /// @brief Intercept function for zetSysmanFrequencyGetAvailableClocks
     ze_result_t __zecall
     zetSysmanFrequencyGetAvailableClocks(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
                                                         ///< If count is zero, then the driver will update the value with the total
                                                         ///< number of frequencies available.
@@ -1305,10 +1305,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnFrequencyGetAvailableClocks = context.zetDdiTable.Sysman.pfnFrequencyGetAvailableClocks;
-        if( nullptr != pfnFrequencyGetAvailableClocks )
+        auto pfnGetAvailableClocks = context.zetDdiTable.SysmanFrequency.pfnGetAvailableClocks;
+        if( nullptr != pfnGetAvailableClocks )
         {
-            result = pfnFrequencyGetAvailableClocks( hSysman, pCount, phFrequency );
+            result = pfnGetAvailableClocks( hFrequency, pCount, phFrequency );
         }
         else
         {
@@ -2174,9 +2174,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureRead
+    /// @brief Intercept function for zetSysmanTemperatureGet
     ze_result_t __zecall
-    zetSysmanTemperatureRead(
+    zetSysmanTemperatureGet(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -2192,10 +2192,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnTemperatureRead = context.zetDdiTable.Sysman.pfnTemperatureRead;
-        if( nullptr != pfnTemperatureRead )
+        auto pfnTemperatureGet = context.zetDdiTable.Sysman.pfnTemperatureGet;
+        if( nullptr != pfnTemperatureGet )
         {
-            result = pfnTemperatureRead( hSysman, pCount, phTemperature );
+            result = pfnTemperatureGet( hSysman, pCount, phTemperature );
         }
         else
         {
@@ -2233,9 +2233,57 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureGet
+    /// @brief Intercept function for zetSysmanTemperatureGetConfig
     ze_result_t __zecall
-    zetSysmanTemperatureGet(
+    zetSysmanTemperatureGetConfig(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        zet_temp_config_t* pConfig                      ///< [in] Returns current configuration.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetConfig = context.zetDdiTable.SysmanTemperature.pfnGetConfig;
+        if( nullptr != pfnGetConfig )
+        {
+            result = pfnGetConfig( hTemperature, pConfig );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureSetConfig
+    ze_result_t __zecall
+    zetSysmanTemperatureSetConfig(
+        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+        const zet_temp_config_t* pConfig                ///< [in] New configuration.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetConfig = context.zetDdiTable.SysmanTemperature.pfnSetConfig;
+        if( nullptr != pfnSetConfig )
+        {
+            result = pfnSetConfig( hTemperature, pConfig );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanTemperatureGetState
+    ze_result_t __zecall
+    zetSysmanTemperatureGetState(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
         double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
                                                         ///< degrees Celcius.
@@ -2244,64 +2292,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGet = context.zetDdiTable.SysmanTemperature.pfnGet;
-        if( nullptr != pfnGet )
+        auto pfnGetState = context.zetDdiTable.SysmanTemperature.pfnGetState;
+        if( nullptr != pfnGetState )
         {
-            result = pfnGet( hTemperature, pTemperature );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureGetThresholds
-    ze_result_t __zecall
-    zetSysmanTemperatureGetThresholds(
-        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        zet_temp_threshold_t* pThreshold1,              ///< [in][optional] Returns information about temperature threshold 1 -
-                                                        ///< enabled/temperature/process ID.
-        zet_temp_threshold_t* pThreshold2               ///< [in][optional] Returns information about temperature threshold 1 -
-                                                        ///< enabled/temperature/process ID.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetThresholds = context.zetDdiTable.SysmanTemperature.pfnGetThresholds;
-        if( nullptr != pfnGetThresholds )
-        {
-            result = pfnGetThresholds( hTemperature, pThreshold1, pThreshold2 );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanTemperatureSetThresholds
-    ze_result_t __zecall
-    zetSysmanTemperatureSetThresholds(
-        zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        double threshold1,                              ///< [in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable
-                                                        ///< threshold 1.
-        double threshold2                               ///< [in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable
-                                                        ///< theshold 2.
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetThresholds = context.zetDdiTable.SysmanTemperature.pfnSetThresholds;
-        if( nullptr != pfnSetThresholds )
-        {
-            result = pfnSetThresholds( hTemperature, threshold1, threshold2 );
+            result = pfnGetState( hTemperature, pTemperature );
         }
         else
         {
@@ -2693,9 +2687,58 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanRasGetErrors
+    /// @brief Intercept function for zetSysmanRasGetConfig
     ze_result_t __zecall
-    zetSysmanRasGetErrors(
+    zetSysmanRasGetConfig(
+        zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+        zet_ras_config_t* pConfig                       ///< [in] Will be populed with the current RAS configuration - thresholds
+                                                        ///< used to trigger events
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetConfig = context.zetDdiTable.SysmanRas.pfnGetConfig;
+        if( nullptr != pfnGetConfig )
+        {
+            result = pfnGetConfig( hRas, pConfig );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanRasSetConfig
+    ze_result_t __zecall
+    zetSysmanRasSetConfig(
+        zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+        const zet_ras_config_t* pConfig                 ///< [in] Change the RAS configuration - thresholds used to trigger events
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetConfig = context.zetDdiTable.SysmanRas.pfnSetConfig;
+        if( nullptr != pfnSetConfig )
+        {
+            result = pfnSetConfig( hRas, pConfig );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanRasGetState
+    ze_result_t __zecall
+    zetSysmanRasGetState(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
         uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
@@ -2705,10 +2748,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetErrors = context.zetDdiTable.SysmanRas.pfnGetErrors;
-        if( nullptr != pfnGetErrors )
+        auto pfnGetState = context.zetDdiTable.SysmanRas.pfnGetState;
+        if( nullptr != pfnGetState )
         {
-            result = pfnGetErrors( hRas, clear, pTotalErrors, pDetails );
+            result = pfnGetState( hRas, clear, pTotalErrors, pDetails );
         }
         else
         {
@@ -2719,46 +2762,47 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsGetProperties
+    /// @brief Intercept function for zetSysmanEventGet
     ze_result_t __zecall
-    zetSysmanEventsGetProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        zet_event_properties_t* pProperties             ///< [in] Structure describing event properties
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnEventsGetProperties = context.zetDdiTable.Sysman.pfnEventsGetProperties;
-        if( nullptr != pfnEventsGetProperties )
-        {
-            result = pfnEventsGetProperties( hSysman, pProperties );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsRegister
-    ze_result_t __zecall
-    zetSysmanEventsRegister(
+    zetSysmanEventGet(
         zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
-        uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
-                                                        ///< be registered.
-        zet_event_request_t* pEvents                    ///< [in][optional] Events to register.
+        zet_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnEventsRegister = context.zetDdiTable.Sysman.pfnEventsRegister;
-        if( nullptr != pfnEventsRegister )
+        auto pfnEventGet = context.zetDdiTable.Sysman.pfnEventGet;
+        if( nullptr != pfnEventGet )
         {
-            result = pfnEventsRegister( hSysman, count, pEvents );
+            result = pfnEventGet( hSysman, phEvent );
+        }
+        else
+        {
+            // generic implementation
+            *phEvent = reinterpret_cast<zet_sysman_event_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanEventGetConfig
+    ze_result_t __zecall
+    zetSysmanEventGetConfig(
+        zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+        zet_event_config_t* pConfig                     ///< [in] Will contain the current event configuration (list of registered
+                                                        ///< events).
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetConfig = context.zetDdiTable.SysmanEvent.pfnGetConfig;
+        if( nullptr != pfnGetConfig )
+        {
+            result = pfnGetConfig( hEvent, pConfig );
         }
         else
         {
@@ -2769,22 +2813,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsUnregister
+    /// @brief Intercept function for zetSysmanEventSetConfig
     ze_result_t __zecall
-    zetSysmanEventsUnregister(
-        zet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
-                                                        ///< be unregistered.
-        zet_event_request_t* pEvents                    ///< [in][optional] Events to unregister.
+    zetSysmanEventSetConfig(
+        zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+        const zet_event_config_t* pConfig               ///< [in] New event configuration (list of registered events).
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnEventsUnregister = context.zetDdiTable.Sysman.pfnEventsUnregister;
-        if( nullptr != pfnEventsUnregister )
+        auto pfnSetConfig = context.zetDdiTable.SysmanEvent.pfnSetConfig;
+        if( nullptr != pfnSetConfig )
         {
-            result = pfnEventsUnregister( hSysman, count, pEvents );
+            result = pfnSetConfig( hEvent, pConfig );
         }
         else
         {
@@ -2795,27 +2837,54 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanEventsListen
+    /// @brief Intercept function for zetSysmanEventGetState
     ze_result_t __zecall
-    zetSysmanEventsListen(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for a device. Set to nullptr to get events from any
-                                                        ///< device for which the application has registered to receive
-                                                        ///< notifications.
-        ze_bool_t clear,                                ///< [in] Clear the event status.
-        uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Zero will
-                                                        ///< check status and return immediately. Set to ::ZET_EVENT_WAIT_INFINITE
-                                                        ///< to block until events arrive.
-        uint32_t* pEvents                               ///< [in] Bitfield of events (1<<::zet_sysman_event_type_t) that have been
-                                                        ///< triggered.
+    zetSysmanEventGetState(
+        zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
+        ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
+        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+                                                        ///< triggered by this device.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnEventsListen = context.zetDdiTable.Sysman.pfnEventsListen;
-        if( nullptr != pfnEventsListen )
+        auto pfnGetState = context.zetDdiTable.SysmanEvent.pfnGetState;
+        if( nullptr != pfnGetState )
         {
-            result = pfnEventsListen( hSysman, clear, timeout, pEvents );
+            result = pfnGetState( hEvent, clear, pEvents );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanEventListen
+    ze_result_t __zecall
+    zetSysmanEventListen(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
+                                                        ///< ::ZET_EVENT_WAIT_NONE will check status and return immediately. Set to
+                                                        ///< ::ZET_EVENT_WAIT_INFINITE to block until events arrive.
+        uint32_t count,                                 ///< [in] Number of handles in phEvents
+        zet_sysman_event_handle_t* phEvents,            ///< [in][range(0, count)] Handle of events that should be listened to
+        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+                                                        ///< triggered by any of the supplied event handles. If timeout is not
+                                                        ///< ::ZET_EVENT_WAIT_INFINITE and this value is
+                                                        ///< ::ZET_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnListen = context.zetDdiTable.SysmanEvent.pfnListen;
+        if( nullptr != pfnListen )
+        {
+            result = pfnListen( hDriver, timeout, count, phEvents, pEvents );
         }
         else
         {
@@ -3470,8 +3539,6 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnFrequencyGet                           = driver::zetSysmanFrequencyGet;
 
-    pDdiTable->pfnFrequencyGetAvailableClocks            = driver::zetSysmanFrequencyGetAvailableClocks;
-
     pDdiTable->pfnEngineGet                              = driver::zetSysmanEngineGet;
 
     pDdiTable->pfnStandbyGet                             = driver::zetSysmanStandbyGet;
@@ -3482,7 +3549,7 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnFabricPortGet                          = driver::zetSysmanFabricPortGet;
 
-    pDdiTable->pfnTemperatureRead                        = driver::zetSysmanTemperatureRead;
+    pDdiTable->pfnTemperatureGet                         = driver::zetSysmanTemperatureGet;
 
     pDdiTable->pfnPsuGet                                 = driver::zetSysmanPsuGet;
 
@@ -3492,13 +3559,7 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnRasGet                                 = driver::zetSysmanRasGet;
 
-    pDdiTable->pfnEventsGetProperties                    = driver::zetSysmanEventsGetProperties;
-
-    pDdiTable->pfnEventsRegister                         = driver::zetSysmanEventsRegister;
-
-    pDdiTable->pfnEventsUnregister                       = driver::zetSysmanEventsUnregister;
-
-    pDdiTable->pfnEventsListen                           = driver::zetSysmanEventsListen;
+    pDdiTable->pfnEventGet                               = driver::zetSysmanEventGet;
 
     pDdiTable->pfnDiagnosticsGet                         = driver::zetSysmanDiagnosticsGet;
 
@@ -3571,6 +3632,8 @@ zetGetSysmanFrequencyProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     pDdiTable->pfnGetProperties                          = driver::zetSysmanFrequencyGetProperties;
+
+    pDdiTable->pfnGetAvailableClocks                     = driver::zetSysmanFrequencyGetAvailableClocks;
 
     pDdiTable->pfnGetRange                               = driver::zetSysmanFrequencyGetRange;
 
@@ -3798,11 +3861,11 @@ zetGetSysmanTemperatureProcAddrTable(
 
     pDdiTable->pfnGetProperties                          = driver::zetSysmanTemperatureGetProperties;
 
-    pDdiTable->pfnGet                                    = driver::zetSysmanTemperatureGet;
+    pDdiTable->pfnGetConfig                              = driver::zetSysmanTemperatureGetConfig;
 
-    pDdiTable->pfnGetThresholds                          = driver::zetSysmanTemperatureGetThresholds;
+    pDdiTable->pfnSetConfig                              = driver::zetSysmanTemperatureSetConfig;
 
-    pDdiTable->pfnSetThresholds                          = driver::zetSysmanTemperatureSetThresholds;
+    pDdiTable->pfnGetState                               = driver::zetSysmanTemperatureGetState;
 
     return result;
 }
@@ -3936,7 +3999,11 @@ zetGetSysmanRasProcAddrTable(
 
     pDdiTable->pfnGetProperties                          = driver::zetSysmanRasGetProperties;
 
-    pDdiTable->pfnGetErrors                              = driver::zetSysmanRasGetErrors;
+    pDdiTable->pfnGetConfig                              = driver::zetSysmanRasGetConfig;
+
+    pDdiTable->pfnSetConfig                              = driver::zetSysmanRasSetConfig;
+
+    pDdiTable->pfnGetState                               = driver::zetSysmanRasGetState;
 
     return result;
 }
@@ -3969,6 +4036,42 @@ zetGetSysmanDiagnosticsProcAddrTable(
     pDdiTable->pfnGetProperties                          = driver::zetSysmanDiagnosticsGetProperties;
 
     pDdiTable->pfnRunTests                               = driver::zetSysmanDiagnosticsRunTests;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanEvent table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zetGetSysmanEventProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_sysman_event_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetConfig                              = driver::zetSysmanEventGetConfig;
+
+    pDdiTable->pfnSetConfig                              = driver::zetSysmanEventSetConfig;
+
+    pDdiTable->pfnGetState                               = driver::zetSysmanEventGetState;
+
+    pDdiTable->pfnListen                                 = driver::zetSysmanEventListen;
 
     return result;
 }

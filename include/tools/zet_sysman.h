@@ -877,7 +877,7 @@ zetSysmanPowerGetEnergyThreshold(
 ///     - An event ::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be
 ///       generated when the delta energy consumed starting from this call
 ///       exceeds the specified threshold. Use the function
-///       ::zetSysmanEventsRegister() to start receiving the event.
+///       ::zetSysmanEventSetConfig() to start receiving the event.
 ///     - Only one running process can control the energy threshold at a given
 ///       time. If another process attempts to change the energy threshold, the
 ///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
@@ -1137,12 +1137,12 @@ zetSysmanFrequencyGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hFrequency
 ///         + nullptr == pCount
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFrequencyGetAvailableClocks(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] SMI handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
                                                     ///< If count is zero, then the driver will update the value with the total
                                                     ///< number of frequencies available.
@@ -2286,14 +2286,31 @@ typedef struct _zet_temp_properties_t
 /// @brief Temperature sensor threshold
 typedef struct _zet_temp_threshold_t
 {
-    ze_bool_t enableLowToHigh;                      ///< [in,out] Generate an event when the temperature crosses from below the
+    ze_bool_t enableLowToHigh;                      ///< [in,out] Trigger an event when the temperature crosses from below the
                                                     ///< threshold to above.
-    ze_bool_t enableHighToLow;                      ///< [in,out] Generate an event when the temperature crosses from above the
+    ze_bool_t enableHighToLow;                      ///< [in,out] Trigger an event when the temperature crosses from above the
                                                     ///< threshold to below.
-    ze_bool_t threshold;                            ///< [in,out] The threshold in degrees Celcius.
-    uint32_t processId;                             ///< [in,out] Host processId that set this threshold.
+    double threshold;                               ///< [in,out] The threshold in degrees Celcius.
 
 } zet_temp_threshold_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Temperature configuration - which events should be triggered and the
+///        trigger conditions.
+typedef struct _zet_temp_config_t
+{
+    ze_bool_t enableCritical;                       ///< [in,out] Indicates if event ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
+                                                    ///< should be triggered by the driver.
+    zet_temp_threshold_t threshold1;                ///< [in,out] Configuration controlling if and when event
+                                                    ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the
+                                                    ///< driver.
+    zet_temp_threshold_t threshold2;                ///< [in,out] Configuration controlling if and when event
+                                                    ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the
+                                                    ///< driver.
+    uint32_t processId;                             ///< [out] Host processId that set this configuration (ignored when setting
+                                                    ///< the configuration).
+
+} zet_temp_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle of temperature sensors
@@ -2311,7 +2328,7 @@ typedef struct _zet_temp_threshold_t
 ///         + nullptr == pCount
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanTemperatureRead(
+zetSysmanTemperatureGet(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
@@ -2346,6 +2363,73 @@ zetSysmanTemperatureGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get temperature configuration for this sensor - which events are
+///        triggered and the trigger conditions
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hTemperature
+///         + nullptr == pConfig
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
+///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to request this feature.
+ze_result_t __zecall
+zetSysmanTemperatureGetConfig(
+    zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+    zet_temp_config_t* pConfig                      ///< [in] Returns current configuration.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set temperature configuration for this sensor - indicates which events
+///        are triggered and the trigger conditions
+/// 
+/// @details
+///     - Events ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL will be triggered when
+///       temperature reaches the critical range. Use the function
+///       ::zetSysmanEventSetConfig() to start receiving this event.
+///     - Events ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and
+///       ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when
+///       temperature cross the thresholds set using this function. Use the
+///       function ::zetSysmanEventSetConfig() to start receiving these events.
+///     - Only one running process can set the temperature configuration at a
+///       time. If another process attempts to change the configuration, the
+///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
+///       function ::zetSysmanTemperatureGetConfig() will return the process ID
+///       currently controlling these settings.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hTemperature
+///         + nullptr == pConfig
+///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyGetOcTjMax()). Temperature thresholds must be below this value.
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
+///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to request this feature.
+///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///         + Another running process is controlling these settings.
+ze_result_t __zecall
+zetSysmanTemperatureSetConfig(
+    zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
+    const zet_temp_config_t* pConfig                ///< [in] New configuration.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get the temperature from a specified sensor
 /// 
 /// @details
@@ -2361,76 +2445,10 @@ zetSysmanTemperatureGetProperties(
 ///         + nullptr == pTemperature
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanTemperatureGet(
+zetSysmanTemperatureGetState(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
     double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
                                                     ///< degrees Celcius.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get state of temperature thresholds
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTemperature
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
-///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
-///         + User does not have permissions to request this feature.
-ze_result_t __zecall
-zetSysmanTemperatureGetThresholds(
-    zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-    zet_temp_threshold_t* pThreshold1,              ///< [in][optional] Returns information about temperature threshold 1 -
-                                                    ///< enabled/temperature/process ID.
-    zet_temp_threshold_t* pThreshold2               ///< [in][optional] Returns information about temperature threshold 1 -
-                                                    ///< enabled/temperature/process ID.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set temperature thresholds
-/// 
-/// @details
-///     - Events ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and
-///       ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when
-///       temperature cross the thresholds set using this function. Use the
-///       function ::zetSysmanEventsRegister() to start receiving the event.
-///     - Only one running process can set the temperature thresholds at a time.
-///       If another process attempts to change the temperature thresholds, the
-///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
-///       function ::zetSysmanTemperatureGetThresholds() will return the process
-///       ID currently controlling these settings.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTemperature
-///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyGetOcTjMax()). Temperature thresholds must be below this value.
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
-///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
-///         + User does not have permissions to request this feature.
-///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
-///         + Another running process is controlling these settings.
-ze_result_t __zecall
-zetSysmanTemperatureSetThresholds(
-    zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-    double threshold1,                              ///< [in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable
-                                                    ///< threshold 1.
-    double threshold2                               ///< [in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable
-                                                    ///< theshold 2.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2888,6 +2906,23 @@ typedef struct _zet_ras_details_t
 } zet_ras_details_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief RAS error configuration - thresholds used for triggering RAS events
+///        (::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
+///        ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
+typedef struct _zet_ras_config_t
+{
+    uint64_t totalThreshold;                        ///< [in,out] If the total RAS errors exceeds this threshold, the event
+                                                    ///< will be triggered. A value of 0ULL disables triggering the event based
+                                                    ///< on the total counter.
+    zet_ras_details_t detailedThresholds;           ///< [in,out] If the RAS errors for each category exceed the threshold for
+                                                    ///< that category, the event will be triggered. A value of 0ULL will
+                                                    ///< disable an event being triggered for that category.
+    uint32_t processId;                             ///< [out] Host processId that set this configuration (ignored when setting
+                                                    ///< the configuration).
+
+} zet_ras_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle of RAS error sets
 /// 
 /// @details
@@ -2938,6 +2973,69 @@ zetSysmanRasGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get RAS error thresholds
+/// 
+/// @details
+///     - When a particular RAS correctable error counter exceeds the configured
+///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
+///       will be triggered.
+///     - When a particular RAS uncorrectable error counter exceeds the
+///       configured threshold, the event
+///       ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hRas
+///         + nullptr == pConfig
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + This device does not support RAS.
+ze_result_t __zecall
+zetSysmanRasGetConfig(
+    zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+    zet_ras_config_t* pConfig                       ///< [in] Will be populed with the current RAS configuration - thresholds
+                                                    ///< used to trigger events
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set RAS error thresholds
+/// 
+/// @details
+///     - When a particular RAS correctable error counter exceeds the specified
+///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
+///       will be generated.
+///     - When a particular RAS uncorrectable error counter exceeds the
+///       specified threshold, the event
+///       ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated.
+///     - Call ::zetSysmanRasGetState() and set the clear flag to true to
+///       restart event generation once counters have exceeded thresholds.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hRas
+///         + nullptr == pConfig
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + This device does not support RAS.
+///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///         + Another running process is controlling these settings.
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + Don't have permissions to set thresholds.
+ze_result_t __zecall
+zetSysmanRasSetConfig(
+    zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+    const zet_ras_config_t* pConfig                 ///< [in] Change the RAS configuration - thresholds used to trigger events
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get the number of errors of a given RAS error set
 /// 
 /// @details
@@ -2959,7 +3057,7 @@ zetSysmanRasGetProperties(
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + Don't have permissions to clear error counters.
 ze_result_t __zecall
-zetSysmanRasGetErrors(
+zetSysmanRasGetState(
     zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
     ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
     uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
@@ -2970,40 +3068,39 @@ zetSysmanRasGetErrors(
 /// @brief Event types
 typedef enum _zet_sysman_event_type_t
 {
-    ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = 0,       ///< The frequency is being throttled
-    ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED, ///< Event is generated when the energy consumption threshold is reached
+    ZET_SYSMAN_EVENT_TYPE_NONE = 0,                 ///< Specifies no events
+    ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = ZE_BIT( 0 ), ///< Event is triggered when the frequency starts being throttled
+    ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED = ZE_BIT( 1 ),   ///< Event is triggered when the energy consumption threshold is reached
                                                     ///< (use ::zetSysmanPowerSetEnergyThreshold() to configure).
-    ZET_SYSMAN_EVENT_TYPE_CRITICAL_TEMPERATURE,     ///< Event is generated when the critical temperature is reached.
-    ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1,          ///< Event is generated when the temperature cross threshold 1 (use
-                                                    ///< ::zetSysmanTemperatureSetThresholds() to configure).
-    ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2,          ///< Event is generated when the temperature cross threshold 1 (use
-                                                    ///< ::zetSysmanTemperatureSetThresholds() to configure).
-    ZET_SYSMAN_EVENT_TYPE_RAS_ERRORS,               ///< ECC/RAS errors
-    ZET_SYSMAN_EVENT_TYPE_NUM,                      ///< The number of event types
+    ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL = ZE_BIT( 2 ),  ///< Event is triggered when the critical temperature is reached (use
+                                                    ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
+    ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 = ZE_BIT( 3 ),///< Event is triggered when the temperature crosses threshold 1 (use
+                                                    ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
+    ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 = ZE_BIT( 4 ),///< Event is triggered when the temperature crosses threshold 2 (use
+                                                    ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
+    ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH = ZE_BIT( 5 ), ///< Event is triggered when the health of device memory changes.
+    ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH = ZE_BIT( 6 ), ///< Event is triggered when the health of fabric ports change.
+    ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS = ZE_BIT( 7 ), ///< Event is triggered when RAS correctable errors cross thresholds (use
+                                                    ///< ::zetSysmanRasSetConfig() to configure - disabled by default).
+    ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 8 ),   ///< Event is triggered when RAS uncorrectable errors cross thresholds (use
+                                                    ///< ::zetSysmanRasSetConfig() to configure - disabled by default).
+    ZET_SYSMAN_EVENT_TYPE_ALL = (~0),               ///< Specifies all events
 
 } zet_sysman_event_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Event properties
-typedef struct _zet_event_properties_t
+/// @brief Event configuration for a device
+typedef struct _zet_event_config_t
 {
-    ze_bool_t supportedEvents[ZET_SYSMAN_EVENT_TYPE_NUM];   ///< [out] Set to true for the events that are supported
+    uint32_t registered;                            ///< [in,out] List of registered events (Bitfield of events
+                                                    ///< ::zet_sysman_event_type_t). ::ZET_SYSMAN_EVENT_TYPE_NONE indicates
+                                                    ///< there are no registered events. ::ZET_SYSMAN_EVENT_TYPE_ALL indicates
+                                                    ///< that all events are registered.
 
-} zet_event_properties_t;
+} zet_event_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Request structure used to register/unregister events
-typedef struct _zet_event_request_t
-{
-    zet_sysman_event_type_t event;                  ///< [in] The event type to register.
-    uint32_t threshold;                             ///< [in] The application only receives a notification when the total count
-                                                    ///< exceeds this value. Set to zero to receive a notification for every
-                                                    ///< new event.
-
-} zet_event_request_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get event properties
+/// @brief Get the event handle for the specified device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -3015,48 +3112,19 @@ typedef struct _zet_event_request_t
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pProperties
+///         + nullptr == phEvent
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanEventsGetProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    zet_event_properties_t* pProperties             ///< [in] Structure describing event properties
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Register to receive events
-/// 
-/// @details
-///     - This will only register the specified list of events. If other events
-///       have been registered, notifications for them will continue.
-///     - Set count to zero to receive notifications for all events.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
-///         + User does not have permissions to register to receive notifications for this event.
-ze_result_t __zecall
-zetSysmanEventsRegister(
+zetSysmanEventGet(
     zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
-    uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
-                                                    ///< be registered.
-    zet_event_request_t* pEvents                    ///< [in][optional] Events to register.
+    zet_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Unregister events
+/// @brief Find out which events are currently registered on the specified device
+///        event handler
 /// 
 /// @details
-///     - This will only unregister the specified list of events. If other
-///       events have been registered, notifications for them will continue.
-///     - Set count to zero to no longer receive any notifications.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -3065,15 +3133,69 @@ zetSysmanEventsRegister(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hEvent
+///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanEventsUnregister(
-    zet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
-                                                    ///< be unregistered.
-    zet_event_request_t* pEvents                    ///< [in][optional] Events to unregister.
+zetSysmanEventGetConfig(
+    zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+    zet_event_config_t* pConfig                     ///< [in] Will contain the current event configuration (list of registered
+                                                    ///< events).
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set a new event configuration (list of registered events) on the
+///        specified device event handler
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hEvent
+///         + nullptr == pConfig
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanEventSetConfig(
+    zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+    const zet_event_config_t* pConfig               ///< [in] New event configuration (list of registered events).
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get events that have been triggered for a specific device
+/// 
+/// @details
+///     - If events have occurred on the specified device event handle, they are
+///       returned and the corresponding event status is cleared if the argument
+///       clear = true.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hEvent
+///         + nullptr == pEvents
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanEventGetState(
+    zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
+    ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
+    uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+                                                    ///< triggered by this device.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZET_EVENT_WAIT_NONE
+/// @brief Don't wait - just check if there are any new events
+#define ZET_EVENT_WAIT_NONE  0x0
+#endif // ZET_EVENT_WAIT_NONE
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_EVENT_WAIT_INFINITE
@@ -3082,16 +3204,12 @@ zetSysmanEventsUnregister(
 #endif // ZET_EVENT_WAIT_INFINITE
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get events that have been triggered for a specific device or from all
-///        registered devices
+/// @brief Wait for the specified list of event handles to receive any registered
+///        events
 /// 
 /// @details
-///     - If events have occurred, they are returned and the corresponding event
-///       status is cleared if the argument clear = true.
-///     - If listening to events from multiple devices, it is recommended to
-///       call this function with hSysman = nullptr, clear = false and timeout =
-///       ::ZET_EVENT_WAIT_INFINITE. Then call this function for each device
-///       with clear = true and timeout = 0.
+///     - If previous events arrived and were not cleared using
+///       ::zetSysmanEventGetState(), this call will return immediately.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -3100,22 +3218,25 @@ zetSysmanEventsUnregister(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///         + nullptr == hDriver
+///         + nullptr == phEvents
 ///         + nullptr == pEvents
+///         + One or more of the supplied event handles are for devices that belong to a different driver handle.
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to listen to events.
 ze_result_t __zecall
-zetSysmanEventsListen(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for a device. Set to nullptr to get events from any
-                                                    ///< device for which the application has registered to receive
-                                                    ///< notifications.
-    ze_bool_t clear,                                ///< [in] Clear the event status.
-    uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Zero will
-                                                    ///< check status and return immediately. Set to ::ZET_EVENT_WAIT_INFINITE
-                                                    ///< to block until events arrive.
-    uint32_t* pEvents                               ///< [in] Bitfield of events (1<<::zet_sysman_event_type_t) that have been
-                                                    ///< triggered.
+zetSysmanEventListen(
+    ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+    uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
+                                                    ///< ::ZET_EVENT_WAIT_NONE will check status and return immediately. Set to
+                                                    ///< ::ZET_EVENT_WAIT_INFINITE to block until events arrive.
+    uint32_t count,                                 ///< [in] Number of handles in phEvents
+    zet_sysman_event_handle_t* phEvents,            ///< [in][range(0, count)] Handle of events that should be listened to
+    uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+                                                    ///< triggered by any of the supplied event handles. If timeout is not
+                                                    ///< ::ZET_EVENT_WAIT_INFINITE and this value is
+                                                    ///< ::ZET_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

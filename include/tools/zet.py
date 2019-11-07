@@ -143,6 +143,11 @@ class zet_sysman_diag_handle_t(c_void_p):
     pass
 
 ###############################################################################
+## @brief Handle for a SMI device event
+class zet_sysman_event_handle_t(c_void_p):
+    pass
+
+###############################################################################
 ## @brief Maximum metric group name string size
 ZET_MAX_METRIC_GROUP_NAME = 256
 
@@ -1198,12 +1203,28 @@ class zet_temp_properties_t(Structure):
 ## @brief Temperature sensor threshold
 class zet_temp_threshold_t(Structure):
     _fields_ = [
-        ("enableLowToHigh", ze_bool_t),                                 ## [in,out] Generate an event when the temperature crosses from below the
+        ("enableLowToHigh", ze_bool_t),                                 ## [in,out] Trigger an event when the temperature crosses from below the
                                                                         ## threshold to above.
-        ("enableHighToLow", ze_bool_t),                                 ## [in,out] Generate an event when the temperature crosses from above the
+        ("enableHighToLow", ze_bool_t),                                 ## [in,out] Trigger an event when the temperature crosses from above the
                                                                         ## threshold to below.
-        ("threshold", ze_bool_t),                                       ## [in,out] The threshold in degrees Celcius.
-        ("processId", c_ulong)                                          ## [in,out] Host processId that set this threshold.
+        ("threshold", c_double)                                         ## [in,out] The threshold in degrees Celcius.
+    ]
+
+###############################################################################
+## @brief Temperature configuration - which events should be triggered and the
+##        trigger conditions.
+class zet_temp_config_t(Structure):
+    _fields_ = [
+        ("enableCritical", ze_bool_t),                                  ## [in,out] Indicates if event ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
+                                                                        ## should be triggered by the driver.
+        ("threshold1", zet_temp_threshold_t),                           ## [in,out] Configuration controlling if and when event
+                                                                        ## ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the
+                                                                        ## driver.
+        ("threshold2", zet_temp_threshold_t),                           ## [in,out] Configuration controlling if and when event
+                                                                        ## ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the
+                                                                        ## driver.
+        ("processId", c_ulong)                                          ## [out] Host processId that set this configuration (ignored when setting
+                                                                        ## the configuration).
     ]
 
 ###############################################################################
@@ -1376,18 +1397,41 @@ class zet_ras_details_t(Structure):
     ]
 
 ###############################################################################
+## @brief RAS error configuration - thresholds used for triggering RAS events
+##        (::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
+##        ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
+class zet_ras_config_t(Structure):
+    _fields_ = [
+        ("totalThreshold", c_ulonglong),                                ## [in,out] If the total RAS errors exceeds this threshold, the event
+                                                                        ## will be triggered. A value of 0ULL disables triggering the event based
+                                                                        ## on the total counter.
+        ("detailedThresholds", zet_ras_details_t),                      ## [in,out] If the RAS errors for each category exceed the threshold for
+                                                                        ## that category, the event will be triggered. A value of 0ULL will
+                                                                        ## disable an event being triggered for that category.
+        ("processId", c_ulong)                                          ## [out] Host processId that set this configuration (ignored when setting
+                                                                        ## the configuration).
+    ]
+
+###############################################################################
 ## @brief Event types
 class zet_sysman_event_type_v(IntEnum):
-    FREQ_THROTTLED = 0                              ## The frequency is being throttled
-    ENERGY_THRESHOLD_CROSSED = auto()               ## Event is generated when the energy consumption threshold is reached
+    NONE = 0                                        ## Specifies no events
+    FREQ_THROTTLED = ZE_BIT( 0 )                    ## Event is triggered when the frequency starts being throttled
+    ENERGY_THRESHOLD_CROSSED = ZE_BIT( 1 )          ## Event is triggered when the energy consumption threshold is reached
                                                     ## (use ::zetSysmanPowerSetEnergyThreshold() to configure).
-    CRITICAL_TEMPERATURE = auto()                   ## Event is generated when the critical temperature is reached.
-    TEMP_THRESHOLD1 = auto()                        ## Event is generated when the temperature cross threshold 1 (use
-                                                    ## ::zetSysmanTemperatureSetThresholds() to configure).
-    TEMP_THRESHOLD2 = auto()                        ## Event is generated when the temperature cross threshold 1 (use
-                                                    ## ::zetSysmanTemperatureSetThresholds() to configure).
-    RAS_ERRORS = auto()                             ## ECC/RAS errors
-    NUM = auto()                                    ## The number of event types
+    TEMP_CRITICAL = ZE_BIT( 2 )                     ## Event is triggered when the critical temperature is reached (use
+                                                    ## ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
+    TEMP_THRESHOLD1 = ZE_BIT( 3 )                   ## Event is triggered when the temperature crosses threshold 1 (use
+                                                    ## ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
+    TEMP_THRESHOLD2 = ZE_BIT( 4 )                   ## Event is triggered when the temperature crosses threshold 2 (use
+                                                    ## ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
+    MEM_HEALTH = ZE_BIT( 5 )                        ## Event is triggered when the health of device memory changes.
+    FABRIC_PORT_HEALTH = ZE_BIT( 6 )                ## Event is triggered when the health of fabric ports change.
+    RAS_CORRECTABLE_ERRORS = ZE_BIT( 7 )            ## Event is triggered when RAS correctable errors cross thresholds (use
+                                                    ## ::zetSysmanRasSetConfig() to configure - disabled by default).
+    RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 8 )          ## Event is triggered when RAS uncorrectable errors cross thresholds (use
+                                                    ## ::zetSysmanRasSetConfig() to configure - disabled by default).
+    ALL = (~0)                                      ## Specifies all events
 
 class zet_sysman_event_type_t(c_int):
     def __str__(self):
@@ -1395,21 +1439,18 @@ class zet_sysman_event_type_t(c_int):
 
 
 ###############################################################################
-## @brief Event properties
-class zet_event_properties_t(Structure):
+## @brief Event configuration for a device
+class zet_event_config_t(Structure):
     _fields_ = [
-        ("supportedEvents", ze_bool_t * ZET_SYSMAN_EVENT_TYPE_NUM)      ## [out] Set to true for the events that are supported
+        ("registered", c_ulong)                                         ## [in,out] List of registered events (Bitfield of events
+                                                                        ## ::zet_sysman_event_type_t). ::ZET_SYSMAN_EVENT_TYPE_NONE indicates
+                                                                        ## there are no registered events. ::ZET_SYSMAN_EVENT_TYPE_ALL indicates
+                                                                        ## that all events are registered.
     ]
 
 ###############################################################################
-## @brief Request structure used to register/unregister events
-class zet_event_request_t(Structure):
-    _fields_ = [
-        ("event", zet_sysman_event_type_t),                             ## [in] The event type to register.
-        ("threshold", c_ulong)                                          ## [in] The application only receives a notification when the total count
-                                                                        ## exceeds this value. Set to zero to receive a notification for every
-                                                                        ## new event.
-    ]
+## @brief Don't wait - just check if there are any new events
+ZET_EVENT_WAIT_NONE = 0x0
 
 ###############################################################################
 ## @brief Wait infinitely for events to arrive.
@@ -1944,13 +1985,6 @@ else:
     _zetSysmanFrequencyGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_freq_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetAvailableClocks
-if __use_win_types:
-    _zetSysmanFrequencyGetAvailableClocks_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(c_double) )
-else:
-    _zetSysmanFrequencyGetAvailableClocks_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(c_double) )
-
-###############################################################################
 ## @brief Function-pointer for zetSysmanEngineGet
 if __use_win_types:
     _zetSysmanEngineGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_engine_handle_t) )
@@ -1986,11 +2020,11 @@ else:
     _zetSysmanFabricPortGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_fabric_port_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanTemperatureRead
+## @brief Function-pointer for zetSysmanTemperatureGet
 if __use_win_types:
-    _zetSysmanTemperatureRead_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_temp_handle_t) )
+    _zetSysmanTemperatureGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_temp_handle_t) )
 else:
-    _zetSysmanTemperatureRead_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_temp_handle_t) )
+    _zetSysmanTemperatureGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_temp_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanPsuGet
@@ -2021,32 +2055,11 @@ else:
     _zetSysmanRasGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_ras_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanEventsGetProperties
+## @brief Function-pointer for zetSysmanEventGet
 if __use_win_types:
-    _zetSysmanEventsGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_event_properties_t) )
+    _zetSysmanEventGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sysman_event_handle_t) )
 else:
-    _zetSysmanEventsGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_event_properties_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanEventsRegister
-if __use_win_types:
-    _zetSysmanEventsRegister_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, c_ulong, POINTER(zet_event_request_t) )
-else:
-    _zetSysmanEventsRegister_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, c_ulong, POINTER(zet_event_request_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanEventsUnregister
-if __use_win_types:
-    _zetSysmanEventsUnregister_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, c_ulong, POINTER(zet_event_request_t) )
-else:
-    _zetSysmanEventsUnregister_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, c_ulong, POINTER(zet_event_request_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanEventsListen
-if __use_win_types:
-    _zetSysmanEventsListen_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, ze_bool_t, c_ulong, POINTER(c_ulong) )
-else:
-    _zetSysmanEventsListen_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, ze_bool_t, c_ulong, POINTER(c_ulong) )
+    _zetSysmanEventGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sysman_event_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanDiagnosticsGet
@@ -2078,21 +2091,17 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnPciGetStats", c_void_p),                                   ## _zetSysmanPciGetStats_t
         ("pfnPowerGet", c_void_p),                                      ## _zetSysmanPowerGet_t
         ("pfnFrequencyGet", c_void_p),                                  ## _zetSysmanFrequencyGet_t
-        ("pfnFrequencyGetAvailableClocks", c_void_p),                   ## _zetSysmanFrequencyGetAvailableClocks_t
         ("pfnEngineGet", c_void_p),                                     ## _zetSysmanEngineGet_t
         ("pfnStandbyGet", c_void_p),                                    ## _zetSysmanStandbyGet_t
         ("pfnFirmwareGet", c_void_p),                                   ## _zetSysmanFirmwareGet_t
         ("pfnMemoryGet", c_void_p),                                     ## _zetSysmanMemoryGet_t
         ("pfnFabricPortGet", c_void_p),                                 ## _zetSysmanFabricPortGet_t
-        ("pfnTemperatureRead", c_void_p),                               ## _zetSysmanTemperatureRead_t
+        ("pfnTemperatureGet", c_void_p),                                ## _zetSysmanTemperatureGet_t
         ("pfnPsuGet", c_void_p),                                        ## _zetSysmanPsuGet_t
         ("pfnFanGet", c_void_p),                                        ## _zetSysmanFanGet_t
         ("pfnLedGet", c_void_p),                                        ## _zetSysmanLedGet_t
         ("pfnRasGet", c_void_p),                                        ## _zetSysmanRasGet_t
-        ("pfnEventsGetProperties", c_void_p),                           ## _zetSysmanEventsGetProperties_t
-        ("pfnEventsRegister", c_void_p),                                ## _zetSysmanEventsRegister_t
-        ("pfnEventsUnregister", c_void_p),                              ## _zetSysmanEventsUnregister_t
-        ("pfnEventsListen", c_void_p),                                  ## _zetSysmanEventsListen_t
+        ("pfnEventGet", c_void_p),                                      ## _zetSysmanEventGet_t
         ("pfnDiagnosticsGet", c_void_p)                                 ## _zetSysmanDiagnosticsGet_t
     ]
 
@@ -2157,6 +2166,13 @@ if __use_win_types:
     _zetSysmanFrequencyGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_properties_t) )
 else:
     _zetSysmanFrequencyGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanFrequencyGetAvailableClocks
+if __use_win_types:
+    _zetSysmanFrequencyGetAvailableClocks_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_ulong), POINTER(c_double) )
+else:
+    _zetSysmanFrequencyGetAvailableClocks_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_ulong), POINTER(c_double) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyGetRange
@@ -2241,6 +2257,7 @@ else:
 class _zet_sysman_frequency_dditable_t(Structure):
     _fields_ = [
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanFrequencyGetProperties_t
+        ("pfnGetAvailableClocks", c_void_p),                            ## _zetSysmanFrequencyGetAvailableClocks_t
         ("pfnGetRange", c_void_p),                                      ## _zetSysmanFrequencyGetRange_t
         ("pfnSetRange", c_void_p),                                      ## _zetSysmanFrequencySetRange_t
         ("pfnGetState", c_void_p),                                      ## _zetSysmanFrequencyGetState_t
@@ -2433,25 +2450,25 @@ else:
     _zetSysmanTemperatureGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanTemperatureGet
+## @brief Function-pointer for zetSysmanTemperatureGetConfig
 if __use_win_types:
-    _zetSysmanTemperatureGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(c_double) )
+    _zetSysmanTemperatureGetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_config_t) )
 else:
-    _zetSysmanTemperatureGet_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(c_double) )
+    _zetSysmanTemperatureGetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_config_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanTemperatureGetThresholds
+## @brief Function-pointer for zetSysmanTemperatureSetConfig
 if __use_win_types:
-    _zetSysmanTemperatureGetThresholds_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_threshold_t), POINTER(zet_temp_threshold_t) )
+    _zetSysmanTemperatureSetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_config_t) )
 else:
-    _zetSysmanTemperatureGetThresholds_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_threshold_t), POINTER(zet_temp_threshold_t) )
+    _zetSysmanTemperatureSetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(zet_temp_config_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanTemperatureSetThresholds
+## @brief Function-pointer for zetSysmanTemperatureGetState
 if __use_win_types:
-    _zetSysmanTemperatureSetThresholds_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, c_double, c_double )
+    _zetSysmanTemperatureGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(c_double) )
 else:
-    _zetSysmanTemperatureSetThresholds_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, c_double, c_double )
+    _zetSysmanTemperatureGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_temp_handle_t, POINTER(c_double) )
 
 
 ###############################################################################
@@ -2459,9 +2476,9 @@ else:
 class _zet_sysman_temperature_dditable_t(Structure):
     _fields_ = [
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanTemperatureGetProperties_t
-        ("pfnGet", c_void_p),                                           ## _zetSysmanTemperatureGet_t
-        ("pfnGetThresholds", c_void_p),                                 ## _zetSysmanTemperatureGetThresholds_t
-        ("pfnSetThresholds", c_void_p)                                  ## _zetSysmanTemperatureSetThresholds_t
+        ("pfnGetConfig", c_void_p),                                     ## _zetSysmanTemperatureGetConfig_t
+        ("pfnSetConfig", c_void_p),                                     ## _zetSysmanTemperatureSetConfig_t
+        ("pfnGetState", c_void_p)                                       ## _zetSysmanTemperatureGetState_t
     ]
 
 ###############################################################################
@@ -2565,11 +2582,25 @@ else:
     _zetSysmanRasGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_ras_handle_t, POINTER(zet_ras_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanRasGetErrors
+## @brief Function-pointer for zetSysmanRasGetConfig
 if __use_win_types:
-    _zetSysmanRasGetErrors_t = WINFUNCTYPE( ze_result_t, zet_sysman_ras_handle_t, ze_bool_t, POINTER(c_ulonglong), POINTER(zet_ras_details_t) )
+    _zetSysmanRasGetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_ras_handle_t, POINTER(zet_ras_config_t) )
 else:
-    _zetSysmanRasGetErrors_t = CFUNCTYPE( ze_result_t, zet_sysman_ras_handle_t, ze_bool_t, POINTER(c_ulonglong), POINTER(zet_ras_details_t) )
+    _zetSysmanRasGetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_ras_handle_t, POINTER(zet_ras_config_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanRasSetConfig
+if __use_win_types:
+    _zetSysmanRasSetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_ras_handle_t, POINTER(zet_ras_config_t) )
+else:
+    _zetSysmanRasSetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_ras_handle_t, POINTER(zet_ras_config_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanRasGetState
+if __use_win_types:
+    _zetSysmanRasGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_ras_handle_t, ze_bool_t, POINTER(c_ulonglong), POINTER(zet_ras_details_t) )
+else:
+    _zetSysmanRasGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_ras_handle_t, ze_bool_t, POINTER(c_ulonglong), POINTER(zet_ras_details_t) )
 
 
 ###############################################################################
@@ -2577,7 +2608,9 @@ else:
 class _zet_sysman_ras_dditable_t(Structure):
     _fields_ = [
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanRasGetProperties_t
-        ("pfnGetErrors", c_void_p)                                      ## _zetSysmanRasGetErrors_t
+        ("pfnGetConfig", c_void_p),                                     ## _zetSysmanRasGetConfig_t
+        ("pfnSetConfig", c_void_p),                                     ## _zetSysmanRasSetConfig_t
+        ("pfnGetState", c_void_p)                                       ## _zetSysmanRasGetState_t
     ]
 
 ###############################################################################
@@ -2601,6 +2634,45 @@ class _zet_sysman_diagnostics_dditable_t(Structure):
     _fields_ = [
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanDiagnosticsGetProperties_t
         ("pfnRunTests", c_void_p)                                       ## _zetSysmanDiagnosticsRunTests_t
+    ]
+
+###############################################################################
+## @brief Function-pointer for zetSysmanEventGetConfig
+if __use_win_types:
+    _zetSysmanEventGetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_event_handle_t, POINTER(zet_event_config_t) )
+else:
+    _zetSysmanEventGetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_event_handle_t, POINTER(zet_event_config_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanEventSetConfig
+if __use_win_types:
+    _zetSysmanEventSetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_event_handle_t, POINTER(zet_event_config_t) )
+else:
+    _zetSysmanEventSetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_event_handle_t, POINTER(zet_event_config_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanEventGetState
+if __use_win_types:
+    _zetSysmanEventGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_event_handle_t, ze_bool_t, POINTER(c_ulong) )
+else:
+    _zetSysmanEventGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_event_handle_t, ze_bool_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanEventListen
+if __use_win_types:
+    _zetSysmanEventListen_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_ulong, c_ulong, POINTER(zet_sysman_event_handle_t), POINTER(c_ulong) )
+else:
+    _zetSysmanEventListen_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_ulong, c_ulong, POINTER(zet_sysman_event_handle_t), POINTER(c_ulong) )
+
+
+###############################################################################
+## @brief Table of SysmanEvent functions pointers
+class _zet_sysman_event_dditable_t(Structure):
+    _fields_ = [
+        ("pfnGetConfig", c_void_p),                                     ## _zetSysmanEventGetConfig_t
+        ("pfnSetConfig", c_void_p),                                     ## _zetSysmanEventSetConfig_t
+        ("pfnGetState", c_void_p),                                      ## _zetSysmanEventGetState_t
+        ("pfnListen", c_void_p)                                         ## _zetSysmanEventListen_t
     ]
 
 ###############################################################################
@@ -2630,7 +2702,8 @@ class _zet_dditable_t(Structure):
         ("SysmanFan", _zet_sysman_fan_dditable_t),
         ("SysmanLed", _zet_sysman_led_dditable_t),
         ("SysmanRas", _zet_sysman_ras_dditable_t),
-        ("SysmanDiagnostics", _zet_sysman_diagnostics_dditable_t)
+        ("SysmanDiagnostics", _zet_sysman_diagnostics_dditable_t),
+        ("SysmanEvent", _zet_sysman_event_dditable_t)
     ]
 
 ###############################################################################
@@ -2799,21 +2872,17 @@ class ZET_DDI:
         self.zetSysmanPciGetStats = _zetSysmanPciGetStats_t(self.__dditable.Sysman.pfnPciGetStats)
         self.zetSysmanPowerGet = _zetSysmanPowerGet_t(self.__dditable.Sysman.pfnPowerGet)
         self.zetSysmanFrequencyGet = _zetSysmanFrequencyGet_t(self.__dditable.Sysman.pfnFrequencyGet)
-        self.zetSysmanFrequencyGetAvailableClocks = _zetSysmanFrequencyGetAvailableClocks_t(self.__dditable.Sysman.pfnFrequencyGetAvailableClocks)
         self.zetSysmanEngineGet = _zetSysmanEngineGet_t(self.__dditable.Sysman.pfnEngineGet)
         self.zetSysmanStandbyGet = _zetSysmanStandbyGet_t(self.__dditable.Sysman.pfnStandbyGet)
         self.zetSysmanFirmwareGet = _zetSysmanFirmwareGet_t(self.__dditable.Sysman.pfnFirmwareGet)
         self.zetSysmanMemoryGet = _zetSysmanMemoryGet_t(self.__dditable.Sysman.pfnMemoryGet)
         self.zetSysmanFabricPortGet = _zetSysmanFabricPortGet_t(self.__dditable.Sysman.pfnFabricPortGet)
-        self.zetSysmanTemperatureRead = _zetSysmanTemperatureRead_t(self.__dditable.Sysman.pfnTemperatureRead)
+        self.zetSysmanTemperatureGet = _zetSysmanTemperatureGet_t(self.__dditable.Sysman.pfnTemperatureGet)
         self.zetSysmanPsuGet = _zetSysmanPsuGet_t(self.__dditable.Sysman.pfnPsuGet)
         self.zetSysmanFanGet = _zetSysmanFanGet_t(self.__dditable.Sysman.pfnFanGet)
         self.zetSysmanLedGet = _zetSysmanLedGet_t(self.__dditable.Sysman.pfnLedGet)
         self.zetSysmanRasGet = _zetSysmanRasGet_t(self.__dditable.Sysman.pfnRasGet)
-        self.zetSysmanEventsGetProperties = _zetSysmanEventsGetProperties_t(self.__dditable.Sysman.pfnEventsGetProperties)
-        self.zetSysmanEventsRegister = _zetSysmanEventsRegister_t(self.__dditable.Sysman.pfnEventsRegister)
-        self.zetSysmanEventsUnregister = _zetSysmanEventsUnregister_t(self.__dditable.Sysman.pfnEventsUnregister)
-        self.zetSysmanEventsListen = _zetSysmanEventsListen_t(self.__dditable.Sysman.pfnEventsListen)
+        self.zetSysmanEventGet = _zetSysmanEventGet_t(self.__dditable.Sysman.pfnEventGet)
         self.zetSysmanDiagnosticsGet = _zetSysmanDiagnosticsGet_t(self.__dditable.Sysman.pfnDiagnosticsGet)
 
         # call driver to get function pointers
@@ -2840,6 +2909,7 @@ class ZET_DDI:
 
         # attach function interface to function address
         self.zetSysmanFrequencyGetProperties = _zetSysmanFrequencyGetProperties_t(self.__dditable.SysmanFrequency.pfnGetProperties)
+        self.zetSysmanFrequencyGetAvailableClocks = _zetSysmanFrequencyGetAvailableClocks_t(self.__dditable.SysmanFrequency.pfnGetAvailableClocks)
         self.zetSysmanFrequencyGetRange = _zetSysmanFrequencyGetRange_t(self.__dditable.SysmanFrequency.pfnGetRange)
         self.zetSysmanFrequencySetRange = _zetSysmanFrequencySetRange_t(self.__dditable.SysmanFrequency.pfnSetRange)
         self.zetSysmanFrequencyGetState = _zetSysmanFrequencyGetState_t(self.__dditable.SysmanFrequency.pfnGetState)
@@ -2923,9 +2993,9 @@ class ZET_DDI:
 
         # attach function interface to function address
         self.zetSysmanTemperatureGetProperties = _zetSysmanTemperatureGetProperties_t(self.__dditable.SysmanTemperature.pfnGetProperties)
-        self.zetSysmanTemperatureGet = _zetSysmanTemperatureGet_t(self.__dditable.SysmanTemperature.pfnGet)
-        self.zetSysmanTemperatureGetThresholds = _zetSysmanTemperatureGetThresholds_t(self.__dditable.SysmanTemperature.pfnGetThresholds)
-        self.zetSysmanTemperatureSetThresholds = _zetSysmanTemperatureSetThresholds_t(self.__dditable.SysmanTemperature.pfnSetThresholds)
+        self.zetSysmanTemperatureGetConfig = _zetSysmanTemperatureGetConfig_t(self.__dditable.SysmanTemperature.pfnGetConfig)
+        self.zetSysmanTemperatureSetConfig = _zetSysmanTemperatureSetConfig_t(self.__dditable.SysmanTemperature.pfnSetConfig)
+        self.zetSysmanTemperatureGetState = _zetSysmanTemperatureGetState_t(self.__dditable.SysmanTemperature.pfnGetState)
 
         # call driver to get function pointers
         _SysmanPsu = _zet_sysman_psu_dditable_t()
@@ -2972,7 +3042,9 @@ class ZET_DDI:
 
         # attach function interface to function address
         self.zetSysmanRasGetProperties = _zetSysmanRasGetProperties_t(self.__dditable.SysmanRas.pfnGetProperties)
-        self.zetSysmanRasGetErrors = _zetSysmanRasGetErrors_t(self.__dditable.SysmanRas.pfnGetErrors)
+        self.zetSysmanRasGetConfig = _zetSysmanRasGetConfig_t(self.__dditable.SysmanRas.pfnGetConfig)
+        self.zetSysmanRasSetConfig = _zetSysmanRasSetConfig_t(self.__dditable.SysmanRas.pfnSetConfig)
+        self.zetSysmanRasGetState = _zetSysmanRasGetState_t(self.__dditable.SysmanRas.pfnGetState)
 
         # call driver to get function pointers
         _SysmanDiagnostics = _zet_sysman_diagnostics_dditable_t()
@@ -2984,5 +3056,18 @@ class ZET_DDI:
         # attach function interface to function address
         self.zetSysmanDiagnosticsGetProperties = _zetSysmanDiagnosticsGetProperties_t(self.__dditable.SysmanDiagnostics.pfnGetProperties)
         self.zetSysmanDiagnosticsRunTests = _zetSysmanDiagnosticsRunTests_t(self.__dditable.SysmanDiagnostics.pfnRunTests)
+
+        # call driver to get function pointers
+        _SysmanEvent = _zet_sysman_event_dditable_t()
+        r = ze_result_v(self.__dll.zetGetSysmanEventProcAddrTable(version, byref(_SysmanEvent)))
+        if r != ze_result_v.SUCCESS:
+            raise Exception(r)
+        self.__dditable.SysmanEvent = _SysmanEvent
+
+        # attach function interface to function address
+        self.zetSysmanEventGetConfig = _zetSysmanEventGetConfig_t(self.__dditable.SysmanEvent.pfnGetConfig)
+        self.zetSysmanEventSetConfig = _zetSysmanEventSetConfig_t(self.__dditable.SysmanEvent.pfnSetConfig)
+        self.zetSysmanEventGetState = _zetSysmanEventGetState_t(self.__dditable.SysmanEvent.pfnGetState)
+        self.zetSysmanEventListen = _zetSysmanEventListen_t(self.__dditable.SysmanEvent.pfnListen)
 
         # success!

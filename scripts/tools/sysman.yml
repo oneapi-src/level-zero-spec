@@ -793,7 +793,7 @@ desc: "Set energy threshold"
 class: $tSysmanPower
 name: SetEnergyThreshold
 details:
-    - "An event $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function $tSysmanEventsRegister() to start receiving the event."
+    - "An event $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function $tSysmanEventSetConfig() to start receiving the event."
     - "Only one running process can control the energy threshold at a given time. If another process attempts to change the energy threshold, the error $X_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The function $tSysmanPowerGetEnergyThreshold() to determine the process ID currently controlling this setting."
     - "Calling this function will remove any pending energy thresholds and start counting from the time of this call."
     - "Once the energy threshold has been reached and the event generated, the threshold is automatically removed. It is up to the application to request a new threshold."
@@ -1045,15 +1045,15 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get available non-overclocked hardware clock frequencies for the frequency domain"
-class: $tSysman
-name: FrequencyGetAvailableClocks
+class: $tSysmanFrequency
+name: GetAvailableClocks
 details:
     - "The list of available frequencies is returned in order of slowest to fastest."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
+    - type: $t_sysman_freq_handle_t
+      name: hFrequency
       desc: "[in] SMI handle of the device."
     - type: "uint32_t*"
       name: pCount
@@ -2114,21 +2114,36 @@ name: $t_temp_threshold_t
 members:
     - type: $x_bool_t
       name: "enableLowToHigh"
-      desc: "[in,out] Generate an event when the temperature crosses from below the threshold to above."
+      desc: "[in,out] Trigger an event when the temperature crosses from below the threshold to above."
     - type: $x_bool_t
       name: "enableHighToLow"
-      desc: "[in,out] Generate an event when the temperature crosses from above the threshold to below."
-    - type: $x_bool_t
+      desc: "[in,out] Trigger an event when the temperature crosses from above the threshold to below."
+    - type: double
       name: "threshold"
       desc: "[in,out] The threshold in degrees Celcius."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Temperature configuration - which events should be triggered and the trigger conditions."
+class: $tSysmanTemperature
+name: $t_temp_config_t
+members:
+    - type: $x_bool_t
+      name: "enableCritical"
+      desc: "[in,out] Indicates if event $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL should be triggered by the driver."
+    - type: $t_temp_threshold_t
+      name: "threshold1"
+      desc: "[in,out] Configuration controlling if and when event $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the driver."
+    - type: $t_temp_threshold_t
+      name: "threshold2"
+      desc: "[in,out] Configuration controlling if and when event $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the driver."
     - type: uint32_t
       name: "processId"
-      desc: "[in,out] Host processId that set this threshold."
+      desc: "[out] Host processId that set this configuration (ignored when setting the configuration)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of temperature sensors"
 class: $tSysman
-name: TemperatureRead
+name: TemperatureGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -2163,9 +2178,9 @@ params:
       desc: "[in] Will contain the temperature sensor properties."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the temperature from a specified sensor"
+desc: "Get temperature configuration for this sensor - which events are triggered and the trigger conditions"
 class: $tSysmanTemperature
-name: Get
+name: GetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -2173,27 +2188,9 @@ params:
     - type: $t_sysman_temp_handle_t
       name: hTemperature
       desc: "[in] Handle for the component."
-    - type: double*
-      name: pTemperature
-      desc: "[in] Will contain the temperature read from the specified sensor in degrees Celcius."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get state of temperature thresholds"
-class: $tSysmanTemperature
-name: GetThresholds
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_temp_handle_t
-      name: hTemperature
-      desc: "[in] Handle for the component."
-    - type: $t_temp_threshold_t*
-      name: pThreshold1
-      desc: "[in][optional] Returns information about temperature threshold 1 - enabled/temperature/process ID."
-    - type: $t_temp_threshold_t*
-      name: pThreshold2
-      desc: "[in][optional] Returns information about temperature threshold 1 - enabled/temperature/process ID."
+    - type: $t_temp_config_t*
+      name: pConfig
+      desc: "[in] Returns current configuration."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
@@ -2202,24 +2199,22 @@ returns:
         - "User does not have permissions to request this feature."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set temperature thresholds"
+desc: "Set temperature configuration for this sensor - indicates which events are triggered and the trigger conditions"
 class: $tSysmanTemperature
-name: SetThresholds
+name: SetConfig
 details:
-    - "Events $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $tSysmanEventsRegister() to start receiving the event."
-    - "Only one running process can set the temperature thresholds at a time. If another process attempts to change the temperature thresholds, the error $X_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The function $tSysmanTemperatureGetThresholds() will return the process ID currently controlling these settings."
+    - "Events $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL will be triggered when temperature reaches the critical range. Use the function $tSysmanEventSetConfig() to start receiving this event."
+    - "Events $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $tSysmanEventSetConfig() to start receiving these events."
+    - "Only one running process can set the temperature configuration at a time. If another process attempts to change the configuration, the error $X_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The function $tSysmanTemperatureGetConfig() will return the process ID currently controlling these settings."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_temp_handle_t
       name: hTemperature
       desc: "[in] Handle for the component."
-    - type: double
-      name: threshold1
-      desc: "[in] Temperature threshold 1 in degrees Celsium. Set to 0.0 to disable threshold 1."
-    - type: double
-      name: threshold2
-      desc: "[in] Temperature threshold 2 in degrees Celsium. Set to 0.0 to disable theshold 2."
+    - type: "const $t_temp_config_t*"
+      name: pConfig
+      desc: "[in] New configuration."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
@@ -2230,6 +2225,21 @@ returns:
         - "Another running process is controlling these settings."
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "One or both the thresholds is above TjMax (see $tSysmanFrequencyGetOcTjMax()). Temperature thresholds must be below this value."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the temperature from a specified sensor"
+class: $tSysmanTemperature
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_temp_handle_t
+      name: hTemperature
+      desc: "[in] Handle for the component."
+    - type: double*
+      name: pTemperature
+      desc: "[in] Will contain the temperature read from the specified sensor in degrees Celcius."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2702,6 +2712,21 @@ members:
       name: "numDisplayErrors"
       desc: "[out] The number of errors that have occurred in the display"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "RAS error configuration - thresholds used for triggering RAS events ($T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS, $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)"
+class: $tSysmanRas
+name: $t_ras_config_t
+members:
+    - type: uint64_t
+      name: "totalThreshold"
+      desc: "[in,out] If the total RAS errors exceeds this threshold, the event will be triggered. A value of 0ULL disables triggering the event based on the total counter."
+    - type: $t_ras_details_t
+      name: detailedThresholds
+      desc: "[in,out] If the RAS errors for each category exceed the threshold for that category, the event will be triggered. A value of 0ULL will disable an event being triggered for that category."
+    - type: uint32_t
+      name: "processId"
+      desc: "[out] Host processId that set this configuration (ignored when setting the configuration)."
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of RAS error sets"
 class: $tSysman
@@ -2740,9 +2765,54 @@ params:
       desc: "[in] Structure describing RAS properties"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Get RAS error thresholds"
+class: $tSysmanRas
+name: GetConfig
+details:
+    - "When a particular RAS correctable error counter exceeds the configured threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be triggered."
+    - "When a particular RAS uncorrectable error counter exceeds the configured threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_ras_handle_t
+      name: hRas
+      desc: "[in] Handle for the component."
+    - type: "$t_ras_config_t*"
+      name: pConfig
+      desc: "[in] Will be populed with the current RAS configuration - thresholds used to trigger events"
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "This device does not support RAS."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set RAS error thresholds"
+class: $tSysmanRas
+name: SetConfig
+details:
+    - "When a particular RAS correctable error counter exceeds the specified threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be generated."
+    - "When a particular RAS uncorrectable error counter exceeds the specified threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated."
+    - "Call $tSysmanRasGetState() and set the clear flag to true to restart event generation once counters have exceeded thresholds."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_ras_handle_t
+      name: hRas
+      desc: "[in] Handle for the component."
+    - type: "const $t_ras_config_t*"
+      name: pConfig
+      desc: "[in] Change the RAS configuration - thresholds used to trigger events"
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "This device does not support RAS."
+    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
+        - "Another running process is controlling these settings."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "Don't have permissions to set thresholds."
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Get the number of errors of a given RAS error set"
 class: $tSysmanRas
-name: GetErrors
+name: GetState
 details:
     - "Clearing errors will affect other threads/applications - the counter values will start from zero."
     - "Clearing errors requires write permissions."
@@ -2773,100 +2843,117 @@ desc: "Event types"
 class: $tSysman
 name: $t_sysman_event_type_t
 etors:
-    - name: $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
+    - name: $T_SYSMAN_EVENT_TYPE_NONE
       value: "0"
-      desc: "The frequency is being throttled"
+      desc: "Specifies no events"
+    - name: $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
+      value: "$X_BIT( 0 )"
+      desc: "Event is triggered when the frequency starts being throttled"
     - name: $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED
-      desc: "Event is generated when the energy consumption threshold is reached (use $tSysmanPowerSetEnergyThreshold() to configure)."
-    - name: $T_SYSMAN_EVENT_TYPE_CRITICAL_TEMPERATURE
-      desc: "Event is generated when the critical temperature is reached."
+      value: "$X_BIT( 1 )"
+      desc: "Event is triggered when the energy consumption threshold is reached (use $tSysmanPowerSetEnergyThreshold() to configure)."
+    - name: $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
+      value: "$X_BIT( 2 )"
+      desc: "Event is triggered when the critical temperature is reached (use $tSysmanTemperatureSetConfig() to configure - disabled by default)."
     - name: $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1
-      desc: "Event is generated when the temperature cross threshold 1 (use $tSysmanTemperatureSetThresholds() to configure)."
+      value: "$X_BIT( 3 )"
+      desc: "Event is triggered when the temperature crosses threshold 1 (use $tSysmanTemperatureSetConfig() to configure - disabled by default)."
     - name: $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2
-      desc: "Event is generated when the temperature cross threshold 1 (use $tSysmanTemperatureSetThresholds() to configure)."
-    - name: $T_SYSMAN_EVENT_TYPE_RAS_ERRORS
-      desc: "ECC/RAS errors"
-    - name: $T_SYSMAN_EVENT_TYPE_NUM
-      desc: "The number of event types"
+      value: "$X_BIT( 4 )"
+      desc: "Event is triggered when the temperature crosses threshold 2 (use $tSysmanTemperatureSetConfig() to configure - disabled by default)."
+    - name: $T_SYSMAN_EVENT_TYPE_MEM_HEALTH
+      value: "$X_BIT( 5 )"
+      desc: "Event is triggered when the health of device memory changes."
+    - name: $T_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH
+      value: "$X_BIT( 6 )"
+      desc: "Event is triggered when the health of fabric ports change."
+    - name: $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
+      value: "$X_BIT( 7 )"
+      desc: "Event is triggered when RAS correctable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
+    - name: $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS
+      value: "$X_BIT( 8 )"
+      desc: "Event is triggered when RAS uncorrectable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
+    - name: $T_SYSMAN_EVENT_TYPE_ALL
+      value: "(~0)"
+      desc: "Specifies all events"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event properties"
-class: $tSysman
-name: $t_event_properties_t
+desc: "Event configuration for a device"
+class: $tSysmanEvent
+name: $t_event_config_t
 members:
-    - type: $x_bool_t
-      name: "supportedEvents[$T_SYSMAN_EVENT_TYPE_NUM]"
-      desc: "[out] Set to true for the events that are supported"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Request structure used to register/unregister events"
-class: $tSysman
-name: $t_event_request_t
-members:
-    - type: $t_sysman_event_type_t
-      name: "event"
-      desc: "[in] The event type to register."
     - type: uint32_t
-      name: "threshold"
-      desc: "[in] The application only receives a notification when the total count exceeds this value. Set to zero to receive a notification for every new event."
+      name: "registered"
+      desc: "[in,out] List of registered events (Bitfield of events $t_sysman_event_type_t). $T_SYSMAN_EVENT_TYPE_NONE indicates there are no registered events. $T_SYSMAN_EVENT_TYPE_ALL indicates that all events are registered."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get event properties"
+desc: "Get the event handle for the specified device"
 class: $tSysman
-name: EventsGetProperties
+name: EventGet
 details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] Handle of the SMI object"
-    - type: $t_event_properties_t*
-      name: pProperties
-      desc: "[in] Structure describing event properties"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Register to receive events"
-class: $tSysman
-name: EventsRegister
-details:
-    - "This will only register the specified list of events. If other events have been registered, notifications for them will continue."
-    - "Set count to zero to receive notifications for all events."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle for the device"
-    - type: uint32_t
-      name: count
-      desc: "[in] Number of entries in the array pEvents. If zero, all events will be registered."
-    - type: $t_event_request_t*
-      name: pEvents
-      desc: "[in][optional] Events to register."
-returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
-        - "User does not have permissions to register to receive notifications for this event."
+    - type: "$t_sysman_event_handle_t*"
+      name: phEvent
+      desc: "[out] The event handle for the specified device."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Unregister events"
-class: $tSysman
-name: EventsUnregister
+desc: "Find out which events are currently registered on the specified device event handler"
+class: $tSysmanEvent
+name: GetConfig
 details:
-    - "This will only unregister the specified list of events. If other events have been registered, notifications for them will continue."
-    - "Set count to zero to no longer receive any notifications."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] Handle of the SMI object"
-    - type: uint32_t
-      name: count
-      desc: "[in] Number of entries in the array pEvents. If zero, all events will be unregistered."
-    - type: $t_event_request_t*
+    - type: $t_sysman_event_handle_t
+      name: hEvent
+      desc: "[in] The event handle for the device"
+    - type: "$t_event_config_t*"
+      name: pConfig
+      desc: "[in] Will contain the current event configuration (list of registered events)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set a new event configuration (list of registered events) on the specified device event handler"
+class: $tSysmanEvent
+name: SetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_event_handle_t
+      name: hEvent
+      desc: "[in] The event handle for the device"
+    - type: "const $t_event_config_t*"
+      name: pConfig
+      desc: "[in] New event configuration (list of registered events)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get events that have been triggered for a specific device"
+class: $tSysmanEvent
+name: GetState
+details:
+    - "If events have occurred on the specified device event handle, they are returned and the corresponding event status is cleared if the argument clear = true."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_event_handle_t
+      name: hEvent
+      desc: "[in] The event handle for the device."
+    - type: $x_bool_t
+      name: clear
+      desc: "[in] Indicates if the event list for this device should be cleared."
+    - type: "uint32_t*"
       name: pEvents
-      desc: "[in][optional] Events to unregister."
+      desc: "[in] Bitfield of events $t_sysman_event_type_t that have been triggered by this device."
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Don't wait - just check if there are any new events"
+name: $T_EVENT_WAIT_NONE
+value: "0x0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Wait infinitely for events to arrive."
@@ -2874,31 +2961,35 @@ name: $T_EVENT_WAIT_INFINITE
 value: "0xFFFFFFFF"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get events that have been triggered for a specific device or from all registered devices"
-class: $tSysman
+desc: "Wait for the specified list of event handles to receive any registered events"
+class: $tSysmanEvent
 decl: static
-name: EventsListen
+name: Listen
 details:
-    - "If events have occurred, they are returned and the corresponding event status is cleared if the argument clear = true."
-    - "If listening to events from multiple devices, it is recommended to call this function with hSysman = nullptr, clear = false and timeout = $T_EVENT_WAIT_INFINITE. Then call this function for each device with clear = true and timeout = 0."
+    - "If previous events arrived and were not cleared using $tSysmanEventGetState(), this call will return immediately."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle for a device. Set to nullptr to get events from any device for which the application has registered to receive notifications."
-    - type: $x_bool_t
-      name: clear
-      desc: "[in] Clear the event status."
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: uint32_t
       name: timeout
-      desc: "[in] How long to wait in milliseconds for events to arrive. Zero will check status and return immediately. Set to $T_EVENT_WAIT_INFINITE to block until events arrive."
+      desc: "[in] How long to wait in milliseconds for events to arrive. Set to $T_EVENT_WAIT_NONE will check status and return immediately. Set to $T_EVENT_WAIT_INFINITE to block until events arrive."
+    - type: uint32_t
+      name: count
+      desc: "[in] Number of handles in phEvents"
+    - type: "$t_sysman_event_handle_t*"
+      name: phEvents
+      desc: "[in][range(0, count)] Handle of events that should be listened to"
     - type: "uint32_t*"
       name: pEvents
-      desc: "[in] Bitfield of events (1<<$t_sysman_event_type_t) that have been triggered."
+      desc: "[in] Bitfield of events $t_sysman_event_type_t that have been triggered by any of the supplied event handles. If timeout is not $T_EVENT_WAIT_INFINITE and this value is $T_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred."
 returns:
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to listen to events."
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "One or more of the supplied event handles are for devices that belong to a different driver handle."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -3209,6 +3300,19 @@ name: $tSysmanDiagnostics
 owner: $tSysman
 members:
     - type: $t_sysman_diag_handle_t
+      name: handle
+      desc: "[in] handle of SMI object" 
+      init: nullptr
+    - type: $tSysman*
+      name: pSysman
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a SMI device event"
+name: $tSysmanEvent
+owner: $tSysman
+members:
+    - type: $t_sysman_event_handle_t
       name: handle
       desc: "[in] handle of SMI object" 
       init: nullptr

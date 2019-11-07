@@ -91,4 +91,7 @@ namespace loader
     using zet_sysman_diag_object_t            = object_t < zet_sysman_diag_handle_t >;
     using zet_sysman_diag_factory_t           = singleton_factory_t < zet_sysman_diag_object_t, zet_sysman_diag_handle_t >;
 
+    using zet_sysman_event_object_t           = object_t < zet_sysman_event_handle_t >;
+    using zet_sysman_event_factory_t          = singleton_factory_t < zet_sysman_event_object_t, zet_sysman_event_handle_t >;
+
 }

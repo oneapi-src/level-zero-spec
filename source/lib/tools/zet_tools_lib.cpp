@@ -200,6 +200,13 @@ namespace zet_lib
             result = getTable( ZE_API_VERSION_1_0, &ddiTable.SysmanDiagnostics );
         }
 
+        if( ZE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<zet_pfnGetSysmanEventProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zetGetSysmanEventProcAddrTable") );
+            result = getTable( ZE_API_VERSION_1_0, &ddiTable.SysmanEvent );
+        }
+
         return result;
     }
 } // namespace zet_lib

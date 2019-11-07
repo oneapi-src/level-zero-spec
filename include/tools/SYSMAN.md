@@ -98,7 +98,7 @@ int main( int argc, char *argv[] )
                 malloc(deviceCount * sizeof(ze_device_handle_t));
             zeDeviceGet(allDrivers[i], &deviceCount, allDevices);
 
-            for(uint32_t d = 0; d < deviceCount; ++i)
+            for(uint32_t d = 0; d < deviceCount; ++d)
             {
                 ze_device_properties_t device_properties;
                 zeDeviceGetProperties(allDevices[d], &device_properties);
@@ -201,9 +201,12 @@ sub-devices. The table shows the operations (queries) that will be provided for 
 | [Frequency](#frq)     | Sub-device 0: GPU frequency<br />Sub-device 0: HBM frequency<br />Sub-device 1: GPU frequency<br />Sub-device 1: HBM frequency | List available frequencies<br />Set frequency range<br />Get frequencies<br />Get throttle reasons<br />Get throttle time |
 | [Engines](#eng)       | Sub-device 0: All engines<br />Sub-device 0: Compute engines<br />Sub-device 0: Media engines<br />Sub-device 1: All engines<br />Sub-device 1: Compute engines<br />Sub-device 1: Media engines | Get busy time |
 | [Firmware](#fmw)      | Sub-device 0: Enumerates each firmware<br />Sub-device 1: Enumerates each firmware | Get firmware  name and version<br />Verify firmware checksum |
-| [Mermory](#mem)       | Sub-device 0: HBM memory<br />Sub-device 1: HBM memory | Get maximum supported bandwidth<br />Get current allocation size<br />Get current bandwidth |
+| [Memory](#mem)        | Sub-device 0: HBM memory<br />Sub-device 1: HBM memory | Get maximum supported bandwidth<br />Get current allocation size<br />Get current bandwidth |
 | [Fabric port](#con)   | Sub-device 0: Enumerates each port<br />Sub-device 1: Enumerates each port | Get port configuration (UP/DOWN)<br />Get physical link details<br />Get port health (green/yellow/red/black)<br />Get remote port UUID<br />Get port max rx/tx speed<br />Get port current rx/tx bandwidth | 
 | [Temperature](#tmp)   | Package: temperature<br />Sub-device 0: GPU temperature<br />Sub-device 0: HBM temperature<br />Sub-device 1: GPU temperature<br />Sub-device 1: HBM temperature | Get current temperature sensor reading |
+| [PSU](#psu)           | Package: Power supplies | Get details about the power supply<br />Query current state (temperature,current,fan) |
+| [Fan](#fan)           | Package: Fans | Get details (max fan speed)<br />Get config (fixed fan speed, temperature-speed table)<br />Query current fan speed |
+| [LED](#led)           | Package: LEDs | Get details (supports RGB configuration)<br />Query current state (on,color) |
 | [RAS](#ras)           | Sub-device 0: One set of RAS error counters<br />Sub-device 1: One set of RAS error counters | Read RAS total correctable and uncorrectable error counter.<br />Read breakdown of errors by category:<br />- no. resets<br />- no. programming errors<br />- no. driver errors<br />- no. compute errors<br />- no. cache errors<br />- no. memory errors<br />- no. PCI errors<br />- no. switch errors<br />- no. display errors<br />- no. non-compute errors | 
 | [Diagnostics](#dag)   | Package: SCAN test suite<br />Package: ARRAY test suite | Get list of all diagnostics tests in the test suite | 
 
@@ -217,6 +220,8 @@ sub-devices. The table shows the operations (controls) that will be provided for
 | [Standby](#sby)       | Sub-device 0: Control entire sub-device<br />Sub-device 1: Control entire sub-device | Disable opportunistic standby |
 | [Firmware](#fmw)      | Sub-device 0: Enumerates each firmware<br />Sub-device 1: Enumerates each firmware | Flash new firmware |
 | [Fabric port](#con)   | Sub-device 0: Control each port<br />Sub-device 1: Control each port | Configure port UP/DOWN<br />Turn beaconing ON/OFF | 
+| [Fan](#fan)           | Package: Fans | Set config (fixed speed, temperature-speed table) |
+| [LED](#led)           | Package: LEDs | Turn LED on/off and set color where applicable |
 | [Diagnostics](#con)   | SCAN test suite<br />ARRAY test suite | Run all or a subset of diagnostic tests in the test suite | 
 
 ## <a name="dce">Device component enumeration</a>
@@ -896,9 +901,9 @@ A device has multiple temperature sensors embedded at different locations. The f
 | :---                                   | :---        |
 | ::zetSysmanTemperatureGet()           | Enumerate the temperature sensors on the device. |
 | ::zetSysmanTemperatureGetProperties() | Get static properties for a temperature sensor. In particular, this will indicate which parts of the device the sensor measures (one of ::zet_temp_sensors_t). |
-| ::zetSysmanTemperatureRead()          | Read the temperature of a sensor. |
-| ::zetSysmanTemperatureGetThresholds() | Get information about the current temperature thresholds - enabled/threshold/processID. |
-| ::zetSysmanTemperatureSetThresholds() | Set new temperature thresholds. Events will be triggered when the temperature crosses these thresholds. |
+| ::zetSysmanTemperatureGetConfig()     | Get information about the current temperature thresholds - enabled/threshold/processID. |
+| ::zetSysmanTemperatureSetConfig()     | Set new temperature thresholds. Events will be triggered when the temperature crosses these thresholds. |
+| ::zetSysmanTemperatureGetState()      | Read the temperature of a sensor. |
 
 
 ## <a name="psu">Operations on power supplies</a>
@@ -1024,15 +1029,15 @@ Software can use the function ::zetSysmanRasGetProperties() to find out if the d
 The function ::zetSysmanRasGet() enumerates the available sets of RAS errors. If no handles are returned, the device does not support RAS.
 A device without sub-devices will return one handle if RAS is supported. A device with sub-devices will return a handle for each sub-device.
 
-To determine if errors have occurred, software uses the function ::zetSysmanRasGetErrors(). This will return the total number of errors of a given type
+To determine if errors have occurred, software uses the function ::zetSysmanRasGetState(). This will return the total number of errors of a given type
 (correctable/uncorrectable) that have occurred.
 
-When calling ::zetSysmanRasGetErrors(), software can request that the error counters be cleared. When this is done, all counters of the specified
+When calling ::zetSysmanRasGetState(), software can request that the error counters be cleared. When this is done, all counters of the specified
 type (correctable/uncorrectable) will be set to zero and any subsequent calls to this function will only show new errors that have occurred.
 If software intends to clear errors, it should be the only application doing so and it should store the counters in an appropriate database
 for historical analysis.
 
-When calling ::zetSysmanRasGetErrors(), an optional pointer to a structure of type ::zet_ras_details_t can be supplied. This will give a
+When calling ::zetSysmanRasGetState(), an optional pointer to a structure of type ::zet_ras_details_t can be supplied. This will give a
 breakdown of the main device components where the errors occurred. The categories are defined in the structure ::zet_ras_details_t. The meaning
 of each category depends on the error type (correctable, uncorrectable).
 
@@ -1104,7 +1109,7 @@ void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
                     {
                         uint64_t newErrors;
                         zet_ras_details_t errorDetails;
-                        if (zetSysmanRasGetErrors(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                        if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
                             == ZE_RESULT_SUCCESS)
                         {
                             fprintf(stdout, "    Number new errors: %llu\n", newErrors);
@@ -1141,8 +1146,10 @@ the type and name of each test suite (::zet_diag_properties_t.type and ::zet_dia
 
 Each test suite contains one or more diagnostic tests. On some systems, it is possible to run only a subset of the tests. Use the function
 ::zetSysmanDiagnosticsGetProperties() and check that ::zet_diag_properties_t.numTests is non-zero to determine if this feature is available. If it is,
-::zet_diag_properties_t.pTests provides the list of tests that can be run - the index and name of each test. The example code below shows how to 
-all test suites and the tests in each if this is known:
+::zet_diag_properties_t.pTests provides the list of tests that can be run - the index and name of each test.
+
+The example code below shows how to 
+discover all test suites and the tests in each:
 
 ```c
 void ListDiagnosticTests(zet_sysman_handle_t hSysmanDevice)
@@ -1190,29 +1197,154 @@ Events are a way to determine if changes have occurred on a device e.g. new RAS 
 notification about and then it queries to receive notifications. The query can request a blocking wait - this will put the calling application thread
 to sleep until new notifications are received.
 
-The list of all events is provided by the enumerator ::zet_sysman_event_type_t. Before registering to receive an event from this list, the application
-should first check if it is supported for a specific class of devices (devices with the same device ID). This is achieved using the function
-::zetSysmanEventsGetProperties() and looking at the array ::zet_event_properties_t.supportedEvents[::zet_sysman_event_type_t] for each event.
+For every device on which the application wants to receive events, it should perform the following actions:
 
-For events supported on a given device, the application uses the function ::zetSysmanEventsRegister() to register to receive notifications.
-It can stop notifications at any time using the function ::zetSysmanEventsUnregister().
+1. Use ::zetSysmanEventGet() to get an event handler from the Sysman handle for the device.
+2. Use ::zetSysmanEventSetConfig() to indicate which events it wasnts to listen to.
+3. For each event, call the appropriate function to set conditions that will trigger the event.
 
-Finally, the application uses the function ::zetSysmanEventsListen() to get a list of new notifications that have occurred since the last time it checked.
+Finally, the application calls ::zetSysmanEventListen() with a list of event handles that it wishes to listen for events on. A wait timeout is used
+to request non-blocking operations (timeout = ::ZET_EVENT_WAIT_NONE) or blocking operations (timeout = ::ZET_EVENT_WAIT_INFINITE) or to return
+after a specified amount of time even if no events have been received.
 
-The application can choose to block for events by setting timeout to ::ZET_EVENT_WAIT_INFINITE or it can set to zero if it wishes to get the current
-status without blocking.
+Once events have occurred, the application can call ::zetSysmanEventGetState() to determine the list of events that have been received
+for each event handle. If events have been received, the application can use the function relevant to the event to determine the actual state.
 
-The event notifications are returned as a bitfield of event types. It is up to the application to then enumerate the corresponding device properties
-to determine where the events occurred if that is required.
+The list of events is given in the table below. For each event, the corresponding configuration and state functions are shown. Where a
+configuration function is not shown, the event is generated automatically; where a configuration function is shown, it must be called to
+enable the event and/or provide threshold conditions.
 
-When calling ::zetSysmanEventsListen(), the application can request that the status be cleared. The driver will return the current status and clear
-it internally. The next call to the function will return no notifications until new events occur. If the application does not request that event list
-be cleared, subsequent calls to this function will show the same notifications and any new notifications.
+| Event                                             | Trigger                                   | Configuration function                | State function                    |
+| :---                                              | :---                                      | :---                                  | :---                              |
+| ::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED           | Frequency starts being throttled          |                                       | ::zetSysmanFrequencyGetState()   |
+| ::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED | Energy consumption threshold is reached   | ::zetSysmanPowerSetEnergyThreshold() |                                   |
+| ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL            | Critical temperature is reached           | ::zetSysmanTemperatureSetConfig()    | ::zetSysmanTemperatureGetState() |
+| ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1          | Temperature crosses threshold 1           | ::zetSysmanTemperatureSetConfig()    | ::zetSysmanTemperatureGetState() |
+| ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2          | Temperature crosses threshold 2           | ::zetSysmanTemperatureSetConfig()    | ::zetSysmanTemperatureGetState() |
+| ::ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH               | Health of device memory changes           |                                       | ::zetSysmanMemoryGetState()      |
+| ::ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH       | Health of fabric ports change             |                                       | ::zetSysmanFabricPortGetState()  |
+| ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS   | RAS correctable errors cross thresholds   | ::zetSysmanRasSetConfig()            | ::zetSysmanRasGetState()         |
+| ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS | RAS uncorrectable errors cross thresholds | ::zetSysmanRasSetConfig()            | ::zetSysmanRasGetState()         |
 
-The first argument of ::zetSysmanEventsListen() specifies the SMI handle for the device on which event notifications wish to be received. However, this
-can be set to NULL in order to query event notifications across all devices for which the application has created SMI handles. When querying across
-multiple devices, it is suggested not to request event status clearing. In this way, the application can know when any event has occurred and can then
-make individual requests to each device, this time requesting that the event status be cleared.
+The call to ::zetSysmanEventListen() requires the driver handle. The list of event handles must only be for devices that have been enumerated
+from that driver, otherwise and error will be returned. If the application is managing devices from multiple drivers, it will need to call this
+function separately for each driver.
+
+The table below summaries all the event functions:
+
+| Function                               | Description |
+| :---                                   | :---        |
+| ::zetSysmanEventGet()                 | Get the event handle for a specific Sysman device. |
+| ::zetSysmanEventGetConfig()           | Get the current list of events for a given event handle that have been registered. |
+| ::zetSysmanEventSetConfig()           | Set the events that should be registered on a given event handle. |
+| ::zetSysmanEventGetState()            | Get the list of events that have been received for a given event handle. |
+| ::zetSysmanEventListen()              | Wait for events to arrive for a given list of event handles. |
+
+The example code below shows how to configure all temperature sensors to trigger an event when the temperature exceeds a specified threshold
+or when the critical temperature is reached.
+
+```c
+void WaitForExcessTemperatureEvent(zet_driver_handle_t hDriver, double tempLimit)
+{
+    uint32_t deviceCount = 0;
+    uint32_t numEventHandles = 0;
+    ze_device_handle_t* phDevices;
+    zet_sysman_event_handle_t* phEvents;
+    zet_sysman_event_handle_t* phListenEvents;
+    uint32_t* pListenDeviceIndex;
+
+    // Get list of all devices under this driver
+    zeDeviceGet(hDriver, &deviceCount, nullptr);
+    phDevices = (ze_device_handle_t*)malloc(deviceCount * sizeof(ze_device_handle_t));
+    phEvents = (zet_sysman_event_handle_t*)malloc(deviceCount * sizeof(zet_sysman_event_handle_t));
+    phListenEvents = (zet_sysman_event_handle_t*)malloc(deviceCount * sizeof(zet_sysman_event_handle_t));
+    pListenDeviceIndex = (uint32_t*)malloc(deviceCount * sizeof(uint32_t));
+    zeDeviceGet(hDriver, &deviceCount, phDevices);
+    for(uint32_t d = 0; d < deviceCount; ++d)
+    {
+        // Get Sysman handle, event handle and list of temperature sensors in the device
+        uint32_t numTempSensors = 0;
+        uint32_t numConfiguredTempSensors = 0;
+        zet_sysman_temp_handle_t* allTempSensors;
+        zet_sysman_handle_t hSysmanDevice;
+        if (zetSysmanGet(phDevices[d], ZET_SYSMAN_VERSION_CURRENT, &hSysmanDevice) != ZE_RESULT_SUCCESS)
+        {
+            continue;
+        }
+        if (zetSysmanEventGet(hSysmanDevice, &phEvents[d]) != ZE_RESULT_SUCCESS)
+        {
+            continue;
+        }
+        if (zetSysmanTemperatureGet(hSysmanDevice, &numTempSensors, NULL) != ZE_RESULT_SUCCESS)
+        {
+            continue;
+        }
+        allTempSensors = (zet_sysman_temp_handle_t*)malloc(deviceCount * sizeof(zet_sysman_temp_handle_t));
+        if (zetSysmanTemperatureGet(hSysmanDevice, &numTempSensors, allTempSensors) == ZE_RESULT_SUCCESS)
+        {
+            // Configure each temperature sensor to trigger a critical event and a threshold1 event
+            zet_temp_config_t config;
+            for (uint32_t t = 0; t < numTempSensors; t++)
+            {
+                if (zetSysmanTemperatureGetConfig(allTempSensors[t], &config) != ZE_RESULT_SUCCESS)
+                {
+                    continue;
+                }
+                config.enableCritical = true;
+                config.threshold1.enableHighToLow = false;
+                config.threshold1.enableLowToHigh = true;
+                config.threshold1.threshold = tempLimit;
+                config.threshold2.enableHighToLow = false;
+                config.threshold2.enableLowToHigh = false;
+                if (zetSysmanTemperatureSetConfig(allTempSensors[t], &config) == ZE_RESULT_SUCCESS)
+                {
+                    numConfiguredTempSensors++;
+                }
+            }
+        }
+        if (numConfiguredTempSensors)
+        {
+            zet_event_config_t eventConfig;
+            eventConfig.registered = ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL | ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1;
+            if (zetSysmanEventSetConfig(phEvents[d], &eventConfig) == ZE_RESULT_SUCCESS)
+            {
+                phListenEvents[numEventHandles] = phEvents[d];
+                pListenDeviceIndex[numEventHandles] = d;
+                numEventHandles++;
+            }
+        }
+        free(allTempSensors);
+    }
+
+    if (numEventHandles)
+    {
+        uint32_t events;
+        // Block until we receive events
+        if (zetSysmanEventListen(hDriver, ZET_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events) == ZE_RESULT_SUCCESS)
+        {
+            for (uint32_t e = 0; e < numEventHandles; e++)
+            {
+                if (zetSysmanEventGetState(phListenEvents[e], true, &events) != ZE_RESULT_SUCCESS)
+                {
+                    continue;
+                }
+                if (events & ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL)
+                {
+                    fprintf(stdout, "Device %u: Went above the critical temperature.\n", pListenDeviceIndex[e]);
+                }
+                else if (events & ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1)
+                {
+                    fprintf(stdout, "Device %u: Went above the temperature threshold %f.\n", pListenDeviceIndex[e], tempLimit);
+                }
+            }
+        }
+    }
+
+    free(phDevices);
+    free(phEvents);
+    free(phListenEvents);
+}
+```
 
 # <a name="se">Security</a>
 
@@ -1338,9 +1470,9 @@ The table below summarizes the default permissions for each API function:
 | ::zetSysmanFabricPortGetThroughput()                 | read-only            | no-access            | no-access            | no-access            |
 | ::zetSysmanTemperatureGet()                          | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanTemperatureGetProperties()                | read-only            | read-only            | read-only            | no-access            |
-| ::zetSysmanTemperatureRead()                         | read-only            | read-only            | read-only            | no-access            |
-| ::zetSysmanTemperatureGetThresholds()                | read-only            | read-only            | no-access            | no-access            |
-| ::zetSysmanTemperatureSetThresholds()                | read-write           | read-write           | no-access            | no-access            |
+| ::zetSysmanTemperatureGetConfig()                    | read-only            | read-only            | no-access            | no-access            |
+| ::zetSysmanTemperatureSetConfig()                    | read-write           | read-write           | no-access            | no-access            |
+| ::zetSysmanTemperatureGetState()                     | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPsuGet()                                  | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPsuGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPsuGetState()                             | read-only            | read-only            | read-only            | no-access            |
@@ -1355,11 +1487,14 @@ The table below summarizes the default permissions for each API function:
 | ::zetSysmanLedSetState()                             | read-write           | read-write           | read-only            | no-access            |
 | ::zetSysmanRasGet()                                  | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanRasGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
-| ::zetSysmanRasGetErrors()                            | read-only            | read-only            | read-only            | no-access            |
-| ::zetSysmanEventsGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
-| ::zetSysmanEventsRegister()                          | read-only            | read-only            | read-only            | no-access            |
-| ::zetSysmanEventsUnregister()                        | read-only            | read-only            | read-only            | no-access            |
-| ::zetSysmanEventsListen()                            | read-write           | read-write           | read-write           | no-access            |
+| ::zetSysmanRasGetConfig()                            | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanRasSetConfig()                            | read-write           | read-write           | no-access            | no-access            |
+| ::zetSysmanRasGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEventGet                                  | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEventGetConfig()                          | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEventSetConfig()                          | read-write           | read-write           | read-write           | no-access            |
+| ::zetSysmanEventGetState()                           | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanEventListen()                             | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanDiagnosticsGet()                          | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanDiagnosticsGetProperties()                | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanDiagnosticsRunTests()                     | read-write           | no-access            | no-access            | no-access            |

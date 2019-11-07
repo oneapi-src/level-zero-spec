@@ -127,6 +127,10 @@ typedef struct _zet_sysman_ras_handle_t *zet_sysman_ras_handle_t;
 typedef struct _zet_sysman_diag_handle_t *zet_sysman_diag_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a SMI device event
+typedef struct _zet_sysman_event_handle_t *zet_sysman_event_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_metric_group_properties_t
 typedef struct _zet_metric_group_properties_t zet_metric_group_properties_t;
 
@@ -311,6 +315,10 @@ typedef struct _zet_temp_properties_t zet_temp_properties_t;
 typedef struct _zet_temp_threshold_t zet_temp_threshold_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_temp_config_t
+typedef struct _zet_temp_config_t zet_temp_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_psu_properties_t
 typedef struct _zet_psu_properties_t zet_psu_properties_t;
 
@@ -351,12 +359,12 @@ typedef struct _zet_ras_properties_t zet_ras_properties_t;
 typedef struct _zet_ras_details_t zet_ras_details_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_event_properties_t
-typedef struct _zet_event_properties_t zet_event_properties_t;
+/// @brief Forward-declare zet_ras_config_t
+typedef struct _zet_ras_config_t zet_ras_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_event_request_t
-typedef struct _zet_event_request_t zet_event_request_t;
+/// @brief Forward-declare zet_event_config_t
+typedef struct _zet_event_config_t zet_event_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_diag_test_t
