@@ -37,7 +37,7 @@ returns:
 type: macro
 desc: "Maximum number of characters in string properties."
 name: $T_STRING_PROPERTY_SIZE
-value: "32"
+value: "64"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Types of accelerator engines"
@@ -831,8 +831,8 @@ desc: "Frequency properties"
 class: $tSysmanFrequency
 name: $t_freq_properties_t
 details:
-    - "Indicates if this frequency domain can be overclocked (if true, functions such as $tSysmanFrequencySetOcConfig() are supported)."
-    - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $tSysmanFrequencyGetOcConfig() to determine the maximum frequency that can be requested."
+    - "Indicates if this frequency domain can be overclocked (if true, functions such as $tSysmanFrequencyOcSetConfig() are supported)."
+    - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $tSysmanFrequencyOcGetConfig() to determine the maximum frequency that can be requested."
     - "If step is non-zero, the available frequencies are (min, min + step, min + 2xstep, ..., max). Otherwise, call $tSysmanFrequencyGetAvailableClocks() to get the list of frequencies that can be requested."
 members:
     - type: $t_freq_domain_t
@@ -1132,7 +1132,7 @@ params:
 type: function
 desc: "Get the overclocking capabilities."
 class: $tSysmanFrequency
-name: GetOcCapabilities
+name: OcGetCapabilities
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1147,7 +1147,7 @@ params:
 type: function
 desc: "Get the current overclocking configuration."
 class: $tSysmanFrequency
-name: GetOcConfig
+name: OcGetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1165,9 +1165,9 @@ returns:
 type: function
 desc: "Change the overclocking configuration."
 class: $tSysmanFrequency
-name: SetOcConfig
+name: OcSetConfig
 details:
-    - "If $t_oc_config_t.mode is set to $T_OC_MODE_OFF, overclocking will be turned off and the hardware returned to run with factory voltages/frequencies. Call $tSysmanFrequencySetOcIccMax() and $tSysmanFrequencySetOcTjMax() separately with 0.0 to return those settings to factory defaults."
+    - "If $t_oc_config_t.mode is set to $T_OC_MODE_OFF, overclocking will be turned off and the hardware returned to run with factory voltages/frequencies. Call $tSysmanFrequencyOcSetIccMax() and $tSysmanFrequencyOcSetTjMax() separately with 0.0 to return those settings to factory defaults."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -1192,7 +1192,7 @@ returns:
 type: function
 desc: "Get the maximum current limit setting."
 class: $tSysmanFrequency
-name: GetOcIccMax
+name: OcGetIccMax
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1211,7 +1211,7 @@ returns:
 type: function
 desc: "Change the maximum current limit setting."
 class: $tSysmanFrequency
-name: SetOcIccMax
+name: OcSetIccMax
 details:
     - "Setting ocIccMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
@@ -1237,7 +1237,7 @@ returns:
 type: function
 desc: "Get the maximum temperature limit setting."
 class: $tSysmanFrequency
-name: GetOcTjMax
+name: OcGetTjMax
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1255,7 +1255,7 @@ returns:
 type: function
 desc: "Change the maximum temperature limit setting."
 class: $tSysmanFrequency
-name: SetOcTjMax
+name: OcSetTjMax
 details:
     - "Setting ocTjMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
@@ -2101,6 +2101,9 @@ members:
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
+      name: "isCriticalTempSupported"
+      desc: "[out] Indicates if the critical temperature event $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported"
+    - type: $x_bool_t
       name: "isThreshold1Supported"
       desc: "[out] Indicates if the temperature threshold 1 event $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported"
     - type: $x_bool_t
@@ -2218,13 +2221,14 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
+        - "Enabling the critical temperature event is not supported - check $t_temp_properties_t.isCriticalTempSupported"
         - "One or both of the thresholds is not supported - check $t_temp_properties_t.isThreshold1Supported and $t_temp_properties_t.isThreshold2Supported"
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
     - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
         - "Another running process is controlling these settings."
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "One or both the thresholds is above TjMax (see $tSysmanFrequencyGetOcTjMax()). Temperature thresholds must be below this value."
+        - "One or both the thresholds is above TjMax (see $tSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the temperature from a specified sensor"
@@ -3036,8 +3040,8 @@ members:
     - type: uint32_t
       name: "index"
       desc: "[out] Index of the test"
-    - type: const char*
-      name: "name"
+    - type: char
+      name: "name[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] Name of the test"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -3054,15 +3058,12 @@ members:
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
-    - type: const char*
-      name: "name"
+    - type: char
+      name: "name[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] Name of the diagnostics test suite"
-    - type: uint32_t
-      name: "numTests"
-      desc: "[out] The number of tests in the test suite"
-    - type: const $t_diag_test_t*
-      name: "pTests"
-      desc: "[out] Array of tests (size $t_diag_properties_t.numTests), sorted by increasing value of $t_diag_test_t.index"
+    - type: $x_bool_t
+      name: "haveTests"
+      desc: "[out] Indicates if this test suite has individual tests which can be run separately (use the function $SysmanDiagnosticsGetTests() to get the list of these tests)"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of diagnostics test suites"
@@ -3102,10 +3103,35 @@ params:
       desc: "[in] Structure describing the properties of a diagnostics test suite"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Get individual tests that can be run separately. Not all test suites permit running individual tests - check $t_diag_properties_t.haveTests"
+class: $tSysmanDiagnostics
+name: GetTests
+details:
+    - "The list of available tests is returned in order of increasing test index $t_diag_test_t.index."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_diag_handle_t
+      name: hDiagnostics
+      desc: "[in] Handle for the component."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of tests.
+            If count is zero, then the driver will update the value with the total number of tests available.
+            If count is non-zero, then driver will only retrieve that number of tests.
+            If count is larger than the number of tests available, then the driver will update the value with the correct number of tests available.
+    - type: "$t_diag_test_t*"
+      name: pTests
+      desc: "[in,out][optional][range(0, *pCount)] Array of tests sorted by increasing value of $t_diag_test_t.index"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Run a diagnostics test suite, either all tests or a subset of tests."
 class: $tSysmanDiagnostics
 name: RunTests
 details:
+    - "To run all tests in a test suite, set start = $T_DIAG_FIRST_TEST_INDEX and end = $T_DIAG_LAST_TEST_INDEX."
+    - "If the test suite permits running individual tests, $t_diag_properties_t.haveTests will be true. In this case, the function $tSysmanDiagnosticsGetTests() can be called to get the list of tests and corresponding indices that can be supplied to the arguments start and end in this function."
     - "This function will block until the diagnostics have completed."
 params:
     - type: $t_sysman_diag_handle_t

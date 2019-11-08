@@ -1007,50 +1007,50 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetThrottleTime_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencyGetOcCapabilities 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcCapabilities_t)(
+/// @brief Function-pointer for zetSysmanFrequencyOcGetCapabilities 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyOcGetCapabilities_t)(
     zet_sysman_freq_handle_t,
     zet_oc_capabilities_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencyGetOcConfig 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcConfig_t)(
+/// @brief Function-pointer for zetSysmanFrequencyOcGetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyOcGetConfig_t)(
     zet_sysman_freq_handle_t,
     zet_oc_config_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencySetOcConfig 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcConfig_t)(
+/// @brief Function-pointer for zetSysmanFrequencyOcSetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyOcSetConfig_t)(
     zet_sysman_freq_handle_t,
     zet_oc_config_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencyGetOcIccMax 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcIccMax_t)(
+/// @brief Function-pointer for zetSysmanFrequencyOcGetIccMax 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyOcGetIccMax_t)(
     zet_sysman_freq_handle_t,
     double*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencySetOcIccMax 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcIccMax_t)(
+/// @brief Function-pointer for zetSysmanFrequencyOcSetIccMax 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyOcSetIccMax_t)(
     zet_sysman_freq_handle_t,
     double
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencyGetOcTjMax 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyGetOcTjMax_t)(
+/// @brief Function-pointer for zetSysmanFrequencyOcGetTjMax 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyOcGetTjMax_t)(
     zet_sysman_freq_handle_t,
     double*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanFrequencySetOcTjMax 
-typedef ze_result_t (__zecall *zet_pfnSysmanFrequencySetOcTjMax_t)(
+/// @brief Function-pointer for zetSysmanFrequencyOcSetTjMax 
+typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyOcSetTjMax_t)(
     zet_sysman_freq_handle_t,
     double
     );
@@ -1065,13 +1065,13 @@ typedef struct _zet_sysman_frequency_dditable_t
     zet_pfnSysmanFrequencySetRange_t                            pfnSetRange;
     zet_pfnSysmanFrequencyGetState_t                            pfnGetState;
     zet_pfnSysmanFrequencyGetThrottleTime_t                     pfnGetThrottleTime;
-    zet_pfnSysmanFrequencyGetOcCapabilities_t                   pfnGetOcCapabilities;
-    zet_pfnSysmanFrequencyGetOcConfig_t                         pfnGetOcConfig;
-    zet_pfnSysmanFrequencySetOcConfig_t                         pfnSetOcConfig;
-    zet_pfnSysmanFrequencyGetOcIccMax_t                         pfnGetOcIccMax;
-    zet_pfnSysmanFrequencySetOcIccMax_t                         pfnSetOcIccMax;
-    zet_pfnSysmanFrequencyGetOcTjMax_t                          pfnGetOcTjMax;
-    zet_pfnSysmanFrequencySetOcTjMax_t                          pfnSetOcTjMax;
+    zet_pfnSysmanFrequencyOcGetCapabilities_t                   pfnOcGetCapabilities;
+    zet_pfnSysmanFrequencyOcGetConfig_t                         pfnOcGetConfig;
+    zet_pfnSysmanFrequencyOcSetConfig_t                         pfnOcSetConfig;
+    zet_pfnSysmanFrequencyOcGetIccMax_t                         pfnOcGetIccMax;
+    zet_pfnSysmanFrequencyOcSetIccMax_t                         pfnOcSetIccMax;
+    zet_pfnSysmanFrequencyOcGetTjMax_t                          pfnOcGetTjMax;
+    zet_pfnSysmanFrequencyOcSetTjMax_t                          pfnOcSetTjMax;
 } zet_sysman_frequency_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1683,6 +1683,14 @@ typedef ze_result_t (__zecall *zet_pfnSysmanDiagnosticsGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanDiagnosticsGetTests 
+typedef ze_result_t (__zecall *zet_pfnSysmanDiagnosticsGetTests_t)(
+    zet_sysman_diag_handle_t,
+    uint32_t*,
+    zet_diag_test_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanDiagnosticsRunTests 
 typedef ze_result_t (__zecall *zet_pfnSysmanDiagnosticsRunTests_t)(
     zet_sysman_diag_handle_t,
@@ -1696,6 +1704,7 @@ typedef ze_result_t (__zecall *zet_pfnSysmanDiagnosticsRunTests_t)(
 typedef struct _zet_sysman_diagnostics_dditable_t
 {
     zet_pfnSysmanDiagnosticsGetProperties_t                     pfnGetProperties;
+    zet_pfnSysmanDiagnosticsGetTests_t                          pfnGetTests;
     zet_pfnSysmanDiagnosticsRunTests_t                          pfnRunTests;
 } zet_sysman_diagnostics_dditable_t;
 

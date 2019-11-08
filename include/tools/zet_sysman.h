@@ -62,7 +62,7 @@ zetSysmanGet(
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_STRING_PROPERTY_SIZE
 /// @brief Maximum number of characters in string properties.
-#define ZET_STRING_PROPERTY_SIZE  32
+#define ZET_STRING_PROPERTY_SIZE  64
 #endif // ZET_STRING_PROPERTY_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -923,10 +923,10 @@ typedef enum _zet_freq_domain_t
 /// 
 /// @details
 ///     - Indicates if this frequency domain can be overclocked (if true,
-///       functions such as ::zetSysmanFrequencySetOcConfig() are supported).
+///       functions such as ::zetSysmanFrequencyOcSetConfig() are supported).
 ///     - The min/max hardware frequencies are specified for non-overclock
 ///       configurations. For overclock configurations, use
-///       ::zetSysmanFrequencyGetOcConfig() to determine the maximum frequency
+///       ::zetSysmanFrequencyOcGetConfig() to determine the maximum frequency
 ///       that can be requested.
 ///     - If step is non-zero, the available frequencies are (min, min + step,
 ///       min + 2xstep, ..., max). Otherwise, call
@@ -1259,7 +1259,7 @@ zetSysmanFrequencyGetThrottleTime(
 ///         + nullptr == pOcCapabilities
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencyGetOcCapabilities(
+zetSysmanFrequencyOcGetCapabilities(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
     );
@@ -1281,7 +1281,7 @@ zetSysmanFrequencyGetOcCapabilities(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ze_result_t __zecall
-zetSysmanFrequencyGetOcConfig(
+zetSysmanFrequencyOcGetConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
     );
@@ -1292,8 +1292,8 @@ zetSysmanFrequencyGetOcConfig(
 /// @details
 ///     - If ::zet_oc_config_t.mode is set to ::ZET_OC_MODE_OFF, overclocking
 ///       will be turned off and the hardware returned to run with factory
-///       voltages/frequencies. Call ::zetSysmanFrequencySetOcIccMax() and
-///       ::zetSysmanFrequencySetOcTjMax() separately with 0.0 to return those
+///       voltages/frequencies. Call ::zetSysmanFrequencyOcSetIccMax() and
+///       ::zetSysmanFrequencyOcSetTjMax() separately with 0.0 to return those
 ///       settings to factory defaults.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -1315,7 +1315,7 @@ zetSysmanFrequencyGetOcConfig(
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
-zetSysmanFrequencySetOcConfig(
+zetSysmanFrequencyOcSetConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
     );
@@ -1338,7 +1338,7 @@ zetSysmanFrequencySetOcConfig(
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + Capability ::zet_oc_capabilities_t.isIccMaxSupported is false for this frequency domain
 ze_result_t __zecall
-zetSysmanFrequencyGetOcIccMax(
+zetSysmanFrequencyOcGetIccMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
                                                     ///< return.
@@ -1367,7 +1367,7 @@ zetSysmanFrequencyGetOcIccMax(
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
-zetSysmanFrequencySetOcIccMax(
+zetSysmanFrequencyOcSetIccMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
     );
@@ -1389,7 +1389,7 @@ zetSysmanFrequencySetOcIccMax(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ze_result_t __zecall
-zetSysmanFrequencyGetOcTjMax(
+zetSysmanFrequencyOcGetTjMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
                                                     ///< successful return.
@@ -1418,7 +1418,7 @@ zetSysmanFrequencyGetOcTjMax(
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
-zetSysmanFrequencySetOcTjMax(
+zetSysmanFrequencyOcSetTjMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
     );
@@ -2275,6 +2275,8 @@ typedef struct _zet_temp_properties_t
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    ze_bool_t isCriticalTempSupported;              ///< [out] Indicates if the critical temperature event
+                                                    ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
     ze_bool_t isThreshold1Supported;                ///< [out] Indicates if the temperature threshold 1 event
                                                     ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported
     ze_bool_t isThreshold2Supported;                ///< [out] Indicates if the temperature threshold 2 event
@@ -2415,9 +2417,10 @@ zetSysmanTemperatureGetConfig(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hTemperature
 ///         + nullptr == pConfig
-///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyGetOcTjMax()). Temperature thresholds must be below this value.
+///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value.
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
+///         + Enabling the critical temperature event is not supported - check ::zet_temp_properties_t.isCriticalTempSupported
 ///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
@@ -3277,7 +3280,7 @@ typedef enum _zet_diag_result_t
 typedef struct _zet_diag_test_t
 {
     uint32_t index;                                 ///< [out] Index of the test
-    const char* name;                               ///< [out] Name of the test
+    char name[ZET_STRING_PROPERTY_SIZE];            ///< [out] Name of the test
 
 } zet_diag_test_t;
 
@@ -3289,10 +3292,10 @@ typedef struct _zet_diag_properties_t
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    const char* name;                               ///< [out] Name of the diagnostics test suite
-    uint32_t numTests;                              ///< [out] The number of tests in the test suite
-    const zet_diag_test_t* pTests;                  ///< [out] Array of tests (size ::zet_diag_properties_t.numTests), sorted
-                                                    ///< by increasing value of ::zet_diag_test_t.index
+    char name[ZET_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
+    ze_bool_t haveTests;                            ///< [out] Indicates if this test suite has individual tests which can be
+                                                    ///< run separately (use the function $SysmanDiagnosticsGetTests() to get
+                                                    ///< the list of these tests)
 
 } zet_diag_properties_t;
 
@@ -3347,9 +3350,48 @@ zetSysmanDiagnosticsGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get individual tests that can be run separately. Not all test suites
+///        permit running individual tests - check
+///        ::zet_diag_properties_t.haveTests
+/// 
+/// @details
+///     - The list of available tests is returned in order of increasing test
+///       index ::zet_diag_test_t.index.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDiagnostics
+///         + nullptr == pCount
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanDiagnosticsGetTests(
+    zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
+                                                    ///< If count is zero, then the driver will update the value with the total
+                                                    ///< number of tests available.
+                                                    ///< If count is non-zero, then driver will only retrieve that number of tests.
+                                                    ///< If count is larger than the number of tests available, then the driver
+                                                    ///< will update the value with the correct number of tests available.
+    zet_diag_test_t* pTests                         ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
+                                                    ///< increasing value of ::zet_diag_test_t.index
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Run a diagnostics test suite, either all tests or a subset of tests.
 /// 
 /// @details
+///     - To run all tests in a test suite, set start =
+///       ::ZET_DIAG_FIRST_TEST_INDEX and end = ::ZET_DIAG_LAST_TEST_INDEX.
+///     - If the test suite permits running individual tests,
+///       ::zet_diag_properties_t.haveTests will be true. In this case, the
+///       function ::zetSysmanDiagnosticsGetTests() can be called to get the
+///       list of tests and corresponding indices that can be supplied to the
+///       arguments start and end in this function.
 ///     - This function will block until the diagnostics have completed.
 /// 
 /// @returns

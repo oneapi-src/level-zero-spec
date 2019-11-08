@@ -527,6 +527,12 @@ be able to run at maximum frequencies without hitting this condition.
 - The sustained power limit will be triggered if high frequencies are requested for lengthy periods (configurable, default is 28sec) and the frequencies will be throttled
 if the high requests and utilization of the device continue.
 
+Some power domains support requesting the event ::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED be generated when the energy consumption exceeds
+some value. This can be a useful technique to suspend an application until the GPU becomes busy. The technique involves calling
+::zetSysmanPowerSetEnergyThreshold() with some delta energy threshold, registering to receive the event using the function
+::zetSysmanEventSetConfig() and then calling ::zetSysmanEventListen() to block until the event is triggered. When the energy consumed by the
+power domain from the time the call is made exceeds the specified delta, the event is triggered and the application is woken up.
+
 The following functions are provided to manage the power of the device:
 
 | Function                              | Description |
@@ -653,6 +659,8 @@ using the function ::zetSysmanFrequencyGetState() which will indicate the curren
 frequency information that depends on the current conditions. If the actual frequency is below the requested frequency,
 ::zet_freq_state_t.throttleReasons will provide the reasons why the frequency is being limited by the Punit.
 
+When a frequency domain starts being throttled, the event ::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED is triggered.
+
 ### <a name="fro">Frequency/Voltage overclocking</a>
 Overclocking involves modifying the voltage-frequency (V-F) curve to either achieve better performance by permitting the hardware to reach higher frequencies
 or better efficiency by lowering the voltage for the same frequency.
@@ -686,21 +694,21 @@ The following functions are provided to handle overclocking:
 
 | Function                                  | Description |
 | :---                                      | :---        |
-| ::zetSysmanFrequencyGetOcCapabilities()  | Determine the overclock capabilities of the device. |
-| ::zetSysmanFrequencyGetOcConfig()        | Get the overclock configuration in effect. |
-| ::zetSysmanFrequencySetOcConfig()        | Set a new overclock configuration. |
-| ::zetSysmanFrequencyGetOcIccMax()        | Get the maximum current limit in effect. |
-| ::zetSysmanFrequencySetOcIccMax()        | Set a new maximum current limit. |
-| ::zetSysmanFrequencyGetOcTjMax()         | Get the maximum temperature limit in effect. |
-| ::zetSysmanFrequencySetOcTjMax()         | Set a new maximum temperature limit. |
+| ::zetSysmanFrequencyOcGetCapabilities()  | Determine the overclock capabilities of the device. |
+| ::zetSysmanFrequencyOcGetConfig()        | Get the overclock configuration in effect. |
+| ::zetSysmanFrequencyOcSetConfig()        | Set a new overclock configuration. |
+| ::zetSysmanFrequencyOcGetIccMax()        | Get the maximum current limit in effect. |
+| ::zetSysmanFrequencyOcSetIccMax()        | Set a new maximum current limit. |
+| ::zetSysmanFrequencyOcGetTjMax()         | Get the maximum temperature limit in effect. |
+| ::zetSysmanFrequencyOcSetTjMax()         | Set a new maximum temperature limit. |
 
-Overclocking can be turned off by calling ::zetSysmanFrequencySetOcConfig() with mode ::ZET_OC_MODE_OFF and by calling
-::zetSysmanFrequencyGetOcIccMax() and ::zetSysmanFrequencySetOcTjMax() with values of 0.0.
+Overclocking can be turned off by calling ::zetSysmanFrequencyOcSetConfig() with mode ::ZET_OC_MODE_OFF and by calling
+::zetSysmanFrequencyOcGetIccMax() and ::zetSysmanFrequencyOcSetTjMax() with values of 0.0.
 
 ## <a name="eng">Operations on engine groups</a>
 It is possible to monitor the activity of one or engines combined into an **engine group**. A device can have multiple engine groups and the possible
 types are defined in ::zet_engine_group_t. The current engine groups supported are global activity across all engines, activity across all compute
-accelerators and activity across all media accelerators.
+accelerators, activity across all media accelerators and activity across all copy engines.
 
 By taking two snapshots of the activity counters, it is possible to calculate the average utilization of different parts of the device.
 
@@ -741,6 +749,18 @@ The following functions are provided to manage firmwares on the device:
 | ::zetSysmanFirmwareFlash()            | Flash a new firmware image. |
 
 ## <a name="mem">Querying memory modules</a>
+The API provides an enumeration of all device memory modules. For each memory module, the current and maximum bandwidth can be queried.
+The API also provides a health metric which can take one of the following values (::zet_mem_health_t):
+
+| Memory health                         | Description |
+| :---                                  | :---        |
+| ::ZET_MEM_HEALTH_OK                  | All memory channels are healthy. |
+| ::ZET_MEM_HEALTH_DEGRADED            | Excessive correctable errors have been detected on one or more channels. Device should be reset. |
+| ::ZET_MEM_HEALTH_CRITICAL            | Operating with reduced memory to cover banks with too many uncorrectable errors. |
+| ::ZET_MEM_HEALTH_REPLACE             | Device should be replaced due to excessive uncorrectable errors. |
+
+When the health state of a memory module changes, the event ::ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH is triggered.
+
 The following functions provide access to information about the device memory modules:
 
 | Function                               | Description |
@@ -778,6 +798,8 @@ For each port, the API permits querying its configuration (UP/DOWN) and its heal
 
 If the port is in a yellow state, the API provides additional information about the types of quality degradation that are being observed.
 If the port is in a red state, the API provides additional information about the causes of the instability.
+
+When a port's health state changes, the event ::ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH is triggered.
 
 The API permits measuring the receive and transmit bandwidth flowing through each port. It also provides the maximum receive and transmit
 speed (frequency/number of lanes) of each port and the current speeds which can be lower if operating in a degraded state. Note that a
@@ -895,7 +917,26 @@ void ShowFabricPorts(zet_sysman_handle_t hSysmanDevice)
 ```
 
 ## <a name="tmp">Querying temperature</a>
-A device has multiple temperature sensors embedded at different locations. The following function can be used to read their current value:
+A device has multiple temperature sensors embedded at different locations. The following locations are supported:
+
+| Temperature sensor location                | Description |
+| :---                                       | :---        |
+| ::ZET_TEMP_SENSORS_GLOBAL                 | Returns the maximum measured across all sensors in the device. |
+| ::ZET_TEMP_SENSORS_GPU                    | Returns the maximum measured across all sensors in the GPU accelerator. |
+| ::ZET_TEMP_SENSORS_MEMORY                 | Returns the maximum measured across all sensors in the device memory. |
+
+For some sensors, it is possible to request that events be triggered when temperatures cross thresholds. This is accomplished using the
+function ::zetSysmanTemperatureGetConfig() and ::zetSysmanTemperatureSetConfig(). Support for specific events is accomplished by calling
+::zetSysmanTemperatureGetProperties(). In general, temperature events are only supported on the temperature sensor of type
+::ZET_TEMP_SENSORS_GLOBAL. The list below describes the list of temperature events:
+
+| Event                                      | Check support                                    | Description |
+| :---                                       | :---                                             | :--- |
+| ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL     | ::zet_temp_properties_t.isCriticalTempSupported | The event is triggered when the temperature crosses into the critical zone where severe frequency throttling will be taking place. |
+| ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1   | ::zet_temp_properties_t.isThreshold1Supported   | The event is triggered when the temperature crosses the custom threshold 1. Flags can be set to limit the trigger to when crossing from high to low or low to high. |
+| ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2   | ::zet_temp_properties_t.isThreshold2Supported   | The event is triggered when the temperature crosses the custom threshold 2. Flags can be set to limit the trigger to when crossing from high to low or low to high. |
+
+The following function can be used to manage temperature sensors:
 
 | Function                               | Description |
 | :---                                   | :---        |
@@ -1054,6 +1095,26 @@ of each category depends on the error type (correctable, uncorrectable).
 | ::zet_ras_details_t.numFabricErrors      | Number of times one or more ports have transitioned from a green status to a yellow status. This indicates that links are experiencing quality degradation. | Number of times one or more ports have transitioned from a green/yellow status to a red status. This indicates that links are experiencing connectivity statibility issues. |
 | ::zet_ras_details_t.numDisplayErrors     | Number of ECC correctable errors that have occurred in the display. | Number of ECC uncorrectable errors that have occurred in the display. |
 
+Each RAS error type can trigger events when the error counters exceed thresholds. The events are listed in the table below. Software can use the
+functions ::zetSysmanRasGetConfig() and ::zetSysmanRasSetConfig() to get and set the thresholds for each error type. The default is for all
+thresholds to be 0 which means that no events are generated. Thresholds can be set on the total RAS error counter or on each of the detailed
+error counters.
+
+| RAS error Type                      | Event |
+| :---                                | :---        |
+| ::ZET_RAS_ERROR_TYPE_UNCORRECTABLE | ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS |
+| ::ZET_RAS_ERROR_TYPE_CORRECTABLE   | ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS |
+
+The table below summaries all the RAS management functions:
+
+| Function                              | Description |
+| :---                                  | :---        |
+| ::zetSysmanRasGet()                  | Get handles to the available RAS error groups. |
+| ::zetSysmanRasGetProperties()        | Get properties about a RAS error group - type of RAS errors and if they are enabled. |
+| ::zetSysmanRasGetConfig()            | Get the current list of thresholds for each counter in the RAS group. RAS error events will be generated when the thresholds are exceeded. |
+| ::zetSysmanRasSetConfig()            | Set current list of thresholds for each counter in the RAS group. RAS error events will be generated when the thresholds are exceeded. |
+| ::zetSysmanRasGetState()             | Get the current state of the RAS error counters. The counters can also be cleared. |
+
 The code below shows how to determine if RAS is supported and the current state of RAS errors:
 
 ```c
@@ -1145,11 +1206,23 @@ There are multiple diagnostic test suites that can be run and these are defined 
 the type and name of each test suite (::zet_diag_properties_t.type and ::zet_diag_properties_t.type).
 
 Each test suite contains one or more diagnostic tests. On some systems, it is possible to run only a subset of the tests. Use the function
-::zetSysmanDiagnosticsGetProperties() and check that ::zet_diag_properties_t.numTests is non-zero to determine if this feature is available. If it is,
-::zet_diag_properties_t.pTests provides the list of tests that can be run - the index and name of each test.
+::zetSysmanDiagnosticsGetProperties() and check that ::zet_diag_properties_t.haveTests is true to determine if this feature is available. If it is,
+the function ::zetSysmanDiagnosticsGetTests() can be called to get the list of individual tests that can be run.
 
-The example code below shows how to 
-discover all test suites and the tests in each:
+When running diagnostics for a test suite using ::zetSysmanDiagnosticsRunTests(), it is possible to specify the start and index of tests in the suite.
+Setting to ::ZET_DIAG_FIRST_TEST_INDEX and ::ZET_DIAG_LAST_TEST_INDEX will run all tests in the suite. If it is possible to run a subset of tests,
+specify the index of the start test and the end test - all tests that have an index in this range will be run.
+
+The table below summaries all the diagnostic management functions:
+
+| Function                               | Description |
+| :---                                   | :---        |
+| ::zetSysmanDiagnosticsGet()           | Get handles to the available diagnostic test suites that can be run. |
+| ::zetSysmanDiagnosticsGetProperties() | Get information about a test suite - type, name, location and if individual tests can be run. |
+| ::zetSysmanDiagnosticsGetTests()      | Get list of individual diagnostic tests that can be run. |
+| ::zetSysmanDiagnosticsRunTests()      | Run either all or individual diagnostic tests. |
+
+The example code below shows how to discover all test suites and the tests in each:
 
 ```c
 void ListDiagnosticTests(zet_sysman_handle_t hSysmanDevice)
@@ -1163,34 +1236,41 @@ void ListDiagnosticTests(zet_sysman_handle_t hSysmanDevice)
         {
             for (uint32_t suiteIndex = 0; suiteIndex < numTestSuites; suiteIndex++)
             {
+                uint32_t numTests = 0;
+                zet_diag_test_t* pTests;
                 zet_diag_properties_t suiteProps;
-                if (zetSysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) == ZE_RESULT_SUCCESS)
+                if (zetSysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) != ZE_RESULT_SUCCESS)
                 {
-                    fprintf(stdout, "Diagnostic test suite %s:\n", suiteProps.name);
-                    if (suiteProps.numTests)
-                    {
-                        for (uint32_t i = 0; i < suiteProps.numTests; i++)
-                        {
-                            const zet_diag_test_t* pTest = &suiteProps.pTests[i];
-                            fprintf(stdout, "    Test %u: %s\n", pTest->index, pTest->name);
-                        }
-                    }
-                    else
-                    {
-                        fprintf(stdout, "    Cannot run subset of tests.\n");
-                    }
+                    continue;
                 }
+                fprintf(stdout, "Diagnostic test suite %s:\n", suiteProps.name);
+                if (!suiteProps.haveTests)
+                {
+                    fprintf(stdout, "    There are no individual tests that can be selected.\n");
+                    continue;
+                }
+                if (zetSysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, NULL) != ZE_RESULT_SUCCESS)
+                {
+                    fprintf(stdout, "    Problem getting list of individual tests.\n");
+                    continue;
+                }
+                pTests = (zet_diag_test_t*)malloc(numTests * sizeof(zet_diag_test_t*));
+                if (zetSysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, pTests) != ZE_RESULT_SUCCESS)
+                {
+                    fprintf(stdout, "    Problem getting list of individual tests.\n");
+                    continue;
+                }
+                for (uint32_t i = 0; i < numTests; i++)
+                {
+                    fprintf(stdout, "    Test %u: %s\n", pTests[i].index, pTests[i].name);
+                }
+                free(pTests);
             }
         }
         free(phTestSuites);
     }
 }
 ```
-
-When running diagnostics for a test suite using ::zetSysmanDiagnosticsRunTests(), it is possible to specify the start and index of tests in the suite.
-Setting to ::ZET_DIAG_FIRST_TEST_INDEX and ::ZET_DIAG_LAST_TEST_INDEX will run all tests in the suite. If it is possible to run a subset of tests,
-specify the index of the start test and the end test - all tests that have an index in this range will be run.
-
 
 ## <a name="evd">Events</a>
 Events are a way to determine if changes have occurred on a device e.g. new RAS errors. An application registers the events that it wishes to receive
@@ -1230,7 +1310,7 @@ The call to ::zetSysmanEventListen() requires the driver handle. The list of eve
 from that driver, otherwise and error will be returned. If the application is managing devices from multiple drivers, it will need to call this
 function separately for each driver.
 
-The table below summaries all the event functions:
+The table below summaries all the event management functions:
 
 | Function                               | Description |
 | :---                                   | :---        |
@@ -1446,6 +1526,13 @@ The table below summarizes the default permissions for each API function:
 | ::zetSysmanFrequencySetRange()                       | read-write           | read-write           | read-only            | no-access            |
 | ::zetSysmanFrequencyGetState()                       | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanFrequencyGetThrottleTime()                | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencyOcGetCapabilities()              | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencyOcGetConfig()                    | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencyOcSetConfig()                    | read-write           | no-access            | no-access            | no-access            |
+| ::zetSysmanFrequencyOcGetIccMax()                    | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencyOcSetIccMax()                    | read-write           | no-access            | no-access            | no-access            |
+| ::zetSysmanFrequencyOcGetTjMax()                     | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanFrequencyOcSetTjMax()                     | read-write           | no-access            | no-access            | no-access            |
 | ::zetSysmanEngineGet()                               | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanEngineGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanEngineGetActivity()                       | read-only            | read-only            | read-only            | no-access            |
@@ -1489,7 +1576,7 @@ The table below summarizes the default permissions for each API function:
 | ::zetSysmanRasGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanRasGetConfig()                            | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanRasSetConfig()                            | read-write           | read-write           | no-access            | no-access            |
-| ::zetSysmanRasGetState()                             | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanRasGetState()                             | read-write           | read-write           | read-only            | no-access            |
 | ::zetSysmanEventGet                                  | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanEventGetConfig()                          | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanEventSetConfig()                          | read-write           | read-write           | read-write           | no-access            |
@@ -1497,5 +1584,6 @@ The table below summarizes the default permissions for each API function:
 | ::zetSysmanEventListen()                             | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanDiagnosticsGet()                          | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanDiagnosticsGetProperties()                | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanDiagnosticsGetTests()                     | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanDiagnosticsRunTests()                     | read-write           | no-access            | no-access            | no-access            |
 

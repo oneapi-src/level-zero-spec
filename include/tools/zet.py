@@ -413,7 +413,7 @@ class zet_sysman_version_t(c_int):
 
 ###############################################################################
 ## @brief Maximum number of characters in string properties.
-ZET_STRING_PROPERTY_SIZE = 32
+ZET_STRING_PROPERTY_SIZE = 64
 
 ###############################################################################
 ## @brief Types of accelerator engines
@@ -713,10 +713,10 @@ class zet_freq_domain_t(c_int):
 ## 
 ## @details
 ##     - Indicates if this frequency domain can be overclocked (if true,
-##       functions such as ::zetSysmanFrequencySetOcConfig() are supported).
+##       functions such as ::zetSysmanFrequencyOcSetConfig() are supported).
 ##     - The min/max hardware frequencies are specified for non-overclock
 ##       configurations. For overclock configurations, use
-##       ::zetSysmanFrequencyGetOcConfig() to determine the maximum frequency
+##       ::zetSysmanFrequencyOcGetConfig() to determine the maximum frequency
 ##       that can be requested.
 ##     - If step is non-zero, the available frequencies are (min, min + step,
 ##       min + 2xstep, ..., max). Otherwise, call
@@ -1193,6 +1193,8 @@ class zet_temp_properties_t(Structure):
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
+        ("isCriticalTempSupported", ze_bool_t),                         ## [out] Indicates if the critical temperature event
+                                                                        ## ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
         ("isThreshold1Supported", ze_bool_t),                           ## [out] Indicates if the temperature threshold 1 event
                                                                         ## ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported
         ("isThreshold2Supported", ze_bool_t)                            ## [out] Indicates if the temperature threshold 2 event
@@ -1494,7 +1496,7 @@ ZET_DIAG_LAST_TEST_INDEX = 0xFFFFFFFF
 class zet_diag_test_t(Structure):
     _fields_ = [
         ("index", c_ulong),                                             ## [out] Index of the test
-        ("name", POINTER(c_char))                                       ## [out] Name of the test
+        ("name", c_char * ZET_STRING_PROPERTY_SIZE)                     ## [out] Name of the test
     ]
 
 ###############################################################################
@@ -1505,10 +1507,10 @@ class zet_diag_properties_t(Structure):
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
-        ("name", POINTER(c_char)),                                      ## [out] Name of the diagnostics test suite
-        ("numTests", c_ulong),                                          ## [out] The number of tests in the test suite
-        ("pTests", POINTER(zet_diag_test_t))                            ## [out] Array of tests (size ::zet_diag_properties_t.numTests), sorted
-                                                                        ## by increasing value of ::zet_diag_test_t.index
+        ("name", c_char * ZET_STRING_PROPERTY_SIZE),                    ## [out] Name of the diagnostics test suite
+        ("haveTests", ze_bool_t)                                        ## [out] Indicates if this test suite has individual tests which can be
+                                                                        ## run separately (use the function $SysmanDiagnosticsGetTests() to get
+                                                                        ## the list of these tests)
     ]
 
 ###############################################################################
@@ -2203,53 +2205,53 @@ else:
     _zetSysmanFrequencyGetThrottleTime_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_freq_throttle_time_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetOcCapabilities
+## @brief Function-pointer for zetSysmanFrequencyOcGetCapabilities
 if __use_win_types:
-    _zetSysmanFrequencyGetOcCapabilities_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_capabilities_t) )
+    _zetSysmanFrequencyOcGetCapabilities_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_capabilities_t) )
 else:
-    _zetSysmanFrequencyGetOcCapabilities_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_capabilities_t) )
+    _zetSysmanFrequencyOcGetCapabilities_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_capabilities_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetOcConfig
+## @brief Function-pointer for zetSysmanFrequencyOcGetConfig
 if __use_win_types:
-    _zetSysmanFrequencyGetOcConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
+    _zetSysmanFrequencyOcGetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
 else:
-    _zetSysmanFrequencyGetOcConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
+    _zetSysmanFrequencyOcGetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencySetOcConfig
+## @brief Function-pointer for zetSysmanFrequencyOcSetConfig
 if __use_win_types:
-    _zetSysmanFrequencySetOcConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
+    _zetSysmanFrequencyOcSetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
 else:
-    _zetSysmanFrequencySetOcConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
+    _zetSysmanFrequencyOcSetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetOcIccMax
+## @brief Function-pointer for zetSysmanFrequencyOcGetIccMax
 if __use_win_types:
-    _zetSysmanFrequencyGetOcIccMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
+    _zetSysmanFrequencyOcGetIccMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
 else:
-    _zetSysmanFrequencyGetOcIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
+    _zetSysmanFrequencyOcGetIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencySetOcIccMax
+## @brief Function-pointer for zetSysmanFrequencyOcSetIccMax
 if __use_win_types:
-    _zetSysmanFrequencySetOcIccMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
+    _zetSysmanFrequencyOcSetIccMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
 else:
-    _zetSysmanFrequencySetOcIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
+    _zetSysmanFrequencyOcSetIccMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencyGetOcTjMax
+## @brief Function-pointer for zetSysmanFrequencyOcGetTjMax
 if __use_win_types:
-    _zetSysmanFrequencyGetOcTjMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
+    _zetSysmanFrequencyOcGetTjMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
 else:
-    _zetSysmanFrequencyGetOcTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
+    _zetSysmanFrequencyOcGetTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(c_double) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanFrequencySetOcTjMax
+## @brief Function-pointer for zetSysmanFrequencyOcSetTjMax
 if __use_win_types:
-    _zetSysmanFrequencySetOcTjMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
+    _zetSysmanFrequencyOcSetTjMax_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
 else:
-    _zetSysmanFrequencySetOcTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
+    _zetSysmanFrequencyOcSetTjMax_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, c_double )
 
 
 ###############################################################################
@@ -2262,13 +2264,13 @@ class _zet_sysman_frequency_dditable_t(Structure):
         ("pfnSetRange", c_void_p),                                      ## _zetSysmanFrequencySetRange_t
         ("pfnGetState", c_void_p),                                      ## _zetSysmanFrequencyGetState_t
         ("pfnGetThrottleTime", c_void_p),                               ## _zetSysmanFrequencyGetThrottleTime_t
-        ("pfnGetOcCapabilities", c_void_p),                             ## _zetSysmanFrequencyGetOcCapabilities_t
-        ("pfnGetOcConfig", c_void_p),                                   ## _zetSysmanFrequencyGetOcConfig_t
-        ("pfnSetOcConfig", c_void_p),                                   ## _zetSysmanFrequencySetOcConfig_t
-        ("pfnGetOcIccMax", c_void_p),                                   ## _zetSysmanFrequencyGetOcIccMax_t
-        ("pfnSetOcIccMax", c_void_p),                                   ## _zetSysmanFrequencySetOcIccMax_t
-        ("pfnGetOcTjMax", c_void_p),                                    ## _zetSysmanFrequencyGetOcTjMax_t
-        ("pfnSetOcTjMax", c_void_p)                                     ## _zetSysmanFrequencySetOcTjMax_t
+        ("pfnOcGetCapabilities", c_void_p),                             ## _zetSysmanFrequencyOcGetCapabilities_t
+        ("pfnOcGetConfig", c_void_p),                                   ## _zetSysmanFrequencyOcGetConfig_t
+        ("pfnOcSetConfig", c_void_p),                                   ## _zetSysmanFrequencyOcSetConfig_t
+        ("pfnOcGetIccMax", c_void_p),                                   ## _zetSysmanFrequencyOcGetIccMax_t
+        ("pfnOcSetIccMax", c_void_p),                                   ## _zetSysmanFrequencyOcSetIccMax_t
+        ("pfnOcGetTjMax", c_void_p),                                    ## _zetSysmanFrequencyOcGetTjMax_t
+        ("pfnOcSetTjMax", c_void_p)                                     ## _zetSysmanFrequencyOcSetTjMax_t
     ]
 
 ###############################################################################
@@ -2621,6 +2623,13 @@ else:
     _zetSysmanDiagnosticsGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_diag_handle_t, POINTER(zet_diag_properties_t) )
 
 ###############################################################################
+## @brief Function-pointer for zetSysmanDiagnosticsGetTests
+if __use_win_types:
+    _zetSysmanDiagnosticsGetTests_t = WINFUNCTYPE( ze_result_t, zet_sysman_diag_handle_t, POINTER(c_ulong), POINTER(zet_diag_test_t) )
+else:
+    _zetSysmanDiagnosticsGetTests_t = CFUNCTYPE( ze_result_t, zet_sysman_diag_handle_t, POINTER(c_ulong), POINTER(zet_diag_test_t) )
+
+###############################################################################
 ## @brief Function-pointer for zetSysmanDiagnosticsRunTests
 if __use_win_types:
     _zetSysmanDiagnosticsRunTests_t = WINFUNCTYPE( ze_result_t, zet_sysman_diag_handle_t, c_ulong, c_ulong, POINTER(zet_diag_result_t) )
@@ -2633,6 +2642,7 @@ else:
 class _zet_sysman_diagnostics_dditable_t(Structure):
     _fields_ = [
         ("pfnGetProperties", c_void_p),                                 ## _zetSysmanDiagnosticsGetProperties_t
+        ("pfnGetTests", c_void_p),                                      ## _zetSysmanDiagnosticsGetTests_t
         ("pfnRunTests", c_void_p)                                       ## _zetSysmanDiagnosticsRunTests_t
     ]
 
@@ -2914,13 +2924,13 @@ class ZET_DDI:
         self.zetSysmanFrequencySetRange = _zetSysmanFrequencySetRange_t(self.__dditable.SysmanFrequency.pfnSetRange)
         self.zetSysmanFrequencyGetState = _zetSysmanFrequencyGetState_t(self.__dditable.SysmanFrequency.pfnGetState)
         self.zetSysmanFrequencyGetThrottleTime = _zetSysmanFrequencyGetThrottleTime_t(self.__dditable.SysmanFrequency.pfnGetThrottleTime)
-        self.zetSysmanFrequencyGetOcCapabilities = _zetSysmanFrequencyGetOcCapabilities_t(self.__dditable.SysmanFrequency.pfnGetOcCapabilities)
-        self.zetSysmanFrequencyGetOcConfig = _zetSysmanFrequencyGetOcConfig_t(self.__dditable.SysmanFrequency.pfnGetOcConfig)
-        self.zetSysmanFrequencySetOcConfig = _zetSysmanFrequencySetOcConfig_t(self.__dditable.SysmanFrequency.pfnSetOcConfig)
-        self.zetSysmanFrequencyGetOcIccMax = _zetSysmanFrequencyGetOcIccMax_t(self.__dditable.SysmanFrequency.pfnGetOcIccMax)
-        self.zetSysmanFrequencySetOcIccMax = _zetSysmanFrequencySetOcIccMax_t(self.__dditable.SysmanFrequency.pfnSetOcIccMax)
-        self.zetSysmanFrequencyGetOcTjMax = _zetSysmanFrequencyGetOcTjMax_t(self.__dditable.SysmanFrequency.pfnGetOcTjMax)
-        self.zetSysmanFrequencySetOcTjMax = _zetSysmanFrequencySetOcTjMax_t(self.__dditable.SysmanFrequency.pfnSetOcTjMax)
+        self.zetSysmanFrequencyOcGetCapabilities = _zetSysmanFrequencyOcGetCapabilities_t(self.__dditable.SysmanFrequency.pfnOcGetCapabilities)
+        self.zetSysmanFrequencyOcGetConfig = _zetSysmanFrequencyOcGetConfig_t(self.__dditable.SysmanFrequency.pfnOcGetConfig)
+        self.zetSysmanFrequencyOcSetConfig = _zetSysmanFrequencyOcSetConfig_t(self.__dditable.SysmanFrequency.pfnOcSetConfig)
+        self.zetSysmanFrequencyOcGetIccMax = _zetSysmanFrequencyOcGetIccMax_t(self.__dditable.SysmanFrequency.pfnOcGetIccMax)
+        self.zetSysmanFrequencyOcSetIccMax = _zetSysmanFrequencyOcSetIccMax_t(self.__dditable.SysmanFrequency.pfnOcSetIccMax)
+        self.zetSysmanFrequencyOcGetTjMax = _zetSysmanFrequencyOcGetTjMax_t(self.__dditable.SysmanFrequency.pfnOcGetTjMax)
+        self.zetSysmanFrequencyOcSetTjMax = _zetSysmanFrequencyOcSetTjMax_t(self.__dditable.SysmanFrequency.pfnOcSetTjMax)
 
         # call driver to get function pointers
         _SysmanEngine = _zet_sysman_engine_dditable_t()
@@ -3055,6 +3065,7 @@ class ZET_DDI:
 
         # attach function interface to function address
         self.zetSysmanDiagnosticsGetProperties = _zetSysmanDiagnosticsGetProperties_t(self.__dditable.SysmanDiagnostics.pfnGetProperties)
+        self.zetSysmanDiagnosticsGetTests = _zetSysmanDiagnosticsGetTests_t(self.__dditable.SysmanDiagnostics.pfnGetTests)
         self.zetSysmanDiagnosticsRunTests = _zetSysmanDiagnosticsRunTests_t(self.__dditable.SysmanDiagnostics.pfnRunTests)
 
         # call driver to get function pointers

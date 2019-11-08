@@ -1492,16 +1492,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcCapabilities
+    /// @brief Intercept function for zetSysmanFrequencyOcGetCapabilities
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcCapabilities(
+    zetSysmanFrequencyOcGetCapabilities(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
         )
     {
-        auto pfnGetOcCapabilities = context.zetDdiTable.SysmanFrequency.pfnGetOcCapabilities;
+        auto pfnOcGetCapabilities = context.zetDdiTable.SysmanFrequency.pfnOcGetCapabilities;
 
-        if( nullptr == pfnGetOcCapabilities )
+        if( nullptr == pfnOcGetCapabilities )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1514,20 +1514,20 @@ namespace layer
 
         }
 
-        return pfnGetOcCapabilities( hFrequency, pOcCapabilities );
+        return pfnOcGetCapabilities( hFrequency, pOcCapabilities );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcConfig
+    /// @brief Intercept function for zetSysmanFrequencyOcGetConfig
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcConfig(
+    zetSysmanFrequencyOcGetConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
-        auto pfnGetOcConfig = context.zetDdiTable.SysmanFrequency.pfnGetOcConfig;
+        auto pfnOcGetConfig = context.zetDdiTable.SysmanFrequency.pfnOcGetConfig;
 
-        if( nullptr == pfnGetOcConfig )
+        if( nullptr == pfnOcGetConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1540,20 +1540,20 @@ namespace layer
 
         }
 
-        return pfnGetOcConfig( hFrequency, pOcConfiguration );
+        return pfnOcGetConfig( hFrequency, pOcConfiguration );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcConfig
+    /// @brief Intercept function for zetSysmanFrequencyOcSetConfig
     ze_result_t __zecall
-    zetSysmanFrequencySetOcConfig(
+    zetSysmanFrequencyOcSetConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
-        auto pfnSetOcConfig = context.zetDdiTable.SysmanFrequency.pfnSetOcConfig;
+        auto pfnOcSetConfig = context.zetDdiTable.SysmanFrequency.pfnOcSetConfig;
 
-        if( nullptr == pfnSetOcConfig )
+        if( nullptr == pfnOcSetConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1566,21 +1566,21 @@ namespace layer
 
         }
 
-        return pfnSetOcConfig( hFrequency, pOcConfiguration );
+        return pfnOcSetConfig( hFrequency, pOcConfiguration );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcIccMax
+    /// @brief Intercept function for zetSysmanFrequencyOcGetIccMax
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcIccMax(
+    zetSysmanFrequencyOcGetIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
                                                         ///< return.
         )
     {
-        auto pfnGetOcIccMax = context.zetDdiTable.SysmanFrequency.pfnGetOcIccMax;
+        auto pfnOcGetIccMax = context.zetDdiTable.SysmanFrequency.pfnOcGetIccMax;
 
-        if( nullptr == pfnGetOcIccMax )
+        if( nullptr == pfnOcGetIccMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1593,20 +1593,20 @@ namespace layer
 
         }
 
-        return pfnGetOcIccMax( hFrequency, pOcIccMax );
+        return pfnOcGetIccMax( hFrequency, pOcIccMax );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcIccMax
+    /// @brief Intercept function for zetSysmanFrequencyOcSetIccMax
     ze_result_t __zecall
-    zetSysmanFrequencySetOcIccMax(
+    zetSysmanFrequencyOcSetIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
         )
     {
-        auto pfnSetOcIccMax = context.zetDdiTable.SysmanFrequency.pfnSetOcIccMax;
+        auto pfnOcSetIccMax = context.zetDdiTable.SysmanFrequency.pfnOcSetIccMax;
 
-        if( nullptr == pfnSetOcIccMax )
+        if( nullptr == pfnOcSetIccMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1616,21 +1616,21 @@ namespace layer
 
         }
 
-        return pfnSetOcIccMax( hFrequency, ocIccMax );
+        return pfnOcSetIccMax( hFrequency, ocIccMax );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcTjMax
+    /// @brief Intercept function for zetSysmanFrequencyOcGetTjMax
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcTjMax(
+    zetSysmanFrequencyOcGetTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
                                                         ///< successful return.
         )
     {
-        auto pfnGetOcTjMax = context.zetDdiTable.SysmanFrequency.pfnGetOcTjMax;
+        auto pfnOcGetTjMax = context.zetDdiTable.SysmanFrequency.pfnOcGetTjMax;
 
-        if( nullptr == pfnGetOcTjMax )
+        if( nullptr == pfnOcGetTjMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1643,20 +1643,20 @@ namespace layer
 
         }
 
-        return pfnGetOcTjMax( hFrequency, pOcTjMax );
+        return pfnOcGetTjMax( hFrequency, pOcTjMax );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcTjMax
+    /// @brief Intercept function for zetSysmanFrequencyOcSetTjMax
     ze_result_t __zecall
-    zetSysmanFrequencySetOcTjMax(
+    zetSysmanFrequencyOcSetTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
         )
     {
-        auto pfnSetOcTjMax = context.zetDdiTable.SysmanFrequency.pfnSetOcTjMax;
+        auto pfnOcSetTjMax = context.zetDdiTable.SysmanFrequency.pfnOcSetTjMax;
 
-        if( nullptr == pfnSetOcTjMax )
+        if( nullptr == pfnOcSetTjMax )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1666,7 +1666,7 @@ namespace layer
 
         }
 
-        return pfnSetOcTjMax( hFrequency, ocTjMax );
+        return pfnOcSetTjMax( hFrequency, ocTjMax );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3103,6 +3103,39 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanDiagnosticsGetTests
+    ze_result_t __zecall
+    zetSysmanDiagnosticsGetTests(
+        zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of tests available.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of tests.
+                                                        ///< If count is larger than the number of tests available, then the driver
+                                                        ///< will update the value with the correct number of tests available.
+        zet_diag_test_t* pTests                         ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
+                                                        ///< increasing value of ::zet_diag_test_t.index
+        )
+    {
+        auto pfnGetTests = context.zetDdiTable.SysmanDiagnostics.pfnGetTests;
+
+        if( nullptr == pfnGetTests )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDiagnostics )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetTests( hDiagnostics, pCount, pTests );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDiagnosticsRunTests
     ze_result_t __zecall
     zetSysmanDiagnosticsRunTests(
@@ -3899,26 +3932,26 @@ zetGetSysmanFrequencyProcAddrTable(
     dditable.pfnGetThrottleTime                          = pDdiTable->pfnGetThrottleTime;
     pDdiTable->pfnGetThrottleTime                        = layer::zetSysmanFrequencyGetThrottleTime;
 
-    dditable.pfnGetOcCapabilities                        = pDdiTable->pfnGetOcCapabilities;
-    pDdiTable->pfnGetOcCapabilities                      = layer::zetSysmanFrequencyGetOcCapabilities;
+    dditable.pfnOcGetCapabilities                        = pDdiTable->pfnOcGetCapabilities;
+    pDdiTable->pfnOcGetCapabilities                      = layer::zetSysmanFrequencyOcGetCapabilities;
 
-    dditable.pfnGetOcConfig                              = pDdiTable->pfnGetOcConfig;
-    pDdiTable->pfnGetOcConfig                            = layer::zetSysmanFrequencyGetOcConfig;
+    dditable.pfnOcGetConfig                              = pDdiTable->pfnOcGetConfig;
+    pDdiTable->pfnOcGetConfig                            = layer::zetSysmanFrequencyOcGetConfig;
 
-    dditable.pfnSetOcConfig                              = pDdiTable->pfnSetOcConfig;
-    pDdiTable->pfnSetOcConfig                            = layer::zetSysmanFrequencySetOcConfig;
+    dditable.pfnOcSetConfig                              = pDdiTable->pfnOcSetConfig;
+    pDdiTable->pfnOcSetConfig                            = layer::zetSysmanFrequencyOcSetConfig;
 
-    dditable.pfnGetOcIccMax                              = pDdiTable->pfnGetOcIccMax;
-    pDdiTable->pfnGetOcIccMax                            = layer::zetSysmanFrequencyGetOcIccMax;
+    dditable.pfnOcGetIccMax                              = pDdiTable->pfnOcGetIccMax;
+    pDdiTable->pfnOcGetIccMax                            = layer::zetSysmanFrequencyOcGetIccMax;
 
-    dditable.pfnSetOcIccMax                              = pDdiTable->pfnSetOcIccMax;
-    pDdiTable->pfnSetOcIccMax                            = layer::zetSysmanFrequencySetOcIccMax;
+    dditable.pfnOcSetIccMax                              = pDdiTable->pfnOcSetIccMax;
+    pDdiTable->pfnOcSetIccMax                            = layer::zetSysmanFrequencyOcSetIccMax;
 
-    dditable.pfnGetOcTjMax                               = pDdiTable->pfnGetOcTjMax;
-    pDdiTable->pfnGetOcTjMax                             = layer::zetSysmanFrequencyGetOcTjMax;
+    dditable.pfnOcGetTjMax                               = pDdiTable->pfnOcGetTjMax;
+    pDdiTable->pfnOcGetTjMax                             = layer::zetSysmanFrequencyOcGetTjMax;
 
-    dditable.pfnSetOcTjMax                               = pDdiTable->pfnSetOcTjMax;
-    pDdiTable->pfnSetOcTjMax                             = layer::zetSysmanFrequencySetOcTjMax;
+    dditable.pfnOcSetTjMax                               = pDdiTable->pfnOcSetTjMax;
+    pDdiTable->pfnOcSetTjMax                             = layer::zetSysmanFrequencyOcSetTjMax;
 
     return result;
 }
@@ -4354,6 +4387,9 @@ zetGetSysmanDiagnosticsProcAddrTable(
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = layer::zetSysmanDiagnosticsGetProperties;
+
+    dditable.pfnGetTests                                 = pDdiTable->pfnGetTests;
+    pDdiTable->pfnGetTests                               = layer::zetSysmanDiagnosticsGetTests;
 
     dditable.pfnRunTests                                 = pDdiTable->pfnRunTests;
     pDdiTable->pfnRunTests                               = layer::zetSysmanDiagnosticsRunTests;

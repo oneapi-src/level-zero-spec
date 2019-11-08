@@ -1418,9 +1418,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcCapabilities
+    /// @brief Intercept function for zetSysmanFrequencyOcGetCapabilities
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcCapabilities(
+    zetSysmanFrequencyOcGetCapabilities(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
         )
@@ -1428,10 +1428,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetOcCapabilities = context.zetDdiTable.SysmanFrequency.pfnGetOcCapabilities;
-        if( nullptr != pfnGetOcCapabilities )
+        auto pfnOcGetCapabilities = context.zetDdiTable.SysmanFrequency.pfnOcGetCapabilities;
+        if( nullptr != pfnOcGetCapabilities )
         {
-            result = pfnGetOcCapabilities( hFrequency, pOcCapabilities );
+            result = pfnOcGetCapabilities( hFrequency, pOcCapabilities );
         }
         else
         {
@@ -1442,9 +1442,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcConfig
+    /// @brief Intercept function for zetSysmanFrequencyOcGetConfig
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcConfig(
+    zetSysmanFrequencyOcGetConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
@@ -1452,10 +1452,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetOcConfig = context.zetDdiTable.SysmanFrequency.pfnGetOcConfig;
-        if( nullptr != pfnGetOcConfig )
+        auto pfnOcGetConfig = context.zetDdiTable.SysmanFrequency.pfnOcGetConfig;
+        if( nullptr != pfnOcGetConfig )
         {
-            result = pfnGetOcConfig( hFrequency, pOcConfiguration );
+            result = pfnOcGetConfig( hFrequency, pOcConfiguration );
         }
         else
         {
@@ -1466,9 +1466,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcConfig
+    /// @brief Intercept function for zetSysmanFrequencyOcSetConfig
     ze_result_t __zecall
-    zetSysmanFrequencySetOcConfig(
+    zetSysmanFrequencyOcSetConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
@@ -1476,10 +1476,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetOcConfig = context.zetDdiTable.SysmanFrequency.pfnSetOcConfig;
-        if( nullptr != pfnSetOcConfig )
+        auto pfnOcSetConfig = context.zetDdiTable.SysmanFrequency.pfnOcSetConfig;
+        if( nullptr != pfnOcSetConfig )
         {
-            result = pfnSetOcConfig( hFrequency, pOcConfiguration );
+            result = pfnOcSetConfig( hFrequency, pOcConfiguration );
         }
         else
         {
@@ -1490,9 +1490,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcIccMax
+    /// @brief Intercept function for zetSysmanFrequencyOcGetIccMax
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcIccMax(
+    zetSysmanFrequencyOcGetIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
                                                         ///< return.
@@ -1501,10 +1501,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetOcIccMax = context.zetDdiTable.SysmanFrequency.pfnGetOcIccMax;
-        if( nullptr != pfnGetOcIccMax )
+        auto pfnOcGetIccMax = context.zetDdiTable.SysmanFrequency.pfnOcGetIccMax;
+        if( nullptr != pfnOcGetIccMax )
         {
-            result = pfnGetOcIccMax( hFrequency, pOcIccMax );
+            result = pfnOcGetIccMax( hFrequency, pOcIccMax );
         }
         else
         {
@@ -1515,9 +1515,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcIccMax
+    /// @brief Intercept function for zetSysmanFrequencyOcSetIccMax
     ze_result_t __zecall
-    zetSysmanFrequencySetOcIccMax(
+    zetSysmanFrequencyOcSetIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
         )
@@ -1525,10 +1525,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetOcIccMax = context.zetDdiTable.SysmanFrequency.pfnSetOcIccMax;
-        if( nullptr != pfnSetOcIccMax )
+        auto pfnOcSetIccMax = context.zetDdiTable.SysmanFrequency.pfnOcSetIccMax;
+        if( nullptr != pfnOcSetIccMax )
         {
-            result = pfnSetOcIccMax( hFrequency, ocIccMax );
+            result = pfnOcSetIccMax( hFrequency, ocIccMax );
         }
         else
         {
@@ -1539,9 +1539,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencyGetOcTjMax
+    /// @brief Intercept function for zetSysmanFrequencyOcGetTjMax
     ze_result_t __zecall
-    zetSysmanFrequencyGetOcTjMax(
+    zetSysmanFrequencyOcGetTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
                                                         ///< successful return.
@@ -1550,10 +1550,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetOcTjMax = context.zetDdiTable.SysmanFrequency.pfnGetOcTjMax;
-        if( nullptr != pfnGetOcTjMax )
+        auto pfnOcGetTjMax = context.zetDdiTable.SysmanFrequency.pfnOcGetTjMax;
+        if( nullptr != pfnOcGetTjMax )
         {
-            result = pfnGetOcTjMax( hFrequency, pOcTjMax );
+            result = pfnOcGetTjMax( hFrequency, pOcTjMax );
         }
         else
         {
@@ -1564,9 +1564,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanFrequencySetOcTjMax
+    /// @brief Intercept function for zetSysmanFrequencyOcSetTjMax
     ze_result_t __zecall
-    zetSysmanFrequencySetOcTjMax(
+    zetSysmanFrequencyOcSetTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
         )
@@ -1574,10 +1574,10 @@ namespace driver
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSetOcTjMax = context.zetDdiTable.SysmanFrequency.pfnSetOcTjMax;
-        if( nullptr != pfnSetOcTjMax )
+        auto pfnOcSetTjMax = context.zetDdiTable.SysmanFrequency.pfnOcSetTjMax;
+        if( nullptr != pfnOcSetTjMax )
         {
-            result = pfnSetOcTjMax( hFrequency, ocTjMax );
+            result = pfnOcSetTjMax( hFrequency, ocTjMax );
         }
         else
         {
@@ -2954,6 +2954,37 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanDiagnosticsGetTests
+    ze_result_t __zecall
+    zetSysmanDiagnosticsGetTests(
+        zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of tests available.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of tests.
+                                                        ///< If count is larger than the number of tests available, then the driver
+                                                        ///< will update the value with the correct number of tests available.
+        zet_diag_test_t* pTests                         ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
+                                                        ///< increasing value of ::zet_diag_test_t.index
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetTests = context.zetDdiTable.SysmanDiagnostics.pfnGetTests;
+        if( nullptr != pfnGetTests )
+        {
+            result = pfnGetTests( hDiagnostics, pCount, pTests );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDiagnosticsRunTests
     ze_result_t __zecall
     zetSysmanDiagnosticsRunTests(
@@ -3643,19 +3674,19 @@ zetGetSysmanFrequencyProcAddrTable(
 
     pDdiTable->pfnGetThrottleTime                        = driver::zetSysmanFrequencyGetThrottleTime;
 
-    pDdiTable->pfnGetOcCapabilities                      = driver::zetSysmanFrequencyGetOcCapabilities;
+    pDdiTable->pfnOcGetCapabilities                      = driver::zetSysmanFrequencyOcGetCapabilities;
 
-    pDdiTable->pfnGetOcConfig                            = driver::zetSysmanFrequencyGetOcConfig;
+    pDdiTable->pfnOcGetConfig                            = driver::zetSysmanFrequencyOcGetConfig;
 
-    pDdiTable->pfnSetOcConfig                            = driver::zetSysmanFrequencySetOcConfig;
+    pDdiTable->pfnOcSetConfig                            = driver::zetSysmanFrequencyOcSetConfig;
 
-    pDdiTable->pfnGetOcIccMax                            = driver::zetSysmanFrequencyGetOcIccMax;
+    pDdiTable->pfnOcGetIccMax                            = driver::zetSysmanFrequencyOcGetIccMax;
 
-    pDdiTable->pfnSetOcIccMax                            = driver::zetSysmanFrequencySetOcIccMax;
+    pDdiTable->pfnOcSetIccMax                            = driver::zetSysmanFrequencyOcSetIccMax;
 
-    pDdiTable->pfnGetOcTjMax                             = driver::zetSysmanFrequencyGetOcTjMax;
+    pDdiTable->pfnOcGetTjMax                             = driver::zetSysmanFrequencyOcGetTjMax;
 
-    pDdiTable->pfnSetOcTjMax                             = driver::zetSysmanFrequencySetOcTjMax;
+    pDdiTable->pfnOcSetTjMax                             = driver::zetSysmanFrequencyOcSetTjMax;
 
     return result;
 }
@@ -4034,6 +4065,8 @@ zetGetSysmanDiagnosticsProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     pDdiTable->pfnGetProperties                          = driver::zetSysmanDiagnosticsGetProperties;
+
+    pDdiTable->pfnGetTests                               = driver::zetSysmanDiagnosticsGetTests;
 
     pDdiTable->pfnRunTests                               = driver::zetSysmanDiagnosticsRunTests;
 

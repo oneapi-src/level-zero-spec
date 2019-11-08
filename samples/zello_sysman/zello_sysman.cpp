@@ -95,23 +95,35 @@ void ListDiagnosticTests(zet_sysman_handle_t hSysmanDevice)
         {
             for (uint32_t suiteIndex = 0; suiteIndex < numTestSuites; suiteIndex++)
             {
+                uint32_t numTests = 0;
+                zet_diag_test_t* pTests;
                 zet_diag_properties_t suiteProps;
-                if (zetSysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) == ZE_RESULT_SUCCESS)
+                if (zetSysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) != ZE_RESULT_SUCCESS)
                 {
-                    fprintf(stdout, "Diagnostic test suite %s:\n", suiteProps.name);
-                    if (suiteProps.numTests)
-                    {
-                        for (uint32_t i = 0; i < suiteProps.numTests; i++)
-                        {
-                            const zet_diag_test_t* pTest = &suiteProps.pTests[i];
-                            fprintf(stdout, "    Test %u: %s\n", pTest->index, pTest->name);
-                        }
-                    }
-                    else
-                    {
-                        fprintf(stdout, "    Cannot run subset of tests.\n");
-                    }
+                    continue;
                 }
+                fprintf(stdout, "Diagnostic test suite %s:\n", suiteProps.name);
+                if (!suiteProps.haveTests)
+                {
+                    fprintf(stdout, "    There are no individual tests that can be selected.\n");
+                    continue;
+                }
+                if (zetSysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, NULL) != ZE_RESULT_SUCCESS)
+                {
+                    fprintf(stdout, "    Problem getting list of individual tests.\n");
+                    continue;
+                }
+                pTests = (zet_diag_test_t*)malloc(numTests * sizeof(zet_diag_test_t*));
+                if (zetSysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, pTests) != ZE_RESULT_SUCCESS)
+                {
+                    fprintf(stdout, "    Problem getting list of individual tests.\n");
+                    continue;
+                }
+                for (uint32_t i = 0; i < numTests; i++)
+                {
+                    fprintf(stdout, "    Test %u: %s\n", pTests[i].index, pTests[i].name);
+                }
+                free(pTests);
             }
         }
         free(phTestSuites);
@@ -323,7 +335,7 @@ bool SetOverclock(zet_sysman_freq_handle_t hFreqDomain)
 {
     bool ret = false;
     zet_oc_capabilities_t oc_caps;
-    if (zetSysmanFrequencyGetOcCapabilities(hFreqDomain, &oc_caps) == ZE_RESULT_SUCCESS)
+    if (zetSysmanFrequencyOcGetCapabilities(hFreqDomain, &oc_caps) == ZE_RESULT_SUCCESS)
     {
         double CurrentMaxFrequencyMhz = oc_caps.maxFactoryDefaultFrequency;
         CurrentMaxFrequencyMhz *= 1.05;
@@ -335,7 +347,7 @@ bool SetOverclock(zet_sysman_freq_handle_t hFreqDomain)
             config.frequency = CurrentMaxFrequencyMhz;
             config.voltage = oc_caps.maxFactoryDefaultVoltage * 1.1;
 
-            status = zetSysmanFrequencySetOcConfig(hFreqDomain, &config);
+            status = zetSysmanFrequencyOcSetConfig(hFreqDomain, &config);
             if (status == ZE_RESULT_SUCCESS)
             {
                 fprintf(stdout, "Successfully overclocked to %.3f Mhz\n", CurrentMaxFrequencyMhz);
@@ -398,7 +410,7 @@ void ShowOcCapabilities(zet_sysman_handle_t hSysmanDevice)
                 {
                     continue;
                 }
-                if (zetSysmanFrequencyGetOcCapabilities(pFreqHandles[index], &oc_caps) != ZE_RESULT_SUCCESS)
+                if (zetSysmanFrequencyOcGetCapabilities(pFreqHandles[index], &oc_caps) != ZE_RESULT_SUCCESS)
                 {
                     continue;
                 }
@@ -419,7 +431,7 @@ void ShowOcCapabilities(zet_sysman_handle_t hSysmanDevice)
                     if (oc_caps.isIccMaxSupported)
                     {
                         double iccmax;
-                        if (zetSysmanFrequencyGetOcIccMax(pFreqHandles[index], &iccmax) == ZE_RESULT_SUCCESS) 
+                        if (zetSysmanFrequencyOcGetIccMax(pFreqHandles[index], &iccmax) == ZE_RESULT_SUCCESS) 
                         {
                             fprintf(stdout, "    Icc Max: %.3f A\n", iccmax);
                         }
@@ -428,7 +440,7 @@ void ShowOcCapabilities(zet_sysman_handle_t hSysmanDevice)
                     if (oc_caps.isTjMaxSupported)
                     {
                         double tjmax;
-                        if (zetSysmanFrequencyGetOcTjMax(pFreqHandles[index], &tjmax) == ZE_RESULT_SUCCESS)
+                        if (zetSysmanFrequencyOcGetTjMax(pFreqHandles[index], &tjmax) == ZE_RESULT_SUCCESS)
                         {
                             fprintf(stdout, "    TjMax: %.3f\n", tjmax);
                         }

@@ -24,7 +24,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_STRING_PROPERTY_SIZE
 /// @brief Maximum number of characters in string properties.
-#define ZET_STRING_PROPERTY_SIZE  32
+#define ZET_STRING_PROPERTY_SIZE  64
 #endif // ZET_STRING_PROPERTY_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1115,10 +1115,10 @@ namespace zet
         /// 
         /// @details
         ///     - Indicates if this frequency domain can be overclocked (if true,
-        ///       functions such as ::zetSysmanFrequencySetOcConfig() are supported).
+        ///       functions such as ::zetSysmanFrequencyOcSetConfig() are supported).
         ///     - The min/max hardware frequencies are specified for non-overclock
         ///       configurations. For overclock configurations, use
-        ///       ::zetSysmanFrequencyGetOcConfig() to determine the maximum frequency
+        ///       ::zetSysmanFrequencyOcGetConfig() to determine the maximum frequency
         ///       that can be requested.
         ///     - If step is non-zero, the available frequencies are (min, min + step,
         ///       min + 2xstep, ..., max). Otherwise, call
@@ -1352,7 +1352,7 @@ namespace zet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetOcCapabilities(
+        OcGetCapabilities(
             oc_capabilities_t* pOcCapabilities              ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
             );
 
@@ -1364,7 +1364,7 @@ namespace zet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetOcConfig(
+        OcGetConfig(
             oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
             );
 
@@ -1374,14 +1374,14 @@ namespace zet
         /// @details
         ///     - If ::zet_oc_config_t.mode is set to ::ZET_OC_MODE_OFF, overclocking
         ///       will be turned off and the hardware returned to run with factory
-        ///       voltages/frequencies. Call ::zetSysmanFrequencySetOcIccMax() and
-        ///       ::zetSysmanFrequencySetOcTjMax() separately with 0.0 to return those
+        ///       voltages/frequencies. Call ::zetSysmanFrequencyOcSetIccMax() and
+        ///       ::zetSysmanFrequencyOcSetTjMax() separately with 0.0 to return those
         ///       settings to factory defaults.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetOcConfig(
+        OcSetConfig(
             oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
             );
 
@@ -1393,7 +1393,7 @@ namespace zet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetOcIccMax(
+        OcGetIccMax(
             double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
                                                             ///< return.
             );
@@ -1407,7 +1407,7 @@ namespace zet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetOcIccMax(
+        OcSetIccMax(
             double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
             );
 
@@ -1419,7 +1419,7 @@ namespace zet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetOcTjMax(
+        OcGetTjMax(
             double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
                                                             ///< successful return.
             );
@@ -1433,7 +1433,7 @@ namespace zet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetOcTjMax(
+        OcSetTjMax(
             double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
             );
 
@@ -2133,6 +2133,8 @@ namespace zet
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling SMI handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            ze::bool_t isCriticalTempSupported;             ///< [out] Indicates if the critical temperature event
+                                                            ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
             ze::bool_t isThreshold1Supported;               ///< [out] Indicates if the temperature threshold 1 event
                                                             ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported
             ze::bool_t isThreshold2Supported;               ///< [out] Indicates if the temperature threshold 2 event
@@ -2785,7 +2787,7 @@ namespace zet
         struct diag_test_t
         {
             uint32_t index;                                 ///< [out] Index of the test
-            const char* name;                               ///< [out] Name of the test
+            char name[ZET_STRING_PROPERTY_SIZE];            ///< [out] Name of the test
 
         };
 
@@ -2797,10 +2799,10 @@ namespace zet
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling SMI handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            const char* name;                               ///< [out] Name of the diagnostics test suite
-            uint32_t numTests;                              ///< [out] The number of tests in the test suite
-            const diag_test_t* pTests;                      ///< [out] Array of tests (size ::zet_diag_properties_t.numTests), sorted
-                                                            ///< by increasing value of ::zet_diag_test_t.index
+            char name[ZET_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
+            ze::bool_t haveTests;                           ///< [out] Indicates if this test suite has individual tests which can be
+                                                            ///< run separately (use the function $SysmanDiagnosticsGetTests() to get
+                                                            ///< the list of these tests)
 
         };
 
@@ -2843,9 +2845,39 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get individual tests that can be run separately. Not all test suites
+        ///        permit running individual tests - check
+        ///        ::zet_diag_properties_t.haveTests
+        /// 
+        /// @details
+        ///     - The list of available tests is returned in order of increasing test
+        ///       index ::zet_diag_test_t.index.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetTests(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
+                                                            ///< If count is zero, then the driver will update the value with the total
+                                                            ///< number of tests available.
+                                                            ///< If count is non-zero, then driver will only retrieve that number of tests.
+                                                            ///< If count is larger than the number of tests available, then the driver
+                                                            ///< will update the value with the correct number of tests available.
+            diag_test_t* pTests = nullptr                   ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
+                                                            ///< increasing value of ::zet_diag_test_t.index
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Run a diagnostics test suite, either all tests or a subset of tests.
         /// 
         /// @details
+        ///     - To run all tests in a test suite, set start =
+        ///       ::ZET_DIAG_FIRST_TEST_INDEX and end = ::ZET_DIAG_LAST_TEST_INDEX.
+        ///     - If the test suite permits running individual tests,
+        ///       ::zet_diag_properties_t.haveTests will be true. In this case, the
+        ///       function ::zetSysmanDiagnosticsGetTests() can be called to get the
+        ///       list of tests and corresponding indices that can be supplied to the
+        ///       arguments start and end in this function.
         ///     - This function will block until the diagnostics have completed.
         /// @throws result_t
         void __zecall

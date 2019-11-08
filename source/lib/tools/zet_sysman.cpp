@@ -989,16 +989,16 @@ zetSysmanFrequencyGetThrottleTime(
 ///         + nullptr == pOcCapabilities
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanFrequencyGetOcCapabilities(
+zetSysmanFrequencyOcGetCapabilities(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
     )
 {
-    auto pfnGetOcCapabilities = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcCapabilities;
-    if( nullptr == pfnGetOcCapabilities )
+    auto pfnOcGetCapabilities = zet_lib::context.ddiTable.SysmanFrequency.pfnOcGetCapabilities;
+    if( nullptr == pfnOcGetCapabilities )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetOcCapabilities( hFrequency, pOcCapabilities );
+    return pfnOcGetCapabilities( hFrequency, pOcCapabilities );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1018,16 +1018,16 @@ zetSysmanFrequencyGetOcCapabilities(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ze_result_t __zecall
-zetSysmanFrequencyGetOcConfig(
+zetSysmanFrequencyOcGetConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
     )
 {
-    auto pfnGetOcConfig = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcConfig;
-    if( nullptr == pfnGetOcConfig )
+    auto pfnOcGetConfig = zet_lib::context.ddiTable.SysmanFrequency.pfnOcGetConfig;
+    if( nullptr == pfnOcGetConfig )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetOcConfig( hFrequency, pOcConfiguration );
+    return pfnOcGetConfig( hFrequency, pOcConfiguration );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1036,8 +1036,8 @@ zetSysmanFrequencyGetOcConfig(
 /// @details
 ///     - If ::zet_oc_config_t.mode is set to ::ZET_OC_MODE_OFF, overclocking
 ///       will be turned off and the hardware returned to run with factory
-///       voltages/frequencies. Call ::zetSysmanFrequencySetOcIccMax() and
-///       ::zetSysmanFrequencySetOcTjMax() separately with 0.0 to return those
+///       voltages/frequencies. Call ::zetSysmanFrequencyOcSetIccMax() and
+///       ::zetSysmanFrequencyOcSetTjMax() separately with 0.0 to return those
 ///       settings to factory defaults.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -1059,16 +1059,16 @@ zetSysmanFrequencyGetOcConfig(
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
-zetSysmanFrequencySetOcConfig(
+zetSysmanFrequencyOcSetConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
     )
 {
-    auto pfnSetOcConfig = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcConfig;
-    if( nullptr == pfnSetOcConfig )
+    auto pfnOcSetConfig = zet_lib::context.ddiTable.SysmanFrequency.pfnOcSetConfig;
+    if( nullptr == pfnOcSetConfig )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetOcConfig( hFrequency, pOcConfiguration );
+    return pfnOcSetConfig( hFrequency, pOcConfiguration );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1089,17 +1089,17 @@ zetSysmanFrequencySetOcConfig(
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + Capability ::zet_oc_capabilities_t.isIccMaxSupported is false for this frequency domain
 ze_result_t __zecall
-zetSysmanFrequencyGetOcIccMax(
+zetSysmanFrequencyOcGetIccMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
                                                     ///< return.
     )
 {
-    auto pfnGetOcIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcIccMax;
-    if( nullptr == pfnGetOcIccMax )
+    auto pfnOcGetIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnOcGetIccMax;
+    if( nullptr == pfnOcGetIccMax )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetOcIccMax( hFrequency, pOcIccMax );
+    return pfnOcGetIccMax( hFrequency, pOcIccMax );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1125,16 +1125,16 @@ zetSysmanFrequencyGetOcIccMax(
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
-zetSysmanFrequencySetOcIccMax(
+zetSysmanFrequencyOcSetIccMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
     )
 {
-    auto pfnSetOcIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcIccMax;
-    if( nullptr == pfnSetOcIccMax )
+    auto pfnOcSetIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnOcSetIccMax;
+    if( nullptr == pfnOcSetIccMax )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetOcIccMax( hFrequency, ocIccMax );
+    return pfnOcSetIccMax( hFrequency, ocIccMax );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1154,17 +1154,17 @@ zetSysmanFrequencySetOcIccMax(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ze_result_t __zecall
-zetSysmanFrequencyGetOcTjMax(
+zetSysmanFrequencyOcGetTjMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
                                                     ///< successful return.
     )
 {
-    auto pfnGetOcTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnGetOcTjMax;
-    if( nullptr == pfnGetOcTjMax )
+    auto pfnOcGetTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnOcGetTjMax;
+    if( nullptr == pfnOcGetTjMax )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetOcTjMax( hFrequency, pOcTjMax );
+    return pfnOcGetTjMax( hFrequency, pOcTjMax );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1190,16 +1190,16 @@ zetSysmanFrequencyGetOcTjMax(
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
-zetSysmanFrequencySetOcTjMax(
+zetSysmanFrequencyOcSetTjMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
     )
 {
-    auto pfnSetOcTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnSetOcTjMax;
-    if( nullptr == pfnSetOcTjMax )
+    auto pfnOcSetTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnOcSetTjMax;
+    if( nullptr == pfnOcSetTjMax )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetOcTjMax( hFrequency, ocTjMax );
+    return pfnOcSetTjMax( hFrequency, ocTjMax );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1997,9 +1997,10 @@ zetSysmanTemperatureGetConfig(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hTemperature
 ///         + nullptr == pConfig
-///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyGetOcTjMax()). Temperature thresholds must be below this value.
+///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value.
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
+///         + Enabling the critical temperature event is not supported - check ::zet_temp_properties_t.isCriticalTempSupported
 ///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
@@ -2817,9 +2818,55 @@ zetSysmanDiagnosticsGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get individual tests that can be run separately. Not all test suites
+///        permit running individual tests - check
+///        ::zet_diag_properties_t.haveTests
+/// 
+/// @details
+///     - The list of available tests is returned in order of increasing test
+///       index ::zet_diag_test_t.index.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDiagnostics
+///         + nullptr == pCount
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanDiagnosticsGetTests(
+    zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
+                                                    ///< If count is zero, then the driver will update the value with the total
+                                                    ///< number of tests available.
+                                                    ///< If count is non-zero, then driver will only retrieve that number of tests.
+                                                    ///< If count is larger than the number of tests available, then the driver
+                                                    ///< will update the value with the correct number of tests available.
+    zet_diag_test_t* pTests                         ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
+                                                    ///< increasing value of ::zet_diag_test_t.index
+    )
+{
+    auto pfnGetTests = zet_lib::context.ddiTable.SysmanDiagnostics.pfnGetTests;
+    if( nullptr == pfnGetTests )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetTests( hDiagnostics, pCount, pTests );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Run a diagnostics test suite, either all tests or a subset of tests.
 /// 
 /// @details
+///     - To run all tests in a test suite, set start =
+///       ::ZET_DIAG_FIRST_TEST_INDEX and end = ::ZET_DIAG_LAST_TEST_INDEX.
+///     - If the test suite permits running individual tests,
+///       ::zet_diag_properties_t.haveTests will be true. In this case, the
+///       function ::zetSysmanDiagnosticsGetTests() can be called to get the
+///       list of tests and corresponding indices that can be supplied to the
+///       arguments start and end in this function.
 ///     - This function will block until the diagnostics have completed.
 /// 
 /// @returns
@@ -3802,16 +3849,16 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::GetOcCapabilities(
+    SysmanFrequency::OcGetCapabilities(
         oc_capabilities_t* pOcCapabilities              ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcCapabilities(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyOcGetCapabilities(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             reinterpret_cast<zet_oc_capabilities_t*>( pOcCapabilities ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcCapabilities" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::OcGetCapabilities" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3823,16 +3870,16 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::GetOcConfig(
+    SysmanFrequency::OcGetConfig(
         oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcConfig(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyOcGetConfig(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             reinterpret_cast<zet_oc_config_t*>( pOcConfiguration ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcConfig" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::OcGetConfig" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3841,24 +3888,24 @@ namespace zet
     /// @details
     ///     - If ::zet_oc_config_t.mode is set to ::ZET_OC_MODE_OFF, overclocking
     ///       will be turned off and the hardware returned to run with factory
-    ///       voltages/frequencies. Call ::zetSysmanFrequencySetOcIccMax() and
-    ///       ::zetSysmanFrequencySetOcTjMax() separately with 0.0 to return those
+    ///       voltages/frequencies. Call ::zetSysmanFrequencyOcSetIccMax() and
+    ///       ::zetSysmanFrequencyOcSetTjMax() separately with 0.0 to return those
     ///       settings to factory defaults.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::SetOcConfig(
+    SysmanFrequency::OcSetConfig(
         oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcConfig(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyOcSetConfig(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             reinterpret_cast<zet_oc_config_t*>( pOcConfiguration ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcConfig" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::OcSetConfig" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3870,17 +3917,17 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::GetOcIccMax(
+    SysmanFrequency::OcGetIccMax(
         double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
                                                         ///< return.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcIccMax(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyOcGetIccMax(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             pOcIccMax ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcIccMax" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::OcGetIccMax" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3893,16 +3940,16 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::SetOcIccMax(
+    SysmanFrequency::OcSetIccMax(
         double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcIccMax(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyOcSetIccMax(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             ocIccMax ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcIccMax" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::OcSetIccMax" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3914,17 +3961,17 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::GetOcTjMax(
+    SysmanFrequency::OcGetTjMax(
         double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
                                                         ///< successful return.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencyGetOcTjMax(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyOcGetTjMax(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             pOcTjMax ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::GetOcTjMax" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::OcGetTjMax" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3937,16 +3984,16 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    SysmanFrequency::SetOcTjMax(
+    SysmanFrequency::OcSetTjMax(
         double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanFrequencySetOcTjMax(
+        auto result = static_cast<result_t>( ::zetSysmanFrequencyOcSetTjMax(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
             ocTjMax ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::SetOcTjMax" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::OcSetTjMax" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -5458,9 +5505,49 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get individual tests that can be run separately. Not all test suites
+    ///        permit running individual tests - check
+    ///        ::zet_diag_properties_t.haveTests
+    /// 
+    /// @details
+    ///     - The list of available tests is returned in order of increasing test
+    ///       index ::zet_diag_test_t.index.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanDiagnostics::GetTests(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of tests available.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of tests.
+                                                        ///< If count is larger than the number of tests available, then the driver
+                                                        ///< will update the value with the correct number of tests available.
+        diag_test_t* pTests                             ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
+                                                        ///< increasing value of ::zet_diag_test_t.index
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanDiagnosticsGetTests(
+            reinterpret_cast<zet_sysman_diag_handle_t>( getHandle() ),
+            pCount,
+            reinterpret_cast<zet_diag_test_t*>( pTests ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanDiagnostics::GetTests" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Run a diagnostics test suite, either all tests or a subset of tests.
     /// 
     /// @details
+    ///     - To run all tests in a test suite, set start =
+    ///       ::ZET_DIAG_FIRST_TEST_INDEX and end = ::ZET_DIAG_LAST_TEST_INDEX.
+    ///     - If the test suite permits running individual tests,
+    ///       ::zet_diag_properties_t.haveTests will be true. In this case, the
+    ///       function ::zetSysmanDiagnosticsGetTests() can be called to get the
+    ///       list of tests and corresponding indices that can be supplied to the
+    ///       arguments start and end in this function.
     ///     - This function will block until the diagnostics have completed.
     /// 
     /// @throws result_t
@@ -6970,6 +7057,10 @@ namespace zet
         str += std::to_string(val.subdeviceId);
         str += "\n";
         
+        str += "SysmanTemperature::temp_properties_t::isCriticalTempSupported : ";
+        str += std::to_string(val.isCriticalTempSupported);
+        str += "\n";
+        
         str += "SysmanTemperature::temp_properties_t::isThreshold1Supported : ";
         str += std::to_string(val.isThreshold1Supported);
         str += "\n";
@@ -7537,16 +7628,8 @@ namespace zet
         str += val.name;
         str += "\n";
         
-        str += "SysmanDiagnostics::diag_properties_t::numTests : ";
-        str += std::to_string(val.numTests);
-        str += "\n";
-        
-        str += "SysmanDiagnostics::diag_properties_t::pTests : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pTests);
-            str += ss.str();
-        }
+        str += "SysmanDiagnostics::diag_properties_t::haveTests : ";
+        str += std::to_string(val.haveTests);
         str += "\n";
 
         return str;
