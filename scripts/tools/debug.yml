@@ -286,6 +286,17 @@ returns:
         - "an invalid debug handle or thread identifier has been supplied"
         - "the thread is already running or unavailable"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory spaces for Intel Graphics devices."
+class: $tDebug
+name: $t_debug_memory_space_intel_graphics_t
+etors:
+    - name: $T_DEBUG_MEMORY_SPACE_GEN_DEFAULT
+      desc: "default memory space (attribute may be omitted)"
+      value: "0"
+    - name: $T_DEBUG_MEMORY_SPACE_GEN_SLM
+      desc: "shared local memory space"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Read memory."
 class: $tDebug
@@ -297,6 +308,9 @@ params:
     - type: "uint64_t"
       name: threadid
       desc: "[in] the thread context or $T_DEBUG_THREAD_NONE"
+    - type: "int"
+      name: memSpace
+      desc: "[in] the (device-specific) memory space"
     - type: "uint64_t"
       name: address
       desc: "[in] the virtual address of the memory to read from"
@@ -325,6 +339,9 @@ params:
     - type: "uint64_t"
       name: threadid
       desc: "[in] the thread context or $T_DEBUG_THREAD_NONE"
+    - type: "int"
+      name: memSpace
+      desc: "[in] the (device-specific) memory space"
     - type: "uint64_t"
       name: address
       desc: "[in] the virtual address of the memory to write to"

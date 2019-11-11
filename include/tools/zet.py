@@ -1693,6 +1693,17 @@ class zet_debug_event_t(Structure):
     ]
 
 ###############################################################################
+## @brief Memory spaces for Intel Graphics devices.
+class zet_debug_memory_space_intel_graphics_v(IntEnum):
+    DEBUG_MEMORY_SPACE_GEN_DEFAULT = 0              ## default memory space (attribute may be omitted)
+    DEBUG_MEMORY_SPACE_GEN_SLM = auto()             ## shared local memory space
+
+class zet_debug_memory_space_intel_graphics_t(c_int):
+    def __str__(self):
+        return str(zet_debug_memory_space_intel_graphics_v(value))
+
+
+###############################################################################
 ## @brief Register file types for Intel Graphics devices.
 class zet_debug_state_intel_graphics_v(IntEnum):
     DEBUG_STATE_GEN_INVALID = 0                     ## An invalid register file
@@ -2923,16 +2934,16 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetDebugReadMemory
 if __use_win_types:
-    _zetDebugReadMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+    _zetDebugReadMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_int, c_ulonglong, c_size_t, c_void_p )
 else:
-    _zetDebugReadMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+    _zetDebugReadMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_int, c_ulonglong, c_size_t, c_void_p )
 
 ###############################################################################
 ## @brief Function-pointer for zetDebugWriteMemory
 if __use_win_types:
-    _zetDebugWriteMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+    _zetDebugWriteMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_int, c_ulonglong, c_size_t, c_void_p )
 else:
-    _zetDebugWriteMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+    _zetDebugWriteMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_int, c_ulonglong, c_size_t, c_void_p )
 
 ###############################################################################
 ## @brief Function-pointer for zetDebugReadState

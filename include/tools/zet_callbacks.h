@@ -3236,6 +3236,7 @@ typedef struct _zet_debug_read_memory_params_t
 {
     zet_debug_session_handle_t* phDebug;
     uint64_t* pthreadid;
+    int* pmemSpace;
     uint64_t* paddress;
     size_t* psize;
     void** pbuffer;
@@ -3262,6 +3263,7 @@ typedef struct _zet_debug_write_memory_params_t
 {
     zet_debug_session_handle_t* phDebug;
     uint64_t* pthreadid;
+    int* pmemSpace;
     uint64_t* paddress;
     size_t* psize;
     const void** pbuffer;

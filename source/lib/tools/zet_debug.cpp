@@ -198,6 +198,7 @@ ze_result_t __zecall
 zetDebugReadMemory(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+    int memSpace,                                   ///< [in] the (device-specific) memory space
     uint64_t address,                               ///< [in] the virtual address of the memory to read from
     size_t size,                                    ///< [in] the number of bytes to read
     void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
@@ -207,7 +208,7 @@ zetDebugReadMemory(
     if( nullptr == pfnReadMemory )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnReadMemory( hDebug, threadid, address, size, buffer );
+    return pfnReadMemory( hDebug, threadid, memSpace, address, size, buffer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -230,6 +231,7 @@ ze_result_t __zecall
 zetDebugWriteMemory(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+    int memSpace,                                   ///< [in] the (device-specific) memory space
     uint64_t address,                               ///< [in] the virtual address of the memory to write to
     size_t size,                                    ///< [in] the number of bytes to write
     const void* buffer                              ///< [in] a buffer holding the pattern to write
@@ -239,7 +241,7 @@ zetDebugWriteMemory(
     if( nullptr == pfnWriteMemory )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnWriteMemory( hDebug, threadid, address, size, buffer );
+    return pfnWriteMemory( hDebug, threadid, memSpace, address, size, buffer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -444,6 +446,7 @@ namespace zet
     void __zecall
     Debug::ReadMemory(
         uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
         uint64_t address,                               ///< [in] the virtual address of the memory to read from
         size_t size,                                    ///< [in] the number of bytes to read
         void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
@@ -452,6 +455,7 @@ namespace zet
         auto result = static_cast<result_t>( ::zetDebugReadMemory(
             reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
             threadid,
+            memSpace,
             address,
             size,
             buffer ) );
@@ -467,6 +471,7 @@ namespace zet
     void __zecall
     Debug::WriteMemory(
         uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
         uint64_t address,                               ///< [in] the virtual address of the memory to write to
         size_t size,                                    ///< [in] the number of bytes to write
         const void* buffer                              ///< [in] a buffer holding the pattern to write
@@ -475,6 +480,7 @@ namespace zet
         auto result = static_cast<result_t>( ::zetDebugWriteMemory(
             reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
             threadid,
+            memSpace,
             address,
             size,
             buffer ) );
@@ -615,6 +621,30 @@ namespace zet
 
         default:
             str = "Debug::detach_reason_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::memory_space_intel_graphics_t to std::string
+    std::string to_string( const Debug::memory_space_intel_graphics_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Debug::memory_space_intel_graphics_t::DEBUG_MEMORY_SPACE_GEN_DEFAULT:
+            str = "Debug::memory_space_intel_graphics_t::DEBUG_MEMORY_SPACE_GEN_DEFAULT";
+            break;
+
+        case Debug::memory_space_intel_graphics_t::DEBUG_MEMORY_SPACE_GEN_SLM:
+            str = "Debug::memory_space_intel_graphics_t::DEBUG_MEMORY_SPACE_GEN_SLM";
+            break;
+
+        default:
+            str = "Debug::memory_space_intel_graphics_t::?";
             break;
         };
 

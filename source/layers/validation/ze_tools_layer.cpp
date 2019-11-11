@@ -3494,6 +3494,7 @@ namespace layer
     zetDebugReadMemory(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
         uint64_t address,                               ///< [in] the virtual address of the memory to read from
         size_t size,                                    ///< [in] the number of bytes to read
         void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
@@ -3514,7 +3515,7 @@ namespace layer
 
         }
 
-        return pfnReadMemory( hDebug, threadid, address, size, buffer );
+        return pfnReadMemory( hDebug, threadid, memSpace, address, size, buffer );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3523,6 +3524,7 @@ namespace layer
     zetDebugWriteMemory(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
         uint64_t address,                               ///< [in] the virtual address of the memory to write to
         size_t size,                                    ///< [in] the number of bytes to write
         const void* buffer                              ///< [in] a buffer holding the pattern to write
@@ -3543,7 +3545,7 @@ namespace layer
 
         }
 
-        return pfnWriteMemory( hDebug, threadid, address, size, buffer );
+        return pfnWriteMemory( hDebug, threadid, memSpace, address, size, buffer );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

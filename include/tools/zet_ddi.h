@@ -1857,6 +1857,7 @@ typedef ze_result_t (__zecall *zet_pfnDebugResume_t)(
 typedef ze_result_t (__zecall *zet_pfnDebugReadMemory_t)(
     zet_debug_session_handle_t,
     uint64_t,
+    int,
     uint64_t,
     size_t,
     void*
@@ -1867,6 +1868,7 @@ typedef ze_result_t (__zecall *zet_pfnDebugReadMemory_t)(
 typedef ze_result_t (__zecall *zet_pfnDebugWriteMemory_t)(
     zet_debug_session_handle_t,
     uint64_t,
+    int,
     uint64_t,
     size_t,
     const void*

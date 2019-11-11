@@ -860,33 +860,46 @@ other events preceding that event.
 ## Memory Access
 
 A tool may read and write memory in the context of a stopped device thread
-as if that thread had read or written the memory.  Global memory may also
-be accessed in the context of the special ::ZET_DEBUG_THREAD_NONE thread.
+as if that thread had read or written the memory.
+
+Memory may be partitioned into device-specific memory spaces.  Intel
+graphics devices, for example, use the following memory spaces defined in
+::zet_debug_memory_space_intel_graphics_t:
+
+  * 0: default memory space
+  * 1: shared local memory space
+
+The default memory space may also be accessed in the context of the
+special ::ZET_DEBUG_THREAD_NONE thread.
 
 To read and write memory, call the ::zetDebugReadMemory and
 ::zetDebugWriteMemory function, respectively.  The functions take a
-::zet_debug_session_handle_t, a thread handle, the virtual address of the
-memory to access, the size of the access, and an input or output buffer.
+::zet_debug_session_handle_t, a thread handle, a memory space selector,
+the virtual address of the memory to access, the size of the access, and
+an input or output buffer.
 
 The following example copies 16 bytes of memory from one location in the
-context of one thread to another location in global memory.
+context of one Intel graphics device thread to another location in the
+default memory space.
 
 ```c
     zet_debug_session_handle_t session = ...;
+    int memSpace = ...;
     uint64_t src = ..., dst = ...;
     uint64_t threadid = ...;
     uint8_t buffer[16];
     ze_result_t errcode;
 
-    errcode = zetDebugReadMemory(session, threadid, src, sizeof(buffer),
-                                  buffer);
+    errcode = zetDebugReadMemory(session, threadid, memSpace, src,
+                                  sizeof(buffer), buffer);
     if (errcode)
         return errcode;
 
     ...
 
-    errcode = zetDebugWriteMemory(session, ZET_DEBUG_THREAD_NONE, dst,
-                                   sizeof(buffer), buffer);
+    errcode = zetDebugWriteMemory(session, ZET_DEBUG_THREAD_NONE,
+                                   ZET_DEBUG_MEMORY_SPACE_GEN_DEFAULT,
+                                   dst, sizeof(buffer), buffer);
     if (errcode)
         return errcode;
 ```

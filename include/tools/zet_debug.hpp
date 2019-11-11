@@ -78,6 +78,15 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Memory spaces for Intel Graphics devices.
+        enum class memory_space_intel_graphics_t
+        {
+            DEBUG_MEMORY_SPACE_GEN_DEFAULT = 0,             ///< default memory space (attribute may be omitted)
+            DEBUG_MEMORY_SPACE_GEN_SLM,                     ///< shared local memory space
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Register file types for Intel Graphics devices.
         enum class state_intel_graphics_t
         {
@@ -274,6 +283,7 @@ namespace zet
         void __zecall
         ReadMemory(
             uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+            int memSpace,                                   ///< [in] the (device-specific) memory space
             uint64_t address,                               ///< [in] the virtual address of the memory to read from
             size_t size,                                    ///< [in] the number of bytes to read
             void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
@@ -285,6 +295,7 @@ namespace zet
         void __zecall
         WriteMemory(
             uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+            int memSpace,                                   ///< [in] the (device-specific) memory space
             uint64_t address,                               ///< [in] the virtual address of the memory to write to
             size_t size,                                    ///< [in] the number of bytes to write
             const void* buffer                              ///< [in] a buffer holding the pattern to write
@@ -366,6 +377,10 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::event_t to std::string
     std::string to_string( const Debug::event_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Debug::memory_space_intel_graphics_t to std::string
+    std::string to_string( const Debug::memory_space_intel_graphics_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::state_intel_graphics_t to std::string
