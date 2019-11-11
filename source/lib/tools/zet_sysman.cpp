@@ -6271,6 +6271,10 @@ namespace zet
         str += std::to_string(val.canControl);
         str += "\n";
         
+        str += "SysmanFrequency::freq_properties_t::isThrottleEventSupported : ";
+        str += std::to_string(val.isThrottleEventSupported);
+        str += "\n";
+        
         str += "SysmanFrequency::freq_properties_t::min : ";
         str += std::to_string(val.min);
         str += "\n";

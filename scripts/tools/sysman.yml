@@ -580,7 +580,7 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "canControl"
-      desc: "[out] Software can change the power limits."
+      desc: "[out] Software can change the power limits of this domain assuming the user has permissions."
     - type: $x_bool_t
       name: "isEnergyThresholdSupported"
       desc: "[out] Indicates if this power domain supports the energy threshold event ($T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED)."
@@ -846,7 +846,10 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: canControl
-      desc: "[out] Indicates if software can control the frequency of this domain"
+      desc: "[out] Indicates if software can control the frequency of this domain assuming the user has permissions"
+    - type: $x_bool_t
+      name: isThrottleEventSupported
+      desc: "[out] Indicates if software can register to receive event $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED"
     - type: double
       name: min
       desc: "[out] The minimum hardware clock frequency in units of MHz"
@@ -1502,7 +1505,7 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "canControl"
-      desc: "[out] Indicates if software can flash the firmware"
+      desc: "[out] Indicates if software can flash the firmware assuming the user has permissions"
     - type: int8_t
       name: "name[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
@@ -2272,7 +2275,7 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "canControl"
-      desc: "[out] Indicates if software can control the PSU"
+      desc: "[out] Indicates if software can control the PSU assuming the user has permissions"
     - type: $x_bool_t
       name: "haveFan"
       desc: "[out] True if the power supply has a fan"
@@ -2408,7 +2411,7 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "canControl"
-      desc: "[out] Indicates if software can control the fan speed"
+      desc: "[out] Indicates if software can control the fan speed assuming the user has permissions"
     - type: uint32_t
       name: "maxSpeed"
       desc: "[out] The maximum RPM of the fan"
@@ -2554,7 +2557,7 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "canControl"
-      desc: "[out] Indicates if software can control the LED"
+      desc: "[out] Indicates if software can control the LED assuming the user has permissions"
     - type: $x_bool_t
       name: "haveRGB"
       desc: "[out] Indicates if the LED is RGB capable"

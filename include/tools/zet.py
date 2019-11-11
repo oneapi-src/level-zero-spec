@@ -730,6 +730,9 @@ class zet_freq_properties_t(Structure):
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Indicates if software can control the frequency of this domain
+                                                                        ## assuming the user has permissions
+        ("isThrottleEventSupported", ze_bool_t),                        ## [out] Indicates if software can register to receive event
+                                                                        ## ::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
         ("min", c_double),                                              ## [out] The minimum hardware clock frequency in units of MHz
         ("max", c_double),                                              ## [out] The maximum non-overclock hardware clock frequency in units of
                                                                         ## MHz.

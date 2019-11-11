@@ -665,7 +665,8 @@ using the function ::${t}SysmanFrequencyGetState() which will indicate the curre
 frequency information that depends on the current conditions. If the actual frequency is below the requested frequency,
 ::${t}_freq_state_t.throttleReasons will provide the reasons why the frequency is being limited by the Punit.
 
-When a frequency domain starts being throttled, the event ::${T}_SYSMAN_EVENT_TYPE_FREQ_THROTTLED is triggered.
+When a frequency domain starts being throttled, the event ::${T}_SYSMAN_EVENT_TYPE_FREQ_THROTTLED is triggered if this is supported (check
+::${t}_freq_properties_t.isThrottleEventSupported).
 
 ${"###"} <a name="fro">Frequency/Voltage overclocking</a>
 Overclocking involves modifying the voltage-frequency (V-F) curve to either achieve better performance by permitting the hardware to reach higher frequencies

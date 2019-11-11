@@ -659,7 +659,8 @@ using the function ::zetSysmanFrequencyGetState() which will indicate the curren
 frequency information that depends on the current conditions. If the actual frequency is below the requested frequency,
 ::zet_freq_state_t.throttleReasons will provide the reasons why the frequency is being limited by the Punit.
 
-When a frequency domain starts being throttled, the event ::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED is triggered.
+When a frequency domain starts being throttled, the event ::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED is triggered if this is supported (check
+::zet_freq_properties_t.isThrottleEventSupported).
 
 ### <a name="fro">Frequency/Voltage overclocking</a>
 Overclocking involves modifying the voltage-frequency (V-F) curve to either achieve better performance by permitting the hardware to reach higher frequencies

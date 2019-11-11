@@ -1132,6 +1132,9 @@ namespace zet
                                                             ///< that the resource is on the device of the calling SMI handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Indicates if software can control the frequency of this domain
+                                                            ///< assuming the user has permissions
+            ze::bool_t isThrottleEventSupported;            ///< [out] Indicates if software can register to receive event
+                                                            ///< ::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
             double min;                                     ///< [out] The minimum hardware clock frequency in units of MHz
             double max;                                     ///< [out] The maximum non-overclock hardware clock frequency in units of
                                                             ///< MHz.
