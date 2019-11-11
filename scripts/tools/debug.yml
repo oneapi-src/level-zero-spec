@@ -287,7 +287,7 @@ returns:
         - "the thread is already running or unavailable"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Read uncompressed memory."
+desc: "Read memory."
 class: $tDebug
 name: ReadMemory
 params:
@@ -315,7 +315,7 @@ returns:
         - "the memory cannot be accessed from the supplied thread"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Write uncompressed memory."
+desc: "Write memory."
 class: $tDebug
 name: WriteMemory
 params:
@@ -341,70 +341,6 @@ returns:
         - "an invalid address has been supplied"
     - $X_RESULT_ERROR_DEVICE_ACCESS:
         - "the memory cannot be accessed from the supplied thread"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Read compressed memory."
-class: $tDebug
-name: ReadCompressedMemory
-params:
-    - type: $t_debug_session_handle_t
-      name: hDebug
-      desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: threadid
-      desc: "[in] the thread context or $T_DEBUG_THREAD_NONE"
-    - type: "uint64_t"
-      name: address
-      desc: "[in] the virtual address of the memory to read from"
-    - type: "size_t"
-      name: size
-      desc: "[in] the number of bytes to read"
-    - type: "uint64_t"
-      name: desc
-      desc: "[in] the virtual address of the compression descriptor"
-    - type: "void*"
-      name: buffer
-      desc: "[in,out] a buffer to hold a copy of the memory"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or thread identifier has been supplied"
-        - "the thread is running or unavailable"
-        - "an invalid memory or descriptor address has been supplied"
-    - $X_RESULT_ERROR_DEVICE_ACCESS:
-        - "the memory cannot be accessed from the supplied thread"
-        - "the memory cannot be accessed using the supplied descriptor"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Write compressed memory."
-class: $tDebug
-name: WriteCompressedMemory
-params:
-    - type: $t_debug_session_handle_t
-      name: hDebug
-      desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: threadid
-      desc: "[in] the thread context or $T_DEBUG_THREAD_NONE"
-    - type: "uint64_t"
-      name: address
-      desc: "[in] the virtual address of the memory to write to"
-    - type: "size_t"
-      name: size
-      desc: "[in] the number of bytes to write"
-    - type: "uint64_t"
-      name: desc
-      desc: "[in] the virtual address of the compression descriptor"
-    - type: "const void*"
-      name: buffer
-      desc: "[in] a buffer holding the pattern to write"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or thread identifier has been supplied"
-        - "the thread is running or unavailable"
-        - "an invalid memory or descriptor address has been supplied"
-    - $X_RESULT_ERROR_DEVICE_ACCESS:
-        - "the memory cannot be accessed from the supplied thread"
-        - "the memory cannot be accessed using the supplied descriptor"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Register file types for Intel Graphics devices."

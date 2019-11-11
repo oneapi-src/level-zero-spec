@@ -1873,28 +1873,6 @@ typedef ze_result_t (__zecall *zet_pfnDebugWriteMemory_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetDebugReadCompressedMemory 
-typedef ze_result_t (__zecall *zet_pfnDebugReadCompressedMemory_t)(
-    zet_debug_session_handle_t,
-    uint64_t,
-    uint64_t,
-    size_t,
-    uint64_t,
-    void*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetDebugWriteCompressedMemory 
-typedef ze_result_t (__zecall *zet_pfnDebugWriteCompressedMemory_t)(
-    zet_debug_session_handle_t,
-    uint64_t,
-    uint64_t,
-    size_t,
-    uint64_t,
-    const void*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetDebugReadState 
 typedef ze_result_t (__zecall *zet_pfnDebugReadState_t)(
     zet_debug_session_handle_t,
@@ -1926,8 +1904,6 @@ typedef struct _zet_debug_dditable_t
     zet_pfnDebugResume_t                                        pfnResume;
     zet_pfnDebugReadMemory_t                                    pfnReadMemory;
     zet_pfnDebugWriteMemory_t                                   pfnWriteMemory;
-    zet_pfnDebugReadCompressedMemory_t                          pfnReadCompressedMemory;
-    zet_pfnDebugWriteCompressedMemory_t                         pfnWriteCompressedMemory;
     zet_pfnDebugReadState_t                                     pfnReadState;
     zet_pfnDebugWriteState_t                                    pfnWriteState;
 } zet_debug_dditable_t;

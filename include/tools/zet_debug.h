@@ -274,7 +274,7 @@ zetDebugResume(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Read uncompressed memory.
+/// @brief Read memory.
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -299,7 +299,7 @@ zetDebugReadMemory(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Write uncompressed memory.
+/// @brief Write memory.
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -320,60 +320,6 @@ zetDebugWriteMemory(
     uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
     uint64_t address,                               ///< [in] the virtual address of the memory to write to
     size_t size,                                    ///< [in] the number of bytes to write
-    const void* buffer                              ///< [in] a buffer holding the pattern to write
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Read compressed memory.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
-///         + an invalid debug handle or thread identifier has been supplied
-///         + the thread is running or unavailable
-///         + an invalid memory or descriptor address has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
-///         + the memory cannot be accessed from the supplied thread
-///         + the memory cannot be accessed using the supplied descriptor
-ze_result_t __zecall
-zetDebugReadCompressedMemory(
-    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-    uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-    uint64_t address,                               ///< [in] the virtual address of the memory to read from
-    size_t size,                                    ///< [in] the number of bytes to read
-    uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
-    void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Write compressed memory.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
-///         + an invalid debug handle or thread identifier has been supplied
-///         + the thread is running or unavailable
-///         + an invalid memory or descriptor address has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
-///         + the memory cannot be accessed from the supplied thread
-///         + the memory cannot be accessed using the supplied descriptor
-ze_result_t __zecall
-zetDebugWriteCompressedMemory(
-    zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-    uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-    uint64_t address,                               ///< [in] the virtual address of the memory to write to
-    size_t size,                                    ///< [in] the number of bytes to write
-    uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
     const void* buffer                              ///< [in] a buffer holding the pattern to write
     );
 

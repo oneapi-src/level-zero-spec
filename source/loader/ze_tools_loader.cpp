@@ -3689,46 +3689,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugReadCompressedMemory
-    ze_result_t __zecall
-    zetDebugReadCompressedMemory(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-        uint64_t address,                               ///< [in] the virtual address of the memory to read from
-        size_t size,                                    ///< [in] the number of bytes to read
-        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
-        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnReadCompressedMemory( hDebug, threadid, address, size, desc, buffer );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugWriteCompressedMemory
-    ze_result_t __zecall
-    zetDebugWriteCompressedMemory(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-        uint64_t address,                               ///< [in] the virtual address of the memory to write to
-        size_t size,                                    ///< [in] the number of bytes to write
-        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
-        const void* buffer                              ///< [in] a buffer holding the pattern to write
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnWriteCompressedMemory( hDebug, threadid, address, size, desc, buffer );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugReadState
     ze_result_t __zecall
     zetDebugReadState(
@@ -5581,8 +5541,6 @@ zetGetDebugProcAddrTable(
             pDdiTable->pfnResume                                   = loader::zetDebugResume;
             pDdiTable->pfnReadMemory                               = loader::zetDebugReadMemory;
             pDdiTable->pfnWriteMemory                              = loader::zetDebugWriteMemory;
-            pDdiTable->pfnReadCompressedMemory                     = loader::zetDebugReadCompressedMemory;
-            pDdiTable->pfnWriteCompressedMemory                    = loader::zetDebugWriteCompressedMemory;
             pDdiTable->pfnReadState                                = loader::zetDebugReadState;
             pDdiTable->pfnWriteState                               = loader::zetDebugWriteState;
         }

@@ -3547,66 +3547,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugReadCompressedMemory
-    ze_result_t __zecall
-    zetDebugReadCompressedMemory(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-        uint64_t address,                               ///< [in] the virtual address of the memory to read from
-        size_t size,                                    ///< [in] the number of bytes to read
-        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
-        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
-        )
-    {
-        auto pfnReadCompressedMemory = context.zetDdiTable.Debug.pfnReadCompressedMemory;
-
-        if( nullptr == pfnReadCompressedMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == buffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnReadCompressedMemory( hDebug, threadid, address, size, desc, buffer );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugWriteCompressedMemory
-    ze_result_t __zecall
-    zetDebugWriteCompressedMemory(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-        uint64_t address,                               ///< [in] the virtual address of the memory to write to
-        size_t size,                                    ///< [in] the number of bytes to write
-        uint64_t desc,                                  ///< [in] the virtual address of the compression descriptor
-        const void* buffer                              ///< [in] a buffer holding the pattern to write
-        )
-    {
-        auto pfnWriteCompressedMemory = context.zetDdiTable.Debug.pfnWriteCompressedMemory;
-
-        if( nullptr == pfnWriteCompressedMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == buffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnWriteCompressedMemory( hDebug, threadid, address, size, desc, buffer );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugReadState
     ze_result_t __zecall
     zetDebugReadState(
@@ -4857,12 +4797,6 @@ zetGetDebugProcAddrTable(
 
     dditable.pfnWriteMemory                              = pDdiTable->pfnWriteMemory;
     pDdiTable->pfnWriteMemory                            = layer::zetDebugWriteMemory;
-
-    dditable.pfnReadCompressedMemory                     = pDdiTable->pfnReadCompressedMemory;
-    pDdiTable->pfnReadCompressedMemory                   = layer::zetDebugReadCompressedMemory;
-
-    dditable.pfnWriteCompressedMemory                    = pDdiTable->pfnWriteCompressedMemory;
-    pDdiTable->pfnWriteCompressedMemory                  = layer::zetDebugWriteCompressedMemory;
 
     dditable.pfnReadState                                = pDdiTable->pfnReadState;
     pDdiTable->pfnReadState                              = layer::zetDebugReadState;
