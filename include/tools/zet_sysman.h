@@ -632,7 +632,8 @@ typedef struct _zet_power_properties_t
     ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Software can change the power limits.
+    ze_bool_t canControl;                           ///< [out] Software can change the power limits of this domain assuming the
+                                                    ///< user has permissions.
     ze_bool_t isEnergyThresholdSupported;           ///< [out] Indicates if this power domain supports the energy threshold
                                                     ///< event (::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
     uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
@@ -1670,7 +1671,8 @@ typedef struct _zet_firmware_properties_t
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Indicates if software can flash the firmware
+    ze_bool_t canControl;                           ///< [out] Indicates if software can flash the firmware assuming the user
+                                                    ///< has permissions
     int8_t name[ZET_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
     int8_t version[ZET_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
 
@@ -2474,7 +2476,8 @@ typedef struct _zet_psu_properties_t
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Indicates if software can control the PSU
+    ze_bool_t canControl;                           ///< [out] Indicates if software can control the PSU assuming the user has
+                                                    ///< permissions
     ze_bool_t haveFan;                              ///< [out] True if the power supply has a fan
     uint32_t ampLimit;                              ///< [out] The maximum electrical current in amperes that can be drawn
 
@@ -2605,7 +2608,8 @@ typedef struct _zet_fan_properties_t
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Indicates if software can control the fan speed
+    ze_bool_t canControl;                           ///< [out] Indicates if software can control the fan speed assuming the
+                                                    ///< user has permissions
     uint32_t maxSpeed;                              ///< [out] The maximum RPM of the fan
     uint32_t maxPoints;                             ///< [out] The maximum number of points in the fan temp/speed table
 
@@ -2756,7 +2760,8 @@ typedef struct _zet_led_properties_t
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Indicates if software can control the LED
+    ze_bool_t canControl;                           ///< [out] Indicates if software can control the LED assuming the user has
+                                                    ///< permissions
     ze_bool_t haveRGB;                              ///< [out] Indicates if the LED is RGB capable
 
 } zet_led_properties_t;
@@ -3075,20 +3080,25 @@ zetSysmanRasGetState(
 typedef enum _zet_sysman_event_type_t
 {
     ZET_SYSMAN_EVENT_TYPE_NONE = 0,                 ///< Specifies no events
-    ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = ZE_BIT( 0 ), ///< Event is triggered when the frequency starts being throttled
-    ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED = ZE_BIT( 1 ),   ///< Event is triggered when the energy consumption threshold is reached
+    ZET_SYSMAN_EVENT_TYPE_DEVICE_RESET = ZE_BIT( 0 ),   ///< Event is triggered when the driver is going to reset the device
+    ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER = ZE_BIT( 1 ),   ///< Event is triggered when the driver is about to put the device into a
+                                                    ///< deep sleep state
+    ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT = ZE_BIT( 2 ),///< Event is triggered when the driver is waking the device up from a deep
+                                                    ///< sleep state
+    ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = ZE_BIT( 3 ), ///< Event is triggered when the frequency starts being throttled
+    ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED = ZE_BIT( 4 ),   ///< Event is triggered when the energy consumption threshold is reached
                                                     ///< (use ::zetSysmanPowerSetEnergyThreshold() to configure).
-    ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL = ZE_BIT( 2 ),  ///< Event is triggered when the critical temperature is reached (use
+    ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL = ZE_BIT( 5 ),  ///< Event is triggered when the critical temperature is reached (use
                                                     ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
-    ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 = ZE_BIT( 3 ),///< Event is triggered when the temperature crosses threshold 1 (use
+    ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 = ZE_BIT( 6 ),///< Event is triggered when the temperature crosses threshold 1 (use
                                                     ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
-    ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 = ZE_BIT( 4 ),///< Event is triggered when the temperature crosses threshold 2 (use
+    ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 = ZE_BIT( 7 ),///< Event is triggered when the temperature crosses threshold 2 (use
                                                     ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
-    ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH = ZE_BIT( 5 ), ///< Event is triggered when the health of device memory changes.
-    ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH = ZE_BIT( 6 ), ///< Event is triggered when the health of fabric ports change.
-    ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS = ZE_BIT( 7 ), ///< Event is triggered when RAS correctable errors cross thresholds (use
+    ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH = ZE_BIT( 8 ), ///< Event is triggered when the health of device memory changes.
+    ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH = ZE_BIT( 9 ), ///< Event is triggered when the health of fabric ports change.
+    ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS = ZE_BIT( 10 ),///< Event is triggered when RAS correctable errors cross thresholds (use
                                                     ///< ::zetSysmanRasSetConfig() to configure - disabled by default).
-    ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 8 ),   ///< Event is triggered when RAS uncorrectable errors cross thresholds (use
+    ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 11 ),  ///< Event is triggered when RAS uncorrectable errors cross thresholds (use
                                                     ///< ::zetSysmanRasSetConfig() to configure - disabled by default).
     ZET_SYSMAN_EVENT_TYPE_ALL = (~0),               ///< Specifies all events
 

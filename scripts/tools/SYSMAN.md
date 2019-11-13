@@ -1301,17 +1301,20 @@ The list of events is given in the table below. For each event, the correspondin
 configuration function is not shown, the event is generated automatically; where a configuration function is shown, it must be called to
 enable the event and/or provide threshold conditions.
 
-| Event                                             | Trigger                                   | Configuration function                | State function                    |
-| :---                                              | :---                                      | :---                                  | :---                              |
-| ::${T}_SYSMAN_EVENT_TYPE_FREQ_THROTTLED           | Frequency starts being throttled          |                                       | ::${t}SysmanFrequencyGetState()   |
-| ::${T}_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED | Energy consumption threshold is reached   | ::${t}SysmanPowerSetEnergyThreshold() |                                   |
-| ::${T}_SYSMAN_EVENT_TYPE_TEMP_CRITICAL            | Critical temperature is reached           | ::${t}SysmanTemperatureSetConfig()    | ::${t}SysmanTemperatureGetState() |
-| ::${T}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1          | Temperature crosses threshold 1           | ::${t}SysmanTemperatureSetConfig()    | ::${t}SysmanTemperatureGetState() |
-| ::${T}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2          | Temperature crosses threshold 2           | ::${t}SysmanTemperatureSetConfig()    | ::${t}SysmanTemperatureGetState() |
-| ::${T}_SYSMAN_EVENT_TYPE_MEM_HEALTH               | Health of device memory changes           |                                       | ::${t}SysmanMemoryGetState()      |
-| ::${T}_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH       | Health of fabric ports change             |                                       | ::${t}SysmanFabricPortGetState()  |
-| ::${T}_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS   | RAS correctable errors cross thresholds   | ::${t}SysmanRasSetConfig()            | ::${t}SysmanRasGetState()         |
-| ::${T}_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS | RAS uncorrectable errors cross thresholds | ::${t}SysmanRasSetConfig()            | ::${t}SysmanRasGetState()         |
+| Event                                             | Trigger                                     | Configuration function                | State function                    |
+| :---                                              | :---                                        | :---                                  | :---                              |
+| ::${T}_SYSMAN_EVENT_TYPE_DEVICE_RESET             | Device is about to be reset by the driver   |                                       |                                   |
+| ::${T}_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER | Device is about to enter a deep sleep state |                                       |                                   |
+| ::${T}_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT  | Device is exiting a deep sleep state        |                                       |                                   |
+| ::${T}_SYSMAN_EVENT_TYPE_FREQ_THROTTLED           | Frequency starts being throttled            |                                       | ::${t}SysmanFrequencyGetState()   |
+| ::${T}_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED | Energy consumption threshold is reached     | ::${t}SysmanPowerSetEnergyThreshold() |                                   |
+| ::${T}_SYSMAN_EVENT_TYPE_TEMP_CRITICAL            | Critical temperature is reached             | ::${t}SysmanTemperatureSetConfig()    | ::${t}SysmanTemperatureGetState() |
+| ::${T}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1          | Temperature crosses threshold 1             | ::${t}SysmanTemperatureSetConfig()    | ::${t}SysmanTemperatureGetState() |
+| ::${T}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2          | Temperature crosses threshold 2             | ::${t}SysmanTemperatureSetConfig()    | ::${t}SysmanTemperatureGetState() |
+| ::${T}_SYSMAN_EVENT_TYPE_MEM_HEALTH               | Health of device memory changes             |                                       | ::${t}SysmanMemoryGetState()      |
+| ::${T}_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH       | Health of fabric ports change               |                                       | ::${t}SysmanFabricPortGetState()  |
+| ::${T}_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS   | RAS correctable errors cross thresholds     | ::${t}SysmanRasSetConfig()            | ::${t}SysmanRasGetState()         |
+| ::${T}_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS | RAS uncorrectable errors cross thresholds   | ::${t}SysmanRasSetConfig()            | ::${t}SysmanRasGetState()         |
 
 The call to ::${t}SysmanEventListen() requires the driver handle. The list of event handles must only be for devices that have been enumerated
 from that driver, otherwise and error will be returned. If the application is managing devices from multiple drivers, it will need to call this

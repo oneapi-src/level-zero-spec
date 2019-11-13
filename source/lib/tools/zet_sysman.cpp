@@ -5749,6 +5749,15 @@ namespace zet
         if( 0 == bits )
             str += "NONE   ";
         
+        if( static_cast<uint32_t>(Sysman::event_type_t::DEVICE_RESET) & bits )
+            str += "DEVICE_RESET | ";
+        
+        if( static_cast<uint32_t>(Sysman::event_type_t::DEVICE_SLEEP_STATE_ENTER) & bits )
+            str += "DEVICE_SLEEP_STATE_ENTER | ";
+        
+        if( static_cast<uint32_t>(Sysman::event_type_t::DEVICE_SLEEP_STATE_EXIT) & bits )
+            str += "DEVICE_SLEEP_STATE_EXIT | ";
+        
         if( static_cast<uint32_t>(Sysman::event_type_t::FREQ_THROTTLED) & bits )
             str += "FREQ_THROTTLED | ";
         

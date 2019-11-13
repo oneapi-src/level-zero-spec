@@ -2853,32 +2853,41 @@ etors:
     - name: $T_SYSMAN_EVENT_TYPE_NONE
       value: "0"
       desc: "Specifies no events"
-    - name: $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
+    - name: $T_SYSMAN_EVENT_TYPE_DEVICE_RESET
       value: "$X_BIT( 0 )"
+      desc: "Event is triggered when the driver is going to reset the device"
+    - name: $T_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER
+      value: "$X_BIT( 1 )"
+      desc: "Event is triggered when the driver is about to put the device into a deep sleep state"
+    - name: $T_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT
+      value: "$X_BIT( 2 )"
+      desc: "Event is triggered when the driver is waking the device up from a deep sleep state"
+    - name: $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
+      value: "$X_BIT( 3 )"
       desc: "Event is triggered when the frequency starts being throttled"
     - name: $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED
-      value: "$X_BIT( 1 )"
+      value: "$X_BIT( 4 )"
       desc: "Event is triggered when the energy consumption threshold is reached (use $tSysmanPowerSetEnergyThreshold() to configure)."
     - name: $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
-      value: "$X_BIT( 2 )"
+      value: "$X_BIT( 5 )"
       desc: "Event is triggered when the critical temperature is reached (use $tSysmanTemperatureSetConfig() to configure - disabled by default)."
     - name: $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1
-      value: "$X_BIT( 3 )"
+      value: "$X_BIT( 6 )"
       desc: "Event is triggered when the temperature crosses threshold 1 (use $tSysmanTemperatureSetConfig() to configure - disabled by default)."
     - name: $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2
-      value: "$X_BIT( 4 )"
+      value: "$X_BIT( 7 )"
       desc: "Event is triggered when the temperature crosses threshold 2 (use $tSysmanTemperatureSetConfig() to configure - disabled by default)."
     - name: $T_SYSMAN_EVENT_TYPE_MEM_HEALTH
-      value: "$X_BIT( 5 )"
+      value: "$X_BIT( 8 )"
       desc: "Event is triggered when the health of device memory changes."
     - name: $T_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH
-      value: "$X_BIT( 6 )"
+      value: "$X_BIT( 9 )"
       desc: "Event is triggered when the health of fabric ports change."
     - name: $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
-      value: "$X_BIT( 7 )"
+      value: "$X_BIT( 10 )"
       desc: "Event is triggered when RAS correctable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
     - name: $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS
-      value: "$X_BIT( 8 )"
+      value: "$X_BIT( 11 )"
       desc: "Event is triggered when RAS uncorrectable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
     - name: $T_SYSMAN_EVENT_TYPE_ALL
       value: "(~0)"
