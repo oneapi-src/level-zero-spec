@@ -74,71 +74,71 @@ class: $tSysman
 name: "$t_sysman_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device power domain"
+desc: "Handle for a Sysman device power domain"
 class: $tSysmanPower
 name: "$t_sysman_pwr_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device frequency domain"
+desc: "Handle for a Sysman device frequency domain"
 class: $tSysmanFrequency
 name: "$t_sysman_freq_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device engine group"
+desc: "Handle for a Sysman device engine group"
 class: $tSysmanEngine
 name: "$t_sysman_engine_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device standby control"
+desc: "Handle for a Sysman device standby control"
 class: $tSysmanStandby
 name: "$t_sysman_standby_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device firmware"
+desc: "Handle for a Sysman device firmware"
 class: $tSysmanFirmware
 name: "$t_sysman_firmware_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device memory module"
+desc: "Handle for a Sysman device memory module"
 class: $tSysmanMemory
 name: "$t_sysman_mem_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI fabric port"
+desc: "Handle for a Sysman fabric port"
 class: $tSysmanFabricPort
 name: "$t_sysman_fabric_port_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device temperature sensor"
+desc: "Handle for a Sysman device temperature sensor"
 class: $tSysmanTemperature
 name: "$t_sysman_temp_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device power supply"
+desc: "Handle for a Sysman device power supply"
 class: $tSysmanPsu
 name: "$t_sysman_psu_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device fan"
+desc: "Handle for a Sysman device fan"
 class: $tSysmanFan
 name: "$t_sysman_fan_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device LED"
+desc: "Handle for a Sysman device LED"
 class: $tSysmanLed
 name: "$t_sysman_led_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device RAS error set"
+desc: "Handle for a Sysman device RAS error set"
 class: $tSysmanRas
 name: "$t_sysman_ras_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device diagnostics test suite"
+desc: "Handle for a Sysman device diagnostics test suite"
 class: $tSysmanDiagnostics
 name: "$t_sysman_diag_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a SMI device event"
+desc: "Handle for a Sysman device event"
 class: $tSysmanEvent
 name: "$t_sysman_event_handle_t"

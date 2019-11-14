@@ -96,85 +96,85 @@ namespace zet
     using sysman_handle_t = _sysman_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device power domain
+    /// @brief Handle for a Sysman device power domain
     class SysmanPower;
     struct _sysman_pwr_handle_t;
     using sysman_pwr_handle_t = _sysman_pwr_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device frequency domain
+    /// @brief Handle for a Sysman device frequency domain
     class SysmanFrequency;
     struct _sysman_freq_handle_t;
     using sysman_freq_handle_t = _sysman_freq_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device engine group
+    /// @brief Handle for a Sysman device engine group
     class SysmanEngine;
     struct _sysman_engine_handle_t;
     using sysman_engine_handle_t = _sysman_engine_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device standby control
+    /// @brief Handle for a Sysman device standby control
     class SysmanStandby;
     struct _sysman_standby_handle_t;
     using sysman_standby_handle_t = _sysman_standby_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device firmware
+    /// @brief Handle for a Sysman device firmware
     class SysmanFirmware;
     struct _sysman_firmware_handle_t;
     using sysman_firmware_handle_t = _sysman_firmware_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device memory module
+    /// @brief Handle for a Sysman device memory module
     class SysmanMemory;
     struct _sysman_mem_handle_t;
     using sysman_mem_handle_t = _sysman_mem_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI fabric port
+    /// @brief Handle for a Sysman fabric port
     class SysmanFabricPort;
     struct _sysman_fabric_port_handle_t;
     using sysman_fabric_port_handle_t = _sysman_fabric_port_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device temperature sensor
+    /// @brief Handle for a Sysman device temperature sensor
     class SysmanTemperature;
     struct _sysman_temp_handle_t;
     using sysman_temp_handle_t = _sysman_temp_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device power supply
+    /// @brief Handle for a Sysman device power supply
     class SysmanPsu;
     struct _sysman_psu_handle_t;
     using sysman_psu_handle_t = _sysman_psu_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device fan
+    /// @brief Handle for a Sysman device fan
     class SysmanFan;
     struct _sysman_fan_handle_t;
     using sysman_fan_handle_t = _sysman_fan_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device LED
+    /// @brief Handle for a Sysman device LED
     class SysmanLed;
     struct _sysman_led_handle_t;
     using sysman_led_handle_t = _sysman_led_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device RAS error set
+    /// @brief Handle for a Sysman device RAS error set
     class SysmanRas;
     struct _sysman_ras_handle_t;
     using sysman_ras_handle_t = _sysman_ras_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device diagnostics test suite
+    /// @brief Handle for a Sysman device diagnostics test suite
     class SysmanDiagnostics;
     struct _sysman_diag_handle_t;
     using sysman_diag_handle_t = _sysman_diag_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a SMI device event
+    /// @brief Handle for a Sysman device event
     class SysmanEvent;
     struct _sysman_event_handle_t;
     using sysman_event_handle_t = _sysman_event_handle_t*;

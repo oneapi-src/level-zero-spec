@@ -671,8 +671,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanGet(
         zet_device_handle_t hDevice,                    ///< [in] Handle of the device
-        zet_sysman_version_t version,                   ///< [in] SMI version that application was built with
-        zet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing SMI features
+        zet_sysman_version_t version,                   ///< [in] Sysman version that application was built with
+        zet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing Sysman features
         )
     {
         auto pfnGet = context.zetDdiTable.Sysman.pfnGet;
@@ -697,7 +697,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanDeviceGetProperties
     ze_result_t __zecall
     zetSysmanDeviceGetProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_sysman_properties_t* pProperties            ///< [in] Structure that will contain information about the device.
         )
     {
@@ -723,7 +723,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanSchedulerGetCurrentMode
     ze_result_t __zecall
     zetSysmanSchedulerGetCurrentMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
         )
     {
@@ -749,7 +749,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanSchedulerGetTimeoutModeProperties
     ze_result_t __zecall
     zetSysmanSchedulerGetTimeoutModeProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         zet_sched_timeout_properties_t* pConfig         ///< [in] Will contain the current parameters for this mode.
@@ -777,7 +777,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanSchedulerGetTimesliceModeProperties
     ze_result_t __zecall
     zetSysmanSchedulerGetTimesliceModeProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         zet_sched_timeslice_properties_t* pConfig       ///< [in] Will contain the current parameters for this mode.
@@ -805,7 +805,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanSchedulerSetTimeoutMode
     ze_result_t __zecall
     zetSysmanSchedulerSetTimeoutMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
         ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
@@ -836,7 +836,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanSchedulerSetTimesliceMode
     ze_result_t __zecall
     zetSysmanSchedulerSetTimesliceMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
         ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
@@ -867,7 +867,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanSchedulerSetExclusiveMode
     ze_result_t __zecall
     zetSysmanSchedulerSetExclusiveMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
         )
@@ -894,7 +894,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanSchedulerSetComputeUnitDebugMode
     ze_result_t __zecall
     zetSysmanSchedulerSetComputeUnitDebugMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                         ///< scheduler mode.
         )
@@ -921,7 +921,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanProcessesGetState
     ze_result_t __zecall
     zetSysmanProcessesGetState(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of processes currently using the device.
@@ -954,7 +954,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanDeviceReset
     ze_result_t __zecall
     zetSysmanDeviceReset(
-        zet_sysman_handle_t hSysman                     ///< [in] SMI handle for the device
+        zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
         )
     {
         auto pfnDeviceReset = context.zetDdiTable.Sysman.pfnDeviceReset;
@@ -976,7 +976,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanDeviceWasRepaired
     ze_result_t __zecall
     zetSysmanDeviceWasRepaired(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
         ze_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
         )
     {
@@ -1002,7 +1002,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanPciGetProperties
     ze_result_t __zecall
     zetSysmanPciGetProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
         )
     {
@@ -1028,7 +1028,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanPciGetState
     ze_result_t __zecall
     zetSysmanPciGetState(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
         )
     {
@@ -1054,7 +1054,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanPciGetBarProperties
     ze_result_t __zecall
     zetSysmanPciGetBarProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::zet_pci_properties_t.numBars -
                                                         ///< 1]).
         zet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
@@ -1082,7 +1082,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanPciGetStats
     ze_result_t __zecall
     zetSysmanPciGetStats(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
         )
     {
@@ -1108,7 +1108,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanPowerGet
     ze_result_t __zecall
     zetSysmanPowerGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -1295,7 +1295,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanFrequencyGet
     ze_result_t __zecall
     zetSysmanFrequencyGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -1355,7 +1355,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanFrequencyGetAvailableClocks
     ze_result_t __zecall
     zetSysmanFrequencyGetAvailableClocks(
-        zet_sysman_freq_handle_t hFrequency,            ///< [in] SMI handle of the device.
+        zet_sysman_freq_handle_t hFrequency,            ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
                                                         ///< If count is zero, then the driver will update the value with the total
                                                         ///< number of frequencies available.
@@ -1673,7 +1673,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanEngineGet
     ze_result_t __zecall
     zetSysmanEngineGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -1759,7 +1759,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanStandbyGet
     ze_result_t __zecall
     zetSysmanStandbyGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -1868,7 +1868,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanFirmwareGet
     ze_result_t __zecall
     zetSysmanFirmwareGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -1981,7 +1981,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanMemoryGet
     ze_result_t __zecall
     zetSysmanMemoryGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -2093,7 +2093,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanFabricPortGet
     ze_result_t __zecall
     zetSysmanFabricPortGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -2285,7 +2285,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanTemperatureGet
     ze_result_t __zecall
     zetSysmanTemperatureGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -2424,7 +2424,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanPsuGet
     ze_result_t __zecall
     zetSysmanPsuGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -2510,7 +2510,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanFanGet
     ze_result_t __zecall
     zetSysmanFanGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -2649,7 +2649,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanLedGet
     ze_result_t __zecall
     zetSysmanLedGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -2761,7 +2761,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanRasGet
     ze_result_t __zecall
     zetSysmanRasGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -2902,7 +2902,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanEventGet
     ze_result_t __zecall
     zetSysmanEventGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
         zet_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
         )
     {
@@ -3046,7 +3046,7 @@ namespace layer
     /// @brief Intercept function for zetSysmanDiagnosticsGet
     ze_result_t __zecall
     zetSysmanDiagnosticsGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.

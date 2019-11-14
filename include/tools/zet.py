@@ -78,72 +78,72 @@ class zet_sysman_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device power domain
+## @brief Handle for a Sysman device power domain
 class zet_sysman_pwr_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device frequency domain
+## @brief Handle for a Sysman device frequency domain
 class zet_sysman_freq_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device engine group
+## @brief Handle for a Sysman device engine group
 class zet_sysman_engine_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device standby control
+## @brief Handle for a Sysman device standby control
 class zet_sysman_standby_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device firmware
+## @brief Handle for a Sysman device firmware
 class zet_sysman_firmware_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device memory module
+## @brief Handle for a Sysman device memory module
 class zet_sysman_mem_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI fabric port
+## @brief Handle for a Sysman fabric port
 class zet_sysman_fabric_port_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device temperature sensor
+## @brief Handle for a Sysman device temperature sensor
 class zet_sysman_temp_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device power supply
+## @brief Handle for a Sysman device power supply
 class zet_sysman_psu_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device fan
+## @brief Handle for a Sysman device fan
 class zet_sysman_fan_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device LED
+## @brief Handle for a Sysman device LED
 class zet_sysman_led_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device RAS error set
+## @brief Handle for a Sysman device RAS error set
 class zet_sysman_ras_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device diagnostics test suite
+## @brief Handle for a Sysman device diagnostics test suite
 class zet_sysman_diag_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Handle for a SMI device event
+## @brief Handle for a Sysman device event
 class zet_sysman_event_handle_t(c_void_p):
     pass
 
@@ -402,7 +402,7 @@ class zet_profile_register_sequence_t(Structure):
     ]
 
 ###############################################################################
-## @brief API version of SMI
+## @brief API version of Sysman
 class zet_sysman_version_v(IntEnum):
     CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
@@ -608,7 +608,7 @@ class zet_pci_stats_t(Structure):
 class zet_power_properties_t(Structure):
     _fields_ = [
         ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Software can change the power limits of this domain assuming the
                                                                         ## user has permissions.
@@ -728,7 +728,7 @@ class zet_freq_properties_t(Structure):
         ("type", zet_freq_domain_t),                                    ## [out] The hardware block that this frequency domain controls (GPU,
                                                                         ## memory, ...)
         ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Indicates if software can control the frequency of this domain
                                                                         ## assuming the user has permissions
@@ -884,7 +884,7 @@ class zet_engine_properties_t(Structure):
         ("type", zet_engine_group_t),                                   ## [out] The engine group
         ("engines", c_int64_t),                                         ## [out] Bitfield of accelerator engines counted by this group.
         ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong)                                        ## [out] If onSubdevice is true, this gives the ID of the sub-device
     ]
 
@@ -924,7 +924,7 @@ class zet_standby_properties_t(Structure):
     _fields_ = [
         ("type", zet_standby_type_t),                                   ## [out] Which standby hardware component this controls
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong)                                        ## [out] If onSubdevice is true, this gives the ID of the sub-device
     ]
 
@@ -945,7 +945,7 @@ class zet_standby_promo_mode_t(c_int):
 class zet_firmware_properties_t(Structure):
     _fields_ = [
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Indicates if software can flash the firmware assuming the user
                                                                         ## has permissions
@@ -990,7 +990,7 @@ class zet_mem_properties_t(Structure):
     _fields_ = [
         ("type", zet_mem_type_t),                                       ## [out] The memory type
         ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("physicalSize", c_ulonglong)                                   ## [out] Physical memory size in bytes
     ]
@@ -1105,7 +1105,7 @@ class zet_fabric_port_properties_t(Structure):
     _fields_ = [
         ("model", c_int8_t * ZET_MAX_FABRIC_PORT_MODEL_SIZE),           ## [out] Description of port technology
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the port is located on a sub-device; false means that
-                                                                        ## the port is on the device of the calling SMI handle
+                                                                        ## the port is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("portUuid", zet_fabric_port_uuid_t),                           ## [out] The port universal unique id
         ("maxRxSpeed", zet_fabric_port_speed_t),                        ## [out] Maximum bandwidth supported by the receive side of the port
@@ -1196,7 +1196,7 @@ class zet_temp_properties_t(Structure):
     _fields_ = [
         ("type", zet_temp_sensors_t),                                   ## [out] Which part of the device the temperature sensor measures
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("isCriticalTempSupported", ze_bool_t),                         ## [out] Indicates if the critical temperature event
                                                                         ## ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
@@ -1251,7 +1251,7 @@ class zet_psu_voltage_status_t(c_int):
 class zet_psu_properties_t(Structure):
     _fields_ = [
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Indicates if software can control the PSU assuming the user has
                                                                         ## permissions
@@ -1311,7 +1311,7 @@ ZET_FAN_TEMP_SPEED_PAIR_COUNT = 32
 class zet_fan_properties_t(Structure):
     _fields_ = [
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Indicates if software can control the fan speed assuming the
                                                                         ## user has permissions
@@ -1344,7 +1344,7 @@ class zet_fan_state_t(Structure):
 class zet_led_properties_t(Structure):
     _fields_ = [
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("canControl", ze_bool_t),                                      ## [out] Indicates if software can control the LED assuming the user has
                                                                         ## permissions
@@ -1378,7 +1378,7 @@ class zet_ras_properties_t(Structure):
     _fields_ = [
         ("type", zet_ras_error_type_t),                                 ## [out] The type of RAS error
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("supported", ze_bool_t),                                       ## [out] True if RAS is supported on this device
         ("enabled", ze_bool_t)                                          ## [out] True if RAS is enabled on this device
@@ -1518,7 +1518,7 @@ class zet_diag_properties_t(Structure):
     _fields_ = [
         ("type", zet_diag_type_t),                                      ## [out] The type of diagnostics test suite
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
-                                                                        ## that the resource is on the device of the calling SMI handle
+                                                                        ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
         ("name", c_char * ZET_STRING_PROPERTY_SIZE),                    ## [out] Name of the diagnostics test suite
         ("haveTests", ze_bool_t)                                        ## [out] Indicates if this test suite has individual tests which can be

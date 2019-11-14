@@ -75,59 +75,59 @@ typedef struct _zet_tracer_handle_t *zet_tracer_handle_t;
 typedef struct _zet_sysman_handle_t *zet_sysman_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device power domain
+/// @brief Handle for a Sysman device power domain
 typedef struct _zet_sysman_pwr_handle_t *zet_sysman_pwr_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device frequency domain
+/// @brief Handle for a Sysman device frequency domain
 typedef struct _zet_sysman_freq_handle_t *zet_sysman_freq_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device engine group
+/// @brief Handle for a Sysman device engine group
 typedef struct _zet_sysman_engine_handle_t *zet_sysman_engine_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device standby control
+/// @brief Handle for a Sysman device standby control
 typedef struct _zet_sysman_standby_handle_t *zet_sysman_standby_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device firmware
+/// @brief Handle for a Sysman device firmware
 typedef struct _zet_sysman_firmware_handle_t *zet_sysman_firmware_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device memory module
+/// @brief Handle for a Sysman device memory module
 typedef struct _zet_sysman_mem_handle_t *zet_sysman_mem_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI fabric port
+/// @brief Handle for a Sysman fabric port
 typedef struct _zet_sysman_fabric_port_handle_t *zet_sysman_fabric_port_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device temperature sensor
+/// @brief Handle for a Sysman device temperature sensor
 typedef struct _zet_sysman_temp_handle_t *zet_sysman_temp_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device power supply
+/// @brief Handle for a Sysman device power supply
 typedef struct _zet_sysman_psu_handle_t *zet_sysman_psu_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device fan
+/// @brief Handle for a Sysman device fan
 typedef struct _zet_sysman_fan_handle_t *zet_sysman_fan_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device LED
+/// @brief Handle for a Sysman device LED
 typedef struct _zet_sysman_led_handle_t *zet_sysman_led_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device RAS error set
+/// @brief Handle for a Sysman device RAS error set
 typedef struct _zet_sysman_ras_handle_t *zet_sysman_ras_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device diagnostics test suite
+/// @brief Handle for a Sysman device diagnostics test suite
 typedef struct _zet_sysman_diag_handle_t *zet_sysman_diag_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a SMI device event
+/// @brief Handle for a Sysman device event
 typedef struct _zet_sysman_event_handle_t *zet_sysman_event_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -6,7 +6,7 @@
  *
  * @file zet_sysman.cpp
  *
- * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for System Resource Management (SMI)
+ * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for System Resource Management (Sysman)
  *
  * @cond DEV
  * DO NOT EDIT: generated from /scripts/tools/sysman.yml
@@ -18,7 +18,7 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the handle to access SMI features for a device
+/// @brief Get the handle to access Sysman features for a device
 /// 
 /// @details
 ///     - The returned handle is unique.
@@ -38,8 +38,8 @@ extern "C" {
 ze_result_t __zecall
 zetSysmanGet(
     zet_device_handle_t hDevice,                    ///< [in] Handle of the device
-    zet_sysman_version_t version,                   ///< [in] SMI version that application was built with
-    zet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing SMI features
+    zet_sysman_version_t version,                   ///< [in] Sysman version that application was built with
+    zet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing Sysman features
     )
 {
     auto pfnGet = zet_lib::context.ddiTable.Sysman.pfnGet;
@@ -66,7 +66,7 @@ zetSysmanGet(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanDeviceGetProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sysman_properties_t* pProperties            ///< [in] Structure that will contain information about the device.
     )
 {
@@ -95,7 +95,7 @@ zetSysmanDeviceGetProperties(
 ///         + Device does not support scheduler modes.
 ze_result_t __zecall
 zetSysmanSchedulerGetCurrentMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
     )
 {
@@ -124,7 +124,7 @@ zetSysmanSchedulerGetCurrentMode(
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 ze_result_t __zecall
 zetSysmanSchedulerGetTimeoutModeProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     zet_sched_timeout_properties_t* pConfig         ///< [in] Will contain the current parameters for this mode.
@@ -155,7 +155,7 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 ze_result_t __zecall
 zetSysmanSchedulerGetTimesliceModeProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     zet_sched_timeslice_properties_t* pConfig       ///< [in] Will contain the current parameters for this mode.
@@ -194,7 +194,7 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimeoutMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
@@ -232,7 +232,7 @@ zetSysmanSchedulerSetTimeoutMode(
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimesliceMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
@@ -269,7 +269,7 @@ zetSysmanSchedulerSetTimesliceMode(
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetExclusiveMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
     )
@@ -305,7 +305,7 @@ zetSysmanSchedulerSetExclusiveMode(
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetComputeUnitDebugMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
     )
@@ -334,7 +334,7 @@ zetSysmanSchedulerSetComputeUnitDebugMode(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanProcessesGetState(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of processes currently using the device.
@@ -366,7 +366,7 @@ zetSysmanProcessesGetState(
 ///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
 zetSysmanDeviceReset(
-    zet_sysman_handle_t hSysman                     ///< [in] SMI handle for the device
+    zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
     )
 {
     auto pfnDeviceReset = zet_lib::context.ddiTable.Sysman.pfnDeviceReset;
@@ -393,7 +393,7 @@ zetSysmanDeviceReset(
 ///         + User does not have permissions to query this property.
 ze_result_t __zecall
 zetSysmanDeviceWasRepaired(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     ze_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
     )
 {
@@ -421,7 +421,7 @@ zetSysmanDeviceWasRepaired(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPciGetProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
     )
 {
@@ -449,7 +449,7 @@ zetSysmanPciGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPciGetState(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
     )
 {
@@ -477,7 +477,7 @@ zetSysmanPciGetState(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPciGetBarProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::zet_pci_properties_t.numBars -
                                                     ///< 1]).
     zet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
@@ -509,7 +509,7 @@ zetSysmanPciGetBarProperties(
 ///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
 zetSysmanPciGetStats(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
     )
 {
@@ -537,7 +537,7 @@ zetSysmanPciGetStats(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPowerGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -770,7 +770,7 @@ zetSysmanPowerSetEnergyThreshold(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFrequencyGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -837,7 +837,7 @@ zetSysmanFrequencyGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFrequencyGetAvailableClocks(
-    zet_sysman_freq_handle_t hFrequency,            ///< [in] SMI handle of the device.
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
                                                     ///< If count is zero, then the driver will update the value with the total
                                                     ///< number of frequencies available.
@@ -1219,7 +1219,7 @@ zetSysmanFrequencyOcSetTjMax(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanEngineGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1311,7 +1311,7 @@ zetSysmanEngineGetActivity(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanStandbyGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1432,7 +1432,7 @@ zetSysmanStandbySetMode(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFirmwareGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1557,7 +1557,7 @@ zetSysmanFirmwareFlash(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanMemoryGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1679,7 +1679,7 @@ zetSysmanMemoryGetBandwidth(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFabricPortGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1890,7 +1890,7 @@ zetSysmanFabricPortGetThroughput(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanTemperatureGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2065,7 +2065,7 @@ zetSysmanTemperatureGetState(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPsuGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2157,7 +2157,7 @@ zetSysmanPsuGetState(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFanGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2308,7 +2308,7 @@ zetSysmanFanGetState(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanLedGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2430,7 +2430,7 @@ zetSysmanLedSetState(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanRasGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2607,7 +2607,7 @@ zetSysmanRasGetState(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanEventGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     zet_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
     )
 {
@@ -2770,7 +2770,7 @@ zetSysmanEventListen(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanDiagnosticsGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2902,7 +2902,7 @@ namespace zet
 {
     ///////////////////////////////////////////////////////////////////////////////
     Sysman::Sysman( 
-        sysman_handle_t handle,                         ///< [in] handle of SMI object
+        sysman_handle_t handle,                         ///< [in] handle of Sysman object
         Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -2912,7 +2912,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanPower::SysmanPower( 
-        sysman_pwr_handle_t handle,                     ///< [in] handle of SMI object
+        sysman_pwr_handle_t handle,                     ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -2922,7 +2922,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanFrequency::SysmanFrequency( 
-        sysman_freq_handle_t handle,                    ///< [in] handle of SMI object
+        sysman_freq_handle_t handle,                    ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -2932,7 +2932,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanEngine::SysmanEngine( 
-        sysman_engine_handle_t handle,                  ///< [in] handle of SMI object
+        sysman_engine_handle_t handle,                  ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -2942,7 +2942,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanStandby::SysmanStandby( 
-        sysman_standby_handle_t handle,                 ///< [in] handle of SMI object
+        sysman_standby_handle_t handle,                 ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -2952,7 +2952,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanFirmware::SysmanFirmware( 
-        sysman_firmware_handle_t handle,                ///< [in] handle of SMI object
+        sysman_firmware_handle_t handle,                ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -2962,7 +2962,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanMemory::SysmanMemory( 
-        sysman_mem_handle_t handle,                     ///< [in] handle of SMI object
+        sysman_mem_handle_t handle,                     ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -2972,7 +2972,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanFabricPort::SysmanFabricPort( 
-        sysman_fabric_port_handle_t handle,             ///< [in] handle of SMI object
+        sysman_fabric_port_handle_t handle,             ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -2982,7 +2982,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanTemperature::SysmanTemperature( 
-        sysman_temp_handle_t handle,                    ///< [in] handle of SMI object
+        sysman_temp_handle_t handle,                    ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -2992,7 +2992,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanPsu::SysmanPsu( 
-        sysman_psu_handle_t handle,                     ///< [in] handle of SMI object
+        sysman_psu_handle_t handle,                     ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -3002,7 +3002,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanFan::SysmanFan( 
-        sysman_fan_handle_t handle,                     ///< [in] handle of SMI object
+        sysman_fan_handle_t handle,                     ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -3012,7 +3012,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanLed::SysmanLed( 
-        sysman_led_handle_t handle,                     ///< [in] handle of SMI object
+        sysman_led_handle_t handle,                     ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -3022,7 +3022,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanRas::SysmanRas( 
-        sysman_ras_handle_t handle,                     ///< [in] handle of SMI object
+        sysman_ras_handle_t handle,                     ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -3032,7 +3032,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanDiagnostics::SysmanDiagnostics( 
-        sysman_diag_handle_t handle,                    ///< [in] handle of SMI object
+        sysman_diag_handle_t handle,                    ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -3042,7 +3042,7 @@ namespace zet
 
     ///////////////////////////////////////////////////////////////////////////////
     SysmanEvent::SysmanEvent( 
-        sysman_event_handle_t handle,                   ///< [in] handle of SMI object
+        sysman_event_handle_t handle,                   ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
@@ -3051,7 +3051,7 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the handle to access SMI features for a device
+    /// @brief Get the handle to access Sysman features for a device
     /// 
     /// @details
     ///     - The returned handle is unique.
@@ -3060,13 +3060,13 @@ namespace zet
     ///       on sub-devices can be enumerated through the primary device.
     /// 
     /// @returns
-    ///     - Sysman*: Handle for accessing SMI features
+    ///     - Sysman*: Handle for accessing Sysman features
     /// 
     /// @throws result_t
     Sysman* __zecall
     Sysman::Get(
         Device* pDevice,                                ///< [in] Handle of the device
-        version_t version                               ///< [in] SMI version that application was built with
+        version_t version                               ///< [in] Sysman version that application was built with
         )
     {
         zet_sysman_handle_t hSysman;

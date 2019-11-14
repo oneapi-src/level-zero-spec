@@ -47,7 +47,7 @@ The following documents the high-level programming models and guidelines.
 
 
 # <a name="in">Introduction</a>
-Sysman is the System Resource Management Interface (SMI) used to monitor and control the power and performance of accelerator devices.
+Sysman is the System Resource Management library used to monitor and control the power and performance of accelerator devices.
 
 # <a name="ho">High-level overview</a>
 
@@ -55,14 +55,14 @@ Sysman is the System Resource Management Interface (SMI) used to monitor and con
 An application wishing to manage power and performance for devices first needs to use the Level0 Core API to enumerate through available accelerator
 devices in the system and select those of interest.
 
-For each selected device handle, applications use the function ::zetSysmanGet() to get an **SMI handle** to manage system resources of the device.
+For each selected device handle, applications use the function ::zetSysmanGet() to get an **Sysman handle** to manage system resources of the device.
 
 ![Object hierarchy](../images/tools_sysman_object_hierarchy.png?raw=true) 
 
 There is a unique handle for each device. Multiple threads can use the handle. If concurrent accesses are made to the same device property through
 the handle, the last request wins.
 
-The code example below shows how to enumerate the GPU devices in the system and create SMI handles for them:
+The code example below shows how to enumerate the GPU devices in the system and create Sysman handles for them:
 
 ```c
 int gNumDevices = 0;    // Global
@@ -189,7 +189,7 @@ The full list of available functions is described [below](#glo).
 Aside from management of the global properties of a device, there are many device components that can be managed to change the performance and/or power
 configuration of the device. Similar components are broken into **classes** and each class has a set of operations that can be performed on them.
 
-For example, devices typically have one or more frequency domains. The SMI API exposes a class for frequency and an enumeration of all frequency domains
+For example, devices typically have one or more frequency domains. The Sysman API exposes a class for frequency and an enumeration of all frequency domains
 that can be managed.
 
 The table below summarizes the classes that provide device queries and an example list of components that would be enumerated for a device with two
@@ -198,16 +198,16 @@ sub-devices. The table shows the operations (queries) that will be provided for 
 | Class                 | Components    | Operations |
 | :---                  | :---          | :---        |
 | [Power](#pwr)         | Package: power<br />Sub-device 0: Total power<br />Sub-device 1: Total power | Get energy consumption |
-| [Frequency](#frq)     | Sub-device 0: GPU frequency<br />Sub-device 0: HBM frequency<br />Sub-device 1: GPU frequency<br />Sub-device 1: HBM frequency | List available frequencies<br />Set frequency range<br />Get frequencies<br />Get throttle reasons<br />Get throttle time |
+| [Frequency](#frq)     | Sub-device 0: GPU frequency<br />Sub-device 0: Memory frequency<br />Sub-device 1: GPU frequency<br />Sub-device 1: Memory frequency | List available frequencies<br />Set frequency range<br />Get frequencies<br />Get throttle reasons<br />Get throttle time |
 | [Engines](#eng)       | Sub-device 0: All engines<br />Sub-device 0: Compute engines<br />Sub-device 0: Media engines<br />Sub-device 1: All engines<br />Sub-device 1: Compute engines<br />Sub-device 1: Media engines | Get busy time |
 | [Firmware](#fmw)      | Sub-device 0: Enumerates each firmware<br />Sub-device 1: Enumerates each firmware | Get firmware  name and version<br />Verify firmware checksum |
-| [Memory](#mem)        | Sub-device 0: HBM memory<br />Sub-device 1: HBM memory | Get maximum supported bandwidth<br />Get current allocation size<br />Get current bandwidth |
+| [Memory](#mem)        | Sub-device 0: Memory module<br />Sub-device 1: Memory module | Get maximum supported bandwidth<br />Get current allocation size<br />Get current bandwidth |
 | [Fabric port](#con)   | Sub-device 0: Enumerates each port<br />Sub-device 1: Enumerates each port | Get port configuration (UP/DOWN)<br />Get physical link details<br />Get port health (green/yellow/red/black)<br />Get remote port UUID<br />Get port max rx/tx speed<br />Get port current rx/tx bandwidth | 
-| [Temperature](#tmp)   | Package: temperature<br />Sub-device 0: GPU temperature<br />Sub-device 0: HBM temperature<br />Sub-device 1: GPU temperature<br />Sub-device 1: HBM temperature | Get current temperature sensor reading |
+| [Temperature](#tmp)   | Package: temperature<br />Sub-device 0: GPU temperature<br />Sub-device 0: Memory temperature<br />Sub-device 1: GPU temperature<br />Sub-device 1: Memory temperature | Get current temperature sensor reading |
 | [PSU](#psu)           | Package: Power supplies | Get details about the power supply<br />Query current state (temperature,current,fan) |
 | [Fan](#fan)           | Package: Fans | Get details (max fan speed)<br />Get config (fixed fan speed, temperature-speed table)<br />Query current fan speed |
 | [LED](#led)           | Package: LEDs | Get details (supports RGB configuration)<br />Query current state (on,color) |
-| [RAS](#ras)           | Sub-device 0: One set of RAS error counters<br />Sub-device 1: One set of RAS error counters | Read RAS total correctable and uncorrectable error counter.<br />Read breakdown of errors by category:<br />- no. resets<br />- no. programming errors<br />- no. driver errors<br />- no. compute errors<br />- no. cache errors<br />- no. memory errors<br />- no. PCI errors<br />- no. switch errors<br />- no. display errors<br />- no. non-compute errors | 
+| [RAS](#ras)           | Sub-device 0: One set of RAS error counters<br />Sub-device 1: One set of RAS error counters | Read RAS total correctable and uncorrectable error counter.<br />Read breakdown of errors by category:<br />- no. resets<br />- no. programming errors<br />- no. driver errors<br />- no. compute errors<br />- no. cache errors<br />- no. memory errors<br />- no. PCI errors<br />- no. fabric port errors<br />- no. display errors<br />- no. non-compute errors | 
 | [Diagnostics](#dag)   | Package: SCAN test suite<br />Package: ARRAY test suite | Get list of all diagnostics tests in the test suite | 
 
 The table below summarizes the classes that provide device controls and an example list of components that would be enumerated for a device with two
@@ -216,7 +216,7 @@ sub-devices. The table shows the operations (controls) that will be provided for
 | Class                 | Components    | Operations |
 | :---                  | :---          | :---        |
 | [Power](#pwr)         | Package: power | Set sustained power limit<br />Set burst power limit<br />Set peak power limit |
-| [Frequency](#frq)     | Sub-device 0: GPU frequency<br />Sub-device 0: HBM frequency<br />Sub-device 1: GPU frequency<br />Sub-device 1: HBM frequency | Set frequency range |
+| [Frequency](#frq)     | Sub-device 0: GPU frequency<br />Sub-device 0: Memory frequency<br />Sub-device 1: GPU frequency<br />Sub-device 1: Memory frequency | Set frequency range |
 | [Standby](#sby)       | Sub-device 0: Control entire sub-device<br />Sub-device 1: Control entire sub-device | Disable opportunistic standby |
 | [Firmware](#fmw)      | Sub-device 0: Enumerates each firmware<br />Sub-device 1: Enumerates each firmware | Flash new firmware |
 | [Fabric port](#con)   | Sub-device 0: Control each port<br />Sub-device 1: Control each port | Configure port UP/DOWN<br />Turn beaconing ON/OFF | 
@@ -225,17 +225,17 @@ sub-devices. The table shows the operations (controls) that will be provided for
 | [Diagnostics](#con)   | SCAN test suite<br />ARRAY test suite | Run all or a subset of diagnostic tests in the test suite | 
 
 ## <a name="dce">Device component enumeration</a>
-The SMI API provides functions to enumerate all components in a class that can be managed.
+The Sysman API provides functions to enumerate all components in a class that can be managed.
 
 For example, there is a frequency class which is used to control the frequency of different parts of the device. On most devices, the enumerator
-will provide two handles, one to control the GPU frequency and one to enumerate the HBM frequency. This is illustrated in the figure below:
+will provide two handles, one to control the GPU frequency and one to enumerate the device memory frequency. This is illustrated in the figure below:
 
 ![Frequency flow](../images/tools_sysman_freq_flow.png?raw=true) 
 
 In the C API, each class is associated with a unique handle type (e.g. ::zet_sysman_freq_handle_t refers to a frequency component).
 In the C++ API, each class is a C++ class (e.g. An instance of the class ::zet::SysmanFrequency refers to a frequency component).
 
-The example code below shows how to use the SMI API to enumerate all GPU frequency components and fix each to a specific frequency:
+The example code below shows how to use the Sysman API to enumerate all GPU frequency components and fix each to a specific frequency:
 
 ```c
 void FixGpuFrequency(zet_sysman_handle_t hSysmanDevice, double FreqMHz)
@@ -278,13 +278,13 @@ void FixGpuFrequency(zet_sysman_handle_t hSysmanDevice, double FreqMHz)
 ```
 
 ## <a name="sdm">Sub-device management</a>
-An SMI handle cannot be created for a sub-device - ::zetSysmanGet() will return error ::ZE_RESULT_ERROR_UNSUPPORTED if a device handle for a 
+A Sysman handle cannot be created for a sub-device - ::zetSysmanGet() will return error ::ZE_RESULT_ERROR_UNSUPPORTED if a device handle for a 
 sub-device is passed to this function. Instead, the enumerator for device components will return a list of components that are located in each
 sub-device. Properties for each component will indicate in which sub-device it is located. If software wishing to manage components in only one
 sub-device should filter the enumerated components using the sub-device ID (see ::ze_device_properties_t.subdeviceId).
 
 The figure below shows the frequency components that will be enumerated on a device with two sub-devices where each sub-device has a GPU and
-HBM frequency control:
+device memory frequency control:
 
 ![Frequency flow](../images/tools_sysman_freq_subdevices.png?raw=true) 
 
@@ -335,13 +335,13 @@ void FixSubdeviceGpuFrequency(zet_sysman_handle_t hSysmanDevice, uint32_t subdev
 ```
 
 ## <a name="evt">Events</a>
-Events are a way to determine if changes have occurred on a device e.g. new RAS errors without poll the SMI API. An application registers the events
+Events are a way to determine if changes have occurred on a device e.g. new RAS errors without polling the Sysman API. An application registers the events
 that it wishes to receive notification about and then it listens for notifications. The application can choose to block when listening - this will put
 the calling application thread to sleep until new notifications are received.
 
 The API enables registering for events from multiple devices and listening for any events coming from any devices by using one function call.
 
-Once notifications have occurred, the application can use the query SMI interface functions to get more details.
+Once notifications have occurred, the application can use the query Sysman interface functions to get more details.
 
 The following events are provided:
 
@@ -806,7 +806,7 @@ The API permits measuring the receive and transmit bandwidth flowing through eac
 speed (frequency/number of lanes) of each port and the current speeds which can be lower if operating in a degraded state. Note that a
 port's receive and transmit speeds are not necessarily the same.
 
-Since ports are contained inside a switch, the measured bandwidth at a port can be higher than the actual bandwidth generated by
+Since ports can pass data directly through to another port, the measured bandwidth at a port can be higher than the actual bandwidth generated by
 the accelerators directly connected by two ports. As such, bandwidth metrics at each port are more relevant for determining points of
 congestion in the fabric and less relevant for measuring the total bandwidth passing between two accelerators.
 
@@ -815,7 +815,7 @@ The following functions can be used to manage Fabric ports:
 | Function                               | Description |
 | :---                                   | :---        |
 | ::zetSysmanFabricPortGet()            | Enumerate all fabric ports on the device. |
-| ::zetSysmanFabricPortGetProperties()  | Get static properties about the switch (model, UUID, max receive/transmit speed). |
+| ::zetSysmanFabricPortGetProperties()  | Get static properties about the port (model, UUID, max receive/transmit speed). |
 | ::zetSysmanFabricPortGetLinkType()    | Get details about the physical link connected to the port. |
 | ::zetSysmanFabricPortGetConfig()      | Determine if the port is configured UP and if beaconing is on or off. |
 | ::zetSysmanFabricPortSetConfig()      | Configure the port UP or DOWN and turn beaconing on or off. |
@@ -1090,7 +1090,7 @@ of each category depends on the error type (correctable, uncorrectable).
 | ::zet_ras_details_t.numDriverErrors      | Always zero. | Number of low level driver communication errors have occurred. |
 | ::zet_ras_details_t.numComputeErrors     | Number of errors that have occurred in the accelerator hardware that were corrected. | Number of errors that have occurred in the accelerator hardware that were not corrected. These would have caused the hardware to hang and the driver to reset. |
 | ::zet_ras_details_t.numNonComputeErrors  | Number of errors occurring in fixed-function accelerator hardware that were corrected. | Number of errors occurring in the fixed-function accelerator hardware there could not be corrected. Typically these will result in a PCI bus reset and driver reset. |
-| ::zet_ras_details_t.numCacheErrors       | Number of ECC correctable errors that have occurred in the on-chip caches (L1/L3/register file/shared local memory). | Number of ECC uncorrectable errors that have occurred in the on-chip caches (L1/L3/register file/shared local memory). These would have caused the hardware to hang and the driver to reset. |
+| ::zet_ras_details_t.numCacheErrors       | Number of ECC correctable errors that have occurred in the on-chip caches (caches/register file/shared local memory). | Number of ECC uncorrectable errors that have occurred in the on-chip caches (caches/register file/shared local memory). These would have caused the hardware to hang and the driver to reset. |
 | ::zet_ras_details_t.numMemoryErrors      | Number of times the device memory has transitioned from a healthy state to a degraded state. Degraded state occurs when the number of correctable errors cross a threshold. | Number of times the device memory has transitioned from a healthy/degraded state to a critical/replace state. |
 | ::zet_ras_details_t.numPciErrors:        | controllerNumber of PCI packet replays that have occurred. | Number of PCI bus resets. |
 | ::zet_ras_details_t.numFabricErrors      | Number of times one or more ports have transitioned from a green status to a yellow status. This indicates that links are experiencing quality degradation. | Number of times one or more ports have transitioned from a green/yellow status to a red status. This indicates that links are experiencing connectivity statibility issues. |
@@ -1121,16 +1121,16 @@ The code below shows how to determine if RAS is supported and the current state 
 ```c
 void PrintRasDetails(zet_ras_details_t* pDetails)
 {
-    fprintf(stdout, "        Number new resets:                %llu\n", pDetails->numResets);
-    fprintf(stdout, "        Number new programming errors:    %llu\n", pDetails->numProgrammingErrors);
-    fprintf(stdout, "        Number new driver errors:         %llu\n", pDetails->numDriverErrors);
-    fprintf(stdout, "        Number new compute errors:        %llu\n", pDetails->numComputeErrors);
-    fprintf(stdout, "        Number new non-compute errors:    %llu\n", pDetails->numNonComputeErrors);
-    fprintf(stdout, "        Number new cache errors:          %llu\n", pDetails->numCacheErrors);
-    fprintf(stdout, "        Number new memory errors:         %llu\n", pDetails->numMemoryErrors);
-    fprintf(stdout, "        Number new PCI errors:            %llu\n", pDetails->numPciErrors);
-    fprintf(stdout, "        Number new switch errors:         %llu\n", pDetails->numSwitchErrors);
-    fprintf(stdout, "        Number new display errors:        %llu\n", pDetails->numDisplayErrors);
+    fprintf(stdout, "        Number new resets:                %llu\n", (long long unsigned int)pDetails->numResets);
+    fprintf(stdout, "        Number new programming errors:    %llu\n", (long long unsigned int)pDetails->numProgrammingErrors);
+    fprintf(stdout, "        Number new driver errors:         %llu\n", (long long unsigned int)pDetails->numDriverErrors);
+    fprintf(stdout, "        Number new compute errors:        %llu\n", (long long unsigned int)pDetails->numComputeErrors);
+    fprintf(stdout, "        Number new non-compute errors:    %llu\n", (long long unsigned int)pDetails->numNonComputeErrors);
+    fprintf(stdout, "        Number new cache errors:          %llu\n", (long long unsigned int)pDetails->numCacheErrors);
+    fprintf(stdout, "        Number new memory errors:         %llu\n", (long long unsigned int)pDetails->numMemoryErrors);
+    fprintf(stdout, "        Number new PCI errors:            %llu\n", (long long unsigned int)pDetails->numPciErrors);
+    fprintf(stdout, "        Number new fabric errors:         %llu\n", (long long unsigned int)pDetails->numFabricErrors);
+    fprintf(stdout, "        Number new display errors:        %llu\n", (long long unsigned int)pDetails->numDisplayErrors);
 }
 
 void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
@@ -1174,7 +1174,7 @@ void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
                         if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
                             == ZE_RESULT_SUCCESS)
                         {
-                            fprintf(stdout, "    Number new errors: %llu\n", newErrors);
+                            fprintf(stdout, "    Number new errors: %llu\n", (long long unsigned int)newErrors);
                             if (newErrors)
                             {
                                 PrintRasDetails(&errorDetails);

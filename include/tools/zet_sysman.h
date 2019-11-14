@@ -6,7 +6,7 @@
  *
  * @file zet_sysman.h
  *
- * @brief Intel 'One API' Level-Zero Tool APIs for System Resource Management (SMI)
+ * @brief Intel 'One API' Level-Zero Tool APIs for System Resource Management (Sysman)
  *
  * @cond DEV
  * DO NOT EDIT: generated from /scripts/tools/sysman.yml
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of SMI
+/// @brief API version of Sysman
 typedef enum _zet_sysman_version_t
 {
     ZET_SYSMAN_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
@@ -35,7 +35,7 @@ typedef enum _zet_sysman_version_t
 } zet_sysman_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the handle to access SMI features for a device
+/// @brief Get the handle to access Sysman features for a device
 /// 
 /// @details
 ///     - The returned handle is unique.
@@ -55,8 +55,8 @@ typedef enum _zet_sysman_version_t
 ze_result_t __zecall
 zetSysmanGet(
     zet_device_handle_t hDevice,                    ///< [in] Handle of the device
-    zet_sysman_version_t version,                   ///< [in] SMI version that application was built with
-    zet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing SMI features
+    zet_sysman_version_t version,                   ///< [in] Sysman version that application was built with
+    zet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing Sysman features
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -109,7 +109,7 @@ typedef struct _zet_sysman_properties_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanDeviceGetProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sysman_properties_t* pProperties            ///< [in] Structure that will contain information about the device.
     );
 
@@ -185,7 +185,7 @@ typedef struct _zet_sched_timeslice_properties_t
 ///         + Device does not support scheduler modes.
 ze_result_t __zecall
 zetSysmanSchedulerGetCurrentMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
     );
 
@@ -207,7 +207,7 @@ zetSysmanSchedulerGetCurrentMode(
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 ze_result_t __zecall
 zetSysmanSchedulerGetTimeoutModeProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     zet_sched_timeout_properties_t* pConfig         ///< [in] Will contain the current parameters for this mode.
@@ -231,7 +231,7 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 ///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
 ze_result_t __zecall
 zetSysmanSchedulerGetTimesliceModeProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     zet_sched_timeslice_properties_t* pConfig       ///< [in] Will contain the current parameters for this mode.
@@ -263,7 +263,7 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimeoutMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
@@ -294,7 +294,7 @@ zetSysmanSchedulerSetTimeoutMode(
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimesliceMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
@@ -324,7 +324,7 @@ zetSysmanSchedulerSetTimesliceMode(
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetExclusiveMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
     );
@@ -353,7 +353,7 @@ zetSysmanSchedulerSetExclusiveMode(
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetComputeUnitDebugMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                     ///< scheduler mode.
     );
@@ -392,7 +392,7 @@ typedef struct _zet_process_state_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanProcessesGetState(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of processes currently using the device.
@@ -417,7 +417,7 @@ zetSysmanProcessesGetState(
 ///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
 zetSysmanDeviceReset(
-    zet_sysman_handle_t hSysman                     ///< [in] SMI handle for the device
+    zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -437,7 +437,7 @@ zetSysmanDeviceReset(
 ///         + User does not have permissions to query this property.
 ze_result_t __zecall
 zetSysmanDeviceWasRepaired(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     ze_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
     );
 
@@ -554,7 +554,7 @@ typedef struct _zet_pci_stats_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPciGetProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
     );
 
@@ -575,7 +575,7 @@ zetSysmanPciGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPciGetState(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
     );
 
@@ -596,7 +596,7 @@ zetSysmanPciGetState(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPciGetBarProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::zet_pci_properties_t.numBars -
                                                     ///< 1]).
     zet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
@@ -621,7 +621,7 @@ zetSysmanPciGetBarProperties(
 ///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
 zetSysmanPciGetStats(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
     );
 
@@ -630,7 +630,7 @@ zetSysmanPciGetStats(
 typedef struct _zet_power_properties_t
 {
     ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     ze_bool_t canControl;                           ///< [out] Software can change the power limits of this domain assuming the
                                                     ///< user has permissions.
@@ -743,7 +743,7 @@ typedef struct _zet_energy_threshold_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPowerGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -938,7 +938,7 @@ typedef struct _zet_freq_properties_t
     zet_freq_domain_t type;                         ///< [out] The hardware block that this frequency domain controls (GPU,
                                                     ///< memory, ...)
     ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     ze_bool_t canControl;                           ///< [out] Indicates if software can control the frequency of this domain
                                                     ///< assuming the user has permissions
@@ -1093,7 +1093,7 @@ typedef struct _zet_oc_config_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFrequencyGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1146,7 +1146,7 @@ zetSysmanFrequencyGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFrequencyGetAvailableClocks(
-    zet_sysman_freq_handle_t hFrequency,            ///< [in] SMI handle of the device.
+    zet_sysman_freq_handle_t hFrequency,            ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
                                                     ///< If count is zero, then the driver will update the value with the total
                                                     ///< number of frequencies available.
@@ -1445,7 +1445,7 @@ typedef struct _zet_engine_properties_t
     zet_engine_group_t type;                        ///< [out] The engine group
     int64_t engines;                                ///< [out] Bitfield of accelerator engines counted by this group.
     ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
 
 } zet_engine_properties_t;
@@ -1488,7 +1488,7 @@ typedef struct _zet_engine_stats_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanEngineGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1556,7 +1556,7 @@ typedef struct _zet_standby_properties_t
 {
     zet_standby_type_t type;                        ///< [out] Which standby hardware component this controls
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
 
 } zet_standby_properties_t;
@@ -1588,7 +1588,7 @@ typedef enum _zet_standby_promo_mode_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanStandbyGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1669,7 +1669,7 @@ zetSysmanStandbySetMode(
 typedef struct _zet_firmware_properties_t
 {
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     ze_bool_t canControl;                           ///< [out] Indicates if software can flash the firmware assuming the user
                                                     ///< has permissions
@@ -1695,7 +1695,7 @@ typedef struct _zet_firmware_properties_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFirmwareGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1808,7 +1808,7 @@ typedef struct _zet_mem_properties_t
 {
     zet_mem_type_t type;                            ///< [out] The memory type
     ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     uint64_t physicalSize;                          ///< [out] Physical memory size in bytes
 
@@ -1868,7 +1868,7 @@ typedef struct _zet_mem_bandwidth_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanMemoryGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2022,7 +2022,7 @@ typedef struct _zet_fabric_port_properties_t
 {
     int8_t model[ZET_MAX_FABRIC_PORT_MODEL_SIZE];   ///< [out] Description of port technology
     ze_bool_t onSubdevice;                          ///< [out] True if the port is located on a sub-device; false means that
-                                                    ///< the port is on the device of the calling SMI handle
+                                                    ///< the port is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     zet_fabric_port_uuid_t portUuid;                ///< [out] The port universal unique id
     zet_fabric_port_speed_t maxRxSpeed;             ///< [out] Maximum bandwidth supported by the receive side of the port
@@ -2117,7 +2117,7 @@ typedef struct _zet_fabric_port_throughput_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFabricPortGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2278,7 +2278,7 @@ typedef struct _zet_temp_properties_t
 {
     zet_temp_sensors_t type;                        ///< [out] Which part of the device the temperature sensor measures
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     ze_bool_t isCriticalTempSupported;              ///< [out] Indicates if the critical temperature event
                                                     ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
@@ -2336,7 +2336,7 @@ typedef struct _zet_temp_config_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanTemperatureGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2474,7 +2474,7 @@ typedef enum _zet_psu_voltage_status_t
 typedef struct _zet_psu_properties_t
 {
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     ze_bool_t canControl;                           ///< [out] Indicates if software can control the PSU assuming the user has
                                                     ///< permissions
@@ -2511,7 +2511,7 @@ typedef struct _zet_psu_state_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanPsuGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2606,7 +2606,7 @@ typedef struct _zet_fan_temp_speed_t
 typedef struct _zet_fan_properties_t
 {
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     ze_bool_t canControl;                           ///< [out] Indicates if software can control the fan speed assuming the
                                                     ///< user has permissions
@@ -2654,7 +2654,7 @@ typedef struct _zet_fan_state_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFanGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2758,7 +2758,7 @@ zetSysmanFanGetState(
 typedef struct _zet_led_properties_t
 {
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     ze_bool_t canControl;                           ///< [out] Indicates if software can control the LED assuming the user has
                                                     ///< permissions
@@ -2794,7 +2794,7 @@ typedef struct _zet_led_state_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanLedGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2886,7 +2886,7 @@ typedef struct _zet_ras_properties_t
 {
     zet_ras_error_type_t type;                      ///< [out] The type of RAS error
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     ze_bool_t supported;                            ///< [out] True if RAS is supported on this device
     ze_bool_t enabled;                              ///< [out] True if RAS is enabled on this device
@@ -2950,7 +2950,7 @@ typedef struct _zet_ras_config_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanRasGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -3132,7 +3132,7 @@ typedef struct _zet_event_config_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanEventGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     zet_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
     );
 
@@ -3303,7 +3303,7 @@ typedef struct _zet_diag_properties_t
 {
     zet_diag_type_t type;                           ///< [out] The type of diagnostics test suite
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling SMI handle
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
     char name[ZET_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
     ze_bool_t haveTests;                            ///< [out] Indicates if this test suite has individual tests which can be
@@ -3329,7 +3329,7 @@ typedef struct _zet_diag_properties_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanDiagnosticsGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.

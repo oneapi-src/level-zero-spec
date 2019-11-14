@@ -1,9 +1,9 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (SMI)"
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman)"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "API version of SMI"
+desc: "API version of Sysman"
 class: $tSysman
 name: $t_sysman_version_t
 etors:
@@ -12,7 +12,7 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the handle to access SMI features for a device"
+desc: "Get the handle to access Sysman features for a device"
 class: $tSysman
 name: Get
 decl: static
@@ -25,10 +25,10 @@ params:
       desc: "[in] Handle of the device"
     - type: "$t_sysman_version_t"
       name: version
-      desc: "[in] SMI version that application was built with"
+      desc: "[in] Sysman version that application was built with"
     - type: "$t_sysman_handle_t*"
       name: phSysman
-      desc: "[out] Handle for accessing SMI features"
+      desc: "[out] Handle for accessing Sysman features"
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "Sub-device handles are not supported. Use the device handle."
@@ -96,7 +96,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $t_sysman_properties_t*
       name: pProperties
       desc: "[in] Structure that will contain information about the device."
@@ -157,7 +157,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $t_sched_mode_t*
       name: pMode
       desc: "[in] Will contain the current scheduler mode."
@@ -175,7 +175,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $x_bool_t
       name: getDefaults
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
@@ -196,7 +196,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $x_bool_t
       name: getDefaults
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
@@ -218,7 +218,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $t_sched_timeout_properties_t*
       name: pProperties
       desc: "[in] The properties to use when configurating this mode."
@@ -242,7 +242,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $t_sched_timeslice_properties_t*
       name: pProperties
       desc: "[in] The properties to use when configurating this mode."
@@ -266,7 +266,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $x_bool_t*
       name: pNeedReboot
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
@@ -287,7 +287,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $x_bool_t*
       name: pNeedReboot
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
@@ -325,7 +325,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle for the device"
+      desc: "[in] Sysman handle for the device"
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -345,7 +345,7 @@ name: DeviceReset
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle for the device"
+      desc: "[in] Sysman handle for the device"
 returns:
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."
@@ -358,7 +358,7 @@ name: DeviceWasRepaired
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle for the device"
+      desc: "[in] Sysman handle for the device"
     - type: $x_bool_t*
       name: pWasRepaired
       desc: "[in] Will indicate if the device was repaired"
@@ -510,7 +510,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $t_pci_properties_t*
       name: pProperties
       desc: "[in] Will contain the PCI properties."
@@ -525,7 +525,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $t_pci_state_t*
       name: pState
       desc: "[in] Will contain the PCI properties."
@@ -540,7 +540,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: uint32_t
       name: barIndex
       desc: "[in] The index of the bar (0 ... [$t_pci_properties_t.numBars - 1])."
@@ -558,7 +558,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: $t_pci_stats_t*
       name: pStats
       desc: "[in] Will contain a snapshot of the latest stats."
@@ -574,7 +574,7 @@ name: $t_power_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -679,7 +679,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -840,7 +840,7 @@ members:
       desc: "[out] The hardware block that this frequency domain controls (GPU, memory, ...)"
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -1019,7 +1019,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -1057,7 +1057,7 @@ details:
 params:
     - type: $t_sysman_freq_handle_t
       name: hFrequency
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -1310,7 +1310,7 @@ members:
       desc: "[out] Bitfield of accelerator engines counted by this group."
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -1343,7 +1343,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -1405,7 +1405,7 @@ members:
       desc: "[out] Which standby hardware component this controls"
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -1431,7 +1431,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -1499,7 +1499,7 @@ name: $t_firmware_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -1523,7 +1523,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -1636,7 +1636,7 @@ members:
       desc: "[out] The memory type"
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -1696,7 +1696,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -1857,7 +1857,7 @@ members:
       desc: "[out] Description of port technology"
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if the port is located on a sub-device; false means that the port is on the device of the calling SMI handle"
+      desc: "[out] True if the port is located on a sub-device; false means that the port is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -1964,7 +1964,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -2099,7 +2099,7 @@ members:
       desc: "[out] Which part of the device the temperature sensor measures"
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -2156,7 +2156,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -2269,7 +2269,7 @@ name: $t_psu_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -2311,7 +2311,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -2405,7 +2405,7 @@ name: $t_fan_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -2465,7 +2465,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -2551,7 +2551,7 @@ name: $t_led_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -2590,7 +2590,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -2672,7 +2672,7 @@ members:
       desc: "[out] The type of RAS error"
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -2744,7 +2744,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -2912,7 +2912,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle for the device"
+      desc: "[in] Sysman handle for the device"
     - type: "$t_sysman_event_handle_t*"
       name: phEvent
       desc: "[out] The event handle for the specified device."
@@ -3066,7 +3066,7 @@ members:
       desc: "[out] The type of diagnostics test suite"
     - type: $x_bool_t
       name: "onSubdevice"
-      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
@@ -3087,7 +3087,7 @@ details:
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device."
+      desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -3164,195 +3164,195 @@ returns:
 
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device"
+desc: "C++ wrapper for a Sysman device"
 name: $tSysman
 owner: $tDevice
 members:
     - type: $t_sysman_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device power domain"
+desc: "C++ wrapper for a Sysman device power domain"
 name: $tSysmanPower
 owner: $tSysman
 members:
     - type: $t_sysman_pwr_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device frequency domain"
+desc: "C++ wrapper for a Sysman device frequency domain"
 name: $tSysmanFrequency
 owner: $tSysman
 members:
     - type: $t_sysman_freq_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device engine group"
+desc: "C++ wrapper for a Sysman device engine group"
 name: $tSysmanEngine
 owner: $tSysman
 members:
     - type: $t_sysman_engine_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI standby control"
+desc: "C++ wrapper for a Sysman standby control"
 name: $tSysmanStandby
 owner: $tSysman
 members:
     - type: $t_sysman_standby_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device firmware"
+desc: "C++ wrapper for a Sysman device firmware"
 name: $tSysmanFirmware
 owner: $tSysman
 members:
     - type: $t_sysman_firmware_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device memory module"
+desc: "C++ wrapper for a Sysman device memory module"
 name: $tSysmanMemory
 owner: $tSysman
 members:
     - type: $t_sysman_mem_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device Fabric port"
+desc: "C++ wrapper for a Sysman device Fabric port"
 name: $tSysmanFabricPort
 owner: $tSysman
 members:
     - type: $t_sysman_fabric_port_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device temperature sensor"
+desc: "C++ wrapper for a Sysman device temperature sensor"
 name: $tSysmanTemperature
 owner: $tSysman
 members:
     - type: $t_sysman_temp_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device power supply"
+desc: "C++ wrapper for a Sysman device power supply"
 name: $tSysmanPsu
 owner: $tSysman
 members:
     - type: $t_sysman_psu_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device fan"
+desc: "C++ wrapper for a Sysman device fan"
 name: $tSysmanFan
 owner: $tSysman
 members:
     - type: $t_sysman_fan_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device LED"
+desc: "C++ wrapper for a Sysman device LED"
 name: $tSysmanLed
 owner: $tSysman
 members:
     - type: $t_sysman_led_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device RAS error set"
+desc: "C++ wrapper for a Sysman device RAS error set"
 name: $tSysmanRas
 owner: $tSysman
 members:
     - type: $t_sysman_ras_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device diagnostic test suite"
+desc: "C++ wrapper for a Sysman device diagnostic test suite"
 name: $tSysmanDiagnostics
 owner: $tSysman
 members:
     - type: $t_sysman_diag_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for a SMI device event"
+desc: "C++ wrapper for a Sysman device event"
 name: $tSysmanEvent
 owner: $tSysman
 members:
     - type: $t_sysman_event_handle_t
       name: handle
-      desc: "[in] handle of SMI object" 
+      desc: "[in] handle of Sysman object" 
       init: nullptr
     - type: $tSysman*
       name: pSysman

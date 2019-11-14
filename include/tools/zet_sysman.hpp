@@ -6,7 +6,7 @@
  *
  * @file zet_sysman.hpp
  *
- * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for System Resource Management (SMI)
+ * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for System Resource Management (Sysman)
  *
  * @cond DEV
  * DO NOT EDIT: generated from /scripts/tools/sysman.yml
@@ -85,12 +85,12 @@
 namespace zet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device
+    /// @brief C++ wrapper for a Sysman device
     class Sysman
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of SMI
+        /// @brief API version of Sysman
         enum class version_t
         {
             CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -326,14 +326,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_handle_t m_handle = nullptr;             ///< [in] handle of SMI object
+        sysman_handle_t m_handle = nullptr;             ///< [in] handle of Sysman object
         Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Sysman( void ) = delete;
         Sysman( 
-            sysman_handle_t handle,                         ///< [in] handle of SMI object
+            sysman_handle_t handle,                         ///< [in] handle of Sysman object
             Device* pDevice                                 ///< [in] pointer to owner object
             );
 
@@ -350,7 +350,7 @@ namespace zet
         auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the handle to access SMI features for a device
+        /// @brief Get the handle to access Sysman features for a device
         /// 
         /// @details
         ///     - The returned handle is unique.
@@ -358,13 +358,13 @@ namespace zet
         ///       support. Only use handles returned by ::zeDeviceGet(). All resources
         ///       on sub-devices can be enumerated through the primary device.
         /// @returns
-        ///     - Sysman*: Handle for accessing SMI features
+        ///     - Sysman*: Handle for accessing Sysman features
         /// 
         /// @throws result_t
         static Sysman* __zecall
         Get(
             Device* pDevice,                                ///< [in] Handle of the device
-            version_t version                               ///< [in] SMI version that application was built with
+            version_t version                               ///< [in] Sysman version that application was built with
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -854,7 +854,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device power domain
+    /// @brief C++ wrapper for a Sysman device power domain
     class SysmanPower
     {
     public:
@@ -863,7 +863,7 @@ namespace zet
         struct power_properties_t
         {
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Software can change the power limits of this domain assuming the
                                                             ///< user has permissions.
@@ -962,14 +962,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_pwr_handle_t m_handle = nullptr;         ///< [in] handle of SMI object
+        sysman_pwr_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanPower( void ) = delete;
         SysmanPower( 
-            sysman_pwr_handle_t handle,                     ///< [in] handle of SMI object
+            sysman_pwr_handle_t handle,                     ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -1080,7 +1080,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device frequency domain
+    /// @brief C++ wrapper for a Sysman device frequency domain
     class SysmanFrequency
     {
     public:
@@ -1135,7 +1135,7 @@ namespace zet
             Sysman::freq_domain_t type;                     ///< [out] The hardware block that this frequency domain controls (GPU,
                                                             ///< memory, ...)
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Indicates if software can control the frequency of this domain
                                                             ///< assuming the user has permissions
@@ -1244,14 +1244,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_freq_handle_t m_handle = nullptr;        ///< [in] handle of SMI object
+        sysman_freq_handle_t m_handle = nullptr;        ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanFrequency( void ) = delete;
         SysmanFrequency( 
-            sysman_freq_handle_t handle,                    ///< [in] handle of SMI object
+            sysman_freq_handle_t handle,                    ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -1449,7 +1449,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device engine group
+    /// @brief C++ wrapper for a Sysman device engine group
     class SysmanEngine
     {
     public:
@@ -1471,7 +1471,7 @@ namespace zet
             engine_group_t type;                            ///< [out] The engine group
             int64_t engines;                                ///< [out] Bitfield of accelerator engines counted by this group.
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
 
         };
@@ -1500,14 +1500,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_engine_handle_t m_handle = nullptr;      ///< [in] handle of SMI object
+        sysman_engine_handle_t m_handle = nullptr;      ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanEngine( void ) = delete;
         SysmanEngine( 
-            sysman_engine_handle_t handle,                  ///< [in] handle of SMI object
+            sysman_engine_handle_t handle,                  ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -1550,7 +1550,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI standby control
+    /// @brief C++ wrapper for a Sysman standby control
     class SysmanStandby
     {
     public:
@@ -1578,7 +1578,7 @@ namespace zet
         {
             standby_type_t type;                            ///< [out] Which standby hardware component this controls
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
 
         };
@@ -1586,14 +1586,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_standby_handle_t m_handle = nullptr;     ///< [in] handle of SMI object
+        sysman_standby_handle_t m_handle = nullptr;     ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanStandby( void ) = delete;
         SysmanStandby( 
-            sysman_standby_handle_t handle,                 ///< [in] handle of SMI object
+            sysman_standby_handle_t handle,                 ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -1648,7 +1648,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device firmware
+    /// @brief C++ wrapper for a Sysman device firmware
     class SysmanFirmware
     {
     public:
@@ -1657,7 +1657,7 @@ namespace zet
         struct firmware_properties_t
         {
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Indicates if software can flash the firmware assuming the user
                                                             ///< has permissions
@@ -1669,14 +1669,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_firmware_handle_t m_handle = nullptr;    ///< [in] handle of SMI object
+        sysman_firmware_handle_t m_handle = nullptr;    ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanFirmware( void ) = delete;
         SysmanFirmware( 
-            sysman_firmware_handle_t handle,                ///< [in] handle of SMI object
+            sysman_firmware_handle_t handle,                ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -1732,7 +1732,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device memory module
+    /// @brief C++ wrapper for a Sysman device memory module
     class SysmanMemory
     {
     public:
@@ -1769,7 +1769,7 @@ namespace zet
         {
             mem_type_t type;                                ///< [out] The memory type
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             uint64_t physicalSize;                          ///< [out] Physical memory size in bytes
 
@@ -1815,14 +1815,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_mem_handle_t m_handle = nullptr;         ///< [in] handle of SMI object
+        sysman_mem_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanMemory( void ) = delete;
         SysmanMemory( 
-            sysman_mem_handle_t handle,                     ///< [in] handle of SMI object
+            sysman_mem_handle_t handle,                     ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -1877,7 +1877,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device Fabric port
+    /// @brief C++ wrapper for a Sysman device Fabric port
     class SysmanFabricPort
     {
     public:
@@ -1939,7 +1939,7 @@ namespace zet
         {
             int8_t model[ZET_MAX_FABRIC_PORT_MODEL_SIZE];   ///< [out] Description of port technology
             ze::bool_t onSubdevice;                         ///< [out] True if the port is located on a sub-device; false means that
-                                                            ///< the port is on the device of the calling SMI handle
+                                                            ///< the port is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             fabric_port_uuid_t portUuid;                    ///< [out] The port universal unique id
             fabric_port_speed_t maxRxSpeed;                 ///< [out] Maximum bandwidth supported by the receive side of the port
@@ -2020,14 +2020,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_fabric_port_handle_t m_handle = nullptr; ///< [in] handle of SMI object
+        sysman_fabric_port_handle_t m_handle = nullptr; ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanFabricPort( void ) = delete;
         SysmanFabricPort( 
-            sysman_fabric_port_handle_t handle,             ///< [in] handle of SMI object
+            sysman_fabric_port_handle_t handle,             ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -2121,7 +2121,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device temperature sensor
+    /// @brief C++ wrapper for a Sysman device temperature sensor
     class SysmanTemperature
     {
     public:
@@ -2141,7 +2141,7 @@ namespace zet
         {
             temp_sensors_t type;                            ///< [out] Which part of the device the temperature sensor measures
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t isCriticalTempSupported;             ///< [out] Indicates if the critical temperature event
                                                             ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
@@ -2185,14 +2185,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_temp_handle_t m_handle = nullptr;        ///< [in] handle of SMI object
+        sysman_temp_handle_t m_handle = nullptr;        ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanTemperature( void ) = delete;
         SysmanTemperature( 
-            sysman_temp_handle_t handle,                    ///< [in] handle of SMI object
+            sysman_temp_handle_t handle,                    ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -2274,7 +2274,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device power supply
+    /// @brief C++ wrapper for a Sysman device power supply
     class SysmanPsu
     {
     public:
@@ -2293,7 +2293,7 @@ namespace zet
         struct psu_properties_t
         {
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Indicates if software can control the PSU assuming the user has
                                                             ///< permissions
@@ -2316,14 +2316,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_psu_handle_t m_handle = nullptr;         ///< [in] handle of SMI object
+        sysman_psu_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanPsu( void ) = delete;
         SysmanPsu( 
-            sysman_psu_handle_t handle,                     ///< [in] handle of SMI object
+            sysman_psu_handle_t handle,                     ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -2366,7 +2366,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device fan
+    /// @brief C++ wrapper for a Sysman device fan
     class SysmanFan
     {
     public:
@@ -2405,7 +2405,7 @@ namespace zet
         struct fan_properties_t
         {
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Indicates if software can control the fan speed assuming the
                                                             ///< user has permissions
@@ -2439,14 +2439,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_fan_handle_t m_handle = nullptr;         ///< [in] handle of SMI object
+        sysman_fan_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanFan( void ) = delete;
         SysmanFan( 
-            sysman_fan_handle_t handle,                     ///< [in] handle of SMI object
+            sysman_fan_handle_t handle,                     ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -2514,7 +2514,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device LED
+    /// @brief C++ wrapper for a Sysman device LED
     class SysmanLed
     {
     public:
@@ -2523,7 +2523,7 @@ namespace zet
         struct led_properties_t
         {
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Indicates if software can control the LED assuming the user has
                                                             ///< permissions
@@ -2545,14 +2545,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_led_handle_t m_handle = nullptr;         ///< [in] handle of SMI object
+        sysman_led_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanLed( void ) = delete;
         SysmanLed( 
-            sysman_led_handle_t handle,                     ///< [in] handle of SMI object
+            sysman_led_handle_t handle,                     ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -2607,7 +2607,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device RAS error set
+    /// @brief C++ wrapper for a Sysman device RAS error set
     class SysmanRas
     {
     public:
@@ -2626,7 +2626,7 @@ namespace zet
         {
             ras_error_type_t type;                          ///< [out] The type of RAS error
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t supported;                           ///< [out] True if RAS is supported on this device
             ze::bool_t enabled;                             ///< [out] True if RAS is enabled on this device
@@ -2676,14 +2676,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_ras_handle_t m_handle = nullptr;         ///< [in] handle of SMI object
+        sysman_ras_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanRas( void ) = delete;
         SysmanRas( 
-            sysman_ras_handle_t handle,                     ///< [in] handle of SMI object
+            sysman_ras_handle_t handle,                     ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -2770,7 +2770,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device diagnostic test suite
+    /// @brief C++ wrapper for a Sysman device diagnostic test suite
     class SysmanDiagnostics
     {
     public:
@@ -2810,7 +2810,7 @@ namespace zet
         {
             diag_type_t type;                               ///< [out] The type of diagnostics test suite
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling SMI handle
+                                                            ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             char name[ZET_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
             ze::bool_t haveTests;                           ///< [out] Indicates if this test suite has individual tests which can be
@@ -2822,14 +2822,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_diag_handle_t m_handle = nullptr;        ///< [in] handle of SMI object
+        sysman_diag_handle_t m_handle = nullptr;        ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanDiagnostics( void ) = delete;
         SysmanDiagnostics( 
-            sysman_diag_handle_t handle,                    ///< [in] handle of SMI object
+            sysman_diag_handle_t handle,                    ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
@@ -2905,7 +2905,7 @@ namespace zet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a SMI device event
+    /// @brief C++ wrapper for a Sysman device event
     class SysmanEvent
     {
     public:
@@ -2923,14 +2923,14 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_event_handle_t m_handle = nullptr;       ///< [in] handle of SMI object
+        sysman_event_handle_t m_handle = nullptr;       ///< [in] handle of Sysman object
         Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanEvent( void ) = delete;
         SysmanEvent( 
-            sysman_event_handle_t handle,                   ///< [in] handle of SMI object
+            sysman_event_handle_t handle,                   ///< [in] handle of Sysman object
             Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
