@@ -43,6 +43,8 @@ extern "C" {
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
 zeDeviceMakeMemoryResident(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -68,6 +70,8 @@ zeDeviceMakeMemoryResident(
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
 zeDeviceEvictMemory(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -92,6 +96,8 @@ zeDeviceEvictMemory(
 ///         + nullptr == hDevice
 ///         + nullptr == hImage
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
 zeDeviceMakeImageResident(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -117,6 +123,8 @@ zeDeviceMakeImageResident(
 ///         + nullptr == hDevice
 ///         + nullptr == hImage
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
 zeDeviceEvictImage(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
