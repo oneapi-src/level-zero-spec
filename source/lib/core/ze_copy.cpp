@@ -65,8 +65,9 @@ zeCommandListAppendMemoryCopy(
 /// @details
 ///     - The memory pointed to by dstptr must be accessible by the device on
 ///       which the command list is created.
-///     - The value to initialize memory to is interpreted as an 8-bit unsigned
-///       char; the upper 24-bits are ignored.
+///     - The value to initialize memory to is described by the pattern and the
+///       pattern size.
+///     - The pattern size must be a power of two.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -83,21 +84,23 @@ zeCommandListAppendMemoryCopy(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
+///         + nullptr == pattern
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zeCommandListAppendMemorySet(
+zeCommandListAppendMemoryFill(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
-    int value,                                      ///< [in] value to initialize memory to
-    size_t size,                                    ///< [in] size in bytes to initailize
+    const void* pattern,                            ///< [in] pointer to value to initialize memory to
+    size_t pattern_size,                            ///< [in] size in bytes of the value to initialize memory to
+    size_t size,                                    ///< [in] size in bytes to initialize
     ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemorySet = ze_lib::context.ddiTable.CommandList.pfnAppendMemorySet;
-    if( nullptr == pfnAppendMemorySet )
+    auto pfnAppendMemoryFill = ze_lib::context.ddiTable.CommandList.pfnAppendMemoryFill;
+    if( nullptr == pfnAppendMemoryFill )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+    return pfnAppendMemoryFill( hCommandList, ptr, pattern, pattern_size, size, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -434,8 +437,9 @@ namespace ze
     /// @details
     ///     - The memory pointed to by dstptr must be accessible by the device on
     ///       which the command list is created.
-    ///     - The value to initialize memory to is interpreted as an 8-bit unsigned
-    ///       char; the upper 24-bits are ignored.
+    ///     - The value to initialize memory to is described by the pattern and the
+    ///       pattern size.
+    ///     - The pattern size must be a power of two.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -447,22 +451,24 @@ namespace ze
     /// 
     /// @throws result_t
     void __zecall
-    CommandList::AppendMemorySet(
+    CommandList::AppendMemoryFill(
         void* ptr,                                      ///< [in] pointer to memory to initialize
-        int value,                                      ///< [in] value to initialize memory to
-        size_t size,                                    ///< [in] size in bytes to initailize
+        const void* pattern,                            ///< [in] pointer to value to initialize memory to
+        size_t pattern_size,                            ///< [in] size in bytes of the value to initialize memory to
+        size_t size,                                    ///< [in] size in bytes to initialize
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
-        auto result = static_cast<result_t>( ::zeCommandListAppendMemorySet(
+        auto result = static_cast<result_t>( ::zeCommandListAppendMemoryFill(
             reinterpret_cast<ze_command_list_handle_t>( getHandle() ),
             ptr,
-            value,
+            pattern,
+            pattern_size,
             size,
             ( pEvent ) ? reinterpret_cast<ze_event_handle_t>( pEvent->getHandle() ) : nullptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::CommandList::AppendMemorySet" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::CommandList::AppendMemoryFill" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

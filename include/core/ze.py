@@ -1509,11 +1509,11 @@ else:
     _zeCommandListAppendMemoryCopy_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_void_p, c_void_p, c_size_t, ze_event_handle_t )
 
 ###############################################################################
-## @brief Function-pointer for zeCommandListAppendMemorySet
+## @brief Function-pointer for zeCommandListAppendMemoryFill
 if __use_win_types:
-    _zeCommandListAppendMemorySet_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_void_p, c_int, c_size_t, ze_event_handle_t )
+    _zeCommandListAppendMemoryFill_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_void_p, c_void_p, c_size_t, c_size_t, ze_event_handle_t )
 else:
-    _zeCommandListAppendMemorySet_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_void_p, c_int, c_size_t, ze_event_handle_t )
+    _zeCommandListAppendMemoryFill_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_void_p, c_void_p, c_size_t, c_size_t, ze_event_handle_t )
 
 ###############################################################################
 ## @brief Function-pointer for zeCommandListAppendMemoryCopyRegion
@@ -1633,7 +1633,7 @@ class _ze_command_list_dditable_t(Structure):
         ("pfnAppendBarrier", c_void_p),                                 ## _zeCommandListAppendBarrier_t
         ("pfnAppendMemoryRangesBarrier", c_void_p),                     ## _zeCommandListAppendMemoryRangesBarrier_t
         ("pfnAppendMemoryCopy", c_void_p),                              ## _zeCommandListAppendMemoryCopy_t
-        ("pfnAppendMemorySet", c_void_p),                               ## _zeCommandListAppendMemorySet_t
+        ("pfnAppendMemoryFill", c_void_p),                              ## _zeCommandListAppendMemoryFill_t
         ("pfnAppendMemoryCopyRegion", c_void_p),                        ## _zeCommandListAppendMemoryCopyRegion_t
         ("pfnAppendImageCopy", c_void_p),                               ## _zeCommandListAppendImageCopy_t
         ("pfnAppendImageCopyRegion", c_void_p),                         ## _zeCommandListAppendImageCopyRegion_t
@@ -2121,7 +2121,7 @@ class ZE_DDI:
         self.zeCommandListAppendBarrier = _zeCommandListAppendBarrier_t(self.__dditable.CommandList.pfnAppendBarrier)
         self.zeCommandListAppendMemoryRangesBarrier = _zeCommandListAppendMemoryRangesBarrier_t(self.__dditable.CommandList.pfnAppendMemoryRangesBarrier)
         self.zeCommandListAppendMemoryCopy = _zeCommandListAppendMemoryCopy_t(self.__dditable.CommandList.pfnAppendMemoryCopy)
-        self.zeCommandListAppendMemorySet = _zeCommandListAppendMemorySet_t(self.__dditable.CommandList.pfnAppendMemorySet)
+        self.zeCommandListAppendMemoryFill = _zeCommandListAppendMemoryFill_t(self.__dditable.CommandList.pfnAppendMemoryFill)
         self.zeCommandListAppendMemoryCopyRegion = _zeCommandListAppendMemoryCopyRegion_t(self.__dditable.CommandList.pfnAppendMemoryCopyRegion)
         self.zeCommandListAppendImageCopy = _zeCommandListAppendImageCopy_t(self.__dditable.CommandList.pfnAppendImageCopy)
         self.zeCommandListAppendImageCopyRegion = _zeCommandListAppendImageCopyRegion_t(self.__dditable.CommandList.pfnAppendImageCopyRegion)

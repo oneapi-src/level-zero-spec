@@ -932,19 +932,20 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeCommandListAppendMemorySet
+    /// @brief Intercept function for zeCommandListAppendMemoryFill
     ze_result_t __zecall
-    zeCommandListAppendMemorySet(
+    zeCommandListAppendMemoryFill(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* ptr,                                      ///< [in] pointer to memory to initialize
-        int value,                                      ///< [in] value to initialize memory to
-        size_t size,                                    ///< [in] size in bytes to initailize
+        const void* pattern,                            ///< [in] pointer to value to initialize memory to
+        size_t pattern_size,                            ///< [in] size in bytes of the value to initialize memory to
+        size_t size,                                    ///< [in] size in bytes to initialize
         ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
-        auto pfnAppendMemorySet = context.zeDdiTable.CommandList.pfnAppendMemorySet;
+        auto pfnAppendMemoryFill = context.zeDdiTable.CommandList.pfnAppendMemoryFill;
 
-        if( nullptr == pfnAppendMemorySet )
+        if( nullptr == pfnAppendMemoryFill )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -955,9 +956,12 @@ namespace layer
             if( nullptr == ptr )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == pattern )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
         }
 
-        return pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+        return pfnAppendMemoryFill( hCommandList, ptr, pattern, pattern_size, size, hEvent );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3106,8 +3110,8 @@ zeGetCommandListProcAddrTable(
     dditable.pfnAppendMemoryCopy                         = pDdiTable->pfnAppendMemoryCopy;
     pDdiTable->pfnAppendMemoryCopy                       = layer::zeCommandListAppendMemoryCopy;
 
-    dditable.pfnAppendMemorySet                          = pDdiTable->pfnAppendMemorySet;
-    pDdiTable->pfnAppendMemorySet                        = layer::zeCommandListAppendMemorySet;
+    dditable.pfnAppendMemoryFill                         = pDdiTable->pfnAppendMemoryFill;
+    pDdiTable->pfnAppendMemoryFill                       = layer::zeCommandListAppendMemoryFill;
 
     dditable.pfnAppendMemoryCopyRegion                   = pDdiTable->pfnAppendMemoryCopyRegion;
     pDdiTable->pfnAppendMemoryCopyRegion                 = layer::zeCommandListAppendMemoryCopyRegion;

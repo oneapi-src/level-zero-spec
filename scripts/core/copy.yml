@@ -40,10 +40,11 @@ params:
 type: function
 desc: "Initializes host, device, or shared memory."
 class: $xCommandList
-name: AppendMemorySet
+name: AppendMemoryFill
 details:
     - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
-    - "The value to initialize memory to is interpreted as an 8-bit unsigned char; the upper 24-bits are ignored."
+    - "The value to initialize memory to is described by the pattern and the pattern size."
+    - "The pattern size must be a power of two."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
@@ -56,12 +57,15 @@ params:
     - type: "void*"
       name: ptr
       desc: "[in] pointer to memory to initialize"
-    - type: "int"
-      name: value
-      desc: "[in] value to initialize memory to"
+    - type: "const void*"
+      name: pattern
+      desc: "[in] pointer to value to initialize memory to"
+    - type: size_t
+      name: pattern_size
+      desc: "[in] size in bytes of the value to initialize memory to"
     - type: size_t
       name: size
-      desc: "[in] size in bytes to initailize"
+      desc: "[in] size in bytes to initialize"
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
