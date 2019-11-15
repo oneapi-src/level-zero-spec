@@ -304,6 +304,29 @@ class ze_device_compute_properties_t(Structure):
     ]
 
 ###############################################################################
+## @brief API version of ::ze_device_kernel_properties_t
+class ze_device_kernel_properties_version_v(IntEnum):
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class ze_device_kernel_properties_version_t(c_int):
+    def __str__(self):
+        return str(ze_device_kernel_properties_version_v(value))
+
+
+###############################################################################
+## @brief Device properties queried using ::zeDeviceGetKernelProperties
+class ze_device_kernel_properties_t(Structure):
+    _fields_ = [
+        ("version", ze_device_kernel_properties_version_t),             ## [in] ::ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT
+        ("spirvVersionSupported", c_ulong),                             ## [out] Maximum supported SPIR-V version.
+                                                                        ## Returns zero if SPIR-V is not supported.
+                                                                        ## Contains major and minor attributes, use ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION.
+        ("fp16Supported", ze_bool_t),                                   ## [out] Supports 16-bit floating-point operations
+        ("fp64Supported", ze_bool_t),                                   ## [out] Supports 64-bit floating-point operations
+        ("int64AtomicsSupported", ze_bool_t)                            ## [out] Supports 64-bit atomic operations
+    ]
+
+###############################################################################
 ## @brief API version of ::ze_device_memory_properties_t
 class ze_device_memory_properties_version_v(IntEnum):
     CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
@@ -1179,6 +1202,13 @@ else:
     _zeDeviceGetComputeProperties_t = CFUNCTYPE( ze_result_t, ze_device_handle_t, POINTER(ze_device_compute_properties_t) )
 
 ###############################################################################
+## @brief Function-pointer for zeDeviceGetKernelProperties
+if __use_win_types:
+    _zeDeviceGetKernelProperties_t = WINFUNCTYPE( ze_result_t, ze_device_handle_t, POINTER(ze_device_kernel_properties_t) )
+else:
+    _zeDeviceGetKernelProperties_t = CFUNCTYPE( ze_result_t, ze_device_handle_t, POINTER(ze_device_kernel_properties_t) )
+
+###############################################################################
 ## @brief Function-pointer for zeDeviceGetMemoryProperties
 if __use_win_types:
     _zeDeviceGetMemoryProperties_t = WINFUNCTYPE( ze_result_t, ze_device_handle_t, POINTER(c_ulong), POINTER(ze_device_memory_properties_t) )
@@ -1280,6 +1310,7 @@ class _ze_device_dditable_t(Structure):
         ("pfnGetSubDevices", c_void_p),                                 ## _zeDeviceGetSubDevices_t
         ("pfnGetProperties", c_void_p),                                 ## _zeDeviceGetProperties_t
         ("pfnGetComputeProperties", c_void_p),                          ## _zeDeviceGetComputeProperties_t
+        ("pfnGetKernelProperties", c_void_p),                           ## _zeDeviceGetKernelProperties_t
         ("pfnGetMemoryProperties", c_void_p),                           ## _zeDeviceGetMemoryProperties_t
         ("pfnGetMemoryAccessProperties", c_void_p),                     ## _zeDeviceGetMemoryAccessProperties_t
         ("pfnGetCacheProperties", c_void_p),                            ## _zeDeviceGetCacheProperties_t
@@ -2056,6 +2087,7 @@ class ZE_DDI:
         self.zeDeviceGetSubDevices = _zeDeviceGetSubDevices_t(self.__dditable.Device.pfnGetSubDevices)
         self.zeDeviceGetProperties = _zeDeviceGetProperties_t(self.__dditable.Device.pfnGetProperties)
         self.zeDeviceGetComputeProperties = _zeDeviceGetComputeProperties_t(self.__dditable.Device.pfnGetComputeProperties)
+        self.zeDeviceGetKernelProperties = _zeDeviceGetKernelProperties_t(self.__dditable.Device.pfnGetKernelProperties)
         self.zeDeviceGetMemoryProperties = _zeDeviceGetMemoryProperties_t(self.__dditable.Device.pfnGetMemoryProperties)
         self.zeDeviceGetMemoryAccessProperties = _zeDeviceGetMemoryAccessProperties_t(self.__dditable.Device.pfnGetMemoryAccessProperties)
         self.zeDeviceGetCacheProperties = _zeDeviceGetCacheProperties_t(self.__dditable.Device.pfnGetCacheProperties)

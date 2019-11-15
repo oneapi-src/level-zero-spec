@@ -161,6 +161,34 @@ zeDeviceGetComputeProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves kernel properties of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDevice
+///         + nullptr == pKernelProperties
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeDeviceGetKernelProperties(
+    ze_device_handle_t hDevice,                     ///< [in] handle of the device
+    ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
+    )
+{
+    auto pfnGetKernelProperties = ze_lib::context.ddiTable.Device.pfnGetKernelProperties;
+    if( nullptr == pfnGetKernelProperties )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetKernelProperties( hDevice, pKernelProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves local memory properties of the device.
 /// 
 /// @details
@@ -240,7 +268,7 @@ zeDeviceGetMemoryAccessProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves cache propreties of the device
+/// @brief Retrieves cache properties of the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -594,6 +622,27 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves kernel properties of the device
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Device::GetKernelProperties(
+        kernel_properties_t* pKernelProperties          ///< [in,out] query result for kernel properties
+        )
+    {
+        auto result = static_cast<result_t>( ::zeDeviceGetKernelProperties(
+            reinterpret_cast<ze_device_handle_t>( getHandle() ),
+            reinterpret_cast<ze_device_kernel_properties_t*>( pKernelProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Device::GetKernelProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Retrieves local memory properties of the device.
     /// 
     /// @details
@@ -660,7 +709,7 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves cache propreties of the device
+    /// @brief Retrieves cache properties of the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -1103,6 +1152,26 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::kernel_properties_version_t to std::string
+    std::string to_string( const Device::kernel_properties_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Device::kernel_properties_version_t::CURRENT:
+            str = "Device::kernel_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Device::kernel_properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::memory_properties_version_t to std::string
     std::string to_string( const Device::memory_properties_version_t val )
     {
@@ -1401,6 +1470,35 @@ namespace ze
             }
             str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::kernel_properties_t to std::string
+    std::string to_string( const Device::kernel_properties_t val )
+    {
+        std::string str;
+        
+        str += "Device::kernel_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Device::kernel_properties_t::spirvVersionSupported : ";
+        str += std::to_string(val.spirvVersionSupported);
+        str += "\n";
+        
+        str += "Device::kernel_properties_t::fp16Supported : ";
+        str += std::to_string(val.fp16Supported);
+        str += "\n";
+        
+        str += "Device::kernel_properties_t::fp64Supported : ";
+        str += std::to_string(val.fp64Supported);
+        str += "\n";
+        
+        str += "Device::kernel_properties_t::int64AtomicsSupported : ";
+        str += std::to_string(val.int64AtomicsSupported);
         str += "\n";
 
         return str;

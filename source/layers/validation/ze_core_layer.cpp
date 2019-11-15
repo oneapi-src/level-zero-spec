@@ -288,6 +288,32 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceGetKernelProperties
+    ze_result_t __zecall
+    zeDeviceGetKernelProperties(
+        ze_device_handle_t hDevice,                     ///< [in] handle of the device
+        ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
+        )
+    {
+        auto pfnGetKernelProperties = context.zeDdiTable.Device.pfnGetKernelProperties;
+
+        if( nullptr == pfnGetKernelProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pKernelProperties )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetKernelProperties( hDevice, pKernelProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryProperties
     ze_result_t __zecall
     zeDeviceGetMemoryProperties(
@@ -2890,6 +2916,9 @@ zeGetDeviceProcAddrTable(
 
     dditable.pfnGetComputeProperties                     = pDdiTable->pfnGetComputeProperties;
     pDdiTable->pfnGetComputeProperties                   = layer::zeDeviceGetComputeProperties;
+
+    dditable.pfnGetKernelProperties                      = pDdiTable->pfnGetKernelProperties;
+    pDdiTable->pfnGetKernelProperties                    = layer::zeDeviceGetKernelProperties;
 
     dditable.pfnGetMemoryProperties                      = pDdiTable->pfnGetMemoryProperties;
     pDdiTable->pfnGetMemoryProperties                    = layer::zeDeviceGetMemoryProperties;

@@ -242,6 +242,49 @@ zeDeviceGetComputeProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::ze_device_kernel_properties_t
+typedef enum _ze_device_kernel_properties_version_t
+{
+    ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+
+} ze_device_kernel_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device properties queried using ::zeDeviceGetKernelProperties
+typedef struct _ze_device_kernel_properties_t
+{
+    ze_device_kernel_properties_version_t version;  ///< [in] ::ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT
+    uint32_t spirvVersionSupported;                 ///< [out] Maximum supported SPIR-V version.
+                                                    ///< Returns zero if SPIR-V is not supported.
+                                                    ///< Contains major and minor attributes, use ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION.
+    ze_bool_t fp16Supported;                        ///< [out] Supports 16-bit floating-point operations
+    ze_bool_t fp64Supported;                        ///< [out] Supports 64-bit floating-point operations
+    ze_bool_t int64AtomicsSupported;                ///< [out] Supports 64-bit atomic operations
+
+} ze_device_kernel_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves kernel properties of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDevice
+///         + nullptr == pKernelProperties
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeDeviceGetKernelProperties(
+    ze_device_handle_t hDevice,                     ///< [in] handle of the device
+    ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::ze_device_memory_properties_t
 typedef enum _ze_device_memory_properties_version_t
 {
@@ -387,7 +430,7 @@ typedef struct _ze_device_cache_properties_t
 } ze_device_cache_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves cache propreties of the device
+/// @brief Retrieves cache properties of the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.

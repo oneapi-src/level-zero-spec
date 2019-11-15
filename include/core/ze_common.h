@@ -203,6 +203,10 @@ typedef struct _ze_device_properties_t ze_device_properties_t;
 typedef struct _ze_device_compute_properties_t ze_device_compute_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ze_device_kernel_properties_t
+typedef struct _ze_device_kernel_properties_t ze_device_kernel_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare ze_device_memory_properties_t
 typedef struct _ze_device_memory_properties_t ze_device_memory_properties_t;
 

@@ -341,6 +341,31 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceGetKernelProperties
+    ze_result_t __zecall
+    zeDeviceGetKernelProperties(
+        ze_device_handle_t hDevice,                     ///< [in] handle of the device
+        ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
+        auto pfnGetKernelProperties = dditable->ze.Device.pfnGetKernelProperties;
+        if( nullptr == pfnGetKernelProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        result = pfnGetKernelProperties( hDevice, pKernelProperties );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryProperties
     ze_result_t __zecall
     zeDeviceGetMemoryProperties(
@@ -3178,6 +3203,7 @@ zeGetDeviceProcAddrTable(
             pDdiTable->pfnGetSubDevices                            = loader::zeDeviceGetSubDevices;
             pDdiTable->pfnGetProperties                            = loader::zeDeviceGetProperties;
             pDdiTable->pfnGetComputeProperties                     = loader::zeDeviceGetComputeProperties;
+            pDdiTable->pfnGetKernelProperties                      = loader::zeDeviceGetKernelProperties;
             pDdiTable->pfnGetMemoryProperties                      = loader::zeDeviceGetMemoryProperties;
             pDdiTable->pfnGetMemoryAccessProperties                = loader::zeDeviceGetMemoryAccessProperties;
             pDdiTable->pfnGetCacheProperties                       = loader::zeDeviceGetCacheProperties;
