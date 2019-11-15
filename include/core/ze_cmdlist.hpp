@@ -336,8 +336,9 @@ namespace ze
         /// @details
         ///     - The memory pointed to by dstptr must be accessible by the device on
         ///       which the command list is created.
-        ///     - The value to initialize memory to is interpreted as an 8-bit unsigned
-        ///       char; the upper 24-bits are ignored.
+        ///     - The value to initialize memory to is described by the pattern and the
+        ///       pattern size.
+        ///     - The pattern size must be a power of two.
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same command list handle.
         ///     - The implementation of this function should be lock-free.
@@ -348,10 +349,11 @@ namespace ze
         ///     - **clEnqueueSVMMemFill**
         /// @throws result_t
         void __zecall
-        AppendMemorySet(
+        AppendMemoryFill(
             void* ptr,                                      ///< [in] pointer to memory to initialize
-            int value,                                      ///< [in] value to initialize memory to
-            size_t size,                                    ///< [in] size in bytes to initailize
+            const void* pattern,                            ///< [in] pointer to value to initialize memory to
+            size_t pattern_size,                            ///< [in] size in bytes of the value to initialize memory to
+            size_t size,                                    ///< [in] size in bytes to initialize
             Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 

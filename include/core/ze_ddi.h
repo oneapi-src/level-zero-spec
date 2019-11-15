@@ -560,11 +560,12 @@ typedef ze_result_t (__zecall *ze_pfnCommandListAppendMemoryCopy_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeCommandListAppendMemorySet 
-typedef ze_result_t (__zecall *ze_pfnCommandListAppendMemorySet_t)(
+/// @brief Function-pointer for zeCommandListAppendMemoryFill 
+typedef ze_result_t (__zecall *ze_pfnCommandListAppendMemoryFill_t)(
     ze_command_list_handle_t,
     void*,
-    int,
+    const void*,
+    size_t,
     size_t,
     ze_event_handle_t
     );
@@ -731,7 +732,7 @@ typedef struct _ze_command_list_dditable_t
     ze_pfnCommandListAppendBarrier_t                            pfnAppendBarrier;
     ze_pfnCommandListAppendMemoryRangesBarrier_t                pfnAppendMemoryRangesBarrier;
     ze_pfnCommandListAppendMemoryCopy_t                         pfnAppendMemoryCopy;
-    ze_pfnCommandListAppendMemorySet_t                          pfnAppendMemorySet;
+    ze_pfnCommandListAppendMemoryFill_t                         pfnAppendMemoryFill;
     ze_pfnCommandListAppendMemoryCopyRegion_t                   pfnAppendMemoryCopyRegion;
     ze_pfnCommandListAppendImageCopy_t                          pfnAppendImageCopy;
     ze_pfnCommandListAppendImageCopyRegion_t                    pfnAppendImageCopyRegion;

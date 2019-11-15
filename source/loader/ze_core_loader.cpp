@@ -1047,13 +1047,14 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeCommandListAppendMemorySet
+    /// @brief Intercept function for zeCommandListAppendMemoryFill
     ze_result_t __zecall
-    zeCommandListAppendMemorySet(
+    zeCommandListAppendMemoryFill(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* ptr,                                      ///< [in] pointer to memory to initialize
-        int value,                                      ///< [in] value to initialize memory to
-        size_t size,                                    ///< [in] size in bytes to initailize
+        const void* pattern,                            ///< [in] pointer to value to initialize memory to
+        size_t pattern_size,                            ///< [in] size in bytes of the value to initialize memory to
+        size_t size,                                    ///< [in] size in bytes to initialize
         ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -1061,8 +1062,8 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
-        auto pfnAppendMemorySet = dditable->ze.CommandList.pfnAppendMemorySet;
-        if( nullptr == pfnAppendMemorySet )
+        auto pfnAppendMemoryFill = dditable->ze.CommandList.pfnAppendMemoryFill;
+        if( nullptr == pfnAppendMemoryFill )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
@@ -1072,7 +1073,7 @@ namespace loader
         hEvent = ( hEvent ) ? reinterpret_cast<ze_event_object_t*>( hEvent )->handle : nullptr;
 
         // forward to device-driver
-        result = pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+        result = pfnAppendMemoryFill( hCommandList, ptr, pattern, pattern_size, size, hEvent );
 
         return result;
     }
@@ -3413,7 +3414,7 @@ zeGetCommandListProcAddrTable(
             pDdiTable->pfnAppendBarrier                            = loader::zeCommandListAppendBarrier;
             pDdiTable->pfnAppendMemoryRangesBarrier                = loader::zeCommandListAppendMemoryRangesBarrier;
             pDdiTable->pfnAppendMemoryCopy                         = loader::zeCommandListAppendMemoryCopy;
-            pDdiTable->pfnAppendMemorySet                          = loader::zeCommandListAppendMemorySet;
+            pDdiTable->pfnAppendMemoryFill                         = loader::zeCommandListAppendMemoryFill;
             pDdiTable->pfnAppendMemoryCopyRegion                   = loader::zeCommandListAppendMemoryCopyRegion;
             pDdiTable->pfnAppendImageCopy                          = loader::zeCommandListAppendImageCopy;
             pDdiTable->pfnAppendImageCopyRegion                    = loader::zeCommandListAppendImageCopyRegion;

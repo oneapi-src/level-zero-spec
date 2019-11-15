@@ -25,6 +25,9 @@ params:
     - type: size_t
       name: size
       desc: "[in] size in bytes to make resident"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allows memory to be evicted from the device."
@@ -45,6 +48,9 @@ params:
     - type: size_t
       name: size
       desc: "[in] size in bytes to evict"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Makes image resident for the device."
@@ -61,6 +67,9 @@ params:
     - type: $x_image_handle_t
       name: hImage
       desc: "[in] handle of image to make resident"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allows image to be evicted from the device."
@@ -78,3 +87,6 @@ params:
     - type: $x_image_handle_t
       name: hImage
       desc: "[in] handle of image to make evict"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY

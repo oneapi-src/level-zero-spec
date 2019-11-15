@@ -1206,26 +1206,27 @@ typedef void (__zecall *ze_pfnCommandListAppendMemoryCopyCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeCommandListAppendMemorySet 
+/// @brief Callback function parameters for zeCommandListAppendMemoryFill 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_command_list_append_memory_set_params_t
+typedef struct _ze_command_list_append_memory_fill_params_t
 {
     ze_command_list_handle_t* phCommandList;
     void** pptr;
-    int* pvalue;
+    const void** ppattern;
+    size_t* ppattern_size;
     size_t* psize;
     ze_event_handle_t* phEvent;
-} ze_command_list_append_memory_set_params_t;
+} ze_command_list_append_memory_fill_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeCommandListAppendMemorySet 
+/// @brief Callback function-pointer for zeCommandListAppendMemoryFill 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnCommandListAppendMemorySetCb_t)(
-    ze_command_list_append_memory_set_params_t* params,
+typedef void (__zecall *ze_pfnCommandListAppendMemoryFillCb_t)(
+    ze_command_list_append_memory_fill_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1633,7 +1634,7 @@ typedef struct _ze_command_list_callbacks_t
     ze_pfnCommandListAppendBarrierCb_t                              pfnAppendBarrierCb;
     ze_pfnCommandListAppendMemoryRangesBarrierCb_t                  pfnAppendMemoryRangesBarrierCb;
     ze_pfnCommandListAppendMemoryCopyCb_t                           pfnAppendMemoryCopyCb;
-    ze_pfnCommandListAppendMemorySetCb_t                            pfnAppendMemorySetCb;
+    ze_pfnCommandListAppendMemoryFillCb_t                           pfnAppendMemoryFillCb;
     ze_pfnCommandListAppendMemoryCopyRegionCb_t                     pfnAppendMemoryCopyRegionCb;
     ze_pfnCommandListAppendImageCopyCb_t                            pfnAppendImageCopyCb;
     ze_pfnCommandListAppendImageCopyRegionCb_t                      pfnAppendImageCopyRegionCb;

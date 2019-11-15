@@ -887,23 +887,24 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeCommandListAppendMemorySet
+    /// @brief Intercept function for zeCommandListAppendMemoryFill
     ze_result_t __zecall
-    zeCommandListAppendMemorySet(
+    zeCommandListAppendMemoryFill(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* ptr,                                      ///< [in] pointer to memory to initialize
-        int value,                                      ///< [in] value to initialize memory to
-        size_t size,                                    ///< [in] size in bytes to initailize
+        const void* pattern,                            ///< [in] pointer to value to initialize memory to
+        size_t pattern_size,                            ///< [in] size in bytes of the value to initialize memory to
+        size_t size,                                    ///< [in] size in bytes to initialize
         ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnAppendMemorySet = context.zeDdiTable.CommandList.pfnAppendMemorySet;
-        if( nullptr != pfnAppendMemorySet )
+        auto pfnAppendMemoryFill = context.zeDdiTable.CommandList.pfnAppendMemoryFill;
+        if( nullptr != pfnAppendMemoryFill )
         {
-            result = pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+            result = pfnAppendMemoryFill( hCommandList, ptr, pattern, pattern_size, size, hEvent );
         }
         else
         {
@@ -4461,23 +4462,25 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeCommandListAppendMemorySet
+    /// @brief Intercept function for zeCommandListAppendMemoryFill
     ze_result_t __zecall
-    zeCommandListAppendMemorySet(
+    zeCommandListAppendMemoryFill(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* ptr,                                      ///< [in] pointer to memory to initialize
-        int value,                                      ///< [in] value to initialize memory to
-        size_t size,                                    ///< [in] size in bytes to initailize
+        const void* pattern,                            ///< [in] pointer to value to initialize memory to
+        size_t pattern_size,                            ///< [in] size in bytes of the value to initialize memory to
+        size_t size,                                    ///< [in] size in bytes to initialize
         ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // capture parameters
-        ze_command_list_append_memory_set_params_t in_params = {
+        ze_command_list_append_memory_fill_params_t in_params = {
             &hCommandList,
             &ptr,
-            &value,
+            &pattern,
+            &pattern_size,
             &size,
             &hEvent
         };
@@ -4491,19 +4494,20 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].zePrologueCbs.CommandList;
-                if( nullptr != table.pfnAppendMemorySetCb )
-                    table.pfnAppendMemorySetCb( &in_params, result,
+                if( nullptr != table.pfnAppendMemoryFillCb )
+                    table.pfnAppendMemoryFillCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::zeCommandListAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+        result = driver::zeCommandListAppendMemoryFill( hCommandList, ptr, pattern, pattern_size, size, hEvent );
 
         // capture parameters
-        ze_command_list_append_memory_set_params_t out_params = {
+        ze_command_list_append_memory_fill_params_t out_params = {
             &hCommandList,
             &ptr,
-            &value,
+            &pattern,
+            &pattern_size,
             &size,
             &hEvent
         };
@@ -4513,8 +4517,8 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.CommandList;
-                if( nullptr != table.pfnAppendMemorySetCb )
-                    table.pfnAppendMemorySetCb( &out_params, result,
+                if( nullptr != table.pfnAppendMemoryFillCb )
+                    table.pfnAppendMemoryFillCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8614,9 +8618,9 @@ zeGetCommandListProcAddrTable(
         pDdiTable->pfnAppendMemoryCopy                       = driver::zeCommandListAppendMemoryCopy;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnAppendMemorySet                        = instrumented::zeCommandListAppendMemorySet;
+        pDdiTable->pfnAppendMemoryFill                       = instrumented::zeCommandListAppendMemoryFill;
     else
-        pDdiTable->pfnAppendMemorySet                        = driver::zeCommandListAppendMemorySet;
+        pDdiTable->pfnAppendMemoryFill                       = driver::zeCommandListAppendMemoryFill;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnAppendMemoryCopyRegion                 = instrumented::zeCommandListAppendMemoryCopyRegion;
