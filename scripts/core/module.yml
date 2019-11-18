@@ -483,15 +483,15 @@ name: $x_thread_group_dimensions_t
 members:
     - type: "uint32_t"
       name: groupCountX
-      desc: "[in] size of thread group in X dimension"
+      desc: "[in] number of thread groups in X dimension"
       init: "0"
     - type: "uint32_t"
       name: groupCountY
-      desc: "[in] size of thread group in Y dimension"
+      desc: "[in] number of thread groups in Y dimension"
       init: "0"
     - type: "uint32_t"
       name: groupCountZ
-      desc: "[in] size of thread group in Z dimension"
+      desc: "[in] number of thread groups in Z dimension"
       init: "0"
 --- #--------------------------------------------------------------------------
 type: enum

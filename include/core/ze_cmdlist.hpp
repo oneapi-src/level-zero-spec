@@ -127,9 +127,9 @@ namespace ze
         /// @brief Kernel thread group dimensions.
         struct thread_group_dimensions_t
         {
-            uint32_t groupCountX = 0;                       ///< [in] size of thread group in X dimension
-            uint32_t groupCountY = 0;                       ///< [in] size of thread group in Y dimension
-            uint32_t groupCountZ = 0;                       ///< [in] size of thread group in Z dimension
+            uint32_t groupCountX = 0;                       ///< [in] number of thread groups in X dimension
+            uint32_t groupCountY = 0;                       ///< [in] number of thread groups in Y dimension
+            uint32_t groupCountZ = 0;                       ///< [in] number of thread groups in Z dimension
 
         };
 

@@ -1056,9 +1056,9 @@ class ze_kernel_set_attribute_t(c_int):
 ## @brief Kernel thread group dimensions.
 class ze_thread_group_dimensions_t(Structure):
     _fields_ = [
-        ("groupCountX", c_ulong),                                       ## [in] size of thread group in X dimension
-        ("groupCountY", c_ulong),                                       ## [in] size of thread group in Y dimension
-        ("groupCountZ", c_ulong)                                        ## [in] size of thread group in Z dimension
+        ("groupCountX", c_ulong),                                       ## [in] number of thread groups in X dimension
+        ("groupCountY", c_ulong),                                       ## [in] number of thread groups in Y dimension
+        ("groupCountZ", c_ulong)                                        ## [in] number of thread groups in Z dimension
     ]
 
 ###############################################################################

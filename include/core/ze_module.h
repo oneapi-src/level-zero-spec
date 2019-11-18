@@ -538,9 +538,9 @@ zeKernelSetIntermediateCacheConfig(
 /// @brief Kernel thread group dimensions.
 typedef struct _ze_thread_group_dimensions_t
 {
-    uint32_t groupCountX;                           ///< [in] size of thread group in X dimension
-    uint32_t groupCountY;                           ///< [in] size of thread group in Y dimension
-    uint32_t groupCountZ;                           ///< [in] size of thread group in Z dimension
+    uint32_t groupCountX;                           ///< [in] number of thread groups in X dimension
+    uint32_t groupCountY;                           ///< [in] number of thread groups in Y dimension
+    uint32_t groupCountZ;                           ///< [in] number of thread groups in Z dimension
 
 } ze_thread_group_dimensions_t;
 
