@@ -815,7 +815,7 @@ The following sample code demonstrates a sequence for setting kernel args and la
     zeKernelSetArgumentValue(hKernel, 2, sizeof(uint32_t), &width);
     zeKernelSetArgumentValue(hKernel, 3, sizeof(uint32_t), &height);
 
-    ze_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
+    ze_group_count_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
     // Append launch kernel
     zeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
@@ -841,7 +841,7 @@ The launch arguments contain thread group dimensions.
     uint32_t numGroupsX = imageWidth / groupSizeX;
     uint32_t numGroupsY = imageHeight / groupSizeY;
 
-    ze_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
+    ze_group_count_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
     // Append launch kernel
     zeCommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
@@ -852,10 +852,10 @@ buffer that the device reads instead of the command itself. This allows for the 
 device to generate the parameters.
 
 ```c
-    ze_thread_group_dimensions_t* pIndirectArgs;
+    ze_group_count_t* pIndirectArgs;
     
     ...
-    zeDriverAllocDeviceMem(hDriver, hDevice, flags, 0, sizeof(ze_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    zeDriverAllocDeviceMem(hDriver, hDevice, flags, 0, sizeof(ze_group_count_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append launch kernel - indirect
     zeCommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);

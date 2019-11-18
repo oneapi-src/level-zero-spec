@@ -535,16 +535,6 @@ zeKernelSetIntermediateCacheConfig(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Kernel thread group dimensions.
-typedef struct _ze_thread_group_dimensions_t
-{
-    uint32_t groupCountX;                           ///< [in] number of thread groups in X dimension
-    uint32_t groupCountY;                           ///< [in] number of thread groups in Y dimension
-    uint32_t groupCountZ;                           ///< [in] number of thread groups in Z dimension
-
-} ze_thread_group_dimensions_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::ze_kernel_properties_t
 typedef enum _ze_kernel_properties_version_t
 {
@@ -565,7 +555,9 @@ typedef struct _ze_kernel_properties_t
     ze_kernel_properties_version_t version;         ///< [in] ::ZE_KERNEL_PROPERTIES_VERSION_CURRENT
     char name[ZE_MAX_KERNEL_NAME];                  ///< [out] Kernel name
     uint32_t numKernelArgs;                         ///< [out] number of kernel arguments.
-    ze_thread_group_dimensions_t compileGroupSize;  ///< [out] group size from kernel attribute.
+    uint32_t requiredGroupSizeX;                    ///< [out] required group size in the X dimension
+    uint32_t requiredGroupSizeY;                    ///< [out] required group size in the Y dimension
+    uint32_t requiredGroupSizeZ;                    ///< [out] required group size in the Z dimension
 
 } ze_kernel_properties_t;
 
@@ -595,6 +587,16 @@ zeKernelGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Kernel dispatch group count.
+typedef struct _ze_group_count_t
+{
+    uint32_t groupCountX;                           ///< [in] number of thread groups in X dimension
+    uint32_t groupCountY;                           ///< [in] number of thread groups in Y dimension
+    uint32_t groupCountZ;                           ///< [in] number of thread groups in Z dimension
+
+} ze_group_count_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Launch kernel over one or more work groups.
 /// 
 /// @details
@@ -621,7 +623,7 @@ ze_result_t __zecall
 zeCommandListAppendLaunchKernel(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+    const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
     ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -659,7 +661,7 @@ ze_result_t __zecall
 zeCommandListAppendLaunchCooperativeKernel(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+    const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
     ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -671,7 +673,7 @@ zeCommandListAppendLaunchCooperativeKernel(
 /// 
 /// @details
 ///     - The launch arguments need to be device visible.
-///     - The launch arguments buffer may not be reusued until the function has
+///     - The launch arguments buffer may not be reused until the function has
 ///       completed on the device.
 ///     - This may **not** be called for a command list created with
 ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
@@ -696,7 +698,7 @@ ze_result_t __zecall
 zeCommandListAppendLaunchKernelIndirect(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+    const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
                                                     ///< arguments
     ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -740,7 +742,7 @@ zeCommandListAppendLaunchMultipleKernelsIndirect(
     const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
                                                     ///< number of kernels to launch; value must be less-than or equal-to
                                                     ///< numKernels
-    const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+    const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
                                                     ///< a contiguous array of thread group launch arguments
     ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching

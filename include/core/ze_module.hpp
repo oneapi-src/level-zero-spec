@@ -346,7 +346,9 @@ namespace ze
             properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::ZE_KERNEL_PROPERTIES_VERSION_CURRENT
             char name[ZE_MAX_KERNEL_NAME];                  ///< [out] Kernel name
             uint32_t numKernelArgs;                         ///< [out] number of kernel arguments.
-            CommandList::thread_group_dimensions_t compileGroupSize;///< [out] group size from kernel attribute.
+            uint32_t requiredGroupSizeX;                    ///< [out] required group size in the X dimension
+            uint32_t requiredGroupSizeY;                    ///< [out] required group size in the Y dimension
+            uint32_t requiredGroupSizeZ;                    ///< [out] required group size in the Z dimension
 
         };
 

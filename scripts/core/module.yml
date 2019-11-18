@@ -476,24 +476,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "devices do not support CacheConfig"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Kernel thread group dimensions."
-class: $xCommandList
-name: $x_thread_group_dimensions_t
-members:
-    - type: "uint32_t"
-      name: groupCountX
-      desc: "[in] number of thread groups in X dimension"
-      init: "0"
-    - type: "uint32_t"
-      name: groupCountY
-      desc: "[in] number of thread groups in Y dimension"
-      init: "0"
-    - type: "uint32_t"
-      name: groupCountZ
-      desc: "[in] number of thread groups in Z dimension"
-      init: "0"
---- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_kernel_properties_t
 class: $xKernel
@@ -523,9 +505,15 @@ members:
     - type: "uint32_t"
       name: numKernelArgs
       desc: "[out] number of kernel arguments."
-    - type: "$x_thread_group_dimensions_t"
-      name: compileGroupSize
-      desc: "[out] group size from kernel attribute."
+    - type: "uint32_t"
+      name: requiredGroupSizeX
+      desc: "[out] required group size in the X dimension"
+    - type: "uint32_t"
+      name: requiredGroupSizeY
+      desc: "[out] required group size in the Y dimension"
+    - type: "uint32_t"
+      name: requiredGroupSizeZ
+      desc: "[out] required group size in the Z dimension"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve kernel properties."
@@ -544,6 +532,24 @@ params:
       name: pKernelProperties
       desc: "[in,out] query result for kernel properties."
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Kernel dispatch group count."
+class: $xCommandList
+name: $x_group_count_t
+members:
+    - type: "uint32_t"
+      name: groupCountX
+      desc: "[in] number of thread groups in X dimension"
+      init: "0"
+    - type: "uint32_t"
+      name: groupCountY
+      desc: "[in] number of thread groups in Y dimension"
+      init: "0"
+    - type: "uint32_t"
+      name: groupCountZ
+      desc: "[in] number of thread groups in Z dimension"
+      init: "0"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Launch kernel over one or more work groups."
 class: $xCommandList
@@ -561,7 +567,7 @@ params:
     - type: "$x_kernel_handle_t"
       name: hKernel
       desc: "[in] handle of the kernel object"
-    - type: "const $x_thread_group_dimensions_t*"
+    - type: "const $x_group_count_t*"
       name: pLaunchFuncArgs
       desc: "[in] thread group launch arguments"
     - type: $x_event_handle_t
@@ -593,7 +599,7 @@ params:
     - type: "$x_kernel_handle_t"
       name: hKernel
       desc: "[in] handle of the kernel object"
-    - type: "const $x_thread_group_dimensions_t*"
+    - type: "const $x_group_count_t*"
       name: pLaunchFuncArgs
       desc: "[in] thread group launch arguments"
     - type: $x_event_handle_t
@@ -614,7 +620,7 @@ analogue:
     - "**cuLaunchKernel**"
 details:
     - "The launch arguments need to be device visible."
-    - "The launch arguments buffer may not be reusued until the function has completed on the device."
+    - "The launch arguments buffer may not be reused until the function has completed on the device."
     - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -625,7 +631,7 @@ params:
     - type: "$x_kernel_handle_t"
       name: hKernel
       desc: "[in] handle of the kernel object"
-    - type: "const $x_thread_group_dimensions_t*"
+    - type: "const $x_group_count_t*"
       name: pLaunchArgumentsBuffer
       desc: "[in] pointer to device buffer that will contain thread group launch arguments"
     - type: $x_event_handle_t
@@ -663,7 +669,7 @@ params:
     - type: "const uint32_t*"
       name: pCountBuffer
       desc: "[in] pointer to device memory location that will contain the actual number of kernels to launch; value must be less-than or equal-to numKernels"
-    - type: "const $x_thread_group_dimensions_t*"
+    - type: "const $x_group_count_t*"
       name: pLaunchArgumentsBuffer
       desc: "[in][range(0, numKernels)] pointer to device buffer that will contain a contiguous array of thread group launch arguments"
     - type: $x_event_handle_t
