@@ -821,7 +821,7 @@ The following sample code demonstrates a sequence for setting kernel args and la
     ${x}KernelSetArgumentValue(hKernel, 2, sizeof(uint32_t), &width);
     ${x}KernelSetArgumentValue(hKernel, 3, sizeof(uint32_t), &height);
 
-    ${x}_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
+    ${x}_group_count_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
     // Append launch kernel
     ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
@@ -847,7 +847,7 @@ The launch arguments contain thread group dimensions.
     uint32_t numGroupsX = imageWidth / groupSizeX;
     uint32_t numGroupsY = imageHeight / groupSizeY;
 
-    ${x}_thread_group_dimensions_t launchArgs = { numGroupsX, numGroupsY, 1 };
+    ${x}_group_count_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
     // Append launch kernel
     ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
@@ -858,10 +858,10 @@ buffer that the device reads instead of the command itself. This allows for the 
 device to generate the parameters.
 
 ```c
-    ${x}_thread_group_dimensions_t* pIndirectArgs;
+    ${x}_group_count_t* pIndirectArgs;
     
     ...
-    ${x}DriverAllocDeviceMem(hDriver, hDevice, flags, 0, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    ${x}DriverAllocDeviceMem(hDriver, hDevice, flags, 0, sizeof(${x}_group_count_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append launch kernel - indirect
     ${x}CommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);

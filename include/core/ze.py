@@ -1053,15 +1053,6 @@ class ze_kernel_set_attribute_t(c_int):
 
 
 ###############################################################################
-## @brief Kernel thread group dimensions.
-class ze_thread_group_dimensions_t(Structure):
-    _fields_ = [
-        ("groupCountX", c_ulong),                                       ## [in] number of thread groups in X dimension
-        ("groupCountY", c_ulong),                                       ## [in] number of thread groups in Y dimension
-        ("groupCountZ", c_ulong)                                        ## [in] number of thread groups in Z dimension
-    ]
-
-###############################################################################
 ## @brief API version of ::ze_kernel_properties_t
 class ze_kernel_properties_version_v(IntEnum):
     CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
@@ -1082,7 +1073,18 @@ class ze_kernel_properties_t(Structure):
         ("version", ze_kernel_properties_version_t),                    ## [in] ::ZE_KERNEL_PROPERTIES_VERSION_CURRENT
         ("name", c_char * ZE_MAX_KERNEL_NAME),                          ## [out] Kernel name
         ("numKernelArgs", c_ulong),                                     ## [out] number of kernel arguments.
-        ("compileGroupSize", ze_thread_group_dimensions_t)              ## [out] group size from kernel attribute.
+        ("requiredGroupSizeX", c_ulong),                                ## [out] required group size in the X dimension
+        ("requiredGroupSizeY", c_ulong),                                ## [out] required group size in the Y dimension
+        ("requiredGroupSizeZ", c_ulong)                                 ## [out] required group size in the Z dimension
+    ]
+
+###############################################################################
+## @brief Kernel dispatch group count.
+class ze_group_count_t(Structure):
+    _fields_ = [
+        ("groupCountX", c_ulong),                                       ## [in] number of thread groups in X dimension
+        ("groupCountY", c_ulong),                                       ## [in] number of thread groups in Y dimension
+        ("groupCountZ", c_ulong)                                        ## [in] number of thread groups in Z dimension
     ]
 
 ###############################################################################
@@ -1619,30 +1621,30 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zeCommandListAppendLaunchKernel
 if __use_win_types:
-    _zeCommandListAppendLaunchKernel_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_thread_group_dimensions_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
+    _zeCommandListAppendLaunchKernel_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_group_count_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
 else:
-    _zeCommandListAppendLaunchKernel_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_thread_group_dimensions_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
+    _zeCommandListAppendLaunchKernel_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_group_count_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zeCommandListAppendLaunchCooperativeKernel
 if __use_win_types:
-    _zeCommandListAppendLaunchCooperativeKernel_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_thread_group_dimensions_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
+    _zeCommandListAppendLaunchCooperativeKernel_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_group_count_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
 else:
-    _zeCommandListAppendLaunchCooperativeKernel_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_thread_group_dimensions_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
+    _zeCommandListAppendLaunchCooperativeKernel_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_group_count_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zeCommandListAppendLaunchKernelIndirect
 if __use_win_types:
-    _zeCommandListAppendLaunchKernelIndirect_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_thread_group_dimensions_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
+    _zeCommandListAppendLaunchKernelIndirect_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_group_count_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
 else:
-    _zeCommandListAppendLaunchKernelIndirect_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_thread_group_dimensions_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
+    _zeCommandListAppendLaunchKernelIndirect_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_kernel_handle_t, POINTER(ze_group_count_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zeCommandListAppendLaunchMultipleKernelsIndirect
 if __use_win_types:
-    _zeCommandListAppendLaunchMultipleKernelsIndirect_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_ulong, POINTER(ze_kernel_handle_t), POINTER(c_ulong), POINTER(ze_thread_group_dimensions_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
+    _zeCommandListAppendLaunchMultipleKernelsIndirect_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_ulong, POINTER(ze_kernel_handle_t), POINTER(c_ulong), POINTER(ze_group_count_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
 else:
-    _zeCommandListAppendLaunchMultipleKernelsIndirect_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_ulong, POINTER(ze_kernel_handle_t), POINTER(c_ulong), POINTER(ze_thread_group_dimensions_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
+    _zeCommandListAppendLaunchMultipleKernelsIndirect_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_ulong, POINTER(ze_kernel_handle_t), POINTER(c_ulong), POINTER(ze_group_count_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zeCommandListAppendLaunchHostFunction

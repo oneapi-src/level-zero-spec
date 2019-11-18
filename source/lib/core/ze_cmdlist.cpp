@@ -549,20 +549,20 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts CommandList::thread_group_dimensions_t to std::string
-    std::string to_string( const CommandList::thread_group_dimensions_t val )
+    /// @brief Converts CommandList::group_count_t to std::string
+    std::string to_string( const CommandList::group_count_t val )
     {
         std::string str;
         
-        str += "CommandList::thread_group_dimensions_t::groupCountX : ";
+        str += "CommandList::group_count_t::groupCountX : ";
         str += std::to_string(val.groupCountX);
         str += "\n";
         
-        str += "CommandList::thread_group_dimensions_t::groupCountY : ";
+        str += "CommandList::group_count_t::groupCountY : ";
         str += std::to_string(val.groupCountY);
         str += "\n";
         
-        str += "CommandList::thread_group_dimensions_t::groupCountZ : ";
+        str += "CommandList::group_count_t::groupCountZ : ";
         str += std::to_string(val.groupCountZ);
         str += "\n";
 
