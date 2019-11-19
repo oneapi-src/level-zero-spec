@@ -146,6 +146,29 @@ typedef void (__zecall *ze_pfnDeviceGetComputePropertiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDeviceGetKernelProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_device_get_kernel_properties_params_t
+{
+    ze_device_handle_t* phDevice;
+    ze_device_kernel_properties_t** ppKernelProperties;
+} ze_device_get_kernel_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDeviceGetKernelProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDeviceGetKernelPropertiesCb_t)(
+    ze_device_get_kernel_properties_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeDeviceGetMemoryProperties 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -520,6 +543,7 @@ typedef struct _ze_device_callbacks_t
     ze_pfnDeviceGetSubDevicesCb_t                                   pfnGetSubDevicesCb;
     ze_pfnDeviceGetPropertiesCb_t                                   pfnGetPropertiesCb;
     ze_pfnDeviceGetComputePropertiesCb_t                            pfnGetComputePropertiesCb;
+    ze_pfnDeviceGetKernelPropertiesCb_t                             pfnGetKernelPropertiesCb;
     ze_pfnDeviceGetMemoryPropertiesCb_t                             pfnGetMemoryPropertiesCb;
     ze_pfnDeviceGetMemoryAccessPropertiesCb_t                       pfnGetMemoryAccessPropertiesCb;
     ze_pfnDeviceGetCachePropertiesCb_t                              pfnGetCachePropertiesCb;
@@ -1493,7 +1517,7 @@ typedef struct _ze_command_list_append_launch_kernel_params_t
 {
     ze_command_list_handle_t* phCommandList;
     ze_kernel_handle_t* phKernel;
-    const ze_thread_group_dimensions_t** ppLaunchFuncArgs;
+    const ze_group_count_t** ppLaunchFuncArgs;
     ze_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     ze_event_handle_t** pphWaitEvents;
@@ -1520,7 +1544,7 @@ typedef struct _ze_command_list_append_launch_cooperative_kernel_params_t
 {
     ze_command_list_handle_t* phCommandList;
     ze_kernel_handle_t* phKernel;
-    const ze_thread_group_dimensions_t** ppLaunchFuncArgs;
+    const ze_group_count_t** ppLaunchFuncArgs;
     ze_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     ze_event_handle_t** pphWaitEvents;
@@ -1547,7 +1571,7 @@ typedef struct _ze_command_list_append_launch_kernel_indirect_params_t
 {
     ze_command_list_handle_t* phCommandList;
     ze_kernel_handle_t* phKernel;
-    const ze_thread_group_dimensions_t** ppLaunchArgumentsBuffer;
+    const ze_group_count_t** ppLaunchArgumentsBuffer;
     ze_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     ze_event_handle_t** pphWaitEvents;
@@ -1576,7 +1600,7 @@ typedef struct _ze_command_list_append_launch_multiple_kernels_indirect_params_t
     uint32_t* pnumKernels;
     ze_kernel_handle_t** pphKernels;
     const uint32_t** ppCountBuffer;
-    const ze_thread_group_dimensions_t** ppLaunchArgumentsBuffer;
+    const ze_group_count_t** ppLaunchArgumentsBuffer;
     ze_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     ze_event_handle_t** pphWaitEvents;

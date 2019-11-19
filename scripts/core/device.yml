@@ -262,6 +262,56 @@ params:
       desc: "[in,out] query result for compute properties"
 --- #--------------------------------------------------------------------------
 type: enum
+desc: "API version of $x_device_kernel_properties_t"
+class: $xDevice
+name: $x_device_kernel_properties_version_t
+etors:
+    - name: $X_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device properties queried using $xDeviceGetKernelProperties"
+class: $xDevice
+name: $x_device_kernel_properties_t
+members:
+    - type: $x_device_kernel_properties_version_t
+      name: version
+      desc: "[in] $X_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT
+    - type: uint32_t
+      name: spirvVersionSupported
+      desc: |
+            [out] Maximum supported SPIR-V version.
+            Returns zero if SPIR-V is not supported.
+            Contains major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION.
+    - type: $x_bool_t
+      name: fp16Supported
+      desc: "[out] Supports 16-bit floating-point operations"
+    - type: $x_bool_t
+      name: fp64Supported
+      desc: "[out] Supports 64-bit floating-point operations"
+    - type: $x_bool_t
+      name: int64AtomicsSupported
+      desc: "[out] Supports 64-bit atomic operations"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves kernel properties of the device"
+class: $xDevice
+name: GetKernelProperties
+ordinal: "1"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_device_kernel_properties_t*"
+      name: pKernelProperties
+      desc: "[in,out] query result for kernel properties"
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "API version of $x_device_memory_properties_t"
 class: $xDevice
 name: $x_device_memory_properties_version_t
@@ -426,7 +476,7 @@ members:
       desc: "[out] Per-cache Last Level Cache (L3) size, in bytes"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves cache propreties of the device"
+desc: "Retrieves cache properties of the device"
 class: $xDevice
 name: GetCacheProperties
 ordinal: "1"

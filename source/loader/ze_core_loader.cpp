@@ -341,6 +341,31 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceGetKernelProperties
+    ze_result_t __zecall
+    zeDeviceGetKernelProperties(
+        ze_device_handle_t hDevice,                     ///< [in] handle of the device
+        ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
+        auto pfnGetKernelProperties = dditable->ze.Device.pfnGetKernelProperties;
+        if( nullptr == pfnGetKernelProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        result = pfnGetKernelProperties( hDevice, pKernelProperties );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryProperties
     ze_result_t __zecall
     zeDeviceGetMemoryProperties(
@@ -2690,7 +2715,7 @@ namespace loader
     zeCommandListAppendLaunchKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+        const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2730,7 +2755,7 @@ namespace loader
     zeCommandListAppendLaunchCooperativeKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+        const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2770,7 +2795,7 @@ namespace loader
     zeCommandListAppendLaunchKernelIndirect(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+        const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
                                                         ///< arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -2815,7 +2840,7 @@ namespace loader
         const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
                                                         ///< number of kernels to launch; value must be less-than or equal-to
                                                         ///< numKernels
-        const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+        const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
                                                         ///< a contiguous array of thread group launch arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -3178,6 +3203,7 @@ zeGetDeviceProcAddrTable(
             pDdiTable->pfnGetSubDevices                            = loader::zeDeviceGetSubDevices;
             pDdiTable->pfnGetProperties                            = loader::zeDeviceGetProperties;
             pDdiTable->pfnGetComputeProperties                     = loader::zeDeviceGetComputeProperties;
+            pDdiTable->pfnGetKernelProperties                      = loader::zeDeviceGetKernelProperties;
             pDdiTable->pfnGetMemoryProperties                      = loader::zeDeviceGetMemoryProperties;
             pDdiTable->pfnGetMemoryAccessProperties                = loader::zeDeviceGetMemoryAccessProperties;
             pDdiTable->pfnGetCacheProperties                       = loader::zeDeviceGetCacheProperties;

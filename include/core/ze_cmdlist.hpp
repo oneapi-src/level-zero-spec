@@ -124,12 +124,12 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Kernel thread group dimensions.
-        struct thread_group_dimensions_t
+        /// @brief Kernel dispatch group count.
+        struct group_count_t
         {
-            uint32_t groupCountX = 0;                       ///< [in] size of thread group in X dimension
-            uint32_t groupCountY = 0;                       ///< [in] size of thread group in Y dimension
-            uint32_t groupCountZ = 0;                       ///< [in] size of thread group in Z dimension
+            uint32_t groupCountX = 0;                       ///< [in] number of thread groups in X dimension
+            uint32_t groupCountY = 0;                       ///< [in] number of thread groups in Y dimension
+            uint32_t groupCountZ = 0;                       ///< [in] number of thread groups in Z dimension
 
         };
 
@@ -591,7 +591,7 @@ namespace ze
         void __zecall
         AppendLaunchKernel(
             Kernel* pKernel,                                ///< [in] pointer to the kernel object
-            const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] thread group launch arguments
+            const group_count_t* pLaunchFuncArgs,           ///< [in] thread group launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
             Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -619,7 +619,7 @@ namespace ze
         void __zecall
         AppendLaunchCooperativeKernel(
             Kernel* pKernel,                                ///< [in] pointer to the kernel object
-            const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] thread group launch arguments
+            const group_count_t* pLaunchFuncArgs,           ///< [in] thread group launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
             Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -631,7 +631,7 @@ namespace ze
         /// 
         /// @details
         ///     - The launch arguments need to be device visible.
-        ///     - The launch arguments buffer may not be reusued until the function has
+        ///     - The launch arguments buffer may not be reused until the function has
         ///       completed on the device.
         ///     - This may **not** be called for a command list created with
         ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
@@ -646,7 +646,7 @@ namespace ze
         void __zecall
         AppendLaunchKernelIndirect(
             Kernel* pKernel,                                ///< [in] pointer to the kernel object
-            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain thread group launch
+            const group_count_t* pLaunchArgumentsBuffer,    ///< [in] pointer to device buffer that will contain thread group launch
                                                             ///< arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
@@ -679,7 +679,7 @@ namespace ze
             const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
                                                             ///< number of kernels to launch; value must be less-than or equal-to
                                                             ///< numKernels
-            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in][range(0, numKernels)] pointer to device buffer that will contain
+            const group_count_t* pLaunchArgumentsBuffer,    ///< [in][range(0, numKernels)] pointer to device buffer that will contain
                                                             ///< a contiguous array of thread group launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
@@ -743,8 +743,8 @@ namespace ze
     std::string to_string( const CommandList::memory_advice_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts CommandList::thread_group_dimensions_t to std::string
-    std::string to_string( const CommandList::thread_group_dimensions_t val );
+    /// @brief Converts CommandList::group_count_t to std::string
+    std::string to_string( const CommandList::group_count_t val );
 
 } // namespace ze
 #endif // defined(__cplusplus)

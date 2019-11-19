@@ -23,7 +23,7 @@ The first few words of the SPIR-V module must be a magic number and a SPIR-V ver
 
 ${"##"} Supported SPIR-V Versions
 
-TODO: How do we describe which SPIR-V versions we consume?
+The maximum SPIR-V version supported by a device is described by ::${x}_device_kernel_properties_t.spirvVersionSupported.
 
 ${"##"} Extended Instruction Sets
 
@@ -134,12 +134,9 @@ An environment that supports SPIR-V 1.0 must support SPIR-V 1.0 modules that dec
   * **GenericPointer**
   * **Groups**
   * **ImageBasic** (for devices supporting ::${x}_device_image_properties_t::supported)
-  * **Float64** (TODO: Can fp64 be optional?)
-
-TODO: Consider:
-
-  * **Float16** (This is an extension in OpenCL)
-  * **Int64Atomics** (This is an extension in OpenCL)
+  * **Float16** (for devices supporting ::${x}_device_kernel_properties_t.fp16Supported)
+  * **Float64** (for devices supporting ::${x}_device_kernel_properties_t.fp64Supported)
+  * **Int64Atomics** (for devices supporting ::${x}_device_kernel_properties_t.int64AtomicsSupported)
 
 If the ${OneApi} environment supports the **ImageBasic** capability, then
 the following capabilities must also be supported:
@@ -202,9 +199,9 @@ must not include the optional _Image Operand_ **ConstOffset**.
 
 For all *Atomic Instructions*:
 
-  * Only 32-bit integer types are supported for the _Result Type_ and/or
-    type of _Value_.
-  * TODO: Update this if we support 64-bit atomics by default.
+  * 32-bit integer types are supported for the _Result Type_ and/or type of _Value_.
+    64-bit integer types are optionally supported for the _Result Type_ and/or type
+    of _Value_ for devices supporting ::${x}_device_kernel_properties_t.int64AtomicsSupported.
   * The _Pointer_ operand must be a pointer to the **Function**, **Workgroup**,
     **CrossWorkGroup**, or **Generic** _Storage Classes_.
 
@@ -310,8 +307,6 @@ The following restrictions apply to the **SubgroupBufferBlockIOINTEL** instructi
 The following restrictions apply to the **SubgroupImageBlockIOINTEL** instructions:
 
   * The behavior of the **SubgroupImageBlockIOINTEL** instructions is undefined for images with an element size greater than four bytes (such as **Rgba32f**).
-
-  * TODO: Do we support images created from a buffer?  If so, we'll need to add these restrictions.
 
 The following restrictions apply to the **OpSubgroupImageBlockWriteINTEL** instruction:
 

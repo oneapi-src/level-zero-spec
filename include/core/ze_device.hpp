@@ -509,6 +509,14 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::ze_device_kernel_properties_t
+        enum class kernel_properties_version_t
+        {
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::ze_device_memory_properties_t
         enum class memory_properties_version_t
         {
@@ -623,6 +631,20 @@ namespace ze
             uint32_t numSubGroupSizes;                      ///< [out] Number of subgroup sizes supported. This indicates number of
                                                             ///< entries in subGroupSizes.
             uint32_t subGroupSizes[ZE_SUBGROUPSIZE_COUNT];  ///< [out] Size group sizes supported.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device properties queried using ::zeDeviceGetKernelProperties
+        struct kernel_properties_t
+        {
+            kernel_properties_version_t version = kernel_properties_version_t::CURRENT; ///< [in] ::ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT
+            uint32_t spirvVersionSupported;                 ///< [out] Maximum supported SPIR-V version.
+                                                            ///< Returns zero if SPIR-V is not supported.
+                                                            ///< Contains major and minor attributes, use ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION.
+            bool_t fp16Supported;                           ///< [out] Supports 16-bit floating-point operations
+            bool_t fp64Supported;                           ///< [out] Supports 64-bit floating-point operations
+            bool_t int64AtomicsSupported;                   ///< [out] Supports 64-bit atomic operations
 
         };
 
@@ -797,6 +819,18 @@ namespace ze
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves kernel properties of the device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetKernelProperties(
+            kernel_properties_t* pKernelProperties          ///< [in,out] query result for kernel properties
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Retrieves local memory properties of the device.
         /// 
         /// @details
@@ -844,7 +878,7 @@ namespace ze
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves cache propreties of the device
+        /// @brief Retrieves cache properties of the device
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1131,6 +1165,14 @@ namespace ze
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::compute_properties_t to std::string
     std::string to_string( const Device::compute_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::kernel_properties_version_t to std::string
+    std::string to_string( const Device::kernel_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::kernel_properties_t to std::string
+    std::string to_string( const Device::kernel_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::memory_properties_version_t to std::string

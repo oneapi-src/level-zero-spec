@@ -90,6 +90,13 @@ typedef ze_result_t (__zecall *ze_pfnDeviceGetComputeProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDeviceGetKernelProperties 
+typedef ze_result_t (__zecall *ze_pfnDeviceGetKernelProperties_t)(
+    ze_device_handle_t,
+    ze_device_kernel_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeDeviceGetMemoryProperties 
 typedef ze_result_t (__zecall *ze_pfnDeviceGetMemoryProperties_t)(
     ze_device_handle_t,
@@ -218,6 +225,7 @@ typedef struct _ze_device_dditable_t
     ze_pfnDeviceGetSubDevices_t                                 pfnGetSubDevices;
     ze_pfnDeviceGetProperties_t                                 pfnGetProperties;
     ze_pfnDeviceGetComputeProperties_t                          pfnGetComputeProperties;
+    ze_pfnDeviceGetKernelProperties_t                           pfnGetKernelProperties;
     ze_pfnDeviceGetMemoryProperties_t                           pfnGetMemoryProperties;
     ze_pfnDeviceGetMemoryAccessProperties_t                     pfnGetMemoryAccessProperties;
     ze_pfnDeviceGetCacheProperties_t                            pfnGetCacheProperties;
@@ -668,7 +676,7 @@ typedef ze_result_t (__zecall *ze_pfnCommandListAppendEventReset_t)(
 typedef ze_result_t (__zecall *ze_pfnCommandListAppendLaunchKernel_t)(
     ze_command_list_handle_t,
     ze_kernel_handle_t,
-    const ze_thread_group_dimensions_t*,
+    const ze_group_count_t*,
     ze_event_handle_t,
     uint32_t,
     ze_event_handle_t*
@@ -679,7 +687,7 @@ typedef ze_result_t (__zecall *ze_pfnCommandListAppendLaunchKernel_t)(
 typedef ze_result_t (__zecall *ze_pfnCommandListAppendLaunchCooperativeKernel_t)(
     ze_command_list_handle_t,
     ze_kernel_handle_t,
-    const ze_thread_group_dimensions_t*,
+    const ze_group_count_t*,
     ze_event_handle_t,
     uint32_t,
     ze_event_handle_t*
@@ -690,7 +698,7 @@ typedef ze_result_t (__zecall *ze_pfnCommandListAppendLaunchCooperativeKernel_t)
 typedef ze_result_t (__zecall *ze_pfnCommandListAppendLaunchKernelIndirect_t)(
     ze_command_list_handle_t,
     ze_kernel_handle_t,
-    const ze_thread_group_dimensions_t*,
+    const ze_group_count_t*,
     ze_event_handle_t,
     uint32_t,
     ze_event_handle_t*
@@ -703,7 +711,7 @@ typedef ze_result_t (__zecall *ze_pfnCommandListAppendLaunchMultipleKernelsIndir
     uint32_t,
     ze_kernel_handle_t*,
     const uint32_t*,
-    const ze_thread_group_dimensions_t*,
+    const ze_group_count_t*,
     ze_event_handle_t,
     uint32_t,
     ze_event_handle_t*

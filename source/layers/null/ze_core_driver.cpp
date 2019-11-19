@@ -283,6 +283,30 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceGetKernelProperties
+    ze_result_t __zecall
+    zeDeviceGetKernelProperties(
+        ze_device_handle_t hDevice,                     ///< [in] handle of the device
+        ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetKernelProperties = context.zeDdiTable.Device.pfnGetKernelProperties;
+        if( nullptr != pfnGetKernelProperties )
+        {
+            result = pfnGetKernelProperties( hDevice, pKernelProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryProperties
     ze_result_t __zecall
     zeDeviceGetMemoryProperties(
@@ -2314,7 +2338,7 @@ namespace driver
     zeCommandListAppendLaunchKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+        const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2343,7 +2367,7 @@ namespace driver
     zeCommandListAppendLaunchCooperativeKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+        const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -2372,7 +2396,7 @@ namespace driver
     zeCommandListAppendLaunchKernelIndirect(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+        const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
                                                         ///< arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -2406,7 +2430,7 @@ namespace driver
         const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
                                                         ///< number of kernels to launch; value must be less-than or equal-to
                                                         ///< numKernels
-        const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+        const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
                                                         ///< a contiguous array of thread group launch arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -3157,6 +3181,59 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.Device;
                 if( nullptr != table.pfnGetComputePropertiesCb )
                     table.pfnGetComputePropertiesCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceGetKernelProperties
+    ze_result_t __zecall
+    zeDeviceGetKernelProperties(
+        ze_device_handle_t hDevice,                     ///< [in] handle of the device
+        ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_device_get_kernel_properties_params_t in_params = {
+            &hDevice,
+            &pKernelProperties
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Device;
+                if( nullptr != table.pfnGetKernelPropertiesCb )
+                    table.pfnGetKernelPropertiesCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeDeviceGetKernelProperties( hDevice, pKernelProperties );
+
+        // capture parameters
+        ze_device_get_kernel_properties_params_t out_params = {
+            &hDevice,
+            &pKernelProperties
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Device;
+                if( nullptr != table.pfnGetKernelPropertiesCb )
+                    table.pfnGetKernelPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -7580,7 +7657,7 @@ namespace instrumented
     zeCommandListAppendLaunchKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+        const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -7646,7 +7723,7 @@ namespace instrumented
     zeCommandListAppendLaunchCooperativeKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+        const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -7712,7 +7789,7 @@ namespace instrumented
     zeCommandListAppendLaunchKernelIndirect(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+        const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
                                                         ///< arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -7783,7 +7860,7 @@ namespace instrumented
         const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
                                                         ///< number of kernels to launch; value must be less-than or equal-to
                                                         ///< numKernels
-        const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+        const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
                                                         ///< a contiguous array of thread group launch arguments
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -8321,6 +8398,11 @@ zeGetDeviceProcAddrTable(
         pDdiTable->pfnGetComputeProperties                   = instrumented::zeDeviceGetComputeProperties;
     else
         pDdiTable->pfnGetComputeProperties                   = driver::zeDeviceGetComputeProperties;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetKernelProperties                    = instrumented::zeDeviceGetKernelProperties;
+    else
+        pDdiTable->pfnGetKernelProperties                    = driver::zeDeviceGetKernelProperties;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnGetMemoryProperties                    = instrumented::zeDeviceGetMemoryProperties;
