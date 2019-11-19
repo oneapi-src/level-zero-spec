@@ -2414,9 +2414,14 @@ zetSysmanLedSetState(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of RAS error sets
+/// @brief Get handle of all RAS error sets on a device
 /// 
 /// @details
+///     - A device can have one or more error sets, one for each
+///       ::zet_ras_error_type_t (correctable/uncorrectable errors).
+///     - A device with sub-devices will enumerate error sets for each
+///       sub-device, but may also enumerate errors sets are relevant to parts
+///       outside the sub-devices.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -2450,7 +2455,7 @@ zetSysmanRasGet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get RAS properties of the device
+/// @brief Get RAS properties of a given RAS error set
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -5118,9 +5123,14 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get handle of RAS error sets
+    /// @brief Get handle of all RAS error sets on a device
     /// 
     /// @details
+    ///     - A device can have one or more error sets, one for each
+    ///       ::zet_ras_error_type_t (correctable/uncorrectable errors).
+    ///     - A device with sub-devices will enumerate error sets for each
+    ///       sub-device, but may also enumerate errors sets are relevant to parts
+    ///       outside the sub-devices.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -5170,7 +5180,7 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get RAS properties of the device
+    /// @brief Get RAS properties of a given RAS error set
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.

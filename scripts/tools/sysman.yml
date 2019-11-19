@@ -2720,10 +2720,12 @@ members:
       desc: "[out] Host processId that set this configuration (ignored when setting the configuration)."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get handle of RAS error sets"
+desc: "Get handle of all RAS error sets on a device"
 class: $tSysman
 name: RasGet
 details:
+    - "A device can have one or more error sets, one for each $t_ras_error_type_t (correctable/uncorrectable errors)."
+    - "A device with sub-devices will enumerate error sets for each sub-device, but may also enumerate errors sets are relevant to parts outside the sub-devices." 
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -2742,7 +2744,7 @@ params:
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get RAS properties of the device"
+desc: "Get RAS properties of a given RAS error set"
 class: $tSysmanRas
 name: GetProperties
 details:
