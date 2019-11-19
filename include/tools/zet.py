@@ -1370,9 +1370,7 @@ class zet_ras_properties_t(Structure):
         ("type", zet_ras_error_type_t),                                 ## [out] The type of RAS error
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling Sysman handle
-        ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
-        ("supported", ze_bool_t),                                       ## [out] True if RAS is supported on this device
-        ("enabled", ze_bool_t)                                          ## [out] True if RAS is enabled on this device
+        ("subdeviceId", c_ulong)                                        ## [out] If onSubdevice is true, this gives the ID of the sub-device
     ]
 
 ###############################################################################
@@ -1401,6 +1399,17 @@ class zet_ras_details_t(Structure):
 ## @brief RAS error configuration - thresholds used for triggering RAS events
 ##        (::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
 ##        ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
+## 
+## @details
+##     - The driver maintains a total counter which is updated every time a
+##       hardware block covered by the corresponding RAS error set notifies
+##       that an error has occurred. When this total count goes above the
+##       totalThreshold specified below, a RAS event is triggered.
+##     - The driver also maintains a counter for each category of RAS error
+##       (see ::zet_ras_details_t for a breakdown). Each time a hardware block
+##       of that category notifies that an error has occurred, that
+##       corresponding category counter is updated. When it goes above the
+##       threshold specified in detailedThresholds, a RAS event is triggered.
 class zet_ras_config_t(Structure):
     _fields_ = [
         ("totalThreshold", c_ulonglong),                                ## [in,out] If the total RAS errors exceeds this threshold, the event

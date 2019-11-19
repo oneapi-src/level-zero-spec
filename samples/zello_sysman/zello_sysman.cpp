@@ -32,56 +32,58 @@ void PrintRasDetails(zet_ras_details_t* pDetails)
 void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
 {
     uint32_t numRasErrorSets;
-    if ((zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) == ZE_RESULT_SUCCESS) && numRasErrorSets)
+    zet_sysman_ras_handle_t* phRasErrorSets;
+    if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) != ZE_RESULT_SUCCESS)
     {
-        zet_sysman_ras_handle_t* phRasErrorSets =
-            (zet_sysman_ras_handle_t*)malloc(numRasErrorSets * sizeof(zet_sysman_ras_handle_t));
-        if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ZE_RESULT_SUCCESS)
+        return;
+    }
+    if (numRasErrorSets == 0)
+    {
+        fprintf(stdout, "No RAS error sets available/enabled on this device.\n");
+        return;
+    }
+    phRasErrorSets =
+        (zet_sysman_ras_handle_t*)malloc(numRasErrorSets * sizeof(zet_sysman_ras_handle_t));
+    if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ZE_RESULT_SUCCESS)
+    {
+        for (uint32_t rasIndex = 0; rasIndex < numRasErrorSets; rasIndex++)
         {
-            for (uint32_t rasIndex = 0; rasIndex < numRasErrorSets; rasIndex++)
+            zet_ras_properties_t props;
+            if (zetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ZE_RESULT_SUCCESS)
             {
-                zet_ras_properties_t props;
-                if (zetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ZE_RESULT_SUCCESS)
+                uint64_t newErrors;
+                zet_ras_details_t errorDetails;
+                const char* pErrorType;
+                switch (props.type)
                 {
-                    const char* pErrorType;
-                    switch (props.type)
+                case ZET_RAS_ERROR_TYPE_CORRECTABLE:
+                    pErrorType = "Correctable";
+                    break;
+                case ZET_RAS_ERROR_TYPE_UNCORRECTABLE:
+                    pErrorType = "Uncorrectable";
+                    break;
+                default:
+                    pErrorType = "Unknown";
+                    break;
+                }
+                fprintf(stdout, "RAS %s errors\n", pErrorType);
+                if (props.onSubdevice)
+                {
+                    fprintf(stdout, "    On sub-device: %u\n", props.subdeviceId);
+                }
+                if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                    == ZE_RESULT_SUCCESS)
+                {
+                    fprintf(stdout, "    Number new errors: %llu\n", (long long unsigned int)newErrors);
+                    if (newErrors)
                     {
-                    case ZET_RAS_ERROR_TYPE_CORRECTABLE:
-                        pErrorType = "Correctable";
-                        break;
-                    case ZET_RAS_ERROR_TYPE_UNCORRECTABLE:
-                        pErrorType = "Uncorrectable";
-                        break;
-                    default:
-                        pErrorType = "Unknown";
-                        break;
-                    }
-                    fprintf(stdout, "RAS %s errors\n", pErrorType);
-                    if (props.onSubdevice)
-                    {
-                        fprintf(stdout, "    On sub-device: %u\n", props.subdeviceId);
-                    }
-                    fprintf(stdout, "    RAS supported: %s\n", props.supported ? "yes" : "no");
-                    fprintf(stdout, "    RAS enabled: %s\n", props.enabled ? "yes" : "no");
-                    if (props.supported && props.enabled)
-                    {
-                        uint64_t newErrors;
-                        zet_ras_details_t errorDetails;
-                        if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
-                            == ZE_RESULT_SUCCESS)
-                        {
-                            fprintf(stdout, "    Number new errors: %llu\n", (long long unsigned int)newErrors);
-                            if (newErrors)
-                            {
-                                PrintRasDetails(&errorDetails);
-                            }
-                        }
+                        PrintRasDetails(&errorDetails);
                     }
                 }
             }
         }
-        free(phRasErrorSets);
     }
+    free(phRasErrorSets);
 }
 
 void ListDiagnosticTests(zet_sysman_handle_t hSysmanDevice)

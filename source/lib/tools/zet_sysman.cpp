@@ -2417,11 +2417,16 @@ zetSysmanLedSetState(
 /// @brief Get handle of all RAS error sets on a device
 /// 
 /// @details
-///     - A device can have one or more error sets, one for each
-///       ::zet_ras_error_type_t (correctable/uncorrectable errors).
-///     - A device with sub-devices will enumerate error sets for each
-///       sub-device, but may also enumerate errors sets are relevant to parts
-///       outside the sub-devices.
+///     - A RAS error set is a collection of RAS error counters of a given type
+///       (correctable/uncorrectable) from hardware blocks contained within a
+///       sub-device or within the device.
+///     - A device without sub-devices will typically return two handles, one
+///       for correctable errors sets and one for uncorrectable error sets.
+///     - A device with sub-devices will return RAS error sets for each
+///       sub-device and possibly RAS error sets for hardware blocks outside the
+///       sub-devices.
+///     - If the function completes successfully but pCount is set to 0, RAS
+///       features are not available/enabled on this device.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -2455,7 +2460,9 @@ zetSysmanRasGet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get RAS properties of a given RAS error set
+/// @brief Get RAS properties of a given RAS error set - this enables discovery
+///        of the type of RAS error set (correctable/uncorrectable) and if
+///        located on a sub-device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2483,9 +2490,12 @@ zetSysmanRasGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get RAS error thresholds
+/// @brief Get RAS error thresholds that control when RAS events are generated
 /// 
 /// @details
+///     - The driver maintains counters for all RAS error sets and error
+///       categories. Events are generated when errors occur. The configuration
+///       enables setting thresholds to limit when events are sent.
 ///     - When a particular RAS correctable error counter exceeds the configured
 ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
 ///       will be triggered.
@@ -2503,7 +2513,6 @@ zetSysmanRasGetProperties(
 ///         + nullptr == hRas
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This device does not support RAS.
 ze_result_t __zecall
 zetSysmanRasGetConfig(
     zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
@@ -2519,9 +2528,12 @@ zetSysmanRasGetConfig(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set RAS error thresholds
+/// @brief Set RAS error thresholds that control when RAS events are generated
 /// 
 /// @details
+///     - The driver maintains counters for all RAS error sets and error
+///       categories. Events are generated when errors occur. The configuration
+///       enables setting thresholds to limit when events are sent.
 ///     - When a particular RAS correctable error counter exceeds the specified
 ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
 ///       will be generated.
@@ -2541,7 +2553,6 @@ zetSysmanRasGetConfig(
 ///         + nullptr == hRas
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This device does not support RAS.
 ///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
 ///         + Another running process is controlling these settings.
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
@@ -2560,7 +2571,7 @@ zetSysmanRasSetConfig(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of errors of a given RAS error set
+/// @brief Get the current value of RAS error counters for a particular error set
 /// 
 /// @details
 ///     - Clearing errors will affect other threads/applications - the counter
@@ -2577,7 +2588,6 @@ zetSysmanRasSetConfig(
 ///         + nullptr == hRas
 ///         + nullptr == pTotalErrors
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This device does not support RAS.
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + Don't have permissions to clear error counters.
 ze_result_t __zecall
@@ -5126,11 +5136,16 @@ namespace zet
     /// @brief Get handle of all RAS error sets on a device
     /// 
     /// @details
-    ///     - A device can have one or more error sets, one for each
-    ///       ::zet_ras_error_type_t (correctable/uncorrectable errors).
-    ///     - A device with sub-devices will enumerate error sets for each
-    ///       sub-device, but may also enumerate errors sets are relevant to parts
-    ///       outside the sub-devices.
+    ///     - A RAS error set is a collection of RAS error counters of a given type
+    ///       (correctable/uncorrectable) from hardware blocks contained within a
+    ///       sub-device or within the device.
+    ///     - A device without sub-devices will typically return two handles, one
+    ///       for correctable errors sets and one for uncorrectable error sets.
+    ///     - A device with sub-devices will return RAS error sets for each
+    ///       sub-device and possibly RAS error sets for hardware blocks outside the
+    ///       sub-devices.
+    ///     - If the function completes successfully but pCount is set to 0, RAS
+    ///       features are not available/enabled on this device.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -5180,7 +5195,9 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get RAS properties of a given RAS error set
+    /// @brief Get RAS properties of a given RAS error set - this enables discovery
+    ///        of the type of RAS error set (correctable/uncorrectable) and if
+    ///        located on a sub-device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -5201,9 +5218,12 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get RAS error thresholds
+    /// @brief Get RAS error thresholds that control when RAS events are generated
     /// 
     /// @details
+    ///     - The driver maintains counters for all RAS error sets and error
+    ///       categories. Events are generated when errors occur. The configuration
+    ///       enables setting thresholds to limit when events are sent.
     ///     - When a particular RAS correctable error counter exceeds the configured
     ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
     ///       will be triggered.
@@ -5229,9 +5249,12 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set RAS error thresholds
+    /// @brief Set RAS error thresholds that control when RAS events are generated
     /// 
     /// @details
+    ///     - The driver maintains counters for all RAS error sets and error
+    ///       categories. Events are generated when errors occur. The configuration
+    ///       enables setting thresholds to limit when events are sent.
     ///     - When a particular RAS correctable error counter exceeds the specified
     ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
     ///       will be generated.
@@ -5258,7 +5281,7 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the number of errors of a given RAS error set
+    /// @brief Get the current value of RAS error counters for a particular error set
     /// 
     /// @details
     ///     - Clearing errors will affect other threads/applications - the counter
@@ -7452,14 +7475,6 @@ namespace zet
         
         str += "SysmanRas::ras_properties_t::subdeviceId : ";
         str += std::to_string(val.subdeviceId);
-        str += "\n";
-        
-        str += "SysmanRas::ras_properties_t::supported : ";
-        str += std::to_string(val.supported);
-        str += "\n";
-        
-        str += "SysmanRas::ras_properties_t::enabled : ";
-        str += std::to_string(val.enabled);
         str += "\n";
 
         return str;

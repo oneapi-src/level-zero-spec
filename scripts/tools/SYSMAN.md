@@ -857,10 +857,14 @@ If a device supports RAS, it maintains counters for hardware and software errors
 | ::${T}_RAS_ERROR_TYPE_UNCORRECTABLE | Hardware errors occurred which most likely resulted in loss of data or even a device hang. If an error results in device lockup, a warm boot is required before those errors will be reported. |
 | ::${T}_RAS_ERROR_TYPE_CORRECTABLE   | These are errors that were corrected by the hardware and did not cause data corruption. |
 
-Software can use the function ::${t}SysmanRasGetProperties() to find out if the device supports RAS and if it is enabled. This information is returned in the structure ::${t}_ras_properties_t.
+A RAS error set is a collection of all RAS errors of a given type (correctable/uncorrectable) located either in a sub-device or a device.
+The function ::${t}SysmanRasGet() enumerates the available RAS error sets, providing a handle for each. If no handles are returned,
+no RAS errors are available/enabled on the device.
 
-The function ::${t}SysmanRasGet() enumerates the available sets of RAS errors. If no handles are returned, the device does not support RAS.
-A device without sub-devices will return one handle if RAS is supported. A device with sub-devices will return a handle for each sub-device.
+A device without sub-devices will typically return two RAS error handles if the device supports RAS - one for correctable handles and one for
+uncorrectable handles. In addition, a device with sub-devices will return additional handles for each sub-device. The function
+::${t}SysmanRasGetProperties() can be used to determine the type RAS errors (correctable/uncorrectable) represented by the handle and the
+sub-device location.
 
 To determine if errors have occurred, software uses the function ::${t}SysmanRasGetState(). This will return the total number of errors of a given type
 (correctable/uncorrectable) that have occurred.
@@ -901,45 +905,47 @@ The table below summaries all the RAS management functions:
 
 | Function                              | Description |
 | :---                                  | :---        |
-| ::${t}SysmanRasGet()                  | Get handles to the available RAS error groups. |
-| ::${t}SysmanRasGetProperties()        | Get properties about a RAS error group - type of RAS errors and if they are enabled. |
-| ::${t}SysmanRasGetConfig()            | Get the current list of thresholds for each counter in the RAS group. RAS error events will be generated when the thresholds are exceeded. |
-| ::${t}SysmanRasSetConfig()            | Set current list of thresholds for each counter in the RAS group. RAS error events will be generated when the thresholds are exceeded. |
-| ::${t}SysmanRasGetState()             | Get the current state of the RAS error counters. The counters can also be cleared. |
+| ::${t}SysmanRasGet()                  | Get handles to the available RAS error sets. |
+| ::${t}SysmanRasGetProperties()        | Get properties about a RAS error set - type of RAS errors and sub-device location. |
+| ::${t}SysmanRasGetConfig()            | Get the current list of thresholds for each counter in the RAS error set. RAS error events will be generated when the thresholds are exceeded. |
+| ::${t}SysmanRasSetConfig()            | Set current list of thresholds for each counter in the RAS error set. RAS error events will be generated when the thresholds are exceeded. |
+| ::${t}SysmanRasGetState()             | Get the current state of the RAS error counters for a given RAS error set. The counters can also be optionally cleared. |
 
-The pseudo code below shows how to determine if RAS is supported and the current state of RAS errors:
+The pseudo code below shows how to determine the RAS error sets on a device and show the current state of RAS errors:
 
 ```c
 void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
     uint32_t numRasErrorSets
-    if ((zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) == ZE_RESULT_SUCCESS))
-        zet_sysman_ras_handle_t* phRasErrorSets =
-            allocate_memory(numRasErrorSets * sizeof(zet_sysman_ras_handle_t))
-        if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ZE_RESULT_SUCCESS)
-            for (rasIndex = 0 .. numRasErrorSets)
-                zet_ras_properties_t props
-                if (zetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ZE_RESULT_SUCCESS)
-                    var pErrorType
-                    switch (props.type)
-						case ZET_RAS_ERROR_TYPE_CORRECTABLE:
-							pErrorType = "Correctable"
-						case ZET_RAS_ERROR_TYPE_UNCORRECTABLE:
-							pErrorType = "Uncorrectable"
-						default:
-							pErrorType = "Unknown"
-                    output("RAS %s errors", pErrorType)
-                    if (props.onSubdevice)
-                        output("    On sub-device: %u", props.subdeviceId)
-                    output("    RAS supported: %s", props.supported ? "yes" : "no")
-                    output("    RAS enabled: %s", props.enabled ? "yes" : "no")
-                    if (props.supported and props.enabled)
-                        uint64_t newErrors
-                        zet_ras_details_t errorDetails
-                        if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
-						    == ZE_RESULT_SUCCESS)
-                                output("    Number new errors: %llu\n", (long long unsigned int)newErrors)
-                                if (newErrors)
-                                    call_function OutputRasDetails(&errorDetails)
+    zet_sysman_ras_handle_t* phRasErrorSets
+    if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) != ZE_RESULT_SUCCESS)
+        return
+    if (numRasErrorSets == 0)
+        output("No RAS error sets available/enabled on this device.")
+        return
+	phRasErrorSets =
+		allocate_memory(numRasErrorSets * sizeof(zet_sysman_ras_handle_t))
+	if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ZE_RESULT_SUCCESS)
+		for (rasIndex = 0 .. numRasErrorSets)
+			uint64_t newErrors
+			zet_ras_details_t errorDetails
+			zet_ras_properties_t props
+			if (zetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ZE_RESULT_SUCCESS)
+				var pErrorType
+				switch (props.type)
+					case ZET_RAS_ERROR_TYPE_CORRECTABLE:
+						pErrorType = "Correctable"
+					case ZET_RAS_ERROR_TYPE_UNCORRECTABLE:
+						pErrorType = "Uncorrectable"
+					default:
+						pErrorType = "Unknown"
+				output("RAS %s errors", pErrorType)
+				if (props.onSubdevice)
+					output("    On sub-device: %u", props.subdeviceId)
+				if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+					== ZE_RESULT_SUCCESS)
+						output("    Number new errors: %llu", newErrors)
+						if (newErrors)
+							call_function OutputRasDetails(&errorDetails)
 	free_memory(...)
 
 function OutputRasDetails(zet_ras_details_t* pDetails)

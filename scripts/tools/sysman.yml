@@ -2661,12 +2661,6 @@ members:
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
-    - type: $x_bool_t
-      name: "supported"
-      desc: "[out] True if RAS is supported on this device"
-    - type: $x_bool_t
-      name: "enabled"
-      desc: "[out] True if RAS is enabled on this device"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "RAS error details"
@@ -2708,6 +2702,9 @@ type: struct
 desc: "RAS error configuration - thresholds used for triggering RAS events ($T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS, $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)"
 class: $tSysmanRas
 name: $t_ras_config_t
+details:
+    - "The driver maintains a total counter which is updated every time a hardware block covered by the corresponding RAS error set notifies that an error has occurred. When this total count goes above the totalThreshold specified below, a RAS event is triggered."
+    - "The driver also maintains a counter for each category of RAS error (see $t_ras_details_t for a breakdown). Each time a hardware block of that category notifies that an error has occurred, that corresponding category counter is updated. When it goes above the threshold specified in detailedThresholds, a RAS event is triggered."
 members:
     - type: uint64_t
       name: "totalThreshold"
@@ -2724,8 +2721,10 @@ desc: "Get handle of all RAS error sets on a device"
 class: $tSysman
 name: RasGet
 details:
-    - "A device can have one or more error sets, one for each $t_ras_error_type_t (correctable/uncorrectable errors)."
-    - "A device with sub-devices will enumerate error sets for each sub-device, but may also enumerate errors sets are relevant to parts outside the sub-devices." 
+    - "A RAS error set is a collection of RAS error counters of a given type (correctable/uncorrectable) from hardware blocks contained within a sub-device or within the device."
+    - "A device without sub-devices will typically return two handles, one for correctable errors sets and one for uncorrectable error sets."
+    - "A device with sub-devices will return RAS error sets for each sub-device and possibly RAS error sets for hardware blocks outside the sub-devices."
+    - "If the function completes successfully but pCount is set to 0, RAS features are not available/enabled on this device."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -2744,7 +2743,7 @@ params:
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get RAS properties of a given RAS error set"
+desc: "Get RAS properties of a given RAS error set - this enables discovery of the type of RAS error set (correctable/uncorrectable) and if located on a sub-device"
 class: $tSysmanRas
 name: GetProperties
 details:
@@ -2759,10 +2758,11 @@ params:
       desc: "[in] Structure describing RAS properties"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get RAS error thresholds"
+desc: "Get RAS error thresholds that control when RAS events are generated"
 class: $tSysmanRas
 name: GetConfig
 details:
+    - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
     - "When a particular RAS correctable error counter exceeds the configured threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be triggered."
     - "When a particular RAS uncorrectable error counter exceeds the configured threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered."
     - "The application may call this function from simultaneous threads."
@@ -2774,15 +2774,13 @@ params:
     - type: "$t_ras_config_t*"
       name: pConfig
       desc: "[in] Will be populed with the current RAS configuration - thresholds used to trigger events"
-returns:
-    - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This device does not support RAS."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set RAS error thresholds"
+desc: "Set RAS error thresholds that control when RAS events are generated"
 class: $tSysmanRas
 name: SetConfig
 details:
+    - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
     - "When a particular RAS correctable error counter exceeds the specified threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be generated."
     - "When a particular RAS uncorrectable error counter exceeds the specified threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated."
     - "Call $tSysmanRasGetState() and set the clear flag to true to restart event generation once counters have exceeded thresholds."
@@ -2796,15 +2794,13 @@ params:
       name: pConfig
       desc: "[in] Change the RAS configuration - thresholds used to trigger events"
 returns:
-    - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This device does not support RAS."
     - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
         - "Another running process is controlling these settings."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "Don't have permissions to set thresholds."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of errors of a given RAS error set"
+desc: "Get the current value of RAS error counters for a particular error set"
 class: $tSysmanRas
 name: GetState
 details:
@@ -2826,8 +2822,6 @@ params:
       name: pDetails
       desc: "[in][optional] Breakdown of where errors have occurred"
 returns:
-    - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This device does not support RAS."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "Don't have permissions to clear error counters."
 
