@@ -2624,7 +2624,7 @@ namespace layer
     zetSysmanFanGetState(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         zet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
-        zet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
+        uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanFan.pfnGetState;
@@ -2637,12 +2637,12 @@ namespace layer
             if( nullptr == hFan )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pState )
+            if( nullptr == pSpeed )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetState( hFan, units, pState );
+        return pfnGetState( hFan, units, pSpeed );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

@@ -339,10 +339,6 @@ typedef struct _zet_fan_properties_t zet_fan_properties_t;
 typedef struct _zet_fan_config_t zet_fan_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_fan_state_t
-typedef struct _zet_fan_state_t zet_fan_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_led_properties_t
 typedef struct _zet_led_properties_t zet_led_properties_t;
 

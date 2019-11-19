@@ -2667,7 +2667,7 @@ typedef struct _zet_sysman_fan_get_state_params_t
 {
     zet_sysman_fan_handle_t* phFan;
     zet_fan_speed_units_t* punits;
-    zet_fan_state_t** ppState;
+    uint32_t** ppSpeed;
 } zet_sysman_fan_get_state_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////

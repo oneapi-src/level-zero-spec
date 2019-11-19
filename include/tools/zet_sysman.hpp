@@ -2426,16 +2426,6 @@ namespace zet
 
         };
 
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fan state
-        struct fan_state_t
-        {
-            fan_speed_mode_t mode;                          ///< [out] The fan speed mode (default, fixed, temp-speed table)
-            fan_speed_units_t speedUnits;                   ///< [out] The units of the fan speed
-            uint32_t speed;                                 ///< [out] The current fan speed
-
-        };
-
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
@@ -2508,7 +2498,7 @@ namespace zet
         void __zecall
         GetState(
             fan_speed_units_t units,                        ///< [in] The units in which the fan speed should be returned.
-            fan_state_t* pState                             ///< [in] Will contain the current state of the fan.
+            uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
             );
 
     };
@@ -3275,10 +3265,6 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFan::fan_config_t to std::string
     std::string to_string( const SysmanFan::fan_config_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFan::fan_state_t to std::string
-    std::string to_string( const SysmanFan::fan_state_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanLed::led_properties_t to std::string

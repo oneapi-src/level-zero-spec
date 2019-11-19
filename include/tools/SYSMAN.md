@@ -792,10 +792,10 @@ function ShowFans(zet_sysman_handle_t hSysmanDevice)
         if (zetSysmanFanGet(hSysmanDevice, &numFans, phFans) == ZE_RESULT_SUCCESS)
             output("    Fans")
             for (fanIndex = 0 .. numFans-1)
-                zet_fan_state_t state
-                if (zetSysmanFanGetState(phFans[fanIndex], ZET_FAN_SPEED_UNITS_RPM, &state)
+                uint32_t speed
+                if (zetSysmanFanGetState(phFans[fanIndex], ZET_FAN_SPEED_UNITS_RPM, &speed)
 				    == ZE_RESULT_SUCCESS)
-                        output("        Fan %u: %u RPM", fanIndex, state.speed)
+                        output("        Fan %u: %u RPM", fanIndex, speed)
 	free_memory(...)
 }
 ```

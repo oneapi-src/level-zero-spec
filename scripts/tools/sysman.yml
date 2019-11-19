@@ -2440,21 +2440,6 @@ members:
       name: "table[$T_FAN_TEMP_SPEED_PAIR_COUNT]"
       desc: "[in,out] Array of temperature/fan speed pairs"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Fan state"
-class: $tSysmanFan
-name: $t_fan_state_t
-members:
-    - type: $t_fan_speed_mode_t
-      name: "mode"
-      desc: "[out] The fan speed mode (default, fixed, temp-speed table)"
-    - type: $t_fan_speed_units_t
-      name: "speedUnits"
-      desc: "[out] The units of the fan speed"
-    - type: uint32_t
-      name: "speed"
-      desc: "[out] The current fan speed"
---- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of fans"
 class: $tSysman
@@ -2539,9 +2524,9 @@ params:
     - type: $t_fan_speed_units_t
       name: units
       desc: "[in] The units in which the fan speed should be returned."
-    - type: $t_fan_state_t*
-      name: pState
-      desc: "[in] Will contain the current state of the fan."
+    - type: uint32_t*
+      name: pSpeed
+      desc: "[in] Will contain the current speed of the fan in the units requested."
 
 --- #--------------------------------------------------------------------------
 type: struct

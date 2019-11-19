@@ -2275,20 +2275,20 @@ zetSysmanFanSetConfig(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFan
-///         + nullptr == pState
+///         + nullptr == pSpeed
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFanGetState(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     zet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
-    zet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
+    uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
     )
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanFan.pfnGetState;
     if( nullptr == pfnGetState )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetState( hFan, units, pState );
+    return pfnGetState( hFan, units, pSpeed );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4990,13 +4990,13 @@ namespace zet
     void __zecall
     SysmanFan::GetState(
         fan_speed_units_t units,                        ///< [in] The units in which the fan speed should be returned.
-        fan_state_t* pState                             ///< [in] Will contain the current state of the fan.
+        uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFanGetState(
             reinterpret_cast<zet_sysman_fan_handle_t>( getHandle() ),
             static_cast<zet_fan_speed_units_t>( units ),
-            reinterpret_cast<zet_fan_state_t*>( pState ) ) );
+            pSpeed ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFan::GetState" );
@@ -7347,27 +7347,6 @@ namespace zet
             }
             str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFan::fan_state_t to std::string
-    std::string to_string( const SysmanFan::fan_state_t val )
-    {
-        std::string str;
-        
-        str += "SysmanFan::fan_state_t::mode : ";
-        str += to_string(val.mode);
-        str += "\n";
-        
-        str += "SysmanFan::fan_state_t::speedUnits : ";
-        str += to_string(val.speedUnits);
-        str += "\n";
-        
-        str += "SysmanFan::fan_state_t::speed : ";
-        str += std::to_string(val.speed);
         str += "\n";
 
         return str;

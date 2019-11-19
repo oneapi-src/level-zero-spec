@@ -1331,15 +1331,6 @@ class zet_fan_config_t(Structure):
     ]
 
 ###############################################################################
-## @brief Fan state
-class zet_fan_state_t(Structure):
-    _fields_ = [
-        ("mode", zet_fan_speed_mode_t),                                 ## [out] The fan speed mode (default, fixed, temp-speed table)
-        ("speedUnits", zet_fan_speed_units_t),                          ## [out] The units of the fan speed
-        ("speed", c_ulong)                                              ## [out] The current fan speed
-    ]
-
-###############################################################################
 ## @brief LED properties
 class zet_led_properties_t(Structure):
     _fields_ = [
@@ -2543,9 +2534,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFanGetState
 if __use_win_types:
-    _zetSysmanFanGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_fan_handle_t, zet_fan_speed_units_t, POINTER(zet_fan_state_t) )
+    _zetSysmanFanGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_fan_handle_t, zet_fan_speed_units_t, POINTER(c_ulong) )
 else:
-    _zetSysmanFanGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_fan_handle_t, zet_fan_speed_units_t, POINTER(zet_fan_state_t) )
+    _zetSysmanFanGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_fan_handle_t, zet_fan_speed_units_t, POINTER(c_ulong) )
 
 
 ###############################################################################

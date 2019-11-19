@@ -2628,16 +2628,6 @@ typedef struct _zet_fan_config_t
 } zet_fan_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Fan state
-typedef struct _zet_fan_state_t
-{
-    zet_fan_speed_mode_t mode;                      ///< [out] The fan speed mode (default, fixed, temp-speed table)
-    zet_fan_speed_units_t speedUnits;               ///< [out] The units of the fan speed
-    uint32_t speed;                                 ///< [out] The current fan speed
-
-} zet_fan_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle of fans
 /// 
 /// @details
@@ -2744,13 +2734,13 @@ zetSysmanFanSetConfig(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFan
-///         + nullptr == pState
+///         + nullptr == pSpeed
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFanGetState(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     zet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
-    zet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
+    uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -2794,7 +2794,7 @@ namespace loader
     zetSysmanFanGetState(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         zet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
-        zet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
+        uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -2809,7 +2809,7 @@ namespace loader
         hFan = reinterpret_cast<zet_sysman_fan_object_t*>( hFan )->handle;
 
         // forward to device-driver
-        result = pfnGetState( hFan, units, pState );
+        result = pfnGetState( hFan, units, pSpeed );
 
         return result;
     }

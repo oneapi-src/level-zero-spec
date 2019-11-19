@@ -581,11 +581,11 @@ void ShowFans(zet_sysman_handle_t hSysmanDevice)
             fprintf(stdout, "    Fans\n");
             for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
-                zet_fan_state_t state;
-                if (zetSysmanFanGetState(phFans[fanIndex], ZET_FAN_SPEED_UNITS_RPM, &state)
+                uint32_t speed;
+                if (zetSysmanFanGetState(phFans[fanIndex], ZET_FAN_SPEED_UNITS_RPM, &speed)
                     == ZE_RESULT_SUCCESS)
                 {
-                    fprintf(stdout, "        Fan %u: %u RPM\n", fanIndex, state.speed);
+                    fprintf(stdout, "        Fan %u: %u RPM\n", fanIndex, speed);
                 }
             }
         }

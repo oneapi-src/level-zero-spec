@@ -1520,7 +1520,7 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFanSetConfig_t)(
 typedef ze_result_t (__zecall *zet_pfnSysmanFanGetState_t)(
     zet_sysman_fan_handle_t,
     zet_fan_speed_units_t,
-    zet_fan_state_t*
+    uint32_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
