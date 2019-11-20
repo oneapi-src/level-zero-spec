@@ -1035,7 +1035,7 @@ to sleep until new notifications are received.
 For every device on which the application wants to receive events, it should perform the following actions:
 
 1. Use ::${t}SysmanEventGet() to get an event handler from the Sysman handle for the device.
-2. Use ::${t}SysmanEventSetConfig() to indicate which events it wasnts to listen to.
+2. Use ::${t}SysmanEventSetConfig() to indicate which events it wants to listen to.
 3. For each event, call the appropriate function to set conditions that will trigger the event.
 
 Finally, the application calls ::${t}SysmanEventListen() with a list of event handles that it wishes to listen for events on. A wait timeout is used

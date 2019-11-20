@@ -2132,7 +2132,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         SetConfig(
-            fabric_port_config_t* pConfig                   ///< [in] Contains new configuration of the Fabric Port.
+            const fabric_port_config_t* pConfig             ///< [in] Contains new configuration of the Fabric Port.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

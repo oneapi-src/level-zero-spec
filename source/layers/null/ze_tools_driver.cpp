@@ -2138,7 +2138,7 @@ namespace driver
     ze_result_t __zecall
     zetSysmanFabricPortSetConfig(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zet_fabric_port_config_t* pConfig               ///< [in] Contains new configuration of the Fabric Port.
+        const zet_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;

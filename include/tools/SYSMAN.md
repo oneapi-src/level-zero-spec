@@ -275,7 +275,7 @@ function ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
 		output("    brand:          %s", devProps.brandName)
 		output("    model:          %s", devProps.modelName)
     if (zetSysmanDeviceRepairStatus(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
-        output("    Was repaired:   %s", (repaired == ZET_REPAIR_STATUS_COMPLETED) ? "yes" : "no")
+        output("    Was repaired:   %s", (repaired == ZET_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
 ```
 
 ### <a name="gloz">Host processes</a>
@@ -1029,7 +1029,7 @@ to sleep until new notifications are received.
 For every device on which the application wants to receive events, it should perform the following actions:
 
 1. Use ::zetSysmanEventGet() to get an event handler from the Sysman handle for the device.
-2. Use ::zetSysmanEventSetConfig() to indicate which events it wasnts to listen to.
+2. Use ::zetSysmanEventSetConfig() to indicate which events it wants to listen to.
 3. For each event, call the appropriate function to set conditions that will trigger the event.
 
 Finally, the application calls ::zetSysmanEventListen() with a list of event handles that it wishes to listen for events on. A wait timeout is used

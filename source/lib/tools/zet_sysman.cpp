@@ -1841,7 +1841,7 @@ zetSysmanFabricPortGetConfig(
 ze_result_t __zecall
 zetSysmanFabricPortSetConfig(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-    zet_fabric_port_config_t* pConfig               ///< [in] Contains new configuration of the Fabric Port.
+    const zet_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
     )
 {
     auto pfnSetConfig = zet_lib::context.ddiTable.SysmanFabricPort.pfnSetConfig;
@@ -4650,12 +4650,12 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFabricPort::SetConfig(
-        fabric_port_config_t* pConfig                   ///< [in] Contains new configuration of the Fabric Port.
+        const fabric_port_config_t* pConfig             ///< [in] Contains new configuration of the Fabric Port.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFabricPortSetConfig(
             reinterpret_cast<zet_sysman_fabric_port_handle_t>( getHandle() ),
-            reinterpret_cast<zet_fabric_port_config_t*>( pConfig ) ) );
+            reinterpret_cast<const zet_fabric_port_config_t*>( pConfig ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFabricPort::SetConfig" );

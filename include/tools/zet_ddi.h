@@ -1342,7 +1342,7 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortGetConfig_t)(
 /// @brief Function-pointer for zetSysmanFabricPortSetConfig 
 typedef ze_result_t (__zecall *zet_pfnSysmanFabricPortSetConfig_t)(
     zet_sysman_fabric_port_handle_t,
-    zet_fabric_port_config_t*
+    const zet_fabric_port_config_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////

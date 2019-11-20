@@ -2385,7 +2385,7 @@ typedef void (__zecall *zet_pfnSysmanFabricPortGetConfigCb_t)(
 typedef struct _zet_sysman_fabric_port_set_config_params_t
 {
     zet_sysman_fabric_port_handle_t* phPort;
-    zet_fabric_port_config_t** ppConfig;
+    const zet_fabric_port_config_t** ppConfig;
 } zet_sysman_fabric_port_set_config_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
