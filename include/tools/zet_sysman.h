@@ -50,8 +50,8 @@ typedef enum _zet_sysman_version_t
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == phSysman
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + Sub-device handles are not supported. Use the device handle.
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanGet(
     zet_device_handle_t hDevice,                    ///< [in] Handle of the device
@@ -168,6 +168,28 @@ typedef struct _zet_sched_timeslice_properties_t
 } zet_sched_timeslice_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Determine if a scheduler mode is supported
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pSupported
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanSchedulerGetModeSupport(
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sched_mode_t mode,                          ///< [in] The scheduler mode
+    ze_bool_t* pSupported                           ///< [in,out] Will indicate if the specified scheduler mode is supported
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get current scheduler mode
 /// 
 /// @details
@@ -182,7 +204,7 @@ typedef struct _zet_sched_timeslice_properties_t
 ///         + nullptr == hSysman
 ///         + nullptr == pMode
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Device does not support scheduler modes.
+///         + Device does not support scheduler modes (check using ::zetSysmanSchedulerGetModeSupport()).
 ze_result_t __zecall
 zetSysmanSchedulerGetCurrentMode(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -204,7 +226,7 @@ zetSysmanSchedulerGetCurrentMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
 ze_result_t __zecall
 zetSysmanSchedulerGetTimeoutModeProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -228,7 +250,7 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
 ze_result_t __zecall
 zetSysmanSchedulerGetTimesliceModeProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -258,7 +280,7 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -289,7 +311,7 @@ zetSysmanSchedulerSetTimeoutMode(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -319,7 +341,7 @@ zetSysmanSchedulerSetTimesliceMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -348,7 +370,7 @@ zetSysmanSchedulerSetExclusiveMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -421,6 +443,16 @@ zetSysmanDeviceReset(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Device repair status
+typedef enum _zet_repair_status_t
+{
+    ZET_REPAIR_STATUS_UNSUPPORTED = 0,              ///< The device does not support in-field repairs.
+    ZET_REPAIR_STATUS_NOT_PERFORMED,                ///< The device has never been repaired.
+    ZET_REPAIR_STATUS_COMPLETED,                    ///< The device has been repaired.
+
+} zet_repair_status_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Find out if the device has been repaired (either by the manufacturer
 ///        or by running diagnostics)
 /// 
@@ -430,15 +462,14 @@ zetSysmanDeviceReset(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pWasRepaired
+///         + nullptr == pRepairStatus
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This device does not record this information or does not support repair features.
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to query this property.
 ze_result_t __zecall
-zetSysmanDeviceWasRepaired(
+zetSysmanDeviceGetRepairStatus(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-    ze_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+    zet_repair_status_t* pRepairStatus              ///< [in] Will indicate if the device was repaired
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -861,7 +892,7 @@ zetSysmanPowerSetLimits(
 ///         + nullptr == hPower
 ///         + nullptr == pThreshold
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Energy threshold not supported on this power domain.
+///         + Energy threshold not supported on this power domain (check ::zet_power_properties_t.isEnergyThresholdSupported).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
 ze_result_t __zecall
@@ -899,7 +930,7 @@ zetSysmanPowerGetEnergyThreshold(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Energy threshold not supported on this power domain.
+///         + Energy threshold not supported on this power domain (check ::zet_power_properties_t.isEnergyThresholdSupported).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
 ///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE

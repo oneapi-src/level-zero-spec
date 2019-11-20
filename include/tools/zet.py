@@ -512,6 +512,18 @@ class zet_process_state_t(Structure):
     ]
 
 ###############################################################################
+## @brief Device repair status
+class zet_repair_status_v(IntEnum):
+    UNSUPPORTED = 0                                 ## The device does not support in-field repairs.
+    NOT_PERFORMED = auto()                          ## The device has never been repaired.
+    COMPLETED = auto()                              ## The device has been repaired.
+
+class zet_repair_status_t(c_int):
+    def __str__(self):
+        return str(zet_repair_status_v(value))
+
+
+###############################################################################
 ## @brief PCI address
 class zet_pci_address_t(Structure):
     _fields_ = [
@@ -1888,6 +1900,13 @@ else:
     _zetSysmanDeviceGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sysman_properties_t) )
 
 ###############################################################################
+## @brief Function-pointer for zetSysmanSchedulerGetModeSupport
+if __use_win_types:
+    _zetSysmanSchedulerGetModeSupport_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, zet_sched_mode_t, POINTER(ze_bool_t) )
+else:
+    _zetSysmanSchedulerGetModeSupport_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, zet_sched_mode_t, POINTER(ze_bool_t) )
+
+###############################################################################
 ## @brief Function-pointer for zetSysmanSchedulerGetCurrentMode
 if __use_win_types:
     _zetSysmanSchedulerGetCurrentMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sched_mode_t) )
@@ -1951,11 +1970,11 @@ else:
     _zetSysmanDeviceReset_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanDeviceWasRepaired
+## @brief Function-pointer for zetSysmanDeviceGetRepairStatus
 if __use_win_types:
-    _zetSysmanDeviceWasRepaired_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
+    _zetSysmanDeviceGetRepairStatus_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_repair_status_t) )
 else:
-    _zetSysmanDeviceWasRepaired_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
+    _zetSysmanDeviceGetRepairStatus_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_repair_status_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanPciGetProperties
@@ -2090,6 +2109,7 @@ class _zet_sysman_dditable_t(Structure):
     _fields_ = [
         ("pfnGet", c_void_p),                                           ## _zetSysmanGet_t
         ("pfnDeviceGetProperties", c_void_p),                           ## _zetSysmanDeviceGetProperties_t
+        ("pfnSchedulerGetModeSupport", c_void_p),                       ## _zetSysmanSchedulerGetModeSupport_t
         ("pfnSchedulerGetCurrentMode", c_void_p),                       ## _zetSysmanSchedulerGetCurrentMode_t
         ("pfnSchedulerGetTimeoutModeProperties", c_void_p),             ## _zetSysmanSchedulerGetTimeoutModeProperties_t
         ("pfnSchedulerGetTimesliceModeProperties", c_void_p),           ## _zetSysmanSchedulerGetTimesliceModeProperties_t
@@ -2099,7 +2119,7 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnSchedulerSetComputeUnitDebugMode", c_void_p),              ## _zetSysmanSchedulerSetComputeUnitDebugMode_t
         ("pfnProcessesGetState", c_void_p),                             ## _zetSysmanProcessesGetState_t
         ("pfnDeviceReset", c_void_p),                                   ## _zetSysmanDeviceReset_t
-        ("pfnDeviceWasRepaired", c_void_p),                             ## _zetSysmanDeviceWasRepaired_t
+        ("pfnDeviceGetRepairStatus", c_void_p),                         ## _zetSysmanDeviceGetRepairStatus_t
         ("pfnPciGetProperties", c_void_p),                              ## _zetSysmanPciGetProperties_t
         ("pfnPciGetState", c_void_p),                                   ## _zetSysmanPciGetState_t
         ("pfnPciGetBarProperties", c_void_p),                           ## _zetSysmanPciGetBarProperties_t
@@ -2879,6 +2899,7 @@ class ZET_DDI:
         # attach function interface to function address
         self.zetSysmanGet = _zetSysmanGet_t(self.__dditable.Sysman.pfnGet)
         self.zetSysmanDeviceGetProperties = _zetSysmanDeviceGetProperties_t(self.__dditable.Sysman.pfnDeviceGetProperties)
+        self.zetSysmanSchedulerGetModeSupport = _zetSysmanSchedulerGetModeSupport_t(self.__dditable.Sysman.pfnSchedulerGetModeSupport)
         self.zetSysmanSchedulerGetCurrentMode = _zetSysmanSchedulerGetCurrentMode_t(self.__dditable.Sysman.pfnSchedulerGetCurrentMode)
         self.zetSysmanSchedulerGetTimeoutModeProperties = _zetSysmanSchedulerGetTimeoutModeProperties_t(self.__dditable.Sysman.pfnSchedulerGetTimeoutModeProperties)
         self.zetSysmanSchedulerGetTimesliceModeProperties = _zetSysmanSchedulerGetTimesliceModeProperties_t(self.__dditable.Sysman.pfnSchedulerGetTimesliceModeProperties)
@@ -2888,7 +2909,7 @@ class ZET_DDI:
         self.zetSysmanSchedulerSetComputeUnitDebugMode = _zetSysmanSchedulerSetComputeUnitDebugMode_t(self.__dditable.Sysman.pfnSchedulerSetComputeUnitDebugMode)
         self.zetSysmanProcessesGetState = _zetSysmanProcessesGetState_t(self.__dditable.Sysman.pfnProcessesGetState)
         self.zetSysmanDeviceReset = _zetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
-        self.zetSysmanDeviceWasRepaired = _zetSysmanDeviceWasRepaired_t(self.__dditable.Sysman.pfnDeviceWasRepaired)
+        self.zetSysmanDeviceGetRepairStatus = _zetSysmanDeviceGetRepairStatus_t(self.__dditable.Sysman.pfnDeviceGetRepairStatus)
         self.zetSysmanPciGetProperties = _zetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)
         self.zetSysmanPciGetState = _zetSysmanPciGetState_t(self.__dditable.Sysman.pfnPciGetState)
         self.zetSysmanPciGetBarProperties = _zetSysmanPciGetBarProperties_t(self.__dditable.Sysman.pfnPciGetBarProperties)

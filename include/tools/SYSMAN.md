@@ -261,21 +261,21 @@ The following operations permit getting properties about the entire device:
 | Function                                                   | Description |
 | :---                                                       | :---        |
 | ::zetSysmanDeviceGetProperties()                          | Get static device properties -  device UUID, sub-device ID, device brand/model/vendor strings |
-| ::zetSysmanDeviceWasRepaired()                            | Determine if the device has undergone repairs, either through the running of diagnostics or by manufacturing. |
+| ::zetSysmanDeviceGetRepairStatus()                        | Determine if the device has undergone repairs, either through the running of diagnostics or by manufacturing. |
 
 The pseudo code below shows how to display general information about a device:
 
 ```c
 function ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
 	zet_sysman_properties_t devProps
-    ze_bool_t repaired
+    zet_repair_status_t repaired
 	if (zetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == ZE_RESULT_SUCCESS)
 		output("    UUID:           %s", devProps.core.uuid.id)
 		output("    #subdevices:    %u", devProps.numSubdevices)
 		output("    brand:          %s", devProps.brandName)
 		output("    model:          %s", devProps.modelName)
-    if (zetSysmanDeviceWasRepaired(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
-        output("    Was repaired:   %s", repaired ? "yes" : "no")
+    if (zetSysmanDeviceRepairStatus(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
+        output("    Was repaired:   %s", (repaired == ZET_REPAIR_STATUS_COMPLETED) ? "yes" : "no")
 ```
 
 ### <a name="gloz">Host processes</a>
@@ -966,7 +966,7 @@ course of action:
 3. ::ZET_DIAG_RESULT_FAIL_CANT_REPAIR - Hardware had problems setting up repair. Card should be removed from the system.
 4. ::ZET_DIAG_RESULT_REBOOT_FOR_REPAIR - Hardware has prepared for repair and requires a reboot after which time workloads can resume submission.
 
-The function ::zetSysmanDeviceWasRepaired() can be used to determine if the device has been repaired.
+The function ::zetSysmanDeviceGetRepairStatus() can be used to determine if the device has been repaired.
 
 There are multiple diagnostic test suites that can be run and these are defined in the enumerator ::zet_diag_type_t. The function
 ::zetSysmanDiagnosticsGet() will enumerate each available test suite and the function ::zetSysmanDiagnosticsGetProperties() can be used to determine
@@ -1234,7 +1234,7 @@ The table below summarizes the default permissions for each API function:
 | Function                                              | Administrator access | Group access         | Other access         | Virtual machine      |
 | :---                                                  | :---                 | :---                 | :---                 | :---                 |
 | ::zetSysmanDeviceGetProperties()                     | read-only            | read-only            | read-only            | no-access            |
-| ::zetSysmanDeviceWasRepaired()                       | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanDeviceGetRepairStatus()                   | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanSchedulerGetCurrentMode()                 | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanSchedulerGetTimeoutModeProperties()       | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanSchedulerGetTimesliceModeProperties()     | read-only            | read-only            | read-only            | no-access            |

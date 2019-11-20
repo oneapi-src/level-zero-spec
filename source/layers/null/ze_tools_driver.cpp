@@ -690,6 +690,31 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanSchedulerGetModeSupport
+    ze_result_t __zecall
+    zetSysmanSchedulerGetModeSupport(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sched_mode_t mode,                          ///< [in] The scheduler mode
+        ze_bool_t* pSupported                           ///< [in,out] Will indicate if the specified scheduler mode is supported
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSchedulerGetModeSupport = context.zetDdiTable.Sysman.pfnSchedulerGetModeSupport;
+        if( nullptr != pfnSchedulerGetModeSupport )
+        {
+            result = pfnSchedulerGetModeSupport( hSysman, mode, pSupported );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGetCurrentMode
     ze_result_t __zecall
     zetSysmanSchedulerGetCurrentMode(
@@ -922,20 +947,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceWasRepaired
+    /// @brief Intercept function for zetSysmanDeviceGetRepairStatus
     ze_result_t __zecall
-    zetSysmanDeviceWasRepaired(
+    zetSysmanDeviceGetRepairStatus(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-        ze_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+        zet_repair_status_t* pRepairStatus              ///< [in] Will indicate if the device was repaired
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceWasRepaired = context.zetDdiTable.Sysman.pfnDeviceWasRepaired;
-        if( nullptr != pfnDeviceWasRepaired )
+        auto pfnDeviceGetRepairStatus = context.zetDdiTable.Sysman.pfnDeviceGetRepairStatus;
+        if( nullptr != pfnDeviceGetRepairStatus )
         {
-            result = pfnDeviceWasRepaired( hSysman, pWasRepaired );
+            result = pfnDeviceGetRepairStatus( hSysman, pRepairStatus );
         }
         else
         {
@@ -3538,6 +3563,8 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnDeviceGetProperties                    = driver::zetSysmanDeviceGetProperties;
 
+    pDdiTable->pfnSchedulerGetModeSupport                = driver::zetSysmanSchedulerGetModeSupport;
+
     pDdiTable->pfnSchedulerGetCurrentMode                = driver::zetSysmanSchedulerGetCurrentMode;
 
     pDdiTable->pfnSchedulerGetTimeoutModeProperties      = driver::zetSysmanSchedulerGetTimeoutModeProperties;
@@ -3556,7 +3583,7 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnDeviceReset                            = driver::zetSysmanDeviceReset;
 
-    pDdiTable->pfnDeviceWasRepaired                      = driver::zetSysmanDeviceWasRepaired;
+    pDdiTable->pfnDeviceGetRepairStatus                  = driver::zetSysmanDeviceGetRepairStatus;
 
     pDdiTable->pfnPciGetProperties                       = driver::zetSysmanPciGetProperties;
 

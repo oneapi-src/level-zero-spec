@@ -701,7 +701,7 @@ void ShowEnergyThreshold(zet_sysman_pwr_handle_t hPower)
 void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
 {
     zet_sysman_properties_t devProps;
-    ze_bool_t repaired;
+    zet_repair_status_t repaired;
     if (zetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == ZE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    UUID:           %s\n", devProps.core.uuid.id);
@@ -710,9 +710,9 @@ void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
         fprintf(stdout, "    model:          %s\n", devProps.modelName);
         fprintf(stdout, "    driver timeout: disabled\n");
     }
-    if (zetSysmanDeviceWasRepaired(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
+    if (zetSysmanDeviceGetRepairStatus(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
     {
-        fprintf(stdout, "    Was repaired:   %s\n", repaired ? "yes" : "no");
+        fprintf(stdout, "    Was repaired:   %s\n", (repaired == ZET_REPAIR_STATUS_COMPLETED) ? "yes" : "no");
     }
 }
 

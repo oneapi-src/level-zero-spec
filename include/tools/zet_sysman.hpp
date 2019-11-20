@@ -130,6 +130,16 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device repair status
+        enum class repair_status_t
+        {
+            UNSUPPORTED = 0,                                ///< The device does not support in-field repairs.
+            NOT_PERFORMED,                                  ///< The device has never been repaired.
+            COMPLETED,                                      ///< The device has been repaired.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief PCI bar types
         enum class pci_bar_type_t
         {
@@ -380,6 +390,19 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Determine if a scheduler mode is supported
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SchedulerGetModeSupport(
+            sched_mode_t mode,                              ///< [in] The scheduler mode
+            ze::bool_t* pSupported                          ///< [in,out] Will indicate if the specified scheduler mode is supported
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get current scheduler mode
         /// 
         /// @details
@@ -522,8 +545,8 @@ namespace zet
         ///        or by running diagnostics)
         /// @throws result_t
         void __zecall
-        DeviceWasRepaired(
-            ze::bool_t* pWasRepaired                        ///< [in] Will indicate if the device was repaired
+        DeviceGetRepairStatus(
+            repair_status_t* pRepairStatus                  ///< [in] Will indicate if the device was repaired
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -3064,6 +3087,10 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::process_state_t to std::string
     std::string to_string( const Sysman::process_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::repair_status_t to std::string
+    std::string to_string( const Sysman::repair_status_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_address_t to std::string

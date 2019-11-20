@@ -824,6 +824,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanSchedulerGetModeSupport
+    ze_result_t __zecall
+    zetSysmanSchedulerGetModeSupport(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sched_mode_t mode,                          ///< [in] The scheduler mode
+        ze_bool_t* pSupported                           ///< [in,out] Will indicate if the specified scheduler mode is supported
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnSchedulerGetModeSupport = dditable->zet.Sysman.pfnSchedulerGetModeSupport;
+        if( nullptr == pfnSchedulerGetModeSupport )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnSchedulerGetModeSupport( hSysman, mode, pSupported );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGetCurrentMode
     ze_result_t __zecall
     zetSysmanSchedulerGetCurrentMode(
@@ -1065,26 +1091,26 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceWasRepaired
+    /// @brief Intercept function for zetSysmanDeviceGetRepairStatus
     ze_result_t __zecall
-    zetSysmanDeviceWasRepaired(
+    zetSysmanDeviceGetRepairStatus(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-        ze_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+        zet_repair_status_t* pRepairStatus              ///< [in] Will indicate if the device was repaired
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceWasRepaired = dditable->zet.Sysman.pfnDeviceWasRepaired;
-        if( nullptr == pfnDeviceWasRepaired )
+        auto pfnDeviceGetRepairStatus = dditable->zet.Sysman.pfnDeviceGetRepairStatus;
+        if( nullptr == pfnDeviceGetRepairStatus )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceWasRepaired( hSysman, pWasRepaired );
+        result = pfnDeviceGetRepairStatus( hSysman, pRepairStatus );
 
         return result;
     }
@@ -4280,6 +4306,7 @@ zetGetSysmanProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = loader::zetSysmanGet;
             pDdiTable->pfnDeviceGetProperties                      = loader::zetSysmanDeviceGetProperties;
+            pDdiTable->pfnSchedulerGetModeSupport                  = loader::zetSysmanSchedulerGetModeSupport;
             pDdiTable->pfnSchedulerGetCurrentMode                  = loader::zetSysmanSchedulerGetCurrentMode;
             pDdiTable->pfnSchedulerGetTimeoutModeProperties        = loader::zetSysmanSchedulerGetTimeoutModeProperties;
             pDdiTable->pfnSchedulerGetTimesliceModeProperties      = loader::zetSysmanSchedulerGetTimesliceModeProperties;
@@ -4289,7 +4316,7 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnSchedulerSetComputeUnitDebugMode         = loader::zetSysmanSchedulerSetComputeUnitDebugMode;
             pDdiTable->pfnProcessesGetState                        = loader::zetSysmanProcessesGetState;
             pDdiTable->pfnDeviceReset                              = loader::zetSysmanDeviceReset;
-            pDdiTable->pfnDeviceWasRepaired                        = loader::zetSysmanDeviceWasRepaired;
+            pDdiTable->pfnDeviceGetRepairStatus                    = loader::zetSysmanDeviceGetRepairStatus;
             pDdiTable->pfnPciGetProperties                         = loader::zetSysmanPciGetProperties;
             pDdiTable->pfnPciGetState                              = loader::zetSysmanPciGetState;
             pDdiTable->pfnPciGetBarProperties                      = loader::zetSysmanPciGetBarProperties;

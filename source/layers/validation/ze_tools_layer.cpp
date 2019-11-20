@@ -720,6 +720,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanSchedulerGetModeSupport
+    ze_result_t __zecall
+    zetSysmanSchedulerGetModeSupport(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sched_mode_t mode,                          ///< [in] The scheduler mode
+        ze_bool_t* pSupported                           ///< [in,out] Will indicate if the specified scheduler mode is supported
+        )
+    {
+        auto pfnSchedulerGetModeSupport = context.zetDdiTable.Sysman.pfnSchedulerGetModeSupport;
+
+        if( nullptr == pfnSchedulerGetModeSupport )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pSupported )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSchedulerGetModeSupport( hSysman, mode, pSupported );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGetCurrentMode
     ze_result_t __zecall
     zetSysmanSchedulerGetCurrentMode(
@@ -973,16 +1000,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceWasRepaired
+    /// @brief Intercept function for zetSysmanDeviceGetRepairStatus
     ze_result_t __zecall
-    zetSysmanDeviceWasRepaired(
+    zetSysmanDeviceGetRepairStatus(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-        ze_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+        zet_repair_status_t* pRepairStatus              ///< [in] Will indicate if the device was repaired
         )
     {
-        auto pfnDeviceWasRepaired = context.zetDdiTable.Sysman.pfnDeviceWasRepaired;
+        auto pfnDeviceGetRepairStatus = context.zetDdiTable.Sysman.pfnDeviceGetRepairStatus;
 
-        if( nullptr == pfnDeviceWasRepaired )
+        if( nullptr == pfnDeviceGetRepairStatus )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -990,12 +1017,12 @@ namespace layer
             if( nullptr == hSysman )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pWasRepaired )
+            if( nullptr == pRepairStatus )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnDeviceWasRepaired( hSysman, pWasRepaired );
+        return pfnDeviceGetRepairStatus( hSysman, pRepairStatus );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3752,6 +3779,9 @@ zetGetSysmanProcAddrTable(
     dditable.pfnDeviceGetProperties                      = pDdiTable->pfnDeviceGetProperties;
     pDdiTable->pfnDeviceGetProperties                    = layer::zetSysmanDeviceGetProperties;
 
+    dditable.pfnSchedulerGetModeSupport                  = pDdiTable->pfnSchedulerGetModeSupport;
+    pDdiTable->pfnSchedulerGetModeSupport                = layer::zetSysmanSchedulerGetModeSupport;
+
     dditable.pfnSchedulerGetCurrentMode                  = pDdiTable->pfnSchedulerGetCurrentMode;
     pDdiTable->pfnSchedulerGetCurrentMode                = layer::zetSysmanSchedulerGetCurrentMode;
 
@@ -3779,8 +3809,8 @@ zetGetSysmanProcAddrTable(
     dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
     pDdiTable->pfnDeviceReset                            = layer::zetSysmanDeviceReset;
 
-    dditable.pfnDeviceWasRepaired                        = pDdiTable->pfnDeviceWasRepaired;
-    pDdiTable->pfnDeviceWasRepaired                      = layer::zetSysmanDeviceWasRepaired;
+    dditable.pfnDeviceGetRepairStatus                    = pDdiTable->pfnDeviceGetRepairStatus;
+    pDdiTable->pfnDeviceGetRepairStatus                  = layer::zetSysmanDeviceGetRepairStatus;
 
     dditable.pfnPciGetProperties                         = pDdiTable->pfnPciGetProperties;
     pDdiTable->pfnPciGetProperties                       = layer::zetSysmanPciGetProperties;
