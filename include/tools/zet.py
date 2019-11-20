@@ -516,7 +516,7 @@ class zet_process_state_t(Structure):
 class zet_repair_status_v(IntEnum):
     UNSUPPORTED = 0                                 ## The device does not support in-field repairs.
     NOT_PERFORMED = auto()                          ## The device has never been repaired.
-    COMPLETED = auto()                              ## The device has been repaired.
+    PERFORMED = auto()                              ## The device has been repaired.
 
 class zet_repair_status_t(c_int):
     def __str__(self):
@@ -1900,11 +1900,11 @@ else:
     _zetSysmanDeviceGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sysman_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerGetModeSupport
+## @brief Function-pointer for zetSysmanSchedulerGetSupportedModes
 if __use_win_types:
-    _zetSysmanSchedulerGetModeSupport_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, zet_sched_mode_t, POINTER(ze_bool_t) )
+    _zetSysmanSchedulerGetSupportedModes_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sched_mode_t) )
 else:
-    _zetSysmanSchedulerGetModeSupport_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, zet_sched_mode_t, POINTER(ze_bool_t) )
+    _zetSysmanSchedulerGetSupportedModes_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sched_mode_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanSchedulerGetCurrentMode
@@ -2109,7 +2109,7 @@ class _zet_sysman_dditable_t(Structure):
     _fields_ = [
         ("pfnGet", c_void_p),                                           ## _zetSysmanGet_t
         ("pfnDeviceGetProperties", c_void_p),                           ## _zetSysmanDeviceGetProperties_t
-        ("pfnSchedulerGetModeSupport", c_void_p),                       ## _zetSysmanSchedulerGetModeSupport_t
+        ("pfnSchedulerGetSupportedModes", c_void_p),                    ## _zetSysmanSchedulerGetSupportedModes_t
         ("pfnSchedulerGetCurrentMode", c_void_p),                       ## _zetSysmanSchedulerGetCurrentMode_t
         ("pfnSchedulerGetTimeoutModeProperties", c_void_p),             ## _zetSysmanSchedulerGetTimeoutModeProperties_t
         ("pfnSchedulerGetTimesliceModeProperties", c_void_p),           ## _zetSysmanSchedulerGetTimesliceModeProperties_t
@@ -2899,7 +2899,7 @@ class ZET_DDI:
         # attach function interface to function address
         self.zetSysmanGet = _zetSysmanGet_t(self.__dditable.Sysman.pfnGet)
         self.zetSysmanDeviceGetProperties = _zetSysmanDeviceGetProperties_t(self.__dditable.Sysman.pfnDeviceGetProperties)
-        self.zetSysmanSchedulerGetModeSupport = _zetSysmanSchedulerGetModeSupport_t(self.__dditable.Sysman.pfnSchedulerGetModeSupport)
+        self.zetSysmanSchedulerGetSupportedModes = _zetSysmanSchedulerGetSupportedModes_t(self.__dditable.Sysman.pfnSchedulerGetSupportedModes)
         self.zetSysmanSchedulerGetCurrentMode = _zetSysmanSchedulerGetCurrentMode_t(self.__dditable.Sysman.pfnSchedulerGetCurrentMode)
         self.zetSysmanSchedulerGetTimeoutModeProperties = _zetSysmanSchedulerGetTimeoutModeProperties_t(self.__dditable.Sysman.pfnSchedulerGetTimeoutModeProperties)
         self.zetSysmanSchedulerGetTimesliceModeProperties = _zetSysmanSchedulerGetTimesliceModeProperties_t(self.__dditable.Sysman.pfnSchedulerGetTimesliceModeProperties)

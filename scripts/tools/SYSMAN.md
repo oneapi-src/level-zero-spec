@@ -281,7 +281,7 @@ function ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
 		output("    brand:          %s", devProps.brandName)
 		output("    model:          %s", devProps.modelName)
     if (zetSysmanDeviceRepairStatus(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
-        output("    Was repaired:   %s", (repaired == ZET_REPAIR_STATUS_COMPLETED) ? "yes" : "no")
+        output("    Was repaired:   %s", (repaired == ZET_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
 ```
 
 ${"###"} <a name="gloz">Host processes</a>

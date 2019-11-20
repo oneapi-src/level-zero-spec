@@ -78,9 +78,11 @@ zetSysmanDeviceGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Determine if a scheduler mode is supported
+/// @brief Get a list of supported scheduler modes
 /// 
 /// @details
+///     - If zero modes are returned, control of scheduler modes are not
+///       supported.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -90,20 +92,28 @@ zetSysmanDeviceGetProperties(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pSupported
+///         + nullptr == pCount
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanSchedulerGetModeSupport(
+zetSysmanSchedulerGetSupportedModes(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    zet_sched_mode_t mode,                          ///< [in] The scheduler mode
-    ze_bool_t* pSupported                           ///< [in,out] Will indicate if the specified scheduler mode is supported
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of supported modes.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< supported scheduler modes.
+                                                    ///< if count is larger than the number of supported scheduler modes, then
+                                                    ///< the driver will update the value with the correct number of supported
+                                                    ///< scheduler modes that are returned.
+    zet_sched_mode_t* pModes                        ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
+                                                    ///< modes
     )
 {
-    auto pfnSchedulerGetModeSupport = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetModeSupport;
-    if( nullptr == pfnSchedulerGetModeSupport )
+    auto pfnSchedulerGetSupportedModes = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetSupportedModes;
+    if( nullptr == pfnSchedulerGetSupportedModes )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSchedulerGetModeSupport( hSysman, mode, pSupported );
+    return pfnSchedulerGetSupportedModes( hSysman, pCount, pModes );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,7 +131,7 @@ zetSysmanSchedulerGetModeSupport(
 ///         + nullptr == hSysman
 ///         + nullptr == pMode
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Device does not support scheduler modes (check using ::zetSysmanSchedulerGetModeSupport()).
+///         + Device does not support scheduler modes (check using ::zetSysmanSchedulerGetSupportedModes()).
 ze_result_t __zecall
 zetSysmanSchedulerGetCurrentMode(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -150,7 +160,7 @@ zetSysmanSchedulerGetCurrentMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ze_result_t __zecall
 zetSysmanSchedulerGetTimeoutModeProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -181,7 +191,7 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ze_result_t __zecall
 zetSysmanSchedulerGetTimesliceModeProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -218,7 +228,7 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -256,7 +266,7 @@ zetSysmanSchedulerSetTimeoutMode(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -293,7 +303,7 @@ zetSysmanSchedulerSetTimesliceMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -329,7 +339,7 @@ zetSysmanSchedulerSetExclusiveMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetModeSupport()).
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -3161,26 +3171,36 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Determine if a scheduler mode is supported
+    /// @brief Get a list of supported scheduler modes
     /// 
     /// @details
+    ///     - If zero modes are returned, control of scheduler modes are not
+    ///       supported.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerGetModeSupport(
-        sched_mode_t mode,                              ///< [in] The scheduler mode
-        ze::bool_t* pSupported                          ///< [in,out] Will indicate if the specified scheduler mode is supported
+    Sysman::SchedulerGetSupportedModes(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of supported modes.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< supported scheduler modes.
+                                                        ///< if count is larger than the number of supported scheduler modes, then
+                                                        ///< the driver will update the value with the correct number of supported
+                                                        ///< scheduler modes that are returned.
+        sched_mode_t* pModes                            ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
+                                                        ///< modes
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanSchedulerGetModeSupport(
+        auto result = static_cast<result_t>( ::zetSysmanSchedulerGetSupportedModes(
             reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
-            static_cast<zet_sched_mode_t>( mode ),
-            reinterpret_cast<ze_bool_t*>( pSupported ) ) );
+            pCount,
+            reinterpret_cast<zet_sched_mode_t*>( pModes ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerGetModeSupport" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerGetSupportedModes" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -5762,8 +5782,8 @@ namespace zet
             str = "Sysman::repair_status_t::NOT_PERFORMED";
             break;
 
-        case Sysman::repair_status_t::COMPLETED:
-            str = "Sysman::repair_status_t::COMPLETED";
+        case Sysman::repair_status_t::PERFORMED:
+            str = "Sysman::repair_status_t::PERFORMED";
             break;
 
         default:

@@ -608,11 +608,11 @@ typedef ze_result_t (__zecall *zet_pfnSysmanDeviceGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerGetModeSupport 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetModeSupport_t)(
+/// @brief Function-pointer for zetSysmanSchedulerGetSupportedModes 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetSupportedModes_t)(
     zet_sysman_handle_t,
-    zet_sched_mode_t,
-    ze_bool_t*
+    uint32_t*,
+    zet_sched_mode_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -835,7 +835,7 @@ typedef struct _zet_sysman_dditable_t
 {
     zet_pfnSysmanGet_t                                          pfnGet;
     zet_pfnSysmanDeviceGetProperties_t                          pfnDeviceGetProperties;
-    zet_pfnSysmanSchedulerGetModeSupport_t                      pfnSchedulerGetModeSupport;
+    zet_pfnSysmanSchedulerGetSupportedModes_t                   pfnSchedulerGetSupportedModes;
     zet_pfnSysmanSchedulerGetCurrentMode_t                      pfnSchedulerGetCurrentMode;
     zet_pfnSysmanSchedulerGetTimeoutModeProperties_t            pfnSchedulerGetTimeoutModeProperties;
     zet_pfnSysmanSchedulerGetTimesliceModeProperties_t          pfnSchedulerGetTimesliceModeProperties;

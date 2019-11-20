@@ -690,21 +690,29 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanSchedulerGetModeSupport
+    /// @brief Intercept function for zetSysmanSchedulerGetSupportedModes
     ze_result_t __zecall
-    zetSysmanSchedulerGetModeSupport(
+    zetSysmanSchedulerGetSupportedModes(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_sched_mode_t mode,                          ///< [in] The scheduler mode
-        ze_bool_t* pSupported                           ///< [in,out] Will indicate if the specified scheduler mode is supported
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of supported modes.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< supported scheduler modes.
+                                                        ///< if count is larger than the number of supported scheduler modes, then
+                                                        ///< the driver will update the value with the correct number of supported
+                                                        ///< scheduler modes that are returned.
+        zet_sched_mode_t* pModes                        ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
+                                                        ///< modes
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnSchedulerGetModeSupport = context.zetDdiTable.Sysman.pfnSchedulerGetModeSupport;
-        if( nullptr != pfnSchedulerGetModeSupport )
+        auto pfnSchedulerGetSupportedModes = context.zetDdiTable.Sysman.pfnSchedulerGetSupportedModes;
+        if( nullptr != pfnSchedulerGetSupportedModes )
         {
-            result = pfnSchedulerGetModeSupport( hSysman, mode, pSupported );
+            result = pfnSchedulerGetSupportedModes( hSysman, pCount, pModes );
         }
         else
         {
@@ -3563,7 +3571,7 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnDeviceGetProperties                    = driver::zetSysmanDeviceGetProperties;
 
-    pDdiTable->pfnSchedulerGetModeSupport                = driver::zetSysmanSchedulerGetModeSupport;
+    pDdiTable->pfnSchedulerGetSupportedModes             = driver::zetSysmanSchedulerGetSupportedModes;
 
     pDdiTable->pfnSchedulerGetCurrentMode                = driver::zetSysmanSchedulerGetCurrentMode;
 

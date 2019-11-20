@@ -148,22 +148,27 @@ members:
       desc: "[in,out] The maximum time in microseconds that the scheduler will wait to preempt a workload running on an engine before deciding to reset the hardware engine and terminating the associated context."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Determine if a scheduler mode is supported"
+desc: "Get a list of supported scheduler modes"
 class: $tSysman
-name: SchedulerGetModeSupport
+name: SchedulerGetSupportedModes
 details:
+    - "If zero modes are returned, control of scheduler modes are not supported."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
-    - type: $t_sched_mode_t
-      name: mode
-      desc: "[in] The scheduler mode"
-    - type: $x_bool_t*
-      name: pSupported
-      desc: "[in,out] Will indicate if the specified scheduler mode is supported"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of scheduler modes.
+            if count is zero, then the driver will update the value with the total number of supported modes.
+            if count is non-zero, then driver will only retrieve that number of supported scheduler modes.
+            if count is larger than the number of supported scheduler modes, then the driver will update the value with the correct number of supported scheduler modes that are returned.
+    - type: "$t_sched_mode_t*"
+      name: pModes
+      desc: "[in,out][optional][range(0, *pCount)] Array of supported scheduler modes"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current scheduler mode"
@@ -181,7 +186,7 @@ params:
       desc: "[in] Will contain the current scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "Device does not support scheduler modes (check using $tSysmanSchedulerGetModeSupport())."
+        - "Device does not support scheduler modes (check using $tSysmanSchedulerGetSupportedModes())."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get scheduler config for mode $T_SCHED_MODE_TIMEOUT"
@@ -202,7 +207,7 @@ params:
       desc: "[in] Will contain the current parameters for this mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetModeSupport())."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get scheduler config for mode $T_SCHED_MODE_TIMESLICE"
@@ -223,7 +228,7 @@ params:
       desc: "[in] Will contain the current parameters for this mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetModeSupport())."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change scheduler mode to $T_SCHED_MODE_TIMEOUT or update scheduler mode parameters if already running in this mode."
@@ -245,7 +250,7 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetModeSupport())."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
@@ -269,7 +274,7 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetModeSupport())."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
@@ -290,7 +295,7 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetModeSupport())."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
@@ -311,7 +316,7 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetModeSupport())."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 
@@ -379,7 +384,7 @@ etors:
       desc: "The device does not support in-field repairs."
     - name: $T_REPAIR_STATUS_NOT_PERFORMED
       desc: "The device has never been repaired."
-    - name: $T_REPAIR_STATUS_COMPLETED
+    - name: $T_REPAIR_STATUS_PERFORMED
       desc: "The device has been repaired."
 --- #--------------------------------------------------------------------------
 type: function

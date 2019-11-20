@@ -712,7 +712,7 @@ void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
     }
     if (zetSysmanDeviceGetRepairStatus(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
     {
-        fprintf(stdout, "    Was repaired:   %s\n", (repaired == ZET_REPAIR_STATUS_COMPLETED) ? "yes" : "no");
+        fprintf(stdout, "    Was repaired:   %s\n", (repaired == ZET_REPAIR_STATUS_PERFORMED) ? "yes" : "no");
     }
 }
 

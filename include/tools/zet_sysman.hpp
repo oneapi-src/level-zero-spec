@@ -135,7 +135,7 @@ namespace zet
         {
             UNSUPPORTED = 0,                                ///< The device does not support in-field repairs.
             NOT_PERFORMED,                                  ///< The device has never been repaired.
-            COMPLETED,                                      ///< The device has been repaired.
+            PERFORMED,                                      ///< The device has been repaired.
 
         };
 
@@ -390,16 +390,26 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Determine if a scheduler mode is supported
+        /// @brief Get a list of supported scheduler modes
         /// 
         /// @details
+        ///     - If zero modes are returned, control of scheduler modes are not
+        ///       supported.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SchedulerGetModeSupport(
-            sched_mode_t mode,                              ///< [in] The scheduler mode
-            ze::bool_t* pSupported                          ///< [in,out] Will indicate if the specified scheduler mode is supported
+        SchedulerGetSupportedModes(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of supported modes.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of
+                                                            ///< supported scheduler modes.
+                                                            ///< if count is larger than the number of supported scheduler modes, then
+                                                            ///< the driver will update the value with the correct number of supported
+                                                            ///< scheduler modes that are returned.
+            sched_mode_t* pModes = nullptr                  ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
+                                                            ///< modes
             );
 
         ///////////////////////////////////////////////////////////////////////////////

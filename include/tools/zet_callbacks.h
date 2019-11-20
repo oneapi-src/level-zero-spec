@@ -824,24 +824,24 @@ typedef void (__zecall *zet_pfnSysmanDeviceGetPropertiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanSchedulerGetModeSupport 
+/// @brief Callback function parameters for zetSysmanSchedulerGetSupportedModes 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_scheduler_get_mode_support_params_t
+typedef struct _zet_sysman_scheduler_get_supported_modes_params_t
 {
     zet_sysman_handle_t* phSysman;
-    zet_sched_mode_t* pmode;
-    ze_bool_t** ppSupported;
-} zet_sysman_scheduler_get_mode_support_params_t;
+    uint32_t** ppCount;
+    zet_sched_mode_t** ppModes;
+} zet_sysman_scheduler_get_supported_modes_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanSchedulerGetModeSupport 
+/// @brief Callback function-pointer for zetSysmanSchedulerGetSupportedModes 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanSchedulerGetModeSupportCb_t)(
-    zet_sysman_scheduler_get_mode_support_params_t* params,
+typedef void (__zecall *zet_pfnSysmanSchedulerGetSupportedModesCb_t)(
+    zet_sysman_scheduler_get_supported_modes_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1515,7 +1515,7 @@ typedef struct _zet_sysman_callbacks_t
 {
     zet_pfnSysmanGetCb_t                                            pfnGetCb;
     zet_pfnSysmanDeviceGetPropertiesCb_t                            pfnDeviceGetPropertiesCb;
-    zet_pfnSysmanSchedulerGetModeSupportCb_t                        pfnSchedulerGetModeSupportCb;
+    zet_pfnSysmanSchedulerGetSupportedModesCb_t                     pfnSchedulerGetSupportedModesCb;
     zet_pfnSysmanSchedulerGetCurrentModeCb_t                        pfnSchedulerGetCurrentModeCb;
     zet_pfnSysmanSchedulerGetTimeoutModePropertiesCb_t              pfnSchedulerGetTimeoutModePropertiesCb;
     zet_pfnSysmanSchedulerGetTimesliceModePropertiesCb_t            pfnSchedulerGetTimesliceModePropertiesCb;
