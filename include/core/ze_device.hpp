@@ -645,6 +645,7 @@ namespace ze
             bool_t fp16Supported;                           ///< [out] Supports 16-bit floating-point operations
             bool_t fp64Supported;                           ///< [out] Supports 64-bit floating-point operations
             bool_t int64AtomicsSupported;                   ///< [out] Supports 64-bit atomic operations
+            bool_t dp4aSupported;                           ///< [out] Supports four component dot product and accumulate operations
 
         };
 

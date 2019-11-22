@@ -1500,6 +1500,10 @@ namespace ze
         str += "Device::kernel_properties_t::int64AtomicsSupported : ";
         str += std::to_string(val.int64AtomicsSupported);
         str += "\n";
+        
+        str += "Device::kernel_properties_t::dp4aSupported : ";
+        str += std::to_string(val.dp4aSupported);
+        str += "\n";
 
         return str;
     }
