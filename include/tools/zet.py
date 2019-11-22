@@ -1829,9 +1829,9 @@ class _zet_metric_query_dditable_t(Structure):
 ###############################################################################
 ## @brief Function-pointer for zetTracerCreate
 if __use_win_types:
-    _zetTracerCreate_t = WINFUNCTYPE( ze_result_t, zet_device_handle_t, POINTER(zet_tracer_desc_t), POINTER(zet_tracer_handle_t) )
+    _zetTracerCreate_t = WINFUNCTYPE( ze_result_t, zet_driver_handle_t, POINTER(zet_tracer_desc_t), POINTER(zet_tracer_handle_t) )
 else:
-    _zetTracerCreate_t = CFUNCTYPE( ze_result_t, zet_device_handle_t, POINTER(zet_tracer_desc_t), POINTER(zet_tracer_handle_t) )
+    _zetTracerCreate_t = CFUNCTYPE( ze_result_t, zet_driver_handle_t, POINTER(zet_tracer_desc_t), POINTER(zet_tracer_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetTracerDestroy

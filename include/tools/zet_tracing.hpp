@@ -59,7 +59,7 @@ namespace zet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         tracer_handle_t m_handle;                       ///< [in] handle of tracer object
-        Device* m_pDevice;                              ///< [in] pointer to owner object
+        Driver* m_pDriver;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the tracer object
 
     public:
@@ -67,7 +67,7 @@ namespace zet
         Tracer( void ) = delete;
         Tracer( 
             tracer_handle_t handle,                         ///< [in] handle of tracer object
-            Device* pDevice,                                ///< [in] pointer to owner object
+            Driver* pDriver,                                ///< [in] pointer to owner object
             const desc_t* desc                              ///< [in] descriptor of the tracer object
             );
 
@@ -81,14 +81,14 @@ namespace zet
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getDevice( void ) const { return m_pDevice; }
+        auto getDriver( void ) const { return m_pDriver; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Creates a tracer for the specified device.
+        /// @brief Creates a tracer for the specified driver.
         /// 
         /// @details
-        ///     - The tracer can only be used on the device on which it was created.
+        ///     - The tracer can only be used on the driver on which it was created.
         ///     - The tracer is created in the disabled state.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
@@ -98,7 +98,7 @@ namespace zet
         /// @throws result_t
         static Tracer* __zecall
         Create(
-            Device* pDevice,                                ///< [in] pointer to the device
+            Driver* pDriver,                                ///< [in] pointer to the driver
             const desc_t* desc                              ///< [in] pointer to tracer descriptor
             );
 

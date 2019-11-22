@@ -89,7 +89,7 @@ int main( int argc, char *argv[] )
         zet::Tracer::desc_t tracer_desc;
         tracer_desc.pUserData = &gbl;
         auto pTracer = std::shared_ptr<zet::Tracer>(
-            zet::Tracer::Create( pDevice, &tracer_desc ),
+            zet::Tracer::Create( pDriver, &tracer_desc ),
             []( zet::Tracer* p ){ zet::Tracer::Destroy( p ); } );
 
         // Set the callbacks

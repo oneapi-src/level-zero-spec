@@ -3016,7 +3016,7 @@ namespace driver
     /// @brief Intercept function for zetTracerCreate
     ze_result_t __zecall
     zetTracerCreate(
-        zet_device_handle_t hDevice,                    ///< [in] handle of the device
+        zet_driver_handle_t hDriver,                    ///< [in] handle of the driver
         const zet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
         zet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
         )
@@ -3027,7 +3027,7 @@ namespace driver
         auto pfnCreate = context.zetDdiTable.Tracer.pfnCreate;
         if( nullptr != pfnCreate )
         {
-            result = pfnCreate( hDevice, desc, phTracer );
+            result = pfnCreate( hDriver, desc, phTracer );
         }
         else
         {

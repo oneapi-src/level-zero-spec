@@ -42,8 +42,9 @@ The callbacks are defined as a collection of per-API function pointers, with the
 * pTracerUserData : the user's pointer for the tracer's data
 * ppTracerInstanceUserData : a per-tracer, per-instance storage location; typically used for passing data from the prologue to the epilogue
 
-Note: since the creation of a tracer requires a device, on first glance it appears that ::${x}Init, ::${x}DriverGet and ::${x}DeviceGet are not traceable.
-However, these APIs **are** traceable for all calls subsequent from the creation and enabling of the tracer itself.
+Since the creation of a tracer requires a driver handle, on first glance it appears that ::${x}Init and ::${x}DriverGet are not traceable.
+However, these APIs are traceable for calls **subsequent** to the creation and enabling of the tracer,
+only on the driver which the tracer was created.
 
 ${"##"} Enabling/Disabling and Destruction
 The tracer is created in a disabled state and must be explicitly enabled by calling ::${t}TracerSetEnabled.
@@ -107,7 +108,7 @@ The following sample code demonstrates a basic usage of API tracing:
         tracer_desc.version = ${T}_TRACER_DESC_VERSION_CURRENT;
         tracer_desc.pUserData = &tracer_data;
         ${t}_tracer_handle_t hTracer;
-        ${t}TracerCreate(hDevice, &tracer_desc, &hTracer);
+        ${t}TracerCreate(hDriver, &tracer_desc, &hTracer);
 
         // Set all callbacks
         ${t}_core_callbacks_t prologCbs = {};

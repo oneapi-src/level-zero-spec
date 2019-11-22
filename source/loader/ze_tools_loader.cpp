@@ -3368,7 +3368,7 @@ namespace loader
     /// @brief Intercept function for zetTracerCreate
     ze_result_t __zecall
     zetTracerCreate(
-        zet_device_handle_t hDevice,                    ///< [in] handle of the device
+        zet_driver_handle_t hDriver,                    ///< [in] handle of the driver
         const zet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
         zet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
         )
@@ -3376,16 +3376,16 @@ namespace loader
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_device_object_t*>( hDevice )->dditable;
+        auto dditable = reinterpret_cast<zet_driver_object_t*>( hDriver )->dditable;
         auto pfnCreate = dditable->zet.Tracer.pfnCreate;
         if( nullptr == pfnCreate )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDevice = reinterpret_cast<zet_device_object_t*>( hDevice )->handle;
+        hDriver = reinterpret_cast<zet_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnCreate( hDevice, desc, phTracer );
+        result = pfnCreate( hDriver, desc, phTracer );
 
         try
         {

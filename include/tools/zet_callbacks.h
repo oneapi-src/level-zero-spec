@@ -654,7 +654,7 @@ typedef struct _zet_metric_query_callbacks_t
 ///     allowing the callback the ability to modify the parameter's value
 typedef struct _zet_tracer_create_params_t
 {
-    zet_device_handle_t* phDevice;
+    zet_driver_handle_t* phDriver;
     const zet_tracer_desc_t** pdesc;
     zet_tracer_handle_t** pphTracer;
 } zet_tracer_create_params_t;

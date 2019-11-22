@@ -54,10 +54,10 @@ typedef struct _zet_tracer_desc_t
 } zet_tracer_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a tracer for the specified device.
+/// @brief Creates a tracer for the specified driver.
 /// 
 /// @details
-///     - The tracer can only be used on the device on which it was created.
+///     - The tracer can only be used on the driver on which it was created.
 ///     - The tracer is created in the disabled state.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -67,7 +67,7 @@ typedef struct _zet_tracer_desc_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDriver
 ///         + nullptr == desc
 ///         + nullptr == phTracer
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
@@ -75,7 +75,7 @@ typedef struct _zet_tracer_desc_t
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ze_result_t __zecall
 zetTracerCreate(
-    zet_device_handle_t hDevice,                    ///< [in] handle of the device
+    zet_driver_handle_t hDriver,                    ///< [in] handle of the driver
     const zet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
     zet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
     );

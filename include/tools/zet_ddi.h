@@ -523,7 +523,7 @@ typedef ze_result_t (__zecall *zet_pfnGetMetricQueryProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetTracerCreate 
 typedef ze_result_t (__zecall *zet_pfnTracerCreate_t)(
-    zet_device_handle_t,
+    zet_driver_handle_t,
     const zet_tracer_desc_t*,
     zet_tracer_handle_t*
     );

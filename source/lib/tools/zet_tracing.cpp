@@ -18,10 +18,10 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a tracer for the specified device.
+/// @brief Creates a tracer for the specified driver.
 /// 
 /// @details
-///     - The tracer can only be used on the device on which it was created.
+///     - The tracer can only be used on the driver on which it was created.
 ///     - The tracer is created in the disabled state.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -31,7 +31,7 @@ extern "C" {
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDriver
 ///         + nullptr == desc
 ///         + nullptr == phTracer
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
@@ -39,7 +39,7 @@ extern "C" {
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ze_result_t __zecall
 zetTracerCreate(
-    zet_device_handle_t hDevice,                    ///< [in] handle of the device
+    zet_driver_handle_t hDriver,                    ///< [in] handle of the driver
     const zet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
     zet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
     )
@@ -48,7 +48,7 @@ zetTracerCreate(
     if( nullptr == pfnCreate )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnCreate( hDevice, desc, phTracer );
+    return pfnCreate( hDriver, desc, phTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -184,20 +184,20 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     Tracer::Tracer( 
         tracer_handle_t handle,                         ///< [in] handle of tracer object
-        Device* pDevice,                                ///< [in] pointer to owner object
+        Driver* pDriver,                                ///< [in] pointer to owner object
         const desc_t* desc                              ///< [in] descriptor of the tracer object
         ) :
         m_handle( handle ),
-        m_pDevice( pDevice ),
+        m_pDriver( pDriver ),
         m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Creates a tracer for the specified device.
+    /// @brief Creates a tracer for the specified driver.
     /// 
     /// @details
-    ///     - The tracer can only be used on the device on which it was created.
+    ///     - The tracer can only be used on the driver on which it was created.
     ///     - The tracer is created in the disabled state.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
@@ -208,14 +208,14 @@ namespace zet
     /// @throws result_t
     Tracer* __zecall
     Tracer::Create(
-        Device* pDevice,                                ///< [in] pointer to the device
+        Driver* pDriver,                                ///< [in] pointer to the driver
         const desc_t* desc                              ///< [in] pointer to tracer descriptor
         )
     {
         zet_tracer_handle_t hTracer;
 
         auto result = static_cast<result_t>( ::zetTracerCreate(
-            reinterpret_cast<zet_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<zet_driver_handle_t>( pDriver->getHandle() ),
             reinterpret_cast<const zet_tracer_desc_t*>( desc ),
             &hTracer ) );
 
@@ -226,7 +226,7 @@ namespace zet
 
         try
         {
-            pTracer = new Tracer( reinterpret_cast<tracer_handle_t>( hTracer ), pDevice, desc );
+            pTracer = new Tracer( reinterpret_cast<tracer_handle_t>( hTracer ), pDriver, desc );
         }
         catch( std::bad_alloc& )
         {

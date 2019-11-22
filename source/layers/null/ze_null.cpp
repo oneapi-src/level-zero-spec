@@ -307,7 +307,7 @@ namespace instrumented
 
             //////////////////////////////////////////////////////////////////////////
             driver::context.zetDdiTable.Tracer.pfnCreate = [](
-                zet_device_handle_t,
+                zet_driver_handle_t,
                 const zet_tracer_desc_t* desc,
                 zet_tracer_handle_t* phTracer )
             {

@@ -36,8 +36,9 @@ The callbacks are defined as a collection of per-API function pointers, with the
 * pTracerUserData : the user's pointer for the tracer's data
 * ppTracerInstanceUserData : a per-tracer, per-instance storage location; typically used for passing data from the prologue to the epilogue
 
-Note: since the creation of a tracer requires a device, on first glance it appears that ::zeInit, ::zeDriverGet and ::zeDeviceGet are not traceable.
-However, these APIs **are** traceable for all calls subsequent from the creation and enabling of the tracer itself.
+Since the creation of a tracer requires a driver handle, on first glance it appears that ::zeInit and ::zeDriverGet are not traceable.
+However, these APIs are traceable for calls **subsequent** to the creation and enabling of the tracer,
+only on the driver which the tracer was created.
 
 ## Enabling/Disabling and Destruction
 The tracer is created in a disabled state and must be explicitly enabled by calling ::zetTracerSetEnabled.
@@ -99,7 +100,7 @@ The following sample code demonstrates a basic usage of API tracing:
         tracer_desc.version = ZET_TRACER_DESC_VERSION_CURRENT;
         tracer_desc.pUserData = &tracer_data;
         zet_tracer_handle_t hTracer;
-        zetTracerCreate(hDevice, &tracer_desc, &hTracer);
+        zetTracerCreate(hDriver, &tracer_desc, &hTracer);
 
         // Set all callbacks
         zet_core_callbacks_t prologCbs = {};
