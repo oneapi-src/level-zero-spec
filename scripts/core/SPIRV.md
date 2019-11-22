@@ -241,13 +241,12 @@ When use of the `SPV_INTEL_subgroups` extension is declared in the module via **
 
 The environment must accept the following types for _Data_ for the **SubgroupShuffleINTEL** instructions:
 
-  * Scalars and **OpTypeVectors** with 2, 4, 8, or 16 _Component Count_ components of the following _Component Type_ types:
+  * Scalars and **OpTypeVectors** with 2, 3, 4, 8, or 16 _Component Count_ components of the following _Component Type_ types:
     * **OpTypeFloat** with a _Width_ of 32 bits (`float`)
-    * TBD: char types?
+    * **OpTypeInt** with a _Width_ of 16 bits and _Signedness_ of 0 (`char` and `uchar`)
     * **OpTypeInt** with a _Width_ of 16 bits and _Signedness_ of 0 (`short` and `ushort`)
     * **OpTypeInt** with a _Width_ of 32 bits and _Signedness_ of 0 (`int` and `uint`)
   * Scalars of **OpTypeInt** with a _Width_ of 64 bits and _Signedness_ of 0 (`long` and `ulong`)
-    * TBD: vectors of long types?
 
 Additionally, if the **Float16** capability is declared and supported:
 
@@ -259,9 +258,12 @@ Additionally, if the **Float64** capability is declared and supported:
 
 The environment must accept the following types for _Result_ and _Data_ for the **SubgroupBufferBlockIOINTEL** and **SubgroupImageBlockIOINTEL** instructions:
 
+  * Scalars and **OpTypeVectors** with 2, 4, 8, or 16 _Component Count_ components of the following _Component Type_ types:
+    * **OpTypeInt** with a _Width_ of 8 bits and _Signedness_ of 0 (`char` and `uchar`)
   * Scalars and **OpTypeVectors** with 2, 4, or 8 _Component Count_ components of the following _Component Type_ types:
-    * **OpTypeInt** with a _Width_ of 32 bits and _Signedness_ of 0 (`int` and `uint`)
     * **OpTypeInt** with a _Width_ of 16 bits and _Signedness_ of 0 (`short` and `ushort`)
+    * **OpTypeInt** with a _Width_ of 32 bits and _Signedness_ of 0 (`int` and `uint`)
+    * **OpTypeInt** with a _Width_ of 64 bits and _Signedness_ of 0 (`long` and `ulong`)
 
 For _Ptr_, valid _Storage Classes_ are:
 
@@ -312,10 +314,6 @@ The following restrictions apply to the **OpSubgroupImageBlockWriteINTEL** instr
 
   * Unlike the image block read instruction, which may read from any arbitrary byte offset, the x-component of the byte coordinate for the image block write instruction must be a multiple of four; in other words, the write must begin at a 32-bit boundary.
     There is no restriction on the y-component of the coordinate.
-
-${"##"} Other Extensions to Consider:
-
-  * [SPV_INTEL_media_block_io](http://htmlpreview.github.io/?https://github.com/KhronosGroup/SPIRV-Registry/blob/master/extensions/INTEL/SPV_INTEL_media_block_io.html) / [cl_intel_spirv_media_block_io](https://www.khronos.org/registry/OpenCL/extensions/intel/cl_intel_spirv_media_block_io.html)?
 
 ${"#"} Numerical Compliance
 
