@@ -130,6 +130,16 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device repair status
+        enum class repair_status_t
+        {
+            UNSUPPORTED = 0,                                ///< The device does not support in-field repairs.
+            NOT_PERFORMED,                                  ///< The device has never been repaired.
+            PERFORMED,                                      ///< The device has been repaired.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief PCI bar types
         enum class pci_bar_type_t
         {
@@ -380,6 +390,29 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get a list of supported scheduler modes
+        /// 
+        /// @details
+        ///     - If zero modes are returned, control of scheduler modes are not
+        ///       supported.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SchedulerGetSupportedModes(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of supported modes.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of
+                                                            ///< supported scheduler modes.
+                                                            ///< if count is larger than the number of supported scheduler modes, then
+                                                            ///< the driver will update the value with the correct number of supported
+                                                            ///< scheduler modes that are returned.
+            sched_mode_t* pModes = nullptr                  ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
+                                                            ///< modes
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get current scheduler mode
         /// 
         /// @details
@@ -522,8 +555,8 @@ namespace zet
         ///        or by running diagnostics)
         /// @throws result_t
         void __zecall
-        DeviceWasRepaired(
-            ze::bool_t* pWasRepaired                        ///< [in] Will indicate if the device was repaired
+        DeviceGetRepairStatus(
+            repair_status_t* pRepairStatus                  ///< [in] Will indicate if the device was repaired
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -797,9 +830,19 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of RAS error sets
+        /// @brief Get handle of all RAS error sets on a device
         /// 
         /// @details
+        ///     - A RAS error set is a collection of RAS error counters of a given type
+        ///       (correctable/uncorrectable) from hardware blocks contained within a
+        ///       sub-device or within the device.
+        ///     - A device without sub-devices will typically return two handles, one
+        ///       for correctable errors sets and one for uncorrectable error sets.
+        ///     - A device with sub-devices will return RAS error sets for each
+        ///       sub-device and possibly RAS error sets for hardware blocks outside the
+        ///       sub-devices.
+        ///     - If the function completes successfully but pCount is set to 0, RAS
+        ///       features are not available/enabled on this device.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
@@ -2089,7 +2132,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         SetConfig(
-            fabric_port_config_t* pConfig                   ///< [in] Contains new configuration of the Fabric Port.
+            const fabric_port_config_t* pConfig             ///< [in] Contains new configuration of the Fabric Port.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2426,16 +2469,6 @@ namespace zet
 
         };
 
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fan state
-        struct fan_state_t
-        {
-            fan_speed_mode_t mode;                          ///< [out] The fan speed mode (default, fixed, temp-speed table)
-            fan_speed_units_t speedUnits;                   ///< [out] The units of the fan speed
-            uint32_t speed;                                 ///< [out] The current fan speed
-
-        };
-
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
@@ -2508,7 +2541,7 @@ namespace zet
         void __zecall
         GetState(
             fan_speed_units_t units,                        ///< [in] The units in which the fan speed should be returned.
-            fan_state_t* pState                             ///< [in] Will contain the current state of the fan.
+            uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
             );
 
     };
@@ -2628,8 +2661,6 @@ namespace zet
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            ze::bool_t supported;                           ///< [out] True if RAS is supported on this device
-            ze::bool_t enabled;                             ///< [out] True if RAS is enabled on this device
 
         };
 
@@ -2660,6 +2691,17 @@ namespace zet
         /// @brief RAS error configuration - thresholds used for triggering RAS events
         ///        (::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
         ///        ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
+        /// 
+        /// @details
+        ///     - The driver maintains a total counter which is updated every time a
+        ///       hardware block covered by the corresponding RAS error set notifies
+        ///       that an error has occurred. When this total count goes above the
+        ///       totalThreshold specified below, a RAS event is triggered.
+        ///     - The driver also maintains a counter for each category of RAS error
+        ///       (see ::zet_ras_details_t for a breakdown). Each time a hardware block
+        ///       of that category notifies that an error has occurred, that
+        ///       corresponding category counter is updated. When it goes above the
+        ///       threshold specified in detailedThresholds, a RAS event is triggered.
         struct ras_config_t
         {
             uint64_t totalThreshold;                        ///< [in,out] If the total RAS errors exceeds this threshold, the event
@@ -2700,7 +2742,9 @@ namespace zet
         auto getSysman( void ) const { return m_pSysman; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get RAS properties of the device
+        /// @brief Get RAS properties of a given RAS error set - this enables discovery
+        ///        of the type of RAS error set (correctable/uncorrectable) and if
+        ///        located on a sub-device
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2712,9 +2756,12 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get RAS error thresholds
+        /// @brief Get RAS error thresholds that control when RAS events are generated
         /// 
         /// @details
+        ///     - The driver maintains counters for all RAS error sets and error
+        ///       categories. Events are generated when errors occur. The configuration
+        ///       enables setting thresholds to limit when events are sent.
         ///     - When a particular RAS correctable error counter exceeds the configured
         ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
         ///       will be triggered.
@@ -2731,9 +2778,12 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set RAS error thresholds
+        /// @brief Set RAS error thresholds that control when RAS events are generated
         /// 
         /// @details
+        ///     - The driver maintains counters for all RAS error sets and error
+        ///       categories. Events are generated when errors occur. The configuration
+        ///       enables setting thresholds to limit when events are sent.
         ///     - When a particular RAS correctable error counter exceeds the specified
         ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
         ///       will be generated.
@@ -2751,7 +2801,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the number of errors of a given RAS error set
+        /// @brief Get the current value of RAS error counters for a particular error set
         /// 
         /// @details
         ///     - Clearing errors will affect other threads/applications - the counter
@@ -3049,6 +3099,10 @@ namespace zet
     std::string to_string( const Sysman::process_state_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::repair_status_t to std::string
+    std::string to_string( const Sysman::repair_status_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_address_t to std::string
     std::string to_string( const Sysman::pci_address_t val );
 
@@ -3275,10 +3329,6 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFan::fan_config_t to std::string
     std::string to_string( const SysmanFan::fan_config_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFan::fan_state_t to std::string
-    std::string to_string( const SysmanFan::fan_state_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanLed::led_properties_t to std::string

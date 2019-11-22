@@ -50,8 +50,8 @@ typedef enum _zet_sysman_version_t
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == phSysman
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + Sub-device handles are not supported. Use the device handle.
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanGet(
     zet_device_handle_t hDevice,                    ///< [in] Handle of the device
@@ -168,6 +168,38 @@ typedef struct _zet_sched_timeslice_properties_t
 } zet_sched_timeslice_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get a list of supported scheduler modes
+/// 
+/// @details
+///     - If zero modes are returned, control of scheduler modes are not
+///       supported.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCount
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanSchedulerGetSupportedModes(
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of supported modes.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< supported scheduler modes.
+                                                    ///< if count is larger than the number of supported scheduler modes, then
+                                                    ///< the driver will update the value with the correct number of supported
+                                                    ///< scheduler modes that are returned.
+    zet_sched_mode_t* pModes                        ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
+                                                    ///< modes
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get current scheduler mode
 /// 
 /// @details
@@ -182,7 +214,7 @@ typedef struct _zet_sched_timeslice_properties_t
 ///         + nullptr == hSysman
 ///         + nullptr == pMode
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Device does not support scheduler modes.
+///         + Device does not support scheduler modes (check using ::zetSysmanSchedulerGetSupportedModes()).
 ze_result_t __zecall
 zetSysmanSchedulerGetCurrentMode(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -204,7 +236,7 @@ zetSysmanSchedulerGetCurrentMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ze_result_t __zecall
 zetSysmanSchedulerGetTimeoutModeProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -228,7 +260,7 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 ///         + nullptr == hSysman
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ze_result_t __zecall
 zetSysmanSchedulerGetTimesliceModeProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -258,7 +290,7 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -289,7 +321,7 @@ zetSysmanSchedulerSetTimeoutMode(
 ///         + nullptr == pProperties
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -319,7 +351,7 @@ zetSysmanSchedulerSetTimesliceMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -348,7 +380,7 @@ zetSysmanSchedulerSetExclusiveMode(
 ///         + nullptr == hSysman
 ///         + nullptr == pNeedReboot
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This scheduler mode is not supported. Other modes may be supported unless ::zetSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device.
+///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
@@ -421,6 +453,16 @@ zetSysmanDeviceReset(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Device repair status
+typedef enum _zet_repair_status_t
+{
+    ZET_REPAIR_STATUS_UNSUPPORTED = 0,              ///< The device does not support in-field repairs.
+    ZET_REPAIR_STATUS_NOT_PERFORMED,                ///< The device has never been repaired.
+    ZET_REPAIR_STATUS_PERFORMED,                    ///< The device has been repaired.
+
+} zet_repair_status_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Find out if the device has been repaired (either by the manufacturer
 ///        or by running diagnostics)
 /// 
@@ -430,15 +472,14 @@ zetSysmanDeviceReset(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pWasRepaired
+///         + nullptr == pRepairStatus
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This device does not record this information or does not support repair features.
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to query this property.
 ze_result_t __zecall
-zetSysmanDeviceWasRepaired(
+zetSysmanDeviceGetRepairStatus(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-    ze_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+    zet_repair_status_t* pRepairStatus              ///< [in] Will indicate if the device was repaired
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -861,7 +902,7 @@ zetSysmanPowerSetLimits(
 ///         + nullptr == hPower
 ///         + nullptr == pThreshold
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Energy threshold not supported on this power domain.
+///         + Energy threshold not supported on this power domain (check ::zet_power_properties_t.isEnergyThresholdSupported).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
 ze_result_t __zecall
@@ -899,7 +940,7 @@ zetSysmanPowerGetEnergyThreshold(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Energy threshold not supported on this power domain.
+///         + Energy threshold not supported on this power domain (check ::zet_power_properties_t.isEnergyThresholdSupported).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
 ///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
@@ -2213,7 +2254,7 @@ zetSysmanFabricPortGetConfig(
 ze_result_t __zecall
 zetSysmanFabricPortSetConfig(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-    zet_fabric_port_config_t* pConfig               ///< [in] Contains new configuration of the Fabric Port.
+    const zet_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2628,16 +2669,6 @@ typedef struct _zet_fan_config_t
 } zet_fan_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Fan state
-typedef struct _zet_fan_state_t
-{
-    zet_fan_speed_mode_t mode;                      ///< [out] The fan speed mode (default, fixed, temp-speed table)
-    zet_fan_speed_units_t speedUnits;               ///< [out] The units of the fan speed
-    uint32_t speed;                                 ///< [out] The current fan speed
-
-} zet_fan_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle of fans
 /// 
 /// @details
@@ -2744,13 +2775,13 @@ zetSysmanFanSetConfig(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFan
-///         + nullptr == pState
+///         + nullptr == pSpeed
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetSysmanFanGetState(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     zet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
-    zet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
+    uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2888,8 +2919,6 @@ typedef struct _zet_ras_properties_t
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t supported;                            ///< [out] True if RAS is supported on this device
-    ze_bool_t enabled;                              ///< [out] True if RAS is enabled on this device
 
 } zet_ras_properties_t;
 
@@ -2920,6 +2949,17 @@ typedef struct _zet_ras_details_t
 /// @brief RAS error configuration - thresholds used for triggering RAS events
 ///        (::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
 ///        ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
+/// 
+/// @details
+///     - The driver maintains a total counter which is updated every time a
+///       hardware block covered by the corresponding RAS error set notifies
+///       that an error has occurred. When this total count goes above the
+///       totalThreshold specified below, a RAS event is triggered.
+///     - The driver also maintains a counter for each category of RAS error
+///       (see ::zet_ras_details_t for a breakdown). Each time a hardware block
+///       of that category notifies that an error has occurred, that
+///       corresponding category counter is updated. When it goes above the
+///       threshold specified in detailedThresholds, a RAS event is triggered.
 typedef struct _zet_ras_config_t
 {
     uint64_t totalThreshold;                        ///< [in,out] If the total RAS errors exceeds this threshold, the event
@@ -2934,9 +2974,19 @@ typedef struct _zet_ras_config_t
 } zet_ras_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of RAS error sets
+/// @brief Get handle of all RAS error sets on a device
 /// 
 /// @details
+///     - A RAS error set is a collection of RAS error counters of a given type
+///       (correctable/uncorrectable) from hardware blocks contained within a
+///       sub-device or within the device.
+///     - A device without sub-devices will typically return two handles, one
+///       for correctable errors sets and one for uncorrectable error sets.
+///     - A device with sub-devices will return RAS error sets for each
+///       sub-device and possibly RAS error sets for hardware blocks outside the
+///       sub-devices.
+///     - If the function completes successfully but pCount is set to 0, RAS
+///       features are not available/enabled on this device.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -2963,7 +3013,9 @@ zetSysmanRasGet(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get RAS properties of the device
+/// @brief Get RAS properties of a given RAS error set - this enables discovery
+///        of the type of RAS error set (correctable/uncorrectable) and if
+///        located on a sub-device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2984,9 +3036,12 @@ zetSysmanRasGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get RAS error thresholds
+/// @brief Get RAS error thresholds that control when RAS events are generated
 /// 
 /// @details
+///     - The driver maintains counters for all RAS error sets and error
+///       categories. Events are generated when errors occur. The configuration
+///       enables setting thresholds to limit when events are sent.
 ///     - When a particular RAS correctable error counter exceeds the configured
 ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
 ///       will be triggered.
@@ -3004,7 +3059,6 @@ zetSysmanRasGetProperties(
 ///         + nullptr == hRas
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This device does not support RAS.
 ze_result_t __zecall
 zetSysmanRasGetConfig(
     zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
@@ -3013,9 +3067,12 @@ zetSysmanRasGetConfig(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set RAS error thresholds
+/// @brief Set RAS error thresholds that control when RAS events are generated
 /// 
 /// @details
+///     - The driver maintains counters for all RAS error sets and error
+///       categories. Events are generated when errors occur. The configuration
+///       enables setting thresholds to limit when events are sent.
 ///     - When a particular RAS correctable error counter exceeds the specified
 ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
 ///       will be generated.
@@ -3035,7 +3092,6 @@ zetSysmanRasGetConfig(
 ///         + nullptr == hRas
 ///         + nullptr == pConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This device does not support RAS.
 ///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
 ///         + Another running process is controlling these settings.
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
@@ -3047,7 +3103,7 @@ zetSysmanRasSetConfig(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of errors of a given RAS error set
+/// @brief Get the current value of RAS error counters for a particular error set
 /// 
 /// @details
 ///     - Clearing errors will affect other threads/applications - the counter
@@ -3064,7 +3120,6 @@ zetSysmanRasSetConfig(
 ///         + nullptr == hRas
 ///         + nullptr == pTotalErrors
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + This device does not support RAS.
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + Don't have permissions to clear error counters.
 ze_result_t __zecall

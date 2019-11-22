@@ -1517,7 +1517,7 @@ typedef struct _ze_command_list_append_launch_kernel_params_t
 {
     ze_command_list_handle_t* phCommandList;
     ze_kernel_handle_t* phKernel;
-    const ze_thread_group_dimensions_t** ppLaunchFuncArgs;
+    const ze_group_count_t** ppLaunchFuncArgs;
     ze_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     ze_event_handle_t** pphWaitEvents;
@@ -1544,7 +1544,7 @@ typedef struct _ze_command_list_append_launch_cooperative_kernel_params_t
 {
     ze_command_list_handle_t* phCommandList;
     ze_kernel_handle_t* phKernel;
-    const ze_thread_group_dimensions_t** ppLaunchFuncArgs;
+    const ze_group_count_t** ppLaunchFuncArgs;
     ze_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     ze_event_handle_t** pphWaitEvents;
@@ -1571,7 +1571,7 @@ typedef struct _ze_command_list_append_launch_kernel_indirect_params_t
 {
     ze_command_list_handle_t* phCommandList;
     ze_kernel_handle_t* phKernel;
-    const ze_thread_group_dimensions_t** ppLaunchArgumentsBuffer;
+    const ze_group_count_t** ppLaunchArgumentsBuffer;
     ze_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     ze_event_handle_t** pphWaitEvents;
@@ -1600,7 +1600,7 @@ typedef struct _ze_command_list_append_launch_multiple_kernels_indirect_params_t
     uint32_t* pnumKernels;
     ze_kernel_handle_t** pphKernels;
     const uint32_t** ppCountBuffer;
-    const ze_thread_group_dimensions_t** ppLaunchArgumentsBuffer;
+    const ze_group_count_t** ppLaunchArgumentsBuffer;
     ze_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
     ze_event_handle_t** pphWaitEvents;

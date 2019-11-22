@@ -32,56 +32,58 @@ void PrintRasDetails(zet_ras_details_t* pDetails)
 void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
 {
     uint32_t numRasErrorSets;
-    if ((zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) == ZE_RESULT_SUCCESS) && numRasErrorSets)
+    zet_sysman_ras_handle_t* phRasErrorSets;
+    if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) != ZE_RESULT_SUCCESS)
     {
-        zet_sysman_ras_handle_t* phRasErrorSets =
-            (zet_sysman_ras_handle_t*)malloc(numRasErrorSets * sizeof(zet_sysman_ras_handle_t));
-        if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ZE_RESULT_SUCCESS)
+        return;
+    }
+    if (numRasErrorSets == 0)
+    {
+        fprintf(stdout, "No RAS error sets available/enabled on this device.\n");
+        return;
+    }
+    phRasErrorSets =
+        (zet_sysman_ras_handle_t*)malloc(numRasErrorSets * sizeof(zet_sysman_ras_handle_t));
+    if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ZE_RESULT_SUCCESS)
+    {
+        for (uint32_t rasIndex = 0; rasIndex < numRasErrorSets; rasIndex++)
         {
-            for (uint32_t rasIndex = 0; rasIndex < numRasErrorSets; rasIndex++)
+            zet_ras_properties_t props;
+            if (zetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ZE_RESULT_SUCCESS)
             {
-                zet_ras_properties_t props;
-                if (zetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ZE_RESULT_SUCCESS)
+                uint64_t newErrors;
+                zet_ras_details_t errorDetails;
+                const char* pErrorType;
+                switch (props.type)
                 {
-                    const char* pErrorType;
-                    switch (props.type)
+                case ZET_RAS_ERROR_TYPE_CORRECTABLE:
+                    pErrorType = "Correctable";
+                    break;
+                case ZET_RAS_ERROR_TYPE_UNCORRECTABLE:
+                    pErrorType = "Uncorrectable";
+                    break;
+                default:
+                    pErrorType = "Unknown";
+                    break;
+                }
+                fprintf(stdout, "RAS %s errors\n", pErrorType);
+                if (props.onSubdevice)
+                {
+                    fprintf(stdout, "    On sub-device: %u\n", props.subdeviceId);
+                }
+                if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                    == ZE_RESULT_SUCCESS)
+                {
+                    fprintf(stdout, "    Number new errors: %llu\n", (long long unsigned int)newErrors);
+                    if (newErrors)
                     {
-                    case ZET_RAS_ERROR_TYPE_CORRECTABLE:
-                        pErrorType = "Correctable";
-                        break;
-                    case ZET_RAS_ERROR_TYPE_UNCORRECTABLE:
-                        pErrorType = "Uncorrectable";
-                        break;
-                    default:
-                        pErrorType = "Unknown";
-                        break;
-                    }
-                    fprintf(stdout, "RAS %s errors\n", pErrorType);
-                    if (props.onSubdevice)
-                    {
-                        fprintf(stdout, "    On sub-device: %u\n", props.subdeviceId);
-                    }
-                    fprintf(stdout, "    RAS supported: %s\n", props.supported ? "yes" : "no");
-                    fprintf(stdout, "    RAS enabled: %s\n", props.enabled ? "yes" : "no");
-                    if (props.supported && props.enabled)
-                    {
-                        uint64_t newErrors;
-                        zet_ras_details_t errorDetails;
-                        if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
-                            == ZE_RESULT_SUCCESS)
-                        {
-                            fprintf(stdout, "    Number new errors: %llu\n", (long long unsigned int)newErrors);
-                            if (newErrors)
-                            {
-                                PrintRasDetails(&errorDetails);
-                            }
-                        }
+                        PrintRasDetails(&errorDetails);
                     }
                 }
             }
         }
-        free(phRasErrorSets);
     }
+    free(phRasErrorSets);
 }
 
 void ListDiagnosticTests(zet_sysman_handle_t hSysmanDevice)
@@ -581,11 +583,11 @@ void ShowFans(zet_sysman_handle_t hSysmanDevice)
             fprintf(stdout, "    Fans\n");
             for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
-                zet_fan_state_t state;
-                if (zetSysmanFanGetState(phFans[fanIndex], ZET_FAN_SPEED_UNITS_RPM, &state)
+                uint32_t speed;
+                if (zetSysmanFanGetState(phFans[fanIndex], ZET_FAN_SPEED_UNITS_RPM, &speed)
                     == ZE_RESULT_SUCCESS)
                 {
-                    fprintf(stdout, "        Fan %u: %u RPM\n", fanIndex, state.speed);
+                    fprintf(stdout, "        Fan %u: %u RPM\n", fanIndex, speed);
                 }
             }
         }
@@ -699,7 +701,7 @@ void ShowEnergyThreshold(zet_sysman_pwr_handle_t hPower)
 void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
 {
     zet_sysman_properties_t devProps;
-    ze_bool_t repaired;
+    zet_repair_status_t repaired;
     if (zetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == ZE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    UUID:           %s\n", devProps.core.uuid.id);
@@ -708,9 +710,9 @@ void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
         fprintf(stdout, "    model:          %s\n", devProps.modelName);
         fprintf(stdout, "    driver timeout: disabled\n");
     }
-    if (zetSysmanDeviceWasRepaired(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
+    if (zetSysmanDeviceGetRepairStatus(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
     {
-        fprintf(stdout, "    Was repaired:   %s\n", repaired ? "yes" : "no");
+        fprintf(stdout, "    Was repaired:   %s\n", (repaired == ZET_REPAIR_STATUS_PERFORMED) ? "yes" : "no");
     }
 }
 

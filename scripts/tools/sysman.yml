@@ -30,7 +30,7 @@ params:
       name: phSysman
       desc: "[out] Handle for accessing Sysman features"
 returns:
-    - $X_RESULT_ERROR_UNSUPPORTED:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "Sub-device handles are not supported. Use the device handle."
 
 --- #--------------------------------------------------------------------------
@@ -148,6 +148,29 @@ members:
       desc: "[in,out] The maximum time in microseconds that the scheduler will wait to preempt a workload running on an engine before deciding to reset the hardware engine and terminating the associated context."
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Get a list of supported scheduler modes"
+class: $tSysman
+name: SchedulerGetSupportedModes
+details:
+    - "If zero modes are returned, control of scheduler modes are not supported."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of scheduler modes.
+            if count is zero, then the driver will update the value with the total number of supported modes.
+            if count is non-zero, then driver will only retrieve that number of supported scheduler modes.
+            if count is larger than the number of supported scheduler modes, then the driver will update the value with the correct number of supported scheduler modes that are returned.
+    - type: "$t_sched_mode_t*"
+      name: pModes
+      desc: "[in,out][optional][range(0, *pCount)] Array of supported scheduler modes"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Get current scheduler mode"
 class: $tSysman
 name: SchedulerGetCurrentMode
@@ -163,7 +186,7 @@ params:
       desc: "[in] Will contain the current scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "Device does not support scheduler modes."
+        - "Device does not support scheduler modes (check using $tSysmanSchedulerGetSupportedModes())."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get scheduler config for mode $T_SCHED_MODE_TIMEOUT"
@@ -184,7 +207,7 @@ params:
       desc: "[in] Will contain the current parameters for this mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get scheduler config for mode $T_SCHED_MODE_TIMESLICE"
@@ -205,7 +228,7 @@ params:
       desc: "[in] Will contain the current parameters for this mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change scheduler mode to $T_SCHED_MODE_TIMEOUT or update scheduler mode parameters if already running in this mode."
@@ -227,7 +250,7 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
@@ -251,7 +274,7 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
@@ -272,7 +295,7 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
@@ -293,7 +316,7 @@ params:
       desc: "[in] Will be set to TRUE if a system reboot is needed to apply the new scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This scheduler mode is not supported. Other modes may be supported unless $tSysmanSchedulerGetCurrentMode() returns the same error in which case no scheduler modes are supported on this device."
+        - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 
@@ -351,20 +374,31 @@ returns:
         - "User does not have permissions to perform this operation."
 
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Device repair status"
+class: $tSysman
+name: $t_repair_status_t
+etors:
+    - name: $T_REPAIR_STATUS_UNSUPPORTED
+      value: "0"
+      desc: "The device does not support in-field repairs."
+    - name: $T_REPAIR_STATUS_NOT_PERFORMED
+      desc: "The device has never been repaired."
+    - name: $T_REPAIR_STATUS_PERFORMED
+      desc: "The device has been repaired."
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Find out if the device has been repaired (either by the manufacturer or by running diagnostics)"
 class: $tSysman
-name: DeviceWasRepaired
+name: DeviceGetRepairStatus
 params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle for the device"
-    - type: $x_bool_t*
-      name: pWasRepaired
+    - type: $t_repair_status_t*
+      name: pRepairStatus
       desc: "[in] Will indicate if the device was repaired"
 returns:
-    - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This device does not record this information or does not support repair features."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to query this property."
 
@@ -784,7 +818,7 @@ params:
       desc: "[in] Returns information about the energy threshold setting - enabled/energy threshold/process ID."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "Energy threshold not supported on this power domain."
+        - "Energy threshold not supported on this power domain (check $t_power_properties_t.isEnergyThresholdSupported)."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
 --- #--------------------------------------------------------------------------
@@ -808,7 +842,7 @@ params:
       desc: "[in] The energy threshold to be set in joules."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
-        - "Energy threshold not supported on this power domain."
+        - "Energy threshold not supported on this power domain (check $t_power_properties_t.isEnergyThresholdSupported)."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
     - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
@@ -2035,7 +2069,7 @@ params:
     - type: $t_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: $t_fabric_port_config_t*
+    - type: const $t_fabric_port_config_t*
       name: pConfig
       desc: "[in] Contains new configuration of the Fabric Port."
 returns:
@@ -2440,21 +2474,6 @@ members:
       name: "table[$T_FAN_TEMP_SPEED_PAIR_COUNT]"
       desc: "[in,out] Array of temperature/fan speed pairs"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Fan state"
-class: $tSysmanFan
-name: $t_fan_state_t
-members:
-    - type: $t_fan_speed_mode_t
-      name: "mode"
-      desc: "[out] The fan speed mode (default, fixed, temp-speed table)"
-    - type: $t_fan_speed_units_t
-      name: "speedUnits"
-      desc: "[out] The units of the fan speed"
-    - type: uint32_t
-      name: "speed"
-      desc: "[out] The current fan speed"
---- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of fans"
 class: $tSysman
@@ -2539,9 +2558,9 @@ params:
     - type: $t_fan_speed_units_t
       name: units
       desc: "[in] The units in which the fan speed should be returned."
-    - type: $t_fan_state_t*
-      name: pState
-      desc: "[in] Will contain the current state of the fan."
+    - type: uint32_t*
+      name: pSpeed
+      desc: "[in] Will contain the current speed of the fan in the units requested."
 
 --- #--------------------------------------------------------------------------
 type: struct
@@ -2676,12 +2695,6 @@ members:
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
-    - type: $x_bool_t
-      name: "supported"
-      desc: "[out] True if RAS is supported on this device"
-    - type: $x_bool_t
-      name: "enabled"
-      desc: "[out] True if RAS is enabled on this device"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "RAS error details"
@@ -2723,6 +2736,9 @@ type: struct
 desc: "RAS error configuration - thresholds used for triggering RAS events ($T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS, $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)"
 class: $tSysmanRas
 name: $t_ras_config_t
+details:
+    - "The driver maintains a total counter which is updated every time a hardware block covered by the corresponding RAS error set notifies that an error has occurred. When this total count goes above the totalThreshold specified below, a RAS event is triggered."
+    - "The driver also maintains a counter for each category of RAS error (see $t_ras_details_t for a breakdown). Each time a hardware block of that category notifies that an error has occurred, that corresponding category counter is updated. When it goes above the threshold specified in detailedThresholds, a RAS event is triggered."
 members:
     - type: uint64_t
       name: "totalThreshold"
@@ -2735,10 +2751,14 @@ members:
       desc: "[out] Host processId that set this configuration (ignored when setting the configuration)."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get handle of RAS error sets"
+desc: "Get handle of all RAS error sets on a device"
 class: $tSysman
 name: RasGet
 details:
+    - "A RAS error set is a collection of RAS error counters of a given type (correctable/uncorrectable) from hardware blocks contained within a sub-device or within the device."
+    - "A device without sub-devices will typically return two handles, one for correctable errors sets and one for uncorrectable error sets."
+    - "A device with sub-devices will return RAS error sets for each sub-device and possibly RAS error sets for hardware blocks outside the sub-devices."
+    - "If the function completes successfully but pCount is set to 0, RAS features are not available/enabled on this device."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -2757,7 +2777,7 @@ params:
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get RAS properties of the device"
+desc: "Get RAS properties of a given RAS error set - this enables discovery of the type of RAS error set (correctable/uncorrectable) and if located on a sub-device"
 class: $tSysmanRas
 name: GetProperties
 details:
@@ -2772,10 +2792,11 @@ params:
       desc: "[in] Structure describing RAS properties"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get RAS error thresholds"
+desc: "Get RAS error thresholds that control when RAS events are generated"
 class: $tSysmanRas
 name: GetConfig
 details:
+    - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
     - "When a particular RAS correctable error counter exceeds the configured threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be triggered."
     - "When a particular RAS uncorrectable error counter exceeds the configured threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered."
     - "The application may call this function from simultaneous threads."
@@ -2787,15 +2808,13 @@ params:
     - type: "$t_ras_config_t*"
       name: pConfig
       desc: "[in] Will be populed with the current RAS configuration - thresholds used to trigger events"
-returns:
-    - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This device does not support RAS."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set RAS error thresholds"
+desc: "Set RAS error thresholds that control when RAS events are generated"
 class: $tSysmanRas
 name: SetConfig
 details:
+    - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
     - "When a particular RAS correctable error counter exceeds the specified threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be generated."
     - "When a particular RAS uncorrectable error counter exceeds the specified threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated."
     - "Call $tSysmanRasGetState() and set the clear flag to true to restart event generation once counters have exceeded thresholds."
@@ -2809,15 +2828,13 @@ params:
       name: pConfig
       desc: "[in] Change the RAS configuration - thresholds used to trigger events"
 returns:
-    - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This device does not support RAS."
     - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
         - "Another running process is controlling these settings."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "Don't have permissions to set thresholds."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of errors of a given RAS error set"
+desc: "Get the current value of RAS error counters for a particular error set"
 class: $tSysmanRas
 name: GetState
 details:
@@ -2839,8 +2856,6 @@ params:
       name: pDetails
       desc: "[in][optional] Breakdown of where errors have occurred"
 returns:
-    - $X_RESULT_ERROR_UNSUPPORTED:
-        - "This device does not support RAS."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "Don't have permissions to clear error counters."
 

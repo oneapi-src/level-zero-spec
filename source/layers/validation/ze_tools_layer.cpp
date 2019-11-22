@@ -720,6 +720,41 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanSchedulerGetSupportedModes
+    ze_result_t __zecall
+    zetSysmanSchedulerGetSupportedModes(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of supported modes.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< supported scheduler modes.
+                                                        ///< if count is larger than the number of supported scheduler modes, then
+                                                        ///< the driver will update the value with the correct number of supported
+                                                        ///< scheduler modes that are returned.
+        zet_sched_mode_t* pModes                        ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
+                                                        ///< modes
+        )
+    {
+        auto pfnSchedulerGetSupportedModes = context.zetDdiTable.Sysman.pfnSchedulerGetSupportedModes;
+
+        if( nullptr == pfnSchedulerGetSupportedModes )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSchedulerGetSupportedModes( hSysman, pCount, pModes );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGetCurrentMode
     ze_result_t __zecall
     zetSysmanSchedulerGetCurrentMode(
@@ -973,16 +1008,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceWasRepaired
+    /// @brief Intercept function for zetSysmanDeviceGetRepairStatus
     ze_result_t __zecall
-    zetSysmanDeviceWasRepaired(
+    zetSysmanDeviceGetRepairStatus(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-        ze_bool_t* pWasRepaired                         ///< [in] Will indicate if the device was repaired
+        zet_repair_status_t* pRepairStatus              ///< [in] Will indicate if the device was repaired
         )
     {
-        auto pfnDeviceWasRepaired = context.zetDdiTable.Sysman.pfnDeviceWasRepaired;
+        auto pfnDeviceGetRepairStatus = context.zetDdiTable.Sysman.pfnDeviceGetRepairStatus;
 
-        if( nullptr == pfnDeviceWasRepaired )
+        if( nullptr == pfnDeviceGetRepairStatus )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -990,12 +1025,12 @@ namespace layer
             if( nullptr == hSysman )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pWasRepaired )
+            if( nullptr == pRepairStatus )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnDeviceWasRepaired( hSysman, pWasRepaired );
+        return pfnDeviceGetRepairStatus( hSysman, pRepairStatus );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2207,7 +2242,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFabricPortSetConfig(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zet_fabric_port_config_t* pConfig               ///< [in] Contains new configuration of the Fabric Port.
+        const zet_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
         )
     {
         auto pfnSetConfig = context.zetDdiTable.SysmanFabricPort.pfnSetConfig;
@@ -2624,7 +2659,7 @@ namespace layer
     zetSysmanFanGetState(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         zet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
-        zet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
+        uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanFan.pfnGetState;
@@ -2637,12 +2672,12 @@ namespace layer
             if( nullptr == hFan )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pState )
+            if( nullptr == pSpeed )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetState( hFan, units, pState );
+        return pfnGetState( hFan, units, pSpeed );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3752,6 +3787,9 @@ zetGetSysmanProcAddrTable(
     dditable.pfnDeviceGetProperties                      = pDdiTable->pfnDeviceGetProperties;
     pDdiTable->pfnDeviceGetProperties                    = layer::zetSysmanDeviceGetProperties;
 
+    dditable.pfnSchedulerGetSupportedModes               = pDdiTable->pfnSchedulerGetSupportedModes;
+    pDdiTable->pfnSchedulerGetSupportedModes             = layer::zetSysmanSchedulerGetSupportedModes;
+
     dditable.pfnSchedulerGetCurrentMode                  = pDdiTable->pfnSchedulerGetCurrentMode;
     pDdiTable->pfnSchedulerGetCurrentMode                = layer::zetSysmanSchedulerGetCurrentMode;
 
@@ -3779,8 +3817,8 @@ zetGetSysmanProcAddrTable(
     dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
     pDdiTable->pfnDeviceReset                            = layer::zetSysmanDeviceReset;
 
-    dditable.pfnDeviceWasRepaired                        = pDdiTable->pfnDeviceWasRepaired;
-    pDdiTable->pfnDeviceWasRepaired                      = layer::zetSysmanDeviceWasRepaired;
+    dditable.pfnDeviceGetRepairStatus                    = pDdiTable->pfnDeviceGetRepairStatus;
+    pDdiTable->pfnDeviceGetRepairStatus                  = layer::zetSysmanDeviceGetRepairStatus;
 
     dditable.pfnPciGetProperties                         = pDdiTable->pfnPciGetProperties;
     pDdiTable->pfnPciGetProperties                       = layer::zetSysmanPciGetProperties;

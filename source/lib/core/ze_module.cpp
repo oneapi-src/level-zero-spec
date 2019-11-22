@@ -605,7 +605,7 @@ ze_result_t __zecall
 zeCommandListAppendLaunchKernel(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+    const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
     ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -650,7 +650,7 @@ ze_result_t __zecall
 zeCommandListAppendLaunchCooperativeKernel(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    const ze_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] thread group launch arguments
+    const ze_group_count_t* pLaunchFuncArgs,        ///< [in] thread group launch arguments
     ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
     ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
@@ -669,7 +669,7 @@ zeCommandListAppendLaunchCooperativeKernel(
 /// 
 /// @details
 ///     - The launch arguments need to be device visible.
-///     - The launch arguments buffer may not be reusued until the function has
+///     - The launch arguments buffer may not be reused until the function has
 ///       completed on the device.
 ///     - This may **not** be called for a command list created with
 ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
@@ -694,7 +694,7 @@ ze_result_t __zecall
 zeCommandListAppendLaunchKernelIndirect(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
+    const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain thread group launch
                                                     ///< arguments
     ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -745,7 +745,7 @@ zeCommandListAppendLaunchMultipleKernelsIndirect(
     const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
                                                     ///< number of kernels to launch; value must be less-than or equal-to
                                                     ///< numKernels
-    const ze_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
+    const ze_group_count_t* pLaunchArgumentsBuffer, ///< [in][range(0, numKernels)] pointer to device buffer that will contain
                                                     ///< a contiguous array of thread group launch arguments
     ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -1401,7 +1401,7 @@ namespace ze
     void __zecall
     CommandList::AppendLaunchKernel(
         Kernel* pKernel,                                ///< [in] pointer to the kernel object
-        const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] thread group launch arguments
+        const group_count_t* pLaunchFuncArgs,           ///< [in] thread group launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -1417,7 +1417,7 @@ namespace ze
         auto result = static_cast<result_t>( ::zeCommandListAppendLaunchKernel(
             reinterpret_cast<ze_command_list_handle_t>( getHandle() ),
             reinterpret_cast<ze_kernel_handle_t>( pKernel->getHandle() ),
-            reinterpret_cast<const ze_thread_group_dimensions_t*>( pLaunchFuncArgs ),
+            reinterpret_cast<const ze_group_count_t*>( pLaunchFuncArgs ),
             ( pSignalEvent ) ? reinterpret_cast<ze_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
             numWaitEvents,
             hWaitEvents.data() ) );
@@ -1448,7 +1448,7 @@ namespace ze
     void __zecall
     CommandList::AppendLaunchCooperativeKernel(
         Kernel* pKernel,                                ///< [in] pointer to the kernel object
-        const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] thread group launch arguments
+        const group_count_t* pLaunchFuncArgs,           ///< [in] thread group launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
         Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
@@ -1464,7 +1464,7 @@ namespace ze
         auto result = static_cast<result_t>( ::zeCommandListAppendLaunchCooperativeKernel(
             reinterpret_cast<ze_command_list_handle_t>( getHandle() ),
             reinterpret_cast<ze_kernel_handle_t>( pKernel->getHandle() ),
-            reinterpret_cast<const ze_thread_group_dimensions_t*>( pLaunchFuncArgs ),
+            reinterpret_cast<const ze_group_count_t*>( pLaunchFuncArgs ),
             ( pSignalEvent ) ? reinterpret_cast<ze_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
             numWaitEvents,
             hWaitEvents.data() ) );
@@ -1478,7 +1478,7 @@ namespace ze
     /// 
     /// @details
     ///     - The launch arguments need to be device visible.
-    ///     - The launch arguments buffer may not be reusued until the function has
+    ///     - The launch arguments buffer may not be reused until the function has
     ///       completed on the device.
     ///     - This may **not** be called for a command list created with
     ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
@@ -1494,7 +1494,7 @@ namespace ze
     void __zecall
     CommandList::AppendLaunchKernelIndirect(
         Kernel* pKernel,                                ///< [in] pointer to the kernel object
-        const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain thread group launch
+        const group_count_t* pLaunchArgumentsBuffer,    ///< [in] pointer to device buffer that will contain thread group launch
                                                         ///< arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -1511,7 +1511,7 @@ namespace ze
         auto result = static_cast<result_t>( ::zeCommandListAppendLaunchKernelIndirect(
             reinterpret_cast<ze_command_list_handle_t>( getHandle() ),
             reinterpret_cast<ze_kernel_handle_t>( pKernel->getHandle() ),
-            reinterpret_cast<const ze_thread_group_dimensions_t*>( pLaunchArgumentsBuffer ),
+            reinterpret_cast<const ze_group_count_t*>( pLaunchArgumentsBuffer ),
             ( pSignalEvent ) ? reinterpret_cast<ze_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
             numWaitEvents,
             hWaitEvents.data() ) );
@@ -1546,7 +1546,7 @@ namespace ze
         const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
                                                         ///< number of kernels to launch; value must be less-than or equal-to
                                                         ///< numKernels
-        const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in][range(0, numKernels)] pointer to device buffer that will contain
+        const group_count_t* pLaunchArgumentsBuffer,    ///< [in][range(0, numKernels)] pointer to device buffer that will contain
                                                         ///< a contiguous array of thread group launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
@@ -1571,7 +1571,7 @@ namespace ze
             numKernels,
             hKernels.data(),
             pCountBuffer,
-            reinterpret_cast<const ze_thread_group_dimensions_t*>( pLaunchArgumentsBuffer ),
+            reinterpret_cast<const ze_group_count_t*>( pLaunchArgumentsBuffer ),
             ( pSignalEvent ) ? reinterpret_cast<ze_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
             numWaitEvents,
             hWaitEvents.data() ) );
@@ -1873,8 +1873,16 @@ namespace ze
         str += std::to_string(val.numKernelArgs);
         str += "\n";
         
-        str += "Kernel::properties_t::compileGroupSize : ";
-        str += to_string(val.compileGroupSize);
+        str += "Kernel::properties_t::requiredGroupSizeX : ";
+        str += std::to_string(val.requiredGroupSizeX);
+        str += "\n";
+        
+        str += "Kernel::properties_t::requiredGroupSizeY : ";
+        str += std::to_string(val.requiredGroupSizeY);
+        str += "\n";
+        
+        str += "Kernel::properties_t::requiredGroupSizeZ : ";
+        str += std::to_string(val.requiredGroupSizeZ);
         str += "\n";
 
         return str;
