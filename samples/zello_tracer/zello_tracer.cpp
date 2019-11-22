@@ -130,11 +130,11 @@ int main( int argc, char *argv[] )
         // signal the event(s) from the device and wait for completion
         pCommandList->AppendSignalEvent( pEvent.get() );
         pEvent->HostSynchronize( UINT32_MAX );
-        pEvent->Reset();
+        pEvent->HostReset();
 
         pCommandList->AppendSignalEvent( pEvent.get() );
         pEvent->HostSynchronize( UINT32_MAX );
-        pEvent->Reset();
+        pEvent->HostReset();
 
     }
     catch( const ze::exception_t& e )
