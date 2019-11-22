@@ -1727,9 +1727,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeEventReset
+    /// @brief Intercept function for zeEventHostReset
     ze_result_t __zecall
-    zeEventReset(
+    zeEventHostReset(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
     {
@@ -1737,15 +1737,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<ze_event_object_t*>( hEvent )->dditable;
-        auto pfnReset = dditable->ze.Event.pfnReset;
-        if( nullptr == pfnReset )
+        auto pfnHostReset = dditable->ze.Event.pfnHostReset;
+        if( nullptr == pfnHostReset )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<ze_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        result = pfnReset( hEvent );
+        result = pfnHostReset( hEvent );
 
         return result;
     }
@@ -3666,7 +3666,7 @@ zeGetEventProcAddrTable(
             pDdiTable->pfnHostSignal                               = loader::zeEventHostSignal;
             pDdiTable->pfnHostSynchronize                          = loader::zeEventHostSynchronize;
             pDdiTable->pfnQueryStatus                              = loader::zeEventQueryStatus;
-            pDdiTable->pfnReset                                    = loader::zeEventReset;
+            pDdiTable->pfnHostReset                                = loader::zeEventHostReset;
         }
         else
         {

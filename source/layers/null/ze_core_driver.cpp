@@ -1459,19 +1459,19 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeEventReset
+    /// @brief Intercept function for zeEventHostReset
     ze_result_t __zecall
-    zeEventReset(
+    zeEventHostReset(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnReset = context.zeDdiTable.Event.pfnReset;
-        if( nullptr != pfnReset )
+        auto pfnHostReset = context.zeDdiTable.Event.pfnHostReset;
+        if( nullptr != pfnHostReset )
         {
-            result = pfnReset( hEvent );
+            result = pfnHostReset( hEvent );
         }
         else
         {
@@ -5741,16 +5741,16 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeEventReset
+    /// @brief Intercept function for zeEventHostReset
     ze_result_t __zecall
-    zeEventReset(
+    zeEventHostReset(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // capture parameters
-        ze_event_reset_params_t in_params = {
+        ze_event_host_reset_params_t in_params = {
             &hEvent
         };
 
@@ -5763,16 +5763,16 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].zePrologueCbs.Event;
-                if( nullptr != table.pfnResetCb )
-                    table.pfnResetCb( &in_params, result,
+                if( nullptr != table.pfnHostResetCb )
+                    table.pfnHostResetCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::zeEventReset( hEvent );
+        result = driver::zeEventHostReset( hEvent );
 
         // capture parameters
-        ze_event_reset_params_t out_params = {
+        ze_event_host_reset_params_t out_params = {
             &hEvent
         };
 
@@ -5781,8 +5781,8 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.Event;
-                if( nullptr != table.pfnResetCb )
-                    table.pfnResetCb( &out_params, result,
+                if( nullptr != table.pfnHostResetCb )
+                    table.pfnHostResetCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8945,9 +8945,9 @@ zeGetEventProcAddrTable(
         pDdiTable->pfnQueryStatus                            = driver::zeEventQueryStatus;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnReset                                  = instrumented::zeEventReset;
+        pDdiTable->pfnHostReset                              = instrumented::zeEventHostReset;
     else
-        pDdiTable->pfnReset                                  = driver::zeEventReset;
+        pDdiTable->pfnHostReset                              = driver::zeEventHostReset;
 
     return result;
 }

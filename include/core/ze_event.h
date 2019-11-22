@@ -468,7 +468,7 @@ zeCommandListAppendEventReset(
 ///         + nullptr == hEvent
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zeEventReset(
+zeEventHostReset(
     ze_event_handle_t hEvent                        ///< [in] handle of the event
     );
 

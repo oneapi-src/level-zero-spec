@@ -962,8 +962,8 @@ typedef ze_result_t (__zecall *ze_pfnEventQueryStatus_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeEventReset 
-typedef ze_result_t (__zecall *ze_pfnEventReset_t)(
+/// @brief Function-pointer for zeEventHostReset 
+typedef ze_result_t (__zecall *ze_pfnEventHostReset_t)(
     ze_event_handle_t
     );
 
@@ -976,7 +976,7 @@ typedef struct _ze_event_dditable_t
     ze_pfnEventHostSignal_t                                     pfnHostSignal;
     ze_pfnEventHostSynchronize_t                                pfnHostSynchronize;
     ze_pfnEventQueryStatus_t                                    pfnQueryStatus;
-    ze_pfnEventReset_t                                          pfnReset;
+    ze_pfnEventHostReset_t                                      pfnHostReset;
 } ze_event_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

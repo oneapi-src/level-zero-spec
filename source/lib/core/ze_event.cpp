@@ -485,15 +485,15 @@ zeCommandListAppendEventReset(
 ///         + nullptr == hEvent
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zeEventReset(
+zeEventHostReset(
     ze_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnReset = ze_lib::context.ddiTable.Event.pfnReset;
-    if( nullptr == pfnReset )
+    auto pfnHostReset = ze_lib::context.ddiTable.Event.pfnHostReset;
+    if( nullptr == pfnHostReset )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnReset( hEvent );
+    return pfnHostReset( hEvent );
 }
 
 } // extern "C"
@@ -992,15 +992,15 @@ namespace ze
     /// 
     /// @throws result_t
     void __zecall
-    Event::Reset(
+    Event::HostReset(
         void
         )
     {
-        auto result = static_cast<result_t>( ::zeEventReset(
+        auto result = static_cast<result_t>( ::zeEventHostReset(
             reinterpret_cast<ze_event_handle_t>( getHandle() ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Event::Reset" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Event::HostReset" );
     }
 
 } // namespace ze

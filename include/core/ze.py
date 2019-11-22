@@ -1814,11 +1814,11 @@ else:
     _zeEventQueryStatus_t = CFUNCTYPE( ze_result_t, ze_event_handle_t )
 
 ###############################################################################
-## @brief Function-pointer for zeEventReset
+## @brief Function-pointer for zeEventHostReset
 if __use_win_types:
-    _zeEventReset_t = WINFUNCTYPE( ze_result_t, ze_event_handle_t )
+    _zeEventHostReset_t = WINFUNCTYPE( ze_result_t, ze_event_handle_t )
 else:
-    _zeEventReset_t = CFUNCTYPE( ze_result_t, ze_event_handle_t )
+    _zeEventHostReset_t = CFUNCTYPE( ze_result_t, ze_event_handle_t )
 
 
 ###############################################################################
@@ -1830,7 +1830,7 @@ class _ze_event_dditable_t(Structure):
         ("pfnHostSignal", c_void_p),                                    ## _zeEventHostSignal_t
         ("pfnHostSynchronize", c_void_p),                               ## _zeEventHostSynchronize_t
         ("pfnQueryStatus", c_void_p),                                   ## _zeEventQueryStatus_t
-        ("pfnReset", c_void_p)                                          ## _zeEventReset_t
+        ("pfnHostReset", c_void_p)                                      ## _zeEventHostReset_t
     ]
 
 ###############################################################################
@@ -2213,7 +2213,7 @@ class ZE_DDI:
         self.zeEventHostSignal = _zeEventHostSignal_t(self.__dditable.Event.pfnHostSignal)
         self.zeEventHostSynchronize = _zeEventHostSynchronize_t(self.__dditable.Event.pfnHostSynchronize)
         self.zeEventQueryStatus = _zeEventQueryStatus_t(self.__dditable.Event.pfnQueryStatus)
-        self.zeEventReset = _zeEventReset_t(self.__dditable.Event.pfnReset)
+        self.zeEventHostReset = _zeEventHostReset_t(self.__dditable.Event.pfnHostReset)
 
         # call driver to get function pointers
         _Image = _ze_image_dditable_t()

@@ -2048,22 +2048,22 @@ typedef void (__zecall *ze_pfnEventQueryStatusCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeEventReset 
+/// @brief Callback function parameters for zeEventHostReset 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_event_reset_params_t
+typedef struct _ze_event_host_reset_params_t
 {
     ze_event_handle_t* phEvent;
-} ze_event_reset_params_t;
+} ze_event_host_reset_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeEventReset 
+/// @brief Callback function-pointer for zeEventHostReset 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnEventResetCb_t)(
-    ze_event_reset_params_t* params,
+typedef void (__zecall *ze_pfnEventHostResetCb_t)(
+    ze_event_host_reset_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -2078,7 +2078,7 @@ typedef struct _ze_event_callbacks_t
     ze_pfnEventHostSignalCb_t                                       pfnHostSignalCb;
     ze_pfnEventHostSynchronizeCb_t                                  pfnHostSynchronizeCb;
     ze_pfnEventQueryStatusCb_t                                      pfnQueryStatusCb;
-    ze_pfnEventResetCb_t                                            pfnResetCb;
+    ze_pfnEventHostResetCb_t                                        pfnHostResetCb;
 } ze_event_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////

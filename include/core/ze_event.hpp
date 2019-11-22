@@ -376,7 +376,7 @@ namespace ze
         ///     - vkResetEvent
         /// @throws result_t
         void __zecall
-        Reset(
+        HostReset(
             void
             );
 

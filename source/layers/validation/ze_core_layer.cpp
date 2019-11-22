@@ -1560,15 +1560,15 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeEventReset
+    /// @brief Intercept function for zeEventHostReset
     ze_result_t __zecall
-    zeEventReset(
+    zeEventHostReset(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
     {
-        auto pfnReset = context.zeDdiTable.Event.pfnReset;
+        auto pfnHostReset = context.zeDdiTable.Event.pfnHostReset;
 
-        if( nullptr == pfnReset )
+        if( nullptr == pfnHostReset )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1578,7 +1578,7 @@ namespace layer
 
         }
 
-        return pfnReset( hEvent );
+        return pfnHostReset( hEvent );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3331,8 +3331,8 @@ zeGetEventProcAddrTable(
     dditable.pfnQueryStatus                              = pDdiTable->pfnQueryStatus;
     pDdiTable->pfnQueryStatus                            = layer::zeEventQueryStatus;
 
-    dditable.pfnReset                                    = pDdiTable->pfnReset;
-    pDdiTable->pfnReset                                  = layer::zeEventReset;
+    dditable.pfnHostReset                                = pDdiTable->pfnHostReset;
+    pDdiTable->pfnHostReset                              = layer::zeEventHostReset;
 
     return result;
 }

@@ -356,7 +356,7 @@ params:
 type: function
 desc: "Reset an event back to not signaled state"
 class: $xEvent
-name: Reset
+name: HostReset
 analogue:
     - vkResetEvent
 details:
