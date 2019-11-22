@@ -80,6 +80,8 @@ typedef struct _${tbl['type']}
     %endif
     ${th.append_ws(th.make_pfncb_type(n, tags, obj), 63)} ${th.make_pfncb_name(n, tags, obj)};
     %if 'condition' in obj:
+#else
+    ${th.append_ws("void*", 63)} ${th.make_pfncb_name(n, tags, obj)};
 #endif // ${th.subt(n, tags, obj['condition'])}
     %endif
     %endfor

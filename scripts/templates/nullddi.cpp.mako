@@ -186,6 +186,8 @@ ${tbl['export']['name']}(
     pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = driver::${th.make_func_name(n, tags, obj)};
     %endif
     %if 'condition' in obj:
+#else
+    pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = nullptr;
 #endif
     %endif
 

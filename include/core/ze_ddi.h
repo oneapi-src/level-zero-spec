@@ -236,12 +236,18 @@ typedef struct _ze_device_dditable_t
     ze_pfnDeviceSystemBarrier_t                                 pfnSystemBarrier;
 #if ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceRegisterCLMemory_t                              pfnRegisterCLMemory;
+#else
+    void*                                                       pfnRegisterCLMemory;
 #endif // ZE_ENABLE_OCL_INTEROP
 #if ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceRegisterCLProgram_t                             pfnRegisterCLProgram;
+#else
+    void*                                                       pfnRegisterCLProgram;
 #endif // ZE_ENABLE_OCL_INTEROP
 #if ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceRegisterCLCommandQueue_t                        pfnRegisterCLCommandQueue;
+#else
+    void*                                                       pfnRegisterCLCommandQueue;
 #endif // ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceMakeMemoryResident_t                            pfnMakeMemoryResident;
     ze_pfnDeviceEvictMemory_t                                   pfnEvictMemory;

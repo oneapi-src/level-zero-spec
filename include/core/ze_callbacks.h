@@ -554,12 +554,18 @@ typedef struct _ze_device_callbacks_t
     ze_pfnDeviceSystemBarrierCb_t                                   pfnSystemBarrierCb;
 #if ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceRegisterCLMemoryCb_t                                pfnRegisterCLMemoryCb;
+#else
+    void*                                                           pfnRegisterCLMemoryCb;
 #endif // ZE_ENABLE_OCL_INTEROP
 #if ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceRegisterCLProgramCb_t                               pfnRegisterCLProgramCb;
+#else
+    void*                                                           pfnRegisterCLProgramCb;
 #endif // ZE_ENABLE_OCL_INTEROP
 #if ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceRegisterCLCommandQueueCb_t                          pfnRegisterCLCommandQueueCb;
+#else
+    void*                                                           pfnRegisterCLCommandQueueCb;
 #endif // ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceMakeMemoryResidentCb_t                              pfnMakeMemoryResidentCb;
     ze_pfnDeviceEvictMemoryCb_t                                     pfnEvictMemoryCb;

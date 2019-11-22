@@ -8449,6 +8449,8 @@ zeGetDeviceProcAddrTable(
         pDdiTable->pfnRegisterCLMemory                       = instrumented::zeDeviceRegisterCLMemory;
     else
         pDdiTable->pfnRegisterCLMemory                       = driver::zeDeviceRegisterCLMemory;
+#else
+    pDdiTable->pfnRegisterCLMemory                       = nullptr;
 #endif
 
 #if ZE_ENABLE_OCL_INTEROP
@@ -8456,6 +8458,8 @@ zeGetDeviceProcAddrTable(
         pDdiTable->pfnRegisterCLProgram                      = instrumented::zeDeviceRegisterCLProgram;
     else
         pDdiTable->pfnRegisterCLProgram                      = driver::zeDeviceRegisterCLProgram;
+#else
+    pDdiTable->pfnRegisterCLProgram                      = nullptr;
 #endif
 
 #if ZE_ENABLE_OCL_INTEROP
@@ -8463,6 +8467,8 @@ zeGetDeviceProcAddrTable(
         pDdiTable->pfnRegisterCLCommandQueue                 = instrumented::zeDeviceRegisterCLCommandQueue;
     else
         pDdiTable->pfnRegisterCLCommandQueue                 = driver::zeDeviceRegisterCLCommandQueue;
+#else
+    pDdiTable->pfnRegisterCLCommandQueue                 = nullptr;
 #endif
 
     if( instrumented::context.enableTracing )

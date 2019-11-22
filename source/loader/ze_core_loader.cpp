@@ -3214,12 +3214,18 @@ zeGetDeviceProcAddrTable(
             pDdiTable->pfnSystemBarrier                            = loader::zeDeviceSystemBarrier;
         #if ZE_ENABLE_OCL_INTEROP
             pDdiTable->pfnRegisterCLMemory                         = loader::zeDeviceRegisterCLMemory;
+        #else
+            pDdiTable->pfnRegisterCLMemory                         = nullptr;
         #endif
         #if ZE_ENABLE_OCL_INTEROP
             pDdiTable->pfnRegisterCLProgram                        = loader::zeDeviceRegisterCLProgram;
+        #else
+            pDdiTable->pfnRegisterCLProgram                        = nullptr;
         #endif
         #if ZE_ENABLE_OCL_INTEROP
             pDdiTable->pfnRegisterCLCommandQueue                   = loader::zeDeviceRegisterCLCommandQueue;
+        #else
+            pDdiTable->pfnRegisterCLCommandQueue                   = nullptr;
         #endif
             pDdiTable->pfnMakeMemoryResident                       = loader::zeDeviceMakeMemoryResident;
             pDdiTable->pfnEvictMemory                              = loader::zeDeviceEvictMemory;

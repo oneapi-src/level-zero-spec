@@ -2947,16 +2947,25 @@ zeGetDeviceProcAddrTable(
 #if ZE_ENABLE_OCL_INTEROP
     dditable.pfnRegisterCLMemory                         = pDdiTable->pfnRegisterCLMemory;
     pDdiTable->pfnRegisterCLMemory                       = layer::zeDeviceRegisterCLMemory;
+#else
+    dditable.pfnRegisterCLMemory                         = nullptr;
+    pDdiTable->pfnRegisterCLMemory                       = nullptr;
 #endif
 
 #if ZE_ENABLE_OCL_INTEROP
     dditable.pfnRegisterCLProgram                        = pDdiTable->pfnRegisterCLProgram;
     pDdiTable->pfnRegisterCLProgram                      = layer::zeDeviceRegisterCLProgram;
+#else
+    dditable.pfnRegisterCLProgram                        = nullptr;
+    pDdiTable->pfnRegisterCLProgram                      = nullptr;
 #endif
 
 #if ZE_ENABLE_OCL_INTEROP
     dditable.pfnRegisterCLCommandQueue                   = pDdiTable->pfnRegisterCLCommandQueue;
     pDdiTable->pfnRegisterCLCommandQueue                 = layer::zeDeviceRegisterCLCommandQueue;
+#else
+    dditable.pfnRegisterCLCommandQueue                   = nullptr;
+    pDdiTable->pfnRegisterCLCommandQueue                 = nullptr;
 #endif
 
     dditable.pfnMakeMemoryResident                       = pDdiTable->pfnMakeMemoryResident;

@@ -102,6 +102,9 @@ ${tbl['export']['name']}(
     dditable.${th.append_ws(th.make_pfn_name(n, tags, obj), 43)} = pDdiTable->${th.make_pfn_name(n, tags, obj)};
     pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = layer::${th.make_func_name(n, tags, obj)};
     %if 'condition' in obj:
+#else
+    dditable.${th.append_ws(th.make_pfn_name(n, tags, obj), 43)} = nullptr;
+    pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = nullptr;
 #endif
     %endif
 
