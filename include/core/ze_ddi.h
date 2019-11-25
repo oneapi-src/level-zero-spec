@@ -724,17 +724,6 @@ typedef ze_result_t (__zecall *ze_pfnCommandListAppendLaunchMultipleKernelsIndir
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeCommandListAppendLaunchHostFunction 
-typedef ze_result_t (__zecall *ze_pfnCommandListAppendLaunchHostFunction_t)(
-    ze_command_list_handle_t,
-    ze_host_pfn_t,
-    void*,
-    ze_event_handle_t,
-    uint32_t,
-    ze_event_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of CommandList functions pointers
 typedef struct _ze_command_list_dditable_t
 {
@@ -761,7 +750,6 @@ typedef struct _ze_command_list_dditable_t
     ze_pfnCommandListAppendLaunchCooperativeKernel_t            pfnAppendLaunchCooperativeKernel;
     ze_pfnCommandListAppendLaunchKernelIndirect_t               pfnAppendLaunchKernelIndirect;
     ze_pfnCommandListAppendLaunchMultipleKernelsIndirect_t      pfnAppendLaunchMultipleKernelsIndirect;
-    ze_pfnCommandListAppendLaunchHostFunction_t                 pfnAppendLaunchHostFunction;
 } ze_command_list_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

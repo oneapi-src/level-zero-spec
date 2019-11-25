@@ -760,47 +760,6 @@ zeCommandListAppendLaunchMultipleKernelsIndirect(
     return pfnAppendLaunchMultipleKernelsIndirect( hCommandList, numKernels, phKernels, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Launch host function. All work after this command in the command list
-///        will block until host function completes.
-/// 
-/// @details
-///     - This may **not** be called for a command list created with
-///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads with the
-///       same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchHostFunc**
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == pUserData
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zeCommandListAppendLaunchHostFunction(
-    ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    ze_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-    void* pUserData,                                ///< [in] pointer to user data to pass to host function.
-    ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
-                                                    ///< on before launching
-    )
-{
-    auto pfnAppendLaunchHostFunction = ze_lib::context.ddiTable.CommandList.pfnAppendLaunchHostFunction;
-    if( nullptr == pfnAppendLaunchHostFunction )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
-}
-
 } // extern "C"
 
 namespace ze
@@ -1578,50 +1537,6 @@ namespace ze
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "ze::CommandList::AppendLaunchMultipleKernelsIndirect" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Launch host function. All work after this command in the command list
-    ///        will block until host function completes.
-    /// 
-    /// @details
-    ///     - This may **not** be called for a command list created with
-    ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
-    ///     - This function may **not** be called from simultaneous threads with the
-    ///       same command list handle.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuLaunchHostFunc**
-    /// 
-    /// @throws result_t
-    void __zecall
-    CommandList::AppendLaunchHostFunction(
-        host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
-        void* pUserData,                                ///< [in] pointer to user data to pass to host function.
-        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
-                                                        ///< on before launching
-        )
-    {
-        thread_local std::vector<ze_event_handle_t> hWaitEvents;
-        hWaitEvents.resize( 0 );
-        hWaitEvents.reserve( numWaitEvents );
-        for( uint32_t i = 0; i < numWaitEvents; ++i )
-            hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<ze_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
-
-        auto result = static_cast<result_t>( ::zeCommandListAppendLaunchHostFunction(
-            reinterpret_cast<ze_command_list_handle_t>( getHandle() ),
-            static_cast<ze_host_pfn_t>( pfnHostFunc ),
-            pUserData,
-            ( pSignalEvent ) ? reinterpret_cast<ze_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
-            numWaitEvents,
-            hWaitEvents.data() ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::CommandList::AppendLaunchHostFunction" );
     }
 
 } // namespace ze

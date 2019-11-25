@@ -1089,16 +1089,6 @@ class ze_group_count_t(Structure):
     ]
 
 ###############################################################################
-## @brief type definition for host function pointers used with
-##        ::zeCommandListAppendLaunchHostFunction
-## 
-## @details
-##     - The application may call this function from simultaneous threads.
-##     - The implementation of this function should be lock-free.
-class ze_host_pfn_t(c_void_p):
-    pass
-
-###############################################################################
 ## @brief API version of ::ze_sampler_desc_t
 class ze_sampler_desc_version_v(IntEnum):
     CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
@@ -1647,13 +1637,6 @@ if __use_win_types:
 else:
     _zeCommandListAppendLaunchMultipleKernelsIndirect_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_ulong, POINTER(ze_kernel_handle_t), POINTER(c_ulong), POINTER(ze_group_count_t), ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
 
-###############################################################################
-## @brief Function-pointer for zeCommandListAppendLaunchHostFunction
-if __use_win_types:
-    _zeCommandListAppendLaunchHostFunction_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_host_pfn_t, c_void_p, ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
-else:
-    _zeCommandListAppendLaunchHostFunction_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, ze_host_pfn_t, c_void_p, ze_event_handle_t, c_ulong, POINTER(ze_event_handle_t) )
-
 
 ###############################################################################
 ## @brief Table of CommandList functions pointers
@@ -1681,8 +1664,7 @@ class _ze_command_list_dditable_t(Structure):
         ("pfnAppendLaunchKernel", c_void_p),                            ## _zeCommandListAppendLaunchKernel_t
         ("pfnAppendLaunchCooperativeKernel", c_void_p),                 ## _zeCommandListAppendLaunchCooperativeKernel_t
         ("pfnAppendLaunchKernelIndirect", c_void_p),                    ## _zeCommandListAppendLaunchKernelIndirect_t
-        ("pfnAppendLaunchMultipleKernelsIndirect", c_void_p),           ## _zeCommandListAppendLaunchMultipleKernelsIndirect_t
-        ("pfnAppendLaunchHostFunction", c_void_p)                       ## _zeCommandListAppendLaunchHostFunction_t
+        ("pfnAppendLaunchMultipleKernelsIndirect", c_void_p)            ## _zeCommandListAppendLaunchMultipleKernelsIndirect_t
     ]
 
 ###############################################################################
@@ -2171,7 +2153,6 @@ class ZE_DDI:
         self.zeCommandListAppendLaunchCooperativeKernel = _zeCommandListAppendLaunchCooperativeKernel_t(self.__dditable.CommandList.pfnAppendLaunchCooperativeKernel)
         self.zeCommandListAppendLaunchKernelIndirect = _zeCommandListAppendLaunchKernelIndirect_t(self.__dditable.CommandList.pfnAppendLaunchKernelIndirect)
         self.zeCommandListAppendLaunchMultipleKernelsIndirect = _zeCommandListAppendLaunchMultipleKernelsIndirect_t(self.__dditable.CommandList.pfnAppendLaunchMultipleKernelsIndirect)
-        self.zeCommandListAppendLaunchHostFunction = _zeCommandListAppendLaunchHostFunction_t(self.__dditable.CommandList.pfnAppendLaunchHostFunction)
 
         # call driver to get function pointers
         _Fence = _ze_fence_dditable_t()

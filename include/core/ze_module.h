@@ -750,51 +750,6 @@ zeCommandListAppendLaunchMultipleKernelsIndirect(
                                                     ///< on before launching
     );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief type definition for host function pointers used with
-///        ::zeCommandListAppendLaunchHostFunction
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-typedef void(__zecall *ze_host_pfn_t)(
-    void* pUserData                                 ///< [in] Pointer to user data to pass to host function.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Launch host function. All work after this command in the command list
-///        will block until host function completes.
-/// 
-/// @details
-///     - This may **not** be called for a command list created with
-///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
-///     - This function may **not** be called from simultaneous threads with the
-///       same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchHostFunc**
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == pUserData
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zeCommandListAppendLaunchHostFunction(
-    ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    ze_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-    void* pUserData,                                ///< [in] pointer to user data to pass to host function.
-    ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
-                                                    ///< on before launching
-    );
-
 #if defined(__cplusplus)
 } // extern "C"
 #endif

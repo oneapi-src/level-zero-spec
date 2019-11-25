@@ -2648,37 +2648,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeCommandListAppendLaunchHostFunction
-    ze_result_t __zecall
-    zeCommandListAppendLaunchHostFunction(
-        ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        ze_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-        void* pUserData,                                ///< [in] pointer to user data to pass to host function.
-        ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
-                                                        ///< on before launching
-        )
-    {
-        auto pfnAppendLaunchHostFunction = context.zeDdiTable.CommandList.pfnAppendLaunchHostFunction;
-
-        if( nullptr == pfnAppendLaunchHostFunction )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pUserData )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceMakeMemoryResident
     ze_result_t __zecall
     zeDeviceMakeMemoryResident(
@@ -3192,9 +3161,6 @@ zeGetCommandListProcAddrTable(
 
     dditable.pfnAppendLaunchMultipleKernelsIndirect      = pDdiTable->pfnAppendLaunchMultipleKernelsIndirect;
     pDdiTable->pfnAppendLaunchMultipleKernelsIndirect    = layer::zeCommandListAppendLaunchMultipleKernelsIndirect;
-
-    dditable.pfnAppendLaunchHostFunction                 = pDdiTable->pfnAppendLaunchHostFunction;
-    pDdiTable->pfnAppendLaunchHostFunction               = layer::zeCommandListAppendLaunchHostFunction;
 
     return result;
 }
