@@ -260,6 +260,7 @@ typedef struct _ze_device_kernel_properties_t
     ze_bool_t fp16Supported;                        ///< [out] Supports 16-bit floating-point operations
     ze_bool_t fp64Supported;                        ///< [out] Supports 64-bit floating-point operations
     ze_bool_t int64AtomicsSupported;                ///< [out] Supports 64-bit atomic operations
+    ze_bool_t dp4aSupported;                        ///< [out] Supports four component dot product and accumulate operations
 
 } ze_device_kernel_properties_t;
 

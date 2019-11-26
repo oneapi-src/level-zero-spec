@@ -296,6 +296,9 @@ members:
     - type: $x_bool_t
       name: int64AtomicsSupported
       desc: "[out] Supports 64-bit atomic operations"
+    - type: $x_bool_t
+      name: dp4aSupported
+      desc: "[out] Supports four component dot product and accumulate operations"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves kernel properties of the device"

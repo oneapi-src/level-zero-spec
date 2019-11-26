@@ -684,49 +684,6 @@ params:
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
-type: typedef
-desc: "type definition for host function pointers used with $xCommandListAppendLaunchHostFunction"
-class: $xCommandList
-name: $x_host_pfn_t
-returns: void
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: "void*"
-      name: pUserData
-      desc: "[in] Pointer to user data to pass to host function."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Launch host function. All work after this command in the command list will block until host function completes."
-class: $xCommandList
-name: AppendLaunchHostFunction
-analogue:
-    - "**cuLaunchHostFunc**"
-details:
-    - "This may **not** be called for a command list created with $X_COMMAND_LIST_FLAG_COPY_ONLY."
-    - "This function may **not** be called from simultaneous threads with the same command list handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: "$x_command_list_handle_t"
-      name: hCommandList
-      desc: "[in] handle of the command list"
-    - type: "$x_host_pfn_t"
-      name: pfnHostFunc
-      desc: "[in] pointer to host function."
-    - type: "void*"
-      name: pUserData
-      desc: "[in] pointer to user data to pass to host function."
-    - type: $x_event_handle_t
-      name: hSignalEvent
-      desc: "[in][optional] handle of the event to signal on completion"
-    - type: uint32_t
-      name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching"
-    - type: "$x_event_handle_t*"
-      name: phWaitEvents
-      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
---- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for module"
 name: $xModule

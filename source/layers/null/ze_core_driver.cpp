@@ -2455,35 +2455,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeCommandListAppendLaunchHostFunction
-    ze_result_t __zecall
-    zeCommandListAppendLaunchHostFunction(
-        ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        ze_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-        void* pUserData,                                ///< [in] pointer to user data to pass to host function.
-        ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
-                                                        ///< on before launching
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnAppendLaunchHostFunction = context.zeDdiTable.CommandList.pfnAppendLaunchHostFunction;
-        if( nullptr != pfnAppendLaunchHostFunction )
-        {
-            result = pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceMakeMemoryResident
     ze_result_t __zecall
     zeDeviceMakeMemoryResident(
@@ -7926,72 +7897,6 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeCommandListAppendLaunchHostFunction
-    ze_result_t __zecall
-    zeCommandListAppendLaunchHostFunction(
-        ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        ze_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-        void* pUserData,                                ///< [in] pointer to user data to pass to host function.
-        ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
-                                                        ///< on before launching
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // capture parameters
-        ze_command_list_append_launch_host_function_params_t in_params = {
-            &hCommandList,
-            &pfnHostFunc,
-            &pUserData,
-            &hSignalEvent,
-            &numWaitEvents,
-            &phWaitEvents
-        };
-
-        // create storage locations for callbacks
-        std::vector<void*> instanceUserData;
-        instanceUserData.resize( context.tracerData.size() );
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zePrologueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchHostFunctionCb )
-                    table.pfnAppendLaunchHostFunctionCb( &in_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        result = driver::zeCommandListAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
-
-        // capture parameters
-        ze_command_list_append_launch_host_function_params_t out_params = {
-            &hCommandList,
-            &pfnHostFunc,
-            &pUserData,
-            &hSignalEvent,
-            &numWaitEvents,
-            &phWaitEvents
-        };
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zeEpilogueCbs.CommandList;
-                if( nullptr != table.pfnAppendLaunchHostFunctionCb )
-                    table.pfnAppendLaunchHostFunctionCb( &out_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceMakeMemoryResident
     ze_result_t __zecall
     zeDeviceMakeMemoryResident(
@@ -8779,11 +8684,6 @@ zeGetCommandListProcAddrTable(
         pDdiTable->pfnAppendLaunchMultipleKernelsIndirect    = instrumented::zeCommandListAppendLaunchMultipleKernelsIndirect;
     else
         pDdiTable->pfnAppendLaunchMultipleKernelsIndirect    = driver::zeCommandListAppendLaunchMultipleKernelsIndirect;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnAppendLaunchHostFunction               = instrumented::zeCommandListAppendLaunchHostFunction;
-    else
-        pDdiTable->pfnAppendLaunchHostFunction               = driver::zeCommandListAppendLaunchHostFunction;
 
     return result;
 }

@@ -1626,33 +1626,6 @@ typedef void (__zecall *ze_pfnCommandListAppendLaunchMultipleKernelsIndirectCb_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeCommandListAppendLaunchHostFunction 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_command_list_append_launch_host_function_params_t
-{
-    ze_command_list_handle_t* phCommandList;
-    ze_host_pfn_t* ppfnHostFunc;
-    void** ppUserData;
-    ze_event_handle_t* phSignalEvent;
-    uint32_t* pnumWaitEvents;
-    ze_event_handle_t** pphWaitEvents;
-} ze_command_list_append_launch_host_function_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeCommandListAppendLaunchHostFunction 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnCommandListAppendLaunchHostFunctionCb_t)(
-    ze_command_list_append_launch_host_function_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of CommandList callback functions pointers
 typedef struct _ze_command_list_callbacks_t
 {
@@ -1679,7 +1652,6 @@ typedef struct _ze_command_list_callbacks_t
     ze_pfnCommandListAppendLaunchCooperativeKernelCb_t              pfnAppendLaunchCooperativeKernelCb;
     ze_pfnCommandListAppendLaunchKernelIndirectCb_t                 pfnAppendLaunchKernelIndirectCb;
     ze_pfnCommandListAppendLaunchMultipleKernelsIndirectCb_t        pfnAppendLaunchMultipleKernelsIndirectCb;
-    ze_pfnCommandListAppendLaunchHostFunctionCb_t                   pfnAppendLaunchHostFunctionCb;
 } ze_command_list_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////

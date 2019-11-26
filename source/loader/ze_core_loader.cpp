@@ -2877,43 +2877,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeCommandListAppendLaunchHostFunction
-    ze_result_t __zecall
-    zeCommandListAppendLaunchHostFunction(
-        ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        ze_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-        void* pUserData,                                ///< [in] pointer to user data to pass to host function.
-        ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        ze_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
-                                                        ///< on before launching
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
-        auto pfnAppendLaunchHostFunction = dditable->ze.CommandList.pfnAppendLaunchHostFunction;
-        if( nullptr == pfnAppendLaunchHostFunction )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
-
-        // convert loader handle to driver handle
-        hSignalEvent = ( hSignalEvent ) ? reinterpret_cast<ze_event_object_t*>( hSignalEvent )->handle : nullptr;
-
-        // convert loader handles to driver handles
-        for( size_t i = 0; ( nullptr != phWaitEvents ) && ( i < numWaitEvents ); ++i )
-            phWaitEvents[ i ] = reinterpret_cast<ze_event_object_t*>( phWaitEvents[ i ] )->handle;
-
-        // forward to device-driver
-        result = pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceMakeMemoryResident
     ze_result_t __zecall
     zeDeviceMakeMemoryResident(
@@ -3461,7 +3424,6 @@ zeGetCommandListProcAddrTable(
             pDdiTable->pfnAppendLaunchCooperativeKernel            = loader::zeCommandListAppendLaunchCooperativeKernel;
             pDdiTable->pfnAppendLaunchKernelIndirect               = loader::zeCommandListAppendLaunchKernelIndirect;
             pDdiTable->pfnAppendLaunchMultipleKernelsIndirect      = loader::zeCommandListAppendLaunchMultipleKernelsIndirect;
-            pDdiTable->pfnAppendLaunchHostFunction                 = loader::zeCommandListAppendLaunchHostFunction;
         }
         else
         {

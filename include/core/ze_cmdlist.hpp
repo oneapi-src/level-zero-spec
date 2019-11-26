@@ -29,17 +29,6 @@ namespace ze
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief type definition for host function pointers used with
-        ///        ::zeCommandListAppendLaunchHostFunction
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        typedef void(__zecall *host_pfn_t)(
-            void* pUserData                                 ///< [in] Pointer to user data to pass to host function.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::ze_command_list_desc_t
         enum class desc_version_t
         {
@@ -681,31 +670,6 @@ namespace ze
                                                             ///< numKernels
             const group_count_t* pLaunchArgumentsBuffer,    ///< [in][range(0, numKernels)] pointer to device buffer that will contain
                                                             ///< a contiguous array of thread group launch arguments
-            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
-                                                            ///< on before launching
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Launch host function. All work after this command in the command list
-        ///        will block until host function completes.
-        /// 
-        /// @details
-        ///     - This may **not** be called for a command list created with
-        ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
-        ///     - This function may **not** be called from simultaneous threads with the
-        ///       same command list handle.
-        ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuLaunchHostFunc**
-        /// @throws result_t
-        void __zecall
-        AppendLaunchHostFunction(
-            host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
-            void* pUserData,                                ///< [in] pointer to user data to pass to host function.
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
             Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
