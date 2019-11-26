@@ -1,3 +1,10 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman)"
