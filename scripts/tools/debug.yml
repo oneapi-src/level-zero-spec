@@ -130,6 +130,8 @@ etors:
       desc: "The debuggee process destroyed all command queues on the device"
     - name: $T_DEBUG_EVENT_MODULE_LOAD
       desc: "An in-memory module was loaded onto the device"
+    - name: $T_DEBUG_EVENT_MODULE_UNLOAD
+      desc: "An in-memory module is about to get unloaded from the device"
     - name: $T_DEBUG_EVENT_EXCEPTION
       desc: "The thread stopped due to a device exception"
 --- #--------------------------------------------------------------------------
@@ -164,7 +166,7 @@ members:
       desc: "The detach reason"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event information for $T_DEBUG_EVENT_MODULE_LOAD"
+desc: "Event information for $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
 class: $tDebug
 name: $t_debug_event_info_module_t
 members:
@@ -206,7 +208,7 @@ members:
       desc: "type == $T_DEBUG_EVENT_DETACHED"
     - type: $t_debug_event_info_module_t
       name: module
-      desc: "type == $T_DEBUG_EVENT_MODULE_LOAD"
+      desc: "type == $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
     - type: $t_debug_event_info_exception_t
       name: exception
       desc: "type == $T_DEBUG_EVENT_EXCEPTION"

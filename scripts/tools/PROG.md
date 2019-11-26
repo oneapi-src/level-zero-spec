@@ -794,6 +794,20 @@ fields.
 
     * The begin and end address of the loaded module.
 
+  * ::${T}_DEBUG_EVENT_MODULE_UNLOAD: an in-memory module is about to get
+    unloaded from the device.
+
+    The event is generated in the $::{x}ModuleDestroy() flow with thread
+    == ::${T}_DEBUG_THREAD_NONE.  If ::${T}_DEBUG_EVENT_FLAG_STOPPED is
+    set, the event blocks the ::${x}ModuleDestroy() call until the
+    debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
+
+    * The begin and end address of the in-memory module.  On all devices
+      supported today, the module is an ELF file with optional DWARF debug
+      information.
+
+    * The begin and end address of the loaded module.
+
   * ::${T}_DEBUG_EVENT_EXCEPTION: the thread stopped due to a device
     exception.  The event-specific fields provide the content of
     frequently-used registers for the tool's convenience.

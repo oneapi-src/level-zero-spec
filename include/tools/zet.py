@@ -1621,6 +1621,7 @@ class zet_debug_event_type_v(IntEnum):
     DEBUG_EVENT_PROCESS_ENTRY = auto()              ## The debuggee process created command queues on the device
     DEBUG_EVENT_PROCESS_EXIT = auto()               ## The debuggee process destroyed all command queues on the device
     DEBUG_EVENT_MODULE_LOAD = auto()                ## An in-memory module was loaded onto the device
+    DEBUG_EVENT_MODULE_UNLOAD = auto()              ## An in-memory module is about to get unloaded from the device
     DEBUG_EVENT_EXCEPTION = auto()                  ## The thread stopped due to a device exception
 
 class zet_debug_event_type_t(c_int):
@@ -1655,7 +1656,7 @@ class zet_debug_event_info_detached_t(Structure):
     ]
 
 ###############################################################################
-## @brief Event information for ::ZET_DEBUG_EVENT_MODULE_LOAD
+## @brief Event information for ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
 class zet_debug_event_info_module_t(Structure):
     _fields_ = [
         ("moduleBegin", c_ulonglong),                                   ## The begin address of the in-memory module
@@ -1678,7 +1679,7 @@ class zet_debug_event_info_exception_t(Structure):
 class zet_debug_event_info_t(Structure):
     _fields_ = [
         ("detached", zet_debug_event_info_detached_t),                  ## type == ::ZET_DEBUG_EVENT_DETACHED
-        ("module", zet_debug_event_info_module_t),                      ## type == ::ZET_DEBUG_EVENT_MODULE_LOAD
+        ("module", zet_debug_event_info_module_t),                      ## type == ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
         ("exception", zet_debug_event_info_exception_t)                 ## type == ::ZET_DEBUG_EVENT_EXCEPTION
     ]
 

@@ -138,6 +138,7 @@ typedef enum _zet_debug_event_type_t
     ZET_DEBUG_EVENT_PROCESS_ENTRY,                  ///< The debuggee process created command queues on the device
     ZET_DEBUG_EVENT_PROCESS_EXIT,                   ///< The debuggee process destroyed all command queues on the device
     ZET_DEBUG_EVENT_MODULE_LOAD,                    ///< An in-memory module was loaded onto the device
+    ZET_DEBUG_EVENT_MODULE_UNLOAD,                  ///< An in-memory module is about to get unloaded from the device
     ZET_DEBUG_EVENT_EXCEPTION,                      ///< The thread stopped due to a device exception
 
 } zet_debug_event_type_t;
@@ -172,7 +173,7 @@ typedef struct _zet_debug_event_info_detached_t
 } zet_debug_event_info_detached_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Event information for ::ZET_DEBUG_EVENT_MODULE_LOAD
+/// @brief Event information for ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
 typedef struct _zet_debug_event_info_module_t
 {
     uint64_t moduleBegin;                           ///< The begin address of the in-memory module
@@ -197,7 +198,7 @@ typedef struct _zet_debug_event_info_exception_t
 typedef union _zet_debug_event_info_t
 {
     zet_debug_event_info_detached_t detached;       ///< type == ::ZET_DEBUG_EVENT_DETACHED
-    zet_debug_event_info_module_t module;           ///< type == ::ZET_DEBUG_EVENT_MODULE_LOAD
+    zet_debug_event_info_module_t module;           ///< type == ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
     zet_debug_event_info_exception_t exception;     ///< type == ::ZET_DEBUG_EVENT_EXCEPTION
 
 } zet_debug_event_info_t;

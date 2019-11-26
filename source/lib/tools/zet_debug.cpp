@@ -591,6 +591,10 @@ namespace zet
             str = "Debug::event_type_t::DEBUG_EVENT_MODULE_LOAD";
             break;
 
+        case Debug::event_type_t::DEBUG_EVENT_MODULE_UNLOAD:
+            str = "Debug::event_type_t::DEBUG_EVENT_MODULE_UNLOAD";
+            break;
+
         case Debug::event_type_t::DEBUG_EVENT_EXCEPTION:
             str = "Debug::event_type_t::DEBUG_EVENT_EXCEPTION";
             break;
