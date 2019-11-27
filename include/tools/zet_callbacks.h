@@ -1893,6 +1893,7 @@ typedef struct _zet_sysman_frequency_oc_set_config_params_t
 {
     zet_sysman_freq_handle_t* phFrequency;
     zet_oc_config_t** ppOcConfiguration;
+    ze_bool_t** ppDeviceRestart;
 } zet_sysman_frequency_oc_set_config_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////

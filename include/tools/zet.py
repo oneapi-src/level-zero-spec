@@ -821,13 +821,13 @@ class zet_freq_throttle_time_t(Structure):
 class zet_oc_mode_v(IntEnum):
     OFF = 0                                         ## Overclocking if off - hardware is running using factory default
                                                     ## voltages/frequencies.
-    OFFSET = auto()                                 ## Overclock offset mode - In this mode, a user-supplied voltage offset
-                                                    ## is applied to the interpolated V-F curve that defines the voltage to
-                                                    ## use for each possible frequency request. The maximum permitted
-                                                    ## frequency can also be increased.
     OVERRIDE = auto()                               ## Overclock override mode - In this mode, a fixed user-supplied voltage
                                                     ## is applied independent of the frequency request. The maximum permitted
                                                     ## frequency can also be increased.
+    INTERPOLATIVE = auto()                          ## Overclock interpolative mode - In this mode, the voltage/frequency
+                                                    ## curve can be extended with a new voltage/frequency point that will be
+                                                    ## interpolated. The existing voltage/frequency points can also be offset
+                                                    ## (up or down) by a fixed voltage.
 
 class zet_oc_mode_t(c_int):
     def __str__(self):
@@ -844,18 +844,19 @@ class zet_oc_capabilities_t(Structure):
     _fields_ = [
         ("isOcSupported", ze_bool_t),                                   ## [out] Indicates if any overclocking features are supported on this
                                                                         ## frequency domain.
-        ("maxOcFrequencyLimit", c_double),                              ## [out] Maximum hardware overclocking frequency limit in Mhz.
         ("maxFactoryDefaultFrequency", c_double),                       ## [out] Factory default non-overclock maximum frequency in Mhz.
         ("maxFactoryDefaultVoltage", c_double),                         ## [out] Factory default voltage used for the non-overclock maximum
                                                                         ## frequency in MHz.
+        ("maxOcFrequency", c_double),                                   ## [out] Maximum hardware overclocking frequency limit in Mhz.
+        ("minOcVoltageOffset", c_double),                               ## [out] The minimum voltage offset that can be applied to the
+                                                                        ## voltage/frequency curve. Note that this number can be negative.
+        ("maxOcVoltageOffset", c_double),                               ## [out] The maximum voltage offset that can be applied to the
+                                                                        ## voltage/frequency curve.
+        ("maxOcVoltage", c_double),                                     ## [out] The maximum overclock voltage that hardware supports.
         ("isTjMaxSupported", ze_bool_t),                                ## [out] Indicates if the maximum temperature limit (TjMax) can be
                                                                         ## changed for this frequency domain.
         ("isIccMaxSupported", ze_bool_t),                               ## [out] Indicates if the maximum current (IccMax) can be changed for
                                                                         ## this frequency domain.
-        ("isVoltageOverrideSupported", ze_bool_t),                      ## [out] Indicates if the voltage of this frequency domain can be changed
-                                                                        ## to fixed value (::ZET_OC_MODE_OVERRIDE).
-        ("isVoltageOffsetSupported", ze_bool_t),                        ## [out] Indicates if this frequency domain supports setting a voltage
-                                                                        ## offset (::ZET_OC_MODE_OFFSET).
         ("isHighVoltModeCapable", ze_bool_t),                           ## [out] Indicates if this frequency domains supports a feature to set
                                                                         ## very high voltages.
         ("isHighVoltModeEnabled", ze_bool_t)                            ## [out] Indicates if very high voltages are permitted on this frequency
@@ -866,14 +867,18 @@ class zet_oc_capabilities_t(Structure):
 ## @brief Overclocking configuration
 ## 
 ## @details
-##     - Provide the current settings to be read or changed.
+##     - Overclock settings
 class zet_oc_config_t(Structure):
     _fields_ = [
         ("mode", zet_oc_mode_t),                                        ## [in,out] Overclock Mode ::zet_oc_mode_t.
-        ("frequency", c_double),                                        ## [in,out] Overclocking Frequency in MHz.
-        ("voltage", c_double)                                           ## [in,out] Overclock voltage in Volts. This is used either as the fixed
-                                                                        ## voltage for mode ::ZET_OC_MODE_OVERRIDE or as an offset voltage for
-                                                                        ## mode ::ZET_OC_MODE_OFFSET.
+        ("frequency", c_double),                                        ## [in,out] Overclocking Frequency in MHz. This cannot be greater than
+                                                                        ## ::zet_oc_capabilities_t.maxOcFrequency.
+        ("voltageTarget", c_double),                                    ## [in,out] Overclock voltage in Volts. This cannot be greater than
+                                                                        ## ::zet_oc_capabilities_t.maxOcVoltage.
+        ("voltageOffset", c_double)                                     ## [in,out] This voltage offset is applied to all points on the
+                                                                        ## voltage/frequency curve, include the new overclock voltageTarget. It
+                                                                        ## can be in the range (::zet_oc_capabilities_t.minOcVoltageOffset,
+                                                                        ## ::zet_oc_capabilities_t.maxOcVoltageOffset).
     ]
 
 ###############################################################################
@@ -2254,9 +2259,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyOcSetConfig
 if __use_win_types:
-    _zetSysmanFrequencyOcSetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
+    _zetSysmanFrequencyOcSetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t), POINTER(ze_bool_t) )
 else:
-    _zetSysmanFrequencyOcSetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t) )
+    _zetSysmanFrequencyOcSetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_freq_handle_t, POINTER(zet_oc_config_t), POINTER(ze_bool_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanFrequencyOcGetIccMax

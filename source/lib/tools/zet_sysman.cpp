@@ -1087,11 +1087,11 @@ zetSysmanFrequencyOcGetConfig(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFrequency
 ///         + nullptr == pOcConfiguration
-///         + The specified voltage and/or frequency overclock settings exceed the hardware values (see ::zet_oc_capabilities_t.maxOcFrequencyLimit)
+///         + nullptr == pDeviceRestart
+///         + The specified voltage and/or frequency overclock settings exceed the hardware values (see ::zet_oc_capabilities_t.maxOcFrequency, ::zet_oc_capabilities_t.maxOcVoltage, ::zet_oc_capabilities_t.minOcVoltageOffset, ::zet_oc_capabilities_t.maxOcVoltageOffset).
 ///         + Requested voltage overclock is very high but ::zet_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device.
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
-///         + The requested voltage overclock mode is not supported on this frequency domain (see ::zet_oc_capabilities_t.isVoltageOverrideSupported and ::zet_oc_capabilities_t.isVoltageOffsetSupported)
 ///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
 ///         + Overclocking feature is locked on this frequency domain
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
@@ -1099,14 +1099,16 @@ zetSysmanFrequencyOcGetConfig(
 ze_result_t __zecall
 zetSysmanFrequencyOcSetConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-    zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+    zet_oc_config_t* pOcConfiguration,              ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+    ze_bool_t* pDeviceRestart                       ///< [in,out] This will be set to true if the device needs to be restarted
+                                                    ///< in order to enable the new overclock settings.
     )
 {
     auto pfnOcSetConfig = zet_lib::context.ddiTable.SysmanFrequency.pfnOcSetConfig;
     if( nullptr == pfnOcSetConfig )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnOcSetConfig( hFrequency, pOcConfiguration );
+    return pfnOcSetConfig( hFrequency, pOcConfiguration, pDeviceRestart );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3983,12 +3985,15 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::OcSetConfig(
-        oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+        oc_config_t* pOcConfiguration,                  ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+        ze::bool_t* pDeviceRestart                      ///< [in,out] This will be set to true if the device needs to be restarted
+                                                        ///< in order to enable the new overclock settings.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyOcSetConfig(
             reinterpret_cast<zet_sysman_freq_handle_t>( getHandle() ),
-            reinterpret_cast<zet_oc_config_t*>( pOcConfiguration ) ) );
+            reinterpret_cast<zet_oc_config_t*>( pOcConfiguration ),
+            reinterpret_cast<ze_bool_t*>( pDeviceRestart ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanFrequency::OcSetConfig" );
@@ -6374,12 +6379,12 @@ namespace zet
             str = "SysmanFrequency::oc_mode_t::OFF";
             break;
 
-        case SysmanFrequency::oc_mode_t::OFFSET:
-            str = "SysmanFrequency::oc_mode_t::OFFSET";
-            break;
-
         case SysmanFrequency::oc_mode_t::OVERRIDE:
             str = "SysmanFrequency::oc_mode_t::OVERRIDE";
+            break;
+
+        case SysmanFrequency::oc_mode_t::INTERPOLATIVE:
+            str = "SysmanFrequency::oc_mode_t::INTERPOLATIVE";
             break;
 
         default:
@@ -6504,10 +6509,6 @@ namespace zet
         str += std::to_string(val.isOcSupported);
         str += "\n";
         
-        str += "SysmanFrequency::oc_capabilities_t::maxOcFrequencyLimit : ";
-        str += std::to_string(val.maxOcFrequencyLimit);
-        str += "\n";
-        
         str += "SysmanFrequency::oc_capabilities_t::maxFactoryDefaultFrequency : ";
         str += std::to_string(val.maxFactoryDefaultFrequency);
         str += "\n";
@@ -6516,20 +6517,28 @@ namespace zet
         str += std::to_string(val.maxFactoryDefaultVoltage);
         str += "\n";
         
+        str += "SysmanFrequency::oc_capabilities_t::maxOcFrequency : ";
+        str += std::to_string(val.maxOcFrequency);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::minOcVoltageOffset : ";
+        str += std::to_string(val.minOcVoltageOffset);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::maxOcVoltageOffset : ";
+        str += std::to_string(val.maxOcVoltageOffset);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_capabilities_t::maxOcVoltage : ";
+        str += std::to_string(val.maxOcVoltage);
+        str += "\n";
+        
         str += "SysmanFrequency::oc_capabilities_t::isTjMaxSupported : ";
         str += std::to_string(val.isTjMaxSupported);
         str += "\n";
         
         str += "SysmanFrequency::oc_capabilities_t::isIccMaxSupported : ";
         str += std::to_string(val.isIccMaxSupported);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_capabilities_t::isVoltageOverrideSupported : ";
-        str += std::to_string(val.isVoltageOverrideSupported);
-        str += "\n";
-        
-        str += "SysmanFrequency::oc_capabilities_t::isVoltageOffsetSupported : ";
-        str += std::to_string(val.isVoltageOffsetSupported);
         str += "\n";
         
         str += "SysmanFrequency::oc_capabilities_t::isHighVoltModeCapable : ";
@@ -6557,8 +6566,12 @@ namespace zet
         str += std::to_string(val.frequency);
         str += "\n";
         
-        str += "SysmanFrequency::oc_config_t::voltage : ";
-        str += std::to_string(val.voltage);
+        str += "SysmanFrequency::oc_config_t::voltageTarget : ";
+        str += std::to_string(val.voltageTarget);
+        str += "\n";
+        
+        str += "SysmanFrequency::oc_config_t::voltageOffset : ";
+        str += std::to_string(val.voltageOffset);
         str += "\n";
 
         return str;

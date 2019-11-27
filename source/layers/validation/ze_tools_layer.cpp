@@ -1583,7 +1583,9 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyOcSetConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+        zet_oc_config_t* pOcConfiguration,              ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+        ze_bool_t* pDeviceRestart                       ///< [in,out] This will be set to true if the device needs to be restarted
+                                                        ///< in order to enable the new overclock settings.
         )
     {
         auto pfnOcSetConfig = context.zetDdiTable.SysmanFrequency.pfnOcSetConfig;
@@ -1599,9 +1601,12 @@ namespace layer
             if( nullptr == pOcConfiguration )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == pDeviceRestart )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
         }
 
-        return pfnOcSetConfig( hFrequency, pOcConfiguration );
+        return pfnOcSetConfig( hFrequency, pOcConfiguration, pDeviceRestart );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

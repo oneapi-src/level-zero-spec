@@ -341,30 +341,29 @@ bool SetOverclock(zet_sysman_freq_handle_t hFreqDomain)
     {
         double CurrentMaxFrequencyMhz = oc_caps.maxFactoryDefaultFrequency;
         CurrentMaxFrequencyMhz *= 1.05;
-        if (CurrentMaxFrequencyMhz <= oc_caps.maxOcFrequencyLimit)
+        if (CurrentMaxFrequencyMhz <= oc_caps.maxOcFrequency)
         {
             ze_result_t status;
             zet_oc_config_t config;
-            config.mode = zet_oc_mode_t::ZET_OC_MODE_OFFSET;
+            ze_bool_t reset;
+            config.mode = zet_oc_mode_t::ZET_OC_MODE_INTERPOLATIVE;
             config.frequency = CurrentMaxFrequencyMhz;
-            config.voltage = oc_caps.maxFactoryDefaultVoltage * 1.1;
+            config.voltageTarget = oc_caps.maxFactoryDefaultVoltage * 1.1;
+            config.voltageOffset = 0.0;
 
-            status = zetSysmanFrequencyOcSetConfig(hFreqDomain, &config);
+            status = zetSysmanFrequencyOcSetConfig(hFreqDomain, &config, &reset);
             if (status == ZE_RESULT_SUCCESS)
             {
                 fprintf(stdout, "Successfully overclocked to %.3f Mhz\n", CurrentMaxFrequencyMhz);
+                if (reset)
+                {
+                    fprintf(stderr, "Please reset the device for the new overclock settings to take effect.\n");
+                }
                 ret = true;
             }
             else if (status == ZE_RESULT_ERROR_UNSUPPORTED)
             {
-                if (oc_caps.isVoltageOffsetSupported)
-                {
-                    fprintf(stderr, "ERROR: Overclocking not supported.\n");
-                }
-                else
-                {
-                    fprintf(stderr, "ERROR: Overclock OFFSET mode not supported.\n");
-                }
+                fprintf(stderr, "ERROR: Overclocking not supported.\n");
             }
             else if (status == ZE_RESULT_ERROR_FEATURE_LOCKED)
             {
@@ -420,11 +419,10 @@ void ShowOcCapabilities(zet_sysman_handle_t hSysmanDevice)
                 if (oc_caps.isOcSupported)
                 {
                     fprintf(stdout, "    Overclocking supported with these capabilities:\n");
-                    fprintf(stdout, "        Max overclock Frequency: %.3f\n", oc_caps.maxOcFrequencyLimit);
+                    fprintf(stdout, "        Max overclock Frequency: %.3f MHz\n", oc_caps.maxOcFrequency);
+                    fprintf(stdout, "        Max overclock Voltage: %.3f Volts\n", oc_caps.maxOcVoltage);
                     fprintf(stdout, "        Max factory default frequency: %.3f\n", oc_caps.maxFactoryDefaultFrequency);
                     fprintf(stdout, "        Max factory default voltage: %.3f\n", oc_caps.maxFactoryDefaultVoltage);
-                    fprintf(stdout, "        Is voltage override mode supported: %s\n", oc_caps.isVoltageOverrideSupported ? "yes" : "no");
-                    fprintf(stdout, "        Is voltage offset mode supported: %s\n", oc_caps.isVoltageOffsetSupported ? "yes" : "no");
                     fprintf(stdout, "        Is high voltage capable: %s\n", oc_caps.isHighVoltModeCapable ? "yes" : "no");
                     fprintf(stdout, "        Is high voltage enabled: %s\n", oc_caps.isHighVoltModeEnabled ? "yes" : "no");
                     fprintf(stdout, "        Is TjMax Supported: %s\n", oc_caps.isTjMaxSupported ? "yes" : "no");

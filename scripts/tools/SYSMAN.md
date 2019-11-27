@@ -525,18 +525,26 @@ To improve maximum performance, the following modifications can be made:
 - Increase the maximum current (IccMax).
 - Increase the maximum temperature (TjMax).
 
-All these changes come with the risk of damage the device.
+All these changes come with the risk of damage to the device. Any attempt at overclocking voids the product warranty.
 
 To improve efficiency for a given workload that is not excercising the full circuitry of the device, the following modifications can be made:
 
 - Decrease the voltage
 
-There are two modes for overclocking/under-voltage the voltage:
+Frequency/voltage overclocking is accomplished by calling ::${t}SysmanFrequencyOcSetConfig() with a new overclock configuration ::${t}_oc_config_t.
+There are two modes that control the way voltage is handled when overclocking the frequency:
 
 | Voltage overclock mode                    | Description |
 | :---                                      | :---        |
-| ::${T}_OC_MODE_OFFSET                     | In this mode, a user-supplied voltage offset is applied to the interpolated V-F curve that defines the voltage to use for each possible frequency request. The V-F curve is adjusted such that when the maximum frequency is requested, the total offset is applied, with smaller offsets being applied for lower frequencies. |
-| ::${T}_OC_MODE_OVERRIDE                   | In this mode, a fixed user-supplied voltage is applied at all times, independent of the frequency request. This is not efficient but can improve stability by avoiding power-supply voltage changes as the frequency changes. Generally this mode is used in conjunction with a fixed frequency. |
+| ::${T}_OC_MODE_OVERRIDE                   | In this mode, a fixed user-supplied voltage (::${t}_oc_config_t.voltageTarget + ::${t}_oc_config_t.voltageOffset) is applied at all times, independent of the frequency request. This is not efficient but can improve stability by avoiding power-supply voltage changes as the frequency changes. |
+| ::${T}_OC_MODE_INTERPOLATIVE              | In this mode, a new point is added to the interpolated V-F curve with a user-supplied overclock voltage and frequency (::${t}_oc_config_t.frequency, ::${t}_oc_config_t.voltageTarget). The user can also specify a voltage offset (::${t}_oc_config_t.voltageOffset) that is applied to all points on the interpolated V-F curve, including the new overclock point. This mode is much more efficient than the override mode since lower voltages are used for lower frequencies, but at the expense of small latencies introduced each time the frequency is changed. |
+
+The figure below shows a fictitious factory default V-F curve (dark blue) for frequency requests between 100MHz and 1100MHz.
+The other curves show how different overclock modes and parameters change the way the hardware drives the voltage. Note that
+in all modes, the voltage used to drive the overclock frequency (in this example 1300MHz) is the sum of the voltage target
+and the voltage offset.
+
+![Overclock V-F curve](../images/tools_sysman_oc.png?raw=true) 
 
 The following functions are provided to handle overclocking:
 

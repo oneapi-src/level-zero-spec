@@ -1033,7 +1033,8 @@ typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyOcGetConfig_t)(
 /// @brief Function-pointer for zetSysmanFrequencyOcSetConfig 
 typedef ze_result_t (__zecall *zet_pfnSysmanFrequencyOcSetConfig_t)(
     zet_sysman_freq_handle_t,
-    zet_oc_config_t*
+    zet_oc_config_t*,
+    ze_bool_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1503,7 +1503,9 @@ namespace driver
     ze_result_t __zecall
     zetSysmanFrequencyOcSetConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+        zet_oc_config_t* pOcConfiguration,              ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+        ze_bool_t* pDeviceRestart                       ///< [in,out] This will be set to true if the device needs to be restarted
+                                                        ///< in order to enable the new overclock settings.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -1512,7 +1514,7 @@ namespace driver
         auto pfnOcSetConfig = context.zetDdiTable.SysmanFrequency.pfnOcSetConfig;
         if( nullptr != pfnOcSetConfig )
         {
-            result = pfnOcSetConfig( hFrequency, pOcConfiguration );
+            result = pfnOcSetConfig( hFrequency, pOcConfiguration, pDeviceRestart );
         }
         else
         {

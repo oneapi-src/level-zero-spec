@@ -1149,13 +1149,13 @@ namespace zet
         {
             OFF = 0,                                        ///< Overclocking if off - hardware is running using factory default
                                                             ///< voltages/frequencies.
-            OFFSET,                                         ///< Overclock offset mode - In this mode, a user-supplied voltage offset
-                                                            ///< is applied to the interpolated V-F curve that defines the voltage to
-                                                            ///< use for each possible frequency request. The maximum permitted
-                                                            ///< frequency can also be increased.
             OVERRIDE,                                       ///< Overclock override mode - In this mode, a fixed user-supplied voltage
                                                             ///< is applied independent of the frequency request. The maximum permitted
                                                             ///< frequency can also be increased.
+            INTERPOLATIVE,                                  ///< Overclock interpolative mode - In this mode, the voltage/frequency
+                                                            ///< curve can be extended with a new voltage/frequency point that will be
+                                                            ///< interpolated. The existing voltage/frequency points can also be offset
+                                                            ///< (up or down) by a fixed voltage.
 
         };
 
@@ -1250,18 +1250,19 @@ namespace zet
         {
             ze::bool_t isOcSupported;                       ///< [out] Indicates if any overclocking features are supported on this
                                                             ///< frequency domain.
-            double maxOcFrequencyLimit;                     ///< [out] Maximum hardware overclocking frequency limit in Mhz.
             double maxFactoryDefaultFrequency;              ///< [out] Factory default non-overclock maximum frequency in Mhz.
             double maxFactoryDefaultVoltage;                ///< [out] Factory default voltage used for the non-overclock maximum
                                                             ///< frequency in MHz.
+            double maxOcFrequency;                          ///< [out] Maximum hardware overclocking frequency limit in Mhz.
+            double minOcVoltageOffset;                      ///< [out] The minimum voltage offset that can be applied to the
+                                                            ///< voltage/frequency curve. Note that this number can be negative.
+            double maxOcVoltageOffset;                      ///< [out] The maximum voltage offset that can be applied to the
+                                                            ///< voltage/frequency curve.
+            double maxOcVoltage;                            ///< [out] The maximum overclock voltage that hardware supports.
             ze::bool_t isTjMaxSupported;                    ///< [out] Indicates if the maximum temperature limit (TjMax) can be
                                                             ///< changed for this frequency domain.
             ze::bool_t isIccMaxSupported;                   ///< [out] Indicates if the maximum current (IccMax) can be changed for
                                                             ///< this frequency domain.
-            ze::bool_t isVoltageOverrideSupported;          ///< [out] Indicates if the voltage of this frequency domain can be changed
-                                                            ///< to fixed value (::ZET_OC_MODE_OVERRIDE).
-            ze::bool_t isVoltageOffsetSupported;            ///< [out] Indicates if this frequency domain supports setting a voltage
-                                                            ///< offset (::ZET_OC_MODE_OFFSET).
             ze::bool_t isHighVoltModeCapable;               ///< [out] Indicates if this frequency domains supports a feature to set
                                                             ///< very high voltages.
             ze::bool_t isHighVoltModeEnabled;               ///< [out] Indicates if very high voltages are permitted on this frequency
@@ -1273,14 +1274,18 @@ namespace zet
         /// @brief Overclocking configuration
         /// 
         /// @details
-        ///     - Provide the current settings to be read or changed.
+        ///     - Overclock settings
         struct oc_config_t
         {
             oc_mode_t mode;                                 ///< [in,out] Overclock Mode ::zet_oc_mode_t.
-            double frequency;                               ///< [in,out] Overclocking Frequency in MHz.
-            double voltage;                                 ///< [in,out] Overclock voltage in Volts. This is used either as the fixed
-                                                            ///< voltage for mode ::ZET_OC_MODE_OVERRIDE or as an offset voltage for
-                                                            ///< mode ::ZET_OC_MODE_OFFSET.
+            double frequency;                               ///< [in,out] Overclocking Frequency in MHz. This cannot be greater than
+                                                            ///< ::zet_oc_capabilities_t.maxOcFrequency.
+            double voltageTarget;                           ///< [in,out] Overclock voltage in Volts. This cannot be greater than
+                                                            ///< ::zet_oc_capabilities_t.maxOcVoltage.
+            double voltageOffset;                           ///< [in,out] This voltage offset is applied to all points on the
+                                                            ///< voltage/frequency curve, include the new overclock voltageTarget. It
+                                                            ///< can be in the range (::zet_oc_capabilities_t.minOcVoltageOffset,
+                                                            ///< ::zet_oc_capabilities_t.maxOcVoltageOffset).
 
         };
 
@@ -1434,7 +1439,9 @@ namespace zet
         /// @throws result_t
         void __zecall
         OcSetConfig(
-            oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+            oc_config_t* pOcConfiguration,                  ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+            ze::bool_t* pDeviceRestart                      ///< [in,out] This will be set to true if the device needs to be restarted
+                                                            ///< in order to enable the new overclock settings.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

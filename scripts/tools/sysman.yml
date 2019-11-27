@@ -990,10 +990,10 @@ etors:
     - name: $T_OC_MODE_OFF
       value: "0"
       desc: "Overclocking if off - hardware is running using factory default voltages/frequencies."
-    - name: $T_OC_MODE_OFFSET
-      desc: "Overclock offset mode - In this mode, a user-supplied voltage offset is applied to the interpolated V-F curve that defines the voltage to use for each possible frequency request. The maximum permitted frequency can also be increased."
     - name: $T_OC_MODE_OVERRIDE
       desc: "Overclock override mode - In this mode, a fixed user-supplied voltage is applied independent of the frequency request. The maximum permitted frequency can also be increased."
+    - name: $T_OC_MODE_INTERPOLATIVE
+      desc: "Overclock interpolative mode - In this mode, the voltage/frequency curve can be extended with a new voltage/frequency point that will be interpolated. The existing voltage/frequency points can also be offset (up or down) by a fixed voltage."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Overclocking properties"
@@ -1006,26 +1006,29 @@ members:
       name: isOcSupported
       desc: "[out] Indicates if any overclocking features are supported on this frequency domain."
     - type: double
-      name: maxOcFrequencyLimit
-      desc: "[out] Maximum hardware overclocking frequency limit in Mhz."
-    - type: double
       name: maxFactoryDefaultFrequency
       desc: "[out] Factory default non-overclock maximum frequency in Mhz."
     - type: double
       name: maxFactoryDefaultVoltage
       desc: "[out] Factory default voltage used for the non-overclock maximum frequency in MHz."
+    - type: double
+      name: maxOcFrequency
+      desc: "[out] Maximum hardware overclocking frequency limit in Mhz."
+    - type: double
+      name: minOcVoltageOffset
+      desc: "[out] The minimum voltage offset that can be applied to the voltage/frequency curve. Note that this number can be negative."
+    - type: double
+      name: maxOcVoltageOffset
+      desc: "[out] The maximum voltage offset that can be applied to the voltage/frequency curve."
+    - type: double
+      name: maxOcVoltage
+      desc: "[out] The maximum overclock voltage that hardware supports."
     - type: $x_bool_t
       name: isTjMaxSupported
       desc: "[out] Indicates if the maximum temperature limit (TjMax) can be changed for this frequency domain."
     - type: $x_bool_t
       name: isIccMaxSupported
       desc: "[out] Indicates if the maximum current (IccMax) can be changed for this frequency domain."
-    - type: $x_bool_t
-      name: isVoltageOverrideSupported
-      desc: "[out] Indicates if the voltage of this frequency domain can be changed to fixed value ($T_OC_MODE_OVERRIDE)."
-    - type: $x_bool_t
-      name: isVoltageOffsetSupported
-      desc: "[out] Indicates if this frequency domain supports setting a voltage offset ($T_OC_MODE_OFFSET)."
     - type: $x_bool_t
       name: isHighVoltModeCapable
       desc: "[out] Indicates if this frequency domains supports a feature to set very high voltages."
@@ -1038,17 +1041,20 @@ desc: "Overclocking configuration"
 class: $tSysmanFrequency
 name: $t_oc_config_t
 details:
-    - "Provide the current settings to be read or changed."
+    - "Overclock settings"
 members:
     - type: $t_oc_mode_t
       name: mode
       desc: "[in,out] Overclock Mode $t_oc_mode_t."
     - type: double
       name: frequency
-      desc: "[in,out] Overclocking Frequency in MHz."
+      desc: "[in,out] Overclocking Frequency in MHz. This cannot be greater than $t_oc_capabilities_t.maxOcFrequency."
     - type: double
-      name: voltage
-      desc: "[in,out] Overclock voltage in Volts. This is used either as the fixed voltage for mode $T_OC_MODE_OVERRIDE or as an offset voltage for mode $T_OC_MODE_OFFSET."
+      name: voltageTarget
+      desc: "[in,out] Overclock voltage in Volts. This cannot be greater than $t_oc_capabilities_t.maxOcVoltage."
+    - type: double
+      name: voltageOffset
+      desc: "[in,out] This voltage offset is applied to all points on the voltage/frequency curve, include the new overclock voltageTarget. It can be in the range ($t_oc_capabilities_t.minOcVoltageOffset, $t_oc_capabilities_t.maxOcVoltageOffset)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of frequency domains"
@@ -1221,14 +1227,16 @@ params:
     - type: $t_oc_config_t*
       name: pOcConfiguration
       desc: "[in] Pointer to the configuration structure $t_oc_config_t."
+    - type: $x_bool_t*
+      name: pDeviceRestart
+      desc: "[in,out] This will be set to true if the device needs to be restarted in order to enable the new overclock settings."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED:
         - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
-        - "The requested voltage overclock mode is not supported on this frequency domain (see $t_oc_capabilities_t.isVoltageOverrideSupported and $t_oc_capabilities_t.isVoltageOffsetSupported)"
     - $X_RESULT_ERROR_FEATURE_LOCKED:
         - "Overclocking feature is locked on this frequency domain"
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $t_oc_capabilities_t.maxOcFrequencyLimit)"
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $t_oc_capabilities_t.maxOcFrequency, $t_oc_capabilities_t.maxOcVoltage, $t_oc_capabilities_t.minOcVoltageOffset, $t_oc_capabilities_t.maxOcVoltageOffset)."
         - "Requested voltage overclock is very high but $t_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
     - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
