@@ -794,7 +794,7 @@ class zet_freq_state_t(Structure):
         ("efficient", c_double),                                        ## [out] The efficient minimum frequency in MHz
         ("actual", c_double),                                           ## [out] The resolved frequency in MHz
         ("throttleReasons", c_ulong)                                    ## [out] The reasons that the frequency is being limited by the hardware
-                                                                        ## (Bitfield of (1<<::zet_freq_throttle_reasons_t)).
+                                                                        ## (Bitfield of ::zet_freq_throttle_reasons_t).
     ]
 
 ###############################################################################

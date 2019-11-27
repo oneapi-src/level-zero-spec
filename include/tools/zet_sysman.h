@@ -1033,7 +1033,7 @@ typedef struct _zet_freq_state_t
     double efficient;                               ///< [out] The efficient minimum frequency in MHz
     double actual;                                  ///< [out] The resolved frequency in MHz
     uint32_t throttleReasons;                       ///< [out] The reasons that the frequency is being limited by the hardware
-                                                    ///< (Bitfield of (1<<::zet_freq_throttle_reasons_t)).
+                                                    ///< (Bitfield of ::zet_freq_throttle_reasons_t).
 
 } zet_freq_state_t;
 

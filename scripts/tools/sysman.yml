@@ -962,7 +962,7 @@ members:
       desc: "[out] The resolved frequency in MHz"
     - type: uint32_t
       name: "throttleReasons"
-      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of (1<<$t_freq_throttle_reasons_t))."
+      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of $t_freq_throttle_reasons_t)."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency throttle time snapshot"
