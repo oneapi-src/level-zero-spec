@@ -177,11 +177,8 @@ members:
       name: moduleEnd
       desc: "The end address of the in-memory module"
     - type: "uint64_t"
-      name: loadBegin
-      desc: "The begin address of the loaded module on the device"
-    - type: "uint64_t"
-      name: loadEnd
-      desc: "The end address of the loaded module on the device"
+      name: load
+      desc: "The load address of the module on the device"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event information for $T_DEBUG_EVENT_EXCEPTION"

@@ -178,8 +178,7 @@ typedef struct _zet_debug_event_info_module_t
 {
     uint64_t moduleBegin;                           ///< The begin address of the in-memory module
     uint64_t moduleEnd;                             ///< The end address of the in-memory module
-    uint64_t loadBegin;                             ///< The begin address of the loaded module on the device
-    uint64_t loadEnd;                               ///< The end address of the loaded module on the device
+    uint64_t load;                                  ///< The load address of the module on the device
 
 } zet_debug_event_info_module_t;
 

@@ -792,7 +792,7 @@ fields.
       supported today, the module is an ELF file with optional DWARF debug
       information.
 
-    * The begin and end address of the loaded module.
+    * The load address of the module.
 
   * ::${T}_DEBUG_EVENT_MODULE_UNLOAD: an in-memory module is about to get
     unloaded from the device.
@@ -806,7 +806,7 @@ fields.
       supported today, the module is an ELF file with optional DWARF debug
       information.
 
-    * The begin and end address of the loaded module.
+    * The load address of the module.
 
   * ::${T}_DEBUG_EVENT_EXCEPTION: the thread stopped due to a device
     exception.  The event-specific fields provide the content of

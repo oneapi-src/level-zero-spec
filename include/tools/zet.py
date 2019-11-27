@@ -1661,8 +1661,7 @@ class zet_debug_event_info_module_t(Structure):
     _fields_ = [
         ("moduleBegin", c_ulonglong),                                   ## The begin address of the in-memory module
         ("moduleEnd", c_ulonglong),                                     ## The end address of the in-memory module
-        ("loadBegin", c_ulonglong),                                     ## The begin address of the loaded module on the device
-        ("loadEnd", c_ulonglong)                                        ## The end address of the loaded module on the device
+        ("load", c_ulonglong)                                           ## The load address of the module on the device
     ]
 
 ###############################################################################

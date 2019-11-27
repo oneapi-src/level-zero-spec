@@ -761,12 +761,8 @@ namespace zet
         str += std::to_string(val.moduleEnd);
         str += "\n";
         
-        str += "Debug::event_info_module_t::loadBegin : ";
-        str += std::to_string(val.loadBegin);
-        str += "\n";
-        
-        str += "Debug::event_info_module_t::loadEnd : ";
-        str += std::to_string(val.loadEnd);
+        str += "Debug::event_info_module_t::load : ";
+        str += std::to_string(val.load);
         str += "\n";
 
         return str;
