@@ -833,19 +833,17 @@ To resume an individual thread or an entire debug session, call
 Whereas interrupting and resuming an entire debug session will
 transparently handle unavailable threads, interrupting and resuming a
 single unavailable thread will result in
-::${X}_RESULT_ERROR_INVALID_ARGUMENT (see below for an exception to this).
+::${X}_RESULT_ERROR_INVALID_ARGUMENT.
 
-Threads that had been unavailable when interrupting an entire debug
-session will be prevented from entering until either the entire debug
-session or that individual thread is resumed.
+Threads that had been unavailable when interrupting a debug session will
+be prevented from entering until the debug session is resumed.
 
 The tool does not know whether any individual thread is available until it
-tries to interact with that thread.  Unavailable threads that are being
-prevented from entering may be interrupted.  Only stopped threads may be
-resumed individually.
+tries to interact with that thread.  Only stopped threads may be resumed
+individually.
 
-The following sample code demonstrates how to interrupt and resume an
-entire debug session:
+The following sample code demonstrates how to interrupt and resume a debug
+session:
 
 ```c
     ${t}_debug_session_handle_t session = ...;
@@ -864,7 +862,9 @@ entire debug session:
 
 After interrupting one or all threads, the tool needs to wait for the
 corresponding ::${T}_DEBUG_EVENT_EXCEPTION event.  Note that there may be
-other events preceding that event.
+other events preceding that event.  There may further be exception events
+for individual threads preceding or succeeding a debug session exception
+event.
 
 
 ${"##"} Memory Access
