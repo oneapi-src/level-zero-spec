@@ -183,22 +183,11 @@ typedef struct _zet_debug_event_info_module_t
 } zet_debug_event_info_module_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Event information for ::ZET_DEBUG_EVENT_EXCEPTION
-typedef struct _zet_debug_event_info_exception_t
-{
-    uint64_t code;                                  ///< The device-specific exception code
-    uint64_t ip;                                    ///< The instruction pointer
-    uint64_t sp;                                    ///< The stack pointer
-
-} zet_debug_event_info_exception_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Event type specific information
 typedef union _zet_debug_event_info_t
 {
     zet_debug_event_info_detached_t detached;       ///< type == ::ZET_DEBUG_EVENT_DETACHED
     zet_debug_event_info_module_t module;           ///< type == ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
-    zet_debug_event_info_exception_t exception;     ///< type == ::ZET_DEBUG_EVENT_EXCEPTION
 
 } zet_debug_event_info_t;
 

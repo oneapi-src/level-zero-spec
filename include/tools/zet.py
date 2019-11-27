@@ -1665,21 +1665,11 @@ class zet_debug_event_info_module_t(Structure):
     ]
 
 ###############################################################################
-## @brief Event information for ::ZET_DEBUG_EVENT_EXCEPTION
-class zet_debug_event_info_exception_t(Structure):
-    _fields_ = [
-        ("code", c_ulonglong),                                          ## The device-specific exception code
-        ("ip", c_ulonglong),                                            ## The instruction pointer
-        ("sp", c_ulonglong)                                             ## The stack pointer
-    ]
-
-###############################################################################
 ## @brief Event type specific information
 class zet_debug_event_info_t(Structure):
     _fields_ = [
         ("detached", zet_debug_event_info_detached_t),                  ## type == ::ZET_DEBUG_EVENT_DETACHED
-        ("module", zet_debug_event_info_module_t),                      ## type == ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
-        ("exception", zet_debug_event_info_exception_t)                 ## type == ::ZET_DEBUG_EVENT_EXCEPTION
+        ("module", zet_debug_event_info_module_t)                       ## type == ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
     ]
 
 ###############################################################################

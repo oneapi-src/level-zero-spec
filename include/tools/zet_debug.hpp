@@ -143,22 +143,11 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Event information for ::ZET_DEBUG_EVENT_EXCEPTION
-        struct event_info_exception_t
-        {
-            uint64_t code;                                  ///< The device-specific exception code
-            uint64_t ip;                                    ///< The instruction pointer
-            uint64_t sp;                                    ///< The stack pointer
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Event type specific information
         union event_info_t
         {
             event_info_detached_t detached;                 ///< type == ::ZET_DEBUG_EVENT_DETACHED
             event_info_module_t module;                     ///< type == ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
-            event_info_exception_t exception;               ///< type == ::ZET_DEBUG_EVENT_EXCEPTION
 
         };
 
@@ -365,10 +354,6 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::event_info_module_t to std::string
     std::string to_string( const Debug::event_info_module_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Debug::event_info_exception_t to std::string
-    std::string to_string( const Debug::event_info_exception_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::event_info_t to std::string

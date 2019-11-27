@@ -391,10 +391,6 @@ typedef struct _zet_debug_event_info_detached_t zet_debug_event_info_detached_t;
 typedef struct _zet_debug_event_info_module_t zet_debug_event_info_module_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_debug_event_info_exception_t
-typedef struct _zet_debug_event_info_exception_t zet_debug_event_info_exception_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_debug_event_t
 typedef struct _zet_debug_event_t zet_debug_event_t;
 

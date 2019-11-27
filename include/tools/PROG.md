@@ -799,21 +799,7 @@ fields.
     * The load address of the module.
 
   * ::ZET_DEBUG_EVENT_EXCEPTION: the thread stopped due to a device
-    exception.  The event-specific fields provide the content of
-    frequently-used registers for the tool's convenience.
-
-    * The device-specific exception code.  If thread ==
-      ::ZET_DEBUG_THREAD_ALL, this may be a summary exception code,
-      e.g. indicating an external interrupt.
-
-      * For Intel Graphics devices, this will be CR0[0:1].
-
-    * The device instruction pointer.  This will be zero if thread ==
-      ::ZET_DEBUG_THREAD_ALL.
-
-    * The stack pointer.  This will be zero if thread ==
-      ::ZET_DEBUG_THREAD_ALL or if the implementation does not use a
-      stack.
+    exception.
 
 
 ## Run Control

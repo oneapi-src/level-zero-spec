@@ -180,21 +180,6 @@ members:
       name: load
       desc: "The load address of the module on the device"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Event information for $T_DEBUG_EVENT_EXCEPTION"
-class: $tDebug
-name: $t_debug_event_info_exception_t
-members:
-    - type: "uint64_t"
-      name: code
-      desc: "The device-specific exception code"
-    - type: "uint64_t"
-      name: ip
-      desc: "The instruction pointer"
-    - type: "uint64_t"
-      name: sp
-      desc: "The stack pointer"
---- #--------------------------------------------------------------------------
 type: union
 desc: "Event type specific information"
 class: $tDebug
@@ -206,9 +191,6 @@ members:
     - type: $t_debug_event_info_module_t
       name: module
       desc: "type == $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
-    - type: $t_debug_event_info_exception_t
-      name: exception
-      desc: "type == $T_DEBUG_EVENT_EXCEPTION"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "A debug event on the device."

@@ -769,27 +769,6 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Debug::event_info_exception_t to std::string
-    std::string to_string( const Debug::event_info_exception_t val )
-    {
-        std::string str;
-        
-        str += "Debug::event_info_exception_t::code : ";
-        str += std::to_string(val.code);
-        str += "\n";
-        
-        str += "Debug::event_info_exception_t::ip : ";
-        str += std::to_string(val.ip);
-        str += "\n";
-        
-        str += "Debug::event_info_exception_t::sp : ";
-        str += std::to_string(val.sp);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Debug::event_info_t to std::string
     std::string to_string( const Debug::event_info_t val )
     {
@@ -801,10 +780,6 @@ namespace zet
         
         str += "Debug::event_info_t::module : ";
         str += to_string(val.module);
-        str += "\n";
-        
-        str += "Debug::event_info_t::exception : ";
-        str += to_string(val.exception);
         str += "\n";
 
         return str;
