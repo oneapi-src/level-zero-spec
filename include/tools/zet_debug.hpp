@@ -22,6 +22,12 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef ZET_DEBUG_API_VERSION
+/// @brief The API version.
+#define ZET_DEBUG_API_VERSION  1
+#endif // ZET_DEBUG_API_VERSION
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_DEBUG_TIMEOUT_INFINITE
 /// @brief An infinite timeout.
 #define ZET_DEBUG_TIMEOUT_INFINITE  0xffffffffffffffffull

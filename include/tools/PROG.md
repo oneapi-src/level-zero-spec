@@ -608,7 +608,7 @@ The following sample code demonstrates attaching and detaching:
     ze_result_t errcode;
 
     memset(&config, 0, sizeof(config));
-    config.version = 1;
+    config.version = ZET_DEBUG_API_VERSION;
     config.variant.v1.pid = ...;
 
     errcode = zetDebugAttach(device, &config, &session);

@@ -27,6 +27,12 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef ZET_DEBUG_API_VERSION
+/// @brief The API version.
+#define ZET_DEBUG_API_VERSION  1
+#endif // ZET_DEBUG_API_VERSION
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Debug session handle
 typedef struct _zet_debug_session_handle_t *zet_debug_session_handle_t;
 

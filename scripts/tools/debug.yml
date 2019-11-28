@@ -2,6 +2,11 @@
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Debug"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "The API version."
+name: $T_DEBUG_API_VERSION
+value: "1"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for Debug API"
 name: $tDebug

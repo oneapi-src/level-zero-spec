@@ -1572,6 +1572,10 @@ class zet_tracer_desc_t(Structure):
     ]
 
 ###############################################################################
+## @brief The API version.
+ZET_DEBUG_API_VERSION = 1
+
+###############################################################################
 ## @brief Debug session handle
 class zet_debug_session_handle_t(c_void_p):
     pass

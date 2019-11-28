@@ -618,7 +618,7 @@ The following sample code demonstrates attaching and detaching:
     ${x}_result_t errcode;
 
     memset(&config, 0, sizeof(config));
-    config.version = 1;
+    config.version = ${T}_DEBUG_API_VERSION;
     config.variant.v1.pid = ...;
 
     errcode = ${t}DebugAttach(device, &config, &session);
