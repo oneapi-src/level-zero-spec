@@ -550,7 +550,7 @@ The APIs operate on a single device.  When debugging a multi-device
 system, the tool would debug each device independently.  The APIs further
 operate in the context of a single host process.  When debugging multiple
 host processes at the same time, the tool would debug device code
-submitted by each host process indepenently.
+submitted by each host process independently.
 
 
 ## Attach and Detach
@@ -570,7 +570,7 @@ that contains the following fields:
 
 
 If the requested API version is not supported,
-::ZE_RESULT_ERROR_UNSUPPORTED is returned.  If the tools supports
+::ZE_RESULT_ERROR_UNSUPPORTED is returned.  If the tool supports
 different API versions it may try to request a different version.
 
 If the requested API version is supported the following properties are
@@ -697,8 +697,8 @@ device.  To read the topmost event, the tool passes a pointer to a buffer
 and its size in bytes.  The size of an event object is defined by the API
 version requested on attach.
 
-It also passses a timeout in milliseconds.  A timeout of zero does not
-wait and immediately returns if no events are available.  A timeout of
+It also passes a timeout in milliseconds.  A timeout of zero does not wait
+and immediately returns if no events are available.  A timeout of
 ::ZET_DEBUG_TIMEOUT_INFINITE waits indefinitely.  If the timeout expires,
 ::ZE_RESULT_NOT_READY is returned.
 
@@ -764,7 +764,7 @@ fields.
         * ::ZET_DEBUG_DETACH_HOST_EXIT indicates that the host process
           exited.
 
-  * ::ZET_DEBUG_EVENT_PROCESS_ENTRY: the host process created one of more
+  * ::ZET_DEBUG_EVENT_PROCESS_ENTRY: the host process created one or more
     command queues on the device.
 
   * ::ZET_DEBUG_EVENT_PROCESS_EXIT: the host process destroyed all
@@ -773,7 +773,7 @@ fields.
   * ::ZET_DEBUG_EVENT_MODULE_LOAD: an in-memory module was loaded onto
     the device.
 
-    The event is generated in the $::{x}ModuleCreate() flow with thread ==
+    The event is generated in the ::zeModuleCreate() flow with thread ==
     ::ZET_DEBUG_THREAD_NONE.  If ::ZET_DEBUG_EVENT_FLAG_STOPPED is set,
     the event blocks the ::zeModuleCreate() call until the debugger
     acknowledges the event by resuming ::ZET_DEBUG_THREAD_NONE.
@@ -787,7 +787,7 @@ fields.
   * ::ZET_DEBUG_EVENT_MODULE_UNLOAD: an in-memory module is about to get
     unloaded from the device.
 
-    The event is generated in the $::{x}ModuleDestroy() flow with thread
+    The event is generated in the ::zeModuleDestroy() flow with thread
     == ::ZET_DEBUG_THREAD_NONE.  If ::ZET_DEBUG_EVENT_FLAG_STOPPED is
     set, the event blocks the ::zeModuleDestroy() call until the
     debugger acknowledges the event by resuming ::ZET_DEBUG_THREAD_NONE.
@@ -811,10 +811,10 @@ To interrupt an individual thread or an entire debug session, call
 ::zetDebugInterrupt with the number of the thread to interrupt or
 ::ZET_DEBUG_THREAD_ALL to interrupt an entire debug session.
 
-When interupting an entire debug session, threads that are already stopped
-as well as threads that are not available will be ignored.  After threads
-have been interrupted, a ::ZET_DEBUG_EVENT_EXCEPTION event with thread ==
-::ZET_DEBUG_THREAD_ALL is created.
+When interrupting an entire debug session, threads that are already
+stopped as well as threads that are not available will be ignored.  After
+threads have been interrupted, a ::ZET_DEBUG_EVENT_EXCEPTION event with
+thread == ::ZET_DEBUG_THREAD_ALL is created.
 
 To resume an individual thread or an entire debug session, call
 ::zetDebugResume with the number of the thread to resume or
@@ -988,7 +988,7 @@ The following sample code demonstrates iterating over register files:
 ```
 
 
-Intel graphics devices, for example, provides:
+Intel graphics devices, for example, provide:
 
   * ::ZET_DEBUG_STATE_GEN_GRF, the general register file.
 
