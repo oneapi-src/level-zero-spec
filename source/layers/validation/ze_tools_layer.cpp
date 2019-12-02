@@ -879,7 +879,7 @@ namespace layer
     /// @brief Intercept function for zetModuleGetKernelNames
     ze_result_t __zecall
     zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the device
+        zet_module_handle_t hModule,                    ///< [in] handle of the module
         uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of names available.

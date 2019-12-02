@@ -19,7 +19,7 @@ details:
 params:
     - type: $t_module_handle_t
       name: hModule
-      desc: "[in] handle of the device"
+      desc: "[in] handle of the module"
     - type: "uint32_t*"
       name: pCount
       desc: |
