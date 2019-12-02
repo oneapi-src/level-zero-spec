@@ -35,6 +35,273 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugAttach
+    ze_result_t __zecall
+    zetDebugAttach(
+        zet_device_handle_t hDevice,                    ///< [in] device handle
+        const zet_debug_config_t* config,               ///< [in] the debug configuration
+        zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
+        )
+    {
+        auto pfnAttach = context.zetDdiTable.Debug.pfnAttach;
+
+        if( nullptr == pfnAttach )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == config )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAttach( hDevice, config, hDebug );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugDetach
+    ze_result_t __zecall
+    zetDebugDetach(
+        zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
+        )
+    {
+        auto pfnDetach = context.zetDdiTable.Debug.pfnDetach;
+
+        if( nullptr == pfnDetach )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnDetach( hDebug );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugGetNumThreads
+    ze_result_t __zecall
+    zetDebugGetNumThreads(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t numThreads                             ///< [out] the maximal number of threads
+        )
+    {
+        auto pfnGetNumThreads = context.zetDdiTable.Debug.pfnGetNumThreads;
+
+        if( nullptr == pfnGetNumThreads )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetNumThreads( hDebug, numThreads );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadEvent
+    ze_result_t __zecall
+    zetDebugReadEvent(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
+        size_t size,                                    ///< [in] the size of the buffer in bytes
+        void* buffer                                    ///< [in,out] a buffer to hold the event data
+        )
+    {
+        auto pfnReadEvent = context.zetDdiTable.Debug.pfnReadEvent;
+
+        if( nullptr == pfnReadEvent )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnReadEvent( hDebug, timeout, size, buffer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugInterrupt
+    ze_result_t __zecall
+    zetDebugInterrupt(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        auto pfnInterrupt = context.zetDdiTable.Debug.pfnInterrupt;
+
+        if( nullptr == pfnInterrupt )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnInterrupt( hDebug, threadid );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugResume
+    ze_result_t __zecall
+    zetDebugResume(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        auto pfnResume = context.zetDdiTable.Debug.pfnResume;
+
+        if( nullptr == pfnResume )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnResume( hDebug, threadid );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadMemory
+    ze_result_t __zecall
+    zetDebugReadMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        auto pfnReadMemory = context.zetDdiTable.Debug.pfnReadMemory;
+
+        if( nullptr == pfnReadMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnReadMemory( hDebug, threadid, memSpace, address, size, buffer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteMemory
+    ze_result_t __zecall
+    zetDebugWriteMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        auto pfnWriteMemory = context.zetDdiTable.Debug.pfnWriteMemory;
+
+        if( nullptr == pfnWriteMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnWriteMemory( hDebug, threadid, memSpace, address, size, buffer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadState
+    ze_result_t __zecall
+    zetDebugReadState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+        )
+    {
+        auto pfnReadState = context.zetDdiTable.Debug.pfnReadState;
+
+        if( nullptr == pfnReadState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnReadState( hDebug, threadid, offset, size, buffer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteState
+    ze_result_t __zecall
+    zetDebugWriteState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        auto pfnWriteState = context.zetDdiTable.Debug.pfnWriteState;
+
+        if( nullptr == pfnWriteState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDebug )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == buffer )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnWriteState( hDebug, threadid, offset, size, buffer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricGroupGet
     ze_result_t __zecall
     zetMetricGroupGet(
@@ -606,6 +873,64 @@ namespace layer
         }
 
         return pfnGetDebugInfo( hModule, format, pSize, pDebugInfo );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetModuleGetKernelNames
+    ze_result_t __zecall
+    zetModuleGetKernelNames(
+        zet_module_handle_t hModule,                    ///< [in] handle of the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        auto pfnGetKernelNames = context.zetDdiTable.Module.pfnGetKernelNames;
+
+        if( nullptr == pfnGetKernelNames )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hModule )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetKernelNames( hModule, pCount, pNames );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetKernelGetProfileInfo
+    ze_result_t __zecall
+    zetKernelGetProfileInfo(
+        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
+        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
+        )
+    {
+        auto pfnGetProfileInfo = context.zetDdiTable.Kernel.pfnGetProfileInfo;
+
+        if( nullptr == pfnGetProfileInfo )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hKernel )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pInfo )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProfileInfo( hKernel, pInfo );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3148,64 +3473,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetModuleGetKernelNames
-    ze_result_t __zecall
-    zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of names available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
-                                                        ///< if count is larger than the number of names available, then the driver
-                                                        ///< will update the value with the correct number of names available.
-        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
-        )
-    {
-        auto pfnGetKernelNames = context.zetDdiTable.Module.pfnGetKernelNames;
-
-        if( nullptr == pfnGetKernelNames )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetKernelNames( hModule, pCount, pNames );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetKernelGetProfileInfo
-    ze_result_t __zecall
-    zetKernelGetProfileInfo(
-        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
-        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
-        )
-    {
-        auto pfnGetProfileInfo = context.zetDdiTable.Kernel.pfnGetProfileInfo;
-
-        if( nullptr == pfnGetProfileInfo )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pInfo )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetProfileInfo( hKernel, pInfo );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetTracerCreate
     ze_result_t __zecall
     zetTracerCreate(
@@ -3337,273 +3604,6 @@ namespace layer
         }
 
         return pfnSetEnabled( hTracer, enable );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugAttach
-    ze_result_t __zecall
-    zetDebugAttach(
-        zet_device_handle_t hDevice,                    ///< [in] device handle
-        const zet_debug_config_t* config,               ///< [in] the debug configuration
-        zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
-        )
-    {
-        auto pfnAttach = context.zetDdiTable.Debug.pfnAttach;
-
-        if( nullptr == pfnAttach )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == config )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnAttach( hDevice, config, hDebug );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugDetach
-    ze_result_t __zecall
-    zetDebugDetach(
-        zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
-        )
-    {
-        auto pfnDetach = context.zetDdiTable.Debug.pfnDetach;
-
-        if( nullptr == pfnDetach )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnDetach( hDebug );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugGetNumThreads
-    ze_result_t __zecall
-    zetDebugGetNumThreads(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t numThreads                             ///< [out] the maximal number of threads
-        )
-    {
-        auto pfnGetNumThreads = context.zetDdiTable.Debug.pfnGetNumThreads;
-
-        if( nullptr == pfnGetNumThreads )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetNumThreads( hDebug, numThreads );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugReadEvent
-    ze_result_t __zecall
-    zetDebugReadEvent(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
-        size_t size,                                    ///< [in] the size of the buffer in bytes
-        void* buffer                                    ///< [in,out] a buffer to hold the event data
-        )
-    {
-        auto pfnReadEvent = context.zetDdiTable.Debug.pfnReadEvent;
-
-        if( nullptr == pfnReadEvent )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == buffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnReadEvent( hDebug, timeout, size, buffer );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugInterrupt
-    ze_result_t __zecall
-    zetDebugInterrupt(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
-        )
-    {
-        auto pfnInterrupt = context.zetDdiTable.Debug.pfnInterrupt;
-
-        if( nullptr == pfnInterrupt )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnInterrupt( hDebug, threadid );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugResume
-    ze_result_t __zecall
-    zetDebugResume(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
-        )
-    {
-        auto pfnResume = context.zetDdiTable.Debug.pfnResume;
-
-        if( nullptr == pfnResume )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnResume( hDebug, threadid );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugReadMemory
-    ze_result_t __zecall
-    zetDebugReadMemory(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-        int memSpace,                                   ///< [in] the (device-specific) memory space
-        uint64_t address,                               ///< [in] the virtual address of the memory to read from
-        size_t size,                                    ///< [in] the number of bytes to read
-        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
-        )
-    {
-        auto pfnReadMemory = context.zetDdiTable.Debug.pfnReadMemory;
-
-        if( nullptr == pfnReadMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == buffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnReadMemory( hDebug, threadid, memSpace, address, size, buffer );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugWriteMemory
-    ze_result_t __zecall
-    zetDebugWriteMemory(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-        int memSpace,                                   ///< [in] the (device-specific) memory space
-        uint64_t address,                               ///< [in] the virtual address of the memory to write to
-        size_t size,                                    ///< [in] the number of bytes to write
-        const void* buffer                              ///< [in] a buffer holding the pattern to write
-        )
-    {
-        auto pfnWriteMemory = context.zetDdiTable.Debug.pfnWriteMemory;
-
-        if( nullptr == pfnWriteMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == buffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnWriteMemory( hDebug, threadid, memSpace, address, size, buffer );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugReadState
-    ze_result_t __zecall
-    zetDebugReadState(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context
-        uint64_t offset,                                ///< [in] the offset into the register state area
-        size_t size,                                    ///< [in] the number of bytes to read
-        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
-        )
-    {
-        auto pfnReadState = context.zetDdiTable.Debug.pfnReadState;
-
-        if( nullptr == pfnReadState )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == buffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnReadState( hDebug, threadid, offset, size, buffer );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugWriteState
-    ze_result_t __zecall
-    zetDebugWriteState(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context
-        uint64_t offset,                                ///< [in] the offset into the register state area
-        size_t size,                                    ///< [in] the number of bytes to write
-        const void* buffer                              ///< [in] a buffer holding the pattern to write
-        )
-    {
-        auto pfnWriteState = context.zetDdiTable.Debug.pfnWriteState;
-
-        if( nullptr == pfnWriteState )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDebug )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == buffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnWriteState( hDebug, threadid, offset, size, buffer );
     }
 
 } // namespace layer

@@ -148,6 +148,166 @@ class zet_sysman_event_handle_t(c_void_p):
     pass
 
 ###############################################################################
+## @brief The API version.
+ZET_DEBUG_API_VERSION = 1
+
+###############################################################################
+## @brief Debug session handle
+class zet_debug_session_handle_t(c_void_p):
+    pass
+
+###############################################################################
+## @brief Debug configuration: version 1
+class zet_debug_config_v1_t(Structure):
+    _fields_ = [
+        ("pid", c_int)                                                  ## The host process identifier
+    ]
+
+###############################################################################
+## @brief Debug configuration: version-dependent fields
+class zet_debug_config_variants_t(Structure):
+    _fields_ = [
+        ("v1", zet_debug_config_v1_t)                                   ## Version 1
+    ]
+
+###############################################################################
+## @brief Debug configuration
+class zet_debug_config_t(Structure):
+    _fields_ = [
+        ("version", c_ushort),                                          ## The requested program debug API version
+        ("variant", zet_debug_config_variants_t)                        ## Version-specific fields
+    ]
+
+###############################################################################
+## @brief An infinite timeout.
+ZET_DEBUG_TIMEOUT_INFINITE = 0xffffffffffffffffull
+
+###############################################################################
+## @brief Debug event flags.
+class zet_debug_event_flags_v(IntEnum):
+    DEBUG_EVENT_FLAG_NONE = 0                       ## No event flags
+    DEBUG_EVENT_FLAG_STOPPED = (1 << 0)             ## The reporting thread stopped
+
+class zet_debug_event_flags_t(c_int):
+    def __str__(self):
+        return str(zet_debug_event_flags_v(value))
+
+
+###############################################################################
+## @brief Debug event types.
+class zet_debug_event_type_v(IntEnum):
+    DEBUG_EVENT_INVALID = 0                         ## The event is invalid
+    DEBUG_EVENT_DETACHED = auto()                   ## The tool was detached
+    DEBUG_EVENT_PROCESS_ENTRY = auto()              ## The debuggee process created command queues on the device
+    DEBUG_EVENT_PROCESS_EXIT = auto()               ## The debuggee process destroyed all command queues on the device
+    DEBUG_EVENT_MODULE_LOAD = auto()                ## An in-memory module was loaded onto the device
+    DEBUG_EVENT_MODULE_UNLOAD = auto()              ## An in-memory module is about to get unloaded from the device
+    DEBUG_EVENT_EXCEPTION = auto()                  ## The thread stopped due to a device exception
+
+class zet_debug_event_type_t(c_int):
+    def __str__(self):
+        return str(zet_debug_event_type_v(value))
+
+
+###############################################################################
+## @brief Debug detach reason.
+class zet_debug_detach_reason_v(IntEnum):
+    DEBUG_DETACH_INVALID = 0                        ## The detach reason is not valid
+    DEBUG_DETACH_HOST_EXIT = auto()                 ## The host process exited
+
+class zet_debug_detach_reason_t(c_int):
+    def __str__(self):
+        return str(zet_debug_detach_reason_v(value))
+
+
+###############################################################################
+## @brief No thread on the device.
+ZET_DEBUG_THREAD_NONE = 0xffffffffffffffffull
+
+###############################################################################
+## @brief All threads on the device.
+ZET_DEBUG_THREAD_ALL = 0xfffffffffffffffeull
+
+###############################################################################
+## @brief Event information for ::ZET_DEBUG_EVENT_DETACHED
+class zet_debug_event_info_detached_t(Structure):
+    _fields_ = [
+        ("reason", c_ubyte)                                             ## The detach reason
+    ]
+
+###############################################################################
+## @brief Event information for ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
+class zet_debug_event_info_module_t(Structure):
+    _fields_ = [
+        ("moduleBegin", c_ulonglong),                                   ## The begin address of the in-memory module
+        ("moduleEnd", c_ulonglong),                                     ## The end address of the in-memory module
+        ("load", c_ulonglong)                                           ## The load address of the module on the device
+    ]
+
+###############################################################################
+## @brief Event type specific information
+class zet_debug_event_info_t(Structure):
+    _fields_ = [
+        ("detached", zet_debug_event_info_detached_t),                  ## type == ::ZET_DEBUG_EVENT_DETACHED
+        ("module", zet_debug_event_info_module_t)                       ## type == ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
+    ]
+
+###############################################################################
+## @brief A debug event on the device.
+class zet_debug_event_t(Structure):
+    _fields_ = [
+        ("type", c_ubyte),                                              ## The event type
+        ("thread", c_ulonglong),                                        ## The thread reporting the event
+        ("flags", c_ulonglong),                                         ## A bit-vector of ::zet_debug_event_flags_t
+        ("info", zet_debug_event_info_t)                                ## Event type specific information
+    ]
+
+###############################################################################
+## @brief Memory spaces for Intel Graphics devices.
+class zet_debug_memory_space_intel_graphics_v(IntEnum):
+    DEBUG_MEMORY_SPACE_GEN_DEFAULT = 0              ## default memory space (attribute may be omitted)
+    DEBUG_MEMORY_SPACE_GEN_SLM = auto()             ## shared local memory space
+
+class zet_debug_memory_space_intel_graphics_t(c_int):
+    def __str__(self):
+        return str(zet_debug_memory_space_intel_graphics_v(value))
+
+
+###############################################################################
+## @brief Register file types for Intel Graphics devices.
+class zet_debug_state_intel_graphics_v(IntEnum):
+    DEBUG_STATE_GEN_INVALID = 0                     ## An invalid register file
+    DEBUG_STATE_GEN_GRF = auto()                    ## The general register file
+    DEBUG_STATE_GEN_ACC = auto()                    ## The accumulator register file
+    DEBUG_STATE_GEN_ADDR = auto()                   ## The address register file
+    DEBUG_STATE_GEN_FLAG = auto()                   ## The flags register file
+
+class zet_debug_state_intel_graphics_t(c_int):
+    def __str__(self):
+        return str(zet_debug_state_intel_graphics_v(value))
+
+
+###############################################################################
+## @brief A register file descriptor.
+class zet_debug_state_section_t(Structure):
+    _fields_ = [
+        ("type", c_ushort),                                             ## The register file type type
+        ("version", c_ushort),                                          ## The register file version
+        ("size", c_ulong),                                              ## The size of the register file in bytes
+        ("offset", c_ulonglong)                                         ## The offset into the register state area
+    ]
+
+###############################################################################
+## @brief A register state descriptor.
+class zet_debug_state_t(Structure):
+    _fields_ = [
+        ("size", c_ulong),                                              ## The size of the register state object in bytes
+        ("headerSize", c_ubyte),                                        ## The size of the register state descriptor in bytes
+        ("secSize", c_ubyte),                                           ## The size of the register file descriptors in bytes
+        ("numSec", c_ushort)                                            ## The number of register file descriptors
+    ]
+
+###############################################################################
 ## @brief Maximum metric group name string size
 ZET_MAX_METRIC_GROUP_NAME = 256
 
@@ -338,6 +498,68 @@ class zet_module_debug_info_format_t(c_int):
     def __str__(self):
         return str(zet_module_debug_info_format_v(value))
 
+
+###############################################################################
+## @brief API version of ::zet_profile_info_t
+class zet_profile_info_version_v(IntEnum):
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class zet_profile_info_version_t(c_int):
+    def __str__(self):
+        return str(zet_profile_info_version_v(value))
+
+
+###############################################################################
+## @brief Supportted profile features
+class zet_profile_flag_v(IntEnum):
+    REGISTER_REALLOCATION = ZE_BIT(0)               ## request the compiler attempt to minimize register usage as much as
+                                                    ## possible to allow for instrumentation
+    FREE_REGISTER_INFO = ZE_BIT(1)                  ## request the compiler generate free register info
+
+class zet_profile_flag_t(c_int):
+    def __str__(self):
+        return str(zet_profile_flag_v(value))
+
+
+###############################################################################
+## @brief Profiling meta-data for instrumentation
+class zet_profile_info_t(Structure):
+    _fields_ = [
+        ("version", zet_profile_info_version_t),                        ## [in] ::ZET_PROFILE_INFO_VERSION_CURRENT
+        ("flags", zet_profile_flag_t),                                  ## [out] indicates which flags were enabled during compilation
+        ("numTokens", c_ulong)                                          ## [out] number of tokens immediately following this structure
+    ]
+
+###############################################################################
+## @brief Supported profile token types
+class zet_profile_token_type_v(IntEnum):
+    FREE_REGISTER = auto()                          ## GRF info
+
+class zet_profile_token_type_t(c_int):
+    def __str__(self):
+        return str(zet_profile_token_type_v(value))
+
+
+###############################################################################
+## @brief Profile free register token detailing unused registers in the current
+##        function
+class zet_profile_free_register_token_t(Structure):
+    _fields_ = [
+        ("type", zet_profile_token_type_t),                             ## [out] type of token
+        ("size", c_ulong),                                              ## [out] total size of the token, in bytes
+        ("count", c_ulong)                                              ## [out] number of register sequences immediately following this
+                                                                        ## structure
+    ]
+
+###############################################################################
+## @brief Profile register sequence detailing consecutive bytes, all of which
+##        are unused
+class zet_profile_register_sequence_t(Structure):
+    _fields_ = [
+        ("start", c_ulong),                                             ## [out] starting byte in the register table, representing the start of
+                                                                        ## unused bytes in the current function
+        ("count", c_ulong)                                              ## [out] number of consecutive bytes in the sequence, starting from start
+    ]
 
 ###############################################################################
 ## @brief API version of Sysman
@@ -1482,68 +1704,6 @@ class zet_diag_properties_t(Structure):
     ]
 
 ###############################################################################
-## @brief API version of ::zet_profile_info_t
-class zet_profile_info_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
-
-class zet_profile_info_version_t(c_int):
-    def __str__(self):
-        return str(zet_profile_info_version_v(value))
-
-
-###############################################################################
-## @brief Supportted profile features
-class zet_profile_flag_v(IntEnum):
-    REGISTER_REALLOCATION = ZE_BIT(0)               ## request the compiler attempt to minimize register usage as much as
-                                                    ## possible to allow for instrumentation
-    FREE_REGISTER_INFO = ZE_BIT(1)                  ## request the compiler generate free register info
-
-class zet_profile_flag_t(c_int):
-    def __str__(self):
-        return str(zet_profile_flag_v(value))
-
-
-###############################################################################
-## @brief Profiling meta-data for instrumentation
-class zet_profile_info_t(Structure):
-    _fields_ = [
-        ("version", zet_profile_info_version_t),                        ## [in] ::ZET_PROFILE_INFO_VERSION_CURRENT
-        ("flags", zet_profile_flag_t),                                  ## [out] indicates which flags were enabled during compilation
-        ("numTokens", c_ulong)                                          ## [out] number of tokens immediately following this structure
-    ]
-
-###############################################################################
-## @brief Supported profile token types
-class zet_profile_token_type_v(IntEnum):
-    FREE_REGISTER = auto()                          ## GRF info
-
-class zet_profile_token_type_t(c_int):
-    def __str__(self):
-        return str(zet_profile_token_type_v(value))
-
-
-###############################################################################
-## @brief Profile free register token detailing unused registers in the current
-##        function
-class zet_profile_free_register_token_t(Structure):
-    _fields_ = [
-        ("type", zet_profile_token_type_t),                             ## [out] type of token
-        ("size", c_ulong),                                              ## [out] total size of the token, in bytes
-        ("count", c_ulong)                                              ## [out] number of register sequences immediately following this
-                                                                        ## structure
-    ]
-
-###############################################################################
-## @brief Profile register sequence detailing consecutive bytes, all of which
-##        are unused
-class zet_profile_register_sequence_t(Structure):
-    _fields_ = [
-        ("start", c_ulong),                                             ## [out] starting byte in the register table, representing the start of
-                                                                        ## unused bytes in the current function
-        ("count", c_ulong)                                              ## [out] number of consecutive bytes in the sequence, starting from start
-    ]
-
-###############################################################################
 ## @brief Alias the existing callbacks definition for 'core' callbacks
 class zet_core_callbacks_t(ze_callbacks_t):
     pass
@@ -1569,166 +1729,6 @@ class zet_tracer_desc_t(Structure):
     _fields_ = [
         ("version", zet_tracer_desc_version_t),                         ## [in] ::ZET_TRACER_DESC_VERSION_CURRENT
         ("pUserData", c_void_p)                                         ## [in] pointer passed to every tracer's callbacks
-    ]
-
-###############################################################################
-## @brief The API version.
-ZET_DEBUG_API_VERSION = 1
-
-###############################################################################
-## @brief Debug session handle
-class zet_debug_session_handle_t(c_void_p):
-    pass
-
-###############################################################################
-## @brief Debug configuration: version 1
-class zet_debug_config_v1_t(Structure):
-    _fields_ = [
-        ("pid", c_int)                                                  ## The host process identifier
-    ]
-
-###############################################################################
-## @brief Debug configuration: version-dependent fields
-class zet_debug_config_variants_t(Structure):
-    _fields_ = [
-        ("v1", zet_debug_config_v1_t)                                   ## Version 1
-    ]
-
-###############################################################################
-## @brief Debug configuration
-class zet_debug_config_t(Structure):
-    _fields_ = [
-        ("version", c_ushort),                                          ## The requested program debug API version
-        ("variant", zet_debug_config_variants_t)                        ## Version-specific fields
-    ]
-
-###############################################################################
-## @brief An infinite timeout.
-ZET_DEBUG_TIMEOUT_INFINITE = 0xffffffffffffffffull
-
-###############################################################################
-## @brief Debug event flags.
-class zet_debug_event_flags_v(IntEnum):
-    DEBUG_EVENT_FLAG_NONE = 0                       ## No event flags
-    DEBUG_EVENT_FLAG_STOPPED = (1 << 0)             ## The reporting thread stopped
-
-class zet_debug_event_flags_t(c_int):
-    def __str__(self):
-        return str(zet_debug_event_flags_v(value))
-
-
-###############################################################################
-## @brief Debug event types.
-class zet_debug_event_type_v(IntEnum):
-    DEBUG_EVENT_INVALID = 0                         ## The event is invalid
-    DEBUG_EVENT_DETACHED = auto()                   ## The tool was detached
-    DEBUG_EVENT_PROCESS_ENTRY = auto()              ## The debuggee process created command queues on the device
-    DEBUG_EVENT_PROCESS_EXIT = auto()               ## The debuggee process destroyed all command queues on the device
-    DEBUG_EVENT_MODULE_LOAD = auto()                ## An in-memory module was loaded onto the device
-    DEBUG_EVENT_MODULE_UNLOAD = auto()              ## An in-memory module is about to get unloaded from the device
-    DEBUG_EVENT_EXCEPTION = auto()                  ## The thread stopped due to a device exception
-
-class zet_debug_event_type_t(c_int):
-    def __str__(self):
-        return str(zet_debug_event_type_v(value))
-
-
-###############################################################################
-## @brief Debug detach reason.
-class zet_debug_detach_reason_v(IntEnum):
-    DEBUG_DETACH_INVALID = 0                        ## The detach reason is not valid
-    DEBUG_DETACH_HOST_EXIT = auto()                 ## The host process exited
-
-class zet_debug_detach_reason_t(c_int):
-    def __str__(self):
-        return str(zet_debug_detach_reason_v(value))
-
-
-###############################################################################
-## @brief No thread on the device.
-ZET_DEBUG_THREAD_NONE = 0xffffffffffffffffull
-
-###############################################################################
-## @brief All threads on the device.
-ZET_DEBUG_THREAD_ALL = 0xfffffffffffffffeull
-
-###############################################################################
-## @brief Event information for ::ZET_DEBUG_EVENT_DETACHED
-class zet_debug_event_info_detached_t(Structure):
-    _fields_ = [
-        ("reason", c_ubyte)                                             ## The detach reason
-    ]
-
-###############################################################################
-## @brief Event information for ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
-class zet_debug_event_info_module_t(Structure):
-    _fields_ = [
-        ("moduleBegin", c_ulonglong),                                   ## The begin address of the in-memory module
-        ("moduleEnd", c_ulonglong),                                     ## The end address of the in-memory module
-        ("load", c_ulonglong)                                           ## The load address of the module on the device
-    ]
-
-###############################################################################
-## @brief Event type specific information
-class zet_debug_event_info_t(Structure):
-    _fields_ = [
-        ("detached", zet_debug_event_info_detached_t),                  ## type == ::ZET_DEBUG_EVENT_DETACHED
-        ("module", zet_debug_event_info_module_t)                       ## type == ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
-    ]
-
-###############################################################################
-## @brief A debug event on the device.
-class zet_debug_event_t(Structure):
-    _fields_ = [
-        ("type", c_ubyte),                                              ## The event type
-        ("thread", c_ulonglong),                                        ## The thread reporting the event
-        ("flags", c_ulonglong),                                         ## A bit-vector of ::zet_debug_event_flags_t
-        ("info", zet_debug_event_info_t)                                ## Event type specific information
-    ]
-
-###############################################################################
-## @brief Memory spaces for Intel Graphics devices.
-class zet_debug_memory_space_intel_graphics_v(IntEnum):
-    DEBUG_MEMORY_SPACE_GEN_DEFAULT = 0              ## default memory space (attribute may be omitted)
-    DEBUG_MEMORY_SPACE_GEN_SLM = auto()             ## shared local memory space
-
-class zet_debug_memory_space_intel_graphics_t(c_int):
-    def __str__(self):
-        return str(zet_debug_memory_space_intel_graphics_v(value))
-
-
-###############################################################################
-## @brief Register file types for Intel Graphics devices.
-class zet_debug_state_intel_graphics_v(IntEnum):
-    DEBUG_STATE_GEN_INVALID = 0                     ## An invalid register file
-    DEBUG_STATE_GEN_GRF = auto()                    ## The general register file
-    DEBUG_STATE_GEN_ACC = auto()                    ## The accumulator register file
-    DEBUG_STATE_GEN_ADDR = auto()                   ## The address register file
-    DEBUG_STATE_GEN_FLAG = auto()                   ## The flags register file
-
-class zet_debug_state_intel_graphics_t(c_int):
-    def __str__(self):
-        return str(zet_debug_state_intel_graphics_v(value))
-
-
-###############################################################################
-## @brief A register file descriptor.
-class zet_debug_state_section_t(Structure):
-    _fields_ = [
-        ("type", c_ushort),                                             ## The register file type type
-        ("version", c_ushort),                                          ## The register file version
-        ("size", c_ulong),                                              ## The size of the register file in bytes
-        ("offset", c_ulonglong)                                         ## The offset into the register state area
-    ]
-
-###############################################################################
-## @brief A register state descriptor.
-class zet_debug_state_t(Structure):
-    _fields_ = [
-        ("size", c_ulong),                                              ## The size of the register state object in bytes
-        ("headerSize", c_ubyte),                                        ## The size of the register state descriptor in bytes
-        ("secSize", c_ubyte),                                           ## The size of the register file descriptors in bytes
-        ("numSec", c_ushort)                                            ## The number of register file descriptors
     ]
 
 ###############################################################################

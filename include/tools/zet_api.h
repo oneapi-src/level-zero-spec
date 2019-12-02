@@ -25,11 +25,11 @@
 #include "zet_driver.h"
 #include "zet_device.h"
 #include "zet_cmdlist.h"
+#include "zet_debug.h"
 #include "zet_metric.h"
 #include "zet_module.h"
-#include "zet_sysman.h"
 #include "zet_pin.h"
+#include "zet_sysman.h"
 #include "zet_tracing.h"
-#include "zet_debug.h"
 
 #endif // _ZET_API_H

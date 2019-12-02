@@ -64,6 +64,191 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugAttach
+    ze_result_t __zecall
+    zetDebugAttach(
+        zet_device_handle_t hDevice,                    ///< [in] device handle
+        const zet_debug_config_t* config,               ///< [in] the debug configuration
+        zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_device_object_t*>( hDevice )->dditable;
+        auto pfnAttach = dditable->zet.Debug.pfnAttach;
+        if( nullptr == pfnAttach )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<zet_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        result = pfnAttach( hDevice, config, hDebug );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugDetach
+    ze_result_t __zecall
+    zetDebugDetach(
+        zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnDetach( hDebug );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugGetNumThreads
+    ze_result_t __zecall
+    zetDebugGetNumThreads(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t numThreads                             ///< [out] the maximal number of threads
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnGetNumThreads( hDebug, numThreads );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadEvent
+    ze_result_t __zecall
+    zetDebugReadEvent(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
+        size_t size,                                    ///< [in] the size of the buffer in bytes
+        void* buffer                                    ///< [in,out] a buffer to hold the event data
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnReadEvent( hDebug, timeout, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugInterrupt
+    ze_result_t __zecall
+    zetDebugInterrupt(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnInterrupt( hDebug, threadid );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugResume
+    ze_result_t __zecall
+    zetDebugResume(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnResume( hDebug, threadid );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadMemory
+    ze_result_t __zecall
+    zetDebugReadMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnReadMemory( hDebug, threadid, memSpace, address, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteMemory
+    ze_result_t __zecall
+    zetDebugWriteMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnWriteMemory( hDebug, threadid, memSpace, address, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadState
+    ze_result_t __zecall
+    zetDebugReadState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnReadState( hDebug, threadid, offset, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteState
+    ze_result_t __zecall
+    zetDebugWriteState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // forward to device-driver
+        result = pfnWriteState( hDebug, threadid, offset, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricGroupGet
     ze_result_t __zecall
     zetMetricGroupGet(
@@ -701,6 +886,62 @@ namespace loader
 
         // forward to device-driver
         result = pfnGetDebugInfo( hModule, format, pSize, pDebugInfo );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetModuleGetKernelNames
+    ze_result_t __zecall
+    zetModuleGetKernelNames(
+        zet_module_handle_t hModule,                    ///< [in] handle of the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_module_object_t*>( hModule )->dditable;
+        auto pfnGetKernelNames = dditable->zet.Module.pfnGetKernelNames;
+        if( nullptr == pfnGetKernelNames )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hModule = reinterpret_cast<zet_module_object_t*>( hModule )->handle;
+
+        // forward to device-driver
+        result = pfnGetKernelNames( hModule, pCount, pNames );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetKernelGetProfileInfo
+    ze_result_t __zecall
+    zetKernelGetProfileInfo(
+        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
+        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_kernel_object_t*>( hKernel )->dditable;
+        auto pfnGetProfileInfo = dditable->zet.Kernel.pfnGetProfileInfo;
+        if( nullptr == pfnGetProfileInfo )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hKernel = reinterpret_cast<zet_kernel_object_t*>( hKernel )->handle;
+
+        // forward to device-driver
+        result = pfnGetProfileInfo( hKernel, pInfo );
 
         return result;
     }
@@ -3345,62 +3586,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetModuleGetKernelNames
-    ze_result_t __zecall
-    zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of names available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
-                                                        ///< if count is larger than the number of names available, then the driver
-                                                        ///< will update the value with the correct number of names available.
-        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_module_object_t*>( hModule )->dditable;
-        auto pfnGetKernelNames = dditable->zet.Module.pfnGetKernelNames;
-        if( nullptr == pfnGetKernelNames )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hModule = reinterpret_cast<zet_module_object_t*>( hModule )->handle;
-
-        // forward to device-driver
-        result = pfnGetKernelNames( hModule, pCount, pNames );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetKernelGetProfileInfo
-    ze_result_t __zecall
-    zetKernelGetProfileInfo(
-        zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
-        zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_kernel_object_t*>( hKernel )->dditable;
-        auto pfnGetProfileInfo = dditable->zet.Kernel.pfnGetProfileInfo;
-        if( nullptr == pfnGetProfileInfo )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hKernel = reinterpret_cast<zet_kernel_object_t*>( hKernel )->handle;
-
-        // forward to device-driver
-        result = pfnGetProfileInfo( hKernel, pInfo );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetTracerCreate
     ze_result_t __zecall
     zetTracerCreate(
@@ -3539,191 +3724,6 @@ namespace loader
 
         // forward to device-driver
         result = pfnSetEnabled( hTracer, enable );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugAttach
-    ze_result_t __zecall
-    zetDebugAttach(
-        zet_device_handle_t hDevice,                    ///< [in] device handle
-        const zet_debug_config_t* config,               ///< [in] the debug configuration
-        zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_device_object_t*>( hDevice )->dditable;
-        auto pfnAttach = dditable->zet.Debug.pfnAttach;
-        if( nullptr == pfnAttach )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hDevice = reinterpret_cast<zet_device_object_t*>( hDevice )->handle;
-
-        // forward to device-driver
-        result = pfnAttach( hDevice, config, hDebug );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugDetach
-    ze_result_t __zecall
-    zetDebugDetach(
-        zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnDetach( hDebug );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugGetNumThreads
-    ze_result_t __zecall
-    zetDebugGetNumThreads(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t numThreads                             ///< [out] the maximal number of threads
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnGetNumThreads( hDebug, numThreads );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugReadEvent
-    ze_result_t __zecall
-    zetDebugReadEvent(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
-        size_t size,                                    ///< [in] the size of the buffer in bytes
-        void* buffer                                    ///< [in,out] a buffer to hold the event data
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnReadEvent( hDebug, timeout, size, buffer );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugInterrupt
-    ze_result_t __zecall
-    zetDebugInterrupt(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnInterrupt( hDebug, threadid );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugResume
-    ze_result_t __zecall
-    zetDebugResume(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnResume( hDebug, threadid );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugReadMemory
-    ze_result_t __zecall
-    zetDebugReadMemory(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-        int memSpace,                                   ///< [in] the (device-specific) memory space
-        uint64_t address,                               ///< [in] the virtual address of the memory to read from
-        size_t size,                                    ///< [in] the number of bytes to read
-        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnReadMemory( hDebug, threadid, memSpace, address, size, buffer );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugWriteMemory
-    ze_result_t __zecall
-    zetDebugWriteMemory(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
-        int memSpace,                                   ///< [in] the (device-specific) memory space
-        uint64_t address,                               ///< [in] the virtual address of the memory to write to
-        size_t size,                                    ///< [in] the number of bytes to write
-        const void* buffer                              ///< [in] a buffer holding the pattern to write
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnWriteMemory( hDebug, threadid, memSpace, address, size, buffer );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugReadState
-    ze_result_t __zecall
-    zetDebugReadState(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context
-        uint64_t offset,                                ///< [in] the offset into the register state area
-        size_t size,                                    ///< [in] the number of bytes to read
-        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnReadState( hDebug, threadid, offset, size, buffer );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetDebugWriteState
-    ze_result_t __zecall
-    zetDebugWriteState(
-        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t threadid,                              ///< [in] the thread context
-        uint64_t offset,                                ///< [in] the offset into the register state area
-        size_t size,                                    ///< [in] the number of bytes to write
-        const void* buffer                              ///< [in] a buffer holding the pattern to write
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // forward to device-driver
-        result = pfnWriteState( hDebug, threadid, offset, size, buffer );
 
         return result;
     }
