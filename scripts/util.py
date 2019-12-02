@@ -79,7 +79,8 @@ def textRead(path):
     try:
         with open(path, "r") as fin:
             return fin.readlines()
-    except:
+    except Exception as e:
+        print(e)
         print("error: unable to read %s"%path)
         return None
 
@@ -143,7 +144,7 @@ def yamlWrite(path, data):
 makoFileList = []
 def makoWrite(inpath, outpath, **args):
     try:
-        template = Template(filename=inpath)
+        template = Template(filename=inpath, input_encoding='ansi')
         rendered = template.render(**args)
         rendered = re.sub(r"\r\n", r"\n", rendered)
 
