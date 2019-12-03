@@ -82,19 +82,20 @@ zetDebugDetach(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDebug
+///         + nullptr == pNumThreads
 ///         + an invalid debug handle has been supplied
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugGetNumThreads(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-    uint64_t numThreads                             ///< [out] the maximal number of threads
+    uint64_t* pNumThreads                           ///< [out] the maximal number of threads
     )
 {
     auto pfnGetNumThreads = zet_lib::context.ddiTable.Debug.pfnGetNumThreads;
     if( nullptr == pfnGetNumThreads )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetNumThreads( hDebug, numThreads );
+    return pfnGetNumThreads( hDebug, pNumThreads );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -310,9 +311,9 @@ namespace zet
 {
     ///////////////////////////////////////////////////////////////////////////////
     Debug::Debug( 
-        debug_session_handle_t* hDebug                  ///< [in] debug session handle
+        debug_session_handle_t handle                   ///< [in] debug session handle
         ) :
-        m_hDebug( hDebug )
+        m_handle( handle )
     {
     }
 
@@ -320,10 +321,10 @@ namespace zet
     /// @brief Attach to a device.
     /// 
     /// @returns
-    ///     - debug_session_handle_t: debug session handle
+    ///     - Debug*: debug session handle
     /// 
     /// @throws result_t
-    debug_session_handle_t __zecall
+    Debug* __zecall
     Debug::Attach(
         Device* pDevice,                                ///< [in] device handle
         const config_t* config                          ///< [in] the debug configuration
@@ -339,7 +340,21 @@ namespace zet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::Attach" );
 
-        return reinterpret_cast<debug_session_handle_t>( hDebug );
+        Debug* pDebug = nullptr;
+
+        try
+        {
+            pDebug = new Debug( reinterpret_cast<debug_session_handle_t>( hDebug ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pDebug;
+            pDebug = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "zet::Debug::Attach" );
+        }
+
+        return pDebug;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -352,7 +367,7 @@ namespace zet
         )
     {
         auto result = static_cast<result_t>( ::zetDebugDetach(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ) ) );
+            reinterpret_cast<zet_debug_session_handle_t>( getHandle() ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::Detach" );
@@ -373,7 +388,7 @@ namespace zet
         uint64_t numThreads;
 
         auto result = static_cast<result_t>( ::zetDebugGetNumThreads(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            reinterpret_cast<zet_debug_session_handle_t>( getHandle() ),
             &numThreads ) );
 
         if( result_t::SUCCESS != result )
@@ -396,13 +411,16 @@ namespace zet
         )
     {
         auto result = static_cast<result_t>( ::zetDebugReadEvent(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            reinterpret_cast<zet_debug_session_handle_t>( getHandle() ),
             timeout,
             size,
             buffer ) );
 
+        if( result_t::NOT_READY == result )
+            return 0; // false
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Debug::ReadEvent" );
+        return 1; // true
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -415,7 +433,7 @@ namespace zet
         )
     {
         auto result = static_cast<result_t>( ::zetDebugInterrupt(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            reinterpret_cast<zet_debug_session_handle_t>( getHandle() ),
             threadid ) );
 
         if( result_t::SUCCESS != result )
@@ -432,7 +450,7 @@ namespace zet
         )
     {
         auto result = static_cast<result_t>( ::zetDebugResume(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            reinterpret_cast<zet_debug_session_handle_t>( getHandle() ),
             threadid ) );
 
         if( result_t::SUCCESS != result )
@@ -453,7 +471,7 @@ namespace zet
         )
     {
         auto result = static_cast<result_t>( ::zetDebugReadMemory(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            reinterpret_cast<zet_debug_session_handle_t>( getHandle() ),
             threadid,
             memSpace,
             address,
@@ -478,7 +496,7 @@ namespace zet
         )
     {
         auto result = static_cast<result_t>( ::zetDebugWriteMemory(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            reinterpret_cast<zet_debug_session_handle_t>( getHandle() ),
             threadid,
             memSpace,
             address,
@@ -502,7 +520,7 @@ namespace zet
         )
     {
         auto result = static_cast<result_t>( ::zetDebugReadState(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            reinterpret_cast<zet_debug_session_handle_t>( getHandle() ),
             threadid,
             offset,
             size,
@@ -525,7 +543,7 @@ namespace zet
         )
     {
         auto result = static_cast<result_t>( ::zetDebugWriteState(
-            reinterpret_cast<zet_debug_session_handle_t>( pDebug ),
+            reinterpret_cast<zet_debug_session_handle_t>( getHandle() ),
             threadid,
             offset,
             size,

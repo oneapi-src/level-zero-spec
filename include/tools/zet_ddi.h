@@ -1826,7 +1826,7 @@ typedef ze_result_t (__zecall *zet_pfnDebugDetach_t)(
 /// @brief Function-pointer for zetDebugGetNumThreads 
 typedef ze_result_t (__zecall *zet_pfnDebugGetNumThreads_t)(
     zet_debug_session_handle_t,
-    uint64_t
+    uint64_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////

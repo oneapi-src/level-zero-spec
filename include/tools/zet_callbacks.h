@@ -3141,7 +3141,7 @@ typedef void (__zecall *zet_pfnDebugDetachCb_t)(
 typedef struct _zet_debug_get_num_threads_params_t
 {
     zet_debug_session_handle_t* phDebug;
-    uint64_t* pnumThreads;
+    uint64_t** ppNumThreads;
 } zet_debug_get_num_threads_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////

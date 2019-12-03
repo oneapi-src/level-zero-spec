@@ -2900,9 +2900,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetDebugGetNumThreads
 if __use_win_types:
-    _zetDebugGetNumThreads_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+    _zetDebugGetNumThreads_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, POINTER(c_ulonglong) )
 else:
-    _zetDebugGetNumThreads_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+    _zetDebugGetNumThreads_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, POINTER(c_ulonglong) )
 
 ###############################################################################
 ## @brief Function-pointer for zetDebugReadEvent

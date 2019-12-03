@@ -91,7 +91,7 @@ namespace layer
     ze_result_t __zecall
     zetDebugGetNumThreads(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t numThreads                             ///< [out] the maximal number of threads
+        uint64_t* pNumThreads                           ///< [out] the maximal number of threads
         )
     {
         auto pfnGetNumThreads = context.zetDdiTable.Debug.pfnGetNumThreads;
@@ -104,9 +104,12 @@ namespace layer
             if( nullptr == hDebug )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == pNumThreads )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
         }
 
-        return pfnGetNumThreads( hDebug, numThreads );
+        return pfnGetNumThreads( hDebug, pNumThreads );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

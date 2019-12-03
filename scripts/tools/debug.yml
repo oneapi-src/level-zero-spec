@@ -1,3 +1,10 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Debug"
@@ -7,17 +14,18 @@ desc: "The API version."
 name: $T_DEBUG_API_VERSION
 value: "1"
 --- #--------------------------------------------------------------------------
+type: handle
+desc: "Debug session handle"
+class: $tDebug
+name: $t_debug_session_handle_t
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for Debug API"
 name: $tDebug
 members:
-    - type: "$t_debug_session_handle_t*"
-      name: hDebug
+    - type: "$t_debug_session_handle_t"
+      name: handle
       desc: "[in] debug session handle"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Debug session handle"
-name: $t_debug_session_handle_t
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Debug configuration: version 1"
@@ -95,8 +103,8 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: numThreads
+    - type: "uint64_t*"
+      name: pNumThreads
       desc: "[out] the maximal number of threads"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:

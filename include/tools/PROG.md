@@ -890,16 +890,13 @@ default memory space.
     uint8_t buffer[16];
     ze_result_t errcode;
 
-    errcode = zetDebugReadMemory(session, threadid, memSpace, src,
-                                  sizeof(buffer), buffer);
+    errcode = zetDebugReadMemory(session, threadid, memSpace, src, sizeof(buffer), buffer);
     if (errcode)
         return errcode;
 
     ...
 
-    errcode = zetDebugWriteMemory(session, ZET_DEBUG_THREAD_NONE,
-                                   ZET_DEBUG_MEMORY_SPACE_GEN_DEFAULT,
-                                   dst, sizeof(buffer), buffer);
+    errcode = zetDebugWriteMemory(session, ZET_DEBUG_THREAD_NONE, ZET_DEBUG_MEMORY_SPACE_GEN_DEFAULT, dst, sizeof(buffer), buffer);
     if (errcode)
         return errcode;
 ```
@@ -967,8 +964,7 @@ The following sample code demonstrates iterating over register files:
     ze_result_t errcode;
     uint16_t sec;
 
-    errcode = zetDebugReadState(session, threadid, 0ull, sizeof(state),
-                                 &state);
+    errcode = zetDebugReadState(session, threadid, 0ull, sizeof(state), &state);
     if (errcode)
         return errcode;
 
@@ -978,8 +974,7 @@ The following sample code demonstrates iterating over register files:
 
         offset = state.headerSize + (state.secSize * sec);
 
-        errcode = zetDebugReadState(session, threadid, offset,
-                                     sizeof(section), &section);
+        errcode = zetDebugReadState(session, threadid, offset, sizeof(section), &section);
         if (errcode)
             return errcode;
 

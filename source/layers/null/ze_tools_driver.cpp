@@ -58,6 +58,8 @@ namespace driver
         else
         {
             // generic implementation
+            *hDebug = reinterpret_cast<zet_debug_session_handle_t>( context.get() );
+
         }
 
         return result;
@@ -81,6 +83,7 @@ namespace driver
         else
         {
             // generic implementation
+
         }
 
         return result;
@@ -91,7 +94,7 @@ namespace driver
     ze_result_t __zecall
     zetDebugGetNumThreads(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
-        uint64_t numThreads                             ///< [out] the maximal number of threads
+        uint64_t* pNumThreads                           ///< [out] the maximal number of threads
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -100,7 +103,7 @@ namespace driver
         auto pfnGetNumThreads = context.zetDdiTable.Debug.pfnGetNumThreads;
         if( nullptr != pfnGetNumThreads )
         {
-            result = pfnGetNumThreads( hDebug, numThreads );
+            result = pfnGetNumThreads( hDebug, pNumThreads );
         }
         else
         {

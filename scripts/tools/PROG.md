@@ -900,16 +900,13 @@ default memory space.
     uint8_t buffer[16];
     ${x}_result_t errcode;
 
-    errcode = ${t}DebugReadMemory(session, threadid, memSpace, src,
-                                  sizeof(buffer), buffer);
+    errcode = ${t}DebugReadMemory(session, threadid, memSpace, src, sizeof(buffer), buffer);
     if (errcode)
         return errcode;
 
     ...
 
-    errcode = ${t}DebugWriteMemory(session, ${T}_DEBUG_THREAD_NONE,
-                                   ${T}_DEBUG_MEMORY_SPACE_GEN_DEFAULT,
-                                   dst, sizeof(buffer), buffer);
+    errcode = ${t}DebugWriteMemory(session, ${T}_DEBUG_THREAD_NONE, ${T}_DEBUG_MEMORY_SPACE_GEN_DEFAULT, dst, sizeof(buffer), buffer);
     if (errcode)
         return errcode;
 ```
@@ -977,8 +974,7 @@ The following sample code demonstrates iterating over register files:
     ${x}_result_t errcode;
     uint16_t sec;
 
-    errcode = ${t}DebugReadState(session, threadid, 0ull, sizeof(state),
-                                 &state);
+    errcode = ${t}DebugReadState(session, threadid, 0ull, sizeof(state), &state);
     if (errcode)
         return errcode;
 
@@ -988,8 +984,7 @@ The following sample code demonstrates iterating over register files:
 
         offset = state.headerSize + (state.secSize * sec);
 
-        errcode = ${t}DebugReadState(session, threadid, offset,
-                                     sizeof(section), &section);
+        errcode = ${t}DebugReadState(session, threadid, offset, sizeof(section), &section);
         if (errcode)
             return errcode;
 

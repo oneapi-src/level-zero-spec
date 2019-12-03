@@ -48,6 +48,12 @@
 namespace zet
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Debug session handle
+    class Debug;
+    struct _debug_session_handle_t;
+    using debug_session_handle_t = _debug_session_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for Debug API
     class Debug
     {
@@ -193,13 +199,13 @@ namespace zet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        debug_session_handle_t* m_hDebug;               ///< [in] debug session handle
+        debug_session_handle_t m_handle;                ///< [in] debug session handle
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Debug( void ) = delete;
         Debug( 
-            debug_session_handle_t* hDebug                  ///< [in] debug session handle
+            debug_session_handle_t handle                   ///< [in] debug session handle
             );
 
         ~Debug( void ) = default;
@@ -211,15 +217,15 @@ namespace zet
         void operator=( Debug&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
-        auto getHdebug( void ) const { return m_hDebug; }
+        auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Attach to a device.
         /// @returns
-        ///     - debug_session_handle_t: debug session handle
+        ///     - Debug*: debug session handle
         /// 
         /// @throws result_t
-        static debug_session_handle_t __zecall
+        static Debug* __zecall
         Attach(
             Device* pDevice,                                ///< [in] device handle
             const config_t* config                          ///< [in] the debug configuration
@@ -319,11 +325,6 @@ namespace zet
             );
 
     };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Debug session handle
-    struct _debug_session_handle_t;
-    using debug_session_handle_t = _debug_session_handle_t*;
 
 } // namespace zet
 
