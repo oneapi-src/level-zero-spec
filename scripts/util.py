@@ -144,7 +144,7 @@ def yamlWrite(path, data):
 makoFileList = []
 def makoWrite(inpath, outpath, **args):
     try:
-        template = Template(filename=inpath, input_encoding='ansi')
+        template = Template(filename=inpath)
         rendered = template.render(**args)
         rendered = re.sub(r"\r\n", r"\n", rendered)
 
