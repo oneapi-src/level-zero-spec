@@ -39,6 +39,265 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugAttach
+    ze_result_t __zecall
+    zetDebugAttach(
+        zet_device_handle_t hDevice,                    ///< [in] device handle
+        const zet_debug_config_t* config,               ///< [in] the debug configuration
+        zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnAttach = context.zetDdiTable.Debug.pfnAttach;
+        if( nullptr != pfnAttach )
+        {
+            result = pfnAttach( hDevice, config, hDebug );
+        }
+        else
+        {
+            // generic implementation
+            *hDebug = reinterpret_cast<zet_debug_session_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugDetach
+    ze_result_t __zecall
+    zetDebugDetach(
+        zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnDetach = context.zetDdiTable.Debug.pfnDetach;
+        if( nullptr != pfnDetach )
+        {
+            result = pfnDetach( hDebug );
+        }
+        else
+        {
+            // generic implementation
+
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugGetNumThreads
+    ze_result_t __zecall
+    zetDebugGetNumThreads(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t* pNumThreads                           ///< [out] the maximal number of threads
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetNumThreads = context.zetDdiTable.Debug.pfnGetNumThreads;
+        if( nullptr != pfnGetNumThreads )
+        {
+            result = pfnGetNumThreads( hDebug, pNumThreads );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadEvent
+    ze_result_t __zecall
+    zetDebugReadEvent(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
+        size_t size,                                    ///< [in] the size of the buffer in bytes
+        void* buffer                                    ///< [in,out] a buffer to hold the event data
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnReadEvent = context.zetDdiTable.Debug.pfnReadEvent;
+        if( nullptr != pfnReadEvent )
+        {
+            result = pfnReadEvent( hDebug, timeout, size, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugInterrupt
+    ze_result_t __zecall
+    zetDebugInterrupt(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnInterrupt = context.zetDdiTable.Debug.pfnInterrupt;
+        if( nullptr != pfnInterrupt )
+        {
+            result = pfnInterrupt( hDebug, threadid );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugResume
+    ze_result_t __zecall
+    zetDebugResume(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnResume = context.zetDdiTable.Debug.pfnResume;
+        if( nullptr != pfnResume )
+        {
+            result = pfnResume( hDebug, threadid );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadMemory
+    ze_result_t __zecall
+    zetDebugReadMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnReadMemory = context.zetDdiTable.Debug.pfnReadMemory;
+        if( nullptr != pfnReadMemory )
+        {
+            result = pfnReadMemory( hDebug, threadid, memSpace, address, size, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteMemory
+    ze_result_t __zecall
+    zetDebugWriteMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnWriteMemory = context.zetDdiTable.Debug.pfnWriteMemory;
+        if( nullptr != pfnWriteMemory )
+        {
+            result = pfnWriteMemory( hDebug, threadid, memSpace, address, size, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadState
+    ze_result_t __zecall
+    zetDebugReadState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnReadState = context.zetDdiTable.Debug.pfnReadState;
+        if( nullptr != pfnReadState )
+        {
+            result = pfnReadState( hDebug, threadid, offset, size, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteState
+    ze_result_t __zecall
+    zetDebugWriteState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnWriteState = context.zetDdiTable.Debug.pfnWriteState;
+        if( nullptr != pfnWriteState )
+        {
+            result = pfnWriteState( hDebug, threadid, offset, size, buffer );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricGroupGet
     ze_result_t __zecall
     zetMetricGroupGet(
@@ -588,7 +847,7 @@ namespace driver
     /// @brief Intercept function for zetModuleGetKernelNames
     ze_result_t __zecall
     zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the device
+        zet_module_handle_t hModule,                    ///< [in] handle of the module
         uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of names available.
@@ -4142,6 +4401,54 @@ zetGetSysmanEventProcAddrTable(
     pDdiTable->pfnGetState                               = driver::zetSysmanEventGetState;
 
     pDdiTable->pfnListen                                 = driver::zetSysmanEventListen;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Debug table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zetGetDebugProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_debug_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    pDdiTable->pfnAttach                                 = driver::zetDebugAttach;
+
+    pDdiTable->pfnDetach                                 = driver::zetDebugDetach;
+
+    pDdiTable->pfnGetNumThreads                          = driver::zetDebugGetNumThreads;
+
+    pDdiTable->pfnReadEvent                              = driver::zetDebugReadEvent;
+
+    pDdiTable->pfnInterrupt                              = driver::zetDebugInterrupt;
+
+    pDdiTable->pfnResume                                 = driver::zetDebugResume;
+
+    pDdiTable->pfnReadMemory                             = driver::zetDebugReadMemory;
+
+    pDdiTable->pfnWriteMemory                            = driver::zetDebugWriteMemory;
+
+    pDdiTable->pfnReadState                              = driver::zetDebugReadState;
+
+    pDdiTable->pfnWriteState                             = driver::zetDebugWriteState;
 
     return result;
 }

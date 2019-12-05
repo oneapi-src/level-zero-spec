@@ -60,6 +60,7 @@ def main():
     add_argument(parser, "md", "generation of markdown files.", True)
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
+    add_argument(parser, "rst", "generation of markdown files.", False)
     args = vars(parser.parse_args())
 
     start = time.time()
@@ -102,6 +103,10 @@ def main():
                 if args['layers']:
                     generate_code.generate_layers("../source/", section, namespace, tags, specs, meta)
 
+            if args['rst']:
+                dstpath_rst = os.path.join("../docs/source/", section)
+                generate_docs.generate_rst(srcpath, dstpath_rst, tags, meta)
+
             if args['md']:
                 generate_docs.generate_md(srcpath, dstpath, tags, meta)
 
@@ -114,7 +119,10 @@ def main():
 
     # generate documentation
     if args['html']:
-        generate_docs.generate_html()
+        if args['rst']:
+            generate_docs.generate_html_from_rst()
+        else:
+            generate_docs.generate_html()
 
     if args['pdf']:
         generate_docs.generate_pdf()

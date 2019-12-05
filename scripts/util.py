@@ -79,7 +79,8 @@ def textRead(path):
     try:
         with open(path, "r") as fin:
             return fin.readlines()
-    except:
+    except Exception as e:
+        print(e)
         print("error: unable to read %s"%path)
         return None
 

@@ -131,6 +131,34 @@ typedef struct _zet_sysman_diag_handle_t *zet_sysman_diag_handle_t;
 typedef struct _zet_sysman_event_handle_t *zet_sysman_event_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_config_v1_t
+typedef struct _zet_debug_config_v1_t zet_debug_config_v1_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_config_t
+typedef struct _zet_debug_config_t zet_debug_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_event_info_detached_t
+typedef struct _zet_debug_event_info_detached_t zet_debug_event_info_detached_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_event_info_module_t
+typedef struct _zet_debug_event_info_module_t zet_debug_event_info_module_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_event_t
+typedef struct _zet_debug_event_t zet_debug_event_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_state_section_t
+typedef struct _zet_debug_state_section_t zet_debug_state_section_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_debug_state_t
+typedef struct _zet_debug_state_t zet_debug_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_metric_group_properties_t
 typedef struct _zet_metric_group_properties_t zet_metric_group_properties_t;
 

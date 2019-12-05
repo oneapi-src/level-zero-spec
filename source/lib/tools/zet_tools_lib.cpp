@@ -207,6 +207,13 @@ namespace zet_lib
             result = getTable( ZE_API_VERSION_1_0, &ddiTable.SysmanEvent );
         }
 
+        if( ZE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<zet_pfnGetDebugProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zetGetDebugProcAddrTable") );
+            result = getTable( ZE_API_VERSION_1_0, &ddiTable.Debug );
+        }
+
         return result;
     }
 } // namespace zet_lib

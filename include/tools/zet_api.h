@@ -25,6 +25,7 @@
 #include "zet_driver.h"
 #include "zet_device.h"
 #include "zet_cmdlist.h"
+#include "zet_debug.h"
 #include "zet_metric.h"
 #include "zet_module.h"
 #include "zet_pin.h"

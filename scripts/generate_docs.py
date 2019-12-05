@@ -107,6 +107,37 @@ def generate_md(srcpath, dstpath, tags, meta):
 
 """
 Entry-point:
+    generate restructedtext documents from templates
+"""
+def generate_rst(srcpath, dstpath, tags, meta):
+    loc = 0
+    util.makePath(dstpath)
+    util.removeFiles(dstpath, "*.rst")
+    for fin in util.findFiles(srcpath, "*.rst"):
+        fout = os.path.join(dstpath, os.path.basename(fin))
+        #validate_md(os.path.abspath(fin), meta)
+        loc += util.makoWrite(fin, fout, tags=tags)
+    print("Generated %s lines of restructedtext (rst).\n"%loc)
+
+
+"""
+Entry-point:
+    generate HTML files using Rst and Doxygen template
+"""
+def generate_html_from_rst():  # This will become generate_html() once MD path is removed.
+    util.removePath("../html")
+    util.removePath("../latex")
+    util.removePath("../docs/xml")
+    util.makePath("../docs/xml")
+    print("Generating doxygen...")
+    cmdline = "doxygen Doxyfile"
+    os.system(cmdline)
+    print("Generating HTML...")
+    cmdline = "sphinx-build -M html ../docs/source .."
+    os.system(cmdline)
+
+"""
+Entry-point:
     generate HTML files using Doxygen template
 """
 def generate_html():

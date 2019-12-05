@@ -155,7 +155,7 @@ namespace ${n}
         auto result = static_cast<result_t>( ::${th.make_func_name(n, tags, obj)}(
             ${",\n            ".join(th.extract_items(wparams, 'arg'))} ) );
 
-        %if len(rvalue) == 0 and re.match(r"\w*bool_t", th.make_return_type(n, tags, obj, cpp=True, meta=meta)):
+        %if len(rvalue) == 0 and re.match(r"[\w,:]*bool_t", th.make_return_type(n, tags, obj, cpp=True, meta=meta)):
         if( result_t::NOT_READY == result )
             return 0; // false
         %endif
@@ -252,7 +252,7 @@ namespace ${n}
         %if len(rvalue) > 0:
 
         return ${rvalue};
-        %elif re.match(r"\w*bool_t", th.make_return_type(n, tags, obj, cpp=True, meta=meta)):
+        %elif re.match(r"[\w,:]*bool_t", th.make_return_type(n, tags, obj, cpp=True, meta=meta)):
         return 1; // true
         %endif
     }

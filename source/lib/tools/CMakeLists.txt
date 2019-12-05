@@ -6,6 +6,7 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_driver.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_device.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_cmdlist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_debug.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_metric.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_module.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_pin.cpp

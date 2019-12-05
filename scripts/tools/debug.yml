@@ -1,0 +1,459 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for Program Debug"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "The API version."
+name: $T_DEBUG_API_VERSION
+value: "1"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Debug session handle"
+class: $tDebug
+name: $t_debug_session_handle_t
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for Debug API"
+name: $tDebug
+members:
+    - type: "$t_debug_session_handle_t"
+      name: handle
+      desc: "[in] debug session handle"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Debug configuration: version 1"
+class: $tDebug
+name: $t_debug_config_v1_t
+members:
+    - type: "int"
+      name: pid
+      desc: "The host process identifier"
+--- #--------------------------------------------------------------------------
+type: union
+desc: "Debug configuration: version-dependent fields"
+class: $tDebug
+name: $t_debug_config_variants_t
+members:
+    - type: $t_debug_config_v1_t
+      name: v1
+      desc: "Version 1"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Debug configuration"
+class: $tDebug
+name: $t_debug_config_t
+members:
+    - type: "uint16_t"
+      name: version
+      desc: "The requested program debug API version"
+    - type: $t_debug_config_variants_t
+      name: variant
+      desc: "Version-specific fields"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Attach to a device."
+class: $tDebug
+name: Attach
+decl: static
+params:
+    - type: $t_device_handle_t
+      name: hDevice
+      desc: "[in] device handle"
+    - type: "const $t_debug_config_t*"
+      name: config
+      desc: "[in] the debug configuration"
+    - type: "$t_debug_session_handle_t*"
+      name: hDebug
+      desc: "[out] debug session handle"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid device handle has been supplied"
+        - "an invalid configuration has been supplied"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "attaching to this device is not supported"
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "caller does not have sufficient permissions"
+    - $X_RESULT_ERROR_DEVICE_ACCESS:
+        - "a debugger is already attached"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Close a debug session."
+class: $tDebug
+name: Detach
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in][release] debug session handle"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle has been supplied"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Query the number of device threads for a debug session."
+class: $tDebug
+name: GetNumThreads
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t*"
+      name: pNumThreads
+      desc: "[out] the maximal number of threads"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle has been supplied"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "An infinite timeout."
+name: $T_DEBUG_TIMEOUT_INFINITE
+value: "0xffffffffffffffffull"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Debug event flags."
+class: $tDebug
+name: $t_debug_event_flags_t
+etors:
+    - name: $T_DEBUG_EVENT_FLAG_NONE
+      desc: "No event flags"
+      value: "0"
+    - name: $T_DEBUG_EVENT_FLAG_STOPPED
+      desc: "The reporting thread stopped"
+      value: "(1 << 0)"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Debug event types."
+class: $tDebug
+name: $t_debug_event_type_t
+etors:
+    - name: $T_DEBUG_EVENT_INVALID
+      desc: "The event is invalid"
+      value: "0"
+    - name: $T_DEBUG_EVENT_DETACHED
+      desc: "The tool was detached"
+    - name: $T_DEBUG_EVENT_PROCESS_ENTRY
+      desc: "The debuggee process created command queues on the device"
+    - name: $T_DEBUG_EVENT_PROCESS_EXIT
+      desc: "The debuggee process destroyed all command queues on the device"
+    - name: $T_DEBUG_EVENT_MODULE_LOAD
+      desc: "An in-memory module was loaded onto the device"
+    - name: $T_DEBUG_EVENT_MODULE_UNLOAD
+      desc: "An in-memory module is about to get unloaded from the device"
+    - name: $T_DEBUG_EVENT_EXCEPTION
+      desc: "The thread stopped due to a device exception"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Debug detach reason."
+class: $tDebug
+name: $t_debug_detach_reason_t
+etors:
+    - name: $T_DEBUG_DETACH_INVALID
+      desc: "The detach reason is not valid"
+      value: "0"
+    - name: $T_DEBUG_DETACH_HOST_EXIT
+      desc: "The host process exited"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "No thread on the device."
+name: $T_DEBUG_THREAD_NONE
+value: "0xffffffffffffffffull"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "All threads on the device."
+name: $T_DEBUG_THREAD_ALL
+value: "0xfffffffffffffffeull"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event information for $T_DEBUG_EVENT_DETACHED"
+class: $tDebug
+name: $t_debug_event_info_detached_t
+members:
+    - type: "uint8_t"
+      name: reason
+      desc: "The detach reason"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event information for $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
+class: $tDebug
+name: $t_debug_event_info_module_t
+members:
+    - type: "uint64_t"
+      name: moduleBegin
+      desc: "The begin address of the in-memory module"
+    - type: "uint64_t"
+      name: moduleEnd
+      desc: "The end address of the in-memory module"
+    - type: "uint64_t"
+      name: load
+      desc: "The load address of the module on the device"
+--- #--------------------------------------------------------------------------
+type: union
+desc: "Event type specific information"
+class: $tDebug
+name: $t_debug_event_info_t
+members:
+    - type: $t_debug_event_info_detached_t
+      name: detached
+      desc: "type == $T_DEBUG_EVENT_DETACHED"
+    - type: $t_debug_event_info_module_t
+      name: module
+      desc: "type == $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "A debug event on the device."
+class: $tDebug
+name: $t_debug_event_t
+members:
+    - type: "uint8_t"
+      name: type
+      desc: "The event type"
+    - type: "uint64_t"
+      name: thread
+      desc: "The thread reporting the event"
+    - type: "uint64_t"
+      name: flags
+      desc: "A bit-vector of $t_debug_event_flags_t"
+    - type: $t_debug_event_info_t
+      name: info
+      desc: "Event type specific information"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Read the topmost debug event."
+class: $tDebug
+name: ReadEvent
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: timeout
+      desc: "[in] timeout in milliseconds (or $T_DEBUG_TIMEOUT_INFINITE)"
+    - type: "size_t"
+      name: size
+      desc: "[in] the size of the buffer in bytes"
+    - type: "void*"
+      name: buffer
+      desc: "[in,out] a buffer to hold the event data"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or buffer pointer has been supplied"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY:
+        - "the output buffer is too small to hold the event"
+    - $X_RESULT_NOT_READY:
+        - "the timeout expired"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Interrupt device threads."
+class: $tDebug
+name: Interrupt
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: threadid
+      desc: "[in] the thread to inerrupt or $T_DEBUG_THREAD_ALL"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or thread identifier has been supplied"
+        - "the thread is already stopped or unavailable"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Resume device threads."
+class: $tDebug
+name: Resume
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: threadid
+      desc: "[in] the thread to resume or $T_DEBUG_THREAD_ALL"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or thread identifier has been supplied"
+        - "the thread is already running or unavailable"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory spaces for Intel Graphics devices."
+class: $tDebug
+name: $t_debug_memory_space_intel_graphics_t
+etors:
+    - name: $T_DEBUG_MEMORY_SPACE_GEN_DEFAULT
+      desc: "default memory space (attribute may be omitted)"
+      value: "0"
+    - name: $T_DEBUG_MEMORY_SPACE_GEN_SLM
+      desc: "shared local memory space"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Read memory."
+class: $tDebug
+name: ReadMemory
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: threadid
+      desc: "[in] the thread context or $T_DEBUG_THREAD_NONE"
+    - type: "int"
+      name: memSpace
+      desc: "[in] the (device-specific) memory space"
+    - type: "uint64_t"
+      name: address
+      desc: "[in] the virtual address of the memory to read from"
+    - type: "size_t"
+      name: size
+      desc: "[in] the number of bytes to read"
+    - type: "void*"
+      name: buffer
+      desc: "[in,out] a buffer to hold a copy of the memory"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or thread identifier has been supplied"
+        - "the thread is running or unavailable"
+        - "an invalid address has been supplied"
+    - $X_RESULT_ERROR_DEVICE_ACCESS:
+        - "the memory cannot be accessed from the supplied thread"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Write memory."
+class: $tDebug
+name: WriteMemory
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: threadid
+      desc: "[in] the thread context or $T_DEBUG_THREAD_NONE"
+    - type: "int"
+      name: memSpace
+      desc: "[in] the (device-specific) memory space"
+    - type: "uint64_t"
+      name: address
+      desc: "[in] the virtual address of the memory to write to"
+    - type: "size_t"
+      name: size
+      desc: "[in] the number of bytes to write"
+    - type: "const void*"
+      name: buffer
+      desc: "[in] a buffer holding the pattern to write"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or thread identifier has been supplied"
+        - "the thread is running or unavailable"
+        - "an invalid address has been supplied"
+    - $X_RESULT_ERROR_DEVICE_ACCESS:
+        - "the memory cannot be accessed from the supplied thread"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Register file types for Intel Graphics devices."
+class: $tDebug
+name: $t_debug_state_intel_graphics_t
+etors:
+    - name: $T_DEBUG_STATE_GEN_INVALID
+      desc: "An invalid register file"
+      value: "0"
+    - name: $T_DEBUG_STATE_GEN_GRF
+      desc: "The general register file"
+    - name: $T_DEBUG_STATE_GEN_ACC
+      desc: "The accumulator register file"
+    - name: $T_DEBUG_STATE_GEN_ADDR
+      desc: "The address register file"
+    - name: $T_DEBUG_STATE_GEN_FLAG
+      desc: "The flags register file"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "A register file descriptor."
+class: $tDebug
+name: $t_debug_state_section_t
+members:
+    - type: "uint16_t"
+      name: type
+      desc: "The register file type type"
+    - type: "uint16_t"
+      name: version
+      desc: "The register file version"
+    - type: "uint32_t"
+      name: size
+      desc: "The size of the register file in bytes"
+    - type: "uint64_t"
+      name: offset
+      desc: "The offset into the register state area"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "A register state descriptor."
+class: $tDebug
+name: $t_debug_state_t
+members:
+    - type: "uint32_t"
+      name: size
+      desc: "The size of the register state object in bytes"
+    - type: "uint8_t"
+      name: headerSize
+      desc: "The size of the register state descriptor in bytes"
+    - type: "uint8_t"
+      name: secSize
+      desc: "The size of the register file descriptors in bytes"
+    - type: "uint16_t"
+      name: numSec
+      desc: "The number of register file descriptors"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Read register state."
+class: $tDebug
+name: ReadState
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: threadid
+      desc: "[in] the thread context"
+    - type: "uint64_t"
+      name: offset
+      desc: "[in] the offset into the register state area"
+    - type: "size_t"
+      name: size
+      desc: "[in] the number of bytes to read"
+    - type: "void*"
+      name: buffer
+      desc: "[in,out] a buffer to hold a copy of the register state"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or thread identifier has been supplied"
+        - "the thread is running or unavailable"
+        - "an invalid offset or size has been supplied"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Write register state."
+class: $tDebug
+name: WriteState
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "uint64_t"
+      name: threadid
+      desc: "[in] the thread context"
+    - type: "uint64_t"
+      name: offset
+      desc: "[in] the offset into the register state area"
+    - type: "size_t"
+      name: size
+      desc: "[in] the number of bytes to write"
+    - type: "const void*"
+      name: buffer
+      desc: "[in] a buffer holding the pattern to write"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or thread identifier has been supplied"
+        - "the thread is running or unavailable"
+        - "an invalid offset or size has been supplied"

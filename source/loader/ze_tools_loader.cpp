@@ -42,6 +42,7 @@ namespace loader
     zet_sysman_ras_factory_t            zet_sysman_ras_factory;
     zet_sysman_diag_factory_t           zet_sysman_diag_factory;
     zet_sysman_event_factory_t          zet_sysman_event_factory;
+    zet_debug_session_factory_t         zet_debug_session_factory;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetInit
@@ -59,6 +60,286 @@ namespace loader
                 result = drv.dditable.zet.Global.pfnInit( flags );
             }
         }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugAttach
+    ze_result_t __zecall
+    zetDebugAttach(
+        zet_device_handle_t hDevice,                    ///< [in] device handle
+        const zet_debug_config_t* config,               ///< [in] the debug configuration
+        zet_debug_session_handle_t* hDebug              ///< [out] debug session handle
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_device_object_t*>( hDevice )->dditable;
+        auto pfnAttach = dditable->zet.Debug.pfnAttach;
+        if( nullptr == pfnAttach )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<zet_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        result = pfnAttach( hDevice, config, hDebug );
+
+        try
+        {
+            // convert driver handle to loader handle
+            *hDebug = reinterpret_cast<zet_debug_session_handle_t>(
+                zet_debug_session_factory.getInstance( *hDebug, dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugDetach
+    ze_result_t __zecall
+    zetDebugDetach(
+        zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->dditable;
+        auto pfnDetach = dditable->zet.Debug.pfnDetach;
+        if( nullptr == pfnDetach )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDebug = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->handle;
+
+        // forward to device-driver
+        result = pfnDetach( hDebug );
+
+        // release loader handle
+        zet_debug_session_factory.release( hDebug );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugGetNumThreads
+    ze_result_t __zecall
+    zetDebugGetNumThreads(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t* pNumThreads                           ///< [out] the maximal number of threads
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->dditable;
+        auto pfnGetNumThreads = dditable->zet.Debug.pfnGetNumThreads;
+        if( nullptr == pfnGetNumThreads )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDebug = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->handle;
+
+        // forward to device-driver
+        result = pfnGetNumThreads( hDebug, pNumThreads );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadEvent
+    ze_result_t __zecall
+    zetDebugReadEvent(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
+        size_t size,                                    ///< [in] the size of the buffer in bytes
+        void* buffer                                    ///< [in,out] a buffer to hold the event data
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->dditable;
+        auto pfnReadEvent = dditable->zet.Debug.pfnReadEvent;
+        if( nullptr == pfnReadEvent )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDebug = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->handle;
+
+        // forward to device-driver
+        result = pfnReadEvent( hDebug, timeout, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugInterrupt
+    ze_result_t __zecall
+    zetDebugInterrupt(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->dditable;
+        auto pfnInterrupt = dditable->zet.Debug.pfnInterrupt;
+        if( nullptr == pfnInterrupt )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDebug = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->handle;
+
+        // forward to device-driver
+        result = pfnInterrupt( hDebug, threadid );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugResume
+    ze_result_t __zecall
+    zetDebugResume(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->dditable;
+        auto pfnResume = dditable->zet.Debug.pfnResume;
+        if( nullptr == pfnResume )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDebug = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->handle;
+
+        // forward to device-driver
+        result = pfnResume( hDebug, threadid );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadMemory
+    ze_result_t __zecall
+    zetDebugReadMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
+        uint64_t address,                               ///< [in] the virtual address of the memory to read from
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the memory
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->dditable;
+        auto pfnReadMemory = dditable->zet.Debug.pfnReadMemory;
+        if( nullptr == pfnReadMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDebug = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->handle;
+
+        // forward to device-driver
+        result = pfnReadMemory( hDebug, threadid, memSpace, address, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteMemory
+    ze_result_t __zecall
+    zetDebugWriteMemory(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
+        int memSpace,                                   ///< [in] the (device-specific) memory space
+        uint64_t address,                               ///< [in] the virtual address of the memory to write to
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->dditable;
+        auto pfnWriteMemory = dditable->zet.Debug.pfnWriteMemory;
+        if( nullptr == pfnWriteMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDebug = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->handle;
+
+        // forward to device-driver
+        result = pfnWriteMemory( hDebug, threadid, memSpace, address, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugReadState
+    ze_result_t __zecall
+    zetDebugReadState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to read
+        void* buffer                                    ///< [in,out] a buffer to hold a copy of the register state
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->dditable;
+        auto pfnReadState = dditable->zet.Debug.pfnReadState;
+        if( nullptr == pfnReadState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDebug = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->handle;
+
+        // forward to device-driver
+        result = pfnReadState( hDebug, threadid, offset, size, buffer );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetDebugWriteState
+    ze_result_t __zecall
+    zetDebugWriteState(
+        zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
+        uint64_t threadid,                              ///< [in] the thread context
+        uint64_t offset,                                ///< [in] the offset into the register state area
+        size_t size,                                    ///< [in] the number of bytes to write
+        const void* buffer                              ///< [in] a buffer holding the pattern to write
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->dditable;
+        auto pfnWriteState = dditable->zet.Debug.pfnWriteState;
+        if( nullptr == pfnWriteState )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDebug = reinterpret_cast<zet_debug_session_object_t*>( hDebug )->handle;
+
+        // forward to device-driver
+        result = pfnWriteState( hDebug, threadid, offset, size, buffer );
 
         return result;
     }
@@ -709,7 +990,7 @@ namespace loader
     /// @brief Intercept function for zetModuleGetKernelNames
     ze_result_t __zecall
     zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the device
+        zet_module_handle_t hModule,                    ///< [in] handle of the module
         uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of names available.
@@ -5300,6 +5581,79 @@ zetGetSysmanEventProcAddrTable(
     {
         auto getTable = reinterpret_cast<zet_pfnGetSysmanEventProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanEventProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Debug table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zetGetDebugProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_debug_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return ZE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( loader::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( ZE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<zet_pfnGetDebugProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "zetGetDebugProcAddrTable") );
+            result = getTable( version, &drv.dditable.zet.Debug );
+        }
+    }
+
+    if( ZE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnAttach                                   = loader::zetDebugAttach;
+            pDdiTable->pfnDetach                                   = loader::zetDebugDetach;
+            pDdiTable->pfnGetNumThreads                            = loader::zetDebugGetNumThreads;
+            pDdiTable->pfnReadEvent                                = loader::zetDebugReadEvent;
+            pDdiTable->pfnInterrupt                                = loader::zetDebugInterrupt;
+            pDdiTable->pfnResume                                   = loader::zetDebugResume;
+            pDdiTable->pfnReadMemory                               = loader::zetDebugReadMemory;
+            pDdiTable->pfnWriteMemory                              = loader::zetDebugWriteMemory;
+            pDdiTable->pfnReadState                                = loader::zetDebugReadState;
+            pDdiTable->pfnWriteState                               = loader::zetDebugWriteState;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.zet.Debug;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        auto getTable = reinterpret_cast<zet_pfnGetDebugProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetDebugProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

@@ -148,6 +148,166 @@ class zet_sysman_event_handle_t(c_void_p):
     pass
 
 ###############################################################################
+## @brief The API version.
+ZET_DEBUG_API_VERSION = 1
+
+###############################################################################
+## @brief Debug session handle
+class zet_debug_session_handle_t(c_void_p):
+    pass
+
+###############################################################################
+## @brief Debug configuration: version 1
+class zet_debug_config_v1_t(Structure):
+    _fields_ = [
+        ("pid", c_int)                                                  ## The host process identifier
+    ]
+
+###############################################################################
+## @brief Debug configuration: version-dependent fields
+class zet_debug_config_variants_t(Structure):
+    _fields_ = [
+        ("v1", zet_debug_config_v1_t)                                   ## Version 1
+    ]
+
+###############################################################################
+## @brief Debug configuration
+class zet_debug_config_t(Structure):
+    _fields_ = [
+        ("version", c_ushort),                                          ## The requested program debug API version
+        ("variant", zet_debug_config_variants_t)                        ## Version-specific fields
+    ]
+
+###############################################################################
+## @brief An infinite timeout.
+ZET_DEBUG_TIMEOUT_INFINITE = 0xffffffffffffffffull
+
+###############################################################################
+## @brief Debug event flags.
+class zet_debug_event_flags_v(IntEnum):
+    DEBUG_EVENT_FLAG_NONE = 0                       ## No event flags
+    DEBUG_EVENT_FLAG_STOPPED = (1 << 0)             ## The reporting thread stopped
+
+class zet_debug_event_flags_t(c_int):
+    def __str__(self):
+        return str(zet_debug_event_flags_v(value))
+
+
+###############################################################################
+## @brief Debug event types.
+class zet_debug_event_type_v(IntEnum):
+    DEBUG_EVENT_INVALID = 0                         ## The event is invalid
+    DEBUG_EVENT_DETACHED = auto()                   ## The tool was detached
+    DEBUG_EVENT_PROCESS_ENTRY = auto()              ## The debuggee process created command queues on the device
+    DEBUG_EVENT_PROCESS_EXIT = auto()               ## The debuggee process destroyed all command queues on the device
+    DEBUG_EVENT_MODULE_LOAD = auto()                ## An in-memory module was loaded onto the device
+    DEBUG_EVENT_MODULE_UNLOAD = auto()              ## An in-memory module is about to get unloaded from the device
+    DEBUG_EVENT_EXCEPTION = auto()                  ## The thread stopped due to a device exception
+
+class zet_debug_event_type_t(c_int):
+    def __str__(self):
+        return str(zet_debug_event_type_v(value))
+
+
+###############################################################################
+## @brief Debug detach reason.
+class zet_debug_detach_reason_v(IntEnum):
+    DEBUG_DETACH_INVALID = 0                        ## The detach reason is not valid
+    DEBUG_DETACH_HOST_EXIT = auto()                 ## The host process exited
+
+class zet_debug_detach_reason_t(c_int):
+    def __str__(self):
+        return str(zet_debug_detach_reason_v(value))
+
+
+###############################################################################
+## @brief No thread on the device.
+ZET_DEBUG_THREAD_NONE = 0xffffffffffffffffull
+
+###############################################################################
+## @brief All threads on the device.
+ZET_DEBUG_THREAD_ALL = 0xfffffffffffffffeull
+
+###############################################################################
+## @brief Event information for ::ZET_DEBUG_EVENT_DETACHED
+class zet_debug_event_info_detached_t(Structure):
+    _fields_ = [
+        ("reason", c_ubyte)                                             ## The detach reason
+    ]
+
+###############################################################################
+## @brief Event information for ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
+class zet_debug_event_info_module_t(Structure):
+    _fields_ = [
+        ("moduleBegin", c_ulonglong),                                   ## The begin address of the in-memory module
+        ("moduleEnd", c_ulonglong),                                     ## The end address of the in-memory module
+        ("load", c_ulonglong)                                           ## The load address of the module on the device
+    ]
+
+###############################################################################
+## @brief Event type specific information
+class zet_debug_event_info_t(Structure):
+    _fields_ = [
+        ("detached", zet_debug_event_info_detached_t),                  ## type == ::ZET_DEBUG_EVENT_DETACHED
+        ("module", zet_debug_event_info_module_t)                       ## type == ::ZET_DEBUG_EVENT_MODULE_LOAD/UNLOAD
+    ]
+
+###############################################################################
+## @brief A debug event on the device.
+class zet_debug_event_t(Structure):
+    _fields_ = [
+        ("type", c_ubyte),                                              ## The event type
+        ("thread", c_ulonglong),                                        ## The thread reporting the event
+        ("flags", c_ulonglong),                                         ## A bit-vector of ::zet_debug_event_flags_t
+        ("info", zet_debug_event_info_t)                                ## Event type specific information
+    ]
+
+###############################################################################
+## @brief Memory spaces for Intel Graphics devices.
+class zet_debug_memory_space_intel_graphics_v(IntEnum):
+    DEBUG_MEMORY_SPACE_GEN_DEFAULT = 0              ## default memory space (attribute may be omitted)
+    DEBUG_MEMORY_SPACE_GEN_SLM = auto()             ## shared local memory space
+
+class zet_debug_memory_space_intel_graphics_t(c_int):
+    def __str__(self):
+        return str(zet_debug_memory_space_intel_graphics_v(value))
+
+
+###############################################################################
+## @brief Register file types for Intel Graphics devices.
+class zet_debug_state_intel_graphics_v(IntEnum):
+    DEBUG_STATE_GEN_INVALID = 0                     ## An invalid register file
+    DEBUG_STATE_GEN_GRF = auto()                    ## The general register file
+    DEBUG_STATE_GEN_ACC = auto()                    ## The accumulator register file
+    DEBUG_STATE_GEN_ADDR = auto()                   ## The address register file
+    DEBUG_STATE_GEN_FLAG = auto()                   ## The flags register file
+
+class zet_debug_state_intel_graphics_t(c_int):
+    def __str__(self):
+        return str(zet_debug_state_intel_graphics_v(value))
+
+
+###############################################################################
+## @brief A register file descriptor.
+class zet_debug_state_section_t(Structure):
+    _fields_ = [
+        ("type", c_ushort),                                             ## The register file type type
+        ("version", c_ushort),                                          ## The register file version
+        ("size", c_ulong),                                              ## The size of the register file in bytes
+        ("offset", c_ulonglong)                                         ## The offset into the register state area
+    ]
+
+###############################################################################
+## @brief A register state descriptor.
+class zet_debug_state_t(Structure):
+    _fields_ = [
+        ("size", c_ulong),                                              ## The size of the register state object in bytes
+        ("headerSize", c_ubyte),                                        ## The size of the register state descriptor in bytes
+        ("secSize", c_ubyte),                                           ## The size of the register file descriptors in bytes
+        ("numSec", c_ushort)                                            ## The number of register file descriptors
+    ]
+
+###############################################################################
 ## @brief Maximum metric group name string size
 ZET_MAX_METRIC_GROUP_NAME = 256
 
@@ -2764,6 +2924,93 @@ class _zet_sysman_event_dditable_t(Structure):
     ]
 
 ###############################################################################
+## @brief Function-pointer for zetDebugAttach
+if __use_win_types:
+    _zetDebugAttach_t = WINFUNCTYPE( ze_result_t, zet_device_handle_t, POINTER(zet_debug_config_t), POINTER(zet_debug_session_handle_t) )
+else:
+    _zetDebugAttach_t = CFUNCTYPE( ze_result_t, zet_device_handle_t, POINTER(zet_debug_config_t), POINTER(zet_debug_session_handle_t) )
+
+###############################################################################
+## @brief Function-pointer for zetDebugDetach
+if __use_win_types:
+    _zetDebugDetach_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t )
+else:
+    _zetDebugDetach_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t )
+
+###############################################################################
+## @brief Function-pointer for zetDebugGetNumThreads
+if __use_win_types:
+    _zetDebugGetNumThreads_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, POINTER(c_ulonglong) )
+else:
+    _zetDebugGetNumThreads_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, POINTER(c_ulonglong) )
+
+###############################################################################
+## @brief Function-pointer for zetDebugReadEvent
+if __use_win_types:
+    _zetDebugReadEvent_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_size_t, c_void_p )
+else:
+    _zetDebugReadEvent_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_size_t, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zetDebugInterrupt
+if __use_win_types:
+    _zetDebugInterrupt_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+else:
+    _zetDebugInterrupt_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+
+###############################################################################
+## @brief Function-pointer for zetDebugResume
+if __use_win_types:
+    _zetDebugResume_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+else:
+    _zetDebugResume_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong )
+
+###############################################################################
+## @brief Function-pointer for zetDebugReadMemory
+if __use_win_types:
+    _zetDebugReadMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_int, c_ulonglong, c_size_t, c_void_p )
+else:
+    _zetDebugReadMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_int, c_ulonglong, c_size_t, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zetDebugWriteMemory
+if __use_win_types:
+    _zetDebugWriteMemory_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_int, c_ulonglong, c_size_t, c_void_p )
+else:
+    _zetDebugWriteMemory_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_int, c_ulonglong, c_size_t, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zetDebugReadState
+if __use_win_types:
+    _zetDebugReadState_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+else:
+    _zetDebugReadState_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zetDebugWriteState
+if __use_win_types:
+    _zetDebugWriteState_t = WINFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+else:
+    _zetDebugWriteState_t = CFUNCTYPE( ze_result_t, zet_debug_session_handle_t, c_ulonglong, c_ulonglong, c_size_t, c_void_p )
+
+
+###############################################################################
+## @brief Table of Debug functions pointers
+class _zet_debug_dditable_t(Structure):
+    _fields_ = [
+        ("pfnAttach", c_void_p),                                        ## _zetDebugAttach_t
+        ("pfnDetach", c_void_p),                                        ## _zetDebugDetach_t
+        ("pfnGetNumThreads", c_void_p),                                 ## _zetDebugGetNumThreads_t
+        ("pfnReadEvent", c_void_p),                                     ## _zetDebugReadEvent_t
+        ("pfnInterrupt", c_void_p),                                     ## _zetDebugInterrupt_t
+        ("pfnResume", c_void_p),                                        ## _zetDebugResume_t
+        ("pfnReadMemory", c_void_p),                                    ## _zetDebugReadMemory_t
+        ("pfnWriteMemory", c_void_p),                                   ## _zetDebugWriteMemory_t
+        ("pfnReadState", c_void_p),                                     ## _zetDebugReadState_t
+        ("pfnWriteState", c_void_p)                                     ## _zetDebugWriteState_t
+    ]
+
+###############################################################################
 class _zet_dditable_t(Structure):
     _fields_ = [
         ("Global", _zet_global_dditable_t),
@@ -2791,7 +3038,8 @@ class _zet_dditable_t(Structure):
         ("SysmanLed", _zet_sysman_led_dditable_t),
         ("SysmanRas", _zet_sysman_ras_dditable_t),
         ("SysmanDiagnostics", _zet_sysman_diagnostics_dditable_t),
-        ("SysmanEvent", _zet_sysman_event_dditable_t)
+        ("SysmanEvent", _zet_sysman_event_dditable_t),
+        ("Debug", _zet_debug_dditable_t)
     ]
 
 ###############################################################################
@@ -3159,5 +3407,24 @@ class ZET_DDI:
         self.zetSysmanEventSetConfig = _zetSysmanEventSetConfig_t(self.__dditable.SysmanEvent.pfnSetConfig)
         self.zetSysmanEventGetState = _zetSysmanEventGetState_t(self.__dditable.SysmanEvent.pfnGetState)
         self.zetSysmanEventListen = _zetSysmanEventListen_t(self.__dditable.SysmanEvent.pfnListen)
+
+        # call driver to get function pointers
+        _Debug = _zet_debug_dditable_t()
+        r = ze_result_v(self.__dll.zetGetDebugProcAddrTable(version, byref(_Debug)))
+        if r != ze_result_v.SUCCESS:
+            raise Exception(r)
+        self.__dditable.Debug = _Debug
+
+        # attach function interface to function address
+        self.zetDebugAttach = _zetDebugAttach_t(self.__dditable.Debug.pfnAttach)
+        self.zetDebugDetach = _zetDebugDetach_t(self.__dditable.Debug.pfnDetach)
+        self.zetDebugGetNumThreads = _zetDebugGetNumThreads_t(self.__dditable.Debug.pfnGetNumThreads)
+        self.zetDebugReadEvent = _zetDebugReadEvent_t(self.__dditable.Debug.pfnReadEvent)
+        self.zetDebugInterrupt = _zetDebugInterrupt_t(self.__dditable.Debug.pfnInterrupt)
+        self.zetDebugResume = _zetDebugResume_t(self.__dditable.Debug.pfnResume)
+        self.zetDebugReadMemory = _zetDebugReadMemory_t(self.__dditable.Debug.pfnReadMemory)
+        self.zetDebugWriteMemory = _zetDebugWriteMemory_t(self.__dditable.Debug.pfnWriteMemory)
+        self.zetDebugReadState = _zetDebugReadState_t(self.__dditable.Debug.pfnReadState)
+        self.zetDebugWriteState = _zetDebugWriteState_t(self.__dditable.Debug.pfnWriteState)
 
         # success!

@@ -552,7 +552,470 @@ If a tool requires changing the address of an application's function, then it sh
 ${"#"} <a name="dbg">Program Debug</a>
 
 ${"##"} Introduction
-The program debug APIs provide tools a basic framework for inserting breakpoints and accessing register values of device programs,
-as they are executing on the device.
 
-(more details coming soon...)
+The program debug APIs provide tools a basic framework for debugging
+device code.
+
+The APIs operate on a single device.  When debugging a multi-device
+system, the tool would debug each device independently.  The APIs further
+operate in the context of a single host process.  When debugging multiple
+host processes at the same time, the tool would debug device code
+submitted by each host process independently.
+
+
+${"##"} Attach and Detach
+
+In order to use most of the program debug APIs, a tool needs to attach to
+a device by calling ::${t}DebugAttach.  As arguments it passes the
+::${x}_device_handle_t and a pointer to a ::${t}_debug_config_t object
+that contains the following fields:
+
+  * the requested program debug API version.  Version numbers start at one
+    with zero reserved to denote an invalid version.
+
+    All other fields depend on the requested version.  Version one defines
+    the following fields:
+
+      * the host process identifier.
+
+
+If the requested API version is not supported,
+::${X}_RESULT_ERROR_UNSUPPORTED is returned.  If the tool supports
+different API versions it may try to request a different version.
+
+If the requested API version is supported the following properties are
+checked:
+
+  * the requested host process must exist.
+
+  * the tool process must be allowed to debug the requested host process.
+
+    Note that the tool does not need to be attached to the host process
+    itself, yet it must have permission to debug the host process.
+
+  * there must be no other tool attached for the requested host process.
+
+    Note that this refers to the device code of that host process, not to
+    the host process itself.
+
+  * device debug must be enabled on this system.
+
+
+If permission is granted, a ::${t}_debug_session_handle_t is provided,
+which can be used in other program debug APIs until the tool detaches
+again.  The requested API version will be used for all API functions.
+
+To detach a debug session, a tool calls ::${t}DebugDetach passing the
+::${t}_debug_session_handle_t that had been provided on the corresponding
+::${t}DebugAttach call.
+
+The following sample code demonstrates attaching and detaching:
+
+```c
+    ${x}_device_handle_t device = ...;
+    ${t}_debug_session_handle_t session;
+    ${t}_debug_config_t config;
+    ${x}_result_t errcode;
+
+    memset(&config, 0, sizeof(config));
+    config.version = ${T}_DEBUG_API_VERSION;
+    config.variant.v1.pid = ...;
+
+    errcode = ${t}DebugAttach(device, &config, &session);
+    if (errcode)
+        return errcode;
+
+    ...
+
+    errcode = ${t}DebugDetach(session);
+    if (errcode)
+        return errcode;
+```
+
+
+${"###"} Devices and Sub-Devices
+
+A tool may attach to any device and will implicitly be attached to all
+sub-devices below that device.
+
+Implementations that use separate code segments per sub-device may further
+allow attaching to sub-devices individually.  In that case, a tool may
+choose to either attach to the device or to one or more sub-devices.
+
+When attached to a sub-device, writes to the code segment will not be
+broadcast to sibling sub-devices, even though they may share the same
+address space range.  This allows breakpoints to be contained within one
+sub-device.
+
+Once a tool is attached to a sub-device, any attempt to attach to an
+ancestor device results in ::${X}_RESULT_ERROR_DEVICE_ACCESS.
+
+Implementations that share code segments across sub-devices will only
+allow attaching to devices.  Any attempt to attach to a sub-device results
+in ::${X}_RESULT_ERROR_UNSUPPORTED.
+
+
+${"###"} Device Thread Identification and Resource Restriction
+
+Device threads are identified by their ordinal number starting from one
+until the maximum number of threads on that device.  Device thread
+identifiers are unique within the same debug session.
+
+If a tool attached to a device, device threads are enumerated for all
+sub-devices below that device.
+
+Implementations that allow restricting the number of device threads may
+enumerate less than the total number of threads supported by the device.
+They may enumerate more threads than had been requested based on hardware
+limitations and to allow for oversubmission.  Not all enumerated threads
+may be available.
+
+The number of device threads can be queried for each debug session using
+the ::${t}DebugGetNumThreads call.
+
+
+${"###"} Thread Availability
+
+For some devices not all threads may be available at all times.  Some
+threads may even not be available at any time.  This may have various
+reasons, including:
+
+  * the thread may be idle
+
+  * the thread may be assigned to a different process
+
+  * the thread may be part of an unused oversubmission buffer
+
+
+For the purpose of this debug tool API, threads may be in one of three
+states:
+
+  * running
+
+  * stopped
+
+  * unavailable
+
+
+Most API functions require the thread they operate on to be stopped.
+
+
+${"##"} Debug Events
+
+As long as the tool is attached, it will receive debug events from the
+device.  To read the topmost event, the tool passes a pointer to a buffer
+and its size in bytes.  The size of an event object is defined by the API
+version requested on attach.
+
+It also passes a timeout in milliseconds.  A timeout of zero does not wait
+and immediately returns if no events are available.  A timeout of
+::${T}_DEBUG_TIMEOUT_INFINITE waits indefinitely.  If the timeout expires,
+::${X}_RESULT_NOT_READY is returned.
+
+On success, the topmost event is copied into the buffer.
+
+The following sample code demonstrates reading an event:
+
+```c
+    ${t}_debug_session_handle_t session = ...;
+    ${t}_debug_event_t event;
+    ${x}_result_t errcode;
+
+    errcode = ${t}DebugReadEvent(session, ${T}_DEBUG_TIMEOUT_INFINITE, sizeof(event), &event);
+    if (errcode)
+        return errcode;
+```
+
+
+A debug event is described by the ::${t}_debug_event_t structure.  Note
+that the declaration of this structure depends on the API version
+requested on attach.  The current version contains:
+
+  * The event type as ::${t}_debug_event_type_t.
+
+  * The thread that reported the event.
+
+    This is either the ordinal number of the thread on the device or one
+    of the following special thread identifiers:
+
+      * ::${T}_DEBUG_THREAD_NONE indicates no threads on the device.
+
+      * ::${T}_DEBUG_THREAD_ALL indicates all threads on the device.
+
+  * A bit-vector of ::${t}_debug_event_flags_t, which can be one of the
+    following:
+
+    * ::${T}_DEBUG_EVENT_FLAG_STOPPED indicates that the thread that
+      reported the event is stopped and needs to be resumed in order to
+      proceed.
+
+      If the event was reported by ::${T}_DEBUG_THREAD_ALL, all threads
+      have stopped and the tool may resume ::${T}_DEBUG_THREAD_ALL.  The
+      tool may also resume individual threads.
+
+      If the event was reported by ::${T}_DEBUG_THREAD_NONE, the event
+      occured outside the context of any device thread, yet still blocks
+      progress.  The tool needs to resume ::${T}_DEBUG_THREAD_NONE in
+      order to acknowledge the event and unblock progress.
+
+      Note that progress may not necessarily be blocked on the device on
+      which the event occured.
+
+
+Following the common fields, the event object contains event-specific
+fields depending on the event type.  Not all events have event-specific
+fields.
+
+  * ::${T}_DEBUG_EVENT_DETACHED: the tool was detached.
+
+    * The detach reason as ::${t}_debug_detach_reason_t.  This can be one
+      of the following reasons:
+
+        * ::${T}_DEBUG_DETACH_HOST_EXIT indicates that the host process
+          exited.
+
+  * ::${T}_DEBUG_EVENT_PROCESS_ENTRY: the host process created one or more
+    command queues on the device.
+
+  * ::${T}_DEBUG_EVENT_PROCESS_EXIT: the host process destroyed all
+    command queues on the device.
+
+  * ::${T}_DEBUG_EVENT_MODULE_LOAD: an in-memory module was loaded onto
+    the device.
+
+    The event is generated in the ::${x}ModuleCreate() flow with thread ==
+    ::${T}_DEBUG_THREAD_NONE.  If ::${T}_DEBUG_EVENT_FLAG_STOPPED is set,
+    the event blocks the ::${x}ModuleCreate() call until the debugger
+    acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
+
+    * The begin and end address of the in-memory module.  On all devices
+      supported today, the module is an ELF file with optional DWARF debug
+      information.
+
+    * The load address of the module.
+
+  * ::${T}_DEBUG_EVENT_MODULE_UNLOAD: an in-memory module is about to get
+    unloaded from the device.
+
+    The event is generated in the ::${x}ModuleDestroy() flow with thread
+    == ::${T}_DEBUG_THREAD_NONE.  If ::${T}_DEBUG_EVENT_FLAG_STOPPED is
+    set, the event blocks the ::${x}ModuleDestroy() call until the
+    debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
+
+    * The begin and end address of the in-memory module.  On all devices
+      supported today, the module is an ELF file with optional DWARF debug
+      information.
+
+    * The load address of the module.
+
+  * ::${T}_DEBUG_EVENT_EXCEPTION: the thread stopped due to a device
+    exception.
+
+
+${"##"} Run Control
+
+The tool may interrupt and resume individual device threads or an entire
+debug session.
+
+To interrupt an individual thread or an entire debug session, call
+::${t}DebugInterrupt with the number of the thread to interrupt or
+::${T}_DEBUG_THREAD_ALL to interrupt an entire debug session.
+
+When interrupting an entire debug session, threads that are already
+stopped as well as threads that are not available will be ignored.  After
+threads have been interrupted, a ::${T}_DEBUG_EVENT_EXCEPTION event with
+thread == ::${T}_DEBUG_THREAD_ALL is created.
+
+To resume an individual thread or an entire debug session, call
+::${t}DebugResume with the number of the thread to resume or
+::${T}_DEBUG_THREAD_ALL to resume an entire debug session.
+
+Whereas interrupting and resuming an entire debug session will
+transparently handle unavailable threads, interrupting and resuming a
+single unavailable thread will result in
+::${X}_RESULT_ERROR_INVALID_ARGUMENT.
+
+Threads that had been unavailable when interrupting a debug session will
+be prevented from entering until the debug session is resumed.
+
+The tool does not know whether any individual thread is available until it
+tries to interact with that thread.  Only stopped threads may be resumed
+individually.
+
+The following sample code demonstrates how to interrupt and resume a debug
+session:
+
+```c
+    ${t}_debug_session_handle_t session = ...;
+    ${x}_result_t errcode;
+
+    errcode = ${t}DebugInterrupt(session, ${T}_DEBUG_THREAD_ALL);
+    if (errcode)
+        return errcode;
+
+    ...
+
+    errcode = ${t}DebugResume(session, ${T}_DEBUG_THREAD_ALL);
+    if (errcode)
+        return errcode;
+```
+
+After interrupting one or all threads, the tool needs to wait for the
+corresponding ::${T}_DEBUG_EVENT_EXCEPTION event.  Note that there may be
+other events preceding that event.  There may further be exception events
+for individual threads preceding or succeeding a debug session exception
+event.
+
+
+${"##"} Memory Access
+
+A tool may read and write memory in the context of a stopped device thread
+as if that thread had read or written the memory.
+
+Memory may be partitioned into device-specific memory spaces.  Intel
+graphics devices, for example, use the following memory spaces defined in
+::${t}_debug_memory_space_intel_graphics_t:
+
+  * 0: default memory space
+  * 1: shared local memory space
+
+The default memory space may also be accessed in the context of the
+special ::${T}_DEBUG_THREAD_NONE thread.
+
+To read and write memory, call the ::${t}DebugReadMemory and
+::${t}DebugWriteMemory function, respectively.  The functions take a
+::${t}_debug_session_handle_t, a thread handle, a memory space selector,
+the virtual address of the memory to access, the size of the access, and
+an input or output buffer.
+
+The following example copies 16 bytes of memory from one location in the
+context of one Intel graphics device thread to another location in the
+default memory space.
+
+```c
+    ${t}_debug_session_handle_t session = ...;
+    int memSpace = ...;
+    uint64_t src = ..., dst = ...;
+    uint64_t threadid = ...;
+    uint8_t buffer[16];
+    ${x}_result_t errcode;
+
+    errcode = ${t}DebugReadMemory(session, threadid, memSpace, src, sizeof(buffer), buffer);
+    if (errcode)
+        return errcode;
+
+    ...
+
+    errcode = ${t}DebugWriteMemory(session, ${T}_DEBUG_THREAD_NONE, ${T}_DEBUG_MEMORY_SPACE_GEN_DEFAULT, dst, sizeof(buffer), buffer);
+    if (errcode)
+        return errcode;
+```
+
+
+${"##"} Register State Access
+
+A tool may read and write the register state of a stopped device thread.
+The register state is represented as a randomly accessible range of
+memory.  It starts with a description of the memory layout followed by the
+actual register state content.  The layout is fixed per device thread.
+
+To read and write the register state, use the ::${t}DebugReadState and
+::${t}DebugWriteState function, respectively.  They take a
+::${t}_debug_session_handle_t, a thread handle, an offset into the
+register state area, an access size in bytes, and an input or output
+buffer.
+
+The register state area starts with a ::${t}_debug_state_t descriptor
+containing the following fields:
+
+  * the size of the register state object in bytes
+
+  * the size of the state descriptor in bytes.
+
+    This also defines the offset of the register file descriptor array.
+
+  * the size of each register file descriptor in bytes.
+
+  * the number of register files contained in this state object.
+
+
+The state descriptor is followed by an array of register file descriptors
+starting at offset ::${t}_debug_state_t.headerSize of the register state
+object.  Each describes one register file contained in the state object
+via the following fields:
+
+  * the register file type
+
+    This is a device-specific enumeration.  See below for examples.
+
+  * the register file version
+
+    This defines variations of the same basic register file as it evolves
+    over time.
+
+    Version numbers start at one with zero reserved to denote an invalid
+    or unsupported version of this register file.
+
+    New registers are typically added to the end of a register file
+    allowing tools to skip unknown portions while still providing limited
+    support for that device.
+
+  * The size of the register file in the register state object in bytes.
+
+  * The offset of the register file in the register state object.
+
+
+The following sample code demonstrates iterating over register files:
+
+```c
+    ${t}_debug_session_handle_t session = ...;
+    uint64_t threadid = ...;
+    ${t}_debug_state_t state;
+    ${x}_result_t errcode;
+    uint16_t sec;
+
+    errcode = ${t}DebugReadState(session, threadid, 0ull, sizeof(state), &state);
+    if (errcode)
+        return errcode;
+
+    for (sec = 0; sec < state.numSec; ++i) {
+        ${t}_debug_state_section_t section;
+        uint64_t offset;
+
+        offset = state.headerSize + (state.secSize * sec);
+
+        errcode = ${t}DebugReadState(session, threadid, offset, sizeof(section), &section);
+        if (errcode)
+            return errcode;
+
+        ...
+    }
+```
+
+
+Intel graphics devices, for example, provide:
+
+  * ::${T}_DEBUG_STATE_GEN_GRF, the general register file.
+
+    In version one, this register file consists of a homogeneous array of
+    256 bit wide registers starting at `r0`.
+
+  * ::${T}_DEBUG_STATE_GEN_ACC, the accumulator register file.
+
+    In version one, this register file consists of a homogeneous array of
+    256 bit wide registers starting at `acc0`.
+
+  * ::${T}_DEBUG_STATE_GEN_ADDR, the address register file.
+
+    In version one, this register file consists of a homogeneous array of
+    256 bit wide registers starting at `a0`.  Each register is split into
+    16 elements, each 16 bit wide.
+
+  * ::${T}_DEBUG_STATE_GEN_FLAG, the flags register file.
+
+    In version one, this register file consists of a homogeneous array of
+    32 bit wide registers starting at `flag0`.  Each register is split
+    into 2 elements, each 16 bit wide.
+
+
+(to be continued...)
