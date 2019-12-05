@@ -461,11 +461,60 @@ members:
       name: "maxSpeed"
       desc: "[out] Fastest port configuration supported by the device."
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "PCI link status"
+class: $tSysman
+name: $t_pci_link_status_t
+etors:
+    - name: $T_PCI_LINK_STATUS_GREEN
+      value: "0"
+      desc: "The link is up and operating as expected"
+    - name: $T_PCI_LINK_STATUS_YELLOW
+      desc: "The link is up but has quality and/or bandwidth degradation"
+    - name: $T_PCI_LINK_STATUS_RED
+      desc: "The link has stability issues and preventing workloads making forward progress"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "PCI link quality degradation reasons"
+class: $tSysman
+name: $t_pci_link_qual_issues_t
+etors:
+    - name: $T_PCI_LINK_QUAL_ISSUES_NONE
+      value: "0"
+      desc: "There are no quality issues with the link at this time"
+    - name: $T_PCI_LINK_QUAL_ISSUES_REPLAYS
+      value: "$X_BIT( 0 )"
+      desc: "An significant number of replays are occurring"
+    - name: $T_PCI_LINK_QUAL_ISSUES_SPEED
+      value: "$X_BIT( 1 )"
+      desc: "There is a degradation in the maximum bandwidth of the link"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "PCI link stability issues"
+class: $tSysman
+name: $t_pci_link_stab_issues_t
+etors:
+    - name: $T_PCI_LINK_STAB_ISSUES_NONE
+      value: "0"
+      desc: "There are no connection stability issues at this time"
+    - name: $T_PCI_LINK_STAB_ISSUES_RETRAINING
+      value: "$X_BIT( 0 )"
+      desc: "Link retraining has occurred to deal with quality issues"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Dynamic PCI state"
 class: $tSysman
 name: $t_pci_state_t
 members:
+    - type: $t_pci_link_status_t
+      name: "status"
+      desc: "[out] The current status of the port"
+    - type: $t_pci_link_qual_issues_t
+      name: "qualityIssues"
+      desc: "[out] If status is $T_PCI_LINK_STATUS_YELLOW, this gives a bitfield of quality issues that have been detected"
+    - type: $t_pci_link_stab_issues_t
+      name: "stabilityIssues"
+      desc: "[out] If status is $T_PCI_LINK_STATUS_RED, this gives a bitfield of reasons for the connection instability"
     - type: $t_pci_speed_t
       name: "speed"
       desc: "[out] The current port configure speed"
@@ -2735,15 +2784,6 @@ members:
       name: "numCacheErrors"
       desc: "[out] The number of errors that have occurred in caches (L1/L3/register file/shared local memory/sampler)"
     - type: uint64_t
-      name: "numMemoryErrors"
-      desc: "[out] The number of errors that have occurred in the local memory"
-    - type: uint64_t
-      name: "numPciErrors"
-      desc: "[out] The number of errors that have occurred in the PCI link"
-    - type: uint64_t
-      name: "numFabricErrors"
-      desc: "[out] The number of errors that have occurred in the high-speed fabric ports"
-    - type: uint64_t
       name: "numDisplayErrors"
       desc: "[out] The number of errors that have occurred in the display"
 --- #--------------------------------------------------------------------------
@@ -2913,12 +2953,15 @@ etors:
     - name: $T_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH
       value: "$X_BIT( 9 )"
       desc: "Event is triggered when the health of fabric ports change."
-    - name: $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
+    - name: $T_SYSMAN_EVENT_TYPE_PCI_LINK_HEALTH
       value: "$X_BIT( 10 )"
-      desc: "Event is triggered when RAS correctable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
-    - name: $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS
+      desc: "Event is triggered when the health of the PCI link changes."
+    - name: $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
       value: "$X_BIT( 11 )"
-      desc: "Event is triggered when RAS uncorrectable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
+      desc: "Event is triggered when accelerator RAS correctable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
+    - name: $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS
+      value: "$X_BIT( 12 )"
+      desc: "Event is triggered when accelerator RAS uncorrectable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
     - name: $T_SYSMAN_EVENT_TYPE_ALL
       value: "(~0)"
       desc: "Specifies all events"

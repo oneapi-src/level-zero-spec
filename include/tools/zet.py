@@ -553,9 +553,50 @@ class zet_pci_properties_t(Structure):
     ]
 
 ###############################################################################
+## @brief PCI link status
+class zet_pci_link_status_v(IntEnum):
+    GREEN = 0                                       ## The link is up and operating as expected
+    YELLOW = auto()                                 ## The link is up but has quality and/or bandwidth degradation
+    RED = auto()                                    ## The link has stability issues and preventing workloads making forward
+                                                    ## progress
+
+class zet_pci_link_status_t(c_int):
+    def __str__(self):
+        return str(zet_pci_link_status_v(value))
+
+
+###############################################################################
+## @brief PCI link quality degradation reasons
+class zet_pci_link_qual_issues_v(IntEnum):
+    NONE = 0                                        ## There are no quality issues with the link at this time
+    REPLAYS = ZE_BIT( 0 )                           ## An significant number of replays are occurring
+    SPEED = ZE_BIT( 1 )                             ## There is a degradation in the maximum bandwidth of the link
+
+class zet_pci_link_qual_issues_t(c_int):
+    def __str__(self):
+        return str(zet_pci_link_qual_issues_v(value))
+
+
+###############################################################################
+## @brief PCI link stability issues
+class zet_pci_link_stab_issues_v(IntEnum):
+    NONE = 0                                        ## There are no connection stability issues at this time
+    RETRAINING = ZE_BIT( 0 )                        ## Link retraining has occurred to deal with quality issues
+
+class zet_pci_link_stab_issues_t(c_int):
+    def __str__(self):
+        return str(zet_pci_link_stab_issues_v(value))
+
+
+###############################################################################
 ## @brief Dynamic PCI state
 class zet_pci_state_t(Structure):
     _fields_ = [
+        ("status", zet_pci_link_status_t),                              ## [out] The current status of the port
+        ("qualityIssues", zet_pci_link_qual_issues_t),                  ## [out] If status is ::ZET_PCI_LINK_STATUS_YELLOW, this gives a bitfield
+                                                                        ## of quality issues that have been detected
+        ("stabilityIssues", zet_pci_link_stab_issues_t),                ## [out] If status is ::ZET_PCI_LINK_STATUS_RED, this gives a bitfield of
+                                                                        ## reasons for the connection instability
         ("speed", zet_pci_speed_t)                                      ## [out] The current port configure speed
     ]
 
@@ -1405,10 +1446,6 @@ class zet_ras_details_t(Structure):
                                                                         ## accelerator hardware
         ("numCacheErrors", c_ulonglong),                                ## [out] The number of errors that have occurred in caches
                                                                         ## (L1/L3/register file/shared local memory/sampler)
-        ("numMemoryErrors", c_ulonglong),                               ## [out] The number of errors that have occurred in the local memory
-        ("numPciErrors", c_ulonglong),                                  ## [out] The number of errors that have occurred in the PCI link
-        ("numFabricErrors", c_ulonglong),                               ## [out] The number of errors that have occurred in the high-speed fabric
-                                                                        ## ports
         ("numDisplayErrors", c_ulonglong)                               ## [out] The number of errors that have occurred in the display
     ]
 
@@ -1459,10 +1496,13 @@ class zet_sysman_event_type_v(IntEnum):
                                                     ## ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
     MEM_HEALTH = ZE_BIT( 8 )                        ## Event is triggered when the health of device memory changes.
     FABRIC_PORT_HEALTH = ZE_BIT( 9 )                ## Event is triggered when the health of fabric ports change.
-    RAS_CORRECTABLE_ERRORS = ZE_BIT( 10 )           ## Event is triggered when RAS correctable errors cross thresholds (use
-                                                    ## ::zetSysmanRasSetConfig() to configure - disabled by default).
-    RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 11 )         ## Event is triggered when RAS uncorrectable errors cross thresholds (use
-                                                    ## ::zetSysmanRasSetConfig() to configure - disabled by default).
+    PCI_LINK_HEALTH = ZE_BIT( 10 )                  ## Event is triggered when the health of the PCI link changes.
+    RAS_CORRECTABLE_ERRORS = ZE_BIT( 11 )           ## Event is triggered when accelerator RAS correctable errors cross
+                                                    ## thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
+                                                    ## default).
+    RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 )         ## Event is triggered when accelerator RAS uncorrectable errors cross
+                                                    ## thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
+                                                    ## default).
     ALL = (~0)                                      ## Specifies all events
 
 class zet_sysman_event_type_t(c_int):

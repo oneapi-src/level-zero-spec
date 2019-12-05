@@ -515,9 +515,44 @@ typedef struct _zet_pci_properties_t
 } zet_pci_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI link status
+typedef enum _zet_pci_link_status_t
+{
+    ZET_PCI_LINK_STATUS_GREEN = 0,                  ///< The link is up and operating as expected
+    ZET_PCI_LINK_STATUS_YELLOW,                     ///< The link is up but has quality and/or bandwidth degradation
+    ZET_PCI_LINK_STATUS_RED,                        ///< The link has stability issues and preventing workloads making forward
+                                                    ///< progress
+
+} zet_pci_link_status_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI link quality degradation reasons
+typedef enum _zet_pci_link_qual_issues_t
+{
+    ZET_PCI_LINK_QUAL_ISSUES_NONE = 0,              ///< There are no quality issues with the link at this time
+    ZET_PCI_LINK_QUAL_ISSUES_REPLAYS = ZE_BIT( 0 ), ///< An significant number of replays are occurring
+    ZET_PCI_LINK_QUAL_ISSUES_SPEED = ZE_BIT( 1 ),   ///< There is a degradation in the maximum bandwidth of the link
+
+} zet_pci_link_qual_issues_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI link stability issues
+typedef enum _zet_pci_link_stab_issues_t
+{
+    ZET_PCI_LINK_STAB_ISSUES_NONE = 0,              ///< There are no connection stability issues at this time
+    ZET_PCI_LINK_STAB_ISSUES_RETRAINING = ZE_BIT( 0 ),  ///< Link retraining has occurred to deal with quality issues
+
+} zet_pci_link_stab_issues_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Dynamic PCI state
 typedef struct _zet_pci_state_t
 {
+    zet_pci_link_status_t status;                   ///< [out] The current status of the port
+    zet_pci_link_qual_issues_t qualityIssues;       ///< [out] If status is ::ZET_PCI_LINK_STATUS_YELLOW, this gives a bitfield
+                                                    ///< of quality issues that have been detected
+    zet_pci_link_stab_issues_t stabilityIssues;     ///< [out] If status is ::ZET_PCI_LINK_STATUS_RED, this gives a bitfield of
+                                                    ///< reasons for the connection instability
     zet_pci_speed_t speed;                          ///< [out] The current port configure speed
 
 } zet_pci_state_t;
@@ -2944,10 +2979,6 @@ typedef struct _zet_ras_details_t
                                                     ///< accelerator hardware
     uint64_t numCacheErrors;                        ///< [out] The number of errors that have occurred in caches
                                                     ///< (L1/L3/register file/shared local memory/sampler)
-    uint64_t numMemoryErrors;                       ///< [out] The number of errors that have occurred in the local memory
-    uint64_t numPciErrors;                          ///< [out] The number of errors that have occurred in the PCI link
-    uint64_t numFabricErrors;                       ///< [out] The number of errors that have occurred in the high-speed fabric
-                                                    ///< ports
     uint64_t numDisplayErrors;                      ///< [out] The number of errors that have occurred in the display
 
 } zet_ras_details_t;
@@ -3158,10 +3189,13 @@ typedef enum _zet_sysman_event_type_t
                                                     ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
     ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH = ZE_BIT( 8 ), ///< Event is triggered when the health of device memory changes.
     ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH = ZE_BIT( 9 ), ///< Event is triggered when the health of fabric ports change.
-    ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS = ZE_BIT( 10 ),///< Event is triggered when RAS correctable errors cross thresholds (use
-                                                    ///< ::zetSysmanRasSetConfig() to configure - disabled by default).
-    ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 11 ),  ///< Event is triggered when RAS uncorrectable errors cross thresholds (use
-                                                    ///< ::zetSysmanRasSetConfig() to configure - disabled by default).
+    ZET_SYSMAN_EVENT_TYPE_PCI_LINK_HEALTH = ZE_BIT( 10 ),   ///< Event is triggered when the health of the PCI link changes.
+    ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS = ZE_BIT( 11 ),///< Event is triggered when accelerator RAS correctable errors cross
+                                                    ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
+                                                    ///< default).
+    ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),  ///< Event is triggered when accelerator RAS uncorrectable errors cross
+                                                    ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
+                                                    ///< default).
     ZET_SYSMAN_EVENT_TYPE_ALL = (~0),               ///< Specifies all events
 
 } zet_sysman_event_type_t;

@@ -140,6 +140,36 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief PCI link status
+        enum class pci_link_status_t
+        {
+            GREEN = 0,                                      ///< The link is up and operating as expected
+            YELLOW,                                         ///< The link is up but has quality and/or bandwidth degradation
+            RED,                                            ///< The link has stability issues and preventing workloads making forward
+                                                            ///< progress
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief PCI link quality degradation reasons
+        enum class pci_link_qual_issues_t
+        {
+            NONE = 0,                                       ///< There are no quality issues with the link at this time
+            REPLAYS = ZE_BIT( 0 ),                          ///< An significant number of replays are occurring
+            SPEED = ZE_BIT( 1 ),                            ///< There is a degradation in the maximum bandwidth of the link
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief PCI link stability issues
+        enum class pci_link_stab_issues_t
+        {
+            NONE = 0,                                       ///< There are no connection stability issues at this time
+            RETRAINING = ZE_BIT( 0 ),                       ///< Link retraining has occurred to deal with quality issues
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief PCI bar types
         enum class pci_bar_type_t
         {
@@ -185,10 +215,13 @@ namespace zet
                                                             ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
             MEM_HEALTH = ZE_BIT( 8 ),                       ///< Event is triggered when the health of device memory changes.
             FABRIC_PORT_HEALTH = ZE_BIT( 9 ),               ///< Event is triggered when the health of fabric ports change.
-            RAS_CORRECTABLE_ERRORS = ZE_BIT( 10 ),          ///< Event is triggered when RAS correctable errors cross thresholds (use
-                                                            ///< ::zetSysmanRasSetConfig() to configure - disabled by default).
-            RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 11 ),        ///< Event is triggered when RAS uncorrectable errors cross thresholds (use
-                                                            ///< ::zetSysmanRasSetConfig() to configure - disabled by default).
+            PCI_LINK_HEALTH = ZE_BIT( 10 ),                 ///< Event is triggered when the health of the PCI link changes.
+            RAS_CORRECTABLE_ERRORS = ZE_BIT( 11 ),          ///< Event is triggered when accelerator RAS correctable errors cross
+                                                            ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
+                                                            ///< default).
+            RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),        ///< Event is triggered when accelerator RAS uncorrectable errors cross
+                                                            ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
+                                                            ///< default).
             ALL = (~0),                                     ///< Specifies all events
 
         };
@@ -289,6 +322,11 @@ namespace zet
         /// @brief Dynamic PCI state
         struct pci_state_t
         {
+            pci_link_status_t status;                       ///< [out] The current status of the port
+            pci_link_qual_issues_t qualityIssues;           ///< [out] If status is ::ZET_PCI_LINK_STATUS_YELLOW, this gives a bitfield
+                                                            ///< of quality issues that have been detected
+            pci_link_stab_issues_t stabilityIssues;         ///< [out] If status is ::ZET_PCI_LINK_STATUS_RED, this gives a bitfield of
+                                                            ///< reasons for the connection instability
             pci_speed_t speed;                              ///< [out] The current port configure speed
 
         };
@@ -2686,10 +2724,6 @@ namespace zet
                                                             ///< accelerator hardware
             uint64_t numCacheErrors;                        ///< [out] The number of errors that have occurred in caches
                                                             ///< (L1/L3/register file/shared local memory/sampler)
-            uint64_t numMemoryErrors;                       ///< [out] The number of errors that have occurred in the local memory
-            uint64_t numPciErrors;                          ///< [out] The number of errors that have occurred in the PCI link
-            uint64_t numFabricErrors;                       ///< [out] The number of errors that have occurred in the high-speed fabric
-                                                            ///< ports
             uint64_t numDisplayErrors;                      ///< [out] The number of errors that have occurred in the display
 
         };
@@ -3120,6 +3154,18 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_properties_t to std::string
     std::string to_string( const Sysman::pci_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_link_status_t to std::string
+    std::string to_string( const Sysman::pci_link_status_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_link_qual_issues_t to std::string
+    std::string to_string( const Sysman::pci_link_qual_issues_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_link_stab_issues_t to std::string
+    std::string to_string( const Sysman::pci_link_stab_issues_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_state_t to std::string

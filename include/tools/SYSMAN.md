@@ -21,7 +21,7 @@ The following documents the high-level programming models and guidelines.
         + [Host processes](#gloz)
         + [Scheduler operations](#glos)
         + [Device reset](#glor)
-        + [PCI properties](#glop)
+        + [PCI link operations](#glop)
     + [Operations on power domains](#pwr)
 	+ [Operations on frequency domains](#frq)
         + [Frequency/Voltage over-clocking](#fro)
@@ -117,6 +117,7 @@ The following operations are provided to access overall device information and c
     - Get configured bars
     - Get maximum supported bandwidth
     - Query current speed (GEN/no. lanes)
+	- Query current health
     - Query current throughput
     - Query packet retry counters
 
@@ -144,7 +145,7 @@ sub-devices. The table shows the operations (queries) that will be provided for 
 | [PSU](#psu)           | Package: Power supplies | Get details about the power supply<br />Query current state (temperature,current,fan) |
 | [Fan](#fan)           | Package: Fans | Get details (max fan speed)<br />Get config (fixed fan speed, temperature-speed table)<br />Query current fan speed |
 | [LED](#led)           | Package: LEDs | Get details (supports RGB configuration)<br />Query current state (on,color) |
-| [RAS](#ras)           | Sub-device 0: One set of RAS error counters<br />Sub-device 1: One set of RAS error counters | Read RAS total correctable and uncorrectable error counter.<br />Read breakdown of errors by category:<br />- no. resets<br />- no. programming errors<br />- no. driver errors<br />- no. compute errors<br />- no. cache errors<br />- no. memory errors<br />- no. PCI errors<br />- no. fabric port errors<br />- no. display errors<br />- no. non-compute errors | 
+| [RAS](#ras)           | Sub-device 0: Set of uncorrectable accelerator RAS errors, set of correctable accelerator RAS errors<br />Sub-device 1: Set of uncorrectable accelerator RAS errors, set of correctable accelerator RAS errors | Read accelerator RAS total correctable and uncorrectable error counters.<br />Read breakdown of errors by category:<br />- no. resets<br />- no. programming errors<br />- no. driver errors<br />- no. compute errors<br />- no. cache errors<br />- no. display errors<br />- no. non-compute errors | 
 | [Diagnostics](#dag)   | Package: SCAN test suite<br />Package: ARRAY test suite | Get list of all diagnostics tests in the test suite | 
 
 The table below summarizes the classes that provide device controls and an example list of components that would be enumerated for a device with two
@@ -350,15 +351,28 @@ The device can be reset using the following function:
 | ::zetSysmanDeviceReset()                                  | Requests that the driver reset the device. If the hardware is hung, this will perform an PCI bus reset. |
 
 
-### <a name="glop">PCI properties</a>
+### <a name="glop">PCI link operations</a>
 The following functions permit getting data about the PCI endpoint for the device:
 
 | Function                                                   | Description |
 | :---                                                       | :---        |
 | ::zetSysmanPciGetProperties()                             | Get static properties for the PCI port - BDF address, number of bars, maximum supported speed |
-| ::zetSysmanPciGetState()                                  | Get current PCI port speed (number of lanes, generation) |
+| ::zetSysmanPciGetState()                                  | Get current PCI port speed (number of lanes, generation) and health. |
 | ::zetSysmanPciGetBarProperties()                          | Get information about each configured PCI bar |
 | ::zetSysmanPciGetStats()                                  | Get PCI statistics - throughput, total packets, number of packet replays |
+
+::zetSysmanPciGetState() returns a structure that contains the current health of the PCI link which can be one of the following
+
+| PCI link health                        | Description |
+| :---                                   | :---        |
+| ::ZET_PCI_LINK_STATUS_GREEN           | The PCI link is operating as expected. |
+| ::ZET_PCI_LINK_STATUS_YELLOW          | The PCI link has quality issues and/or bandwidth degradation. |
+| ::ZET_PCI_LINK_STATUS_RED             | The PCI link is unstable and preventing workloads making forward progress. |
+
+If the PCI link is in a yellow state, the API provides additional information about the types of quality degradation that are being observed.
+If the PCI link is in a red state, the API provides additional information about the causes of the instability.
+
+When the PCI link health state changes, the event ::ZET_SYSMAN_EVENT_TYPE_PCI_LINK_HEALTH is triggered.
 
 The pseudo code below shows how to output the PCI BDF address:
 
@@ -848,16 +862,20 @@ The following functions are available:
 
 
 ## <a name="ras">Querying RAS errors</a>
-RAS stands for Reliability, Availability and Serviceability. It is a feature of certain devices that attempts to correct random bit errors and
-provide redundancy where permanent damage has occurred.
+RAS stands for Reliability, Availability and Serviceability. It is a feature of certain devices accelerators that attempts to correct
+random bit errors and provide redundancy where permanent damage has occurred.
 
-If a device supports RAS, it maintains counters for hardware and software errors. There are two types of errors and they are defined in
+If a device accelerator supports RAS, it maintains counters for hardware and software errors. There are two types of errors and they are defined in
 ::zet_ras_error_type_t:
 
 | Error Type                          | Description |
 | :---                                | :---        |
 | ::ZET_RAS_ERROR_TYPE_UNCORRECTABLE | Hardware errors occurred which most likely resulted in loss of data or even a device hang. If an error results in device lockup, a warm boot is required before those errors will be reported. |
 | ::ZET_RAS_ERROR_TYPE_CORRECTABLE   | These are errors that were corrected by the hardware and did not cause data corruption. |
+
+Note that these are errors related to the accelerator device and do not include similar RAS behavior of components such as device memory,
+high-speed fabric and the PCI link to the host - errors related to these components are provided via separate health metrics (see
+::zetSysmanMemoryGetState(), ::zetSysmanFabricPortGetState() and ::zetSysmanPciGetState()).
 
 A RAS error set is a collection of all RAS errors of a given type (correctable/uncorrectable) located either in a sub-device or a device.
 The function ::zetSysmanRasGet() enumerates the available RAS error sets, providing a handle for each. If no handles are returned,
@@ -888,9 +906,6 @@ of each category depends on the error type (correctable, uncorrectable).
 | ::zet_ras_details_t.numComputeErrors     | Number of errors that have occurred in the accelerator hardware that were corrected. | Number of errors that have occurred in the accelerator hardware that were not corrected. These would have caused the hardware to hang and the driver to reset. |
 | ::zet_ras_details_t.numNonComputeErrors  | Number of errors occurring in fixed-function accelerator hardware that were corrected. | Number of errors occurring in the fixed-function accelerator hardware there could not be corrected. Typically these will result in a PCI bus reset and driver reset. |
 | ::zet_ras_details_t.numCacheErrors       | Number of ECC correctable errors that have occurred in the on-chip caches (caches/register file/shared local memory). | Number of ECC uncorrectable errors that have occurred in the on-chip caches (caches/register file/shared local memory). These would have caused the hardware to hang and the driver to reset. |
-| ::zet_ras_details_t.numMemoryErrors      | Number of times the device memory has transitioned from a healthy state to a degraded state. Degraded state occurs when the number of correctable errors cross a threshold. | Number of times the device memory has transitioned from a healthy/degraded state to a critical/replace state. |
-| ::zet_ras_details_t.numPciErrors:        | controllerNumber of PCI packet replays that have occurred. | Number of PCI bus resets. |
-| ::zet_ras_details_t.numFabricErrors      | Number of times one or more ports have transitioned from a green status to a yellow status. This indicates that links are experiencing quality degradation. | Number of times one or more ports have transitioned from a green/yellow status to a red status. This indicates that links are experiencing connectivity statibility issues. |
 | ::zet_ras_details_t.numDisplayErrors     | Number of ECC correctable errors that have occurred in the display. | Number of ECC uncorrectable errors that have occurred in the display. |
 
 Each RAS error type can trigger events when the error counters exceed thresholds. The events are listed in the table below. Software can use the
@@ -1051,20 +1066,21 @@ The list of events is given in the table below. For each event, the correspondin
 configuration function is not shown, the event is generated automatically; where a configuration function is shown, it must be called to
 enable the event and/or provide threshold conditions.
 
-| Event                                             | Trigger                                     | Configuration function                | State function                    |
-| :---                                              | :---                                        | :---                                  | :---                              |
-| ::ZET_SYSMAN_EVENT_TYPE_DEVICE_RESET             | Device is about to be reset by the driver   |                                       |                                   |
-| ::ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER | Device is about to enter a deep sleep state |                                       |                                   |
-| ::ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT  | Device is exiting a deep sleep state        |                                       |                                   |
-| ::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED           | Frequency starts being throttled            |                                       | ::zetSysmanFrequencyGetState()   |
-| ::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED | Energy consumption threshold is reached     | ::zetSysmanPowerSetEnergyThreshold() |                                   |
-| ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL            | Critical temperature is reached             | ::zetSysmanTemperatureSetConfig()    | ::zetSysmanTemperatureGetState() |
-| ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1          | Temperature crosses threshold 1             | ::zetSysmanTemperatureSetConfig()    | ::zetSysmanTemperatureGetState() |
-| ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2          | Temperature crosses threshold 2             | ::zetSysmanTemperatureSetConfig()    | ::zetSysmanTemperatureGetState() |
-| ::ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH               | Health of device memory changes             |                                       | ::zetSysmanMemoryGetState()      |
-| ::ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH       | Health of fabric ports change               |                                       | ::zetSysmanFabricPortGetState()  |
-| ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS   | RAS correctable errors cross thresholds     | ::zetSysmanRasSetConfig()            | ::zetSysmanRasGetState()         |
-| ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS | RAS uncorrectable errors cross thresholds   | ::zetSysmanRasSetConfig()            | ::zetSysmanRasGetState()         |
+| Event                                             | Trigger                                               | Configuration function                | State function                    |
+| :---                                              | :---                                                  | :---                                  | :---                              |
+| ::ZET_SYSMAN_EVENT_TYPE_DEVICE_RESET             | Device is about to be reset by the driver             |                                       |                                   |
+| ::ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER | Device is about to enter a deep sleep state           |                                       |                                   |
+| ::ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT  | Device is exiting a deep sleep state                  |                                       |                                   |
+| ::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED           | Frequency starts being throttled                      |                                       | ::zetSysmanFrequencyGetState()   |
+| ::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED | Energy consumption threshold is reached               | ::zetSysmanPowerSetEnergyThreshold() |                                   |
+| ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL            | Critical temperature is reached                       | ::zetSysmanTemperatureSetConfig()    | ::zetSysmanTemperatureGetState() |
+| ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1          | Temperature crosses threshold 1                       | ::zetSysmanTemperatureSetConfig()    | ::zetSysmanTemperatureGetState() |
+| ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2          | Temperature crosses threshold 2                       | ::zetSysmanTemperatureSetConfig()    | ::zetSysmanTemperatureGetState() |
+| ::ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH               | Health of device memory changes                       |                                       | ::zetSysmanMemoryGetState()      |
+| ::ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH       | Health of fabric ports change                         |                                       | ::zetSysmanFabricPortGetState()  |
+| ::ZET_SYSMAN_EVENT_TYPE_PCI_LINK_HEALTH          | Health of the PCI link to the host                    |                                       | ::zetSysmanPciGetState()         |
+| ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS   | Accerlator RAS correctable errors cross thresholds    | ::zetSysmanRasSetConfig()            | ::zetSysmanRasGetState()         |
+| ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS | Accelerator RAS uncorrectable errors cross thresholds | ::zetSysmanRasSetConfig()            | ::zetSysmanRasGetState()         |
 
 The call to ::zetSysmanEventListen() requires the driver handle. The list of event handles must only be for devices that have been enumerated
 from that driver, otherwise and error will be returned. If the application is managing devices from multiple drivers, it will need to call this

@@ -23,9 +23,6 @@ void PrintRasDetails(zet_ras_details_t* pDetails)
     fprintf(stdout, "        Number new compute errors:        %llu\n", (long long unsigned int)pDetails->numComputeErrors);
     fprintf(stdout, "        Number new non-compute errors:    %llu\n", (long long unsigned int)pDetails->numNonComputeErrors);
     fprintf(stdout, "        Number new cache errors:          %llu\n", (long long unsigned int)pDetails->numCacheErrors);
-    fprintf(stdout, "        Number new memory errors:         %llu\n", (long long unsigned int)pDetails->numMemoryErrors);
-    fprintf(stdout, "        Number new PCI errors:            %llu\n", (long long unsigned int)pDetails->numPciErrors);
-    fprintf(stdout, "        Number new fabric errors:         %llu\n", (long long unsigned int)pDetails->numFabricErrors);
     fprintf(stdout, "        Number new display errors:        %llu\n", (long long unsigned int)pDetails->numDisplayErrors);
 }
 

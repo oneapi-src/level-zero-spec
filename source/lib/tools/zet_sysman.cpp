@@ -5800,6 +5800,75 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_link_status_t to std::string
+    std::string to_string( const Sysman::pci_link_status_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::pci_link_status_t::GREEN:
+            str = "Sysman::pci_link_status_t::GREEN";
+            break;
+
+        case Sysman::pci_link_status_t::YELLOW:
+            str = "Sysman::pci_link_status_t::YELLOW";
+            break;
+
+        case Sysman::pci_link_status_t::RED:
+            str = "Sysman::pci_link_status_t::RED";
+            break;
+
+        default:
+            str = "Sysman::pci_link_status_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_link_qual_issues_t to std::string
+    std::string to_string( const Sysman::pci_link_qual_issues_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "NONE   ";
+        
+        if( static_cast<uint32_t>(Sysman::pci_link_qual_issues_t::REPLAYS) & bits )
+            str += "REPLAYS | ";
+        
+        if( static_cast<uint32_t>(Sysman::pci_link_qual_issues_t::SPEED) & bits )
+            str += "SPEED | ";
+
+        return ( str.size() > 3 ) 
+            ? "Sysman::pci_link_qual_issues_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Sysman::pci_link_qual_issues_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_link_stab_issues_t to std::string
+    std::string to_string( const Sysman::pci_link_stab_issues_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "NONE   ";
+        
+        if( static_cast<uint32_t>(Sysman::pci_link_stab_issues_t::RETRAINING) & bits )
+            str += "RETRAINING | ";
+
+        return ( str.size() > 3 ) 
+            ? "Sysman::pci_link_stab_issues_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Sysman::pci_link_stab_issues_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_bar_type_t to std::string
     std::string to_string( const Sysman::pci_bar_type_t val )
     {
@@ -5915,6 +5984,9 @@ namespace zet
         
         if( static_cast<uint32_t>(Sysman::event_type_t::FABRIC_PORT_HEALTH) & bits )
             str += "FABRIC_PORT_HEALTH | ";
+        
+        if( static_cast<uint32_t>(Sysman::event_type_t::PCI_LINK_HEALTH) & bits )
+            str += "PCI_LINK_HEALTH | ";
         
         if( static_cast<uint32_t>(Sysman::event_type_t::RAS_CORRECTABLE_ERRORS) & bits )
             str += "RAS_CORRECTABLE_ERRORS | ";
@@ -6146,6 +6218,18 @@ namespace zet
     std::string to_string( const Sysman::pci_state_t val )
     {
         std::string str;
+        
+        str += "Sysman::pci_state_t::status : ";
+        str += to_string(val.status);
+        str += "\n";
+        
+        str += "Sysman::pci_state_t::qualityIssues : ";
+        str += to_string(val.qualityIssues);
+        str += "\n";
+        
+        str += "Sysman::pci_state_t::stabilityIssues : ";
+        str += to_string(val.stabilityIssues);
+        str += "\n";
         
         str += "Sysman::pci_state_t::speed : ";
         str += to_string(val.speed);
@@ -7620,18 +7704,6 @@ namespace zet
         
         str += "SysmanRas::ras_details_t::numCacheErrors : ";
         str += std::to_string(val.numCacheErrors);
-        str += "\n";
-        
-        str += "SysmanRas::ras_details_t::numMemoryErrors : ";
-        str += std::to_string(val.numMemoryErrors);
-        str += "\n";
-        
-        str += "SysmanRas::ras_details_t::numPciErrors : ";
-        str += std::to_string(val.numPciErrors);
-        str += "\n";
-        
-        str += "SysmanRas::ras_details_t::numFabricErrors : ";
-        str += std::to_string(val.numFabricErrors);
         str += "\n";
         
         str += "SysmanRas::ras_details_t::numDisplayErrors : ";
