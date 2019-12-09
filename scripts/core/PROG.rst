@@ -1,4 +1,4 @@
-<%
+﻿<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
@@ -27,7 +27,7 @@ A device represents a physical device in the system that support Level-Zero.
 
 The following diagram illustrates the relationship between the driver, device and other objects described in this document.
 
-.. image:: ../images/core_device.png
+.. image:: ../../../images/core_device.png
 
 Initialization and Discovery
 ----------------------------
@@ -283,7 +283,7 @@ The following are the motivations for seperating a command queue from a command 
 
 The following diagram illustrates the hierarchy of command lists and command queues to the device:
 
-.. image:: ../images/core_queue.png
+.. image:: ../../../images/core_queue.png
 
 Command Queues
 --------------
@@ -475,7 +475,7 @@ There are two types of synchronization primitives:
 
 The following diagram illustrates the relationship of capabilities of these types of synchronization primitives:
 
-.. image:: ../images/core_sync.png
+.. image:: ../../../images/core_sync.png
 
 The following are the motivations for seperating the different types of synchronization primitives:
 
@@ -534,7 +534,7 @@ The primary usage model(s) for fences are to notify the Host when a command list
 
 The following diagram illustrates fences signalled after command lists on execution:
 
-.. image:: ../images/core_fence.png
+.. image:: ../../../images/core_fence.png
 
 .. _Events:
 
@@ -599,7 +599,7 @@ The following pseudo-code demonstrates a sequence for creation and submission of
 
 The following diagram illustrates an event being signalled between kernels within a command list:
 
-.. image:: ../images/core_event.png
+.. image:: ../../../images/core_event.png
 
 Barriers
 ========
@@ -707,7 +707,7 @@ There are multiple levels of constructs needed for executing kernels on the devi
 The following diagram provides a high level overview of the major parts
 of the system.
 
-.. image:: ../images/core_module.png
+.. image:: ../../../images/core_module.png
 
 .. _Modules:
 
@@ -760,11 +760,11 @@ Module build options can be passed with ::${x}_module_desc_t as a string.
 +--------------------------------------------+----------------------------------------------------+----------+----------------+
 | Build Option                               | Description                                        | Default  | Device Support |
 +============================================+====================================================+==========+================+
-| -${x}-opt-disable                          | Disable optimizations.                             | Disabled | All            |
+| -${x}-opt-disable                            | Disable optimizations.                             | Disabled | All            |
 +--------------------------------------------+----------------------------------------------------+----------+----------------+
-| -${x}-opt-greater-than-4GB-buffer-required | Use 64-bit offset calculations for buffers.        | Disabled | GPU            |
+| -${x}-opt-greater-than-4GB-buffer-required   | Use 64-bit offset calculations for buffers.        | Disabled | GPU            |
 +--------------------------------------------+----------------------------------------------------+----------+----------------+
-| -${x}-opt-large-register-file              | Increase number of registers available to threads. | Disabled | GPU            |
+| -${x}-opt-large-register-file                | Increase number of registers available to threads. | Disabled | GPU            |
 +--------------------------------------------+----------------------------------------------------+----------+----------------+
 
 Module Specialization Constants
@@ -1032,11 +1032,11 @@ kernels. The ::${x}SamplerCreate function takes a sampler descriptor (::${x}_sam
 +===================================+===================================+
 | Address Mode                      | Determines how out-of-bounds      |
 |                                   | accessse are handled. See         |
-|                                   | ::${x}_sampler_address_mode_t.    |
+|                                   | ::${x}_sampler_address_mode_t.      |
 +-----------------------------------+-----------------------------------+
 | Filter Mode                       | Specifies which filtering mode to |
 |                                   | use. See                          |
-|                                   | ::${x}_sampler_filter_mode_t      |
+|                                   | ::${x}_sampler_filter_mode_t        |
 +-----------------------------------+-----------------------------------+
 | Normalized                        | Specifies whether coordinates for |
 |                                   | addressing image are normalized   |

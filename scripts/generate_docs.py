@@ -115,9 +115,10 @@ def generate_rst(srcpath, dstpath, tags, meta):
     util.removeFiles(dstpath, "*.rst")
     for fin in util.findFiles(srcpath, "*.rst"):
         fout = os.path.join(dstpath, os.path.basename(fin))
-        #validate_md(os.path.abspath(fin), meta)
+        print("Generating %s..."%fout)
         loc += util.makoWrite(fin, fout, tags=tags)
-    print("Generated %s lines of restructedtext (rst).\n"%loc)
+    if (loc > 0):
+        print("Generated %s lines of restructuredtext (rst).\n"%loc)
 
 
 """
@@ -133,7 +134,7 @@ def generate_html_from_rst():  # This will become generate_html() once MD path i
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
     print("Generating HTML...")
-    cmdline = "sphinx-build -M html ../docs/source .."
+    cmdline = "sphinx-build -w ../docs/source/warnings.txt -b html ../docs/source .."
     os.system(cmdline)
 
 """

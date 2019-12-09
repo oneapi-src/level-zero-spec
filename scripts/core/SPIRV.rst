@@ -1,4 +1,4 @@
-<%
+ï»¿<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
@@ -58,7 +58,7 @@ Numerical Type Formats
 
 Floating-point types are represented and stored using
 `IEEE-754 <http://dx.doi.org/10.1109/IEEESTD.2008.4610935>`__ semantics.
-All integer formats are represented and stored using 2’s-complement
+All integer formats are represented and stored using 2â€™s-complement
 format.
 
 Supported Types
@@ -155,7 +155,7 @@ For **OpTypePointer** parameters, supported *Storage Classes* are:
 -  **UniformConstant**
 
 Environments that support extensions or optional features may allow
-additional types in an entry point’s parameter list.
+additional types in an entry pointâ€™s parameter list.
 
 Required Capabilities
 =====================
