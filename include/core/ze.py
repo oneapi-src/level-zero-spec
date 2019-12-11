@@ -1104,6 +1104,9 @@ class ze_sampler_address_mode_v(IntEnum):
     NONE = 0                                        ## No coordinate modifications for out-of-bounds image access.
     REPEAT = auto()                                 ## Out-of-bounds coordinates are wrapped back around.
     CLAMP = auto()                                  ## Out-of-bounds coordinates are clamped to edge.
+    CLAMP_TO_BORDER = auto()                        ## Out-of-bounds coordinates are clamped to border color which is (0.0f,
+                                                    ## 0.0f, 0.0f, 0.0f) if image format swizzle contains alpha, otherwise
+                                                    ## (0.0f, 0.0f, 0.0f, 1.0f).
     MIRROR = auto()                                 ## Out-of-bounds coordinates are mirrored starting from edge.
 
 class ze_sampler_address_mode_t(c_int):
