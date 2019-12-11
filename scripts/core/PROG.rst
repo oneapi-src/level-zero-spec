@@ -1003,7 +1003,7 @@ device to generate the parameters.
        ${x}_group_count_t* pIndirectArgs;
        
        ...
-       ${x}DriverAllocDeviceMem(hDriver, hDevice, flags, 0, sizeof(${x}_group_count_t), sizeof(uint32_t), &pIndirectArgs);
+       ${x}DriverAllocDeviceMem(hDriver, flags, 0, sizeof(${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
 
        // Append launch kernel - indirect
        ${x}CommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
@@ -1123,7 +1123,7 @@ or sub-device using ::${x}DeviceGetProperties.
        assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
        void* pMemForSubDevice2;
-       ${x}DriverAllocDeviceMem(hDriver, hSubdevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, 0, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+       ${x}DriverAllocDeviceMem(hDriver, flags, 0, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
        ...
 
        ...
@@ -1301,7 +1301,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 .. code:: c
 
        void* dptr = nullptr;
-       ${x}DriverAllocDeviceMem(hDriver, hDevice, flags, 0, size, alignment, &dptr);
+       ${x}DriverAllocDeviceMem(hDriver, flags, 0, size, alignment, hDevice, &dptr);
 
        ${x}_ipc_mem_handle_t hIPC;
        ${x}DriverGetMemIpcHandle(hDriver, dptr, &hIPC);

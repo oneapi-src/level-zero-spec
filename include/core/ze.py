@@ -1359,16 +1359,16 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zeDriverAllocSharedMem
 if __use_win_types:
-    _zeDriverAllocSharedMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocSharedMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 else:
-    _zeDriverAllocSharedMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocSharedMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 
 ###############################################################################
 ## @brief Function-pointer for zeDriverAllocDeviceMem
 if __use_win_types:
-    _zeDriverAllocDeviceMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocDeviceMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 else:
-    _zeDriverAllocDeviceMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocDeviceMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 
 ###############################################################################
 ## @brief Function-pointer for zeDriverAllocHostMem

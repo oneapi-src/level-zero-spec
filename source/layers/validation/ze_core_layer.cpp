@@ -1800,13 +1800,13 @@ namespace layer
     ze_result_t __zecall
     zeDriverAllocSharedMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_device_handle_t hDevice,                     ///< [in] handle of a device
         ze_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
                                                         ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
         ze_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
+        ze_device_handle_t hDevice,                     ///< [in][optional] device handle to associated with
         void** pptr                                     ///< [out] pointer to shared allocation
         )
     {
@@ -1820,15 +1820,12 @@ namespace layer
             if( nullptr == hDriver )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
             if( nullptr == pptr )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnAllocSharedMem( hDriver, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
+        return pfnAllocSharedMem( hDriver, device_flags, ordinal, host_flags, size, alignment, hDevice, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1836,12 +1833,12 @@ namespace layer
     ze_result_t __zecall
     zeDriverAllocDeviceMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
                                                         ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
+        ze_device_handle_t hDevice,                     ///< [in] handle of the device
         void** pptr                                     ///< [out] pointer to device allocation
         )
     {
@@ -1863,7 +1860,7 @@ namespace layer
 
         }
 
-        return pfnAllocDeviceMem( hDriver, hDevice, flags, ordinal, size, alignment, pptr );
+        return pfnAllocDeviceMem( hDriver, flags, ordinal, size, alignment, hDevice, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

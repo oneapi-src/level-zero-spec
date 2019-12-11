@@ -54,10 +54,17 @@ typedef enum _ze_host_mem_alloc_flag_t
 /// @details
 ///     - Shared allocations share ownership between the host and one or more
 ///       devices.
-///     - By default, shared allocations are visible to all devices supported by
-///       the driver.
-///     - A shared allocation can be restricted to be only visible to the host
-///       and a single device by specifying a single device handle.
+///     - Shared allocations may optionally be associated with a device by
+///       passing a handle to the device.
+///     - Devices supporting only single-device shared access capabilities may
+///       access shared memory associated with the device.
+///       For these devices, ownership of the allocation is shared between the
+///       host and the associated device only.
+///     - Passing nullptr as the device handle does not associate the shared
+///       allocation with any device.
+///       For allocations with no associated device, ownership of the allocation
+///       is shared between the host and all devices supporting cross-device
+///       shared access capabilities.
 ///     - The application may call this function from simultaneous threads.
 /// 
 /// @remarks
@@ -70,7 +77,6 @@ typedef enum _ze_host_mem_alloc_flag_t
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDriver
-///         + nullptr == hDevice
 ///         + nullptr == pptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -80,13 +86,13 @@ typedef enum _ze_host_mem_alloc_flag_t
 ze_result_t __zecall
 zeDriverAllocSharedMem(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-    ze_device_handle_t hDevice,                     ///< [in] handle of a device
     ze_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
                                                     ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
     ze_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
+    ze_device_handle_t hDevice,                     ///< [in][optional] device handle to associated with
     void** pptr                                     ///< [out] pointer to shared allocation
     );
 
@@ -119,12 +125,12 @@ zeDriverAllocSharedMem(
 ze_result_t __zecall
 zeDriverAllocDeviceMem(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-    ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
                                                     ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
+    ze_device_handle_t hDevice,                     ///< [in] handle of the device
     void** pptr                                     ///< [out] pointer to device allocation
     );
 

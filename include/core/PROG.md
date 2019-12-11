@@ -855,7 +855,7 @@ device to generate the parameters.
     ze_group_count_t* pIndirectArgs;
     
     ...
-    zeDriverAllocDeviceMem(hDriver, hDevice, flags, 0, sizeof(ze_group_count_t), sizeof(uint32_t), &pIndirectArgs);
+    zeDriverAllocDeviceMem(hDriver, flags, 0, sizeof(ze_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
 
     // Append launch kernel - indirect
     zeCommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
@@ -950,7 +950,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    zeDriverAllocDeviceMem(hDriver, hSubdevice, ZE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, 0, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    zeDriverAllocDeviceMem(hDriver, flags, 0, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
     ...
 
     ...
@@ -1082,7 +1082,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    zeDriverAllocDeviceMem(hDriver, hDevice, flags, 0, size, alignment, &dptr);
+    zeDriverAllocDeviceMem(hDriver, flags, 0, size, alignment, hDevice, &dptr);
 
     ze_ipc_mem_handle_t hIPC;
     zeDriverGetMemIpcHandle(hDriver, dptr, &hIPC);
