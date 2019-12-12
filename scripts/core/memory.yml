@@ -81,7 +81,7 @@ params:
       desc: "[in] minimum alignment in bytes for the allocation"
     - type: "$x_device_handle_t"
       name: hDevice
-      desc: "[in][optional] device handle to associated with"
+      desc: "[in][optional] device handle to associate with"
     - type: "void**"
       name: pptr
       desc: "[out] pointer to shared allocation"

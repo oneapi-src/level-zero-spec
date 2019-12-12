@@ -1693,7 +1693,7 @@ namespace driver
         ze_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-        ze_device_handle_t hDevice,                     ///< [in][optional] device handle to associated with
+        ze_device_handle_t hDevice,                     ///< [in][optional] device handle to associate with
         void** pptr                                     ///< [out] pointer to shared allocation
         )
     {
@@ -6197,7 +6197,7 @@ namespace instrumented
         ze_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-        ze_device_handle_t hDevice,                     ///< [in][optional] device handle to associated with
+        ze_device_handle_t hDevice,                     ///< [in][optional] device handle to associate with
         void** pptr                                     ///< [out] pointer to shared allocation
         )
     {

@@ -316,7 +316,7 @@ namespace ze
             host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
             size_t size,                                    ///< [in] size in bytes to allocate
             size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-            Device* pDevice = nullptr                       ///< [in][optional] device handle to associated with
+            Device* pDevice = nullptr                       ///< [in][optional] device handle to associate with
             );
 
         ///////////////////////////////////////////////////////////////////////////////
