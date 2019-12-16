@@ -1,4 +1,4 @@
-<%
+Ôªø<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
@@ -14,7 +14,7 @@ It can be adapted to support broader set of languages features, such as
 function pointers, virtual functions, unified memory, and I/O
 capabilities.
 
-.. image:: ../images/one_api_sw_stack.png
+.. image:: ../../../images/one_api_sw_stack.png
 
 The Level-Zero API provides the lowest-level, fine-grain and most explicit control over:
 
@@ -90,7 +90,7 @@ submission to a specific sub-device.
 Peer-to-Peer Communication
 --------------------------
 
-Peer to Peer APIís provide capabilities to marshall data across Host to
+Peer to Peer API‚Äôs provide capabilities to marshall data across Host to
 Device, Device to Host and Device to Device. The data marshalling API
 can be scheduled as asynchronous operations or can be synchronized with
 kernel execution through command queues. Data coherency is maintained by
@@ -100,7 +100,7 @@ Inter-Process Communication
 ---------------------------
 
 The API allows sharing of memory objects across different device
-processes. Since each process has itís own virtual address space, there
+processes. Since each process has it‚Äôs own virtual address space, there
 is no guarantee that the same virtual address will be available when the
 memory object is shared in new process. There are a set of APIs that
 makes it easier to share the memory objects with ease.
@@ -142,7 +142,7 @@ conflicts within the API, or with other APIs and libraries:
 - all driver entry points are prefixed with ${x}
 - all types follow \**${x}_<name>_t*\* convention
 - all macros and enumerator values use all caps \**${X}_<SCOPE>_<NAME>*\* convention
-- all functions use camel case **${x}<Object><Action>** convention - exception: since ìdriverî functions use implicit <Object>, it is omitted
+- all functions use camel case **${x}<Object><Action>** convention - exception: since ‚Äúdriver‚Äù functions use implicit <Object>, it is omitted
 - all structure members and function parameters use camel case convention
 
 In addition, the following coding standards are followed:
@@ -243,9 +243,9 @@ The primary usage-models enabled by these rules is:
 Experimental API Support
 ------------------------
 
-Features which are still being considered for inclusion into the ìCoreî
+Features which are still being considered for inclusion into the ‚ÄúCore‚Äù
 API, but require additional experimentation by application vendors
-before ratification, are exposed as ìExperimentalî APIs.
+before ratification, are exposed as ‚ÄúExperimental‚Äù APIs.
 
 Applications should not rely on experimental APIs in production. -
 Experimental APIs may be added and removed from the API at any time;
@@ -260,15 +260,15 @@ Driver Architecture
 
 The following section provides high-level driver architecture.
 
-.. image:: ../images/intro_driver.png
+.. image:: ../../../images/intro_driver.png
 
 Library
 -------
 
 A static library is provided to allow applications to make direct API
 calls without understanding the underlying driver architecture. For
-example, C/C++ applications should include ì${x}_api.hî (C) or
-ì${x}_api.hppî (C++11) and link with ì${x}_api.libî.
+example, C/C++ applications should include ‚Äú${x}_api.h‚Äù (C) or
+‚Äú${x}_api.hpp‚Äù (C++11) and link with ‚Äú${x}_api.lib‚Äù.
 
 Loader
 ------
@@ -278,25 +278,25 @@ loader exports all API functions to the static library via per-process
 API function pointer table(s). Each driver and layer must below the
 loader will also export its API/DDI functions via per-process function
 pointer table(s). The export function and table definitions are defined
-in ì${x}_ddi.hî.
+in ‚Äú${x}_ddi.h‚Äù.
 
 The loader is dynamically linked with the application using the
-ì${x}_loader.dllî (windows) or ì${x}_loader.soî (linux). The loader is
+‚Äú${x}_loader.dll‚Äù (windows) or ‚Äú${x}_loader.so‚Äù (linux). The loader is
 vendor agnostic, but must be aware of the names of vendor-specific
 device driver names. (Note: these are currently hard-coded but a
 registration method will be adopted when multiple vendors are
 supported.)
 
-The loader dynamically loads each vendorís device driver(s) present in
+The loader dynamically loads each vendor‚Äôs device driver(s) present in
 the system and queries each per-process function pointer table(s). If
 only one device driver needs to be loaded, then the loader layer may be
 entirely bypassed.
 
 The following diagram illustrates the expected loading sequence:
 
-.. image:: ../images/intro_loader.png
+.. image:: ../../../images/intro_loader.png
 
-Thus, the loaderís internal function pointer table entries may point to:
+Thus, the loader‚Äôs internal function pointer table entries may point to:
 
 + validation layer intercepts (if enabled),
 + instrumentation layer intercepts (if enabled),
@@ -310,7 +310,7 @@ The device driver(s) contain the device-specific implementations of the APIs.
 The device driver(s) are dynamically linked using a *${x}_vendor_type.dll*
 (windows) / *${x}_vendor_type.so* (linux); where *vendor* and *type* are
 names chosen by the device vendor. For example, Intel GPUs use the name:
-ì${x}_intc_gpuî.
+‚Äú${x}_intc_gpu‚Äù.
 
 Validation Layer
 ----------------
@@ -379,29 +379,29 @@ driver behavior.
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
-| Device          | ${X}_AFFINITY_MASK                  | Hex String | Forces driver to only report devices (and sub-devices) as specified by mask value |
+| Device          | ${X}_AFFINITY_MASK                    | Hex String | Forces driver to only report devices (and sub-devices) as specified by mask value |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC      | {**0**, 1} | Forces all shared allocations into device memory                                  |
+| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                  |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Validation      | ${X}_ENABLE_VALIDATION_LAYER        | {**0**, 1} | Enables validation layer for debugging                                            |
+| Validation      | ${X}_ENABLE_VALIDATION_LAYER          | {**0**, 1} | Enables validation layer for debugging                                            |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PARAMETER_VALIDATION    | {**0**, 1} | Enables the validation level for parameters                                       |
+|                 | ${X}_ENABLE_PARAMETER_VALIDATION      | {**0**, 1} | Enables the validation level for parameters                                       |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_HANDLE_LIFETIME         | {**0**, 1} | Enables the validation level for tracking handle lifetime                         |
+|                 | ${X}_ENABLE_HANDLE_LIFETIME           | {**0**, 1} | Enables the validation level for tracking handle lifetime                         |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_MEMORY_TRACKER          | {**0**, 1} | Enables the validation level for tracking memory lifetime                         |
+|                 | ${X}_ENABLE_MEMORY_TRACKER            | {**0**, 1} | Enables the validation level for tracking memory lifetime                         |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_THREADING_VALIDATION    | {**0**, 1} | Enables the validation level for multithreading usage                             |
+|                 | ${X}_ENABLE_THREADING_VALIDATION      | {**0**, 1} | Enables the validation level for multithreading usage                             |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Instrumentation | ${X}_ENABLE_INSTRUMENTATION_LAYER   | {**0**, 1} | Enables validation layer for debugging                                            |
+| Instrumentation | ${X}_ENABLE_INSTRUMENTATION_LAYER     | {**0**, 1} | Enables validation layer for debugging                                            |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_API_TRACING             | {**0**, 1} | Enables the instrumentation for API tracing                                       |
+|                 | ${X}_ENABLE_API_TRACING               | {**0**, 1} | Enables the instrumentation for API tracing                                       |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_METRICS                 | {**0**, 1} | Enables the instrumentation for device metrics                                    |
+|                 | ${X}_ENABLE_METRICS                   | {**0**, 1} | Enables the instrumentation for device metrics                                    |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PROGRAM_INSTRUMENTATION | {**0**, 1} | Enables the instrumentation for program instrumentation                           |
+|                 | ${X}_ENABLE_PROGRAM_INSTRUMENTATION   | {**0**, 1} | Enables the instrumentation for program instrumentation                           |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PROGRAM_DEBUGGING       | {**0**, 1} | Enables the instrumentation for program debugging                                 |
+|                 | ${X}_ENABLE_PROGRAM_DEBUGGING         | {**0**, 1} | Enables the instrumentation for program debugging                                 |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 
 Affinity Mask
@@ -416,19 +416,19 @@ devices and the number of sub-devices for each device.
 
 The following examples demonstrate proper usage:
 
-- "" (empty string) = disabled; i.e.†all devices and sub-devices are reported. This is the default value.
+- "" (empty string) = disabled; i.e.¬†all devices and sub-devices are reported. This is the default value.
 - Two devices, each with four sub-devices
 
-    + ìFFî = all devices and sub-devices are reported (same as default)
-    + ì0Fî = only device 0 (with all its sub-devices) is reported
-    + ìF0î = only device 1 (with all its sub-devices) is reported as device 0'
-    + ìAAî = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1
+    + ‚ÄúFF‚Äù = all devices and sub-devices are reported (same as default)
+    + ‚Äú0F‚Äù = only device 0 (with all its sub-devices) is reported
+    + ‚ÄúF0‚Äù = only device 1 (with all its sub-devices) is reported as device 0'
+    + ‚ÄúAA‚Äù = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1
 
 - Two devices, device 0 with one sub-device and device 1 with two sub-devices
 
-    + ì07î = all devices and sub-devices are reported (same as default) + ì01î = only device 0 (with all its sub-devices) is reported
-    + ì06î = only device 1 (with all its sub-devices) is reported as device 0
-    + ì05î = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
+    + ‚Äú07‚Äù = all devices and sub-devices are reported (same as default) + ‚Äú01‚Äù = only device 0 (with all its sub-devices) is reported
+    + ‚Äú06‚Äù = only device 1 (with all its sub-devices) is reported as device 0
+    + ‚Äú05‚Äù = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
 
 .. _Tools:
 
@@ -436,32 +436,32 @@ Tools
 =====
 
 Level-Zero APIs specific for supporting 3rd-party tools are separated
-from ìCoreî into ìToolsî APIs. The ìToolsî APIs are designed to provided
+from ‚ÄúCore‚Äù into ‚ÄúTools‚Äù APIs. The ‚ÄúTools‚Äù APIs are designed to provided
 low-level access to device capabilities in order to support 3rd-party
 tools, but are not intended to replace or directly interface 3rd-party
-tools. The ìToolsî APIs are still available for direct application use.
+tools. The ‚ÄúTools‚Äù APIs are still available for direct application use.
 
 The following diagram illustrates how 3rd-party tools may utilize the instrumentation layer:
 
-.. image:: ../images/intro_tools.png
+.. image:: ../../../images/intro_tools.png
 
-The ìToolsî APIs provide the following capabilities for 3rd-party tools:
+The ‚ÄúTools‚Äù APIs provide the following capabilities for 3rd-party tools:
 
 - Allow for callbacks to be registered, in order to be notified of specific application events.
 - Allow for device metrics to be queried, in order to profile application usage.
 - Allow for application programs to be instrumented with custom instructions, for low-level code profiling.
 - Allow for application programs to be debugged using breakpoints and register access.
 
-See the ìToolsî programming guide for more details.
+See the ‚ÄúTools‚Äù programming guide for more details.
 
 .. _system-management-1:
 
 System Management
 =================
 
-All global management of accelerator resources are separated from ìCoreî into the ìSysmanî API.
+All global management of accelerator resources are separated from ‚ÄúCore‚Äù into the ‚ÄúSysman‚Äù API.
 
-The ìSysmanî API provides in-band access to the following features for each accelerator device:
+The ‚ÄúSysman‚Äù API provides in-band access to the following features for each accelerator device:
 
 - Query inventory information
 - Query information about host processes using the device
@@ -488,5 +488,5 @@ operations on resources. Most queries are available to any user with the
 exception of those that could be used for side-channel attacks. The
 systems administrator can tighten/relax the default permissions.
 
-See the ìSysmanî programming guide for more details.
+See the ‚ÄúSysman‚Äù programming guide for more details.
 

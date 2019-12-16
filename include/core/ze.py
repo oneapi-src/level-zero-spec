@@ -1104,6 +1104,9 @@ class ze_sampler_address_mode_v(IntEnum):
     NONE = 0                                        ## No coordinate modifications for out-of-bounds image access.
     REPEAT = auto()                                 ## Out-of-bounds coordinates are wrapped back around.
     CLAMP = auto()                                  ## Out-of-bounds coordinates are clamped to edge.
+    CLAMP_TO_BORDER = auto()                        ## Out-of-bounds coordinates are clamped to border color which is (0.0f,
+                                                    ## 0.0f, 0.0f, 0.0f) if image format swizzle contains alpha, otherwise
+                                                    ## (0.0f, 0.0f, 0.0f, 1.0f).
     MIRROR = auto()                                 ## Out-of-bounds coordinates are mirrored starting from edge.
 
 class ze_sampler_address_mode_t(c_int):
@@ -1356,16 +1359,16 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zeDriverAllocSharedMem
 if __use_win_types:
-    _zeDriverAllocSharedMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocSharedMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 else:
-    _zeDriverAllocSharedMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocSharedMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 
 ###############################################################################
 ## @brief Function-pointer for zeDriverAllocDeviceMem
 if __use_win_types:
-    _zeDriverAllocDeviceMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocDeviceMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 else:
-    _zeDriverAllocDeviceMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocDeviceMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 
 ###############################################################################
 ## @brief Function-pointer for zeDriverAllocHostMem

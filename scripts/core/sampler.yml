@@ -30,6 +30,8 @@ etors:
       desc: "Out-of-bounds coordinates are wrapped back around."
     - name: $X_SAMPLER_ADDRESS_MODE_CLAMP
       desc: "Out-of-bounds coordinates are clamped to edge."
+    - name: $X_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER
+      desc: "Out-of-bounds coordinates are clamped to border color which is (0.0f, 0.0f, 0.0f, 0.0f) if image format swizzle contains alpha, otherwise (0.0f, 0.0f, 0.0f, 1.0f)."
     - name: $X_SAMPLER_ADDRESS_MODE_MIRROR
       desc: "Out-of-bounds coordinates are mirrored starting from edge."
 --- #--------------------------------------------------------------------------

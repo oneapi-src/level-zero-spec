@@ -231,6 +231,10 @@ namespace ze
             str = "Sampler::address_mode_t::CLAMP";
             break;
 
+        case Sampler::address_mode_t::CLAMP_TO_BORDER:
+            str = "Sampler::address_mode_t::CLAMP_TO_BORDER";
+            break;
+
         case Sampler::address_mode_t::MIRROR:
             str = "Sampler::address_mode_t::MIRROR";
             break;

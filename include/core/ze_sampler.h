@@ -41,6 +41,9 @@ typedef enum _ze_sampler_address_mode_t
     ZE_SAMPLER_ADDRESS_MODE_NONE = 0,               ///< No coordinate modifications for out-of-bounds image access.
     ZE_SAMPLER_ADDRESS_MODE_REPEAT,                 ///< Out-of-bounds coordinates are wrapped back around.
     ZE_SAMPLER_ADDRESS_MODE_CLAMP,                  ///< Out-of-bounds coordinates are clamped to edge.
+    ZE_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,        ///< Out-of-bounds coordinates are clamped to border color which is (0.0f,
+                                                    ///< 0.0f, 0.0f, 0.0f) if image format swizzle contains alpha, otherwise
+                                                    ///< (0.0f, 0.0f, 0.0f, 1.0f).
     ZE_SAMPLER_ADDRESS_MODE_MIRROR,                 ///< Out-of-bounds coordinates are mirrored starting from edge.
 
 } ze_sampler_address_mode_t;

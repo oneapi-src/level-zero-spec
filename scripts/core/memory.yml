@@ -50,16 +50,18 @@ analogue:
     - "**cudaMallocManaged**"
 details:
     - "Shared allocations share ownership between the host and one or more devices."
-    - "By default, shared allocations are visible to all devices supported by the driver."
-    - "A shared allocation can be restricted to be only visible to the host and a single device by specifying a single device handle."
+    - "Shared allocations may optionally be associated with a device by passing a handle to the device."
+    - |
+      Devices supporting only single-device shared access capabilities may access shared memory associated with the device.
+      For these devices, ownership of the allocation is shared between the host and the associated device only.
+    - |
+      Passing nullptr as the device handle does not associate the shared allocation with any device.
+      For allocations with no associated device, ownership of the allocation is shared between the host and all devices supporting cross-device shared access capabilities.
     - "The application may call this function from simultaneous threads."
 params:
     - type: $x_driver_handle_t
       name: hDriver
       desc: "[in] handle of the driver instance"
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of a device"
     - type: "$x_device_mem_alloc_flag_t"
       name: device_flags
       desc: "[in] flags specifying additional device allocation controls"
@@ -77,6 +79,9 @@ params:
     - type: size_t
       name: alignment
       desc: "[in] minimum alignment in bytes for the allocation"
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in][optional] device handle to associate with"
     - type: "void**"
       name: pptr
       desc: "[out] pointer to shared allocation"
@@ -101,9 +106,6 @@ params:
     - type: $x_driver_handle_t
       name: hDriver
       desc: "[in] handle of the driver instance"
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device"
     - type: "$x_device_mem_alloc_flag_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
@@ -118,6 +120,9 @@ params:
     - type: size_t
       name: alignment
       desc: "[in] minimum alignment in bytes for the allocation"
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
     - type: "void**"
       name: pptr
       desc: "[out] pointer to device allocation"
