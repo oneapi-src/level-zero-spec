@@ -7402,10 +7402,6 @@ namespace zet
         str += std::to_string(val.subdeviceId);
         str += "\n";
         
-        str += "SysmanPsu::psu_properties_t::canControl : ";
-        str += std::to_string(val.canControl);
-        str += "\n";
-        
         str += "SysmanPsu::psu_properties_t::haveFan : ";
         str += std::to_string(val.haveFan);
         str += "\n";

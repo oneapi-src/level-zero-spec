@@ -2372,9 +2372,6 @@ members:
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
-      name: "canControl"
-      desc: "[out] Indicates if software can control the PSU assuming the user has permissions"
-    - type: $x_bool_t
       name: "haveFan"
       desc: "[out] True if the power supply has a fan"
     - type: uint32_t

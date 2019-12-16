@@ -2383,8 +2383,6 @@ namespace zet
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            ze::bool_t canControl;                          ///< [out] Indicates if software can control the PSU assuming the user has
-                                                            ///< permissions
             ze::bool_t haveFan;                             ///< [out] True if the power supply has a fan
             uint32_t ampLimit;                              ///< [out] The maximum electrical current in amperes that can be drawn
 

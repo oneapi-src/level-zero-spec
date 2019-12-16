@@ -1471,8 +1471,6 @@ class zet_psu_properties_t(Structure):
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
-        ("canControl", ze_bool_t),                                      ## [out] Indicates if software can control the PSU assuming the user has
-                                                                        ## permissions
         ("haveFan", ze_bool_t),                                         ## [out] True if the power supply has a fan
         ("ampLimit", c_ulong)                                           ## [out] The maximum electrical current in amperes that can be drawn
     ]
