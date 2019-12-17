@@ -1002,6 +1002,8 @@ class ze_module_desc_t(Structure):
         ("pBuildFlags", POINTER(c_char)),                               ## [in] string containing compiler flags. See programming guide for build
                                                                         ## flags.
         ("pConstants", POINTER(ze_module_constants_t))                  ## [in] pointer to specialization constants. Valid only for SPIR-V input.
+                                                                        ## This must be set to nullptr if no specialization constants are
+                                                                        ## provided.
     ]
 
 ###############################################################################

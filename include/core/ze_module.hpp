@@ -72,6 +72,8 @@ namespace ze
             const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See programming guide for build
                                                             ///< flags.
             const constants_t* pConstants = nullptr;        ///< [in] pointer to specialization constants. Valid only for SPIR-V input.
+                                                            ///< This must be set to nullptr if no specialization constants are
+                                                            ///< provided.
 
         };
 

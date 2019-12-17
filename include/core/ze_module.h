@@ -64,6 +64,8 @@ typedef struct _ze_module_desc_t
     const char* pBuildFlags;                        ///< [in] string containing compiler flags. See programming guide for build
                                                     ///< flags.
     const ze_module_constants_t* pConstants;        ///< [in] pointer to specialization constants. Valid only for SPIR-V input.
+                                                    ///< This must be set to nullptr if no specialization constants are
+                                                    ///< provided.
 
 } ze_module_desc_t;
 

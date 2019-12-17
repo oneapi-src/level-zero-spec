@@ -70,7 +70,7 @@ members:
       init: nullptr
     - type: "const $x_module_constants_t*"
       name: pConstants
-      desc: "[in] pointer to specialization constants. Valid only for SPIR-V input."
+      desc: "[in] pointer to specialization constants. Valid only for SPIR-V input. This must be set to nullptr if no specialization constants are provided."
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
