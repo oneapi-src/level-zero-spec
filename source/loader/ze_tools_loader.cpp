@@ -1324,6 +1324,90 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPerformanceProfileGetSupported
+    ze_result_t __zecall
+    zetSysmanPerformanceProfileGetSupported(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of performance profiles.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of supported performance profiles.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< supported performance profiles.
+                                                        ///< if count is larger than the number of supported performance profiles,
+                                                        ///< then the driver will update the value with the correct number of
+                                                        ///< supported performance profiles that are returned.
+        zet_perf_profile_t* pProfiles                   ///< [in,out][optional][range(0, *pCount)] Array of supported performance
+                                                        ///< profiles
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnPerformanceProfileGetSupported = dditable->zet.Sysman.pfnPerformanceProfileGetSupported;
+        if( nullptr == pfnPerformanceProfileGetSupported )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnPerformanceProfileGetSupported( hSysman, pCount, pProfiles );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPerformanceProfileGet
+    ze_result_t __zecall
+    zetSysmanPerformanceProfileGet(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_perf_profile_t* pProfile                    ///< [in] The performance profile currently loaded.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnPerformanceProfileGet = dditable->zet.Sysman.pfnPerformanceProfileGet;
+        if( nullptr == pfnPerformanceProfileGet )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnPerformanceProfileGet( hSysman, pProfile );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPerformanceProfileSet
+    ze_result_t __zecall
+    zetSysmanPerformanceProfileSet(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_perf_profile_t profile                      ///< [in] The performance profile to load.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnPerformanceProfileSet = dditable->zet.Sysman.pfnPerformanceProfileSet;
+        if( nullptr == pfnPerformanceProfileSet )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnPerformanceProfileSet( hSysman, profile );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanProcessesGetState
     ze_result_t __zecall
     zetSysmanProcessesGetState(
@@ -4605,6 +4689,9 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnSchedulerSetTimesliceMode                = loader::zetSysmanSchedulerSetTimesliceMode;
             pDdiTable->pfnSchedulerSetExclusiveMode                = loader::zetSysmanSchedulerSetExclusiveMode;
             pDdiTable->pfnSchedulerSetComputeUnitDebugMode         = loader::zetSysmanSchedulerSetComputeUnitDebugMode;
+            pDdiTable->pfnPerformanceProfileGetSupported           = loader::zetSysmanPerformanceProfileGetSupported;
+            pDdiTable->pfnPerformanceProfileGet                    = loader::zetSysmanPerformanceProfileGet;
+            pDdiTable->pfnPerformanceProfileSet                    = loader::zetSysmanPerformanceProfileSet;
             pDdiTable->pfnProcessesGetState                        = loader::zetSysmanProcessesGetState;
             pDdiTable->pfnDeviceReset                              = loader::zetSysmanDeviceReset;
             pDdiTable->pfnDeviceGetRepairStatus                    = loader::zetSysmanDeviceGetRepairStatus;

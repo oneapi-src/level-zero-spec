@@ -20,6 +20,7 @@ The following documents the high-level programming models and guidelines.
         + [Device properties](#glod)
         + [Host processes](#gloz)
         + [Scheduler operations](#glos)
+        + [Performance profiles](#glox)
         + [Device reset](#glor)
         + [PCI link operations](#glop)
     + [Operations on power domains](#pwr)
@@ -111,6 +112,7 @@ The following operations are provided to access overall device information and c
 - Get Brand/model/vendor name
 - Query the information about processes using this device
 - Get/set scheduler mode and properties
+- Get/set performance profiles
 - Reset device
 - Query if the device has been repaired
 - PCI information:
@@ -342,6 +344,29 @@ function DisableSchedulerWatchdog(zet_sysman_handle_t hSysmanDevice)
     else
         output("ERROR: Problem calling the API.")
 ```
+
+### <a name="glox">Performance profiles</a>
+Some devices can be configured to optimize resource allocations/availability/frequencies for specific types of workloads. These are known as
+_performance profiles_. The full list of profiles is described in the table below. Not all devices support these profiles - use the function
+::zetSysmanPerformanceProfileGetSupported() to get the list avaiable on a given device. In general, the balanced profile (default) is
+optimal for most workloads, however there are outlier workloads where the hardware is not able to detect the optimal configuration and can
+benefit from one of these profiles being manually loaded.
+
+| Performance profile                  | Description |
+| :---                                 | :---        |
+| ::ZET_PERF_PROFILE_BALANCED         | The hardware is configured to strike a balance between compute and memory resources. This is the default profile when the device boots/resets. |
+| ::ZET_PERF_PROFILE_COMPUTE_BOUNDED  | The hardware is configured to prioritize performance of the compute units. |
+| ::ZET_PERF_PROFILE_MEMORY_BOUNDED   | The hardware is configured to prioritize memory throughput. |
+
+
+The following functions are available to change the performance profile of a device:
+
+| Function                                             | Description |
+| :---                                                 | :---        |
+| ::zetSysmanPerformanceProfileGetSupported()         | Get a list of supported performance profiles that can be loaded for this device |
+| ::zetSysmanPerformanceProfileGet()      			   | Get current pre-configured performance profile being used by the hardware |
+| ::zetSysmanPerformanceProfileSet()    			   | Load a pre-configured performance profile |
+
 
 ### <a name="glor">Device reset</a>
 The device can be reset using the following function:

@@ -391,6 +391,100 @@ zetSysmanSchedulerSetComputeUnitDebugMode(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Workload performance profiles
+typedef enum _zet_perf_profile_t
+{
+    ZET_PERF_PROFILE_BALANCED = 0,                  ///< The hardware is configured to strike a balance between compute and
+                                                    ///< memory resources. This is the default profile when the device
+                                                    ///< boots/resets.
+    ZET_PERF_PROFILE_COMPUTE_BOUNDED,               ///< The hardware is configured to prioritize performance of the compute
+                                                    ///< units.
+    ZET_PERF_PROFILE_MEMORY_BOUNDED,                ///< The hardware is configured to prioritize memory throughput.
+
+} zet_perf_profile_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get a list of supported performance profiles that can be loaded for
+///        this device
+/// 
+/// @details
+///     - The balanced profile ::ZET_PERF_PROFILE_BALANCED is always returned in
+///       the array.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCount
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanPerformanceProfileGetSupported(
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of performance profiles.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of supported performance profiles.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< supported performance profiles.
+                                                    ///< if count is larger than the number of supported performance profiles,
+                                                    ///< then the driver will update the value with the correct number of
+                                                    ///< supported performance profiles that are returned.
+    zet_perf_profile_t* pProfiles                   ///< [in,out][optional][range(0, *pCount)] Array of supported performance
+                                                    ///< profiles
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current pre-configured performance profile being used by the
+///        hardware
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProfile
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zetSysmanPerformanceProfileGet(
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_perf_profile_t* pProfile                    ///< [in] The performance profile currently loaded.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Load a pre-configured performance profile
+/// 
+/// @details
+///     - Performance profiles are not persistent settings. If the device is
+///       reset, the device will default back to the balanced profile
+///       ::ZET_PERF_PROFILE_BALANCED.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + The specified profile is not valid or not supported on this device (use ::zetSysmanPerformanceProfileGetSupported() to get a list of supported profiles).
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + User does not have permissions to change the performance profile of the hardware.
+ze_result_t __zecall
+zetSysmanPerformanceProfileSet(
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_perf_profile_t profile                      ///< [in] The performance profile to load.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Contains information about a process that has an open connection with
 ///        this device
 /// 

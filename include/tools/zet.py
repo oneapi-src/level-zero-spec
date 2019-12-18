@@ -656,6 +656,21 @@ class zet_sched_timeslice_properties_t(Structure):
     ]
 
 ###############################################################################
+## @brief Workload performance profiles
+class zet_perf_profile_v(IntEnum):
+    BALANCED = 0                                    ## The hardware is configured to strike a balance between compute and
+                                                    ## memory resources. This is the default profile when the device
+                                                    ## boots/resets.
+    COMPUTE_BOUNDED = auto()                        ## The hardware is configured to prioritize performance of the compute
+                                                    ## units.
+    MEMORY_BOUNDED = auto()                         ## The hardware is configured to prioritize memory throughput.
+
+class zet_perf_profile_t(c_int):
+    def __str__(self):
+        return str(zet_perf_profile_v(value))
+
+
+###############################################################################
 ## @brief Contains information about a process that has an open connection with
 ##        this device
 ## 
@@ -2159,6 +2174,27 @@ else:
     _zetSysmanSchedulerSetComputeUnitDebugMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
 
 ###############################################################################
+## @brief Function-pointer for zetSysmanPerformanceProfileGetSupported
+if __use_win_types:
+    _zetSysmanPerformanceProfileGetSupported_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_perf_profile_t) )
+else:
+    _zetSysmanPerformanceProfileGetSupported_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_perf_profile_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanPerformanceProfileGet
+if __use_win_types:
+    _zetSysmanPerformanceProfileGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_perf_profile_t) )
+else:
+    _zetSysmanPerformanceProfileGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_perf_profile_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanPerformanceProfileSet
+if __use_win_types:
+    _zetSysmanPerformanceProfileSet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, zet_perf_profile_t )
+else:
+    _zetSysmanPerformanceProfileSet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, zet_perf_profile_t )
+
+###############################################################################
 ## @brief Function-pointer for zetSysmanProcessesGetState
 if __use_win_types:
     _zetSysmanProcessesGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_process_state_t) )
@@ -2320,6 +2356,9 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnSchedulerSetTimesliceMode", c_void_p),                     ## _zetSysmanSchedulerSetTimesliceMode_t
         ("pfnSchedulerSetExclusiveMode", c_void_p),                     ## _zetSysmanSchedulerSetExclusiveMode_t
         ("pfnSchedulerSetComputeUnitDebugMode", c_void_p),              ## _zetSysmanSchedulerSetComputeUnitDebugMode_t
+        ("pfnPerformanceProfileGetSupported", c_void_p),                ## _zetSysmanPerformanceProfileGetSupported_t
+        ("pfnPerformanceProfileGet", c_void_p),                         ## _zetSysmanPerformanceProfileGet_t
+        ("pfnPerformanceProfileSet", c_void_p),                         ## _zetSysmanPerformanceProfileSet_t
         ("pfnProcessesGetState", c_void_p),                             ## _zetSysmanProcessesGetState_t
         ("pfnDeviceReset", c_void_p),                                   ## _zetSysmanDeviceReset_t
         ("pfnDeviceGetRepairStatus", c_void_p),                         ## _zetSysmanDeviceGetRepairStatus_t
@@ -3198,6 +3237,9 @@ class ZET_DDI:
         self.zetSysmanSchedulerSetTimesliceMode = _zetSysmanSchedulerSetTimesliceMode_t(self.__dditable.Sysman.pfnSchedulerSetTimesliceMode)
         self.zetSysmanSchedulerSetExclusiveMode = _zetSysmanSchedulerSetExclusiveMode_t(self.__dditable.Sysman.pfnSchedulerSetExclusiveMode)
         self.zetSysmanSchedulerSetComputeUnitDebugMode = _zetSysmanSchedulerSetComputeUnitDebugMode_t(self.__dditable.Sysman.pfnSchedulerSetComputeUnitDebugMode)
+        self.zetSysmanPerformanceProfileGetSupported = _zetSysmanPerformanceProfileGetSupported_t(self.__dditable.Sysman.pfnPerformanceProfileGetSupported)
+        self.zetSysmanPerformanceProfileGet = _zetSysmanPerformanceProfileGet_t(self.__dditable.Sysman.pfnPerformanceProfileGet)
+        self.zetSysmanPerformanceProfileSet = _zetSysmanPerformanceProfileSet_t(self.__dditable.Sysman.pfnPerformanceProfileSet)
         self.zetSysmanProcessesGetState = _zetSysmanProcessesGetState_t(self.__dditable.Sysman.pfnProcessesGetState)
         self.zetSysmanDeviceReset = _zetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
         self.zetSysmanDeviceGetRepairStatus = _zetSysmanDeviceGetRepairStatus_t(self.__dditable.Sysman.pfnDeviceGetRepairStatus)

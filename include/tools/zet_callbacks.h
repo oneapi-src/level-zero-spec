@@ -1013,6 +1013,76 @@ typedef void (__zecall *zet_pfnSysmanSchedulerSetComputeUnitDebugModeCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanPerformanceProfileGetSupported 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_performance_profile_get_supported_params_t
+{
+    zet_sysman_handle_t* phSysman;
+    uint32_t** ppCount;
+    zet_perf_profile_t** ppProfiles;
+} zet_sysman_performance_profile_get_supported_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanPerformanceProfileGetSupported 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanPerformanceProfileGetSupportedCb_t)(
+    zet_sysman_performance_profile_get_supported_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanPerformanceProfileGet 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_performance_profile_get_params_t
+{
+    zet_sysman_handle_t* phSysman;
+    zet_perf_profile_t** ppProfile;
+} zet_sysman_performance_profile_get_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanPerformanceProfileGet 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanPerformanceProfileGetCb_t)(
+    zet_sysman_performance_profile_get_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zetSysmanPerformanceProfileSet 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _zet_sysman_performance_profile_set_params_t
+{
+    zet_sysman_handle_t* phSysman;
+    zet_perf_profile_t* pprofile;
+} zet_sysman_performance_profile_set_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zetSysmanPerformanceProfileSet 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *zet_pfnSysmanPerformanceProfileSetCb_t)(
+    zet_sysman_performance_profile_set_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zetSysmanProcessesGetState 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1523,6 +1593,9 @@ typedef struct _zet_sysman_callbacks_t
     zet_pfnSysmanSchedulerSetTimesliceModeCb_t                      pfnSchedulerSetTimesliceModeCb;
     zet_pfnSysmanSchedulerSetExclusiveModeCb_t                      pfnSchedulerSetExclusiveModeCb;
     zet_pfnSysmanSchedulerSetComputeUnitDebugModeCb_t               pfnSchedulerSetComputeUnitDebugModeCb;
+    zet_pfnSysmanPerformanceProfileGetSupportedCb_t                 pfnPerformanceProfileGetSupportedCb;
+    zet_pfnSysmanPerformanceProfileGetCb_t                          pfnPerformanceProfileGetCb;
+    zet_pfnSysmanPerformanceProfileSetCb_t                          pfnPerformanceProfileSetCb;
     zet_pfnSysmanProcessesGetStateCb_t                              pfnProcessesGetStateCb;
     zet_pfnSysmanDeviceResetCb_t                                    pfnDeviceResetCb;
     zet_pfnSysmanDeviceGetRepairStatusCb_t                          pfnDeviceGetRepairStatusCb;

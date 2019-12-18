@@ -328,6 +328,79 @@ returns:
         - "User does not have permissions to make this modification."
 
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Workload performance profiles"
+class: $tSysman
+name: $t_perf_profile_t
+etors:
+    - name: $T_PERF_PROFILE_BALANCED
+      value: "0"
+      desc: "The hardware is configured to strike a balance between compute and memory resources. This is the default profile when the device boots/resets."
+    - name: $T_PERF_PROFILE_COMPUTE_BOUNDED
+      desc: "The hardware is configured to prioritize performance of the compute units."
+    - name: $T_PERF_PROFILE_MEMORY_BOUNDED
+      desc: "The hardware is configured to prioritize memory throughput."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get a list of supported performance profiles that can be loaded for this device"
+class: $tSysman
+name: PerformanceProfileGetSupported
+details:
+    - "The balanced profile $T_PERF_PROFILE_BALANCED is always returned in the array."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of performance profiles.
+            if count is zero, then the driver will update the value with the total number of supported performance profiles.
+            if count is non-zero, then driver will only retrieve that number of supported performance profiles.
+            if count is larger than the number of supported performance profiles, then the driver will update the value with the correct number of supported performance profiles that are returned.
+    - type: "$t_perf_profile_t*"
+      name: pProfiles
+      desc: "[in,out][optional][range(0, *pCount)] Array of supported performance profiles"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current pre-configured performance profile being used by the hardware"
+class: $tSysman
+name: PerformanceProfileGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] Sysman handle of the device."
+    - type: $t_perf_profile_t*
+      name: pProfile
+      desc: "[in] The performance profile currently loaded."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Load a pre-configured performance profile"
+class: $tSysman
+name: PerformanceProfileSet
+details:
+    - "Performance profiles are not persistent settings. If the device is reset, the device will default back to the balanced profile $T_PERF_PROFILE_BALANCED."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] Sysman handle of the device."
+    - type: $t_perf_profile_t
+      name: profile
+      desc: "[in] The performance profile to load."
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "The specified profile is not valid or not supported on this device (use $tSysmanPerformanceProfileGetSupported() to get a list of supported profiles)."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "User does not have permissions to change the performance profile of the hardware."
+
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Contains information about a process that has an open connection with this device"
 class: $tSysman

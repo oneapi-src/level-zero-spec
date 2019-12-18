@@ -669,6 +669,28 @@ typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetComputeUnitDebugMode_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPerformanceProfileGetSupported 
+typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceProfileGetSupported_t)(
+    zet_sysman_handle_t,
+    uint32_t*,
+    zet_perf_profile_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPerformanceProfileGet 
+typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceProfileGet_t)(
+    zet_sysman_handle_t,
+    zet_perf_profile_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPerformanceProfileSet 
+typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceProfileSet_t)(
+    zet_sysman_handle_t,
+    zet_perf_profile_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanProcessesGetState 
 typedef ze_result_t (__zecall *zet_pfnSysmanProcessesGetState_t)(
     zet_sysman_handle_t,
@@ -843,6 +865,9 @@ typedef struct _zet_sysman_dditable_t
     zet_pfnSysmanSchedulerSetTimesliceMode_t                    pfnSchedulerSetTimesliceMode;
     zet_pfnSysmanSchedulerSetExclusiveMode_t                    pfnSchedulerSetExclusiveMode;
     zet_pfnSysmanSchedulerSetComputeUnitDebugMode_t             pfnSchedulerSetComputeUnitDebugMode;
+    zet_pfnSysmanPerformanceProfileGetSupported_t               pfnPerformanceProfileGetSupported;
+    zet_pfnSysmanPerformanceProfileGet_t                        pfnPerformanceProfileGet;
+    zet_pfnSysmanPerformanceProfileSet_t                        pfnPerformanceProfileSet;
     zet_pfnSysmanProcessesGetState_t                            pfnProcessesGetState;
     zet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
     zet_pfnSysmanDeviceGetRepairStatus_t                        pfnDeviceGetRepairStatus;

@@ -130,6 +130,19 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Workload performance profiles
+        enum class perf_profile_t
+        {
+            BALANCED = 0,                                   ///< The hardware is configured to strike a balance between compute and
+                                                            ///< memory resources. This is the default profile when the device
+                                                            ///< boots/resets.
+            COMPUTE_BOUNDED,                                ///< The hardware is configured to prioritize performance of the compute
+                                                            ///< units.
+            MEMORY_BOUNDED,                                 ///< The hardware is configured to prioritize memory throughput.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Device repair status
         enum class repair_status_t
         {
@@ -559,6 +572,58 @@ namespace zet
         SchedulerSetComputeUnitDebugMode(
             ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
                                                             ///< scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get a list of supported performance profiles that can be loaded for
+        ///        this device
+        /// 
+        /// @details
+        ///     - The balanced profile ::ZET_PERF_PROFILE_BALANCED is always returned in
+        ///       the array.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        PerformanceProfileGetSupported(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of performance profiles.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of supported performance profiles.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of
+                                                            ///< supported performance profiles.
+                                                            ///< if count is larger than the number of supported performance profiles,
+                                                            ///< then the driver will update the value with the correct number of
+                                                            ///< supported performance profiles that are returned.
+            perf_profile_t* pProfiles = nullptr             ///< [in,out][optional][range(0, *pCount)] Array of supported performance
+                                                            ///< profiles
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get current pre-configured performance profile being used by the
+        ///        hardware
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        PerformanceProfileGet(
+            perf_profile_t* pProfile                        ///< [in] The performance profile currently loaded.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Load a pre-configured performance profile
+        /// 
+        /// @details
+        ///     - Performance profiles are not persistent settings. If the device is
+        ///       reset, the device will default back to the balanced profile
+        ///       ::ZET_PERF_PROFILE_BALANCED.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        PerformanceProfileSet(
+            perf_profile_t profile                          ///< [in] The performance profile to load.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -3132,6 +3197,10 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::sched_timeslice_properties_t to std::string
     std::string to_string( const Sysman::sched_timeslice_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::perf_profile_t to std::string
+    std::string to_string( const Sysman::perf_profile_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::process_state_t to std::string

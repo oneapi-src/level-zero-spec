@@ -1160,6 +1160,87 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPerformanceProfileGetSupported
+    ze_result_t __zecall
+    zetSysmanPerformanceProfileGetSupported(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of performance profiles.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of supported performance profiles.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< supported performance profiles.
+                                                        ///< if count is larger than the number of supported performance profiles,
+                                                        ///< then the driver will update the value with the correct number of
+                                                        ///< supported performance profiles that are returned.
+        zet_perf_profile_t* pProfiles                   ///< [in,out][optional][range(0, *pCount)] Array of supported performance
+                                                        ///< profiles
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnPerformanceProfileGetSupported = context.zetDdiTable.Sysman.pfnPerformanceProfileGetSupported;
+        if( nullptr != pfnPerformanceProfileGetSupported )
+        {
+            result = pfnPerformanceProfileGetSupported( hSysman, pCount, pProfiles );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPerformanceProfileGet
+    ze_result_t __zecall
+    zetSysmanPerformanceProfileGet(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_perf_profile_t* pProfile                    ///< [in] The performance profile currently loaded.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnPerformanceProfileGet = context.zetDdiTable.Sysman.pfnPerformanceProfileGet;
+        if( nullptr != pfnPerformanceProfileGet )
+        {
+            result = pfnPerformanceProfileGet( hSysman, pProfile );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPerformanceProfileSet
+    ze_result_t __zecall
+    zetSysmanPerformanceProfileSet(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_perf_profile_t profile                      ///< [in] The performance profile to load.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnPerformanceProfileSet = context.zetDdiTable.Sysman.pfnPerformanceProfileSet;
+        if( nullptr != pfnPerformanceProfileSet )
+        {
+            result = pfnPerformanceProfileSet( hSysman, profile );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanProcessesGetState
     ze_result_t __zecall
     zetSysmanProcessesGetState(
@@ -3847,6 +3928,12 @@ zetGetSysmanProcAddrTable(
     pDdiTable->pfnSchedulerSetExclusiveMode              = driver::zetSysmanSchedulerSetExclusiveMode;
 
     pDdiTable->pfnSchedulerSetComputeUnitDebugMode       = driver::zetSysmanSchedulerSetComputeUnitDebugMode;
+
+    pDdiTable->pfnPerformanceProfileGetSupported         = driver::zetSysmanPerformanceProfileGetSupported;
+
+    pDdiTable->pfnPerformanceProfileGet                  = driver::zetSysmanPerformanceProfileGet;
+
+    pDdiTable->pfnPerformanceProfileSet                  = driver::zetSysmanPerformanceProfileSet;
 
     pDdiTable->pfnProcessesGetState                      = driver::zetSysmanProcessesGetState;
 
