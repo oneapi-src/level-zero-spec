@@ -987,37 +987,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetModuleGetKernelNames
-    ze_result_t __zecall
-    zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the module
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of names available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
-                                                        ///< if count is larger than the number of names available, then the driver
-                                                        ///< will update the value with the correct number of names available.
-        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_module_object_t*>( hModule )->dditable;
-        auto pfnGetKernelNames = dditable->zet.Module.pfnGetKernelNames;
-        if( nullptr == pfnGetKernelNames )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hModule = reinterpret_cast<zet_module_object_t*>( hModule )->handle;
-
-        // forward to device-driver
-        result = pfnGetKernelNames( hModule, pCount, pNames );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetKernelGetProfileInfo
     ze_result_t __zecall
     zetKernelGetProfileInfo(
@@ -4154,7 +4123,6 @@ zetGetModuleProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetDebugInfo                             = loader::zetModuleGetDebugInfo;
-            pDdiTable->pfnGetKernelNames                           = loader::zetModuleGetKernelNames;
         }
         else
         {

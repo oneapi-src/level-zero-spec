@@ -879,38 +879,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetModuleGetKernelNames
-    ze_result_t __zecall
-    zetModuleGetKernelNames(
-        zet_module_handle_t hModule,                    ///< [in] handle of the module
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of names available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
-                                                        ///< if count is larger than the number of names available, then the driver
-                                                        ///< will update the value with the correct number of names available.
-        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
-        )
-    {
-        auto pfnGetKernelNames = context.zetDdiTable.Module.pfnGetKernelNames;
-
-        if( nullptr == pfnGetKernelNames )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetKernelNames( hModule, pCount, pNames );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetKernelGetProfileInfo
     ze_result_t __zecall
     zetKernelGetProfileInfo(
@@ -3836,9 +3804,6 @@ zetGetModuleProcAddrTable(
 
     dditable.pfnGetDebugInfo                             = pDdiTable->pfnGetDebugInfo;
     pDdiTable->pfnGetDebugInfo                           = layer::zetModuleGetDebugInfo;
-
-    dditable.pfnGetKernelNames                           = pDdiTable->pfnGetKernelNames;
-    pDdiTable->pfnGetKernelNames                         = layer::zetModuleGetKernelNames;
 
     return result;
 }

@@ -70,7 +70,7 @@ members:
       init: nullptr
     - type: "const $x_module_constants_t*"
       name: pConstants
-      desc: "[in] pointer to specialization constants. Valid only for SPIR-V input."
+      desc: "[in] pointer to specialization constants. Valid only for SPIR-V input. This must be set to nullptr if no specialization constants are provided."
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
@@ -203,7 +203,7 @@ details:
 params:
     - type: $x_module_handle_t
       name: hModule
-      desc: "[in] handle of the device"
+      desc: "[in] handle of the module"
     - type: "const char*"
       name: pGlobalName
       desc: "[in] name of global variable in module"
@@ -214,6 +214,28 @@ returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid name"
     - $X_RESULT_ERROR_UNSUPPORTED
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve all kernel names in the module."
+class: $xModule
+name: GetKernelNames
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_module_handle_t
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of names.
+            if count is zero, then the driver will update the value with the total number of names available.
+            if count is non-zero, then driver will only retrieve that number of names.
+            if count is larger than the number of names available, then the driver will update the value with the correct number of names available.
+    - type: "const char**"
+      name: pNames
+      desc: "[in,out][optional][range(0, *pCount)] array of names of functions"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_kernel_desc_t

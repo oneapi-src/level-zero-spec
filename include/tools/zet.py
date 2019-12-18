@@ -1878,20 +1878,12 @@ if __use_win_types:
 else:
     _zetModuleGetDebugInfo_t = CFUNCTYPE( ze_result_t, zet_module_handle_t, zet_module_debug_info_format_t, POINTER(c_size_t), POINTER(c_ubyte) )
 
-###############################################################################
-## @brief Function-pointer for zetModuleGetKernelNames
-if __use_win_types:
-    _zetModuleGetKernelNames_t = WINFUNCTYPE( ze_result_t, zet_module_handle_t, POINTER(c_ulong), POINTER(c_char*) )
-else:
-    _zetModuleGetKernelNames_t = CFUNCTYPE( ze_result_t, zet_module_handle_t, POINTER(c_ulong), POINTER(c_char*) )
-
 
 ###############################################################################
 ## @brief Table of Module functions pointers
 class _zet_module_dditable_t(Structure):
     _fields_ = [
-        ("pfnGetDebugInfo", c_void_p),                                  ## _zetModuleGetDebugInfo_t
-        ("pfnGetKernelNames", c_void_p)                                 ## _zetModuleGetKernelNames_t
+        ("pfnGetDebugInfo", c_void_p)                                   ## _zetModuleGetDebugInfo_t
     ]
 
 ###############################################################################
@@ -3134,7 +3126,6 @@ class ZET_DDI:
 
         # attach function interface to function address
         self.zetModuleGetDebugInfo = _zetModuleGetDebugInfo_t(self.__dditable.Module.pfnGetDebugInfo)
-        self.zetModuleGetKernelNames = _zetModuleGetKernelNames_t(self.__dditable.Module.pfnGetKernelNames)
 
         # call driver to get function pointers
         _Kernel = _zet_kernel_dditable_t()

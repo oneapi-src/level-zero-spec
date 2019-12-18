@@ -9,28 +9,6 @@
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Instrumentation (PIN)"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Retrieve all kernel names in the module."
-class: $tModule
-name: GetKernelNames
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_module_handle_t
-      name: hModule
-      desc: "[in] handle of the module"
-    - type: "uint32_t*"
-      name: pCount
-      desc: |
-            [in,out] pointer to the number of names.
-            if count is zero, then the driver will update the value with the total number of names available.
-            if count is non-zero, then driver will only retrieve that number of names.
-            if count is larger than the number of names available, then the driver will update the value with the correct number of names available.
-    - type: "const char**"
-      name: pNames
-      desc: "[in,out][optional][range(0, *pCount)] array of names of functions"
---- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $t_profile_info_t"
 class: $tKernel

@@ -503,7 +503,6 @@ For example, a tool may use API Tracing in any of the following ways:
 ## Intra-Function Instrumentation
 The following capabilities allow for a tool to inject instructions within a kernel:
 * ::zetModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
-* ::zetModuleGetKernelNames - allows for a tool to query for all kernels within an application's module
 * ::zetKernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
 * ::zeModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
 * [API Tracing](#at) - same usage as Inter-Function Instrumentation above

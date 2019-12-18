@@ -1078,6 +1078,14 @@ typedef ze_result_t (__zecall *ze_pfnModuleGetGlobalPointer_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeModuleGetKernelNames 
+typedef ze_result_t (__zecall *ze_pfnModuleGetKernelNames_t)(
+    ze_module_handle_t,
+    uint32_t*,
+    const char**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeModuleGetFunctionPointer 
 typedef ze_result_t (__zecall *ze_pfnModuleGetFunctionPointer_t)(
     ze_module_handle_t,
@@ -1093,6 +1101,7 @@ typedef struct _ze_module_dditable_t
     ze_pfnModuleDestroy_t                                       pfnDestroy;
     ze_pfnModuleGetNativeBinary_t                               pfnGetNativeBinary;
     ze_pfnModuleGetGlobalPointer_t                              pfnGetGlobalPointer;
+    ze_pfnModuleGetKernelNames_t                                pfnGetKernelNames;
     ze_pfnModuleGetFunctionPointer_t                            pfnGetFunctionPointer;
 } ze_module_dditable_t;
 

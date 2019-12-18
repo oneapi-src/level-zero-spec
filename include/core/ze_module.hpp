@@ -72,6 +72,8 @@ namespace ze
             const char* pBuildFlags = nullptr;              ///< [in] string containing compiler flags. See programming guide for build
                                                             ///< flags.
             const constants_t* pConstants = nullptr;        ///< [in] pointer to specialization constants. Valid only for SPIR-V input.
+                                                            ///< This must be set to nullptr if no specialization constants are
+                                                            ///< provided.
 
         };
 
@@ -195,6 +197,24 @@ namespace ze
         void* __zecall
         GetGlobalPointer(
             const char* pGlobalName                         ///< [in] name of global variable in module
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieve all kernel names in the module.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetKernelNames(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of names available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                            ///< if count is larger than the number of names available, then the driver
+                                                            ///< will update the value with the correct number of names available.
+            const char** pNames = nullptr                   ///< [in,out][optional][range(0, *pCount)] array of names of functions
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -1002,6 +1002,8 @@ class ze_module_desc_t(Structure):
         ("pBuildFlags", POINTER(c_char)),                               ## [in] string containing compiler flags. See programming guide for build
                                                                         ## flags.
         ("pConstants", POINTER(ze_module_constants_t))                  ## [in] pointer to specialization constants. Valid only for SPIR-V input.
+                                                                        ## This must be set to nullptr if no specialization constants are
+                                                                        ## provided.
     ]
 
 ###############################################################################
@@ -1879,6 +1881,13 @@ else:
     _zeModuleGetGlobalPointer_t = CFUNCTYPE( ze_result_t, ze_module_handle_t, POINTER(c_char), POINTER(c_void_p) )
 
 ###############################################################################
+## @brief Function-pointer for zeModuleGetKernelNames
+if __use_win_types:
+    _zeModuleGetKernelNames_t = WINFUNCTYPE( ze_result_t, ze_module_handle_t, POINTER(c_ulong), POINTER(c_char*) )
+else:
+    _zeModuleGetKernelNames_t = CFUNCTYPE( ze_result_t, ze_module_handle_t, POINTER(c_ulong), POINTER(c_char*) )
+
+###############################################################################
 ## @brief Function-pointer for zeModuleGetFunctionPointer
 if __use_win_types:
     _zeModuleGetFunctionPointer_t = WINFUNCTYPE( ze_result_t, ze_module_handle_t, POINTER(c_char), POINTER(c_void_p) )
@@ -1894,6 +1903,7 @@ class _ze_module_dditable_t(Structure):
         ("pfnDestroy", c_void_p),                                       ## _zeModuleDestroy_t
         ("pfnGetNativeBinary", c_void_p),                               ## _zeModuleGetNativeBinary_t
         ("pfnGetGlobalPointer", c_void_p),                              ## _zeModuleGetGlobalPointer_t
+        ("pfnGetKernelNames", c_void_p),                                ## _zeModuleGetKernelNames_t
         ("pfnGetFunctionPointer", c_void_p)                             ## _zeModuleGetFunctionPointer_t
     ]
 
@@ -2224,6 +2234,7 @@ class ZE_DDI:
         self.zeModuleDestroy = _zeModuleDestroy_t(self.__dditable.Module.pfnDestroy)
         self.zeModuleGetNativeBinary = _zeModuleGetNativeBinary_t(self.__dditable.Module.pfnGetNativeBinary)
         self.zeModuleGetGlobalPointer = _zeModuleGetGlobalPointer_t(self.__dditable.Module.pfnGetGlobalPointer)
+        self.zeModuleGetKernelNames = _zeModuleGetKernelNames_t(self.__dditable.Module.pfnGetKernelNames)
         self.zeModuleGetFunctionPointer = _zeModuleGetFunctionPointer_t(self.__dditable.Module.pfnGetFunctionPointer)
 
         # call driver to get function pointers

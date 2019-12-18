@@ -2056,7 +2056,7 @@ namespace driver
     /// @brief Intercept function for zeModuleGetGlobalPointer
     ze_result_t __zecall
     zeModuleGetGlobalPointer(
-        ze_module_handle_t hModule,                     ///< [in] handle of the device
+        ze_module_handle_t hModule,                     ///< [in] handle of the module
         const char* pGlobalName,                        ///< [in] name of global variable in module
         void** pptr                                     ///< [out] device visible pointer
         )
@@ -2068,6 +2068,36 @@ namespace driver
         if( nullptr != pfnGetGlobalPointer )
         {
             result = pfnGetGlobalPointer( hModule, pGlobalName, pptr );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeModuleGetKernelNames
+    ze_result_t __zecall
+    zeModuleGetKernelNames(
+        ze_module_handle_t hModule,                     ///< [in] handle of the module
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetKernelNames = context.zeDdiTable.Module.pfnGetKernelNames;
+        if( nullptr != pfnGetKernelNames )
+        {
+            result = pfnGetKernelNames( hModule, pCount, pNames );
         }
         else
         {
@@ -7006,7 +7036,7 @@ namespace instrumented
     /// @brief Intercept function for zeModuleGetGlobalPointer
     ze_result_t __zecall
     zeModuleGetGlobalPointer(
-        ze_module_handle_t hModule,                     ///< [in] handle of the device
+        ze_module_handle_t hModule,                     ///< [in] handle of the module
         const char* pGlobalName,                        ///< [in] name of global variable in module
         void** pptr                                     ///< [out] device visible pointer
         )
@@ -7051,6 +7081,67 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.Module;
                 if( nullptr != table.pfnGetGlobalPointerCb )
                     table.pfnGetGlobalPointerCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeModuleGetKernelNames
+    ze_result_t __zecall
+    zeModuleGetKernelNames(
+        ze_module_handle_t hModule,                     ///< [in] handle of the module
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_module_get_kernel_names_params_t in_params = {
+            &hModule,
+            &pCount,
+            &pNames
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Module;
+                if( nullptr != table.pfnGetKernelNamesCb )
+                    table.pfnGetKernelNamesCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeModuleGetKernelNames( hModule, pCount, pNames );
+
+        // capture parameters
+        ze_module_get_kernel_names_params_t out_params = {
+            &hModule,
+            &pCount,
+            &pNames
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Module;
+                if( nullptr != table.pfnGetKernelNamesCb )
+                    table.pfnGetKernelNamesCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8939,6 +9030,11 @@ zeGetModuleProcAddrTable(
         pDdiTable->pfnGetGlobalPointer                       = instrumented::zeModuleGetGlobalPointer;
     else
         pDdiTable->pfnGetGlobalPointer                       = driver::zeModuleGetGlobalPointer;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetKernelNames                         = instrumented::zeModuleGetKernelNames;
+    else
+        pDdiTable->pfnGetKernelNames                         = driver::zeModuleGetKernelNames;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnGetFunctionPointer                     = instrumented::zeModuleGetFunctionPointer;

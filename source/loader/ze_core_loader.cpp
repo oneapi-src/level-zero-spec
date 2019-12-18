@@ -2411,7 +2411,7 @@ namespace loader
     /// @brief Intercept function for zeModuleGetGlobalPointer
     ze_result_t __zecall
     zeModuleGetGlobalPointer(
-        ze_module_handle_t hModule,                     ///< [in] handle of the device
+        ze_module_handle_t hModule,                     ///< [in] handle of the module
         const char* pGlobalName,                        ///< [in] name of global variable in module
         void** pptr                                     ///< [out] device visible pointer
         )
@@ -2429,6 +2429,37 @@ namespace loader
 
         // forward to device-driver
         result = pfnGetGlobalPointer( hModule, pGlobalName, pptr );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeModuleGetKernelNames
+    ze_result_t __zecall
+    zeModuleGetKernelNames(
+        ze_module_handle_t hModule,                     ///< [in] handle of the module
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_module_object_t*>( hModule )->dditable;
+        auto pfnGetKernelNames = dditable->ze.Module.pfnGetKernelNames;
+        if( nullptr == pfnGetKernelNames )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hModule = reinterpret_cast<ze_module_object_t*>( hModule )->handle;
+
+        // forward to device-driver
+        result = pfnGetKernelNames( hModule, pCount, pNames );
 
         return result;
     }
@@ -3762,6 +3793,7 @@ zeGetModuleProcAddrTable(
             pDdiTable->pfnDestroy                                  = loader::zeModuleDestroy;
             pDdiTable->pfnGetNativeBinary                          = loader::zeModuleGetNativeBinary;
             pDdiTable->pfnGetGlobalPointer                         = loader::zeModuleGetGlobalPointer;
+            pDdiTable->pfnGetKernelNames                           = loader::zeModuleGetKernelNames;
             pDdiTable->pfnGetFunctionPointer                       = loader::zeModuleGetFunctionPointer;
         }
         else

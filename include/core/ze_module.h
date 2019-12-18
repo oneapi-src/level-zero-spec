@@ -64,6 +64,8 @@ typedef struct _ze_module_desc_t
     const char* pBuildFlags;                        ///< [in] string containing compiler flags. See programming guide for build
                                                     ///< flags.
     const ze_module_constants_t* pConstants;        ///< [in] pointer to specialization constants. Valid only for SPIR-V input.
+                                                    ///< This must be set to nullptr if no specialization constants are
+                                                    ///< provided.
 
 } ze_module_desc_t;
 
@@ -243,9 +245,36 @@ zeModuleGetNativeBinary(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zeModuleGetGlobalPointer(
-    ze_module_handle_t hModule,                     ///< [in] handle of the device
+    ze_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pGlobalName,                        ///< [in] name of global variable in module
     void** pptr                                     ///< [out] device visible pointer
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve all kernel names in the module.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hModule
+///         + nullptr == pCount
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeModuleGetKernelNames(
+    ze_module_handle_t hModule,                     ///< [in] handle of the module
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of names available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                    ///< if count is larger than the number of names available, then the driver
+                                                    ///< will update the value with the correct number of names available.
+    const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
     );
 
 ///////////////////////////////////////////////////////////////////////////////
