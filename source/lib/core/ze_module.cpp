@@ -229,7 +229,7 @@ zeModuleGetNativeBinary(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zeModuleGetGlobalPointer(
-    ze_module_handle_t hModule,                     ///< [in] handle of the device
+    ze_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pGlobalName,                        ///< [in] name of global variable in module
     void** pptr                                     ///< [out] device visible pointer
     )
@@ -239,6 +239,40 @@ zeModuleGetGlobalPointer(
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnGetGlobalPointer( hModule, pGlobalName, pptr );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve all kernel names in the module.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hModule
+///         + nullptr == pCount
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeModuleGetKernelNames(
+    ze_module_handle_t hModule,                     ///< [in] handle of the module
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of names available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                    ///< if count is larger than the number of names available, then the driver
+                                                    ///< will update the value with the correct number of names available.
+    const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+    )
+{
+    auto pfnGetKernelNames = ze_lib::context.ddiTable.Module.pfnGetKernelNames;
+    if( nullptr == pfnGetKernelNames )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetKernelNames( hModule, pCount, pNames );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1025,6 +1059,34 @@ namespace ze
             throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Module::GetGlobalPointer" );
 
         return pptr;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieve all kernel names in the module.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Module::GetKernelNames(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        auto result = static_cast<result_t>( ::zeModuleGetKernelNames(
+            reinterpret_cast<ze_module_handle_t>( getHandle() ),
+            pCount,
+            pNames ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Module::GetKernelNames" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

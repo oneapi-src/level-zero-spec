@@ -2228,6 +2228,30 @@ typedef void (__zecall *ze_pfnModuleGetGlobalPointerCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeModuleGetKernelNames 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_module_get_kernel_names_params_t
+{
+    ze_module_handle_t* phModule;
+    uint32_t** ppCount;
+    const char*** ppNames;
+} ze_module_get_kernel_names_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeModuleGetKernelNames 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnModuleGetKernelNamesCb_t)(
+    ze_module_get_kernel_names_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeModuleGetFunctionPointer 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -2259,6 +2283,7 @@ typedef struct _ze_module_callbacks_t
     ze_pfnModuleDestroyCb_t                                         pfnDestroyCb;
     ze_pfnModuleGetNativeBinaryCb_t                                 pfnGetNativeBinaryCb;
     ze_pfnModuleGetGlobalPointerCb_t                                pfnGetGlobalPointerCb;
+    ze_pfnModuleGetKernelNamesCb_t                                  pfnGetKernelNamesCb;
     ze_pfnModuleGetFunctionPointerCb_t                              pfnGetFunctionPointerCb;
 } ze_module_callbacks_t;
 

@@ -200,6 +200,24 @@ namespace ze
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieve all kernel names in the module.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetKernelNames(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of names available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                            ///< if count is larger than the number of names available, then the driver
+                                                            ///< will update the value with the correct number of names available.
+            const char** pNames = nullptr                   ///< [in,out][optional][range(0, *pCount)] array of names of functions
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Retrieve a function pointer from a module by name
         /// 
         /// @details

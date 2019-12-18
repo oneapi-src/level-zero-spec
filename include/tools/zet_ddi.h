@@ -171,19 +171,10 @@ typedef ze_result_t (__zecall *zet_pfnModuleGetDebugInfo_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetModuleGetKernelNames 
-typedef ze_result_t (__zecall *zet_pfnModuleGetKernelNames_t)(
-    zet_module_handle_t,
-    uint32_t*,
-    const char**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Module functions pointers
 typedef struct _zet_module_dditable_t
 {
     zet_pfnModuleGetDebugInfo_t                                 pfnGetDebugInfo;
-    zet_pfnModuleGetKernelNames_t                               pfnGetKernelNames;
 } zet_module_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -211,35 +211,10 @@ typedef void (__zecall *zet_pfnModuleGetDebugInfoCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetModuleGetKernelNames 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_module_get_kernel_names_params_t
-{
-    zet_module_handle_t* phModule;
-    uint32_t** ppCount;
-    const char*** ppNames;
-} zet_module_get_kernel_names_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetModuleGetKernelNames 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnModuleGetKernelNamesCb_t)(
-    zet_module_get_kernel_names_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Module callback functions pointers
 typedef struct _zet_module_callbacks_t
 {
     zet_pfnModuleGetDebugInfoCb_t                                   pfnGetDebugInfoCb;
-    zet_pfnModuleGetKernelNamesCb_t                                 pfnGetKernelNamesCb;
 } zet_module_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
