@@ -1291,6 +1291,9 @@ The table below summarizes the default permissions for each API function:
 | ::zetSysmanSchedulerSetTimesliceMode()               | read-write           | read-write           | read-only            | no-access            |
 | ::zetSysmanSchedulerSetExclusiveMode()               | read-write           | read-write           | read-only            | no-access            |
 | ::zetSysmanSchedulerSetComputeUnitDebugMode()        | read-write           | read-write           | read-only            | no-access            |
+| ::zetSysmanPerformanceProfileGetSupported()          | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPerformanceProfileGet()                   | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPerformanceProfileSet()                   | read-write           | read-write           | no-access            | no-access            |
 | ::zetSysmanDeviceReset()                             | read-write           | no-access            | no-access            | no-access            |
 | ::zetSysmanPciGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPciGetState()                             | read-only            | read-only            | read-only            | no-access            |

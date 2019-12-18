@@ -1297,6 +1297,9 @@ The table below summarizes the default permissions for each API function:
 | ::${t}SysmanSchedulerSetTimesliceMode()               | read-write           | read-write           | read-only            | no-access            |
 | ::${t}SysmanSchedulerSetExclusiveMode()               | read-write           | read-write           | read-only            | no-access            |
 | ::${t}SysmanSchedulerSetComputeUnitDebugMode()        | read-write           | read-write           | read-only            | no-access            |
+| ::${t}SysmanPerformanceProfileGetSupported()          | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPerformanceProfileGet()                   | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPerformanceProfileSet()                   | read-write           | read-write           | no-access            | no-access            |
 | ::${t}SysmanDeviceReset()                             | read-write           | no-access            | no-access            | no-access            |
 | ::${t}SysmanPciGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanPciGetState()                             | read-only            | read-only            | read-only            | no-access            |
