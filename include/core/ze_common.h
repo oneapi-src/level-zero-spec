@@ -187,6 +187,14 @@ typedef struct _ze_ipc_mem_handle_t ze_ipc_mem_handle_t;
 typedef struct _ze_ipc_event_pool_handle_t ze_ipc_event_pool_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ze_driver_uuid_t
+typedef struct _ze_driver_uuid_t ze_driver_uuid_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ze_driver_properties_t
+typedef struct _ze_driver_properties_t ze_driver_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare ze_driver_ipc_properties_t
 typedef struct _ze_driver_ipc_properties_t ze_driver_ipc_properties_t;
 

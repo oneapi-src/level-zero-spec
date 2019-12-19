@@ -99,7 +99,7 @@ namespace driver
     /// @brief Intercept function for zeDriverGetApiVersion
     ze_result_t __zecall
     zeDriverGetApiVersion(
-        ze_driver_handle_t hDrivers,                    ///< [in] handle of the driver instance
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_api_version_t* version                       ///< [out] api version
         )
     {
@@ -109,7 +109,31 @@ namespace driver
         auto pfnGetApiVersion = context.zeDdiTable.Driver.pfnGetApiVersion;
         if( nullptr != pfnGetApiVersion )
         {
-            result = pfnGetApiVersion( hDrivers, version );
+            result = pfnGetApiVersion( hDriver, version );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDriverGetProperties
+    ze_result_t __zecall
+    zeDriverGetProperties(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        ze_driver_properties_t* pDriverProperties       ///< [in,out] query result for driver properties
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.zeDdiTable.Driver.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hDriver, pDriverProperties );
         }
         else
         {
@@ -2803,7 +2827,7 @@ namespace instrumented
     /// @brief Intercept function for zeDriverGetApiVersion
     ze_result_t __zecall
     zeDriverGetApiVersion(
-        ze_driver_handle_t hDrivers,                    ///< [in] handle of the driver instance
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_api_version_t* version                       ///< [out] api version
         )
     {
@@ -2811,7 +2835,7 @@ namespace instrumented
 
         // capture parameters
         ze_driver_get_api_version_params_t in_params = {
-            &hDrivers,
+            &hDriver,
             &version
         };
 
@@ -2830,11 +2854,11 @@ namespace instrumented
                         &instanceUserData[ i ] );
             }
 
-        result = driver::zeDriverGetApiVersion( hDrivers, version );
+        result = driver::zeDriverGetApiVersion( hDriver, version );
 
         // capture parameters
         ze_driver_get_api_version_params_t out_params = {
-            &hDrivers,
+            &hDriver,
             &version
         };
 
@@ -2845,6 +2869,59 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.Driver;
                 if( nullptr != table.pfnGetApiVersionCb )
                     table.pfnGetApiVersionCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDriverGetProperties
+    ze_result_t __zecall
+    zeDriverGetProperties(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        ze_driver_properties_t* pDriverProperties       ///< [in,out] query result for driver properties
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_driver_get_properties_params_t in_params = {
+            &hDriver,
+            &pDriverProperties
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Driver;
+                if( nullptr != table.pfnGetPropertiesCb )
+                    table.pfnGetPropertiesCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeDriverGetProperties( hDriver, pDriverProperties );
+
+        // capture parameters
+        ze_driver_get_properties_params_t out_params = {
+            &hDriver,
+            &pDriverProperties
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Driver;
+                if( nullptr != table.pfnGetPropertiesCb )
+                    table.pfnGetPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8318,6 +8395,109 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Driver table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zeGetDriverProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    ze_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGet                                    = instrumented::zeDriverGet;
+    else
+        pDdiTable->pfnGet                                    = driver::zeDriverGet;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetDriverVersion                       = instrumented::zeDriverGetDriverVersion;
+    else
+        pDdiTable->pfnGetDriverVersion                       = driver::zeDriverGetDriverVersion;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetApiVersion                          = instrumented::zeDriverGetApiVersion;
+    else
+        pDdiTable->pfnGetApiVersion                          = driver::zeDriverGetApiVersion;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetProperties                          = instrumented::zeDriverGetProperties;
+    else
+        pDdiTable->pfnGetProperties                          = driver::zeDriverGetProperties;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetIPCProperties                       = instrumented::zeDriverGetIPCProperties;
+    else
+        pDdiTable->pfnGetIPCProperties                       = driver::zeDriverGetIPCProperties;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetExtensionFunctionAddress            = instrumented::zeDriverGetExtensionFunctionAddress;
+    else
+        pDdiTable->pfnGetExtensionFunctionAddress            = driver::zeDriverGetExtensionFunctionAddress;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnAllocSharedMem                         = instrumented::zeDriverAllocSharedMem;
+    else
+        pDdiTable->pfnAllocSharedMem                         = driver::zeDriverAllocSharedMem;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnAllocDeviceMem                         = instrumented::zeDriverAllocDeviceMem;
+    else
+        pDdiTable->pfnAllocDeviceMem                         = driver::zeDriverAllocDeviceMem;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnAllocHostMem                           = instrumented::zeDriverAllocHostMem;
+    else
+        pDdiTable->pfnAllocHostMem                           = driver::zeDriverAllocHostMem;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnFreeMem                                = instrumented::zeDriverFreeMem;
+    else
+        pDdiTable->pfnFreeMem                                = driver::zeDriverFreeMem;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetMemAllocProperties                  = instrumented::zeDriverGetMemAllocProperties;
+    else
+        pDdiTable->pfnGetMemAllocProperties                  = driver::zeDriverGetMemAllocProperties;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetMemAddressRange                     = instrumented::zeDriverGetMemAddressRange;
+    else
+        pDdiTable->pfnGetMemAddressRange                     = driver::zeDriverGetMemAddressRange;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetMemIpcHandle                        = instrumented::zeDriverGetMemIpcHandle;
+    else
+        pDdiTable->pfnGetMemIpcHandle                        = driver::zeDriverGetMemIpcHandle;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnOpenMemIpcHandle                       = instrumented::zeDriverOpenMemIpcHandle;
+    else
+        pDdiTable->pfnOpenMemIpcHandle                       = driver::zeDriverOpenMemIpcHandle;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnCloseMemIpcHandle                      = instrumented::zeDriverCloseMemIpcHandle;
+    else
+        pDdiTable->pfnCloseMemIpcHandle                      = driver::zeDriverCloseMemIpcHandle;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Global table
 ///        with current process' addresses
 ///
@@ -8486,104 +8666,6 @@ zeGetDeviceProcAddrTable(
         pDdiTable->pfnEvictImage                             = instrumented::zeDeviceEvictImage;
     else
         pDdiTable->pfnEvictImage                             = driver::zeDeviceEvictImage;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Driver table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__zedllexport ze_result_t __zecall
-zeGetDriverProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    ze_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGet                                    = instrumented::zeDriverGet;
-    else
-        pDdiTable->pfnGet                                    = driver::zeDriverGet;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetDriverVersion                       = instrumented::zeDriverGetDriverVersion;
-    else
-        pDdiTable->pfnGetDriverVersion                       = driver::zeDriverGetDriverVersion;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetApiVersion                          = instrumented::zeDriverGetApiVersion;
-    else
-        pDdiTable->pfnGetApiVersion                          = driver::zeDriverGetApiVersion;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetIPCProperties                       = instrumented::zeDriverGetIPCProperties;
-    else
-        pDdiTable->pfnGetIPCProperties                       = driver::zeDriverGetIPCProperties;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetExtensionFunctionAddress            = instrumented::zeDriverGetExtensionFunctionAddress;
-    else
-        pDdiTable->pfnGetExtensionFunctionAddress            = driver::zeDriverGetExtensionFunctionAddress;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnAllocSharedMem                         = instrumented::zeDriverAllocSharedMem;
-    else
-        pDdiTable->pfnAllocSharedMem                         = driver::zeDriverAllocSharedMem;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnAllocDeviceMem                         = instrumented::zeDriverAllocDeviceMem;
-    else
-        pDdiTable->pfnAllocDeviceMem                         = driver::zeDriverAllocDeviceMem;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnAllocHostMem                           = instrumented::zeDriverAllocHostMem;
-    else
-        pDdiTable->pfnAllocHostMem                           = driver::zeDriverAllocHostMem;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnFreeMem                                = instrumented::zeDriverFreeMem;
-    else
-        pDdiTable->pfnFreeMem                                = driver::zeDriverFreeMem;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetMemAllocProperties                  = instrumented::zeDriverGetMemAllocProperties;
-    else
-        pDdiTable->pfnGetMemAllocProperties                  = driver::zeDriverGetMemAllocProperties;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetMemAddressRange                     = instrumented::zeDriverGetMemAddressRange;
-    else
-        pDdiTable->pfnGetMemAddressRange                     = driver::zeDriverGetMemAddressRange;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetMemIpcHandle                        = instrumented::zeDriverGetMemIpcHandle;
-    else
-        pDdiTable->pfnGetMemIpcHandle                        = driver::zeDriverGetMemIpcHandle;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnOpenMemIpcHandle                       = instrumented::zeDriverOpenMemIpcHandle;
-    else
-        pDdiTable->pfnOpenMemIpcHandle                       = driver::zeDriverOpenMemIpcHandle;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnCloseMemIpcHandle                      = instrumented::zeDriverCloseMemIpcHandle;
-    else
-        pDdiTable->pfnCloseMemIpcHandle                      = driver::zeDriverCloseMemIpcHandle;
 
     return result;
 }

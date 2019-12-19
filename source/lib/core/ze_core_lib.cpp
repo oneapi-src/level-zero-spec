@@ -27,6 +27,13 @@ namespace ze_lib
 
         if( ZE_RESULT_SUCCESS == result )
         {
+            auto getTable = reinterpret_cast<ze_pfnGetDriverProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zeGetDriverProcAddrTable") );
+            result = getTable( ZE_API_VERSION_1_0, &ddiTable.Driver );
+        }
+
+        if( ZE_RESULT_SUCCESS == result )
+        {
             auto getTable = reinterpret_cast<ze_pfnGetGlobalProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "zeGetGlobalProcAddrTable") );
             result = getTable( ZE_API_VERSION_1_0, &ddiTable.Global );
@@ -37,13 +44,6 @@ namespace ze_lib
             auto getTable = reinterpret_cast<ze_pfnGetDeviceProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "zeGetDeviceProcAddrTable") );
             result = getTable( ZE_API_VERSION_1_0, &ddiTable.Device );
-        }
-
-        if( ZE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<ze_pfnGetDriverProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zeGetDriverProcAddrTable") );
-            result = getTable( ZE_API_VERSION_1_0, &ddiTable.Driver );
         }
 
         if( ZE_RESULT_SUCCESS == result )

@@ -454,14 +454,6 @@ zeDeviceSetLastLevelCacheConfig(
 namespace ze
 {
     ///////////////////////////////////////////////////////////////////////////////
-    Driver::Driver( 
-        driver_handle_t handle                          ///< [in] handle of the driver instance
-        ) :
-        m_handle( handle )
-    {
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     Device::Device( 
         device_handle_t handle,                         ///< [in] handle of device object
         Driver* pDriver                                 ///< [in] pointer to owner object
@@ -866,216 +858,12 @@ namespace ze
 namespace ze
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::api_version_t to std::string
-    std::string to_string( const Driver::api_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Driver::api_version_t::_1_0:
-            str = "Driver::api_version_t::_1_0";
-            break;
-
-        default:
-            str = "Driver::api_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::ipc_properties_version_t to std::string
-    std::string to_string( const Driver::ipc_properties_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Driver::ipc_properties_version_t::CURRENT:
-            str = "Driver::ipc_properties_version_t::CURRENT";
-            break;
-
-        default:
-            str = "Driver::ipc_properties_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::device_type_t to std::string
-    std::string to_string( const Driver::device_type_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Driver::device_type_t::GPU:
-            str = "Driver::device_type_t::GPU";
-            break;
-
-        case Driver::device_type_t::FPGA:
-            str = "Driver::device_type_t::FPGA";
-            break;
-
-        default:
-            str = "Driver::device_type_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::device_mem_alloc_flag_t to std::string
-    std::string to_string( const Driver::device_mem_alloc_flag_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-
-        std::string str;
-        
-        if( 0 == bits )
-            str += "DEFAULT   ";
-        
-        if( static_cast<uint32_t>(Driver::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "BIAS_CACHED | ";
-        
-        if( static_cast<uint32_t>(Driver::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "BIAS_UNCACHED | ";
-
-        return ( str.size() > 3 ) 
-            ? "Driver::device_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Driver::device_mem_alloc_flag_t::{ ? }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::host_mem_alloc_flag_t to std::string
-    std::string to_string( const Driver::host_mem_alloc_flag_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-
-        std::string str;
-        
-        if( 0 == bits )
-            str += "DEFAULT   ";
-        
-        if( static_cast<uint32_t>(Driver::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "BIAS_CACHED | ";
-        
-        if( static_cast<uint32_t>(Driver::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "BIAS_UNCACHED | ";
-        
-        if( static_cast<uint32_t>(Driver::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
-            str += "BIAS_WRITE_COMBINED | ";
-
-        return ( str.size() > 3 ) 
-            ? "Driver::host_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Driver::host_mem_alloc_flag_t::{ ? }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::memory_allocation_properties_version_t to std::string
-    std::string to_string( const Driver::memory_allocation_properties_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Driver::memory_allocation_properties_version_t::CURRENT:
-            str = "Driver::memory_allocation_properties_version_t::CURRENT";
-            break;
-
-        default:
-            str = "Driver::memory_allocation_properties_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::memory_type_t to std::string
-    std::string to_string( const Driver::memory_type_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Driver::memory_type_t::UNKNOWN:
-            str = "Driver::memory_type_t::UNKNOWN";
-            break;
-
-        case Driver::memory_type_t::HOST:
-            str = "Driver::memory_type_t::HOST";
-            break;
-
-        case Driver::memory_type_t::DEVICE:
-            str = "Driver::memory_type_t::DEVICE";
-            break;
-
-        case Driver::memory_type_t::SHARED:
-            str = "Driver::memory_type_t::SHARED";
-            break;
-
-        default:
-            str = "Driver::memory_type_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::ipc_memory_flag_t to std::string
-    std::string to_string( const Driver::ipc_memory_flag_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Driver::ipc_memory_flag_t::NONE:
-            str = "Driver::ipc_memory_flag_t::NONE";
-            break;
-
-        default:
-            str = "Driver::ipc_memory_flag_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::ipc_properties_t to std::string
-    std::string to_string( const Driver::ipc_properties_t val )
+    /// @brief Converts device_uuid_t to std::string
+    std::string to_string( const device_uuid_t val )
     {
         std::string str;
         
-        str += "Driver::ipc_properties_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
-        
-        str += "Driver::ipc_properties_t::memsSupported : ";
-        str += std::to_string(val.memsSupported);
-        str += "\n";
-        
-        str += "Driver::ipc_properties_t::eventsSupported : ";
-        str += std::to_string(val.eventsSupported);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::device_uuid_t to std::string
-    std::string to_string( const Driver::device_uuid_t val )
-    {
-        std::string str;
-        
-        str += "Driver::device_uuid_t::id : ";
+        str += "device_uuid_t::id : ";
         {
             std::string tmp;
             for( auto& entry : val.id )
@@ -1085,27 +873,6 @@ namespace ze
             }
             str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::memory_allocation_properties_t to std::string
-    std::string to_string( const Driver::memory_allocation_properties_t val )
-    {
-        std::string str;
-        
-        str += "Driver::memory_allocation_properties_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
-        
-        str += "Driver::memory_allocation_properties_t::type : ";
-        str += to_string(val.type);
-        str += "\n";
-        
-        str += "Driver::memory_allocation_properties_t::id : ";
-        str += std::to_string(val.id);
         str += "\n";
 
         return str;

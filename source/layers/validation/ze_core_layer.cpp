@@ -93,7 +93,7 @@ namespace layer
     /// @brief Intercept function for zeDriverGetApiVersion
     ze_result_t __zecall
     zeDriverGetApiVersion(
-        ze_driver_handle_t hDrivers,                    ///< [in] handle of the driver instance
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_api_version_t* version                       ///< [out] api version
         )
     {
@@ -104,7 +104,7 @@ namespace layer
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDrivers )
+            if( nullptr == hDriver )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == version )
@@ -112,7 +112,33 @@ namespace layer
 
         }
 
-        return pfnGetApiVersion( hDrivers, version );
+        return pfnGetApiVersion( hDriver, version );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDriverGetProperties
+    ze_result_t __zecall
+    zeDriverGetProperties(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        ze_driver_properties_t* pDriverProperties       ///< [in,out] query result for driver properties
+        )
+    {
+        auto pfnGetProperties = context.zeDdiTable.Driver.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDriver )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pDriverProperties )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hDriver, pDriverProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2844,6 +2870,81 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Driver table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zeGetDriverProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    ze_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.zeDdiTable.Driver;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    dditable.pfnGet                                      = pDdiTable->pfnGet;
+    pDdiTable->pfnGet                                    = layer::zeDriverGet;
+
+    dditable.pfnGetDriverVersion                         = pDdiTable->pfnGetDriverVersion;
+    pDdiTable->pfnGetDriverVersion                       = layer::zeDriverGetDriverVersion;
+
+    dditable.pfnGetApiVersion                            = pDdiTable->pfnGetApiVersion;
+    pDdiTable->pfnGetApiVersion                          = layer::zeDriverGetApiVersion;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zeDriverGetProperties;
+
+    dditable.pfnGetIPCProperties                         = pDdiTable->pfnGetIPCProperties;
+    pDdiTable->pfnGetIPCProperties                       = layer::zeDriverGetIPCProperties;
+
+    dditable.pfnGetExtensionFunctionAddress              = pDdiTable->pfnGetExtensionFunctionAddress;
+    pDdiTable->pfnGetExtensionFunctionAddress            = layer::zeDriverGetExtensionFunctionAddress;
+
+    dditable.pfnAllocSharedMem                           = pDdiTable->pfnAllocSharedMem;
+    pDdiTable->pfnAllocSharedMem                         = layer::zeDriverAllocSharedMem;
+
+    dditable.pfnAllocDeviceMem                           = pDdiTable->pfnAllocDeviceMem;
+    pDdiTable->pfnAllocDeviceMem                         = layer::zeDriverAllocDeviceMem;
+
+    dditable.pfnAllocHostMem                             = pDdiTable->pfnAllocHostMem;
+    pDdiTable->pfnAllocHostMem                           = layer::zeDriverAllocHostMem;
+
+    dditable.pfnFreeMem                                  = pDdiTable->pfnFreeMem;
+    pDdiTable->pfnFreeMem                                = layer::zeDriverFreeMem;
+
+    dditable.pfnGetMemAllocProperties                    = pDdiTable->pfnGetMemAllocProperties;
+    pDdiTable->pfnGetMemAllocProperties                  = layer::zeDriverGetMemAllocProperties;
+
+    dditable.pfnGetMemAddressRange                       = pDdiTable->pfnGetMemAddressRange;
+    pDdiTable->pfnGetMemAddressRange                     = layer::zeDriverGetMemAddressRange;
+
+    dditable.pfnGetMemIpcHandle                          = pDdiTable->pfnGetMemIpcHandle;
+    pDdiTable->pfnGetMemIpcHandle                        = layer::zeDriverGetMemIpcHandle;
+
+    dditable.pfnOpenMemIpcHandle                         = pDdiTable->pfnOpenMemIpcHandle;
+    pDdiTable->pfnOpenMemIpcHandle                       = layer::zeDriverOpenMemIpcHandle;
+
+    dditable.pfnCloseMemIpcHandle                        = pDdiTable->pfnCloseMemIpcHandle;
+    pDdiTable->pfnCloseMemIpcHandle                      = layer::zeDriverCloseMemIpcHandle;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Global table
 ///        with current process' addresses
 ///
@@ -2977,78 +3078,6 @@ zeGetDeviceProcAddrTable(
 
     dditable.pfnEvictImage                               = pDdiTable->pfnEvictImage;
     pDdiTable->pfnEvictImage                             = layer::zeDeviceEvictImage;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Driver table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__zedllexport ze_result_t __zecall
-zeGetDriverProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    ze_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    auto& dditable = layer::context.zeDdiTable.Driver;
-
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    dditable.pfnGet                                      = pDdiTable->pfnGet;
-    pDdiTable->pfnGet                                    = layer::zeDriverGet;
-
-    dditable.pfnGetDriverVersion                         = pDdiTable->pfnGetDriverVersion;
-    pDdiTable->pfnGetDriverVersion                       = layer::zeDriverGetDriverVersion;
-
-    dditable.pfnGetApiVersion                            = pDdiTable->pfnGetApiVersion;
-    pDdiTable->pfnGetApiVersion                          = layer::zeDriverGetApiVersion;
-
-    dditable.pfnGetIPCProperties                         = pDdiTable->pfnGetIPCProperties;
-    pDdiTable->pfnGetIPCProperties                       = layer::zeDriverGetIPCProperties;
-
-    dditable.pfnGetExtensionFunctionAddress              = pDdiTable->pfnGetExtensionFunctionAddress;
-    pDdiTable->pfnGetExtensionFunctionAddress            = layer::zeDriverGetExtensionFunctionAddress;
-
-    dditable.pfnAllocSharedMem                           = pDdiTable->pfnAllocSharedMem;
-    pDdiTable->pfnAllocSharedMem                         = layer::zeDriverAllocSharedMem;
-
-    dditable.pfnAllocDeviceMem                           = pDdiTable->pfnAllocDeviceMem;
-    pDdiTable->pfnAllocDeviceMem                         = layer::zeDriverAllocDeviceMem;
-
-    dditable.pfnAllocHostMem                             = pDdiTable->pfnAllocHostMem;
-    pDdiTable->pfnAllocHostMem                           = layer::zeDriverAllocHostMem;
-
-    dditable.pfnFreeMem                                  = pDdiTable->pfnFreeMem;
-    pDdiTable->pfnFreeMem                                = layer::zeDriverFreeMem;
-
-    dditable.pfnGetMemAllocProperties                    = pDdiTable->pfnGetMemAllocProperties;
-    pDdiTable->pfnGetMemAllocProperties                  = layer::zeDriverGetMemAllocProperties;
-
-    dditable.pfnGetMemAddressRange                       = pDdiTable->pfnGetMemAddressRange;
-    pDdiTable->pfnGetMemAddressRange                     = layer::zeDriverGetMemAddressRange;
-
-    dditable.pfnGetMemIpcHandle                          = pDdiTable->pfnGetMemIpcHandle;
-    pDdiTable->pfnGetMemIpcHandle                        = layer::zeDriverGetMemIpcHandle;
-
-    dditable.pfnOpenMemIpcHandle                         = pDdiTable->pfnOpenMemIpcHandle;
-    pDdiTable->pfnOpenMemIpcHandle                       = layer::zeDriverOpenMemIpcHandle;
-
-    dditable.pfnCloseMemIpcHandle                        = pDdiTable->pfnCloseMemIpcHandle;
-    pDdiTable->pfnCloseMemIpcHandle                      = layer::zeDriverCloseMemIpcHandle;
 
     return result;
 }

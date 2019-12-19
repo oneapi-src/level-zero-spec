@@ -151,13 +151,70 @@ typedef enum _ze_api_version_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDrivers
+///         + nullptr == hDriver
 ///         + nullptr == version
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zeDriverGetApiVersion(
-    ze_driver_handle_t hDrivers,                    ///< [in] handle of the driver instance
+    ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     ze_api_version_t* version                       ///< [out] api version
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::ze_driver_properties_t
+typedef enum _ze_driver_properties_version_t
+{
+    ZE_DRIVER_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+
+} ze_driver_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZE_MAX_DRIVER_UUID_SIZE
+/// @brief Maximum driver universal unique id (UUID) size in bytes
+#define ZE_MAX_DRIVER_UUID_SIZE  16
+#endif // ZE_MAX_DRIVER_UUID_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Driver universal unique id (UUID)
+typedef struct _ze_driver_uuid_t
+{
+    uint8_t id[ZE_MAX_DRIVER_UUID_SIZE];            ///< Opaque data representing a driver UUID
+
+} ze_driver_uuid_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Driver properties queried using ::zeDriverGetProperties
+typedef struct _ze_driver_properties_t
+{
+    ze_driver_properties_version_t version;         ///< [in] ::ZE_DRIVER_PROPERTIES_VERSION_CURRENT
+    ze_driver_uuid_t uuid;                          ///< [out] universal unique identifier.
+
+} ze_driver_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves properties of the driver.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDriverGetVersion**
+///     - **clGetPlatformInfo**
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDriver
+///         + nullptr == pDriverProperties
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+ze_result_t __zecall
+zeDriverGetProperties(
+    ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+    ze_driver_properties_t* pDriverProperties       ///< [in,out] query result for driver properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -23,6 +23,395 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGet 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_params_t
+{
+    uint32_t** ppCount;
+    ze_driver_handle_t** pphDrivers;
+} ze_driver_get_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGet 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetCb_t)(
+    ze_driver_get_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGetDriverVersion 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_driver_version_params_t
+{
+    ze_driver_handle_t* phDriver;
+    uint32_t** pversion;
+} ze_driver_get_driver_version_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGetDriverVersion 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetDriverVersionCb_t)(
+    ze_driver_get_driver_version_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGetApiVersion 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_api_version_params_t
+{
+    ze_driver_handle_t* phDriver;
+    ze_api_version_t** pversion;
+} ze_driver_get_api_version_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGetApiVersion 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetApiVersionCb_t)(
+    ze_driver_get_api_version_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGetProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_properties_params_t
+{
+    ze_driver_handle_t* phDriver;
+    ze_driver_properties_t** ppDriverProperties;
+} ze_driver_get_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGetProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetPropertiesCb_t)(
+    ze_driver_get_properties_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGetIPCProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_ipc_properties_params_t
+{
+    ze_driver_handle_t* phDriver;
+    ze_driver_ipc_properties_t** ppIPCProperties;
+} ze_driver_get_ipc_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGetIPCProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetIPCPropertiesCb_t)(
+    ze_driver_get_ipc_properties_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGetExtensionFunctionAddress 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_extension_function_address_params_t
+{
+    ze_driver_handle_t* phDriver;
+    const char** ppFuncName;
+    void*** ppfunc;
+} ze_driver_get_extension_function_address_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGetExtensionFunctionAddress 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetExtensionFunctionAddressCb_t)(
+    ze_driver_get_extension_function_address_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverAllocSharedMem 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_alloc_shared_mem_params_t
+{
+    ze_driver_handle_t* phDriver;
+    ze_device_mem_alloc_flag_t* pdevice_flags;
+    uint32_t* pordinal;
+    ze_host_mem_alloc_flag_t* phost_flags;
+    size_t* psize;
+    size_t* palignment;
+    ze_device_handle_t* phDevice;
+    void*** ppptr;
+} ze_driver_alloc_shared_mem_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverAllocSharedMem 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverAllocSharedMemCb_t)(
+    ze_driver_alloc_shared_mem_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverAllocDeviceMem 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_alloc_device_mem_params_t
+{
+    ze_driver_handle_t* phDriver;
+    ze_device_mem_alloc_flag_t* pflags;
+    uint32_t* pordinal;
+    size_t* psize;
+    size_t* palignment;
+    ze_device_handle_t* phDevice;
+    void*** ppptr;
+} ze_driver_alloc_device_mem_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverAllocDeviceMem 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverAllocDeviceMemCb_t)(
+    ze_driver_alloc_device_mem_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverAllocHostMem 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_alloc_host_mem_params_t
+{
+    ze_driver_handle_t* phDriver;
+    ze_host_mem_alloc_flag_t* pflags;
+    size_t* psize;
+    size_t* palignment;
+    void*** ppptr;
+} ze_driver_alloc_host_mem_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverAllocHostMem 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverAllocHostMemCb_t)(
+    ze_driver_alloc_host_mem_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverFreeMem 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_free_mem_params_t
+{
+    ze_driver_handle_t* phDriver;
+    void** pptr;
+} ze_driver_free_mem_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverFreeMem 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverFreeMemCb_t)(
+    ze_driver_free_mem_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGetMemAllocProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_mem_alloc_properties_params_t
+{
+    ze_driver_handle_t* phDriver;
+    const void** pptr;
+    ze_memory_allocation_properties_t** ppMemAllocProperties;
+    ze_device_handle_t** pphDevice;
+} ze_driver_get_mem_alloc_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGetMemAllocProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetMemAllocPropertiesCb_t)(
+    ze_driver_get_mem_alloc_properties_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGetMemAddressRange 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_mem_address_range_params_t
+{
+    ze_driver_handle_t* phDriver;
+    const void** pptr;
+    void*** ppBase;
+    size_t** ppSize;
+} ze_driver_get_mem_address_range_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGetMemAddressRange 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetMemAddressRangeCb_t)(
+    ze_driver_get_mem_address_range_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverGetMemIpcHandle 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_get_mem_ipc_handle_params_t
+{
+    ze_driver_handle_t* phDriver;
+    const void** pptr;
+    ze_ipc_mem_handle_t** ppIpcHandle;
+} ze_driver_get_mem_ipc_handle_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverGetMemIpcHandle 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverGetMemIpcHandleCb_t)(
+    ze_driver_get_mem_ipc_handle_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverOpenMemIpcHandle 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_open_mem_ipc_handle_params_t
+{
+    ze_driver_handle_t* phDriver;
+    ze_device_handle_t* phDevice;
+    ze_ipc_mem_handle_t* phandle;
+    ze_ipc_memory_flag_t* pflags;
+    void*** ppptr;
+} ze_driver_open_mem_ipc_handle_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverOpenMemIpcHandle 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverOpenMemIpcHandleCb_t)(
+    ze_driver_open_mem_ipc_handle_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDriverCloseMemIpcHandle 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_driver_close_mem_ipc_handle_params_t
+{
+    ze_driver_handle_t* phDriver;
+    const void** pptr;
+} ze_driver_close_mem_ipc_handle_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDriverCloseMemIpcHandle 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnDriverCloseMemIpcHandleCb_t)(
+    ze_driver_close_mem_ipc_handle_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Driver callback functions pointers
+typedef struct _ze_driver_callbacks_t
+{
+    ze_pfnDriverGetCb_t                                             pfnGetCb;
+    ze_pfnDriverGetDriverVersionCb_t                                pfnGetDriverVersionCb;
+    ze_pfnDriverGetApiVersionCb_t                                   pfnGetApiVersionCb;
+    ze_pfnDriverGetPropertiesCb_t                                   pfnGetPropertiesCb;
+    ze_pfnDriverGetIPCPropertiesCb_t                                pfnGetIPCPropertiesCb;
+    ze_pfnDriverGetExtensionFunctionAddressCb_t                     pfnGetExtensionFunctionAddressCb;
+    ze_pfnDriverAllocSharedMemCb_t                                  pfnAllocSharedMemCb;
+    ze_pfnDriverAllocDeviceMemCb_t                                  pfnAllocDeviceMemCb;
+    ze_pfnDriverAllocHostMemCb_t                                    pfnAllocHostMemCb;
+    ze_pfnDriverFreeMemCb_t                                         pfnFreeMemCb;
+    ze_pfnDriverGetMemAllocPropertiesCb_t                           pfnGetMemAllocPropertiesCb;
+    ze_pfnDriverGetMemAddressRangeCb_t                              pfnGetMemAddressRangeCb;
+    ze_pfnDriverGetMemIpcHandleCb_t                                 pfnGetMemIpcHandleCb;
+    ze_pfnDriverOpenMemIpcHandleCb_t                                pfnOpenMemIpcHandleCb;
+    ze_pfnDriverCloseMemIpcHandleCb_t                               pfnCloseMemIpcHandleCb;
+} ze_driver_callbacks_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeInit 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -572,371 +961,6 @@ typedef struct _ze_device_callbacks_t
     ze_pfnDeviceMakeImageResidentCb_t                               pfnMakeImageResidentCb;
     ze_pfnDeviceEvictImageCb_t                                      pfnEvictImageCb;
 } ze_device_callbacks_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverGet 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_get_params_t
-{
-    uint32_t** ppCount;
-    ze_driver_handle_t** pphDrivers;
-} ze_driver_get_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverGet 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverGetCb_t)(
-    ze_driver_get_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverGetDriverVersion 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_get_driver_version_params_t
-{
-    ze_driver_handle_t* phDriver;
-    uint32_t** pversion;
-} ze_driver_get_driver_version_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverGetDriverVersion 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverGetDriverVersionCb_t)(
-    ze_driver_get_driver_version_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverGetApiVersion 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_get_api_version_params_t
-{
-    ze_driver_handle_t* phDrivers;
-    ze_api_version_t** pversion;
-} ze_driver_get_api_version_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverGetApiVersion 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverGetApiVersionCb_t)(
-    ze_driver_get_api_version_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverGetIPCProperties 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_get_ipc_properties_params_t
-{
-    ze_driver_handle_t* phDriver;
-    ze_driver_ipc_properties_t** ppIPCProperties;
-} ze_driver_get_ipc_properties_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverGetIPCProperties 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverGetIPCPropertiesCb_t)(
-    ze_driver_get_ipc_properties_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverGetExtensionFunctionAddress 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_get_extension_function_address_params_t
-{
-    ze_driver_handle_t* phDriver;
-    const char** ppFuncName;
-    void*** ppfunc;
-} ze_driver_get_extension_function_address_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverGetExtensionFunctionAddress 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverGetExtensionFunctionAddressCb_t)(
-    ze_driver_get_extension_function_address_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverAllocSharedMem 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_alloc_shared_mem_params_t
-{
-    ze_driver_handle_t* phDriver;
-    ze_device_mem_alloc_flag_t* pdevice_flags;
-    uint32_t* pordinal;
-    ze_host_mem_alloc_flag_t* phost_flags;
-    size_t* psize;
-    size_t* palignment;
-    ze_device_handle_t* phDevice;
-    void*** ppptr;
-} ze_driver_alloc_shared_mem_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverAllocSharedMem 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverAllocSharedMemCb_t)(
-    ze_driver_alloc_shared_mem_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverAllocDeviceMem 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_alloc_device_mem_params_t
-{
-    ze_driver_handle_t* phDriver;
-    ze_device_mem_alloc_flag_t* pflags;
-    uint32_t* pordinal;
-    size_t* psize;
-    size_t* palignment;
-    ze_device_handle_t* phDevice;
-    void*** ppptr;
-} ze_driver_alloc_device_mem_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverAllocDeviceMem 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverAllocDeviceMemCb_t)(
-    ze_driver_alloc_device_mem_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverAllocHostMem 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_alloc_host_mem_params_t
-{
-    ze_driver_handle_t* phDriver;
-    ze_host_mem_alloc_flag_t* pflags;
-    size_t* psize;
-    size_t* palignment;
-    void*** ppptr;
-} ze_driver_alloc_host_mem_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverAllocHostMem 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverAllocHostMemCb_t)(
-    ze_driver_alloc_host_mem_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverFreeMem 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_free_mem_params_t
-{
-    ze_driver_handle_t* phDriver;
-    void** pptr;
-} ze_driver_free_mem_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverFreeMem 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverFreeMemCb_t)(
-    ze_driver_free_mem_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverGetMemAllocProperties 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_get_mem_alloc_properties_params_t
-{
-    ze_driver_handle_t* phDriver;
-    const void** pptr;
-    ze_memory_allocation_properties_t** ppMemAllocProperties;
-    ze_device_handle_t** pphDevice;
-} ze_driver_get_mem_alloc_properties_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverGetMemAllocProperties 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverGetMemAllocPropertiesCb_t)(
-    ze_driver_get_mem_alloc_properties_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverGetMemAddressRange 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_get_mem_address_range_params_t
-{
-    ze_driver_handle_t* phDriver;
-    const void** pptr;
-    void*** ppBase;
-    size_t** ppSize;
-} ze_driver_get_mem_address_range_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverGetMemAddressRange 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverGetMemAddressRangeCb_t)(
-    ze_driver_get_mem_address_range_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverGetMemIpcHandle 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_get_mem_ipc_handle_params_t
-{
-    ze_driver_handle_t* phDriver;
-    const void** pptr;
-    ze_ipc_mem_handle_t** ppIpcHandle;
-} ze_driver_get_mem_ipc_handle_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverGetMemIpcHandle 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverGetMemIpcHandleCb_t)(
-    ze_driver_get_mem_ipc_handle_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverOpenMemIpcHandle 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_open_mem_ipc_handle_params_t
-{
-    ze_driver_handle_t* phDriver;
-    ze_device_handle_t* phDevice;
-    ze_ipc_mem_handle_t* phandle;
-    ze_ipc_memory_flag_t* pflags;
-    void*** ppptr;
-} ze_driver_open_mem_ipc_handle_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverOpenMemIpcHandle 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverOpenMemIpcHandleCb_t)(
-    ze_driver_open_mem_ipc_handle_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverCloseMemIpcHandle 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_close_mem_ipc_handle_params_t
-{
-    ze_driver_handle_t* phDriver;
-    const void** pptr;
-} ze_driver_close_mem_ipc_handle_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverCloseMemIpcHandle 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverCloseMemIpcHandleCb_t)(
-    ze_driver_close_mem_ipc_handle_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Driver callback functions pointers
-typedef struct _ze_driver_callbacks_t
-{
-    ze_pfnDriverGetCb_t                                             pfnGetCb;
-    ze_pfnDriverGetDriverVersionCb_t                                pfnGetDriverVersionCb;
-    ze_pfnDriverGetApiVersionCb_t                                   pfnGetApiVersionCb;
-    ze_pfnDriverGetIPCPropertiesCb_t                                pfnGetIPCPropertiesCb;
-    ze_pfnDriverGetExtensionFunctionAddressCb_t                     pfnGetExtensionFunctionAddressCb;
-    ze_pfnDriverAllocSharedMemCb_t                                  pfnAllocSharedMemCb;
-    ze_pfnDriverAllocDeviceMemCb_t                                  pfnAllocDeviceMemCb;
-    ze_pfnDriverAllocHostMemCb_t                                    pfnAllocHostMemCb;
-    ze_pfnDriverFreeMemCb_t                                         pfnFreeMemCb;
-    ze_pfnDriverGetMemAllocPropertiesCb_t                           pfnGetMemAllocPropertiesCb;
-    ze_pfnDriverGetMemAddressRangeCb_t                              pfnGetMemAddressRangeCb;
-    ze_pfnDriverGetMemIpcHandleCb_t                                 pfnGetMemIpcHandleCb;
-    ze_pfnDriverOpenMemIpcHandleCb_t                                pfnOpenMemIpcHandleCb;
-    ze_pfnDriverCloseMemIpcHandleCb_t                               pfnCloseMemIpcHandleCb;
-} ze_driver_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeCommandQueueCreate 
@@ -2631,9 +2655,9 @@ typedef struct _ze_sampler_callbacks_t
 /// @brief Container for all callbacks
 typedef struct _ze_callbacks_t
 {
+    ze_driver_callbacks_t               Driver;
     ze_global_callbacks_t               Global;
     ze_device_callbacks_t               Device;
-    ze_driver_callbacks_t               Driver;
     ze_command_queue_callbacks_t        CommandQueue;
     ze_command_list_callbacks_t         CommandList;
     ze_fence_callbacks_t                Fence;

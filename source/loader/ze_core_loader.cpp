@@ -132,23 +132,48 @@ namespace loader
     /// @brief Intercept function for zeDriverGetApiVersion
     ze_result_t __zecall
     zeDriverGetApiVersion(
-        ze_driver_handle_t hDrivers,                    ///< [in] handle of the driver instance
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_api_version_t* version                       ///< [out] api version
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<ze_driver_object_t*>( hDrivers )->dditable;
+        auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnGetApiVersion = dditable->ze.Driver.pfnGetApiVersion;
         if( nullptr == pfnGetApiVersion )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDrivers = reinterpret_cast<ze_driver_object_t*>( hDrivers )->handle;
+        hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnGetApiVersion( hDrivers, version );
+        result = pfnGetApiVersion( hDriver, version );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDriverGetProperties
+    ze_result_t __zecall
+    zeDriverGetProperties(
+        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        ze_driver_properties_t* pDriverProperties       ///< [in,out] query result for driver properties
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
+        auto pfnGetProperties = dditable->ze.Driver.pfnGetProperties;
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
+
+        // forward to device-driver
+        result = pfnGetProperties( hDriver, pDriverProperties );
 
         return result;
     }
@@ -3086,6 +3111,84 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Driver table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zeGetDriverProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    ze_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return ZE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( loader::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( ZE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<ze_pfnGetDriverProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "zeGetDriverProcAddrTable") );
+            result = getTable( version, &drv.dditable.ze.Driver );
+        }
+    }
+
+    if( ZE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGet                                      = loader::zeDriverGet;
+            pDdiTable->pfnGetDriverVersion                         = loader::zeDriverGetDriverVersion;
+            pDdiTable->pfnGetApiVersion                            = loader::zeDriverGetApiVersion;
+            pDdiTable->pfnGetProperties                            = loader::zeDriverGetProperties;
+            pDdiTable->pfnGetIPCProperties                         = loader::zeDriverGetIPCProperties;
+            pDdiTable->pfnGetExtensionFunctionAddress              = loader::zeDriverGetExtensionFunctionAddress;
+            pDdiTable->pfnAllocSharedMem                           = loader::zeDriverAllocSharedMem;
+            pDdiTable->pfnAllocDeviceMem                           = loader::zeDriverAllocDeviceMem;
+            pDdiTable->pfnAllocHostMem                             = loader::zeDriverAllocHostMem;
+            pDdiTable->pfnFreeMem                                  = loader::zeDriverFreeMem;
+            pDdiTable->pfnGetMemAllocProperties                    = loader::zeDriverGetMemAllocProperties;
+            pDdiTable->pfnGetMemAddressRange                       = loader::zeDriverGetMemAddressRange;
+            pDdiTable->pfnGetMemIpcHandle                          = loader::zeDriverGetMemIpcHandle;
+            pDdiTable->pfnOpenMemIpcHandle                         = loader::zeDriverOpenMemIpcHandle;
+            pDdiTable->pfnCloseMemIpcHandle                        = loader::zeDriverCloseMemIpcHandle;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.ze.Driver;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        auto getTable = reinterpret_cast<ze_pfnGetDriverProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "zeGetDriverProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Global table
 ///        with current process' addresses
 ///
@@ -3238,83 +3341,6 @@ zeGetDeviceProcAddrTable(
     {
         auto getTable = reinterpret_cast<ze_pfnGetDeviceProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "zeGetDeviceProcAddrTable") );
-        result = getTable( version, pDdiTable );
-    }
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Driver table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__zedllexport ze_result_t __zecall
-zeGetDriverProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    ze_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( loader::context.drivers.size() < 1 )
-        return ZE_RESULT_ERROR_UNINITIALIZED;
-
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    // Load the device-driver DDI tables
-    for( auto& drv : loader::context.drivers )
-    {
-        if( ZE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<ze_pfnGetDriverProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "zeGetDriverProcAddrTable") );
-            result = getTable( version, &drv.dditable.ze.Driver );
-        }
-    }
-
-    if( ZE_RESULT_SUCCESS == result )
-    {
-        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
-        {
-            // return pointers to loader's DDIs
-            pDdiTable->pfnGet                                      = loader::zeDriverGet;
-            pDdiTable->pfnGetDriverVersion                         = loader::zeDriverGetDriverVersion;
-            pDdiTable->pfnGetApiVersion                            = loader::zeDriverGetApiVersion;
-            pDdiTable->pfnGetIPCProperties                         = loader::zeDriverGetIPCProperties;
-            pDdiTable->pfnGetExtensionFunctionAddress              = loader::zeDriverGetExtensionFunctionAddress;
-            pDdiTable->pfnAllocSharedMem                           = loader::zeDriverAllocSharedMem;
-            pDdiTable->pfnAllocDeviceMem                           = loader::zeDriverAllocDeviceMem;
-            pDdiTable->pfnAllocHostMem                             = loader::zeDriverAllocHostMem;
-            pDdiTable->pfnFreeMem                                  = loader::zeDriverFreeMem;
-            pDdiTable->pfnGetMemAllocProperties                    = loader::zeDriverGetMemAllocProperties;
-            pDdiTable->pfnGetMemAddressRange                       = loader::zeDriverGetMemAddressRange;
-            pDdiTable->pfnGetMemIpcHandle                          = loader::zeDriverGetMemIpcHandle;
-            pDdiTable->pfnOpenMemIpcHandle                         = loader::zeDriverOpenMemIpcHandle;
-            pDdiTable->pfnCloseMemIpcHandle                        = loader::zeDriverCloseMemIpcHandle;
-        }
-        else
-        {
-            // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.ze.Driver;
-        }
-    }
-
-    // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
-    {
-        auto getTable = reinterpret_cast<ze_pfnGetDriverProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "zeGetDriverProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
