@@ -24,7 +24,7 @@
 namespace zet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for instance
+    /// @brief C++ wrapper for driver instance
     class Driver : public ze::Driver
     {
     public:

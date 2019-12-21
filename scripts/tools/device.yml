@@ -11,7 +11,7 @@ desc: "Intel $OneApi Level-Zero Tool APIs for Device"
 ordinal: "1"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for instance"
+desc: "C++ wrapper for driver instance"
 name: $tDriver
 base: $xDriver
 --- #--------------------------------------------------------------------------

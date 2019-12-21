@@ -70,11 +70,6 @@ etors:
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum device uuid size in bytes"
-name: $X_MAX_UUID_SIZE
-value: "16"
---- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported device types"
 class: $xDriver
@@ -86,14 +81,18 @@ etors:
     - name: $X_DEVICE_TYPE_FPGA
       desc: "Field Programmable Gate Array"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device universal unique id (UUID) size in bytes"
+name: $X_MAX_DEVICE_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device universal unique id (UUID)"
-class: $xDriver
-name: $x_device_uuid_t
+name: "$x_device_uuid_t"
 members:
     - type: uint8_t
-      name: "id[$X_MAX_UUID_SIZE]"
-      desc: "[out] device universal unique id"
+      name: "id[$X_MAX_DEVICE_UUID_SIZE]"
+      desc: "Opaque data representing a device UUID"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device name string size"
@@ -662,15 +661,6 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "devices do not support CacheConfig"
---- #--------------------------------------------------------------------------
-type: class
-desc: "C++ wrapper for a driver instance handle"
-name: $xDriver
-attribute: singleton
-members:
-    - type: $x_driver_handle_t
-      name: handle
-      desc: "[in] handle of the driver instance"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a device"

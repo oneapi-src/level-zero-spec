@@ -23,6 +23,179 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGet 
+typedef ze_result_t (__zecall *ze_pfnDriverGet_t)(
+    uint32_t*,
+    ze_driver_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGetDriverVersion 
+typedef ze_result_t (__zecall *ze_pfnDriverGetDriverVersion_t)(
+    ze_driver_handle_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGetApiVersion 
+typedef ze_result_t (__zecall *ze_pfnDriverGetApiVersion_t)(
+    ze_driver_handle_t,
+    ze_api_version_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGetProperties 
+typedef ze_result_t (__zecall *ze_pfnDriverGetProperties_t)(
+    ze_driver_handle_t,
+    ze_driver_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGetIPCProperties 
+typedef ze_result_t (__zecall *ze_pfnDriverGetIPCProperties_t)(
+    ze_driver_handle_t,
+    ze_driver_ipc_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGetExtensionFunctionAddress 
+typedef ze_result_t (__zecall *ze_pfnDriverGetExtensionFunctionAddress_t)(
+    ze_driver_handle_t,
+    const char*,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverAllocSharedMem 
+typedef ze_result_t (__zecall *ze_pfnDriverAllocSharedMem_t)(
+    ze_driver_handle_t,
+    ze_device_mem_alloc_flag_t,
+    uint32_t,
+    ze_host_mem_alloc_flag_t,
+    size_t,
+    size_t,
+    ze_device_handle_t,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverAllocDeviceMem 
+typedef ze_result_t (__zecall *ze_pfnDriverAllocDeviceMem_t)(
+    ze_driver_handle_t,
+    ze_device_mem_alloc_flag_t,
+    uint32_t,
+    size_t,
+    size_t,
+    ze_device_handle_t,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverAllocHostMem 
+typedef ze_result_t (__zecall *ze_pfnDriverAllocHostMem_t)(
+    ze_driver_handle_t,
+    ze_host_mem_alloc_flag_t,
+    size_t,
+    size_t,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverFreeMem 
+typedef ze_result_t (__zecall *ze_pfnDriverFreeMem_t)(
+    ze_driver_handle_t,
+    void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGetMemAllocProperties 
+typedef ze_result_t (__zecall *ze_pfnDriverGetMemAllocProperties_t)(
+    ze_driver_handle_t,
+    const void*,
+    ze_memory_allocation_properties_t*,
+    ze_device_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGetMemAddressRange 
+typedef ze_result_t (__zecall *ze_pfnDriverGetMemAddressRange_t)(
+    ze_driver_handle_t,
+    const void*,
+    void**,
+    size_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverGetMemIpcHandle 
+typedef ze_result_t (__zecall *ze_pfnDriverGetMemIpcHandle_t)(
+    ze_driver_handle_t,
+    const void*,
+    ze_ipc_mem_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverOpenMemIpcHandle 
+typedef ze_result_t (__zecall *ze_pfnDriverOpenMemIpcHandle_t)(
+    ze_driver_handle_t,
+    ze_device_handle_t,
+    ze_ipc_mem_handle_t,
+    ze_ipc_memory_flag_t,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDriverCloseMemIpcHandle 
+typedef ze_result_t (__zecall *ze_pfnDriverCloseMemIpcHandle_t)(
+    ze_driver_handle_t,
+    const void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Driver functions pointers
+typedef struct _ze_driver_dditable_t
+{
+    ze_pfnDriverGet_t                                           pfnGet;
+    ze_pfnDriverGetDriverVersion_t                              pfnGetDriverVersion;
+    ze_pfnDriverGetApiVersion_t                                 pfnGetApiVersion;
+    ze_pfnDriverGetProperties_t                                 pfnGetProperties;
+    ze_pfnDriverGetIPCProperties_t                              pfnGetIPCProperties;
+    ze_pfnDriverGetExtensionFunctionAddress_t                   pfnGetExtensionFunctionAddress;
+    ze_pfnDriverAllocSharedMem_t                                pfnAllocSharedMem;
+    ze_pfnDriverAllocDeviceMem_t                                pfnAllocDeviceMem;
+    ze_pfnDriverAllocHostMem_t                                  pfnAllocHostMem;
+    ze_pfnDriverFreeMem_t                                       pfnFreeMem;
+    ze_pfnDriverGetMemAllocProperties_t                         pfnGetMemAllocProperties;
+    ze_pfnDriverGetMemAddressRange_t                            pfnGetMemAddressRange;
+    ze_pfnDriverGetMemIpcHandle_t                               pfnGetMemIpcHandle;
+    ze_pfnDriverOpenMemIpcHandle_t                              pfnOpenMemIpcHandle;
+    ze_pfnDriverCloseMemIpcHandle_t                             pfnCloseMemIpcHandle;
+} ze_driver_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Driver table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__zedllexport ze_result_t __zecall
+zeGetDriverProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    ze_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeGetDriverProcAddrTable
+typedef ze_result_t (__zecall *ze_pfnGetDriverProcAddrTable_t)(
+    ze_api_version_t,
+    ze_driver_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeInit 
 typedef ze_result_t (__zecall *ze_pfnInit_t)(
     ze_init_flag_t
@@ -277,171 +450,6 @@ zeGetDeviceProcAddrTable(
 typedef ze_result_t (__zecall *ze_pfnGetDeviceProcAddrTable_t)(
     ze_api_version_t,
     ze_device_dditable_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverGet 
-typedef ze_result_t (__zecall *ze_pfnDriverGet_t)(
-    uint32_t*,
-    ze_driver_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverGetDriverVersion 
-typedef ze_result_t (__zecall *ze_pfnDriverGetDriverVersion_t)(
-    ze_driver_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverGetApiVersion 
-typedef ze_result_t (__zecall *ze_pfnDriverGetApiVersion_t)(
-    ze_driver_handle_t,
-    ze_api_version_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverGetIPCProperties 
-typedef ze_result_t (__zecall *ze_pfnDriverGetIPCProperties_t)(
-    ze_driver_handle_t,
-    ze_driver_ipc_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverGetExtensionFunctionAddress 
-typedef ze_result_t (__zecall *ze_pfnDriverGetExtensionFunctionAddress_t)(
-    ze_driver_handle_t,
-    const char*,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverAllocSharedMem 
-typedef ze_result_t (__zecall *ze_pfnDriverAllocSharedMem_t)(
-    ze_driver_handle_t,
-    ze_device_mem_alloc_flag_t,
-    uint32_t,
-    ze_host_mem_alloc_flag_t,
-    size_t,
-    size_t,
-    ze_device_handle_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverAllocDeviceMem 
-typedef ze_result_t (__zecall *ze_pfnDriverAllocDeviceMem_t)(
-    ze_driver_handle_t,
-    ze_device_mem_alloc_flag_t,
-    uint32_t,
-    size_t,
-    size_t,
-    ze_device_handle_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverAllocHostMem 
-typedef ze_result_t (__zecall *ze_pfnDriverAllocHostMem_t)(
-    ze_driver_handle_t,
-    ze_host_mem_alloc_flag_t,
-    size_t,
-    size_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverFreeMem 
-typedef ze_result_t (__zecall *ze_pfnDriverFreeMem_t)(
-    ze_driver_handle_t,
-    void*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverGetMemAllocProperties 
-typedef ze_result_t (__zecall *ze_pfnDriverGetMemAllocProperties_t)(
-    ze_driver_handle_t,
-    const void*,
-    ze_memory_allocation_properties_t*,
-    ze_device_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverGetMemAddressRange 
-typedef ze_result_t (__zecall *ze_pfnDriverGetMemAddressRange_t)(
-    ze_driver_handle_t,
-    const void*,
-    void**,
-    size_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverGetMemIpcHandle 
-typedef ze_result_t (__zecall *ze_pfnDriverGetMemIpcHandle_t)(
-    ze_driver_handle_t,
-    const void*,
-    ze_ipc_mem_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverOpenMemIpcHandle 
-typedef ze_result_t (__zecall *ze_pfnDriverOpenMemIpcHandle_t)(
-    ze_driver_handle_t,
-    ze_device_handle_t,
-    ze_ipc_mem_handle_t,
-    ze_ipc_memory_flag_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverCloseMemIpcHandle 
-typedef ze_result_t (__zecall *ze_pfnDriverCloseMemIpcHandle_t)(
-    ze_driver_handle_t,
-    const void*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Driver functions pointers
-typedef struct _ze_driver_dditable_t
-{
-    ze_pfnDriverGet_t                                           pfnGet;
-    ze_pfnDriverGetDriverVersion_t                              pfnGetDriverVersion;
-    ze_pfnDriverGetApiVersion_t                                 pfnGetApiVersion;
-    ze_pfnDriverGetIPCProperties_t                              pfnGetIPCProperties;
-    ze_pfnDriverGetExtensionFunctionAddress_t                   pfnGetExtensionFunctionAddress;
-    ze_pfnDriverAllocSharedMem_t                                pfnAllocSharedMem;
-    ze_pfnDriverAllocDeviceMem_t                                pfnAllocDeviceMem;
-    ze_pfnDriverAllocHostMem_t                                  pfnAllocHostMem;
-    ze_pfnDriverFreeMem_t                                       pfnFreeMem;
-    ze_pfnDriverGetMemAllocProperties_t                         pfnGetMemAllocProperties;
-    ze_pfnDriverGetMemAddressRange_t                            pfnGetMemAddressRange;
-    ze_pfnDriverGetMemIpcHandle_t                               pfnGetMemIpcHandle;
-    ze_pfnDriverOpenMemIpcHandle_t                              pfnOpenMemIpcHandle;
-    ze_pfnDriverCloseMemIpcHandle_t                             pfnCloseMemIpcHandle;
-} ze_driver_dditable_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Driver table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__zedllexport ze_result_t __zecall
-zeGetDriverProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    ze_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeGetDriverProcAddrTable
-typedef ze_result_t (__zecall *ze_pfnGetDriverProcAddrTable_t)(
-    ze_api_version_t,
-    ze_driver_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1337,9 +1345,9 @@ typedef ze_result_t (__zecall *ze_pfnGetSamplerProcAddrTable_t)(
 /// @brief Container for all DDI tables
 typedef struct _ze_dditable_t
 {
+    ze_driver_dditable_t                Driver;
     ze_global_dditable_t                Global;
     ze_device_dditable_t                Device;
-    ze_driver_dditable_t                Driver;
     ze_command_queue_dditable_t         CommandQueue;
     ze_command_list_dditable_t          CommandList;
     ze_fence_dditable_t                 Fence;

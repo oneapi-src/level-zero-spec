@@ -97,12 +97,6 @@ typedef enum _ze_device_properties_version_t
 } ze_device_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZE_MAX_UUID_SIZE
-/// @brief Maximum device uuid size in bytes
-#define ZE_MAX_UUID_SIZE  16
-#endif // ZE_MAX_UUID_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported device types
 typedef enum _ze_device_type_t
 {
@@ -112,10 +106,16 @@ typedef enum _ze_device_type_t
 } ze_device_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef ZE_MAX_DEVICE_UUID_SIZE
+/// @brief Maximum device universal unique id (UUID) size in bytes
+#define ZE_MAX_DEVICE_UUID_SIZE  16
+#endif // ZE_MAX_DEVICE_UUID_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Device universal unique id (UUID)
 typedef struct _ze_device_uuid_t
 {
-    uint8_t id[ZE_MAX_UUID_SIZE];                   ///< [out] device universal unique id
+    uint8_t id[ZE_MAX_DEVICE_UUID_SIZE];            ///< Opaque data representing a device UUID
 
 } ze_device_uuid_t;
 

@@ -186,6 +186,35 @@ class ze_api_version_t(c_int):
 
 
 ###############################################################################
+## @brief API version of ::ze_driver_properties_t
+class ze_driver_properties_version_v(IntEnum):
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class ze_driver_properties_version_t(c_int):
+    def __str__(self):
+        return str(ze_driver_properties_version_v(value))
+
+
+###############################################################################
+## @brief Maximum driver universal unique id (UUID) size in bytes
+ZE_MAX_DRIVER_UUID_SIZE = 16
+
+###############################################################################
+## @brief Driver universal unique id (UUID)
+class ze_driver_uuid_t(Structure):
+    _fields_ = [
+        ("id", c_ubyte * ZE_MAX_DRIVER_UUID_SIZE)                       ## Opaque data representing a driver UUID
+    ]
+
+###############################################################################
+## @brief Driver properties queried using ::zeDriverGetProperties
+class ze_driver_properties_t(Structure):
+    _fields_ = [
+        ("version", ze_driver_properties_version_t),                    ## [in] ::ZE_DRIVER_PROPERTIES_VERSION_CURRENT
+        ("uuid", ze_driver_uuid_t)                                      ## [out] universal unique identifier.
+    ]
+
+###############################################################################
 ## @brief API version of ::ze_driver_ipc_properties_t
 class ze_driver_ipc_properties_version_v(IntEnum):
     CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
@@ -217,10 +246,6 @@ class ze_device_properties_version_t(c_int):
 
 
 ###############################################################################
-## @brief Maximum device uuid size in bytes
-ZE_MAX_UUID_SIZE = 16
-
-###############################################################################
 ## @brief Supported device types
 class ze_device_type_v(IntEnum):
     GPU = 1                                         ## Graphics Processing Unit
@@ -232,10 +257,14 @@ class ze_device_type_t(c_int):
 
 
 ###############################################################################
+## @brief Maximum device universal unique id (UUID) size in bytes
+ZE_MAX_DEVICE_UUID_SIZE = 16
+
+###############################################################################
 ## @brief Device universal unique id (UUID)
 class ze_device_uuid_t(Structure):
     _fields_ = [
-        ("id", c_ubyte * ZE_MAX_UUID_SIZE)                              ## [out] device universal unique id
+        ("id", c_ubyte * ZE_MAX_DEVICE_UUID_SIZE)                       ## Opaque data representing a device UUID
     ]
 
 ###############################################################################
@@ -1157,6 +1186,133 @@ class cl_command_queue(c_void_p):
 __use_win_types = "Windows" == platform.uname()[0]
 
 ###############################################################################
+## @brief Function-pointer for zeDriverGet
+if __use_win_types:
+    _zeDriverGet_t = WINFUNCTYPE( ze_result_t, POINTER(c_ulong), POINTER(ze_driver_handle_t) )
+else:
+    _zeDriverGet_t = CFUNCTYPE( ze_result_t, POINTER(c_ulong), POINTER(ze_driver_handle_t) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverGetDriverVersion
+if __use_win_types:
+    _zeDriverGetDriverVersion_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_ulong) )
+else:
+    _zeDriverGetDriverVersion_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverGetApiVersion
+if __use_win_types:
+    _zeDriverGetApiVersion_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_api_version_t) )
+else:
+    _zeDriverGetApiVersion_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_api_version_t) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverGetProperties
+if __use_win_types:
+    _zeDriverGetProperties_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_driver_properties_t) )
+else:
+    _zeDriverGetProperties_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_driver_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverGetIPCProperties
+if __use_win_types:
+    _zeDriverGetIPCProperties_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_driver_ipc_properties_t) )
+else:
+    _zeDriverGetIPCProperties_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_driver_ipc_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverGetExtensionFunctionAddress
+if __use_win_types:
+    _zeDriverGetExtensionFunctionAddress_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_char), POINTER(c_void_p) )
+else:
+    _zeDriverGetExtensionFunctionAddress_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_char), POINTER(c_void_p) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverAllocSharedMem
+if __use_win_types:
+    _zeDriverAllocSharedMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
+else:
+    _zeDriverAllocSharedMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverAllocDeviceMem
+if __use_win_types:
+    _zeDriverAllocDeviceMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
+else:
+    _zeDriverAllocDeviceMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverAllocHostMem
+if __use_win_types:
+    _zeDriverAllocHostMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+else:
+    _zeDriverAllocHostMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverFreeMem
+if __use_win_types:
+    _zeDriverFreeMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p )
+else:
+    _zeDriverFreeMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zeDriverGetMemAllocProperties
+if __use_win_types:
+    _zeDriverGetMemAllocProperties_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(ze_memory_allocation_properties_t), POINTER(ze_device_handle_t) )
+else:
+    _zeDriverGetMemAllocProperties_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(ze_memory_allocation_properties_t), POINTER(ze_device_handle_t) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverGetMemAddressRange
+if __use_win_types:
+    _zeDriverGetMemAddressRange_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(c_void_p), POINTER(c_size_t) )
+else:
+    _zeDriverGetMemAddressRange_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(c_void_p), POINTER(c_size_t) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverGetMemIpcHandle
+if __use_win_types:
+    _zeDriverGetMemIpcHandle_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(ze_ipc_mem_handle_t) )
+else:
+    _zeDriverGetMemIpcHandle_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(ze_ipc_mem_handle_t) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverOpenMemIpcHandle
+if __use_win_types:
+    _zeDriverOpenMemIpcHandle_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_ipc_mem_handle_t, ze_ipc_memory_flag_t, POINTER(c_void_p) )
+else:
+    _zeDriverOpenMemIpcHandle_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_ipc_mem_handle_t, ze_ipc_memory_flag_t, POINTER(c_void_p) )
+
+###############################################################################
+## @brief Function-pointer for zeDriverCloseMemIpcHandle
+if __use_win_types:
+    _zeDriverCloseMemIpcHandle_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p )
+else:
+    _zeDriverCloseMemIpcHandle_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p )
+
+
+###############################################################################
+## @brief Table of Driver functions pointers
+class _ze_driver_dditable_t(Structure):
+    _fields_ = [
+        ("pfnGet", c_void_p),                                           ## _zeDriverGet_t
+        ("pfnGetDriverVersion", c_void_p),                              ## _zeDriverGetDriverVersion_t
+        ("pfnGetApiVersion", c_void_p),                                 ## _zeDriverGetApiVersion_t
+        ("pfnGetProperties", c_void_p),                                 ## _zeDriverGetProperties_t
+        ("pfnGetIPCProperties", c_void_p),                              ## _zeDriverGetIPCProperties_t
+        ("pfnGetExtensionFunctionAddress", c_void_p),                   ## _zeDriverGetExtensionFunctionAddress_t
+        ("pfnAllocSharedMem", c_void_p),                                ## _zeDriverAllocSharedMem_t
+        ("pfnAllocDeviceMem", c_void_p),                                ## _zeDriverAllocDeviceMem_t
+        ("pfnAllocHostMem", c_void_p),                                  ## _zeDriverAllocHostMem_t
+        ("pfnFreeMem", c_void_p),                                       ## _zeDriverFreeMem_t
+        ("pfnGetMemAllocProperties", c_void_p),                         ## _zeDriverGetMemAllocProperties_t
+        ("pfnGetMemAddressRange", c_void_p),                            ## _zeDriverGetMemAddressRange_t
+        ("pfnGetMemIpcHandle", c_void_p),                               ## _zeDriverGetMemIpcHandle_t
+        ("pfnOpenMemIpcHandle", c_void_p),                              ## _zeDriverOpenMemIpcHandle_t
+        ("pfnCloseMemIpcHandle", c_void_p)                              ## _zeDriverCloseMemIpcHandle_t
+    ]
+
+###############################################################################
 ## @brief Function-pointer for zeInit
 if __use_win_types:
     _zeInit_t = WINFUNCTYPE( ze_result_t, ze_init_flag_t )
@@ -1321,125 +1477,6 @@ class _ze_device_dditable_t(Structure):
         ("pfnEvictMemory", c_void_p),                                   ## _zeDeviceEvictMemory_t
         ("pfnMakeImageResident", c_void_p),                             ## _zeDeviceMakeImageResident_t
         ("pfnEvictImage", c_void_p)                                     ## _zeDeviceEvictImage_t
-    ]
-
-###############################################################################
-## @brief Function-pointer for zeDriverGet
-if __use_win_types:
-    _zeDriverGet_t = WINFUNCTYPE( ze_result_t, POINTER(c_ulong), POINTER(ze_driver_handle_t) )
-else:
-    _zeDriverGet_t = CFUNCTYPE( ze_result_t, POINTER(c_ulong), POINTER(ze_driver_handle_t) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverGetDriverVersion
-if __use_win_types:
-    _zeDriverGetDriverVersion_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_ulong) )
-else:
-    _zeDriverGetDriverVersion_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_ulong) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverGetApiVersion
-if __use_win_types:
-    _zeDriverGetApiVersion_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_api_version_t) )
-else:
-    _zeDriverGetApiVersion_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_api_version_t) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverGetIPCProperties
-if __use_win_types:
-    _zeDriverGetIPCProperties_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_driver_ipc_properties_t) )
-else:
-    _zeDriverGetIPCProperties_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_driver_ipc_properties_t) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverGetExtensionFunctionAddress
-if __use_win_types:
-    _zeDriverGetExtensionFunctionAddress_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_char), POINTER(c_void_p) )
-else:
-    _zeDriverGetExtensionFunctionAddress_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_char), POINTER(c_void_p) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverAllocSharedMem
-if __use_win_types:
-    _zeDriverAllocSharedMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
-else:
-    _zeDriverAllocSharedMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverAllocDeviceMem
-if __use_win_types:
-    _zeDriverAllocDeviceMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
-else:
-    _zeDriverAllocDeviceMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverAllocHostMem
-if __use_win_types:
-    _zeDriverAllocHostMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
-else:
-    _zeDriverAllocHostMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverFreeMem
-if __use_win_types:
-    _zeDriverFreeMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p )
-else:
-    _zeDriverFreeMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p )
-
-###############################################################################
-## @brief Function-pointer for zeDriverGetMemAllocProperties
-if __use_win_types:
-    _zeDriverGetMemAllocProperties_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(ze_memory_allocation_properties_t), POINTER(ze_device_handle_t) )
-else:
-    _zeDriverGetMemAllocProperties_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(ze_memory_allocation_properties_t), POINTER(ze_device_handle_t) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverGetMemAddressRange
-if __use_win_types:
-    _zeDriverGetMemAddressRange_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(c_void_p), POINTER(c_size_t) )
-else:
-    _zeDriverGetMemAddressRange_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(c_void_p), POINTER(c_size_t) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverGetMemIpcHandle
-if __use_win_types:
-    _zeDriverGetMemIpcHandle_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(ze_ipc_mem_handle_t) )
-else:
-    _zeDriverGetMemIpcHandle_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p, POINTER(ze_ipc_mem_handle_t) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverOpenMemIpcHandle
-if __use_win_types:
-    _zeDriverOpenMemIpcHandle_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_ipc_mem_handle_t, ze_ipc_memory_flag_t, POINTER(c_void_p) )
-else:
-    _zeDriverOpenMemIpcHandle_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_handle_t, ze_ipc_mem_handle_t, ze_ipc_memory_flag_t, POINTER(c_void_p) )
-
-###############################################################################
-## @brief Function-pointer for zeDriverCloseMemIpcHandle
-if __use_win_types:
-    _zeDriverCloseMemIpcHandle_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p )
-else:
-    _zeDriverCloseMemIpcHandle_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, c_void_p )
-
-
-###############################################################################
-## @brief Table of Driver functions pointers
-class _ze_driver_dditable_t(Structure):
-    _fields_ = [
-        ("pfnGet", c_void_p),                                           ## _zeDriverGet_t
-        ("pfnGetDriverVersion", c_void_p),                              ## _zeDriverGetDriverVersion_t
-        ("pfnGetApiVersion", c_void_p),                                 ## _zeDriverGetApiVersion_t
-        ("pfnGetIPCProperties", c_void_p),                              ## _zeDriverGetIPCProperties_t
-        ("pfnGetExtensionFunctionAddress", c_void_p),                   ## _zeDriverGetExtensionFunctionAddress_t
-        ("pfnAllocSharedMem", c_void_p),                                ## _zeDriverAllocSharedMem_t
-        ("pfnAllocDeviceMem", c_void_p),                                ## _zeDriverAllocDeviceMem_t
-        ("pfnAllocHostMem", c_void_p),                                  ## _zeDriverAllocHostMem_t
-        ("pfnFreeMem", c_void_p),                                       ## _zeDriverFreeMem_t
-        ("pfnGetMemAllocProperties", c_void_p),                         ## _zeDriverGetMemAllocProperties_t
-        ("pfnGetMemAddressRange", c_void_p),                            ## _zeDriverGetMemAddressRange_t
-        ("pfnGetMemIpcHandle", c_void_p),                               ## _zeDriverGetMemIpcHandle_t
-        ("pfnOpenMemIpcHandle", c_void_p),                              ## _zeDriverOpenMemIpcHandle_t
-        ("pfnCloseMemIpcHandle", c_void_p)                              ## _zeDriverCloseMemIpcHandle_t
     ]
 
 ###############################################################################
@@ -2035,9 +2072,9 @@ class _ze_sampler_dditable_t(Structure):
 ###############################################################################
 class _ze_dditable_t(Structure):
     _fields_ = [
+        ("Driver", _ze_driver_dditable_t),
         ("Global", _ze_global_dditable_t),
         ("Device", _ze_device_dditable_t),
-        ("Driver", _ze_driver_dditable_t),
         ("CommandQueue", _ze_command_queue_dditable_t),
         ("CommandList", _ze_command_list_dditable_t),
         ("Fence", _ze_fence_dditable_t),
@@ -2062,6 +2099,30 @@ class ZE_DDI:
 
         # fill the ddi tables
         self.__dditable = _ze_dditable_t()
+
+        # call driver to get function pointers
+        _Driver = _ze_driver_dditable_t()
+        r = ze_result_v(self.__dll.zeGetDriverProcAddrTable(version, byref(_Driver)))
+        if r != ze_result_v.SUCCESS:
+            raise Exception(r)
+        self.__dditable.Driver = _Driver
+
+        # attach function interface to function address
+        self.zeDriverGet = _zeDriverGet_t(self.__dditable.Driver.pfnGet)
+        self.zeDriverGetDriverVersion = _zeDriverGetDriverVersion_t(self.__dditable.Driver.pfnGetDriverVersion)
+        self.zeDriverGetApiVersion = _zeDriverGetApiVersion_t(self.__dditable.Driver.pfnGetApiVersion)
+        self.zeDriverGetProperties = _zeDriverGetProperties_t(self.__dditable.Driver.pfnGetProperties)
+        self.zeDriverGetIPCProperties = _zeDriverGetIPCProperties_t(self.__dditable.Driver.pfnGetIPCProperties)
+        self.zeDriverGetExtensionFunctionAddress = _zeDriverGetExtensionFunctionAddress_t(self.__dditable.Driver.pfnGetExtensionFunctionAddress)
+        self.zeDriverAllocSharedMem = _zeDriverAllocSharedMem_t(self.__dditable.Driver.pfnAllocSharedMem)
+        self.zeDriverAllocDeviceMem = _zeDriverAllocDeviceMem_t(self.__dditable.Driver.pfnAllocDeviceMem)
+        self.zeDriverAllocHostMem = _zeDriverAllocHostMem_t(self.__dditable.Driver.pfnAllocHostMem)
+        self.zeDriverFreeMem = _zeDriverFreeMem_t(self.__dditable.Driver.pfnFreeMem)
+        self.zeDriverGetMemAllocProperties = _zeDriverGetMemAllocProperties_t(self.__dditable.Driver.pfnGetMemAllocProperties)
+        self.zeDriverGetMemAddressRange = _zeDriverGetMemAddressRange_t(self.__dditable.Driver.pfnGetMemAddressRange)
+        self.zeDriverGetMemIpcHandle = _zeDriverGetMemIpcHandle_t(self.__dditable.Driver.pfnGetMemIpcHandle)
+        self.zeDriverOpenMemIpcHandle = _zeDriverOpenMemIpcHandle_t(self.__dditable.Driver.pfnOpenMemIpcHandle)
+        self.zeDriverCloseMemIpcHandle = _zeDriverCloseMemIpcHandle_t(self.__dditable.Driver.pfnCloseMemIpcHandle)
 
         # call driver to get function pointers
         _Global = _ze_global_dditable_t()
@@ -2098,29 +2159,6 @@ class ZE_DDI:
         self.zeDeviceEvictMemory = _zeDeviceEvictMemory_t(self.__dditable.Device.pfnEvictMemory)
         self.zeDeviceMakeImageResident = _zeDeviceMakeImageResident_t(self.__dditable.Device.pfnMakeImageResident)
         self.zeDeviceEvictImage = _zeDeviceEvictImage_t(self.__dditable.Device.pfnEvictImage)
-
-        # call driver to get function pointers
-        _Driver = _ze_driver_dditable_t()
-        r = ze_result_v(self.__dll.zeGetDriverProcAddrTable(version, byref(_Driver)))
-        if r != ze_result_v.SUCCESS:
-            raise Exception(r)
-        self.__dditable.Driver = _Driver
-
-        # attach function interface to function address
-        self.zeDriverGet = _zeDriverGet_t(self.__dditable.Driver.pfnGet)
-        self.zeDriverGetDriverVersion = _zeDriverGetDriverVersion_t(self.__dditable.Driver.pfnGetDriverVersion)
-        self.zeDriverGetApiVersion = _zeDriverGetApiVersion_t(self.__dditable.Driver.pfnGetApiVersion)
-        self.zeDriverGetIPCProperties = _zeDriverGetIPCProperties_t(self.__dditable.Driver.pfnGetIPCProperties)
-        self.zeDriverGetExtensionFunctionAddress = _zeDriverGetExtensionFunctionAddress_t(self.__dditable.Driver.pfnGetExtensionFunctionAddress)
-        self.zeDriverAllocSharedMem = _zeDriverAllocSharedMem_t(self.__dditable.Driver.pfnAllocSharedMem)
-        self.zeDriverAllocDeviceMem = _zeDriverAllocDeviceMem_t(self.__dditable.Driver.pfnAllocDeviceMem)
-        self.zeDriverAllocHostMem = _zeDriverAllocHostMem_t(self.__dditable.Driver.pfnAllocHostMem)
-        self.zeDriverFreeMem = _zeDriverFreeMem_t(self.__dditable.Driver.pfnFreeMem)
-        self.zeDriverGetMemAllocProperties = _zeDriverGetMemAllocProperties_t(self.__dditable.Driver.pfnGetMemAllocProperties)
-        self.zeDriverGetMemAddressRange = _zeDriverGetMemAddressRange_t(self.__dditable.Driver.pfnGetMemAddressRange)
-        self.zeDriverGetMemIpcHandle = _zeDriverGetMemIpcHandle_t(self.__dditable.Driver.pfnGetMemIpcHandle)
-        self.zeDriverOpenMemIpcHandle = _zeDriverOpenMemIpcHandle_t(self.__dditable.Driver.pfnOpenMemIpcHandle)
-        self.zeDriverCloseMemIpcHandle = _zeDriverCloseMemIpcHandle_t(self.__dditable.Driver.pfnCloseMemIpcHandle)
 
         # call driver to get function pointers
         _CommandQueue = _ze_command_queue_dditable_t()
