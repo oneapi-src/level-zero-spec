@@ -6913,10 +6913,6 @@ namespace zet
         str += to_string(val.type);
         str += "\n";
         
-        str += "SysmanEngine::engine_properties_t::engines : ";
-        str += std::to_string(val.engines);
-        str += "\n";
-        
         str += "SysmanEngine::engine_properties_t::onSubdevice : ";
         str += std::to_string(val.onSubdevice);
         str += "\n";

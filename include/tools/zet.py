@@ -1115,7 +1115,6 @@ class zet_engine_group_t(c_int):
 class zet_engine_properties_t(Structure):
     _fields_ = [
         ("type", zet_engine_group_t),                                   ## [out] The engine group
-        ("engines", c_int64_t),                                         ## [out] Bitfield of accelerator engines counted by this group.
         ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong)                                        ## [out] If onSubdevice is true, this gives the ID of the sub-device

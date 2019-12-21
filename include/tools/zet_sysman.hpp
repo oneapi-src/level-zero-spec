@@ -1622,7 +1622,6 @@ namespace zet
         struct engine_properties_t
         {
             engine_group_t type;                            ///< [out] The engine group
-            int64_t engines;                                ///< [out] Bitfield of accelerator engines counted by this group.
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device

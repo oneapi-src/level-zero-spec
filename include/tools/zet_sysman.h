@@ -1620,7 +1620,6 @@ typedef enum _zet_engine_group_t
 typedef struct _zet_engine_properties_t
 {
     zet_engine_group_t type;                        ///< [out] The engine group
-    int64_t engines;                                ///< [out] Bitfield of accelerator engines counted by this group.
     ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device

@@ -1476,9 +1476,6 @@ members:
     - type: $t_engine_group_t
       name: "type"
       desc: "[out] The engine group"
-    - type: int64_t
-      name: "engines"
-      desc: "[out] Bitfield of accelerator engines counted by this group."
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
