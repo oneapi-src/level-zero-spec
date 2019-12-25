@@ -547,9 +547,21 @@ members:
     - type: uint32_t
       name: maxImageDims3D
       desc: "[out] Maximum image dimensions for 3D resources."
+    - type: uint64_t
+      name: maxImageBufferSize
+      desc: "[out] Maximum image buffer size in bytes."
     - type: uint32_t
       name: maxImageArraySlices
       desc: "[out] Maximum image array slices"
+    - type: uint32_t
+      name: maxSamplers
+      desc: "[out] Max samplers that can be used in kernel."
+    - type: uint32_t
+      name: maxReadImageArgs
+      desc: "[out] Returns the maximum number of simultaneous image objects that can be read from by a kernel."
+    - type: uint32_t
+      name: maxWriteImageArgs
+      desc: "[out] Returns the maximum number of simultaneous image objects that can be written to by a kernel."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves image X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT of the device"

@@ -468,7 +468,13 @@ class ze_device_image_properties_t(Structure):
         ("maxImageDims1D", c_ulong),                                    ## [out] Maximum image dimensions for 1D resources.
         ("maxImageDims2D", c_ulong),                                    ## [out] Maximum image dimensions for 2D resources.
         ("maxImageDims3D", c_ulong),                                    ## [out] Maximum image dimensions for 3D resources.
-        ("maxImageArraySlices", c_ulong)                                ## [out] Maximum image array slices
+        ("maxImageBufferSize", c_ulonglong),                            ## [out] Maximum image buffer size in bytes.
+        ("maxImageArraySlices", c_ulong),                               ## [out] Maximum image array slices
+        ("maxSamplers", c_ulong),                                       ## [out] Max samplers that can be used in kernel.
+        ("maxReadImageArgs", c_ulong),                                  ## [out] Returns the maximum number of simultaneous image objects that
+                                                                        ## can be read from by a kernel.
+        ("maxWriteImageArgs", c_ulong)                                  ## [out] Returns the maximum number of simultaneous image objects that
+                                                                        ## can be written to by a kernel.
     ]
 
 ###############################################################################

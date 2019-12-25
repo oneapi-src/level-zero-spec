@@ -482,7 +482,13 @@ typedef struct _ze_device_image_properties_t
     uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
     uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
     uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
+    uint64_t maxImageBufferSize;                    ///< [out] Maximum image buffer size in bytes.
     uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
+    uint32_t maxSamplers;                           ///< [out] Max samplers that can be used in kernel.
+    uint32_t maxReadImageArgs;                      ///< [out] Returns the maximum number of simultaneous image objects that
+                                                    ///< can be read from by a kernel.
+    uint32_t maxWriteImageArgs;                     ///< [out] Returns the maximum number of simultaneous image objects that
+                                                    ///< can be written to by a kernel.
 
 } ze_device_image_properties_t;
 

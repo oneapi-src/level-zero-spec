@@ -1412,8 +1412,24 @@ namespace ze
         str += std::to_string(val.maxImageDims3D);
         str += "\n";
         
+        str += "Device::image_properties_t::maxImageBufferSize : ";
+        str += std::to_string(val.maxImageBufferSize);
+        str += "\n";
+        
         str += "Device::image_properties_t::maxImageArraySlices : ";
         str += std::to_string(val.maxImageArraySlices);
+        str += "\n";
+        
+        str += "Device::image_properties_t::maxSamplers : ";
+        str += std::to_string(val.maxSamplers);
+        str += "\n";
+        
+        str += "Device::image_properties_t::maxReadImageArgs : ";
+        str += std::to_string(val.maxReadImageArgs);
+        str += "\n";
+        
+        str += "Device::image_properties_t::maxWriteImageArgs : ";
+        str += std::to_string(val.maxWriteImageArgs);
         str += "\n";
 
         return str;
