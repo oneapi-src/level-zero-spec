@@ -160,6 +160,7 @@ namespace ze
             uint32_t subdeviceId;                           ///< [out] sub-device id. Only valid if isSubdevice is true.
             uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
             bool_t unifiedMemorySupported;                  ///< [out] Supports unified physical memory between Host and device.
+            bool_t eccMemorySupported;                      ///< [out] Supports error correction memory access.
             bool_t onDemandPageFaultsSupported;             ///< [out] Supports on-demand page-faulting.
             uint32_t maxCommandQueues;                      ///< [out] Maximum number of logical command queues.
             uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
@@ -172,6 +173,7 @@ namespace ze
             uint32_t numSubslicesPerSlice;                  ///< [out] Number of sub-slices per slice.
             uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
             uint32_t numTiles;                              ///< [out] Number of tiles.
+            uint64_t timerResolution;                       ///< [out] Returns the resolution of device timer in nanoseconds.
             char name[ZE_MAX_DEVICE_NAME];                  ///< [out] Device name
 
         };

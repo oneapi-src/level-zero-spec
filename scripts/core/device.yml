@@ -133,6 +133,9 @@ members:
       name: unifiedMemorySupported
       desc: "[out] Supports unified physical memory between Host and device."
     - type: $x_bool_t
+      name: eccMemorySupported
+      desc: "[out] Supports error correction memory access."
+    - type: $x_bool_t
       name: onDemandPageFaultsSupported
       desc: "[out] Supports on-demand page-faulting."
     - type: uint32_t
@@ -165,6 +168,9 @@ members:
     - type: uint32_t
       name: numTiles
       desc: "[out] Number of tiles."
+    - type: uint64_t
+      name: timerResolution
+      desc: "[out] Returns the resolution of device timer in nanoseconds."
     - type: char
       name: "name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"

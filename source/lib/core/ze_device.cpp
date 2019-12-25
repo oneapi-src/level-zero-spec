@@ -1130,6 +1130,10 @@ namespace ze
         str += std::to_string(val.unifiedMemorySupported);
         str += "\n";
         
+        str += "Device::properties_t::eccMemorySupported : ";
+        str += std::to_string(val.eccMemorySupported);
+        str += "\n";
+        
         str += "Device::properties_t::onDemandPageFaultsSupported : ";
         str += std::to_string(val.onDemandPageFaultsSupported);
         str += "\n";
@@ -1172,6 +1176,10 @@ namespace ze
         
         str += "Device::properties_t::numTiles : ";
         str += std::to_string(val.numTiles);
+        str += "\n";
+        
+        str += "Device::properties_t::timerResolution : ";
+        str += std::to_string(val.timerResolution);
         str += "\n";
         
         str += "Device::properties_t::name : ";

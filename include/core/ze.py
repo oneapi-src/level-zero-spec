@@ -284,6 +284,7 @@ class ze_device_properties_t(Structure):
         ("subdeviceId", c_ulong),                                       ## [out] sub-device id. Only valid if isSubdevice is true.
         ("coreClockRate", c_ulong),                                     ## [out] Clock rate for device core.
         ("unifiedMemorySupported", ze_bool_t),                          ## [out] Supports unified physical memory between Host and device.
+        ("eccMemorySupported", ze_bool_t),                              ## [out] Supports error correction memory access.
         ("onDemandPageFaultsSupported", ze_bool_t),                     ## [out] Supports on-demand page-faulting.
         ("maxCommandQueues", c_ulong),                                  ## [out] Maximum number of logical command queues.
         ("numAsyncComputeEngines", c_ulong),                            ## [out] Number of asynchronous compute engines
@@ -296,6 +297,7 @@ class ze_device_properties_t(Structure):
         ("numSubslicesPerSlice", c_ulong),                              ## [out] Number of sub-slices per slice.
         ("numSlicesPerTile", c_ulong),                                  ## [out] Number of slices per tile.
         ("numTiles", c_ulong),                                          ## [out] Number of tiles.
+        ("timerResolution", c_ulonglong),                               ## [out] Returns the resolution of device timer in nanoseconds.
         ("name", c_char * ZE_MAX_DEVICE_NAME)                           ## [out] Device name
     ]
 
