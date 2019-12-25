@@ -1367,12 +1367,20 @@ namespace ze
         str += std::to_string(val.intermediateCacheSize);
         str += "\n";
         
+        str += "Device::cache_properties_t::intermediateCachelineSize : ";
+        str += std::to_string(val.intermediateCachelineSize);
+        str += "\n";
+        
         str += "Device::cache_properties_t::lastLevelCacheSizeControlSupported : ";
         str += std::to_string(val.lastLevelCacheSizeControlSupported);
         str += "\n";
         
         str += "Device::cache_properties_t::lastLevelCacheSize : ";
         str += std::to_string(val.lastLevelCacheSize);
+        str += "\n";
+        
+        str += "Device::cache_properties_t::lastLevelCachelineSize : ";
+        str += std::to_string(val.lastLevelCachelineSize);
         str += "\n";
 
         return str;

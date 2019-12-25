@@ -441,9 +441,11 @@ class ze_device_cache_properties_t(Structure):
         ("intermediateCacheControlSupported", ze_bool_t),               ## [out] Support User control on Intermediate Cache (i.e. Resize SLM
                                                                         ## section vs Generic Cache)
         ("intermediateCacheSize", c_size_t),                            ## [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
+        ("intermediateCachelineSize", c_ulong),                         ## [out] Cacheline size in bytes for intermediate cacheline (L1/L2).
         ("lastLevelCacheSizeControlSupported", ze_bool_t),              ## [out] Support User control on Last Level Cache (i.e. Resize SLM
                                                                         ## section vs Generic Cache).
-        ("lastLevelCacheSize", c_size_t)                                ## [out] Per-cache Last Level Cache (L3) size, in bytes
+        ("lastLevelCacheSize", c_size_t),                               ## [out] Per-cache Last Level Cache (L3) size, in bytes
+        ("lastLevelCachelineSize", c_ulong)                             ## [out] Cacheline size in bytes for last-level cacheline (L3).
     ]
 
 ###############################################################################

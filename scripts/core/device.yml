@@ -484,12 +484,18 @@ members:
     - type: size_t
       name: intermediateCacheSize
       desc: "[out] Per-cache Intermediate Cache (L1/L2) size, in bytes"
+    - type: uint32_t
+      name: intermediateCachelineSize
+      desc: "[out] Cacheline size in bytes for intermediate cacheline (L1/L2)."
     - type: $x_bool_t
       name: lastLevelCacheSizeControlSupported
       desc: "[out] Support User control on Last Level Cache (i.e. Resize SLM section vs Generic Cache)."
     - type: size_t
       name: lastLevelCacheSize
       desc: "[out] Per-cache Last Level Cache (L3) size, in bytes"
+    - type: uint32_t
+      name: lastLevelCachelineSize
+      desc: "[out] Cacheline size in bytes for last-level cacheline (L3)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves cache properties of the device"

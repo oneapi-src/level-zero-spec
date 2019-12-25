@@ -429,9 +429,11 @@ typedef struct _ze_device_cache_properties_t
     ze_bool_t intermediateCacheControlSupported;    ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
                                                     ///< section vs Generic Cache)
     size_t intermediateCacheSize;                   ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
+    uint32_t intermediateCachelineSize;             ///< [out] Cacheline size in bytes for intermediate cacheline (L1/L2).
     ze_bool_t lastLevelCacheSizeControlSupported;   ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
                                                     ///< section vs Generic Cache).
     size_t lastLevelCacheSize;                      ///< [out] Per-cache Last Level Cache (L3) size, in bytes
+    uint32_t lastLevelCachelineSize;                ///< [out] Cacheline size in bytes for last-level cacheline (L3).
 
 } ze_device_cache_properties_t;
 
