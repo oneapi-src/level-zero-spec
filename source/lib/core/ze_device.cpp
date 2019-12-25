@@ -1279,6 +1279,14 @@ namespace ze
         str += "Device::kernel_properties_t::dp4aSupported : ";
         str += std::to_string(val.dp4aSupported);
         str += "\n";
+        
+        str += "Device::kernel_properties_t::maxArgumentsSize : ";
+        str += std::to_string(val.maxArgumentsSize);
+        str += "\n";
+        
+        str += "Device::kernel_properties_t::printfBufferSize : ";
+        str += std::to_string(val.printfBufferSize);
+        str += "\n";
 
         return str;
     }

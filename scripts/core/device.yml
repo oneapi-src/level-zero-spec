@@ -304,6 +304,12 @@ members:
     - type: $x_bool_t
       name: dp4aSupported
       desc: "[out] Supports four component dot product and accumulate operations"
+    - type: uint32_t
+      name: maxArgumentsSize
+      desc: "[out] Maximum kernel argument size that is supported."
+    - type: uint32_t
+      name: printfBufferSize
+      desc: "[out] Maximum size of internal buffer that holds output of printf calls from kernel."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves kernel properties of the device"

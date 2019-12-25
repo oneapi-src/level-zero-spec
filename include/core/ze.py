@@ -355,7 +355,10 @@ class ze_device_kernel_properties_t(Structure):
         ("fp16Supported", ze_bool_t),                                   ## [out] Supports 16-bit floating-point operations
         ("fp64Supported", ze_bool_t),                                   ## [out] Supports 64-bit floating-point operations
         ("int64AtomicsSupported", ze_bool_t),                           ## [out] Supports 64-bit atomic operations
-        ("dp4aSupported", ze_bool_t)                                    ## [out] Supports four component dot product and accumulate operations
+        ("dp4aSupported", ze_bool_t),                                   ## [out] Supports four component dot product and accumulate operations
+        ("maxArgumentsSize", c_ulong),                                  ## [out] Maximum kernel argument size that is supported.
+        ("printfBufferSize", c_ulong)                                   ## [out] Maximum size of internal buffer that holds output of printf
+                                                                        ## calls from kernel.
     ]
 
 ###############################################################################

@@ -210,6 +210,9 @@ namespace ze
             bool_t fp64Supported;                           ///< [out] Supports 64-bit floating-point operations
             bool_t int64AtomicsSupported;                   ///< [out] Supports 64-bit atomic operations
             bool_t dp4aSupported;                           ///< [out] Supports four component dot product and accumulate operations
+            uint32_t maxArgumentsSize;                      ///< [out] Maximum kernel argument size that is supported.
+            uint32_t printfBufferSize;                      ///< [out] Maximum size of internal buffer that holds output of printf
+                                                            ///< calls from kernel.
 
         };
 
