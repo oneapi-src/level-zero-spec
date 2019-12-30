@@ -714,8 +714,7 @@ class zet_pci_speed_t(Structure):
     _fields_ = [
         ("gen", c_ulong),                                               ## [out] The link generation
         ("width", c_ulong),                                             ## [out] The number of lanes
-        ("maxBandwidth", c_ulonglong),                                  ## [out] The maximum bandwidth in bytes/sec
-        ("maxPacketSize", c_ulong)                                      ## [out] Maximum packet size in bytes.
+        ("maxBandwidth", c_ulonglong)                                   ## [out] The maximum bandwidth in bytes/sec
     ]
 
 ###############################################################################

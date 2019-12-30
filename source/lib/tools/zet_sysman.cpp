@@ -6394,10 +6394,6 @@ namespace zet
         str += "Sysman::pci_speed_t::maxBandwidth : ";
         str += std::to_string(val.maxBandwidth);
         str += "\n";
-        
-        str += "Sysman::pci_speed_t::maxPacketSize : ";
-        str += std::to_string(val.maxPacketSize);
-        str += "\n";
 
         return str;
     }

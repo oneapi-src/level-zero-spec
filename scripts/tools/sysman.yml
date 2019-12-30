@@ -515,9 +515,6 @@ members:
     - type: uint64_t
       name: "maxBandwidth"
       desc: "[out] The maximum bandwidth in bytes/sec"
-    - type: uint32_t
-      name: "maxPacketSize"
-      desc: "[out] Maximum packet size in bytes."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Static PCI properties"

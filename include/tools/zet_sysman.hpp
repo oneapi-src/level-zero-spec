@@ -317,7 +317,6 @@ namespace zet
             uint32_t gen;                                   ///< [out] The link generation
             uint32_t width;                                 ///< [out] The number of lanes
             uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
-            uint32_t maxPacketSize;                         ///< [out] Maximum packet size in bytes.
 
         };
 
