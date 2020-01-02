@@ -1508,28 +1508,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPciGetBarProperties
+    /// @brief Intercept function for zetSysmanPciGetBars
     ze_result_t __zecall
-    zetSysmanPciGetBarProperties(
+    zetSysmanPciGetBars(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::zet_pci_properties_t.numBars -
-                                                        ///< 1]).
-        zet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of PCI bars.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of bars.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of bars.
+                                                        ///< if count is larger than the number of bar, then the driver will update
+                                                        ///< the value with the correct number of bars that are returned.
+        zet_pci_bar_properties_t* pProperties           ///< [in,out][optional][range(0, *pCount)] array of bar properties
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnPciGetBarProperties = dditable->zet.Sysman.pfnPciGetBarProperties;
-        if( nullptr == pfnPciGetBarProperties )
+        auto pfnPciGetBars = dditable->zet.Sysman.pfnPciGetBars;
+        if( nullptr == pfnPciGetBars )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnPciGetBarProperties( hSysman, barIndex, pProperties );
+        result = pfnPciGetBars( hSysman, pCount, pProperties );
 
         return result;
     }
@@ -4665,7 +4669,7 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnDeviceGetRepairStatus                    = loader::zetSysmanDeviceGetRepairStatus;
             pDdiTable->pfnPciGetProperties                         = loader::zetSysmanPciGetProperties;
             pDdiTable->pfnPciGetState                              = loader::zetSysmanPciGetState;
-            pDdiTable->pfnPciGetBarProperties                      = loader::zetSysmanPciGetBarProperties;
+            pDdiTable->pfnPciGetBars                               = loader::zetSysmanPciGetBars;
             pDdiTable->pfnPciGetStats                              = loader::zetSysmanPciGetStats;
             pDdiTable->pfnPowerGet                                 = loader::zetSysmanPowerGet;
             pDdiTable->pfnFrequencyGet                             = loader::zetSysmanFrequencyGet;

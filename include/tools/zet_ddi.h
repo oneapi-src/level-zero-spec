@@ -717,10 +717,10 @@ typedef ze_result_t (__zecall *zet_pfnSysmanPciGetState_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanPciGetBarProperties 
-typedef ze_result_t (__zecall *zet_pfnSysmanPciGetBarProperties_t)(
+/// @brief Function-pointer for zetSysmanPciGetBars 
+typedef ze_result_t (__zecall *zet_pfnSysmanPciGetBars_t)(
     zet_sysman_handle_t,
-    uint32_t,
+    uint32_t*,
     zet_pci_bar_properties_t*
     );
 
@@ -864,7 +864,7 @@ typedef struct _zet_sysman_dditable_t
     zet_pfnSysmanDeviceGetRepairStatus_t                        pfnDeviceGetRepairStatus;
     zet_pfnSysmanPciGetProperties_t                             pfnPciGetProperties;
     zet_pfnSysmanPciGetState_t                                  pfnPciGetState;
-    zet_pfnSysmanPciGetBarProperties_t                          pfnPciGetBarProperties;
+    zet_pfnSysmanPciGetBars_t                                   pfnPciGetBars;
     zet_pfnSysmanPciGetStats_t                                  pfnPciGetStats;
     zet_pfnSysmanPowerGet_t                                     pfnPowerGet;
     zet_pfnSysmanFrequencyGet_t                                 pfnFrequencyGet;

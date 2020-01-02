@@ -1408,18 +1408,22 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPciGetBarProperties
+    /// @brief Intercept function for zetSysmanPciGetBars
     ze_result_t __zecall
-    zetSysmanPciGetBarProperties(
+    zetSysmanPciGetBars(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::zet_pci_properties_t.numBars -
-                                                        ///< 1]).
-        zet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of PCI bars.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of bars.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of bars.
+                                                        ///< if count is larger than the number of bar, then the driver will update
+                                                        ///< the value with the correct number of bars that are returned.
+        zet_pci_bar_properties_t* pProperties           ///< [in,out][optional][range(0, *pCount)] array of bar properties
         )
     {
-        auto pfnPciGetBarProperties = context.zetDdiTable.Sysman.pfnPciGetBarProperties;
+        auto pfnPciGetBars = context.zetDdiTable.Sysman.pfnPciGetBars;
 
-        if( nullptr == pfnPciGetBarProperties )
+        if( nullptr == pfnPciGetBars )
             return ZE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1427,12 +1431,12 @@ namespace layer
             if( nullptr == hSysman )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pProperties )
+            if( nullptr == pCount )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnPciGetBarProperties( hSysman, barIndex, pProperties );
+        return pfnPciGetBars( hSysman, pCount, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -4159,8 +4163,8 @@ zetGetSysmanProcAddrTable(
     dditable.pfnPciGetState                              = pDdiTable->pfnPciGetState;
     pDdiTable->pfnPciGetState                            = layer::zetSysmanPciGetState;
 
-    dditable.pfnPciGetBarProperties                      = pDdiTable->pfnPciGetBarProperties;
-    pDdiTable->pfnPciGetBarProperties                    = layer::zetSysmanPciGetBarProperties;
+    dditable.pfnPciGetBars                               = pDdiTable->pfnPciGetBars;
+    pDdiTable->pfnPciGetBars                             = layer::zetSysmanPciGetBars;
 
     dditable.pfnPciGetStats                              = pDdiTable->pfnPciGetStats;
     pDdiTable->pfnPciGetStats                            = layer::zetSysmanPciGetStats;

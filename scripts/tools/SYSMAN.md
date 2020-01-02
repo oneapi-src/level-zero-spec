@@ -389,7 +389,7 @@ The following functions permit getting data about the PCI endpoint for the devic
 | :---                                                       | :---        |
 | ::${t}SysmanPciGetProperties()                             | Get static properties for the PCI port - BDF address, number of bars, maximum supported speed |
 | ::${t}SysmanPciGetState()                                  | Get current PCI port speed (number of lanes, generation) and health. |
-| ::${t}SysmanPciGetBarProperties()                          | Get information about each configured PCI bar |
+| ::${t}SysmanPciGetBars()                                   | Get information about each configured PCI bar |
 | ::${t}SysmanPciGetStats()                                  | Get PCI statistics - throughput, total packets, number of packet replays |
 
 ::${t}SysmanPciGetState() returns a structure that contains the current health of the PCI link which can be one of the following
@@ -1303,7 +1303,7 @@ The table below summarizes the default permissions for each API function:
 | ::${t}SysmanDeviceReset()                             | read-write           | no-access            | no-access            | no-access            |
 | ::${t}SysmanPciGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanPciGetState()                             | read-only            | read-only            | read-only            | no-access            |
-| ::${t}SysmanPciGetBarProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::${t}SysmanPciGetBars()                              | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanPciGetStats()                             | read-only            | no-access            | no-access            | no-access            |
 | ::${t}SysmanPowerGet()                                | read-only            | read-only            | read-only            | no-access            |
 | ::${t}SysmanPowerGetProperties()                      | read-only            | read-only            | read-only            | no-access            |

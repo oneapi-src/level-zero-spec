@@ -722,7 +722,6 @@ class zet_pci_speed_t(Structure):
 class zet_pci_properties_t(Structure):
     _fields_ = [
         ("address", zet_pci_address_t),                                 ## [out] The BDF address
-        ("numBars", c_ulong),                                           ## [out] The number of configured bars
         ("maxSpeed", zet_pci_speed_t)                                   ## [out] Fastest port configuration supported by the device.
     ]
 
@@ -797,6 +796,7 @@ class zet_pci_bar_type_t(c_int):
 class zet_pci_bar_properties_t(Structure):
     _fields_ = [
         ("type", zet_pci_bar_type_t),                                   ## [out] The type of bar
+        ("index", c_ulong),                                             ## [out] The index of the bar
         ("base", c_ulonglong),                                          ## [out] Base address of the bar.
         ("size", c_ulonglong)                                           ## [out] Size of the bar.
     ]
@@ -2220,11 +2220,11 @@ else:
     _zetSysmanPciGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_pci_state_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanPciGetBarProperties
+## @brief Function-pointer for zetSysmanPciGetBars
 if __use_win_types:
-    _zetSysmanPciGetBarProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, c_ulong, POINTER(zet_pci_bar_properties_t) )
+    _zetSysmanPciGetBars_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_pci_bar_properties_t) )
 else:
-    _zetSysmanPciGetBarProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, c_ulong, POINTER(zet_pci_bar_properties_t) )
+    _zetSysmanPciGetBars_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_pci_bar_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanPciGetStats
@@ -2354,7 +2354,7 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnDeviceGetRepairStatus", c_void_p),                         ## _zetSysmanDeviceGetRepairStatus_t
         ("pfnPciGetProperties", c_void_p),                              ## _zetSysmanPciGetProperties_t
         ("pfnPciGetState", c_void_p),                                   ## _zetSysmanPciGetState_t
-        ("pfnPciGetBarProperties", c_void_p),                           ## _zetSysmanPciGetBarProperties_t
+        ("pfnPciGetBars", c_void_p),                                    ## _zetSysmanPciGetBars_t
         ("pfnPciGetStats", c_void_p),                                   ## _zetSysmanPciGetStats_t
         ("pfnPowerGet", c_void_p),                                      ## _zetSysmanPowerGet_t
         ("pfnFrequencyGet", c_void_p),                                  ## _zetSysmanFrequencyGet_t
@@ -3234,7 +3234,7 @@ class ZET_DDI:
         self.zetSysmanDeviceGetRepairStatus = _zetSysmanDeviceGetRepairStatus_t(self.__dditable.Sysman.pfnDeviceGetRepairStatus)
         self.zetSysmanPciGetProperties = _zetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)
         self.zetSysmanPciGetState = _zetSysmanPciGetState_t(self.__dditable.Sysman.pfnPciGetState)
-        self.zetSysmanPciGetBarProperties = _zetSysmanPciGetBarProperties_t(self.__dditable.Sysman.pfnPciGetBarProperties)
+        self.zetSysmanPciGetBars = _zetSysmanPciGetBars_t(self.__dditable.Sysman.pfnPciGetBars)
         self.zetSysmanPciGetStats = _zetSysmanPciGetStats_t(self.__dditable.Sysman.pfnPciGetStats)
         self.zetSysmanPowerGet = _zetSysmanPowerGet_t(self.__dditable.Sysman.pfnPowerGet)
         self.zetSysmanFrequencyGet = _zetSysmanFrequencyGet_t(self.__dditable.Sysman.pfnFrequencyGet)

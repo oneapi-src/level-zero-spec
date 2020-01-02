@@ -524,9 +524,6 @@ members:
     - type: $t_pci_address_t
       name: "address"
       desc: "[out] The BDF address"
-    - type: uint32_t
-      name: "numBars"
-      desc: "[out] The number of configured bars"
     - type: $t_pci_speed_t
       name: "maxSpeed"
       desc: "[out] Fastest port configuration supported by the device."
@@ -622,6 +619,9 @@ members:
     - type: $t_pci_bar_type_t
       name: "type"
       desc: "[out] The type of bar"
+    - type: uint32_t
+      name: "index"
+      desc: "[out] The index of the bar"
     - type: uint64_t
       name: "base"
       desc: "[out] Base address of the bar."
@@ -691,9 +691,9 @@ params:
       desc: "[in] Will contain the PCI properties."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get properties of a bar"
+desc: "Get information about each configured bar"
 class: $tSysman
-name: PciGetBarProperties
+name: PciGetBars
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -701,12 +701,16 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
-    - type: uint32_t
-      name: barIndex
-      desc: "[in] The index of the bar (0 ... [$t_pci_properties_t.numBars - 1])."
-    - type: $t_pci_bar_properties_t*
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of PCI bars.
+            if count is zero, then the driver will update the value with the total number of bars.
+            if count is non-zero, then driver will only retrieve that number of bars.
+            if count is larger than the number of bar, then the driver will update the value with the correct number of bars that are returned.
+    - type: "$t_pci_bar_properties_t*"
       name: pProperties
-      desc: "[in] Will contain properties of the specified bar"
+      desc: "[in,out][optional][range(0, *pCount)] array of bar properties"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get PCI stats - bandwidth, number of packets, number of replays"

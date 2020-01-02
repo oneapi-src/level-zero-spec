@@ -1173,24 +1173,24 @@ typedef void (__zecall *zet_pfnSysmanPciGetStateCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zetSysmanPciGetBarProperties 
+/// @brief Callback function parameters for zetSysmanPciGetBars 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _zet_sysman_pci_get_bar_properties_params_t
+typedef struct _zet_sysman_pci_get_bars_params_t
 {
     zet_sysman_handle_t* phSysman;
-    uint32_t* pbarIndex;
+    uint32_t** ppCount;
     zet_pci_bar_properties_t** ppProperties;
-} zet_sysman_pci_get_bar_properties_params_t;
+} zet_sysman_pci_get_bars_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zetSysmanPciGetBarProperties 
+/// @brief Callback function-pointer for zetSysmanPciGetBars 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zet_pfnSysmanPciGetBarPropertiesCb_t)(
-    zet_sysman_pci_get_bar_properties_params_t* params,
+typedef void (__zecall *zet_pfnSysmanPciGetBarsCb_t)(
+    zet_sysman_pci_get_bars_params_t* params,
     ze_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -1576,7 +1576,7 @@ typedef struct _zet_sysman_callbacks_t
     zet_pfnSysmanDeviceGetRepairStatusCb_t                          pfnDeviceGetRepairStatusCb;
     zet_pfnSysmanPciGetPropertiesCb_t                               pfnPciGetPropertiesCb;
     zet_pfnSysmanPciGetStateCb_t                                    pfnPciGetStateCb;
-    zet_pfnSysmanPciGetBarPropertiesCb_t                            pfnPciGetBarPropertiesCb;
+    zet_pfnSysmanPciGetBarsCb_t                                     pfnPciGetBarsCb;
     zet_pfnSysmanPciGetStatsCb_t                                    pfnPciGetStatsCb;
     zet_pfnSysmanPowerGetCb_t                                       pfnPowerGetCb;
     zet_pfnSysmanFrequencyGetCb_t                                   pfnFrequencyGetCb;

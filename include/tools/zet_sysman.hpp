@@ -325,7 +325,6 @@ namespace zet
         struct pci_properties_t
         {
             pci_address_t address;                          ///< [out] The BDF address
-            uint32_t numBars;                               ///< [out] The number of configured bars
             pci_speed_t maxSpeed;                           ///< [out] Fastest port configuration supported by the device.
 
         };
@@ -348,6 +347,7 @@ namespace zet
         struct pci_bar_properties_t
         {
             pci_bar_type_t type;                            ///< [out] The type of bar
+            uint32_t index;                                 ///< [out] The index of the bar
             uint64_t base;                                  ///< [out] Base address of the bar.
             uint64_t size;                                  ///< [out] Size of the bar.
 
@@ -686,17 +686,21 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get properties of a bar
+        /// @brief Get information about each configured bar
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        PciGetBarProperties(
-            uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::zet_pci_properties_t.numBars -
-                                                            ///< 1]).
-            pci_bar_properties_t* pProperties               ///< [in] Will contain properties of the specified bar
+        PciGetBars(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of PCI bars.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of bars.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of bars.
+                                                            ///< if count is larger than the number of bar, then the driver will update
+                                                            ///< the value with the correct number of bars that are returned.
+            pci_bar_properties_t* pProperties = nullptr     ///< [in,out][optional][range(0, *pCount)] array of bar properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////

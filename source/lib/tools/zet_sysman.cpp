@@ -601,7 +601,7 @@ zetSysmanPciGetState(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get properties of a bar
+/// @brief Get information about each configured bar
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -613,21 +613,25 @@ zetSysmanPciGetState(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pProperties
+///         + nullptr == pCount
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
-zetSysmanPciGetBarProperties(
+zetSysmanPciGetBars(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::zet_pci_properties_t.numBars -
-                                                    ///< 1]).
-    zet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of PCI bars.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of bars.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of bars.
+                                                    ///< if count is larger than the number of bar, then the driver will update
+                                                    ///< the value with the correct number of bars that are returned.
+    zet_pci_bar_properties_t* pProperties           ///< [in,out][optional][range(0, *pCount)] array of bar properties
     )
 {
-    auto pfnPciGetBarProperties = zet_lib::context.ddiTable.Sysman.pfnPciGetBarProperties;
-    if( nullptr == pfnPciGetBarProperties )
+    auto pfnPciGetBars = zet_lib::context.ddiTable.Sysman.pfnPciGetBars;
+    if( nullptr == pfnPciGetBars )
         return ZE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnPciGetBarProperties( hSysman, barIndex, pProperties );
+    return pfnPciGetBars( hSysman, pCount, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3671,7 +3675,7 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get properties of a bar
+    /// @brief Get information about each configured bar
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3679,19 +3683,23 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::PciGetBarProperties(
-        uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::zet_pci_properties_t.numBars -
-                                                        ///< 1]).
-        pci_bar_properties_t* pProperties               ///< [in] Will contain properties of the specified bar
+    Sysman::PciGetBars(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of PCI bars.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of bars.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of bars.
+                                                        ///< if count is larger than the number of bar, then the driver will update
+                                                        ///< the value with the correct number of bars that are returned.
+        pci_bar_properties_t* pProperties               ///< [in,out][optional][range(0, *pCount)] array of bar properties
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanPciGetBarProperties(
+        auto result = static_cast<result_t>( ::zetSysmanPciGetBars(
             reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
-            barIndex,
+            pCount,
             reinterpret_cast<zet_pci_bar_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::PciGetBarProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::PciGetBars" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -6408,10 +6416,6 @@ namespace zet
         str += to_string(val.address);
         str += "\n";
         
-        str += "Sysman::pci_properties_t::numBars : ";
-        str += std::to_string(val.numBars);
-        str += "\n";
-        
         str += "Sysman::pci_properties_t::maxSpeed : ";
         str += to_string(val.maxSpeed);
         str += "\n";
@@ -6452,6 +6456,10 @@ namespace zet
         
         str += "Sysman::pci_bar_properties_t::type : ";
         str += to_string(val.type);
+        str += "\n";
+        
+        str += "Sysman::pci_bar_properties_t::index : ";
+        str += std::to_string(val.index);
         str += "\n";
         
         str += "Sysman::pci_bar_properties_t::base : ";

@@ -383,7 +383,7 @@ The following functions permit getting data about the PCI endpoint for the devic
 | :---                                                       | :---        |
 | ::zetSysmanPciGetProperties()                             | Get static properties for the PCI port - BDF address, number of bars, maximum supported speed |
 | ::zetSysmanPciGetState()                                  | Get current PCI port speed (number of lanes, generation) and health. |
-| ::zetSysmanPciGetBarProperties()                          | Get information about each configured PCI bar |
+| ::zetSysmanPciGetBars()                                   | Get information about each configured PCI bar |
 | ::zetSysmanPciGetStats()                                  | Get PCI statistics - throughput, total packets, number of packet replays |
 
 ::zetSysmanPciGetState() returns a structure that contains the current health of the PCI link which can be one of the following
@@ -1297,7 +1297,7 @@ The table below summarizes the default permissions for each API function:
 | ::zetSysmanDeviceReset()                             | read-write           | no-access            | no-access            | no-access            |
 | ::zetSysmanPciGetProperties()                        | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPciGetState()                             | read-only            | read-only            | read-only            | no-access            |
-| ::zetSysmanPciGetBarProperties()                     | read-only            | read-only            | read-only            | no-access            |
+| ::zetSysmanPciGetBars()                              | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPciGetStats()                             | read-only            | no-access            | no-access            | no-access            |
 | ::zetSysmanPowerGet()                                | read-only            | read-only            | read-only            | no-access            |
 | ::zetSysmanPowerGetProperties()                      | read-only            | read-only            | read-only            | no-access            |
