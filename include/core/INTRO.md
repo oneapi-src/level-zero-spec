@@ -264,7 +264,8 @@ The following table documents the supported knobs for overriding default driver 
 | Category            | Name                                        | Values            | Description                                                                       |
 |---------------------|---------------------------------------------|-------------------|-----------------------------------------------------------------------------------|
 | Device              | [ZE_AFFINITY_MASK](#aff)                  | hex string        | Forces driver to only report devices (and sub-devices) as specified by mask value |
-| Memory              | ZE_SHARED_FORCE_DEVICE_ALLOC              | {**0**, 1}        | Forces all shared allocations into device memory                                  |
+|                     | ZE_ENABLE_PCI_ID_DEVICE_ORDER             | {**0**, 1}        | Forces driver to report devices from lowest to highest PCI bus ID                 |
+| Memory              | ZE_ENABLE_SHARED_IN_DEVICE_ALLOC          | {**0**, 1}        | Forces all shared allocations into device memory                                  |
 | Validation          | [ZE_ENABLE_VALIDATION_LAYER](#v0)         | {**0**, 1}        | Enables validation layer for debugging                                            |
 | ^                   | [ZE_ENABLE_PARAMETER_VALIDATION](#v1)     | {**0**, 1}        | Enables the validation level for parameters                                       |
 | ^                   | [ZE_ENABLE_HANDLE_LIFETIME](#v2)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
@@ -280,6 +281,8 @@ The following table documents the supported knobs for overriding default driver 
 The affinity mask allows an application or tool to restrict which devices (and sub-devices) are visible to 3rd-party libraries or applications in another process, respectively.
 The affinity mask is specified via an environment variable as a string of hexadecimal values.
 The value is specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
+The value is specific to the order in which devices are reported by the driver; i.e., the first device maps to bit 0, the second device to bit 1, and so forth.
+The order of the devices reported by the driver can be forced to be consistent by setting the `ZE_ENABLE_SHARED_IN_DEVICE_ALLOC` environment variable.
 
 The following examples demonstrate proper usage:
 - "" (empty string) = disabled; i.e. all devices and sub-devices are reported.  This is the default value.
