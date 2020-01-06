@@ -540,9 +540,6 @@ There are no APIs provided for the actual instrumentation.  Instead this is left
 native binary and inject native instructions.  This model prevents the instrumentation from being manipulated by
 the compiler.
 
-${"####"} Profile Info
-TODO: need a picture and write-up from GT-PIN/IGC team on how to use the profile info.
-
 ${"###"} Execution
 If a tool requires changing the address of an application's function, then it should use API Tracing; for example,
 ::${x}ModuleGetFunctionPointer and all flavors of ::${x}CommandListAppendLaunchKernel.
