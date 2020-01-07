@@ -163,6 +163,9 @@ namespace ze
         {
             properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::ZE_DRIVER_PROPERTIES_VERSION_CURRENT
             driver_uuid_t uuid;                             ///< [out] universal unique identifier.
+            uint32_t driverVersion;                         ///< [out] driver version
+                                                            ///< The driver version is a non-zero, monotonically increasing value where
+                                                            ///< higher values always indicate a more recent version.
 
         };
 
@@ -236,27 +239,6 @@ namespace ze
                                                             ///< if count is larger than the number of drivers available, then the
                                                             ///< loader will update the value with the correct number of drivers available.
             Driver** ppDrivers = nullptr                    ///< [in,out][optional][range(0, *pCount)] array of driver instance handles
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns the driver version for the specified driver
-        /// 
-        /// @details
-        ///     - The driver version is a non-zero, monotonically increasing value where
-        ///       higher values always indicate a more recent version.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuDriverGetVersion**
-        /// @returns
-        ///     - uint32_t: driver version
-        /// 
-        /// @throws result_t
-        uint32_t __zecall
-        GetDriverVersion(
-            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////

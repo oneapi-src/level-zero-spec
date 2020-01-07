@@ -64,32 +64,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDriverGetDriverVersion
-    ze_result_t __zecall
-    zeDriverGetDriverVersion(
-        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        uint32_t* version                               ///< [out] driver version
-        )
-    {
-        auto pfnGetDriverVersion = context.zeDdiTable.Driver.pfnGetDriverVersion;
-
-        if( nullptr == pfnGetDriverVersion )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == version )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetDriverVersion( hDriver, version );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetApiVersion
     ze_result_t __zecall
     zeDriverGetApiVersion(
@@ -2898,9 +2872,6 @@ zeGetDriverProcAddrTable(
 
     dditable.pfnGet                                      = pDdiTable->pfnGet;
     pDdiTable->pfnGet                                    = layer::zeDriverGet;
-
-    dditable.pfnGetDriverVersion                         = pDdiTable->pfnGetDriverVersion;
-    pDdiTable->pfnGetDriverVersion                       = layer::zeDriverGetDriverVersion;
 
     dditable.pfnGetApiVersion                            = pDdiTable->pfnGetApiVersion;
     pDdiTable->pfnGetApiVersion                          = layer::zeDriverGetApiVersion;

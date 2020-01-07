@@ -41,20 +41,25 @@ namespace driver
         //pfnCreateEventPool
 
         //////////////////////////////////////////////////////////////////////////
-        zeDdiTable.Driver.pfnGetDriverVersion = [](
-            ze_driver_handle_t,
-            uint32_t* version )
-        {
-            *version = 0;
-            return ZE_RESULT_SUCCESS;
-        };
-
-        //////////////////////////////////////////////////////////////////////////
         zeDdiTable.Driver.pfnGetApiVersion = [](
             ze_driver_handle_t,
             ze_api_version_t* version )
         {
             *version = context.version;
+            return ZE_RESULT_SUCCESS;
+        };
+
+        //////////////////////////////////////////////////////////////////////////
+        zeDdiTable.Driver.pfnGetProperties = [](
+            ze_driver_handle_t,
+            ze_driver_properties_t* pDriverProperties )
+        {
+            ze_driver_properties_t driverProperties = {};
+            driverProperties.version = ZE_DRIVER_PROPERTIES_VERSION_CURRENT;
+            //driverProperties.uuid
+            driverProperties.driverVersion = 0;
+
+            *pDriverProperties = driverProperties;
             return ZE_RESULT_SUCCESS;
         };
 

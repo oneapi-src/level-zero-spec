@@ -169,7 +169,7 @@ There are multiple versions that should be used by the application to determine 
 **Driver Version** - this is the version of the driver installed in the system.
 
   - This is typically used to mitigate driver implementation issues for a feature.
-  - The value is determined from calling ::${x}DriverGetDriverVersion
+  - The value is determined from calling ::${x}DriverGetProperties
 
 Error Handling
 --------------

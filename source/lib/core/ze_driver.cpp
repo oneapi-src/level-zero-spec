@@ -97,40 +97,6 @@ zeDriverGet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the driver version for the specified driver
-/// 
-/// @details
-///     - The driver version is a non-zero, monotonically increasing value where
-///       higher values always indicate a more recent version.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDriverGetVersion**
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == version
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zeDriverGetDriverVersion(
-    ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-    uint32_t* version                               ///< [out] driver version
-    )
-{
-    auto pfnGetDriverVersion = ze_lib::context.ddiTable.Driver.pfnGetDriverVersion;
-    if( nullptr == pfnGetDriverVersion )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetDriverVersion( hDriver, version );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the API version supported by the specified driver
 /// 
 /// @details
@@ -350,40 +316,6 @@ namespace ze
         {
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "ze::Driver::Get" );
         }
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns the driver version for the specified driver
-    /// 
-    /// @details
-    ///     - The driver version is a non-zero, monotonically increasing value where
-    ///       higher values always indicate a more recent version.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDriverGetVersion**
-    /// 
-    /// @returns
-    ///     - uint32_t: driver version
-    /// 
-    /// @throws result_t
-    uint32_t __zecall
-    Driver::GetDriverVersion(
-        void
-        )
-    {
-        uint32_t version;
-
-        auto result = static_cast<result_t>( ::zeDriverGetDriverVersion(
-            reinterpret_cast<ze_driver_handle_t>( getHandle() ),
-            &version ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Driver::GetDriverVersion" );
-
-        return version;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -768,6 +700,10 @@ namespace ze
         
         str += "Driver::properties_t::uuid : ";
         str += to_string(val.uuid);
+        str += "\n";
+        
+        str += "Driver::properties_t::driverVersion : ";
+        str += std::to_string(val.driverVersion);
         str += "\n";
 
         return str;

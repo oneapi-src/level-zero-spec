@@ -104,31 +104,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDriverGetDriverVersion
-    ze_result_t __zecall
-    zeDriverGetDriverVersion(
-        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        uint32_t* version                               ///< [out] driver version
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
-        auto pfnGetDriverVersion = dditable->ze.Driver.pfnGetDriverVersion;
-        if( nullptr == pfnGetDriverVersion )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
-
-        // forward to device-driver
-        result = pfnGetDriverVersion( hDriver, version );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetApiVersion
     ze_result_t __zecall
     zeDriverGetApiVersion(
@@ -3155,7 +3130,6 @@ zeGetDriverProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = loader::zeDriverGet;
-            pDdiTable->pfnGetDriverVersion                         = loader::zeDriverGetDriverVersion;
             pDdiTable->pfnGetApiVersion                            = loader::zeDriverGetApiVersion;
             pDdiTable->pfnGetProperties                            = loader::zeDriverGetProperties;
             pDdiTable->pfnGetIPCProperties                         = loader::zeDriverGetIPCProperties;

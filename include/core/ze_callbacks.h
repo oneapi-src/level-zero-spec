@@ -46,29 +46,6 @@ typedef void (__zecall *ze_pfnDriverGetCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeDriverGetDriverVersion 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_driver_get_driver_version_params_t
-{
-    ze_driver_handle_t* phDriver;
-    uint32_t** pversion;
-} ze_driver_get_driver_version_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeDriverGetDriverVersion 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnDriverGetDriverVersionCb_t)(
-    ze_driver_get_driver_version_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeDriverGetApiVersion 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -395,7 +372,6 @@ typedef void (__zecall *ze_pfnDriverCloseMemIpcHandleCb_t)(
 typedef struct _ze_driver_callbacks_t
 {
     ze_pfnDriverGetCb_t                                             pfnGetCb;
-    ze_pfnDriverGetDriverVersionCb_t                                pfnGetDriverVersionCb;
     ze_pfnDriverGetApiVersionCb_t                                   pfnGetApiVersionCb;
     ze_pfnDriverGetPropertiesCb_t                                   pfnGetPropertiesCb;
     ze_pfnDriverGetIPCPropertiesCb_t                                pfnGetIPCPropertiesCb;

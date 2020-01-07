@@ -72,30 +72,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDriverGetDriverVersion
-    ze_result_t __zecall
-    zeDriverGetDriverVersion(
-        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        uint32_t* version                               ///< [out] driver version
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetDriverVersion = context.zeDdiTable.Driver.pfnGetDriverVersion;
-        if( nullptr != pfnGetDriverVersion )
-        {
-            result = pfnGetDriverVersion( hDriver, version );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetApiVersion
     ze_result_t __zecall
     zeDriverGetApiVersion(
@@ -2763,59 +2739,6 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.Driver;
                 if( nullptr != table.pfnGetCb )
                     table.pfnGetCb( &out_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDriverGetDriverVersion
-    ze_result_t __zecall
-    zeDriverGetDriverVersion(
-        ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        uint32_t* version                               ///< [out] driver version
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // capture parameters
-        ze_driver_get_driver_version_params_t in_params = {
-            &hDriver,
-            &version
-        };
-
-        // create storage locations for callbacks
-        std::vector<void*> instanceUserData;
-        instanceUserData.resize( context.tracerData.size() );
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zePrologueCbs.Driver;
-                if( nullptr != table.pfnGetDriverVersionCb )
-                    table.pfnGetDriverVersionCb( &in_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        result = driver::zeDriverGetDriverVersion( hDriver, version );
-
-        // capture parameters
-        ze_driver_get_driver_version_params_t out_params = {
-            &hDriver,
-            &version
-        };
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zeEpilogueCbs.Driver;
-                if( nullptr != table.pfnGetDriverVersionCb )
-                    table.pfnGetDriverVersionCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8423,11 +8346,6 @@ zeGetDriverProcAddrTable(
         pDdiTable->pfnGet                                    = instrumented::zeDriverGet;
     else
         pDdiTable->pfnGet                                    = driver::zeDriverGet;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetDriverVersion                       = instrumented::zeDriverGetDriverVersion;
-    else
-        pDdiTable->pfnGetDriverVersion                       = driver::zeDriverGetDriverVersion;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnGetApiVersion                          = instrumented::zeDriverGetApiVersion;

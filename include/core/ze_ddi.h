@@ -30,13 +30,6 @@ typedef ze_result_t (__zecall *ze_pfnDriverGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDriverGetDriverVersion 
-typedef ze_result_t (__zecall *ze_pfnDriverGetDriverVersion_t)(
-    ze_driver_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeDriverGetApiVersion 
 typedef ze_result_t (__zecall *ze_pfnDriverGetApiVersion_t)(
     ze_driver_handle_t,
@@ -155,7 +148,6 @@ typedef ze_result_t (__zecall *ze_pfnDriverCloseMemIpcHandle_t)(
 typedef struct _ze_driver_dditable_t
 {
     ze_pfnDriverGet_t                                           pfnGet;
-    ze_pfnDriverGetDriverVersion_t                              pfnGetDriverVersion;
     ze_pfnDriverGetApiVersion_t                                 pfnGetApiVersion;
     ze_pfnDriverGetProperties_t                                 pfnGetProperties;
     ze_pfnDriverGetIPCProperties_t                              pfnGetIPCProperties;

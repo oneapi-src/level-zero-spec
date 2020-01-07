@@ -97,33 +97,6 @@ zeDriverGet(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the driver version for the specified driver
-/// 
-/// @details
-///     - The driver version is a non-zero, monotonically increasing value where
-///       higher values always indicate a more recent version.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDriverGetVersion**
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == version
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-ze_result_t __zecall
-zeDriverGetDriverVersion(
-    ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-    uint32_t* version                               ///< [out] driver version
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported API versions
 /// 
 /// @details
@@ -188,6 +161,9 @@ typedef struct _ze_driver_properties_t
 {
     ze_driver_properties_version_t version;         ///< [in] ::ZE_DRIVER_PROPERTIES_VERSION_CURRENT
     ze_driver_uuid_t uuid;                          ///< [out] universal unique identifier.
+    uint32_t driverVersion;                         ///< [out] driver version
+                                                    ///< The driver version is a non-zero, monotonically increasing value where
+                                                    ///< higher values always indicate a more recent version.
 
 } ze_driver_properties_t;
 

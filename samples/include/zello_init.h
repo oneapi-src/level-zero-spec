@@ -106,8 +106,11 @@ inline ze::Device* findDevice(
         {
             found = pDevice;
 
+            ze::Driver::properties_t driver_properties;
+            pDriver->GetProperties( &driver_properties );
+
             std::cout << "Found "<< ze::to_string(type) << " device..." << "\n";
-            std::cout << "Driver version: " << pDriver->GetDriverVersion() << "\n";
+            std::cout << "Driver version: " << driver_properties.driverVersion << "\n";
             std::cout << "API version: " << ze::to_string( pDriver->GetApiVersion() ) << "\n";
 
             std::cout << ze::to_string( device_properties ) << "\n";

@@ -211,7 +211,10 @@ class ze_driver_uuid_t(Structure):
 class ze_driver_properties_t(Structure):
     _fields_ = [
         ("version", ze_driver_properties_version_t),                    ## [in] ::ZE_DRIVER_PROPERTIES_VERSION_CURRENT
-        ("uuid", ze_driver_uuid_t)                                      ## [out] universal unique identifier.
+        ("uuid", ze_driver_uuid_t),                                     ## [out] universal unique identifier.
+        ("driverVersion", c_ulong)                                      ## [out] driver version
+                                                                        ## The driver version is a non-zero, monotonically increasing value where
+                                                                        ## higher values always indicate a more recent version.
     ]
 
 ###############################################################################
@@ -1206,13 +1209,6 @@ else:
     _zeDriverGet_t = CFUNCTYPE( ze_result_t, POINTER(c_ulong), POINTER(ze_driver_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for zeDriverGetDriverVersion
-if __use_win_types:
-    _zeDriverGetDriverVersion_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_ulong) )
-else:
-    _zeDriverGetDriverVersion_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(c_ulong) )
-
-###############################################################################
 ## @brief Function-pointer for zeDriverGetApiVersion
 if __use_win_types:
     _zeDriverGetApiVersion_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_api_version_t) )
@@ -1309,7 +1305,6 @@ else:
 class _ze_driver_dditable_t(Structure):
     _fields_ = [
         ("pfnGet", c_void_p),                                           ## _zeDriverGet_t
-        ("pfnGetDriverVersion", c_void_p),                              ## _zeDriverGetDriverVersion_t
         ("pfnGetApiVersion", c_void_p),                                 ## _zeDriverGetApiVersion_t
         ("pfnGetProperties", c_void_p),                                 ## _zeDriverGetProperties_t
         ("pfnGetIPCProperties", c_void_p),                              ## _zeDriverGetIPCProperties_t
@@ -2122,7 +2117,6 @@ class ZE_DDI:
 
         # attach function interface to function address
         self.zeDriverGet = _zeDriverGet_t(self.__dditable.Driver.pfnGet)
-        self.zeDriverGetDriverVersion = _zeDriverGetDriverVersion_t(self.__dditable.Driver.pfnGetDriverVersion)
         self.zeDriverGetApiVersion = _zeDriverGetApiVersion_t(self.__dditable.Driver.pfnGetApiVersion)
         self.zeDriverGetProperties = _zeDriverGetProperties_t(self.__dditable.Driver.pfnGetProperties)
         self.zeDriverGetIPCProperties = _zeDriverGetIPCProperties_t(self.__dditable.Driver.pfnGetIPCProperties)

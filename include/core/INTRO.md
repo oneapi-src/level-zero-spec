@@ -123,7 +123,7 @@ There are multiple versions that should be used by the application to determine 
     - They are provided as the first member of every structure passed to the driver.
 3. Driver Version - this is the version of the driver installed in the system.
     - This is typically used to mitigate driver implementation issues for a feature.
-    - The value is determined from calling ::zeDriverGetDriverVersion
+    - The value is determined from calling ::zeDriverGetProperties
 
 
 ## Error Handling
