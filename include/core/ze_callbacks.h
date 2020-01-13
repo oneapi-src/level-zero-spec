@@ -145,9 +145,8 @@ typedef void (__zecall *ze_pfnDriverGetExtensionFunctionAddressCb_t)(
 typedef struct _ze_driver_alloc_shared_mem_params_t
 {
     ze_driver_handle_t* phDriver;
-    ze_device_mem_alloc_flag_t* pdevice_flags;
-    uint32_t* pordinal;
-    ze_host_mem_alloc_flag_t* phost_flags;
+    const ze_device_mem_alloc_desc_t** pdevice_desc;
+    const ze_host_mem_alloc_desc_t** phost_desc;
     size_t* psize;
     size_t* palignment;
     ze_device_handle_t* phDevice;
@@ -174,8 +173,7 @@ typedef void (__zecall *ze_pfnDriverAllocSharedMemCb_t)(
 typedef struct _ze_driver_alloc_device_mem_params_t
 {
     ze_driver_handle_t* phDriver;
-    ze_device_mem_alloc_flag_t* pflags;
-    uint32_t* pordinal;
+    const ze_device_mem_alloc_desc_t** pdevice_desc;
     size_t* psize;
     size_t* palignment;
     ze_device_handle_t* phDevice;
@@ -202,7 +200,7 @@ typedef void (__zecall *ze_pfnDriverAllocDeviceMemCb_t)(
 typedef struct _ze_driver_alloc_host_mem_params_t
 {
     ze_driver_handle_t* phDriver;
-    ze_host_mem_alloc_flag_t* pflags;
+    const ze_host_mem_alloc_desc_t** phost_desc;
     size_t* psize;
     size_t* palignment;
     void*** ppptr;

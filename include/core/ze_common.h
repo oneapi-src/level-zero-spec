@@ -275,6 +275,14 @@ typedef struct _ze_image_desc_t ze_image_desc_t;
 typedef struct _ze_image_properties_t ze_image_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ze_device_mem_alloc_desc_t
+typedef struct _ze_device_mem_alloc_desc_t ze_device_mem_alloc_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ze_host_mem_alloc_desc_t
+typedef struct _ze_host_mem_alloc_desc_t ze_host_mem_alloc_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare ze_memory_allocation_properties_t
 typedef struct _ze_memory_allocation_properties_t ze_memory_allocation_properties_t;
 

@@ -855,7 +855,7 @@ device to generate the parameters.
     ze_group_count_t* pIndirectArgs;
     
     ...
-    zeDriverAllocDeviceMem(hDriver, flags, 0, sizeof(ze_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
+    zeDriverAllocDeviceMem(hDriver, &desc, sizeof(ze_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
 
     // Append launch kernel - indirect
     zeCommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
@@ -950,7 +950,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    zeDriverAllocDeviceMem(hDriver, flags, 0, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
+    zeDriverAllocDeviceMem(hDriver, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
     ...
 
     ...
@@ -984,9 +984,9 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    zeDriverAllocHostMem(hDriver, ZE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    zeDriverAllocHostMem(hDriver, ZE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    zeDriverAllocHostMem(hDriver, ZE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    zeDriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
+    zeDriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
+    zeDriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as kernel argument and appended into command list
     zeKernelSetAttribute(hFuncArgs, ZE_KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
@@ -1004,9 +1004,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    zeDriverAllocHostMem(hDriver, ZE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    zeDriverAllocHostMem(hDriver, ZE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    zeDriverAllocHostMem(hDriver, ZE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    zeDriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
+    zeDriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
+    zeDriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as kernel argument and appended into command list
     zeKernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
@@ -1082,7 +1082,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    zeDriverAllocDeviceMem(hDriver, flags, 0, size, alignment, hDevice, &dptr);
+    zeDriverAllocDeviceMem(hDriver, &desc, size, alignment, hDevice, &dptr);
 
     ze_ipc_mem_handle_t hIPC;
     zeDriverGetMemIpcHandle(hDriver, dptr, &hIPC);

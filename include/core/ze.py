@@ -939,6 +939,16 @@ class ze_image_properties_t(Structure):
     ]
 
 ###############################################################################
+## @brief API version of ::ze_device_mem_alloc_desc_t
+class ze_device_mem_alloc_desc_version_v(IntEnum):
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class ze_device_mem_alloc_desc_version_t(c_int):
+    def __str__(self):
+        return str(ze_device_mem_alloc_desc_version_v(value))
+
+
+###############################################################################
 ## @brief Supported memory allocation flags
 class ze_device_mem_alloc_flag_v(IntEnum):
     DEFAULT = 0                                     ## implicit default behavior; uses driver-based heuristics
@@ -948,6 +958,26 @@ class ze_device_mem_alloc_flag_v(IntEnum):
 class ze_device_mem_alloc_flag_t(c_int):
     def __str__(self):
         return str(ze_device_mem_alloc_flag_v(value))
+
+
+###############################################################################
+## @brief Device mem alloc descriptor
+class ze_device_mem_alloc_desc_t(Structure):
+    _fields_ = [
+        ("version", ze_device_mem_alloc_desc_version_t),                ## [in] ::ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT
+        ("flags", ze_device_mem_alloc_flag_t),                          ## [in] flags specifying additional allocation controls
+        ("ordinal", c_ulong)                                            ## [in] ordinal of the device's local memory to allocate from;
+                                                                        ## must be less than the count returned from ::zeDeviceGetMemoryProperties
+    ]
+
+###############################################################################
+## @brief API version of ::ze_host_mem_alloc_desc_t
+class ze_host_mem_alloc_desc_version_v(IntEnum):
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class ze_host_mem_alloc_desc_version_t(c_int):
+    def __str__(self):
+        return str(ze_host_mem_alloc_desc_version_v(value))
 
 
 ###############################################################################
@@ -962,6 +992,14 @@ class ze_host_mem_alloc_flag_t(c_int):
     def __str__(self):
         return str(ze_host_mem_alloc_flag_v(value))
 
+
+###############################################################################
+## @brief Host mem alloc descriptor
+class ze_host_mem_alloc_desc_t(Structure):
+    _fields_ = [
+        ("version", ze_host_mem_alloc_desc_version_t),                  ## [in] ::ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT
+        ("flags", ze_host_mem_alloc_flag_t)                             ## [in] flags specifying additional allocation controls
+    ]
 
 ###############################################################################
 ## @brief API version of ::ze_memory_allocation_properties_t
@@ -1239,23 +1277,23 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zeDriverAllocSharedMem
 if __use_win_types:
-    _zeDriverAllocSharedMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
+    _zeDriverAllocSharedMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_device_mem_alloc_desc_t), POINTER(ze_host_mem_alloc_desc_t), c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 else:
-    _zeDriverAllocSharedMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
+    _zeDriverAllocSharedMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_device_mem_alloc_desc_t), POINTER(ze_host_mem_alloc_desc_t), c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 
 ###############################################################################
 ## @brief Function-pointer for zeDriverAllocDeviceMem
 if __use_win_types:
-    _zeDriverAllocDeviceMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
+    _zeDriverAllocDeviceMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_device_mem_alloc_desc_t), c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 else:
-    _zeDriverAllocDeviceMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
+    _zeDriverAllocDeviceMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_device_mem_alloc_desc_t), c_size_t, c_size_t, ze_device_handle_t, POINTER(c_void_p) )
 
 ###############################################################################
 ## @brief Function-pointer for zeDriverAllocHostMem
 if __use_win_types:
-    _zeDriverAllocHostMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocHostMem_t = WINFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_host_mem_alloc_desc_t), c_size_t, c_size_t, POINTER(c_void_p) )
 else:
-    _zeDriverAllocHostMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, ze_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+    _zeDriverAllocHostMem_t = CFUNCTYPE( ze_result_t, ze_driver_handle_t, POINTER(ze_host_mem_alloc_desc_t), c_size_t, c_size_t, POINTER(c_void_p) )
 
 ###############################################################################
 ## @brief Function-pointer for zeDriverFreeMem

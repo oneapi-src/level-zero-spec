@@ -68,9 +68,8 @@ namespace driver
         //////////////////////////////////////////////////////////////////////////
         zeDdiTable.Driver.pfnAllocSharedMem = [](
             ze_driver_handle_t,
-            ze_device_mem_alloc_flag_t,
-            uint32_t,
-            ze_host_mem_alloc_flag_t,
+            const ze_device_mem_alloc_desc_t*,
+            const ze_host_mem_alloc_desc_t*,
             size_t size,
             size_t alignment,
             ze_device_handle_t,
@@ -83,8 +82,7 @@ namespace driver
         //////////////////////////////////////////////////////////////////////////
         zeDdiTable.Driver.pfnAllocDeviceMem = [](
             ze_driver_handle_t,
-            ze_device_mem_alloc_flag_t,
-            uint32_t,
+            const ze_device_mem_alloc_desc_t*,
             size_t size,
             size_t alignment,
             ze_device_handle_t,
@@ -97,7 +95,7 @@ namespace driver
         //////////////////////////////////////////////////////////////////////////
         zeDdiTable.Driver.pfnAllocHostMem = [](
             ze_driver_handle_t,
-            ze_host_mem_alloc_flag_t,
+            const ze_host_mem_alloc_desc_t*,
             size_t size,
             size_t alignment,
             void** pptr)

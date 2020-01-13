@@ -110,12 +110,28 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::ze_device_mem_alloc_desc_t
+        enum class device_mem_alloc_desc_version_t
+        {
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Supported memory allocation flags
         enum class device_mem_alloc_flag_t
         {
             DEFAULT = 0,                                    ///< implicit default behavior; uses driver-based heuristics
             BIAS_CACHED = ZE_BIT( 0 ),                      ///< device should cache allocation
             BIAS_UNCACHED = ZE_BIT( 1 ),                    ///< device should not cache allocation (UC)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::ze_host_mem_alloc_desc_t
+        enum class host_mem_alloc_desc_version_t
+        {
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -178,6 +194,26 @@ namespace ze
                                                             ///< ::::zeDriverGetMemIpcHandle.
             bool_t eventsSupported;                         ///< [out] Supports passing events between processes. See
                                                             ///< ::::zeEventPoolGetIpcHandle.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device mem alloc descriptor
+        struct device_mem_alloc_desc_t
+        {
+            device_mem_alloc_desc_version_t version = device_mem_alloc_desc_version_t::CURRENT; ///< [in] ::ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT
+            device_mem_alloc_flag_t flags = device_mem_alloc_flag_t::DEFAULT;   ///< [in] flags specifying additional allocation controls
+            uint32_t ordinal = 0;                           ///< [in] ordinal of the device's local memory to allocate from;
+                                                            ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Host mem alloc descriptor
+        struct host_mem_alloc_desc_t
+        {
+            host_mem_alloc_desc_version_t version = host_mem_alloc_desc_version_t::CURRENT; ///< [in] ::ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT
+            host_mem_alloc_flag_t flags = host_mem_alloc_flag_t::DEFAULT;   ///< [in] flags specifying additional allocation controls
 
         };
 
@@ -344,10 +380,8 @@ namespace ze
         /// @throws result_t
         void* __zecall
         AllocSharedMem(
-            device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
-            uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                            ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
-            host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
+            const device_mem_alloc_desc_t* device_desc,     ///< [in] pointer to device mem alloc descriptor
+            const host_mem_alloc_desc_t* host_desc,         ///< [in] pointer to host mem alloc descriptor
             size_t size,                                    ///< [in] size in bytes to allocate
             size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
             Device* pDevice = nullptr                       ///< [in][optional] device handle to associate with
@@ -371,9 +405,7 @@ namespace ze
         /// @throws result_t
         void* __zecall
         AllocDeviceMem(
-            device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
-            uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                            ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
+            const device_mem_alloc_desc_t* device_desc,     ///< [in] pointer to device mem alloc descriptor
             size_t size,                                    ///< [in] size in bytes to allocate
             size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
             Device* pDevice                                 ///< [in] pointer to the device
@@ -399,7 +431,7 @@ namespace ze
         /// @throws result_t
         void* __zecall
         AllocHostMem(
-            host_mem_alloc_flag_t flags,                    ///< [in] flags specifying additional allocation controls
+            const host_mem_alloc_desc_t* host_desc,         ///< [in] pointer to host mem alloc descriptor
             size_t size,                                    ///< [in] size in bytes to allocate
             size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
             );
@@ -565,12 +597,28 @@ namespace ze
     std::string to_string( const Driver::device_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Driver::device_mem_alloc_desc_version_t to std::string
+    std::string to_string( const Driver::device_mem_alloc_desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Driver::device_mem_alloc_flag_t to std::string
     std::string to_string( const Driver::device_mem_alloc_flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Driver::device_mem_alloc_desc_t to std::string
+    std::string to_string( const Driver::device_mem_alloc_desc_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Driver::host_mem_alloc_desc_version_t to std::string
+    std::string to_string( const Driver::host_mem_alloc_desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Driver::host_mem_alloc_flag_t to std::string
     std::string to_string( const Driver::host_mem_alloc_flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Driver::host_mem_alloc_desc_t to std::string
+    std::string to_string( const Driver::host_mem_alloc_desc_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Driver::memory_allocation_properties_version_t to std::string

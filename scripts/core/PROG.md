@@ -861,7 +861,7 @@ device to generate the parameters.
     ${x}_group_count_t* pIndirectArgs;
     
     ...
-    ${x}DriverAllocDeviceMem(hDriver, flags, 0, sizeof(${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
+    ${x}DriverAllocDeviceMem(hDriver, &desc, sizeof(${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
 
     // Append launch kernel - indirect
     ${x}CommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
@@ -956,7 +956,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    ${x}DriverAllocDeviceMem(hDriver, flags, 0, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
+    ${x}DriverAllocDeviceMem(hDriver, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
     ...
 
     ...
@@ -990,9 +990,9 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
+    ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
+    ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as kernel argument and appended into command list
     ${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
@@ -1010,9 +1010,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
+    ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
+    ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as kernel argument and appended into command list
     ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
@@ -1088,7 +1088,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    ${x}DriverAllocDeviceMem(hDriver, flags, 0, size, alignment, hDevice, &dptr);
+    ${x}DriverAllocDeviceMem(hDriver, &desc, size, alignment, hDevice, &dptr);
 
     ${x}_ipc_mem_handle_t hIPC;
     ${x}DriverGetMemIpcHandle(hDriver, dptr, &hIPC);

@@ -62,9 +62,8 @@ typedef ze_result_t (__zecall *ze_pfnDriverGetExtensionFunctionAddress_t)(
 /// @brief Function-pointer for zeDriverAllocSharedMem 
 typedef ze_result_t (__zecall *ze_pfnDriverAllocSharedMem_t)(
     ze_driver_handle_t,
-    ze_device_mem_alloc_flag_t,
-    uint32_t,
-    ze_host_mem_alloc_flag_t,
+    const ze_device_mem_alloc_desc_t*,
+    const ze_host_mem_alloc_desc_t*,
     size_t,
     size_t,
     ze_device_handle_t,
@@ -75,8 +74,7 @@ typedef ze_result_t (__zecall *ze_pfnDriverAllocSharedMem_t)(
 /// @brief Function-pointer for zeDriverAllocDeviceMem 
 typedef ze_result_t (__zecall *ze_pfnDriverAllocDeviceMem_t)(
     ze_driver_handle_t,
-    ze_device_mem_alloc_flag_t,
-    uint32_t,
+    const ze_device_mem_alloc_desc_t*,
     size_t,
     size_t,
     ze_device_handle_t,
@@ -87,7 +85,7 @@ typedef ze_result_t (__zecall *ze_pfnDriverAllocDeviceMem_t)(
 /// @brief Function-pointer for zeDriverAllocHostMem 
 typedef ze_result_t (__zecall *ze_pfnDriverAllocHostMem_t)(
     ze_driver_handle_t,
-    ze_host_mem_alloc_flag_t,
+    const ze_host_mem_alloc_desc_t*,
     size_t,
     size_t,
     void**

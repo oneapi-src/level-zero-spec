@@ -570,6 +570,26 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Driver::device_mem_alloc_desc_version_t to std::string
+    std::string to_string( const Driver::device_mem_alloc_desc_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Driver::device_mem_alloc_desc_version_t::CURRENT:
+            str = "Driver::device_mem_alloc_desc_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Driver::device_mem_alloc_desc_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Driver::device_mem_alloc_flag_t to std::string
     std::string to_string( const Driver::device_mem_alloc_flag_t val )
     {
@@ -589,6 +609,26 @@ namespace ze
         return ( str.size() > 3 ) 
             ? "Driver::device_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
             : "Driver::device_mem_alloc_flag_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Driver::host_mem_alloc_desc_version_t to std::string
+    std::string to_string( const Driver::host_mem_alloc_desc_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Driver::host_mem_alloc_desc_version_t::CURRENT:
+            str = "Driver::host_mem_alloc_desc_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Driver::host_mem_alloc_desc_version_t::?";
+            break;
+        };
+
+        return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -725,6 +765,44 @@ namespace ze
         
         str += "Driver::ipc_properties_t::eventsSupported : ";
         str += std::to_string(val.eventsSupported);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Driver::device_mem_alloc_desc_t to std::string
+    std::string to_string( const Driver::device_mem_alloc_desc_t val )
+    {
+        std::string str;
+        
+        str += "Driver::device_mem_alloc_desc_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Driver::device_mem_alloc_desc_t::flags : ";
+        str += to_string(val.flags);
+        str += "\n";
+        
+        str += "Driver::device_mem_alloc_desc_t::ordinal : ";
+        str += std::to_string(val.ordinal);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Driver::host_mem_alloc_desc_t to std::string
+    std::string to_string( const Driver::host_mem_alloc_desc_t val )
+    {
+        std::string str;
+        
+        str += "Driver::host_mem_alloc_desc_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Driver::host_mem_alloc_desc_t::flags : ";
+        str += to_string(val.flags);
         str += "\n";
 
         return str;

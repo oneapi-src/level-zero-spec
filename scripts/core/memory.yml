@@ -10,6 +10,15 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Memory"
 --- #--------------------------------------------------------------------------
 type: enum
+desc: API version of $x_device_mem_alloc_desc_t
+class: $xDriver
+name: $x_device_mem_alloc_desc_version_t
+etors:
+    - name: $X_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "Supported memory allocation flags"
 class: $xDriver
 name: $x_device_mem_alloc_flag_t
@@ -23,6 +32,35 @@ etors:
     - name: $X_DEVICE_MEM_ALLOC_FLAG_BIAS_UNCACHED
       value: "$X_BIT( 1 )"
       desc: "device should not cache allocation (UC)"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device mem alloc descriptor"
+class: $xDriver
+name: $x_device_mem_alloc_desc_t
+members:
+    - type: $x_device_mem_alloc_desc_version_t
+      name: version
+      desc: "[in] $X_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT"
+      init: $X_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT
+    - type: "$x_device_mem_alloc_flag_t"
+      name: flags
+      desc: "[in] flags specifying additional allocation controls"
+      init: "$X_DEVICE_MEM_ALLOC_FLAG_DEFAULT"
+    - type: uint32_t
+      name: ordinal
+      desc: |
+            [in] ordinal of the device's local memory to allocate from;
+            must be less than the count returned from $xDeviceGetMemoryProperties
+      init: "0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: API version of $x_host_mem_alloc_desc_t
+class: $xDriver
+name: $x_host_mem_alloc_desc_version_t
+etors:
+    - name: $X_HOST_MEM_ALLOC_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported host memory allocation flags"
@@ -41,6 +79,20 @@ etors:
     - name: $X_HOST_MEM_ALLOC_FLAG_BIAS_WRITE_COMBINED
       value: "$X_BIT( 2 )"
       desc: "host memory should be allocated write-combined (WC)"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Host mem alloc descriptor"
+class: $xDriver
+name: $x_host_mem_alloc_desc_t
+members:
+    - type: $x_host_mem_alloc_desc_version_t
+      name: version
+      desc: "[in] $X_HOST_MEM_ALLOC_DESC_VERSION_CURRENT"
+      init: $X_HOST_MEM_ALLOC_DESC_VERSION_CURRENT
+    - type: "$x_host_mem_alloc_flag_t"
+      name: flags
+      desc: "[in] flags specifying additional allocation controls"
+      init: "$X_HOST_MEM_ALLOC_FLAG_DEFAULT"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates memory that is shared between the host and one or more devices"
@@ -62,17 +114,12 @@ params:
     - type: $x_driver_handle_t
       name: hDriver
       desc: "[in] handle of the driver instance"
-    - type: "$x_device_mem_alloc_flag_t"
-      name: device_flags
-      desc: "[in] flags specifying additional device allocation controls"
-    - type: uint32_t
-      name: ordinal
-      desc: |
-            [in] ordinal of the device's local memory to allocate from;
-            must be less than the count returned from $xDeviceGetMemoryProperties
-    - type: "$x_host_mem_alloc_flag_t"
-      name: host_flags
-      desc: "[in] flags specifying additional host allocation controls"
+    - type: "const $x_device_mem_alloc_desc_t*"
+      name: device_desc
+      desc: "[in] pointer to device mem alloc descriptor"
+    - type: "const $x_host_mem_alloc_desc_t*"
+      name: host_desc
+      desc: "[in] pointer to host mem alloc descriptor"
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
@@ -106,14 +153,9 @@ params:
     - type: $x_driver_handle_t
       name: hDriver
       desc: "[in] handle of the driver instance"
-    - type: "$x_device_mem_alloc_flag_t"
-      name: flags
-      desc: "[in] flags specifying additional allocation controls"
-    - type: uint32_t
-      name: ordinal
-      desc: |
-            [in] ordinal of the device's local memory to allocate from;
-            must be less than the count returned from $xDeviceGetMemoryProperties
+    - type: "const $x_device_mem_alloc_desc_t*"
+      name: device_desc
+      desc: "[in] pointer to device mem alloc descriptor"
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
@@ -148,9 +190,9 @@ params:
     - type: $x_driver_handle_t
       name: hDriver
       desc: "[in] handle of the driver instance"
-    - type: "$x_host_mem_alloc_flag_t"
-      name: flags
-      desc: "[in] flags specifying additional allocation controls"
+    - type: "const $x_host_mem_alloc_desc_t*"
+      name: host_desc
+      desc: "[in] pointer to host mem alloc descriptor"
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"

@@ -1800,10 +1800,8 @@ namespace layer
     ze_result_t __zecall
     zeDriverAllocSharedMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
-        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
-        ze_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
+        const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
+        const ze_host_mem_alloc_desc_t* host_desc,      ///< [in] pointer to host mem alloc descriptor
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         ze_device_handle_t hDevice,                     ///< [in][optional] device handle to associate with
@@ -1820,12 +1818,24 @@ namespace layer
             if( nullptr == hDriver )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == device_desc )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == host_desc )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
             if( nullptr == pptr )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT < device_desc->version )
+                return ZE_RESULT_ERROR_UNSUPPORTED;
+
+            if( ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT < host_desc->version )
+                return ZE_RESULT_ERROR_UNSUPPORTED;
+
         }
 
-        return pfnAllocSharedMem( hDriver, device_flags, ordinal, host_flags, size, alignment, hDevice, pptr );
+        return pfnAllocSharedMem( hDriver, device_desc, host_desc, size, alignment, hDevice, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1833,9 +1843,7 @@ namespace layer
     ze_result_t __zecall
     zeDriverAllocDeviceMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
-        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
+        const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -1852,15 +1860,21 @@ namespace layer
             if( nullptr == hDriver )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == device_desc )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
             if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pptr )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT < device_desc->version )
+                return ZE_RESULT_ERROR_UNSUPPORTED;
+
         }
 
-        return pfnAllocDeviceMem( hDriver, flags, ordinal, size, alignment, hDevice, pptr );
+        return pfnAllocDeviceMem( hDriver, device_desc, size, alignment, hDevice, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1868,7 +1882,7 @@ namespace layer
     ze_result_t __zecall
     zeDriverAllocHostMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
+        const ze_host_mem_alloc_desc_t* host_desc,      ///< [in] pointer to host mem alloc descriptor
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** pptr                                     ///< [out] pointer to host allocation
@@ -1884,12 +1898,18 @@ namespace layer
             if( nullptr == hDriver )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == host_desc )
+                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+
             if( nullptr == pptr )
                 return ZE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT < host_desc->version )
+                return ZE_RESULT_ERROR_UNSUPPORTED;
+
         }
 
-        return pfnAllocHostMem( hDriver, flags, size, alignment, pptr );
+        return pfnAllocHostMem( hDriver, host_desc, size, alignment, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

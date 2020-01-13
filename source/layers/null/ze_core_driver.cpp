@@ -1687,10 +1687,8 @@ namespace driver
     ze_result_t __zecall
     zeDriverAllocSharedMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
-        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
-        ze_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
+        const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
+        const ze_host_mem_alloc_desc_t* host_desc,      ///< [in] pointer to host mem alloc descriptor
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         ze_device_handle_t hDevice,                     ///< [in][optional] device handle to associate with
@@ -1703,7 +1701,7 @@ namespace driver
         auto pfnAllocSharedMem = context.zeDdiTable.Driver.pfnAllocSharedMem;
         if( nullptr != pfnAllocSharedMem )
         {
-            result = pfnAllocSharedMem( hDriver, device_flags, ordinal, host_flags, size, alignment, hDevice, pptr );
+            result = pfnAllocSharedMem( hDriver, device_desc, host_desc, size, alignment, hDevice, pptr );
         }
         else
         {
@@ -1718,9 +1716,7 @@ namespace driver
     ze_result_t __zecall
     zeDriverAllocDeviceMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
-        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
+        const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -1733,7 +1729,7 @@ namespace driver
         auto pfnAllocDeviceMem = context.zeDdiTable.Driver.pfnAllocDeviceMem;
         if( nullptr != pfnAllocDeviceMem )
         {
-            result = pfnAllocDeviceMem( hDriver, flags, ordinal, size, alignment, hDevice, pptr );
+            result = pfnAllocDeviceMem( hDriver, device_desc, size, alignment, hDevice, pptr );
         }
         else
         {
@@ -1748,7 +1744,7 @@ namespace driver
     ze_result_t __zecall
     zeDriverAllocHostMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
+        const ze_host_mem_alloc_desc_t* host_desc,      ///< [in] pointer to host mem alloc descriptor
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** pptr                                     ///< [out] pointer to host allocation
@@ -1760,7 +1756,7 @@ namespace driver
         auto pfnAllocHostMem = context.zeDdiTable.Driver.pfnAllocHostMem;
         if( nullptr != pfnAllocHostMem )
         {
-            result = pfnAllocHostMem( hDriver, flags, size, alignment, pptr );
+            result = pfnAllocHostMem( hDriver, host_desc, size, alignment, pptr );
         }
         else
         {
@@ -6221,10 +6217,8 @@ namespace instrumented
     ze_result_t __zecall
     zeDriverAllocSharedMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
-        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
-        ze_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
+        const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
+        const ze_host_mem_alloc_desc_t* host_desc,      ///< [in] pointer to host mem alloc descriptor
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         ze_device_handle_t hDevice,                     ///< [in][optional] device handle to associate with
@@ -6236,9 +6230,8 @@ namespace instrumented
         // capture parameters
         ze_driver_alloc_shared_mem_params_t in_params = {
             &hDriver,
-            &device_flags,
-            &ordinal,
-            &host_flags,
+            &device_desc,
+            &host_desc,
             &size,
             &alignment,
             &hDevice,
@@ -6260,14 +6253,13 @@ namespace instrumented
                         &instanceUserData[ i ] );
             }
 
-        result = driver::zeDriverAllocSharedMem( hDriver, device_flags, ordinal, host_flags, size, alignment, hDevice, pptr );
+        result = driver::zeDriverAllocSharedMem( hDriver, device_desc, host_desc, size, alignment, hDevice, pptr );
 
         // capture parameters
         ze_driver_alloc_shared_mem_params_t out_params = {
             &hDriver,
-            &device_flags,
-            &ordinal,
-            &host_flags,
+            &device_desc,
+            &host_desc,
             &size,
             &alignment,
             &hDevice,
@@ -6293,9 +6285,7 @@ namespace instrumented
     ze_result_t __zecall
     zeDriverAllocDeviceMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
-        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::zeDeviceGetMemoryProperties
+        const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -6307,8 +6297,7 @@ namespace instrumented
         // capture parameters
         ze_driver_alloc_device_mem_params_t in_params = {
             &hDriver,
-            &flags,
-            &ordinal,
+            &device_desc,
             &size,
             &alignment,
             &hDevice,
@@ -6330,13 +6319,12 @@ namespace instrumented
                         &instanceUserData[ i ] );
             }
 
-        result = driver::zeDriverAllocDeviceMem( hDriver, flags, ordinal, size, alignment, hDevice, pptr );
+        result = driver::zeDriverAllocDeviceMem( hDriver, device_desc, size, alignment, hDevice, pptr );
 
         // capture parameters
         ze_driver_alloc_device_mem_params_t out_params = {
             &hDriver,
-            &flags,
-            &ordinal,
+            &device_desc,
             &size,
             &alignment,
             &hDevice,
@@ -6362,7 +6350,7 @@ namespace instrumented
     ze_result_t __zecall
     zeDriverAllocHostMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-        ze_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
+        const ze_host_mem_alloc_desc_t* host_desc,      ///< [in] pointer to host mem alloc descriptor
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** pptr                                     ///< [out] pointer to host allocation
@@ -6373,7 +6361,7 @@ namespace instrumented
         // capture parameters
         ze_driver_alloc_host_mem_params_t in_params = {
             &hDriver,
-            &flags,
+            &host_desc,
             &size,
             &alignment,
             &pptr
@@ -6394,12 +6382,12 @@ namespace instrumented
                         &instanceUserData[ i ] );
             }
 
-        result = driver::zeDriverAllocHostMem( hDriver, flags, size, alignment, pptr );
+        result = driver::zeDriverAllocHostMem( hDriver, host_desc, size, alignment, pptr );
 
         // capture parameters
         ze_driver_alloc_host_mem_params_t out_params = {
             &hDriver,
-            &flags,
+            &host_desc,
             &size,
             &alignment,
             &pptr
