@@ -76,11 +76,11 @@ returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid device handle has been supplied"
         - "an invalid configuration has been supplied"
-    - $X_RESULT_ERROR_UNSUPPORTED:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "attaching to this device is not supported"
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "caller does not have sufficient permissions"
-    - $X_RESULT_ERROR_DEVICE_ACCESS:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "a debugger is already attached"
 --- #--------------------------------------------------------------------------
 type: function
@@ -319,7 +319,7 @@ returns:
         - "an invalid debug handle or thread identifier has been supplied"
         - "the thread is running or unavailable"
         - "an invalid address has been supplied"
-    - $X_RESULT_ERROR_DEVICE_ACCESS:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "the memory cannot be accessed from the supplied thread"
 --- #--------------------------------------------------------------------------
 type: function
@@ -350,7 +350,7 @@ returns:
         - "an invalid debug handle or thread identifier has been supplied"
         - "the thread is running or unavailable"
         - "an invalid address has been supplied"
-    - $X_RESULT_ERROR_DEVICE_ACCESS:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "the memory cannot be accessed from the supplied thread"
 --- #--------------------------------------------------------------------------
 type: enum

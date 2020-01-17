@@ -296,7 +296,7 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///         + `nullptr == pNeedReboot`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimeoutMode(
@@ -328,7 +328,7 @@ zetSysmanSchedulerSetTimeoutMode(
 ///         + `nullptr == pNeedReboot`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimesliceMode(
@@ -359,7 +359,7 @@ zetSysmanSchedulerSetTimesliceMode(
 ///         + `nullptr == pNeedReboot`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetExclusiveMode(
@@ -389,7 +389,7 @@ zetSysmanSchedulerSetExclusiveMode(
 ///         + `nullptr == pNeedReboot`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetComputeUnitDebugMode(
@@ -486,7 +486,7 @@ zetSysmanPerformanceProfileGet(
 ///         + profile
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + The specified profile is not valid or not supported on this device (use ::zetSysmanPerformanceProfileGetSupported() to get a list of supported profiles).
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to change the performance profile of the hardware.
 ze_result_t __zecall
 zetSysmanPerformanceProfileSet(
@@ -548,7 +548,7 @@ zetSysmanProcessesGetState(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
 zetSysmanDeviceReset(
@@ -577,7 +577,7 @@ typedef enum _zet_repair_status_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pRepairStatus`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this property.
 ze_result_t __zecall
 zetSysmanDeviceGetRepairStatus(
@@ -799,7 +799,7 @@ zetSysmanPciGetBars(
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pStats`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
 zetSysmanPciGetStats(
@@ -1014,9 +1014,9 @@ zetSysmanPowerGetLimits(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hPower`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported.
 ze_result_t __zecall
 zetSysmanPowerSetLimits(
@@ -1043,7 +1043,7 @@ zetSysmanPowerSetLimits(
 ///         + `nullptr == pThreshold`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Energy threshold not supported on this power domain (check ::zet_power_properties_t.isEnergyThresholdSupported).
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
 ze_result_t __zecall
 zetSysmanPowerGetEnergyThreshold(
@@ -1062,9 +1062,9 @@ zetSysmanPowerGetEnergyThreshold(
 ///       ::zetSysmanEventSetConfig() to start receiving the event.
 ///     - Only one running process can control the energy threshold at a given
 ///       time. If another process attempts to change the energy threshold, the
-///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
-///       function ::zetSysmanPowerGetEnergyThreshold() to determine the process
-///       ID currently controlling this setting.
+///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
+///       ::zetSysmanPowerGetEnergyThreshold() to determine the process ID
+///       currently controlling this setting.
 ///     - Calling this function will remove any pending energy thresholds and
 ///       start counting from the time of this call.
 ///     - Once the energy threshold has been reached and the event generated,
@@ -1081,9 +1081,9 @@ zetSysmanPowerGetEnergyThreshold(
 ///         + `nullptr == hPower`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Energy threshold not supported on this power domain (check ::zet_power_properties_t.isEnergyThresholdSupported).
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
-///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + Another running process has set the energy threshold.
 ze_result_t __zecall
 zetSysmanPowerSetEnergyThreshold(
@@ -1380,7 +1380,7 @@ zetSysmanFrequencyGetRange(
 ///         + `nullptr == hFrequency`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pLimits`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencySetRange(
@@ -1502,9 +1502,9 @@ zetSysmanFrequencyOcGetConfig(
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + The specified voltage and/or frequency overclock settings exceed the hardware values (see ::zet_oc_capabilities_t.maxOcFrequency, ::zet_oc_capabilities_t.maxOcVoltage, ::zet_oc_capabilities_t.minOcVoltageOffset, ::zet_oc_capabilities_t.maxOcVoltageOffset).
 ///         + Requested voltage overclock is very high but ::zet_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device.
-///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + Overclocking feature is locked on this frequency domain
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencyOcSetConfig(
@@ -1556,11 +1556,11 @@ zetSysmanFrequencyOcGetIccMax(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + Capability ::zet_oc_capabilities_t.isIccMaxSupported is false for this frequency domain
-///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + Overclocking feature is locked on this frequency domain
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + The specified current limit is too low or too high
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencyOcSetIccMax(
@@ -1609,11 +1609,11 @@ zetSysmanFrequencyOcGetTjMax(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + Capability ::zet_oc_capabilities_t.isTjMaxSupported is false for this frequency domain
-///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + Overclocking feature is locked on this frequency domain
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + The specified temperature limit is too high
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFrequencyOcSetTjMax(
@@ -1850,7 +1850,7 @@ zetSysmanStandbyGetMode(
 ///         + `nullptr == hStandby`
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///         + mode
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanStandbySetMode(
@@ -1937,7 +1937,7 @@ zetSysmanFirmwareGetProperties(
 ///         + `nullptr == hFirmware`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pChecksum`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
 zetSysmanFirmwareGetChecksum(
@@ -1960,7 +1960,7 @@ zetSysmanFirmwareGetChecksum(
 ///         + `nullptr == hFirmware`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pImage`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
 zetSysmanFirmwareFlash(
@@ -2131,7 +2131,7 @@ zetSysmanMemoryGetState(
 ///         + `nullptr == hMemory`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pBandwidth`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
 zetSysmanMemoryGetBandwidth(
@@ -2402,7 +2402,7 @@ zetSysmanFabricPortGetConfig(
 ///         + `nullptr == hPort`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFabricPortSetConfig(
@@ -2447,7 +2447,7 @@ zetSysmanFabricPortGetState(
 ///         + `nullptr == hPort`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pThroughput`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
 zetSysmanFabricPortGetThroughput(
@@ -2582,7 +2582,7 @@ zetSysmanTemperatureGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
 ///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
 ze_result_t __zecall
 zetSysmanTemperatureGetConfig(
@@ -2604,9 +2604,9 @@ zetSysmanTemperatureGetConfig(
 ///       function ::zetSysmanEventSetConfig() to start receiving these events.
 ///     - Only one running process can set the temperature configuration at a
 ///       time. If another process attempts to change the configuration, the
-///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
-///       function ::zetSysmanTemperatureGetConfig() will return the process ID
-///       currently controlling these settings.
+///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
+///       ::zetSysmanTemperatureGetConfig() will return the process ID currently
+///       controlling these settings.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -2622,9 +2622,9 @@ zetSysmanTemperatureGetConfig(
 ///         + Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
 ///         + Enabling the critical temperature event is not supported - check ::zet_temp_properties_t.isCriticalTempSupported
 ///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
-///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + Another running process is controlling these settings.
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value.
@@ -2908,7 +2908,7 @@ zetSysmanFanGetConfig(
 ///         + `nullptr == hFan`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanFanSetConfig(
@@ -3050,7 +3050,7 @@ zetSysmanLedGetState(
 ///         + `nullptr == hLed`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
 zetSysmanLedSetState(
@@ -3244,9 +3244,9 @@ zetSysmanRasGetConfig(
 ///         + `nullptr == hRas`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
-///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + Another running process is controlling these settings.
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + Don't have permissions to set thresholds.
 ze_result_t __zecall
 zetSysmanRasSetConfig(
@@ -3272,7 +3272,7 @@ zetSysmanRasSetConfig(
 ///         + `nullptr == hRas`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pTotalErrors`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + Don't have permissions to clear error counters.
 ze_result_t __zecall
 zetSysmanRasGetState(
@@ -3448,7 +3448,7 @@ zetSysmanEventGetState(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == phEvents`
 ///         + `nullptr == pEvents`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to listen to events.
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + One or more of the supplied event handles are for devices that belong to a different driver handle.
@@ -3626,7 +3626,7 @@ zetSysmanDiagnosticsGetTests(
 ///         + `nullptr == hDiagnostics`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pResult`
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform diagnostics.
 ze_result_t __zecall
 zetSysmanDiagnosticsRunTests(

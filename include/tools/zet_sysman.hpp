@@ -1210,9 +1210,9 @@ namespace zet
         ///       ::zetSysmanEventSetConfig() to start receiving the event.
         ///     - Only one running process can control the energy threshold at a given
         ///       time. If another process attempts to change the energy threshold, the
-        ///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
-        ///       function ::zetSysmanPowerGetEnergyThreshold() to determine the process
-        ///       ID currently controlling this setting.
+        ///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
+        ///       ::zetSysmanPowerGetEnergyThreshold() to determine the process ID
+        ///       currently controlling this setting.
         ///     - Calling this function will remove any pending energy thresholds and
         ///       start counting from the time of this call.
         ///     - Once the energy threshold has been reached and the event generated,
@@ -2402,9 +2402,9 @@ namespace zet
         ///       function ::zetSysmanEventSetConfig() to start receiving these events.
         ///     - Only one running process can set the temperature configuration at a
         ///       time. If another process attempts to change the configuration, the
-        ///       error ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The
-        ///       function ::zetSysmanTemperatureGetConfig() will return the process ID
-        ///       currently controlling these settings.
+        ///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
+        ///       ::zetSysmanTemperatureGetConfig() will return the process ID currently
+        ///       controlling these settings.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t

@@ -30,19 +30,19 @@ ${"##"} Table of Contents
         + [Device reset](#glor)
         + [PCI link operations](#glop)
     + [Operations on power domains](#pwr)
-	+ [Operations on frequency domains](#frq)
+    + [Operations on frequency domains](#frq)
         + [Frequency/Voltage over-clocking](#fro)
-	+ [Operations on engine groups](#eng)
-	+ [Operations on standby domains](#sby)
-	+ [Operations on firmware](#fmw)
-	+ [Querying memory modules](#mem)
-	+ [Operations on fabric ports](#con)
-	+ [Querying temperature](#tmp)
-	+ [Operations on power supplies](#psu)
-	+ [Operations on fans](#fan)
-	+ [Operations on LEDs](#led)
-	+ [Querying RAS errors](#ras)
-	+ [Performing diagnostics](#dag)
+    + [Operations on engine groups](#eng)
+    + [Operations on standby domains](#sby)
+    + [Operations on firmware](#fmw)
+    + [Querying memory modules](#mem)
+    + [Operations on fabric ports](#con)
+    + [Querying temperature](#tmp)
+    + [Operations on power supplies](#psu)
+    + [Operations on fans](#fan)
+    + [Operations on LEDs](#led)
+    + [Querying RAS errors](#ras)
+    + [Performing diagnostics](#dag)
     + [Events](#evd)
 * [Security](#se)
     + [Linux](#sel)
@@ -73,39 +73,39 @@ The pseudo code below shows how to enumerate the GPU devices in the system and c
 
 ```c
 function main( ... )
-    if ( (zeInit(ZE_INIT_FLAG_NONE) != ZE_RESULT_SUCCESS) or
-         (zetInit(ZE_INIT_FLAG_NONE) != ZE_RESULT_SUCCESS) )
+    if ( (${x}Init(${X}_INIT_FLAG_NONE) != ${X}_RESULT_SUCCESS) or
+         (${t}Init(${X}_INIT_FLAG_NONE) != ${X}_RESULT_SUCCESS) )
         output("Can't initialize the API")
     else
         # Discover all the drivers
         uint32_t driversCount = 0
-        zeDriverGet(&driversCount, nullptr)
-        ze_driver_handle_t* allDrivers =
-            allocate(driversCount * sizeof(ze_driver_handle_t))
-        zeDriverGet(&driversCount, allDrivers)
+        ${x}DriverGet(&driversCount, nullptr)
+        ${x}_driver_handle_t* allDrivers =
+            allocate(driversCount * sizeof(${x}_driver_handle_t))
+        ${x}DriverGet(&driversCount, allDrivers)
 
-        ze_driver_handle_t hDriver = nullptr
+        ${x}_driver_handle_t hDriver = nullptr
         for(i = 0 .. driversCount-1)
             # Discover devices in a driver
             uint32_t deviceCount = 0
-            zeDeviceGet(allDrivers[i], &deviceCount, nullptr)
+            ${x}DeviceGet(allDrivers[i], &deviceCount, nullptr)
 
-            ze_device_handle_t* allDevices = 
-                allocate_memory(deviceCount * sizeof(ze_device_handle_t))
-            zeDeviceGet(allDrivers[i], &deviceCount, allDevices)
+            ${x}_device_handle_t* allDevices = 
+                allocate_memory(deviceCount * sizeof(${x}_device_handle_t))
+            ${x}DeviceGet(allDrivers[i], &deviceCount, allDevices)
 
             for(devIndex = 0 .. deviceCount-1)
-                ze_device_properties_t device_properties
-                zeDeviceGetProperties(allDevices[devIndex], &device_properties)
-                if(ZE_DEVICE_TYPE_GPU != device_properties.type)
-				    next
-				# Create Sysman handle
-				zet_sysman_handle_t hSysmanDevice
-				ze_result_t res = zetSysmanGet(hDevice, ZET_SYSMAN_VERSION_CURRENT, &hSysmanDevice)
-				if (res == ZE_RESULT_SUCCESS)
-					# Start using hSysmanDevice to manage the device
-				else
-					output("ERROR: Can't initialize system resource management for this device")
+                ${x}_device_properties_t device_properties
+                ${x}DeviceGetProperties(allDevices[devIndex], &device_properties)
+                if(${X}_DEVICE_TYPE_GPU != device_properties.type)
+                    next
+                # Create Sysman handle
+                ${t}_sysman_handle_t hSysmanDevice
+                ${x}_result_t res = ${t}SysmanGet(hDevice, ${T}_SYSMAN_VERSION_CURRENT, &hSysmanDevice)
+                if (res == ${X}_RESULT_SUCCESS)
+                    # Start using hSysmanDevice to manage the device
+                else
+                    output("ERROR: Can't initialize system resource management for this device")
 
     free_memory(...)
 
@@ -125,7 +125,7 @@ The following operations are provided to access overall device information and c
     - Get configured bars
     - Get maximum supported bandwidth
     - Query current speed (GEN/no. lanes)
-	- Query current health
+    - Query current health
     - Query current throughput
     - Query packet retry counters
 
@@ -184,26 +184,26 @@ In the C++ API, each class is a C++ class (e.g. An instance of the class ::${t}:
 The pseudo code below shows how to use the Sysman API to enumerate all GPU frequency components and fix each to a specific frequency if this is supported:
 
 ```c
-function FixGpuFrequency(zet_sysman_handle_t hSysmanDevice, double FreqMHz)
+function FixGpuFrequency(${t}_sysman_handle_t hSysmanDevice, double FreqMHz)
     uint32_t numFreqDomains
-    if ((zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == ZE_RESULT_SUCCESS))
-        zet_sysman_freq_handle_t* pFreqHandles =
-		    allocate_memory(numFreqDomains * sizeof(zet_sysman_freq_handle_t))
-        if (zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == ZE_RESULT_SUCCESS)
+    if ((${t}SysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == ${X}_RESULT_SUCCESS))
+        ${t}_sysman_freq_handle_t* pFreqHandles =
+            allocate_memory(numFreqDomains * sizeof(${t}_sysman_freq_handle_t))
+        if (${t}SysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
             for (index = 0 .. numFreqDomains-1)
-                zet_freq_properties_t props
-                if (zetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == ZE_RESULT_SUCCESS)
+                ${t}_freq_properties_t props
+                if (${t}SysmanFrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
                     # Only change the frequency of the domain if:
-					# 1. The domain controls a GPU accelerator
-					# 2. The domain frequency can be changed
-                    if (props.type == ZET_FREQ_DOMAIN_GPU
-					    and props.canControl)
-						    # Fix the frequency
-						    zet_freq_range_t range
-						    range.min = FreqMHz
-						    range.max = FreqMHz
-						    zetSysmanFrequencySetRange(pFreqHandles[index], &range)
-	free_memory(...)
+                    # 1. The domain controls a GPU accelerator
+                    # 2. The domain frequency can be changed
+                    if (props.type == ${T}_FREQ_DOMAIN_GPU
+                        and props.canControl)
+                            # Fix the frequency
+                            ${t}_freq_range_t range
+                            range.min = FreqMHz
+                            range.max = FreqMHz
+                            ${t}SysmanFrequencySetRange(pFreqHandles[index], &range)
+    free_memory(...)
 ```
 
 ${"##"} <a name="sdm">Sub-device management</a>
@@ -220,28 +220,28 @@ device memory frequency control:
 The pseudo code below shows how to fix the GPU frequency on a specific sub-device (notice the additional sub-device check):
 
 ```c
-function FixSubdeviceGpuFrequency(zet_sysman_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
+function FixSubdeviceGpuFrequency(${t}_sysman_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
     uint32_t numFreqDomains
-    if ((zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == ZE_RESULT_SUCCESS))
-        zet_sysman_freq_handle_t* pFreqHandles =
-		    allocate_memory(numFreqDomains * sizeof(zet_sysman_freq_handle_t))
-        if (zetSysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == ZE_RESULT_SUCCESS)
+    if ((${t}SysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == ${X}_RESULT_SUCCESS))
+        ${t}_sysman_freq_handle_t* pFreqHandles =
+            allocate_memory(numFreqDomains * sizeof(${t}_sysman_freq_handle_t))
+        if (${t}SysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
             for (index = 0 .. numFreqDomains-1)
-                zet_freq_properties_t props
-                if (zetSysmanFrequencyGetProperties(pFreqHandles[index], &props) == ZE_RESULT_SUCCESS)
+                ${t}_freq_properties_t props
+                if (${t}SysmanFrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
                     # Only change the frequency of the domain if:
-					# 1. The domain controls a GPU accelerator
-					# 2. The domain frequency can be changed
-					# 3. The domain is located in the specified sub-device
-                    if (props.type == ZET_FREQ_DOMAIN_GPU
-					    and props.canControl
-						and props.subdeviceId == subdeviceId)
-						    # Fix the frequency
-						    zet_freq_range_t range
-						    range.min = FreqMHz
-						    range.max = FreqMHz
-						    zetSysmanFrequencySetRange(pFreqHandles[index], &range)
-	free_memory(...)
+                    # 1. The domain controls a GPU accelerator
+                    # 2. The domain frequency can be changed
+                    # 3. The domain is located in the specified sub-device
+                    if (props.type == ${T}_FREQ_DOMAIN_GPU
+                        and props.canControl
+                        and props.subdeviceId == subdeviceId)
+                            # Fix the frequency
+                            ${t}_freq_range_t range
+                            range.min = FreqMHz
+                            range.max = FreqMHz
+                            ${t}SysmanFrequencySetRange(pFreqHandles[index], &range)
+    free_memory(...)
 ```
 
 ${"##"} <a name="evt">Events</a>
@@ -275,16 +275,16 @@ The following operations permit getting properties about the entire device:
 The pseudo code below shows how to display general information about a device:
 
 ```c
-function ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
-	zet_sysman_properties_t devProps
-    zet_repair_status_t repaired
-	if (zetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == ZE_RESULT_SUCCESS)
-		output("    UUID:           %s", devProps.core.uuid.id)
-		output("    #subdevices:    %u", devProps.numSubdevices)
-		output("    brand:          %s", devProps.brandName)
-		output("    model:          %s", devProps.modelName)
-    if (zetSysmanDeviceRepairStatus(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
-        output("    Was repaired:   %s", (repaired == ZET_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
+function ShowDeviceInfo(${t}_sysman_handle_t hSysmanDevice)
+    ${t}_sysman_properties_t devProps
+    ${t}_repair_status_t repaired
+    if (${t}SysmanDeviceGetProperties(hSysmanDevice, &devProps) == ${X}_RESULT_SUCCESS)
+        output("    UUID:           %s", devProps.core.uuid.id)
+        output("    #subdevices:    %u", devProps.numSubdevices)
+        output("    brand:          %s", devProps.brandName)
+        output("    model:          %s", devProps.modelName)
+    if (${t}SysmanDeviceGetRepairStatus(hSysmanDevice, &repaired) == ${X}_RESULT_SUCCESS)
+        output("    Was repaired:   %s", (repaired == ${T}_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
 ```
 
 ${"###"} <a name="gloz">Host processes</a>
@@ -325,27 +325,27 @@ The following functions are available for changing the behavior of the scheduler
 The pseudo code below shows how to stop the scheduler enforcing fairness while permitting other work to attempt to run:
 
 ```c
-function DisableSchedulerWatchdog(zet_sysman_handle_t hSysmanDevice)
-    ze_result_t res
-    zet_sched_mode_t currentMode
-    res = zetSysmanSchedulerGetCurrentMode(hSysmanDevice, &currentMode)
-    if (res == ZE_RESULT_SUCCESS)
-        ze_bool_t requireReboot
-        zet_sched_timeout_properties_t props
-        props.watchdogTimeout = ZET_SCHED_WATCHDOG_DISABLE
-        res = zetSysmanSchedulerSetTimeoutMode(hSysmanDevice, &props, &requireReboot)
-        if (res == ZE_RESULT_SUCCESS)
+function DisableSchedulerWatchdog(${t}_sysman_handle_t hSysmanDevice)
+    ${x}_result_t res
+    ${t}_sched_mode_t currentMode
+    res = ${t}SysmanSchedulerGetCurrentMode(hSysmanDevice, &currentMode)
+    if (res == ${X}_RESULT_SUCCESS)
+        ${x}_bool_t requireReboot
+        ${t}_sched_timeout_properties_t props
+        props.watchdogTimeout = ${T}_SCHED_WATCHDOG_DISABLE
+        res = ${t}SysmanSchedulerSetTimeoutMode(hSysmanDevice, &props, &requireReboot)
+        if (res == ${X}_RESULT_SUCCESS)
             if (requireReboot)
                 output("WARNING: Reboot required to complete desired configuration.")
             else
                 output("Schedule mode changed successfully.")
-        else if(res == ZE_RESULT_ERROR_UNSUPPORTED)
+        else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
             output("ERROR: The timeout scheduler mode is not supported on this device.")
-        else if(res == ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
+        else if(res == ${X}_RESULT_ERROR_INSUFFICIENT_PERMISSIONS)
             output("ERROR: Don't have permissions to change the scheduler mode.")
         else
             output("ERROR: Problem calling the API to change the scheduler mode.")
-    else if(res == ZE_RESULT_ERROR_UNSUPPORTED)
+    else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
         output("ERROR: Scheduler modes are not supported on this device.")
     else
         output("ERROR: Problem calling the API.")
@@ -408,14 +408,14 @@ When the PCI link health state changes, the event ::${T}_SYSMAN_EVENT_TYPE_PCI_L
 The pseudo code below shows how to output the PCI BDF address:
 
 ```c
-function ShowPciInfo(zet_sysman_handle_t hSysmanDevice)
-    zet_pci_properties_t pciProps;
-    if (zetSysmanPciGetProperties(hSysmanDevice, &pciProps) == ZE_RESULT_SUCCESS)
+function ShowPciInfo(${t}_sysman_handle_t hSysmanDevice)
+    ${t}_pci_properties_t pciProps;
+    if (${t}SysmanPciGetProperties(hSysmanDevice, &pciProps) == ${X}_RESULT_SUCCESS)
         output("    PCI address:        %04u:%02u:%02u.%u",
-		    pciProps.address.domain,
-			pciProps.address.bus,
-			pciProps.address.device,
-			pciProps.address.function);
+            pciProps.address.domain,
+            pciProps.address.bus,
+            pciProps.address.device,
+            pciProps.address.function);
 ```
 
 ${"##"} <a name="pwr">Operations on power domains</a>
@@ -467,15 +467,15 @@ The following functions are provided to manage the power of the device:
 The pseudo code below shows how to output information about each power domain on a device:
 
 ```c
-function ShowPowerDomains(zet_sysman_handle_t hSysmanDevice)
+function ShowPowerDomains(${t}_sysman_handle_t hSysmanDevice)
     uint32_t numPowerDomains
-    if (zetSysmanPowerGet(hSysmanDevice, &numPowerDomains, NULL) == ZE_RESULT_SUCCESS)
-        zet_sysman_pwr_handle_t* phPower =
-            allocate_memory(numPowerDomains * sizeof(zet_sysman_pwr_handle_t))
-        if (zetSysmanPowerGet(hSysmanDevice, &numPowerDomains, phPower) == ZE_RESULT_SUCCESS)
+    if (${t}SysmanPowerGet(hSysmanDevice, &numPowerDomains, NULL) == ${X}_RESULT_SUCCESS)
+        ${t}_sysman_pwr_handle_t* phPower =
+            allocate_memory(numPowerDomains * sizeof(${t}_sysman_pwr_handle_t))
+        if (${t}SysmanPowerGet(hSysmanDevice, &numPowerDomains, phPower) == ${X}_RESULT_SUCCESS)
             for (pwrIndex = 0 .. numPowerDomains-1)
-                zet_power_properties_t props
-                if (zetSysmanPowerGetProperties(phPower[pwrIndex], &props) == ZE_RESULT_SUCCESS)
+                ${t}_power_properties_t props
+                if (${t}SysmanPowerGetProperties(phPower[pwrIndex], &props) == ${X}_RESULT_SUCCESS)
                     if (props.onSubdevice)
                         output("Sub-device %u power:\n", props.subdeviceId)
                         output("    Can control: %s", props.canControl ? "yes" : "no")
@@ -487,16 +487,16 @@ function ShowPowerDomains(zet_sysman_handle_t hSysmanDevice)
     free_memory(...)
 }
 
-function ShowPowerLimits(zet_sysman_pwr_handle_t hPower)
-    zet_power_sustained_limit_t sustainedLimits
-    zet_power_burst_limit_t burstLimits
-    zet_power_peak_limit_t peakLimits
-    if (zetSysmanPowerGetLimits(hPower, &sustainedLimits, &burstLimits, &peakLimits) == ZE_RESULT_SUCCESS)
+function ShowPowerLimits(${t}_sysman_pwr_handle_t hPower)
+    ${t}_power_sustained_limit_t sustainedLimits
+    ${t}_power_burst_limit_t burstLimits
+    ${t}_power_peak_limit_t peakLimits
+    if (${t}SysmanPowerGetLimits(hPower, &sustainedLimits, &burstLimits, &peakLimits) == ${X}_RESULT_SUCCESS)
         output("    Power limits\n")
         if (sustainedLimits.enabled)
             output("        Sustained: %.3f W %.3f sec",
                 sustainedLimits.power / 1000,
-				sustainedLimits.interval / 1000)
+                sustainedLimits.interval / 1000)
         else
             output("        Sustained: Disabled")
         if (burstLimits.enabled)
@@ -509,9 +509,9 @@ function ShowPowerLimits(zet_sysman_pwr_handle_t hPower)
 The pseudo code shows how to output the average power. It assumes that the function is called regularly (say every 100ms).
 
 ```c
-function ShowAveragePower(zet_sysman_pwr_handle_t hPower, zet_power_energy_counter_t* pPrevEnergyCounter)
-    zet_power_energy_counter_t newEnergyCounter;
-    if (zetSysmanPowerGetEnergyCounter(hPower, &newEnergyCounter) == ZE_RESULT_SUCCESS)
+function ShowAveragePower(${t}_sysman_pwr_handle_t hPower, ${t}_power_energy_counter_t* pPrevEnergyCounter)
+    ${t}_power_energy_counter_t newEnergyCounter;
+    if (${t}SysmanPowerGetEnergyCounter(hPower, &newEnergyCounter) == ${X}_RESULT_SUCCESS)
         uint64_t deltaTime = newEnergyCounter.timestamp - pPrevEnergyCounter->timestamp;
         if (deltaTime)
             output("    Average power: %.3f W",
@@ -723,27 +723,27 @@ include the ports on each sub-device. In this case, ::${t}_fabric_port_propertie
 The pseudo-code below shows how to get the state of all fabric ports in the device and sub-devices:
 
 ```c
-void ShowFabricPorts(zet_sysman_handle_t hSysmanDevice)
+void ShowFabricPorts(${t}_sysman_handle_t hSysmanDevice)
     uint32_t numPorts
-    if ((zetSysmanFabricPortGet(hSysmanDevice, &numPorts, NULL) == ZE_RESULT_SUCCESS))
-        zet_sysman_fabric_port_handle_t* phPorts =
-            allocate_memory(numPorts * sizeof(zet_sysman_fabric_port_handle_t))
-        if (zetSysmanFabricPortGet(hSysmanDevice, &numPorts, phPorts) == ZE_RESULT_SUCCESS)
+    if ((${t}SysmanFabricPortGet(hSysmanDevice, &numPorts, NULL) == ${X}_RESULT_SUCCESS))
+        ${t}_sysman_fabric_port_handle_t* phPorts =
+            allocate_memory(numPorts * sizeof(${t}_sysman_fabric_port_handle_t))
+        if (${t}SysmanFabricPortGet(hSysmanDevice, &numPorts, phPorts) == ${X}_RESULT_SUCCESS)
             for (index = 0 .. numPorts-1)
-			    # Show information about a particular port
+                # Show information about a particular port
                 output("    Port %u:\n", index)
                 call_function ShowFabricPortInfo(phPorts[index])
-	free_memory(...)
+    free_memory(...)
 
-function ShowFabricPortInfo(zet_sysman_fabric_port_handle_t hPort)
-    zet_fabric_port_properties_t props
-    if (zetSysmanFabricPortGetProperties(hPort, &props) == ZE_RESULT_SUCCESS)
-        zet_fabric_port_state_t state
-        if (zetSysmanFabricPortGetState(hPort, &state) == ZE_RESULT_SUCCESS)
-            zet_fabric_link_type_t link
-            if (zetSysmanFabricPortGetLinkType(hPort, false, &link) == ZE_RESULT_SUCCESS)
-                zet_fabric_port_config_t config
-                if (zetSysmanFabricPortGetConfig(hPort, &config) == ZE_RESULT_SUCCESS)
+function ShowFabricPortInfo(${t}_sysman_fabric_port_handle_t hPort)
+    ${t}_fabric_port_properties_t props
+    if (${t}SysmanFabricPortGetProperties(hPort, &props) == ${X}_RESULT_SUCCESS)
+        ${t}_fabric_port_state_t state
+        if (${t}SysmanFabricPortGetState(hPort, &state) == ${X}_RESULT_SUCCESS)
+            ${t}_fabric_link_type_t link
+            if (${t}SysmanFabricPortGetLinkType(hPort, false, &link) == ${X}_RESULT_SUCCESS)
+                ${t}_fabric_port_config_t config
+                if (${t}SysmanFabricPortGetConfig(hPort, &config) == ${X}_RESULT_SUCCESS)
                     output("        Model:                 %s", props.model)
                     if (props.onSubdevice)
                         output("        On sub-device:         %u", props.subdeviceId)
@@ -752,16 +752,16 @@ function ShowFabricPortInfo(zet_sysman_fabric_port_handle_t hPort)
                         var status
                         output("        Config:                UP")
                         switch (state.status)
-							case ZET_FABRIC_PORT_STATUS_GREEN:
-								status = "GREEN - The port is up and operating as expected"
-							case ZET_FABRIC_PORT_STATUS_YELLOW:
-								status = "YELLOW - The port is up but has quality and/or bandwidth degradation"
-							case ZET_FABRIC_PORT_STATUS_RED:
-								status = "RED - Port connection instabilities"
-							case ZET_FABRIC_PORT_STATUS_BLACK:
-								status = "BLACK - The port is configured down"
-							default:
-								status = "UNKNOWN"
+                            case ${T}_FABRIC_PORT_STATUS_GREEN:
+                                status = "GREEN - The port is up and operating as expected"
+                            case ${T}_FABRIC_PORT_STATUS_YELLOW:
+                                status = "YELLOW - The port is up but has quality and/or bandwidth degradation"
+                            case ${T}_FABRIC_PORT_STATUS_RED:
+                                status = "RED - Port connection instabilities"
+                            case ${T}_FABRIC_PORT_STATUS_BLACK:
+                                status = "BLACK - The port is configured down"
+                            default:
+                                status = "UNKNOWN"
                         output("        Status:                %s", status)
                         output("        Link type:             %s", link.desc)
                         output(
@@ -837,44 +837,44 @@ The following functions are available:
 The pseudo code below shows how to output the fan speed of all fans:
 
 ```c
-function ShowFans(zet_sysman_handle_t hSysmanDevice)
+function ShowFans(${t}_sysman_handle_t hSysmanDevice)
     uint32_t numFans
-    if (zetSysmanFanGet(hSysmanDevice, &numFans, NULL) == ZE_RESULT_SUCCESS)
-        zet_sysman_fan_handle_t* phFans =
-            allocate_memory(numFans * sizeof(zet_sysman_fan_handle_t))
-        if (zetSysmanFanGet(hSysmanDevice, &numFans, phFans) == ZE_RESULT_SUCCESS)
+    if (${t}SysmanFanGet(hSysmanDevice, &numFans, NULL) == ${X}_RESULT_SUCCESS)
+        ${t}_sysman_fan_handle_t* phFans =
+            allocate_memory(numFans * sizeof(${t}_sysman_fan_handle_t))
+        if (${t}SysmanFanGet(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
             output("    Fans")
             for (fanIndex = 0 .. numFans-1)
                 uint32_t speed
-                if (zetSysmanFanGetState(phFans[fanIndex], ZET_FAN_SPEED_UNITS_RPM, &speed)
-				    == ZE_RESULT_SUCCESS)
+                if (${t}SysmanFanGetState(phFans[fanIndex], ${T}_FAN_SPEED_UNITS_RPM, &speed)
+                    == ${X}_RESULT_SUCCESS)
                         output("        Fan %u: %u RPM", fanIndex, speed)
-	free_memory(...)
+    free_memory(...)
 }
 ```
 
 The next example shows how to set the fan speed for all fans to a fixed value in RPM, but only if control is permitted:
 
 ```c
-function SetFanSpeed(zet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
+function SetFanSpeed(${t}_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 {
     uint32_t numFans
-    if (zetSysmanFanGet(hSysmanDevice, &numFans, NULL) == ZE_RESULT_SUCCESS)
-        zet_sysman_fan_handle_t* phFans =
-            allocate_memory(numFans * sizeof(zet_sysman_fan_handle_t))
-        if (zetSysmanFanGet(hSysmanDevice, &numFans, phFans) == ZE_RESULT_SUCCESS)
-            zet_fan_config_t config
-            config.mode = ZET_FAN_SPEED_MODE_FIXED
+    if (${t}SysmanFanGet(hSysmanDevice, &numFans, NULL) == ${X}_RESULT_SUCCESS)
+        ${t}_sysman_fan_handle_t* phFans =
+            allocate_memory(numFans * sizeof(${t}_sysman_fan_handle_t))
+        if (${t}SysmanFanGet(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
+            ${t}_fan_config_t config
+            config.mode = ${T}_FAN_SPEED_MODE_FIXED
             config.speed = SpeedRpm
-            config.speedUnits = ZET_FAN_SPEED_UNITS_RPM
+            config.speedUnits = ${T}_FAN_SPEED_UNITS_RPM
             for (fanIndex = 0 .. numFans-1)
-                zet_fan_properties_t fanprops
-                if (zetSysmanFanGetProperties(phFans[fanIndex], &fanprops) == ZE_RESULT_SUCCESS)
+                ${t}_fan_properties_t fanprops
+                if (${t}SysmanFanGetProperties(phFans[fanIndex], &fanprops) == ${X}_RESULT_SUCCESS)
                     if (fanprops.canControl)
-                        zetSysmanFanSetConfig(phFans[fanIndex], &config)
+                        ${t}SysmanFanSetConfig(phFans[fanIndex], &config)
                     else
                         output("ERROR: Can't control fan %u.\n", fanIndex)
-	free_memory(...)
+    free_memory(...)
 }
 ```
 
@@ -962,41 +962,41 @@ The table below summaries all the RAS management functions:
 The pseudo code below shows how to determine the RAS error sets on a device and show the current state of RAS errors:
 
 ```c
-void ShowRasErrors(zet_sysman_handle_t hSysmanDevice)
+void ShowRasErrors(${t}_sysman_handle_t hSysmanDevice)
     uint32_t numRasErrorSets
-    zet_sysman_ras_handle_t* phRasErrorSets
-    if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) != ZE_RESULT_SUCCESS)
+    ${t}_sysman_ras_handle_t* phRasErrorSets
+    if (${t}SysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) != ${X}_RESULT_SUCCESS)
         return
     if (numRasErrorSets == 0)
         output("No RAS error sets available/enabled on this device.")
         return
-	phRasErrorSets =
-		allocate_memory(numRasErrorSets * sizeof(zet_sysman_ras_handle_t))
-	if (zetSysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ZE_RESULT_SUCCESS)
-		for (rasIndex = 0 .. numRasErrorSets)
-			uint64_t newErrors
-			zet_ras_details_t errorDetails
-			zet_ras_properties_t props
-			if (zetSysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ZE_RESULT_SUCCESS)
-				var pErrorType
-				switch (props.type)
-					case ZET_RAS_ERROR_TYPE_CORRECTABLE:
-						pErrorType = "Correctable"
-					case ZET_RAS_ERROR_TYPE_UNCORRECTABLE:
-						pErrorType = "Uncorrectable"
-					default:
-						pErrorType = "Unknown"
-				output("RAS %s errors", pErrorType)
-				if (props.onSubdevice)
-					output("    On sub-device: %u", props.subdeviceId)
-				if (zetSysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
-					== ZE_RESULT_SUCCESS)
-						output("    Number new errors: %llu", newErrors)
-						if (newErrors)
-							call_function OutputRasDetails(&errorDetails)
-	free_memory(...)
+    phRasErrorSets =
+        allocate_memory(numRasErrorSets * sizeof(${t}_sysman_ras_handle_t))
+    if (${t}SysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ${X}_RESULT_SUCCESS)
+        for (rasIndex = 0 .. numRasErrorSets)
+            uint64_t newErrors
+            ${t}_ras_details_t errorDetails
+            ${t}_ras_properties_t props
+            if (${t}SysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ${X}_RESULT_SUCCESS)
+                var pErrorType
+                switch (props.type)
+                    case ${T}_RAS_ERROR_TYPE_CORRECTABLE:
+                        pErrorType = "Correctable"
+                    case ${T}_RAS_ERROR_TYPE_UNCORRECTABLE:
+                        pErrorType = "Uncorrectable"
+                    default:
+                        pErrorType = "Unknown"
+                output("RAS %s errors", pErrorType)
+                if (props.onSubdevice)
+                    output("    On sub-device: %u", props.subdeviceId)
+                if (${t}SysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                    == ${X}_RESULT_SUCCESS)
+                        output("    Number new errors: %llu", newErrors)
+                        if (newErrors)
+                            call_function OutputRasDetails(&errorDetails)
+    free_memory(...)
 
-function OutputRasDetails(zet_ras_details_t* pDetails)
+function OutputRasDetails(${t}_ras_details_t* pDetails)
     output("        Number new resets:                %llu", pDetails->numResets)
     output("        Number new programming errors:    %llu", pDetails->numProgrammingErrors)
     output("        Number new driver errors:         %llu", pDetails->numDriverErrors)
@@ -1046,33 +1046,33 @@ The table below summaries all the diagnostic management functions:
 The pseudo code below shows how to discover all test suites and the tests in each:
 
 ```c
-function ListDiagnosticTests(zet_sysman_handle_t hSysmanDevice)
+function ListDiagnosticTests(${t}_sysman_handle_t hSysmanDevice)
 {
     uint32_t numTestSuites
-    if ((zetSysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, NULL) == ZE_RESULT_SUCCESS))
-        zet_sysman_diag_handle_t* phTestSuites =
-            allocate_memory(numTestSuites * sizeof(zet_sysman_diag_handle_t))
-        if (zetSysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, phTestSuites) == ZE_RESULT_SUCCESS)
+    if ((${t}SysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, NULL) == ${X}_RESULT_SUCCESS))
+        ${t}_sysman_diag_handle_t* phTestSuites =
+            allocate_memory(numTestSuites * sizeof(${t}_sysman_diag_handle_t))
+        if (${t}SysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, phTestSuites) == ${X}_RESULT_SUCCESS)
             for (suiteIndex = 0 .. numTestSuites-1)
                 uint32_t numTests = 0
-                zet_diag_test_t* pTests
-                zet_diag_properties_t suiteProps
-                if (zetSysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) != ZE_RESULT_SUCCESS)
+                ${t}_diag_test_t* pTests
+                ${t}_diag_properties_t suiteProps
+                if (${t}SysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) != ${X}_RESULT_SUCCESS)
                     next_loop(suiteIndex)
                 output("Diagnostic test suite %s:", suiteProps.name)
                 if (!suiteProps.haveTests)
                     output("    There are no individual tests that can be selected.")
                     next_loop(suiteIndex)
-                if (zetSysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, NULL) != ZE_RESULT_SUCCESS)
+                if (${t}SysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, NULL) != ${X}_RESULT_SUCCESS)
                     output("    Problem getting list of individual tests.")
                     next_loop(suiteIndex)
-                pTests = allocate_memory(numTests * sizeof(zet_diag_test_t*))
-                if (zetSysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, pTests) != ZE_RESULT_SUCCESS)
+                pTests = allocate_memory(numTests * sizeof(${t}_diag_test_t*))
+                if (${t}SysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, pTests) != ${X}_RESULT_SUCCESS)
                     output("    Problem getting list of individual tests.")
                     next_loop(suiteIndex)
                 for (i = 0 .. numTests-1)
                     output("    Test %u: %s", pTests[i].index, pTests[i].name)
-	free_memory(...)
+    free_memory(...)
 ```
 
 ${"##"} <a name="evd">Events</a>
@@ -1131,67 +1131,67 @@ The pseudo code below shows how to configure all temperature sensors to trigger 
 or when the critical temperature is reached.
 
 ```c
-function WaitForExcessTemperatureEvent(zet_driver_handle_t hDriver, double tempLimit)
+function WaitForExcessTemperatureEvent(${t}_driver_handle_t hDriver, double tempLimit)
 {
-	# This will contain the number of event handles (devices) that we will listen for events from
+    # This will contain the number of event handles (devices) that we will listen for events from
     var numEventHandles = 0
 
     # Get list of all devices under this driver
     uint32_t deviceCount = 0
-    zeDeviceGet(hDriver, &deviceCount, nullptr)
-	# Allocate memory for all device handles
-    ze_device_handle_t* phDevices =
-		allocate_memory(deviceCount * sizeof(ze_device_handle_t))
-	# Allocate memory for the event handle for each device
-    zet_sysman_event_handle_t* phEvents =
-	    allocate_memory(deviceCount * sizeof(zet_sysman_event_handle_t))
-	# Allocate memory for the event handles that we will actually listen to
-    zet_sysman_event_handle_t* phListenEvents =
-	    allocate_memory(deviceCount * sizeof(zet_sysman_event_handle_t))
-	# Allocate memory so that we can map an event handle in phListenEvent to the device handle
+    ${x}DeviceGet(hDriver, &deviceCount, nullptr)
+    # Allocate memory for all device handles
+    ${x}_device_handle_t* phDevices =
+        allocate_memory(deviceCount * sizeof(${x}_device_handle_t))
+    # Allocate memory for the event handle for each device
+    ${t}_sysman_event_handle_t* phEvents =
+        allocate_memory(deviceCount * sizeof(${t}_sysman_event_handle_t))
+    # Allocate memory for the event handles that we will actually listen to
+    ${t}_sysman_event_handle_t* phListenEvents =
+        allocate_memory(deviceCount * sizeof(${t}_sysman_event_handle_t))
+    # Allocate memory so that we can map an event handle in phListenEvent to the device handle
     uint32_t* pListenDeviceIndex = allocate_memory(deviceCount * sizeof(uint32_t))
 
-	# Get all device handles
-    zeDeviceGet(hDriver, &deviceCount, phDevices)
+    # Get all device handles
+    ${x}DeviceGet(hDriver, &deviceCount, phDevices)
     for(devIndex = 0 .. deviceCount-1)
-		# Get Sysman handle for the device
-        zet_sysman_handle_t hSysmanDevice
-        if (zetSysmanGet(phDevices[devIndex], ZET_SYSMAN_VERSION_CURRENT, &hSysmanDevice)
-		    != ZE_RESULT_SUCCESS)
+        # Get Sysman handle for the device
+        ${t}_sysman_handle_t hSysmanDevice
+        if (${t}SysmanGet(phDevices[devIndex], ${T}_SYSMAN_VERSION_CURRENT, &hSysmanDevice)
+            != ${X}_RESULT_SUCCESS)
                 next_loop(devIndex)
 
-		# Get event handle for this device
-        if (zetSysmanEventGet(hSysmanDevice, &phEvents[devIndex]) != ZE_RESULT_SUCCESS)
+        # Get event handle for this device
+        if (${t}SysmanEventGet(hSysmanDevice, &phEvents[devIndex]) != ${X}_RESULT_SUCCESS)
             next_loop(devIndex)
 
-		# Get handles to all temperature sensors
+        # Get handles to all temperature sensors
         uint32_t numTempSensors = 0
-        if (zetSysmanTemperatureGet(hSysmanDevice, &numTempSensors, NULL) != ZE_RESULT_SUCCESS)
+        if (${t}SysmanTemperatureGet(hSysmanDevice, &numTempSensors, NULL) != ${X}_RESULT_SUCCESS)
             next_loop(devIndex)
-        zet_sysman_temp_handle_t* allTempSensors
-            allocate_memory(deviceCount * sizeof(zet_sysman_temp_handle_t))
-        if (zetSysmanTemperatureGet(hSysmanDevice, &numTempSensors, allTempSensors) == ZE_RESULT_SUCCESS)
+        ${t}_sysman_temp_handle_t* allTempSensors
+            allocate_memory(deviceCount * sizeof(${t}_sysman_temp_handle_t))
+        if (${t}SysmanTemperatureGet(hSysmanDevice, &numTempSensors, allTempSensors) == ${X}_RESULT_SUCCESS)
             # Configure each temperature sensor to trigger a critical event and a threshold1 event
-			var numConfiguredTempSensors = 0
+            var numConfiguredTempSensors = 0
             for (tempIndex = 0 .. numTempSensors-1)
-                if (zetSysmanTemperatureGetConfig(allTempSensors[tempIndex], &config) != ZE_RESULT_SUCCESS)
+                if (${t}SysmanTemperatureGetConfig(allTempSensors[tempIndex], &config) != ${X}_RESULT_SUCCESS)
                     next_loop(tempIndex)
-				zet_temp_config_t config
+                ${t}_temp_config_t config
                 config.enableCritical = true
                 config.threshold1.enableHighToLow = false
                 config.threshold1.enableLowToHigh = true
                 config.threshold1.threshold = tempLimit
                 config.threshold2.enableHighToLow = false
                 config.threshold2.enableLowToHigh = false
-                if (zetSysmanTemperatureSetConfig(allTempSensors[tempIndex], &config) == ZE_RESULT_SUCCESS)
+                if (${t}SysmanTemperatureSetConfig(allTempSensors[tempIndex], &config) == ${X}_RESULT_SUCCESS)
                     numConfiguredTempSensors++
 
-		# If we configured any sensors to generate events, we can now register to receive on this device
+        # If we configured any sensors to generate events, we can now register to receive on this device
         if (numConfiguredTempSensors)
-            zet_event_config_t eventConfig
+            ${t}_event_config_t eventConfig
             eventConfig.registered =
-			    ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL | ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1
-            if (zetSysmanEventSetConfig(phEvents[devIndex], &eventConfig) == ZE_RESULT_SUCCESS)
+                ${T}_SYSMAN_EVENT_TYPE_TEMP_CRITICAL | ${T}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1
+            if (${t}SysmanEventSetConfig(phEvents[devIndex], &eventConfig) == ${X}_RESULT_SUCCESS)
                 phListenEvents[numEventHandles] = phEvents[devIndex]
                 pListenDeviceIndex[numEventHandles] = devIndex
                 numEventHandles++
@@ -1200,20 +1200,20 @@ function WaitForExcessTemperatureEvent(zet_driver_handle_t hDriver, double tempL
     if (numEventHandles)
         # Block until we receive events
         uint32_t events
-        if (zetSysmanEventListen(hDriver, ZET_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events)
-		    == ZE_RESULT_SUCCESS)
+        if (${t}SysmanEventListen(hDriver, ${T}_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events)
+            == ${X}_RESULT_SUCCESS)
                 for (evtIndex .. numEventHandles)
-                    if (zetSysmanEventGetState(phListenEvents[evtIndex], true, &events)
-					    != ZE_RESULT_SUCCESS)
+                    if (${t}SysmanEventGetState(phListenEvents[evtIndex], true, &events)
+                        != ${X}_RESULT_SUCCESS)
                             next_loop(evtIndex)
-                    if (events & ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL)
+                    if (events & ${T}_SYSMAN_EVENT_TYPE_TEMP_CRITICAL)
                         output("Device %u: Went above the critical temperature.",
-						    pListenDeviceIndex[evtIndex])
-                    else if (events & ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1)
+                            pListenDeviceIndex[evtIndex])
+                    else if (events & ${T}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1)
                         output("Device %u: Went above the temperature threshold %f.",
-						    pListenDeviceIndex[evtIndex], tempLimit)
+                            pListenDeviceIndex[evtIndex], tempLimit)
 
-	free_memory(...)
+    free_memory(...)
 ```
 
 ${"#"} <a name="se">Security</a>

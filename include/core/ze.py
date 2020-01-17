@@ -145,8 +145,8 @@ class ze_result_v(IntEnum):
     ERROR_OUT_OF_HOST_MEMORY = auto()               ## [Core] insufficient host memory to satisfy call
     ERROR_OUT_OF_DEVICE_MEMORY = auto()             ## [Core] insufficient device memory to satisfy call
     ERROR_MODULE_BUILD_FAILURE = auto()             ## [Core] error occurred when building module, see build log for details
-    ERROR_INSUFFICIENT_PERMISSIONS = 0x70010000     ## [Sysman] access denied due to permission level
-    ERROR_NOT_AVAILABLE = auto()                    ## [Sysman] resource already in use and simultaneous access not allowed
+    ERROR_INSUFFICIENT_PERMISSIONS = 0x70010000     ## [Tools] access denied due to permission level
+    ERROR_NOT_AVAILABLE = auto()                    ## [Tools] resource already in use and simultaneous access not allowed
     ERROR_UNINITIALIZED = 0x78000001                ## [Validation] driver is not initialized
     ERROR_UNSUPPORTED_VERSION = auto()              ## [Validation] generic error code for unsupported versions
     ERROR_UNSUPPORTED_FEATURE = auto()              ## [Validation] generic error code for unsupported features

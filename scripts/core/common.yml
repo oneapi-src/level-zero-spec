@@ -159,9 +159,9 @@ etors:
       desc: "[Core] error occurred when building module, see build log for details"
     - name: $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
       value: "0x70010000"
-      desc: "[Sysman] access denied due to permission level"
+      desc: "[Tools] access denied due to permission level"
     - name: $X_RESULT_ERROR_NOT_AVAILABLE
-      desc: "[Sysman] resource already in use and simultaneous access not allowed"
+      desc: "[Tools] resource already in use and simultaneous access not allowed"
     - name: $X_RESULT_ERROR_UNINITIALIZED
       value: "0x78000001"
       desc: "[Validation] driver is not initialized"

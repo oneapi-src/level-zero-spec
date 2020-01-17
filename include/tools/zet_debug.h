@@ -76,11 +76,11 @@ typedef struct _zet_debug_config_t
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + an invalid device handle has been supplied
 ///         + an invalid configuration has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + attaching to this device is not supported
-///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + caller does not have sufficient permissions
-///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + a debugger is already attached
 ze_result_t __zecall
 zetDebugAttach(
@@ -297,7 +297,7 @@ typedef enum _zet_debug_memory_space_intel_graphics_t
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid address has been supplied
-///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + the memory cannot be accessed from the supplied thread
 ze_result_t __zecall
 zetDebugReadMemory(
@@ -324,7 +324,7 @@ zetDebugReadMemory(
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid address has been supplied
-///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + the memory cannot be accessed from the supplied thread
 ze_result_t __zecall
 zetDebugWriteMemory(

@@ -254,7 +254,7 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
 type: function
@@ -278,7 +278,7 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
 type: function
@@ -299,7 +299,7 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
 type: function
@@ -320,7 +320,7 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make this modification."
 
 --- #--------------------------------------------------------------------------
@@ -393,7 +393,7 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "The specified profile is not valid or not supported on this device (use $tSysmanPerformanceProfileGetSupported() to get a list of supported profiles)."
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to change the performance profile of the hardware."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -444,7 +444,7 @@ params:
       name: hSysman
       desc: "[in] Sysman handle for the device"
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -472,7 +472,7 @@ params:
       name: pRepairStatus
       desc: "[in] Will indicate if the device was repaired"
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this property."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -719,7 +719,7 @@ params:
       name: pStats
       desc: "[in] Will contain a snapshot of the latest stats."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -918,9 +918,9 @@ params:
       name: pPeak
       desc: "[in][optional] The peak power limit."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
-    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported."
 --- #--------------------------------------------------------------------------
 type: function
@@ -940,7 +940,7 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Energy threshold not supported on this power domain (check $t_power_properties_t.isEnergyThresholdSupported)."
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
 --- #--------------------------------------------------------------------------
 type: function
@@ -949,7 +949,7 @@ class: $tSysmanPower
 name: SetEnergyThreshold
 details:
     - "An event $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function $tSysmanEventSetConfig() to start receiving the event."
-    - "Only one running process can control the energy threshold at a given time. If another process attempts to change the energy threshold, the error $X_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The function $tSysmanPowerGetEnergyThreshold() to determine the process ID currently controlling this setting."
+    - "Only one running process can control the energy threshold at a given time. If another process attempts to change the energy threshold, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $tSysmanPowerGetEnergyThreshold() to determine the process ID currently controlling this setting."
     - "Calling this function will remove any pending energy thresholds and start counting from the time of this call."
     - "Once the energy threshold has been reached and the event generated, the threshold is automatically removed. It is up to the application to request a new threshold."
     - "The application may call this function from simultaneous threads."
@@ -964,9 +964,9 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Energy threshold not supported on this power domain (check $t_power_properties_t.isEnergyThresholdSupported)."
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
-    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Another running process has set the energy threshold."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -1259,7 +1259,7 @@ params:
       name: pLimits
       desc: "[in] The limits between which the hardware can operate for the specified domain."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
@@ -1348,9 +1348,9 @@ returns:
         - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
         - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $t_oc_capabilities_t.maxOcFrequency, $t_oc_capabilities_t.maxOcVoltage, $t_oc_capabilities_t.minOcVoltageOffset, $t_oc_capabilities_t.maxOcVoltageOffset)."
         - "Requested voltage overclock is very high but $t_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
-    - $X_RESULT_ERROR_FEATURE_LOCKED:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Overclocking feature is locked on this frequency domain"
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
@@ -1391,11 +1391,11 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
         - "Capability $t_oc_capabilities_t.isIccMaxSupported is false for this frequency domain"
-    - $X_RESULT_ERROR_FEATURE_LOCKED:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Overclocking feature is locked on this frequency domain"
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "The specified current limit is too low or too high"
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
@@ -1435,11 +1435,11 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
         - "Capability $t_oc_capabilities_t.isTjMaxSupported is false for this frequency domain"
-    - $X_RESULT_ERROR_FEATURE_LOCKED:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Overclocking feature is locked on this frequency domain"
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "The specified temperature limit is too high"
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 
 --- #--------------------------------------------------------------------------
@@ -1646,7 +1646,7 @@ params:
       name: mode
       desc: "[in] New standby mode."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -1722,7 +1722,7 @@ params:
       name: pChecksum
       desc: "[in] Calculated checksum of the installed firmware."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."
 --- #--------------------------------------------------------------------------
 type: function
@@ -1743,7 +1743,7 @@ params:
       name: size
       desc: "[in] Size of the flash image."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -1909,7 +1909,7 @@ params:
       name: pBandwidth
       desc: "[in] Will contain a snapshot of the bandwidth counters."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."
 --- #--------------------------------------------------------------------------
 type: macro
@@ -2194,7 +2194,7 @@ params:
       name: pConfig
       desc: "[in] Contains new configuration of the Fabric Port."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
@@ -2227,7 +2227,7 @@ params:
       name: pThroughput
       desc: "[in] Will contain the Fabric port throughput counters and maximum bandwidth."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2355,7 +2355,7 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
         - "One or both of the thresholds is not supported - check $t_temp_properties_t.isThreshold1Supported and $t_temp_properties_t.isThreshold2Supported"
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
 --- #--------------------------------------------------------------------------
 type: function
@@ -2365,7 +2365,7 @@ name: SetConfig
 details:
     - "Events $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL will be triggered when temperature reaches the critical range. Use the function $tSysmanEventSetConfig() to start receiving this event."
     - "Events $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $tSysmanEventSetConfig() to start receiving these events."
-    - "Only one running process can set the temperature configuration at a time. If another process attempts to change the configuration, the error $X_RESULT_ERROR_DEVICE_IS_IN_USE will be returned. The function $tSysmanTemperatureGetConfig() will return the process ID currently controlling these settings."
+    - "Only one running process can set the temperature configuration at a time. If another process attempts to change the configuration, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $tSysmanTemperatureGetConfig() will return the process ID currently controlling these settings."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -2380,9 +2380,9 @@ returns:
         - "Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
         - "Enabling the critical temperature event is not supported - check $t_temp_properties_t.isCriticalTempSupported"
         - "One or both of the thresholds is not supported - check $t_temp_properties_t.isThreshold1Supported and $t_temp_properties_t.isThreshold2Supported"
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
-    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Another running process is controlling these settings."
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "One or both the thresholds is above TjMax (see $tSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value."
@@ -2657,7 +2657,7 @@ params:
       name: pConfig
       desc: "[in] New fan configuration."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
@@ -2782,7 +2782,7 @@ params:
       name: pState
       desc: "[in] New state of the LED."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2934,9 +2934,9 @@ params:
       name: pConfig
       desc: "[in] Change the RAS configuration - thresholds used to trigger events"
 returns:
-    - $X_RESULT_ERROR_DEVICE_IS_IN_USE:
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Another running process is controlling these settings."
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "Don't have permissions to set thresholds."
 --- #--------------------------------------------------------------------------
 type: function
@@ -2962,7 +2962,7 @@ params:
       name: pDetails
       desc: "[in][optional] Breakdown of where errors have occurred"
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "Don't have permissions to clear error counters."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -3125,7 +3125,7 @@ params:
       name: pEvents
       desc: "[in] Bitfield of events $t_sysman_event_type_t that have been triggered by any of the supplied event handles. If timeout is not $T_EVENT_WAIT_INFINITE and this value is $T_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred."
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to listen to events."
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "One or more of the supplied event handles are for devices that belong to a different driver handle."
@@ -3281,7 +3281,7 @@ params:
       name: pResult
       desc: "[in] The result of the diagnostics"
 returns:
-    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform diagnostics."
 --- #--------------------------------------------------------------------------
 type: class

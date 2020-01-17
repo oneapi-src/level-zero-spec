@@ -166,8 +166,8 @@ typedef enum _ze_result_t
     ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY,             ///< [Core] insufficient host memory to satisfy call
     ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY,           ///< [Core] insufficient device memory to satisfy call
     ZE_RESULT_ERROR_MODULE_BUILD_FAILURE,           ///< [Core] error occurred when building module, see build log for details
-    ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS = 0x70010000,  ///< [Sysman] access denied due to permission level
-    ZE_RESULT_ERROR_NOT_AVAILABLE,                  ///< [Sysman] resource already in use and simultaneous access not allowed
+    ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS = 0x70010000,  ///< [Tools] access denied due to permission level
+    ZE_RESULT_ERROR_NOT_AVAILABLE,                  ///< [Tools] resource already in use and simultaneous access not allowed
     ZE_RESULT_ERROR_UNINITIALIZED = 0x78000001,     ///< [Validation] driver is not initialized
     ZE_RESULT_ERROR_UNSUPPORTED_VERSION,            ///< [Validation] generic error code for unsupported versions
     ZE_RESULT_ERROR_UNSUPPORTED_FEATURE,            ///< [Validation] generic error code for unsupported features
