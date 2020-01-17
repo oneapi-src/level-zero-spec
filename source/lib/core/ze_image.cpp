@@ -329,6 +329,10 @@ namespace ze
             str = "Image::type_t::_3D";
             break;
 
+        case Image::type_t::BUFFER:
+            str = "Image::type_t::BUFFER";
+            break;
+
         default:
             str = "Image::type_t::?";
             break;

@@ -54,6 +54,7 @@ typedef enum _ze_image_type_t
     ZE_IMAGE_TYPE_2D,                               ///< 2D
     ZE_IMAGE_TYPE_2DARRAY,                          ///< 2D array
     ZE_IMAGE_TYPE_3D,                               ///< 3D
+    ZE_IMAGE_TYPE_BUFFER,                           ///< Buffer
 
 } ze_image_type_t;
 
@@ -125,7 +126,8 @@ typedef enum _ze_image_format_swizzle_t
 typedef struct _ze_image_format_desc_t
 {
     ze_image_format_layout_t layout;                ///< [in] image format component layout
-    ze_image_format_type_t type;                    ///< [in] image format type
+    ze_image_format_type_t type;                    ///< [in] image format type. Media based formats can not be used for
+                                                    ///< ::ZE_IMAGE_TYPE_BUFFER.
     ze_image_format_swizzle_t x;                    ///< [in] image component swizzle into channel x
     ze_image_format_swizzle_t y;                    ///< [in] image component swizzle into channel y
     ze_image_format_swizzle_t z;                    ///< [in] image component swizzle into channel z
@@ -141,8 +143,9 @@ typedef struct _ze_image_desc_t
     ze_image_flag_t flags;                          ///< [in] creation flags
     ze_image_type_t type;                           ///< [in] image type
     ze_image_format_desc_t format;                  ///< [in] image format
-    uint32_t width;                                 ///< [in] width in pixels, see
-                                                    ///< ::ze_device_image_properties_t::maxImageDims1D/2D/3D
+    uint64_t width;                                 ///< [in] width in pixels for ::ze_image_type_t::1D/2D/3D and bytes for
+                                                    ///< Buffer, see ::ze_device_image_properties_t::maxImageDims1D/2D/3D and
+                                                    ///< maxImageBufferSize.
     uint32_t height;                                ///< [in] height in pixels (2D or 3D only), see
                                                     ///< ::ze_device_image_properties_t::maxImageDims2D/3D
     uint32_t depth;                                 ///< [in] depth in pixels (3D only), see

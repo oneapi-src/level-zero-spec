@@ -844,6 +844,7 @@ class ze_image_type_v(IntEnum):
     _2D = auto()                                    ## 2D
     _2DARRAY = auto()                               ## 2D array
     _3D = auto()                                    ## 3D
+    BUFFER = auto()                                 ## Buffer
 
 class ze_image_type_t(c_int):
     def __str__(self):
@@ -924,7 +925,8 @@ class ze_image_format_swizzle_t(c_int):
 class ze_image_format_desc_t(Structure):
     _fields_ = [
         ("layout", ze_image_format_layout_t),                           ## [in] image format component layout
-        ("type", ze_image_format_type_t),                               ## [in] image format type
+        ("type", ze_image_format_type_t),                               ## [in] image format type. Media based formats can not be used for
+                                                                        ## ::ZE_IMAGE_TYPE_BUFFER.
         ("x", ze_image_format_swizzle_t),                               ## [in] image component swizzle into channel x
         ("y", ze_image_format_swizzle_t),                               ## [in] image component swizzle into channel y
         ("z", ze_image_format_swizzle_t),                               ## [in] image component swizzle into channel z
@@ -939,8 +941,9 @@ class ze_image_desc_t(Structure):
         ("flags", ze_image_flag_t),                                     ## [in] creation flags
         ("type", ze_image_type_t),                                      ## [in] image type
         ("format", ze_image_format_desc_t),                             ## [in] image format
-        ("width", c_ulong),                                             ## [in] width in pixels, see
-                                                                        ## ::ze_device_image_properties_t::maxImageDims1D/2D/3D
+        ("width", c_ulonglong),                                         ## [in] width in pixels for ::ze_image_type_t::1D/2D/3D and bytes for
+                                                                        ## Buffer, see ::ze_device_image_properties_t::maxImageDims1D/2D/3D and
+                                                                        ## maxImageBufferSize.
         ("height", c_ulong),                                            ## [in] height in pixels (2D or 3D only), see
                                                                         ## ::ze_device_image_properties_t::maxImageDims2D/3D
         ("depth", c_ulong),                                             ## [in] depth in pixels (3D only), see
