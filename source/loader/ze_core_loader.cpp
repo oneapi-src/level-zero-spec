@@ -1111,9 +1111,15 @@ namespace loader
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const ze_copy_region_t* dstRegion,              ///< [in] pointer to destination region to copy to
         uint32_t dstPitch,                              ///< [in] destination pitch in bytes
+        uint32_t dstSlicePitch,                         ///< [in] destination slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         const ze_copy_region_t* srcRegion,              ///< [in] pointer to source region to copy from
         uint32_t srcPitch,                              ///< [in] source pitch in bytes
+        uint32_t srcSlicePitch,                         ///< [in] source slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -1132,7 +1138,7 @@ namespace loader
         hEvent = ( hEvent ) ? reinterpret_cast<ze_event_object_t*>( hEvent )->handle : nullptr;
 
         // forward to device-driver
-        result = pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+        result = pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, dstSlicePitch, srcptr, srcRegion, srcPitch, srcSlicePitch, hEvent );
 
         return result;
     }

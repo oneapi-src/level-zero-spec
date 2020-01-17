@@ -678,8 +678,11 @@ class ze_copy_region_t(Structure):
     _fields_ = [
         ("originX", c_ulong),                                           ## [in] The origin x offset for region in bytes
         ("originY", c_ulong),                                           ## [in] The origin y offset for region in rows
+        ("originZ", c_ulong),                                           ## [in] The origin z offset for region in slices
         ("width", c_ulong),                                             ## [in] The region width relative to origin in bytes
-        ("height", c_ulong)                                             ## [in] The region height relative to origin in rows
+        ("height", c_ulong),                                            ## [in] The region height relative to origin in rows
+        ("depth", c_ulong)                                              ## [in] The region depth relative to origin in slices. Set this to 0 for
+                                                                        ## 2D copy.
     ]
 
 ###############################################################################
@@ -925,7 +928,7 @@ class ze_image_format_swizzle_t(c_int):
 class ze_image_format_desc_t(Structure):
     _fields_ = [
         ("layout", ze_image_format_layout_t),                           ## [in] image format component layout
-        ("type", ze_image_format_type_t),                               ## [in] image format type. Media based formats can not be used for
+        ("type", ze_image_format_type_t),                               ## [in] image format type. Media formats can not be used for
                                                                         ## ::ZE_IMAGE_TYPE_BUFFER.
         ("x", ze_image_format_swizzle_t),                               ## [in] image component swizzle into channel x
         ("y", ze_image_format_swizzle_t),                               ## [in] image component swizzle into channel y
@@ -1675,9 +1678,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zeCommandListAppendMemoryCopyRegion
 if __use_win_types:
-    _zeCommandListAppendMemoryCopyRegion_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_void_p, POINTER(ze_copy_region_t), c_ulong, c_void_p, POINTER(ze_copy_region_t), c_ulong, ze_event_handle_t )
+    _zeCommandListAppendMemoryCopyRegion_t = WINFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_void_p, POINTER(ze_copy_region_t), c_ulong, c_ulong, c_void_p, POINTER(ze_copy_region_t), c_ulong, c_ulong, ze_event_handle_t )
 else:
-    _zeCommandListAppendMemoryCopyRegion_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_void_p, POINTER(ze_copy_region_t), c_ulong, c_void_p, POINTER(ze_copy_region_t), c_ulong, ze_event_handle_t )
+    _zeCommandListAppendMemoryCopyRegion_t = CFUNCTYPE( ze_result_t, ze_command_list_handle_t, c_void_p, POINTER(ze_copy_region_t), c_ulong, c_ulong, c_void_p, POINTER(ze_copy_region_t), c_ulong, c_ulong, ze_event_handle_t )
 
 ###############################################################################
 ## @brief Function-pointer for zeCommandListAppendImageCopy

@@ -106,13 +106,14 @@ zeCommandListAppendMemoryFill(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Copies a region from a 2D array of host, device, or shared memory.
+/// @brief Copies a region from a 2D or 3D array of host, device, or shared
+///        memory.
 /// 
 /// @details
 ///     - The memory pointed to by both srcptr and dstptr must be accessible by
 ///       the device on which the command list is created.
-///     - The region width and height for both src and dst must be same. The
-///       origins can be different.
+///     - The region width, height, and depth for both src and dst must be same.
+///       The origins can be different.
 ///     - The src and dst regions cannot be overlapping.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
@@ -137,9 +138,15 @@ zeCommandListAppendMemoryCopyRegion(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const ze_copy_region_t* dstRegion,              ///< [in] pointer to destination region to copy to
     uint32_t dstPitch,                              ///< [in] destination pitch in bytes
+    uint32_t dstSlicePitch,                         ///< [in] destination slice pitch in bytes. This is required for 3D region
+                                                    ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                    ///< ignored.
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     const ze_copy_region_t* srcRegion,              ///< [in] pointer to source region to copy from
     uint32_t srcPitch,                              ///< [in] source pitch in bytes
+    uint32_t srcSlicePitch,                         ///< [in] source slice pitch in bytes. This is required for 3D region
+                                                    ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                    ///< ignored.
     ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -147,7 +154,7 @@ zeCommandListAppendMemoryCopyRegion(
     if( nullptr == pfnAppendMemoryCopyRegion )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+    return pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, dstSlicePitch, srcptr, srcRegion, srcPitch, srcSlicePitch, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -484,13 +491,14 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Copies a region from a 2D array of host, device, or shared memory.
+    /// @brief Copies a region from a 2D or 3D array of host, device, or shared
+    ///        memory.
     /// 
     /// @details
     ///     - The memory pointed to by both srcptr and dstptr must be accessible by
     ///       the device on which the command list is created.
-    ///     - The region width and height for both src and dst must be same. The
-    ///       origins can be different.
+    ///     - The region width, height, and depth for both src and dst must be same.
+    ///       The origins can be different.
     ///     - The src and dst regions cannot be overlapping.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
@@ -502,9 +510,15 @@ namespace ze
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const copy_region_t* dstRegion,                 ///< [in] pointer to destination region to copy to
         uint32_t dstPitch,                              ///< [in] destination pitch in bytes
+        uint32_t dstSlicePitch,                         ///< [in] destination slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         const copy_region_t* srcRegion,                 ///< [in] pointer to source region to copy from
         uint32_t srcPitch,                              ///< [in] source pitch in bytes
+        uint32_t srcSlicePitch,                         ///< [in] source slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
@@ -513,9 +527,11 @@ namespace ze
             dstptr,
             reinterpret_cast<const ze_copy_region_t*>( dstRegion ),
             dstPitch,
+            dstSlicePitch,
             srcptr,
             reinterpret_cast<const ze_copy_region_t*>( srcRegion ),
             srcPitch,
+            srcSlicePitch,
             ( pEvent ) ? reinterpret_cast<ze_event_handle_t>( pEvent->getHandle() ) : nullptr ) );
 
         if( result_t::SUCCESS != result )

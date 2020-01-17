@@ -581,8 +581,10 @@ typedef ze_result_t (__zecall *ze_pfnCommandListAppendMemoryCopyRegion_t)(
     void*,
     const ze_copy_region_t*,
     uint32_t,
+    uint32_t,
     const void*,
     const ze_copy_region_t*,
+    uint32_t,
     uint32_t,
     ze_event_handle_t
     );

@@ -510,12 +510,20 @@ namespace ze
         str += std::to_string(val.originY);
         str += "\n";
         
+        str += "CommandList::copy_region_t::originZ : ";
+        str += std::to_string(val.originZ);
+        str += "\n";
+        
         str += "CommandList::copy_region_t::width : ";
         str += std::to_string(val.width);
         str += "\n";
         
         str += "CommandList::copy_region_t::height : ";
         str += std::to_string(val.height);
+        str += "\n";
+        
+        str += "CommandList::copy_region_t::depth : ";
+        str += std::to_string(val.depth);
         str += "\n";
 
         return str;

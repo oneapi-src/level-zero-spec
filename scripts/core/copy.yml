@@ -88,19 +88,25 @@ members:
       name: originY
       desc: "[in] The origin y offset for region in rows"
     - type: uint32_t
+      name: originZ
+      desc: "[in] The origin z offset for region in slices"
+    - type: uint32_t
       name: width
       desc: "[in] The region width relative to origin in bytes"
     - type: uint32_t
       name: height
       desc: "[in] The region height relative to origin in rows"
+    - type: uint32_t
+      name: depth
+      desc: "[in] The region depth relative to origin in slices. Set this to 0 for 2D copy."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies a region from a 2D array of host, device, or shared memory."
+desc: "Copies a region from a 2D or 3D array of host, device, or shared memory."
 class: $xCommandList
 name: AppendMemoryCopyRegion
 details:
     - "The memory pointed to by both srcptr and dstptr must be accessible by the device on which the command list is created."
-    - "The region width and height for both src and dst must be same. The origins can be different."
+    - "The region width, height, and depth for both src and dst must be same. The origins can be different."
     - "The src and dst regions cannot be overlapping."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -117,6 +123,9 @@ params:
     - type: "uint32_t"
       name: dstPitch
       desc: "[in] destination pitch in bytes"
+    - type: "uint32_t"
+      name: dstSlicePitch
+      desc: "[in] destination slice pitch in bytes. This is required for 3D region copies where $x_copy_region_t::depth is not 0, otherwise it's ignored."
     - type: "const void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
@@ -126,6 +135,9 @@ params:
     - type: "uint32_t"
       name: srcPitch
       desc: "[in] source pitch in bytes"
+    - type: "uint32_t"
+      name: srcSlicePitch
+      desc: "[in] source slice pitch in bytes. This is required for 3D region copies where $x_copy_region_t::depth is not 0, otherwise it's ignored."
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"

@@ -126,7 +126,7 @@ typedef enum _ze_image_format_swizzle_t
 typedef struct _ze_image_format_desc_t
 {
     ze_image_format_layout_t layout;                ///< [in] image format component layout
-    ze_image_format_type_t type;                    ///< [in] image format type. Media based formats can not be used for
+    ze_image_format_type_t type;                    ///< [in] image format type. Media formats can not be used for
                                                     ///< ::ZE_IMAGE_TYPE_BUFFER.
     ze_image_format_swizzle_t x;                    ///< [in] image component swizzle into channel x
     ze_image_format_swizzle_t y;                    ///< [in] image component swizzle into channel y

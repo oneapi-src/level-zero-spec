@@ -1028,9 +1028,15 @@ namespace layer
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const ze_copy_region_t* dstRegion,              ///< [in] pointer to destination region to copy to
         uint32_t dstPitch,                              ///< [in] destination pitch in bytes
+        uint32_t dstSlicePitch,                         ///< [in] destination slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         const ze_copy_region_t* srcRegion,              ///< [in] pointer to source region to copy from
         uint32_t srcPitch,                              ///< [in] source pitch in bytes
+        uint32_t srcSlicePitch,                         ///< [in] source slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -1058,7 +1064,7 @@ namespace layer
 
         }
 
-        return pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+        return pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, dstSlicePitch, srcptr, srcRegion, srcPitch, srcSlicePitch, hEvent );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1783,7 +1789,7 @@ namespace layer
             if( 8 <= desc->flags )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
-            if( 4 <= desc->type )
+            if( 5 <= desc->type )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
@@ -1822,7 +1828,7 @@ namespace layer
             if( 8 <= desc->flags )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
-            if( 4 <= desc->type )
+            if( 5 <= desc->type )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }

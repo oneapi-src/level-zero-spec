@@ -946,9 +946,15 @@ namespace driver
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const ze_copy_region_t* dstRegion,              ///< [in] pointer to destination region to copy to
         uint32_t dstPitch,                              ///< [in] destination pitch in bytes
+        uint32_t dstSlicePitch,                         ///< [in] destination slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         const ze_copy_region_t* srcRegion,              ///< [in] pointer to source region to copy from
         uint32_t srcPitch,                              ///< [in] source pitch in bytes
+        uint32_t srcSlicePitch,                         ///< [in] source slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -958,7 +964,7 @@ namespace driver
         auto pfnAppendMemoryCopyRegion = context.zeDdiTable.CommandList.pfnAppendMemoryCopyRegion;
         if( nullptr != pfnAppendMemoryCopyRegion )
         {
-            result = pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+            result = pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, dstSlicePitch, srcptr, srcRegion, srcPitch, srcSlicePitch, hEvent );
         }
         else
         {
@@ -4608,9 +4614,15 @@ namespace instrumented
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const ze_copy_region_t* dstRegion,              ///< [in] pointer to destination region to copy to
         uint32_t dstPitch,                              ///< [in] destination pitch in bytes
+        uint32_t dstSlicePitch,                         ///< [in] destination slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         const ze_copy_region_t* srcRegion,              ///< [in] pointer to source region to copy from
         uint32_t srcPitch,                              ///< [in] source pitch in bytes
+        uint32_t srcSlicePitch,                         ///< [in] source slice pitch in bytes. This is required for 3D region
+                                                        ///< copies where ::ze_copy_region_t::depth is not 0, otherwise it's
+                                                        ///< ignored.
         ze_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -4622,9 +4634,11 @@ namespace instrumented
             &dstptr,
             &dstRegion,
             &dstPitch,
+            &dstSlicePitch,
             &srcptr,
             &srcRegion,
             &srcPitch,
+            &srcSlicePitch,
             &hEvent
         };
 
@@ -4643,7 +4657,7 @@ namespace instrumented
                         &instanceUserData[ i ] );
             }
 
-        result = driver::zeCommandListAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+        result = driver::zeCommandListAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, dstSlicePitch, srcptr, srcRegion, srcPitch, srcSlicePitch, hEvent );
 
         // capture parameters
         ze_command_list_append_memory_copy_region_params_t out_params = {
@@ -4651,9 +4665,11 @@ namespace instrumented
             &dstptr,
             &dstRegion,
             &dstPitch,
+            &dstSlicePitch,
             &srcptr,
             &srcRegion,
             &srcPitch,
+            &srcSlicePitch,
             &hEvent
         };
 

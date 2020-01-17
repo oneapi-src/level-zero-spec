@@ -1270,9 +1270,11 @@ typedef struct _ze_command_list_append_memory_copy_region_params_t
     void** pdstptr;
     const ze_copy_region_t** pdstRegion;
     uint32_t* pdstPitch;
+    uint32_t* pdstSlicePitch;
     const void** psrcptr;
     const ze_copy_region_t** psrcRegion;
     uint32_t* psrcPitch;
+    uint32_t* psrcSlicePitch;
     ze_event_handle_t* phEvent;
 } ze_command_list_append_memory_copy_region_params_t;
 
