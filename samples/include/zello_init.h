@@ -83,7 +83,7 @@ inline bool init_zet( void )
 //////////////////////////////////////////////////////////////////////////
 inline ze::Device* findDevice(
     ze::Driver* pDriver,
-    const ze::Driver::device_type_t type )
+    const ze::Device::type_t type )
 {
     // get all devices
     uint32_t deviceCount = 0;

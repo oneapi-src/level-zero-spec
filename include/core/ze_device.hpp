@@ -39,6 +39,12 @@
 #define ZE_SUBGROUPSIZE_COUNT  8
 #endif // ZE_SUBGROUPSIZE_COUNT
 
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZE_MAX_NATIVE_KERNEL_UUID_SIZE
+/// @brief Maximum native kernel universal unique id (UUID) size in bytes
+#define ZE_MAX_NATIVE_KERNEL_UUID_SIZE  16
+#endif // ZE_MAX_NATIVE_KERNEL_UUID_SIZE
+
 namespace ze
 {
     ///////////////////////////////////////////////////////////////////////////////
@@ -59,6 +65,15 @@ namespace ze
         enum class properties_version_t
         {
             CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported device types
+        enum class type_t
+        {
+            GPU = 1,                                        ///< Graphics Processing Unit
+            FPGA,                                           ///< Field Programmable Gate Array
 
         };
 
@@ -152,7 +167,7 @@ namespace ze
         struct properties_t
         {
             properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::ZE_DEVICE_PROPERTIES_VERSION_CURRENT
-            Driver::device_type_t type;                     ///< [out] generic device type
+            type_t type;                                    ///< [out] generic device type
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
             device_uuid_t uuid;                             ///< [out] universal unique identifier.
@@ -199,6 +214,14 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Native kernel universal unique id (UUID)
+        struct native_kernel_uuid_t
+        {
+            uint8_t id[ZE_MAX_NATIVE_KERNEL_UUID_SIZE];     ///< Opaque data representing a native kernel UUID
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Device properties queried using ::zeDeviceGetKernelProperties
         struct kernel_properties_t
         {
@@ -206,6 +229,12 @@ namespace ze
             uint32_t spirvVersionSupported;                 ///< [out] Maximum supported SPIR-V version.
                                                             ///< Returns zero if SPIR-V is not supported.
                                                             ///< Contains major and minor attributes, use ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION.
+            native_kernel_uuid_t nativeKernelSupported;     ///< [out] Compatibility UUID of supported native kernel.
+                                                            ///< UUID may or may not be the same across driver release, devices, or
+                                                            ///< operating systems.
+                                                            ///< Application is responsible for ensuring UUID matches before creating
+                                                            ///< module using
+                                                            ///< previously created native kernel.
             bool_t fp16Supported;                           ///< [out] Supports 16-bit floating-point operations
             bool_t fp64Supported;                           ///< [out] Supports 64-bit floating-point operations
             bool_t int64AtomicsSupported;                   ///< [out] Supports 64-bit atomic operations
@@ -691,6 +720,10 @@ namespace ze
     std::string to_string( const Device::properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::type_t to std::string
+    std::string to_string( const Device::type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::properties_t to std::string
     std::string to_string( const Device::properties_t val );
 
@@ -705,6 +738,10 @@ namespace ze
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::kernel_properties_version_t to std::string
     std::string to_string( const Device::kernel_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::native_kernel_uuid_t to std::string
+    std::string to_string( const Device::native_kernel_uuid_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::kernel_properties_t to std::string

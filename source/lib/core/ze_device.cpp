@@ -900,6 +900,30 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::type_t to std::string
+    std::string to_string( const Device::type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Device::type_t::GPU:
+            str = "Device::type_t::GPU";
+            break;
+
+        case Device::type_t::FPGA:
+            str = "Device::type_t::FPGA";
+            break;
+
+        default:
+            str = "Device::type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::compute_properties_version_t to std::string
     std::string to_string( const Device::compute_properties_version_t val )
     {
@@ -1252,6 +1276,27 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::native_kernel_uuid_t to std::string
+    std::string to_string( const Device::native_kernel_uuid_t val )
+    {
+        std::string str;
+        
+        str += "Device::native_kernel_uuid_t::id : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.id )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::kernel_properties_t to std::string
     std::string to_string( const Device::kernel_properties_t val )
     {
@@ -1263,6 +1308,10 @@ namespace ze
         
         str += "Device::kernel_properties_t::spirvVersionSupported : ";
         str += std::to_string(val.spirvVersionSupported);
+        str += "\n";
+        
+        str += "Device::kernel_properties_t::nativeKernelSupported : ";
+        str += to_string(val.nativeKernelSupported);
         str += "\n";
         
         str += "Device::kernel_properties_t::fp16Supported : ";

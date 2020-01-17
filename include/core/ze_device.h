@@ -252,6 +252,20 @@ typedef enum _ze_device_kernel_properties_version_t
 } ze_device_kernel_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef ZE_MAX_NATIVE_KERNEL_UUID_SIZE
+/// @brief Maximum native kernel universal unique id (UUID) size in bytes
+#define ZE_MAX_NATIVE_KERNEL_UUID_SIZE  16
+#endif // ZE_MAX_NATIVE_KERNEL_UUID_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Native kernel universal unique id (UUID)
+typedef struct _ze_native_kernel_uuid_t
+{
+    uint8_t id[ZE_MAX_NATIVE_KERNEL_UUID_SIZE];     ///< Opaque data representing a native kernel UUID
+
+} ze_native_kernel_uuid_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Device properties queried using ::zeDeviceGetKernelProperties
 typedef struct _ze_device_kernel_properties_t
 {
@@ -259,6 +273,12 @@ typedef struct _ze_device_kernel_properties_t
     uint32_t spirvVersionSupported;                 ///< [out] Maximum supported SPIR-V version.
                                                     ///< Returns zero if SPIR-V is not supported.
                                                     ///< Contains major and minor attributes, use ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION.
+    ze_native_kernel_uuid_t nativeKernelSupported;  ///< [out] Compatibility UUID of supported native kernel.
+                                                    ///< UUID may or may not be the same across driver release, devices, or
+                                                    ///< operating systems.
+                                                    ///< Application is responsible for ensuring UUID matches before creating
+                                                    ///< module using
+                                                    ///< previously created native kernel.
     ze_bool_t fp16Supported;                        ///< [out] Supports 16-bit floating-point operations
     ze_bool_t fp64Supported;                        ///< [out] Supports 64-bit floating-point operations
     ze_bool_t int64AtomicsSupported;                ///< [out] Supports 64-bit atomic operations

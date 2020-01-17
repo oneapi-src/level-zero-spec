@@ -544,30 +544,6 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::device_type_t to std::string
-    std::string to_string( const Driver::device_type_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Driver::device_type_t::GPU:
-            str = "Driver::device_type_t::GPU";
-            break;
-
-        case Driver::device_type_t::FPGA:
-            str = "Driver::device_type_t::FPGA";
-            break;
-
-        default:
-            str = "Driver::device_type_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Driver::device_mem_alloc_desc_version_t to std::string
     std::string to_string( const Driver::device_mem_alloc_desc_version_t val )
     {

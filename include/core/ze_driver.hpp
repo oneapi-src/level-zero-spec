@@ -101,15 +101,6 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Supported device types
-        enum class device_type_t
-        {
-            GPU = 1,                                        ///< Graphics Processing Unit
-            FPGA,                                           ///< Field Programmable Gate Array
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::ze_device_mem_alloc_desc_t
         enum class device_mem_alloc_desc_version_t
         {
@@ -591,10 +582,6 @@ namespace ze
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Driver::ipc_properties_t to std::string
     std::string to_string( const Driver::ipc_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Driver::device_type_t to std::string
-    std::string to_string( const Driver::device_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Driver::device_mem_alloc_desc_version_t to std::string

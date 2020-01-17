@@ -373,6 +373,17 @@ class ze_device_kernel_properties_version_t(c_int):
 
 
 ###############################################################################
+## @brief Maximum native kernel universal unique id (UUID) size in bytes
+ZE_MAX_NATIVE_KERNEL_UUID_SIZE = 16
+
+###############################################################################
+## @brief Native kernel universal unique id (UUID)
+class ze_native_kernel_uuid_t(Structure):
+    _fields_ = [
+        ("id", c_ubyte * ZE_MAX_NATIVE_KERNEL_UUID_SIZE)                ## Opaque data representing a native kernel UUID
+    ]
+
+###############################################################################
 ## @brief Device properties queried using ::zeDeviceGetKernelProperties
 class ze_device_kernel_properties_t(Structure):
     _fields_ = [
@@ -380,6 +391,12 @@ class ze_device_kernel_properties_t(Structure):
         ("spirvVersionSupported", c_ulong),                             ## [out] Maximum supported SPIR-V version.
                                                                         ## Returns zero if SPIR-V is not supported.
                                                                         ## Contains major and minor attributes, use ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION.
+        ("nativeKernelSupported", ze_native_kernel_uuid_t),             ## [out] Compatibility UUID of supported native kernel.
+                                                                        ## UUID may or may not be the same across driver release, devices, or
+                                                                        ## operating systems.
+                                                                        ## Application is responsible for ensuring UUID matches before creating
+                                                                        ## module using
+                                                                        ## previously created native kernel.
         ("fp16Supported", ze_bool_t),                                   ## [out] Supports 16-bit floating-point operations
         ("fp64Supported", ze_bool_t),                                   ## [out] Supports 64-bit floating-point operations
         ("int64AtomicsSupported", ze_bool_t),                           ## [out] Supports 64-bit atomic operations

@@ -18,7 +18,7 @@ int main( int argc, char *argv[] )
         putenv( const_cast<char *>( "ZE_ENABLE_NULL_DRIVER=1" ) );
     }
 
-    const ze::Driver::device_type_t type = ze::Driver::device_type_t::GPU;
+    const ze::Device::type_t type = ze::Device::type_t::GPU;
 
     zet::Driver* pDriver = nullptr;
     zet::Device* pDevice = nullptr;
