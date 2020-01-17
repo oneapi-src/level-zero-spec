@@ -186,7 +186,7 @@ ZET_DEBUG_TIMEOUT_INFINITE = 0xffffffffffffffffull
 ## @brief Debug event flags.
 class zet_debug_event_flags_v(IntEnum):
     DEBUG_EVENT_FLAG_NONE = 0                       ## No event flags
-    DEBUG_EVENT_FLAG_STOPPED = (1 << 0)             ## The reporting thread stopped
+    DEBUG_EVENT_FLAG_STOPPED = ZE_BIT(0)            ## The reporting thread stopped
 
 class zet_debug_event_flags_t(c_int):
     def __str__(self):
@@ -1674,7 +1674,7 @@ class zet_sysman_event_type_v(IntEnum):
     RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 )         ## Event is triggered when accelerator RAS uncorrectable errors cross
                                                     ## thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
                                                     ## default).
-    ALL = (~0)                                      ## Specifies all events
+    ALL = 0x0FFF                                    ## Specifies all events
 
 class zet_sysman_event_type_t(c_int):
     def __str__(self):

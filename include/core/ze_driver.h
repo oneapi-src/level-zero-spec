@@ -54,9 +54,8 @@ typedef enum _ze_init_flag_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for flags
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ze_result_t __zecall
 zeInit(
@@ -81,9 +80,8 @@ zeInit(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zeDriverGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
@@ -123,10 +121,10 @@ typedef enum _ze_api_version_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == version
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == version`
 ze_result_t __zecall
 zeDriverGetApiVersion(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -183,10 +181,10 @@ typedef struct _ze_driver_properties_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == pDriverProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pDriverProperties`
 ze_result_t __zecall
 zeDriverGetProperties(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -228,10 +226,10 @@ typedef struct _ze_driver_ipc_properties_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == pIPCProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pIPCProperties`
 ze_result_t __zecall
 zeDriverGetIPCProperties(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -253,11 +251,11 @@ zeDriverGetIPCProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == pFuncName
-///         + nullptr == pfunc
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pFuncName`
+///         + `nullptr == pfunc`
 ze_result_t __zecall
 zeDriverGetExtensionFunctionAddress(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance

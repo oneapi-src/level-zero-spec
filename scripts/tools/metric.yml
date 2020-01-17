@@ -30,9 +30,6 @@ params:
     - type: "$t_metric_group_handle_t*"
       name: phMetricGroups
       desc: "[in,out][optional][range(0, *pCount)] array of handle of metric groups"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "devices do not contain a given metric group"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum metric group name string size"
@@ -103,9 +100,6 @@ params:
     - type: "$t_metric_group_properties_t*"
       name: pProperties
       desc: "[in,out] metric group properties"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric types"
@@ -205,9 +199,6 @@ params:
     - type: "$t_typed_value_t*"
       name: pMetricValues
       desc: "[in,out][optional][range(0, *pMetricValueCount)] buffer of calculated metrics"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves metric from a metric group."
@@ -230,9 +221,6 @@ params:
     - type: "$t_metric_handle_t*"
       name: phMetrics
       desc: "[in,out][optional][range(0, *pCount)] array of handle of metrics"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum metric name string size"
@@ -307,9 +295,6 @@ params:
     - type: "$t_metric_properties_t*"
       name: pProperties
       desc: "[in,out] metric properties"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Activates metric groups."
@@ -328,9 +313,6 @@ params:
     - type: "$t_metric_group_handle_t*"
       name: phMetricGroups
       desc: "[in][optional][range(0, count)] handles of the metric groups to activate. NULL to deactivate."
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric groups"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $t_metric_tracer_desc_t"
@@ -381,8 +363,7 @@ params:
       name: phMetricTracer
       desc: "[out] handle of metric tracer"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "devices do not support metric tracer"
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Append metric tracer marker into a command list."
@@ -400,9 +381,6 @@ params:
     - type: "uint32_t"
       name: value
       desc: "[in] tracer marker value"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "command list do not support metric tracer"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes metric tracer."
@@ -414,9 +392,6 @@ params:
     - type: "$t_metric_tracer_handle_t"
       name: hMetricTracer
       desc: "[in][release] handle of the metric tracer"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric tracer handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reads data from metric tracer."
@@ -443,9 +418,6 @@ params:
     - type: uint8_t*
       name: pRawData
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing tracer reports in raw format"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric tracer handle"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $t_metric_query_pool_desc_t"
@@ -503,9 +475,6 @@ params:
     - type: "$t_metric_query_pool_handle_t*"
       name: phMetricQueryPool
       desc: "[out] handle of metric query pool"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid device handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes a query pool object."
@@ -521,8 +490,7 @@ params:
       name: hMetricQueryPool
       desc: "[in][release] handle of the metric query pool"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric query pool handle"
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates metric query object."
@@ -541,9 +509,6 @@ params:
     - type: "$t_metric_query_handle_t*"
       name: phMetricQuery
       desc: "[out] handle of metric query"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid device handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes a metric query object."
@@ -558,8 +523,7 @@ params:
       name: hMetricQuery
       desc: "[in][release] handle of metric query"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid device handle"
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Resets a metric query object back to inital state."
@@ -572,9 +536,6 @@ params:
     - type: "$t_metric_query_handle_t"
       name: hMetricQuery
       desc: "[in] handle of metric query"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid device handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends metric query begin into a command list."
@@ -589,9 +550,6 @@ params:
     - type: "$t_metric_query_handle_t"
       name: hMetricQuery
       desc: "[in] handle of the metric query"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends metric query end into a command list."
@@ -610,8 +568,7 @@ params:
       name: hCompletionEvent
       desc: "[in][optional] handle of the completion event to signal"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid handle"
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends metric query commands to flush all caches."
@@ -623,9 +580,6 @@ params:
     - type: "$t_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid command list handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves raw data for a given metric query."
@@ -647,9 +601,6 @@ params:
     - type: uint8_t*
       name: pRawData
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing query reports in raw format"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric query handle"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for metric group"

@@ -63,12 +63,15 @@ typedef struct _zex_command_graph_desc_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == desc
-///         + nullptr == phCommandGraph
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == phCommandGraph`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
@@ -92,9 +95,9 @@ zexCommandGraphCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandGraph
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandGraph`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zexCommandGraphDestroy(
     zex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
@@ -115,9 +118,8 @@ zexCommandGraphDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandGraph
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandGraph`
 ze_result_t __zecall
 zexCommandGraphClose(
     zex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close

@@ -47,11 +47,12 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == dstptr
-///         + nullptr == srcptr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == dstptr`
+///         + `nullptr == srcptr`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendMemoryCopy(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -83,11 +84,12 @@ zeCommandListAppendMemoryCopy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == ptr
-///         + nullptr == pattern
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
+///         + `nullptr == pattern`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendMemoryFill(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -125,13 +127,15 @@ typedef struct _ze_copy_region_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == dstptr
-///         + nullptr == dstRegion
-///         + nullptr == srcptr
-///         + nullptr == srcRegion
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == dstptr`
+///         + `nullptr == dstRegion`
+///         + `nullptr == srcptr`
+///         + `nullptr == srcRegion`
+///     - ::ZE_RESULT_ERROR_OVERLAPPING_REGIONS
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendMemoryCopyRegion(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -160,11 +164,11 @@ zeCommandListAppendMemoryCopyRegion(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hDstImage
-///         + nullptr == hSrcImage
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hDstImage`
+///         + `nullptr == hSrcImage`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendImageCopy(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -199,11 +203,12 @@ typedef struct _ze_image_region_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hDstImage
-///         + nullptr == hSrcImage
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hDstImage`
+///         + `nullptr == hSrcImage`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+///     - ::ZE_RESULT_ERROR_OVERLAPPING_REGIONS
 ze_result_t __zecall
 zeCommandListAppendImageCopyRegion(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -232,11 +237,12 @@ zeCommandListAppendImageCopyRegion(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == dstptr
-///         + nullptr == hSrcImage
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hSrcImage`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == dstptr`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendImageCopyToMemory(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -264,11 +270,12 @@ zeCommandListAppendImageCopyToMemory(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hDstImage
-///         + nullptr == srcptr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hDstImage`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == srcptr`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendImageCopyFromMemory(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -308,10 +315,10 @@ zeCommandListAppendImageCopyFromMemory(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == ptr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
 ze_result_t __zecall
 zeCommandListAppendMemoryPrefetch(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -363,12 +370,13 @@ typedef enum _ze_memory_advice_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hDevice
-///         + nullptr == ptr
-///         + invalid value for advice
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + advice
 ze_result_t __zecall
 zeCommandListAppendMemAdvise(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list

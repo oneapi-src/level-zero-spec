@@ -38,11 +38,12 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == dstptr
-///         + nullptr == srcptr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == dstptr`
+///         + `nullptr == srcptr`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendMemoryCopy(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -54,7 +55,7 @@ zeCommandListAppendMemoryCopy(
 {
     auto pfnAppendMemoryCopy = ze_lib::context.ddiTable.CommandList.pfnAppendMemoryCopy;
     if( nullptr == pfnAppendMemoryCopy )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
 }
@@ -81,11 +82,12 @@ zeCommandListAppendMemoryCopy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == ptr
-///         + nullptr == pattern
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
+///         + `nullptr == pattern`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendMemoryFill(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -98,7 +100,7 @@ zeCommandListAppendMemoryFill(
 {
     auto pfnAppendMemoryFill = ze_lib::context.ddiTable.CommandList.pfnAppendMemoryFill;
     if( nullptr == pfnAppendMemoryFill )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendMemoryFill( hCommandList, ptr, pattern, pattern_size, size, hEvent );
 }
@@ -119,13 +121,15 @@ zeCommandListAppendMemoryFill(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == dstptr
-///         + nullptr == dstRegion
-///         + nullptr == srcptr
-///         + nullptr == srcRegion
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == dstptr`
+///         + `nullptr == dstRegion`
+///         + `nullptr == srcptr`
+///         + `nullptr == srcRegion`
+///     - ::ZE_RESULT_ERROR_OVERLAPPING_REGIONS
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendMemoryCopyRegion(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -140,7 +144,7 @@ zeCommandListAppendMemoryCopyRegion(
 {
     auto pfnAppendMemoryCopyRegion = ze_lib::context.ddiTable.CommandList.pfnAppendMemoryCopyRegion;
     if( nullptr == pfnAppendMemoryCopyRegion )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
 }
@@ -161,11 +165,11 @@ zeCommandListAppendMemoryCopyRegion(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hDstImage
-///         + nullptr == hSrcImage
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hDstImage`
+///         + `nullptr == hSrcImage`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendImageCopy(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -176,7 +180,7 @@ zeCommandListAppendImageCopy(
 {
     auto pfnAppendImageCopy = ze_lib::context.ddiTable.CommandList.pfnAppendImageCopy;
     if( nullptr == pfnAppendImageCopy )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
 }
@@ -193,11 +197,12 @@ zeCommandListAppendImageCopy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hDstImage
-///         + nullptr == hSrcImage
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hDstImage`
+///         + `nullptr == hSrcImage`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+///     - ::ZE_RESULT_ERROR_OVERLAPPING_REGIONS
 ze_result_t __zecall
 zeCommandListAppendImageCopyRegion(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -210,7 +215,7 @@ zeCommandListAppendImageCopyRegion(
 {
     auto pfnAppendImageCopyRegion = ze_lib::context.ddiTable.CommandList.pfnAppendImageCopyRegion;
     if( nullptr == pfnAppendImageCopyRegion )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
 }
@@ -233,11 +238,12 @@ zeCommandListAppendImageCopyRegion(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == dstptr
-///         + nullptr == hSrcImage
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hSrcImage`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == dstptr`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendImageCopyToMemory(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -249,7 +255,7 @@ zeCommandListAppendImageCopyToMemory(
 {
     auto pfnAppendImageCopyToMemory = ze_lib::context.ddiTable.CommandList.pfnAppendImageCopyToMemory;
     if( nullptr == pfnAppendImageCopyToMemory )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
 }
@@ -272,11 +278,12 @@ zeCommandListAppendImageCopyToMemory(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hDstImage
-///         + nullptr == srcptr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hDstImage`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == srcptr`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendImageCopyFromMemory(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -288,7 +295,7 @@ zeCommandListAppendImageCopyFromMemory(
 {
     auto pfnAppendImageCopyFromMemory = ze_lib::context.ddiTable.CommandList.pfnAppendImageCopyFromMemory;
     if( nullptr == pfnAppendImageCopyFromMemory )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
 }
@@ -323,10 +330,10 @@ zeCommandListAppendImageCopyFromMemory(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == ptr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
 ze_result_t __zecall
 zeCommandListAppendMemoryPrefetch(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -336,7 +343,7 @@ zeCommandListAppendMemoryPrefetch(
 {
     auto pfnAppendMemoryPrefetch = ze_lib::context.ddiTable.CommandList.pfnAppendMemoryPrefetch;
     if( nullptr == pfnAppendMemoryPrefetch )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendMemoryPrefetch( hCommandList, ptr, size );
 }
@@ -368,12 +375,13 @@ zeCommandListAppendMemoryPrefetch(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hDevice
-///         + nullptr == ptr
-///         + invalid value for advice
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + advice
 ze_result_t __zecall
 zeCommandListAppendMemAdvise(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
@@ -385,7 +393,7 @@ zeCommandListAppendMemAdvise(
 {
     auto pfnAppendMemAdvise = ze_lib::context.ddiTable.CommandList.pfnAppendMemAdvise;
     if( nullptr == pfnAppendMemAdvise )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 }

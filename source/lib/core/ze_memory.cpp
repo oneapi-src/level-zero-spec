@@ -45,16 +45,20 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == device_desc
-///         + nullptr == host_desc
-///         + nullptr == pptr
-///         + unsupported allocation size
-///         + unsupported alignment
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT < device_desc->version
-///         + ::ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT < host_desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == device_desc`
+///         + `nullptr == host_desc`
+///         + `nullptr == pptr`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT < device_desc->version`
+///         + `::ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT < host_desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + device_desc->flags
+///         + host_desc->flags
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_SIZE
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
@@ -70,7 +74,7 @@ zeDriverAllocSharedMem(
 {
     auto pfnAllocSharedMem = ze_lib::context.ddiTable.Driver.pfnAllocSharedMem;
     if( nullptr == pfnAllocSharedMem )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAllocSharedMem( hDriver, device_desc, host_desc, size, alignment, hDevice, pptr );
 }
@@ -92,15 +96,18 @@ zeDriverAllocSharedMem(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == device_desc
-///         + nullptr == hDevice
-///         + nullptr == pptr
-///         + unsupported allocation size
-///         + unsupported alignment
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT < device_desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == device_desc`
+///         + `nullptr == pptr`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT < device_desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + device_desc->flags
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_SIZE
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
@@ -115,7 +122,7 @@ zeDriverAllocDeviceMem(
 {
     auto pfnAllocDeviceMem = ze_lib::context.ddiTable.Driver.pfnAllocDeviceMem;
     if( nullptr == pfnAllocDeviceMem )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAllocDeviceMem( hDriver, device_desc, size, alignment, hDevice, pptr );
 }
@@ -139,14 +146,17 @@ zeDriverAllocDeviceMem(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == host_desc
-///         + nullptr == pptr
-///         + unsupported allocation size
-///         + unsupported alignment
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT < host_desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == host_desc`
+///         + `nullptr == pptr`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT < host_desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + host_desc->flags
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_SIZE
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
@@ -160,7 +170,7 @@ zeDriverAllocHostMem(
 {
     auto pfnAllocHostMem = ze_lib::context.ddiTable.Driver.pfnAllocHostMem;
     if( nullptr == pfnAllocHostMem )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAllocHostMem( hDriver, host_desc, size, alignment, pptr );
 }
@@ -185,10 +195,10 @@ zeDriverAllocHostMem(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == ptr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
 ze_result_t __zecall
 zeDriverFreeMem(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -197,7 +207,7 @@ zeDriverFreeMem(
 {
     auto pfnFreeMem = ze_lib::context.ddiTable.Driver.pfnFreeMem;
     if( nullptr == pfnFreeMem )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnFreeMem( hDriver, ptr );
 }
@@ -216,11 +226,11 @@ zeDriverFreeMem(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == ptr
-///         + nullptr == pMemAllocProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
+///         + `nullptr == pMemAllocProperties`
 ze_result_t __zecall
 zeDriverGetMemAllocProperties(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -231,7 +241,7 @@ zeDriverGetMemAllocProperties(
 {
     auto pfnGetMemAllocProperties = ze_lib::context.ddiTable.Driver.pfnGetMemAllocProperties;
     if( nullptr == pfnGetMemAllocProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetMemAllocProperties( hDriver, ptr, pMemAllocProperties, phDevice );
 }
@@ -250,10 +260,10 @@ zeDriverGetMemAllocProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == ptr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
 ze_result_t __zecall
 zeDriverGetMemAddressRange(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -264,7 +274,7 @@ zeDriverGetMemAddressRange(
 {
     auto pfnGetMemAddressRange = ze_lib::context.ddiTable.Driver.pfnGetMemAddressRange;
     if( nullptr == pfnGetMemAddressRange )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetMemAddressRange( hDriver, ptr, pBase, pSize );
 }
@@ -286,11 +296,11 @@ zeDriverGetMemAddressRange(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == ptr
-///         + nullptr == pIpcHandle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
+///         + `nullptr == pIpcHandle`
 ze_result_t __zecall
 zeDriverGetMemIpcHandle(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -300,7 +310,7 @@ zeDriverGetMemIpcHandle(
 {
     auto pfnGetMemIpcHandle = ze_lib::context.ddiTable.Driver.pfnGetMemIpcHandle;
     if( nullptr == pfnGetMemIpcHandle )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetMemIpcHandle( hDriver, ptr, pIpcHandle );
 }
@@ -324,12 +334,13 @@ zeDriverGetMemIpcHandle(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == hDevice
-///         + nullptr == pptr
-///         + invalid flags
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + flags
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pptr`
 ze_result_t __zecall
 zeDriverOpenMemIpcHandle(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -341,7 +352,7 @@ zeDriverOpenMemIpcHandle(
 {
     auto pfnOpenMemIpcHandle = ze_lib::context.ddiTable.Driver.pfnOpenMemIpcHandle;
     if( nullptr == pfnOpenMemIpcHandle )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnOpenMemIpcHandle( hDriver, hDevice, handle, flags, pptr );
 }
@@ -363,10 +374,10 @@ zeDriverOpenMemIpcHandle(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == ptr
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
 ze_result_t __zecall
 zeDriverCloseMemIpcHandle(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -375,7 +386,7 @@ zeDriverCloseMemIpcHandle(
 {
     auto pfnCloseMemIpcHandle = ze_lib::context.ddiTable.Driver.pfnCloseMemIpcHandle;
     if( nullptr == pfnCloseMemIpcHandle )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnCloseMemIpcHandle( hDriver, ptr );
 }

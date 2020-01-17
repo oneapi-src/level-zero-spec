@@ -83,6 +83,8 @@ params:
     - type: $t_tracer_handle_t
       name: hTracer
       desc: "[in][release] handle of tracer object to destroy"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the collection of callbacks to be executed **before** driver execution."

@@ -27,6 +27,4 @@ params:
       name: flags
       desc: "[in] initialization flags"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid value for flags"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY

@@ -97,6 +97,8 @@ params:
     - type: $x_event_pool_handle_t
       name: hEventPool
       desc: "[in][release] handle of event pool object to destroy"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_event_desc_t"
@@ -192,6 +194,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][release] handle of event object to destroy"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Gets an IPC event pool handle for the specified event handle that can be shared with another process."
@@ -262,6 +266,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends wait on event(s) on the device into a command list."
@@ -280,6 +286,8 @@ params:
     - type: "$x_event_handle_t*"
       name: phEvents
       desc: "[in][range(0, numEvents)] handle of the events to wait on before continuing"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."
@@ -294,6 +302,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "The current host thread waits on an event to be signalled."
@@ -316,6 +326,7 @@ params:
             if zero, then operates exactly like $xEventQueryStatus;
             if UINT32_MAX, then function will not return until complete or device is lost.
 returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
     - $X_RESULT_NOT_READY:
        - "timeout expired"
 --- #--------------------------------------------------------------------------
@@ -335,6 +346,7 @@ params:
       name: hEvent
       desc: "[in] handle of the event"
 returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
     - $X_RESULT_NOT_READY:
         - not signaled
 --- #--------------------------------------------------------------------------
@@ -354,6 +366,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset an event back to not signaled state"
@@ -368,6 +382,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for event pool"

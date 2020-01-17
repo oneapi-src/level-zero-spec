@@ -41,11 +41,9 @@ typedef struct _zet_global_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetGlobalProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -80,11 +78,9 @@ typedef struct _zet_device_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetDeviceProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -143,11 +139,9 @@ typedef struct _zet_command_list_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetCommandListProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -183,11 +177,9 @@ typedef struct _zet_module_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetModuleProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -221,11 +213,9 @@ typedef struct _zet_kernel_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetKernelProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -279,11 +269,9 @@ typedef struct _zet_metric_group_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetMetricGroupProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -326,11 +314,9 @@ typedef struct _zet_metric_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetMetricProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -384,11 +370,9 @@ typedef struct _zet_metric_tracer_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetMetricTracerProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -431,11 +415,9 @@ typedef struct _zet_metric_query_pool_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetMetricQueryPoolProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -493,11 +475,9 @@ typedef struct _zet_metric_query_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetMetricQueryProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -565,11 +545,9 @@ typedef struct _zet_tracer_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetTracerProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -888,11 +866,9 @@ typedef struct _zet_sysman_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -970,11 +946,9 @@ typedef struct _zet_sysman_power_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanPowerProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1106,11 +1080,9 @@ typedef struct _zet_sysman_frequency_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanFrequencyProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1152,11 +1124,9 @@ typedef struct _zet_sysman_engine_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanEngineProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1206,11 +1176,9 @@ typedef struct _zet_sysman_standby_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanStandbyProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1261,11 +1229,9 @@ typedef struct _zet_sysman_firmware_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanFirmwareProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1315,11 +1281,9 @@ typedef struct _zet_sysman_memory_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanMemoryProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1394,11 +1358,9 @@ typedef struct _zet_sysman_fabric_port_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanFabricPortProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1456,11 +1418,9 @@ typedef struct _zet_sysman_temperature_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanTemperatureProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1502,11 +1462,9 @@ typedef struct _zet_sysman_psu_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanPsuProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1565,11 +1523,9 @@ typedef struct _zet_sysman_fan_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanFanProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1619,11 +1575,9 @@ typedef struct _zet_sysman_led_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanLedProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1683,11 +1637,9 @@ typedef struct _zet_sysman_ras_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanRasProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1740,11 +1692,9 @@ typedef struct _zet_sysman_diagnostics_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanDiagnosticsProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1806,11 +1756,9 @@ typedef struct _zet_sysman_event_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetSysmanEventProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -1932,11 +1880,9 @@ typedef struct _zet_debug_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zetGetDebugProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested

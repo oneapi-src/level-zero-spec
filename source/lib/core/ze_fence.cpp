@@ -32,12 +32,15 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandQueue
-///         + nullptr == desc
-///         + nullptr == phFence
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZE_FENCE_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandQueue`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == phFence`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZE_FENCE_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
@@ -49,7 +52,7 @@ zeFenceCreate(
 {
     auto pfnCreate = ze_lib::context.ddiTable.Fence.pfnCreate;
     if( nullptr == pfnCreate )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnCreate( hCommandQueue, desc, phFence );
 }
@@ -74,10 +77,9 @@ zeFenceCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFence
-///         + fence is enqueued in a command queue
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFence`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zeFenceDestroy(
     ze_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
@@ -85,7 +87,7 @@ zeFenceDestroy(
 {
     auto pfnDestroy = ze_lib::context.ddiTable.Fence.pfnDestroy;
     if( nullptr == pfnDestroy )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDestroy( hFence );
 }
@@ -105,10 +107,9 @@ zeFenceDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFence
-///         + fence is not enqueued in a command queue
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFence`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ///     - ::ZE_RESULT_NOT_READY
 ///         + timeout expired
 ze_result_t __zecall
@@ -123,7 +124,7 @@ zeFenceHostSynchronize(
 {
     auto pfnHostSynchronize = ze_lib::context.ddiTable.Fence.pfnHostSynchronize;
     if( nullptr == pfnHostSynchronize )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnHostSynchronize( hFence, timeout );
 }
@@ -143,10 +144,9 @@ zeFenceHostSynchronize(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFence
-///         + fence is not enqueued in a command queue
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFence`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ///     - ::ZE_RESULT_NOT_READY
 ///         + not signaled
 ze_result_t __zecall
@@ -156,7 +156,7 @@ zeFenceQueryStatus(
 {
     auto pfnQueryStatus = ze_lib::context.ddiTable.Fence.pfnQueryStatus;
     if( nullptr == pfnQueryStatus )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnQueryStatus( hFence );
 }
@@ -176,9 +176,8 @@ zeFenceQueryStatus(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFence
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFence`
 ze_result_t __zecall
 zeFenceReset(
     ze_fence_handle_t hFence                        ///< [in] handle of the fence
@@ -186,7 +185,7 @@ zeFenceReset(
 {
     auto pfnReset = ze_lib::context.ddiTable.Fence.pfnReset;
     if( nullptr == pfnReset )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnReset( hFence );
 }

@@ -36,11 +36,10 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pCount
-///         + devices do not contain a given metric group
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetMetricGroupGet(
     zet_device_handle_t hDevice,                    ///< [in] handle of the device
@@ -108,11 +107,10 @@ typedef struct _zet_metric_group_properties_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricGroup
-///         + nullptr == pProperties
-///         + invalid metric group handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricGroup`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetMetricGroupGetProperties(
     zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
@@ -177,12 +175,11 @@ typedef struct _zet_typed_value_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricGroup
-///         + nullptr == pRawData
-///         + nullptr == pMetricValueCount
-///         + invalid metric group handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricGroup`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pRawData`
+///         + `nullptr == pMetricValueCount`
 ze_result_t __zecall
 zetMetricGroupCalculateMetricValues(
     zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
@@ -210,11 +207,10 @@ zetMetricGroupCalculateMetricValues(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricGroup
-///         + nullptr == pCount
-///         + invalid metric group handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricGroup`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetMetricGet(
     zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
@@ -284,11 +280,10 @@ typedef struct _zet_metric_properties_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetric
-///         + nullptr == pProperties
-///         + invalid handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetric`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetMetricGetProperties(
     zet_metric_handle_t hMetric,                    ///< [in] handle of the metric
@@ -308,10 +303,8 @@ zetMetricGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + invalid metric groups
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
 ze_result_t __zecall
 zetDeviceActivateMetricGroups(
     zet_device_handle_t hDevice,                    ///< [in] handle of the device
@@ -350,14 +343,16 @@ typedef struct _zet_metric_tracer_desc_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == hMetricGroup
-///         + nullptr == desc
-///         + nullptr == phMetricTracer
-///         + devices do not support metric tracer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZET_METRIC_TRACER_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///         + `nullptr == hMetricGroup`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == phMetricTracer`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZET_METRIC_TRACER_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zetMetricTracerOpen(
     zet_device_handle_t hDevice,                    ///< [in] handle of the device
@@ -379,11 +374,9 @@ zetMetricTracerOpen(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hMetricTracer
-///         + command list do not support metric tracer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hMetricTracer`
 ze_result_t __zecall
 zetCommandListAppendMetricTracerMarker(
     zet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
@@ -402,10 +395,8 @@ zetCommandListAppendMetricTracerMarker(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricTracer
-///         + invalid metric tracer handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricTracer`
 ze_result_t __zecall
 zetMetricTracerClose(
     zet_metric_tracer_handle_t hMetricTracer        ///< [in][release] handle of the metric tracer
@@ -421,11 +412,10 @@ zetMetricTracerClose(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricTracer
-///         + nullptr == pRawDataSize
-///         + invalid metric tracer handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricTracer`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pRawDataSize`
 ze_result_t __zecall
 zetMetricTracerReadData(
     zet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
@@ -479,14 +469,16 @@ typedef struct _zet_metric_query_pool_desc_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == hMetricGroup
-///         + nullptr == desc
-///         + nullptr == phMetricQueryPool
-///         + invalid device handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///         + `nullptr == hMetricGroup`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == phMetricQueryPool`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->flags
 ze_result_t __zecall
 zetMetricQueryPoolCreate(
     zet_device_handle_t hDevice,                    ///< [in] handle of the device
@@ -511,10 +503,9 @@ zetMetricQueryPoolCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricQueryPool
-///         + invalid metric query pool handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricQueryPool`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zetMetricQueryPoolDestroy(
     zet_metric_query_pool_handle_t hMetricQueryPool ///< [in][release] handle of the metric query pool
@@ -530,11 +521,10 @@ zetMetricQueryPoolDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricQueryPool
-///         + nullptr == phMetricQuery
-///         + invalid device handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricQueryPool`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phMetricQuery`
 ze_result_t __zecall
 zetMetricQueryCreate(
     zet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
@@ -555,10 +545,9 @@ zetMetricQueryCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricQuery
-///         + invalid device handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricQuery`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zetMetricQueryDestroy(
     zet_metric_query_handle_t hMetricQuery          ///< [in][release] handle of metric query
@@ -577,10 +566,8 @@ zetMetricQueryDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricQuery
-///         + invalid device handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricQuery`
 ze_result_t __zecall
 zetMetricQueryReset(
     zet_metric_query_handle_t hMetricQuery          ///< [in] handle of metric query
@@ -597,11 +584,9 @@ zetMetricQueryReset(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hMetricQuery
-///         + invalid handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hMetricQuery`
 ze_result_t __zecall
 zetCommandListAppendMetricQueryBegin(
     zet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
@@ -619,11 +604,10 @@ zetCommandListAppendMetricQueryBegin(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hMetricQuery
-///         + invalid handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hMetricQuery`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zetCommandListAppendMetricQueryEnd(
     zet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
@@ -642,10 +626,8 @@ zetCommandListAppendMetricQueryEnd(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + invalid command list handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
 ze_result_t __zecall
 zetCommandListAppendMetricMemoryBarrier(
     zet_command_list_handle_t hCommandList          ///< [in] handle of the command list
@@ -661,11 +643,10 @@ zetCommandListAppendMetricMemoryBarrier(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricQuery
-///         + nullptr == pRawDataSize
-///         + invalid metric query handle
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMetricQuery`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pRawDataSize`
 ze_result_t __zecall
 zetMetricQueryGetData(
     zet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query

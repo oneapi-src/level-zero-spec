@@ -117,7 +117,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnGetApiVersion = dditable->ze.Driver.pfnGetApiVersion;
         if( nullptr == pfnGetApiVersion )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -142,7 +142,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnGetProperties = dditable->ze.Driver.pfnGetProperties;
         if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -167,7 +167,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnGetIPCProperties = dditable->ze.Driver.pfnGetIPCProperties;
         if( nullptr == pfnGetIPCProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -193,7 +193,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnGetExtensionFunctionAddress = dditable->ze.Driver.pfnGetExtensionFunctionAddress;
         if( nullptr == pfnGetExtensionFunctionAddress )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -224,7 +224,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnGet = dditable->ze.Device.pfnGet;
         if( nullptr == pfnGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -267,7 +267,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetSubDevices = dditable->ze.Device.pfnGetSubDevices;
         if( nullptr == pfnGetSubDevices )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -304,7 +304,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetProperties = dditable->ze.Device.pfnGetProperties;
         if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -329,7 +329,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetComputeProperties = dditable->ze.Device.pfnGetComputeProperties;
         if( nullptr == pfnGetComputeProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -354,7 +354,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetKernelProperties = dditable->ze.Device.pfnGetKernelProperties;
         if( nullptr == pfnGetKernelProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -388,7 +388,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetMemoryProperties = dditable->ze.Device.pfnGetMemoryProperties;
         if( nullptr == pfnGetMemoryProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -413,7 +413,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetMemoryAccessProperties = dditable->ze.Device.pfnGetMemoryAccessProperties;
         if( nullptr == pfnGetMemoryAccessProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -438,7 +438,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetCacheProperties = dditable->ze.Device.pfnGetCacheProperties;
         if( nullptr == pfnGetCacheProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -463,7 +463,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetImageProperties = dditable->ze.Device.pfnGetImageProperties;
         if( nullptr == pfnGetImageProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -489,7 +489,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetP2PProperties = dditable->ze.Device.pfnGetP2PProperties;
         if( nullptr == pfnGetP2PProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -518,7 +518,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnCanAccessPeer = dditable->ze.Device.pfnCanAccessPeer;
         if( nullptr == pfnCanAccessPeer )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -546,7 +546,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnSetLastLevelCacheConfig = dditable->ze.Device.pfnSetLastLevelCacheConfig;
         if( nullptr == pfnSetLastLevelCacheConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -572,7 +572,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnCreate = dditable->ze.CommandQueue.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -607,7 +607,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_queue_object_t*>( hCommandQueue )->dditable;
         auto pfnDestroy = dditable->ze.CommandQueue.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandQueue = reinterpret_cast<ze_command_queue_object_t*>( hCommandQueue )->handle;
@@ -638,7 +638,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_queue_object_t*>( hCommandQueue )->dditable;
         auto pfnExecuteCommandLists = dditable->ze.CommandQueue.pfnExecuteCommandLists;
         if( nullptr == pfnExecuteCommandLists )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandQueue = reinterpret_cast<ze_command_queue_object_t*>( hCommandQueue )->handle;
@@ -674,7 +674,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_queue_object_t*>( hCommandQueue )->dditable;
         auto pfnSynchronize = dditable->ze.CommandQueue.pfnSynchronize;
         if( nullptr == pfnSynchronize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandQueue = reinterpret_cast<ze_command_queue_object_t*>( hCommandQueue )->handle;
@@ -700,7 +700,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnCreate = dditable->ze.CommandList.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -737,7 +737,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnCreateImmediate = dditable->ze.CommandList.pfnCreateImmediate;
         if( nullptr == pfnCreateImmediate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -772,7 +772,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnDestroy = dditable->ze.CommandList.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -799,7 +799,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnClose = dditable->ze.CommandList.pfnClose;
         if( nullptr == pfnClose )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -823,7 +823,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnReset = dditable->ze.CommandList.pfnReset;
         if( nullptr == pfnReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -851,7 +851,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendBarrier = dditable->ze.CommandList.pfnAppendBarrier;
         if( nullptr == pfnAppendBarrier )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -889,7 +889,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendMemoryRangesBarrier = dditable->ze.CommandList.pfnAppendMemoryRangesBarrier;
         if( nullptr == pfnAppendMemoryRangesBarrier )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -920,7 +920,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnSystemBarrier = dditable->ze.Device.pfnSystemBarrier;
         if( nullptr == pfnSystemBarrier )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -948,7 +948,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnRegisterCLMemory = dditable->ze.Device.pfnRegisterCLMemory;
         if( nullptr == pfnRegisterCLMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -977,7 +977,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnRegisterCLProgram = dditable->ze.Device.pfnRegisterCLProgram;
         if( nullptr == pfnRegisterCLProgram )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -1017,7 +1017,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnRegisterCLCommandQueue = dditable->ze.Device.pfnRegisterCLCommandQueue;
         if( nullptr == pfnRegisterCLCommandQueue )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -1057,7 +1057,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendMemoryCopy = dditable->ze.CommandList.pfnAppendMemoryCopy;
         if( nullptr == pfnAppendMemoryCopy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1089,7 +1089,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendMemoryFill = dditable->ze.CommandList.pfnAppendMemoryFill;
         if( nullptr == pfnAppendMemoryFill )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1123,7 +1123,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendMemoryCopyRegion = dditable->ze.CommandList.pfnAppendMemoryCopyRegion;
         if( nullptr == pfnAppendMemoryCopyRegion )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1153,7 +1153,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendImageCopy = dditable->ze.CommandList.pfnAppendImageCopy;
         if( nullptr == pfnAppendImageCopy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1191,7 +1191,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendImageCopyRegion = dditable->ze.CommandList.pfnAppendImageCopyRegion;
         if( nullptr == pfnAppendImageCopyRegion )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1228,7 +1228,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendImageCopyToMemory = dditable->ze.CommandList.pfnAppendImageCopyToMemory;
         if( nullptr == pfnAppendImageCopyToMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1262,7 +1262,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendImageCopyFromMemory = dditable->ze.CommandList.pfnAppendImageCopyFromMemory;
         if( nullptr == pfnAppendImageCopyFromMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1294,7 +1294,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendMemoryPrefetch = dditable->ze.CommandList.pfnAppendMemoryPrefetch;
         if( nullptr == pfnAppendMemoryPrefetch )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1322,7 +1322,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendMemAdvise = dditable->ze.CommandList.pfnAppendMemAdvise;
         if( nullptr == pfnAppendMemAdvise )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1356,7 +1356,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnCreate = dditable->ze.EventPool.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -1395,7 +1395,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_event_pool_object_t*>( hEventPool )->dditable;
         auto pfnDestroy = dditable->ze.EventPool.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hEventPool = reinterpret_cast<ze_event_pool_object_t*>( hEventPool )->handle;
@@ -1424,7 +1424,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_event_pool_object_t*>( hEventPool )->dditable;
         auto pfnCreate = dditable->ze.Event.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hEventPool = reinterpret_cast<ze_event_pool_object_t*>( hEventPool )->handle;
@@ -1459,7 +1459,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_event_object_t*>( hEvent )->dditable;
         auto pfnDestroy = dditable->ze.Event.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<ze_event_object_t*>( hEvent )->handle;
@@ -1487,7 +1487,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_event_pool_object_t*>( hEventPool )->dditable;
         auto pfnGetIpcHandle = dditable->ze.EventPool.pfnGetIpcHandle;
         if( nullptr == pfnGetIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hEventPool = reinterpret_cast<ze_event_pool_object_t*>( hEventPool )->handle;
@@ -1513,7 +1513,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnOpenIpcHandle = dditable->ze.EventPool.pfnOpenIpcHandle;
         if( nullptr == pfnOpenIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -1548,7 +1548,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_event_pool_object_t*>( hEventPool )->dditable;
         auto pfnCloseIpcHandle = dditable->ze.EventPool.pfnCloseIpcHandle;
         if( nullptr == pfnCloseIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hEventPool = reinterpret_cast<ze_event_pool_object_t*>( hEventPool )->handle;
@@ -1576,7 +1576,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendSignalEvent = dditable->ze.CommandList.pfnAppendSignalEvent;
         if( nullptr == pfnAppendSignalEvent )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1606,7 +1606,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendWaitOnEvents = dditable->ze.CommandList.pfnAppendWaitOnEvents;
         if( nullptr == pfnAppendWaitOnEvents )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1634,7 +1634,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_event_object_t*>( hEvent )->dditable;
         auto pfnHostSignal = dditable->ze.Event.pfnHostSignal;
         if( nullptr == pfnHostSignal )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<ze_event_object_t*>( hEvent )->handle;
@@ -1663,7 +1663,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_event_object_t*>( hEvent )->dditable;
         auto pfnHostSynchronize = dditable->ze.Event.pfnHostSynchronize;
         if( nullptr == pfnHostSynchronize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<ze_event_object_t*>( hEvent )->handle;
@@ -1687,7 +1687,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_event_object_t*>( hEvent )->dditable;
         auto pfnQueryStatus = dditable->ze.Event.pfnQueryStatus;
         if( nullptr == pfnQueryStatus )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<ze_event_object_t*>( hEvent )->handle;
@@ -1712,7 +1712,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendEventReset = dditable->ze.CommandList.pfnAppendEventReset;
         if( nullptr == pfnAppendEventReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -1739,7 +1739,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_event_object_t*>( hEvent )->dditable;
         auto pfnHostReset = dditable->ze.Event.pfnHostReset;
         if( nullptr == pfnHostReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<ze_event_object_t*>( hEvent )->handle;
@@ -1765,7 +1765,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_queue_object_t*>( hCommandQueue )->dditable;
         auto pfnCreate = dditable->ze.Fence.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandQueue = reinterpret_cast<ze_command_queue_object_t*>( hCommandQueue )->handle;
@@ -1800,7 +1800,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_fence_object_t*>( hFence )->dditable;
         auto pfnDestroy = dditable->ze.Fence.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hFence = reinterpret_cast<ze_fence_object_t*>( hFence )->handle;
@@ -1832,7 +1832,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_fence_object_t*>( hFence )->dditable;
         auto pfnHostSynchronize = dditable->ze.Fence.pfnHostSynchronize;
         if( nullptr == pfnHostSynchronize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hFence = reinterpret_cast<ze_fence_object_t*>( hFence )->handle;
@@ -1856,7 +1856,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_fence_object_t*>( hFence )->dditable;
         auto pfnQueryStatus = dditable->ze.Fence.pfnQueryStatus;
         if( nullptr == pfnQueryStatus )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hFence = reinterpret_cast<ze_fence_object_t*>( hFence )->handle;
@@ -1880,7 +1880,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_fence_object_t*>( hFence )->dditable;
         auto pfnReset = dditable->ze.Fence.pfnReset;
         if( nullptr == pfnReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hFence = reinterpret_cast<ze_fence_object_t*>( hFence )->handle;
@@ -1906,7 +1906,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnGetProperties = dditable->ze.Image.pfnGetProperties;
         if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -1932,7 +1932,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnCreate = dditable->ze.Image.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -1967,7 +1967,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_image_object_t*>( hImage )->dditable;
         auto pfnDestroy = dditable->ze.Image.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hImage = reinterpret_cast<ze_image_object_t*>( hImage )->handle;
@@ -2000,7 +2000,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnAllocSharedMem = dditable->ze.Driver.pfnAllocSharedMem;
         if( nullptr == pfnAllocSharedMem )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -2032,7 +2032,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnAllocDeviceMem = dditable->ze.Driver.pfnAllocDeviceMem;
         if( nullptr == pfnAllocDeviceMem )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -2063,7 +2063,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnAllocHostMem = dditable->ze.Driver.pfnAllocHostMem;
         if( nullptr == pfnAllocHostMem )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -2088,7 +2088,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnFreeMem = dditable->ze.Driver.pfnFreeMem;
         if( nullptr == pfnFreeMem )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -2115,7 +2115,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnGetMemAllocProperties = dditable->ze.Driver.pfnGetMemAllocProperties;
         if( nullptr == pfnGetMemAllocProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -2154,7 +2154,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnGetMemAddressRange = dditable->ze.Driver.pfnGetMemAddressRange;
         if( nullptr == pfnGetMemAddressRange )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -2180,7 +2180,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnGetMemIpcHandle = dditable->ze.Driver.pfnGetMemIpcHandle;
         if( nullptr == pfnGetMemIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -2208,7 +2208,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnOpenMemIpcHandle = dditable->ze.Driver.pfnOpenMemIpcHandle;
         if( nullptr == pfnOpenMemIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -2236,7 +2236,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_driver_object_t*>( hDriver )->dditable;
         auto pfnCloseMemIpcHandle = dditable->ze.Driver.pfnCloseMemIpcHandle;
         if( nullptr == pfnCloseMemIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<ze_driver_object_t*>( hDriver )->handle;
@@ -2263,7 +2263,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnCreate = dditable->ze.Module.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -2310,7 +2310,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_module_object_t*>( hModule )->dditable;
         auto pfnDestroy = dditable->ze.Module.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<ze_module_object_t*>( hModule )->handle;
@@ -2337,7 +2337,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_module_build_log_object_t*>( hModuleBuildLog )->dditable;
         auto pfnDestroy = dditable->ze.ModuleBuildLog.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hModuleBuildLog = reinterpret_cast<ze_module_build_log_object_t*>( hModuleBuildLog )->handle;
@@ -2366,7 +2366,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_module_build_log_object_t*>( hModuleBuildLog )->dditable;
         auto pfnGetString = dditable->ze.ModuleBuildLog.pfnGetString;
         if( nullptr == pfnGetString )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hModuleBuildLog = reinterpret_cast<ze_module_build_log_object_t*>( hModuleBuildLog )->handle;
@@ -2392,7 +2392,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_module_object_t*>( hModule )->dditable;
         auto pfnGetNativeBinary = dditable->ze.Module.pfnGetNativeBinary;
         if( nullptr == pfnGetNativeBinary )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<ze_module_object_t*>( hModule )->handle;
@@ -2418,7 +2418,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_module_object_t*>( hModule )->dditable;
         auto pfnGetGlobalPointer = dditable->ze.Module.pfnGetGlobalPointer;
         if( nullptr == pfnGetGlobalPointer )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<ze_module_object_t*>( hModule )->handle;
@@ -2449,7 +2449,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_module_object_t*>( hModule )->dditable;
         auto pfnGetKernelNames = dditable->ze.Module.pfnGetKernelNames;
         if( nullptr == pfnGetKernelNames )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<ze_module_object_t*>( hModule )->handle;
@@ -2475,7 +2475,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_module_object_t*>( hModule )->dditable;
         auto pfnCreate = dditable->ze.Kernel.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<ze_module_object_t*>( hModule )->handle;
@@ -2510,7 +2510,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
         auto pfnDestroy = dditable->ze.Kernel.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
@@ -2539,7 +2539,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_module_object_t*>( hModule )->dditable;
         auto pfnGetFunctionPointer = dditable->ze.Module.pfnGetFunctionPointer;
         if( nullptr == pfnGetFunctionPointer )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<ze_module_object_t*>( hModule )->handle;
@@ -2566,7 +2566,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
         auto pfnSetGroupSize = dditable->ze.Kernel.pfnSetGroupSize;
         if( nullptr == pfnSetGroupSize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
@@ -2596,7 +2596,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
         auto pfnSuggestGroupSize = dditable->ze.Kernel.pfnSuggestGroupSize;
         if( nullptr == pfnSuggestGroupSize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
@@ -2621,7 +2621,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
         auto pfnSuggestMaxCooperativeGroupCount = dditable->ze.Kernel.pfnSuggestMaxCooperativeGroupCount;
         if( nullptr == pfnSuggestMaxCooperativeGroupCount )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
@@ -2649,7 +2649,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
         auto pfnSetArgumentValue = dditable->ze.Kernel.pfnSetArgumentValue;
         if( nullptr == pfnSetArgumentValue )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
@@ -2675,7 +2675,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
         auto pfnSetAttribute = dditable->ze.Kernel.pfnSetAttribute;
         if( nullptr == pfnSetAttribute )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
@@ -2700,7 +2700,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
         auto pfnSetIntermediateCacheConfig = dditable->ze.Kernel.pfnSetIntermediateCacheConfig;
         if( nullptr == pfnSetIntermediateCacheConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
@@ -2725,7 +2725,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
         auto pfnGetProperties = dditable->ze.Kernel.pfnGetProperties;
         if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
@@ -2755,7 +2755,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendLaunchKernel = dditable->ze.CommandList.pfnAppendLaunchKernel;
         if( nullptr == pfnAppendLaunchKernel )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -2795,7 +2795,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendLaunchCooperativeKernel = dditable->ze.CommandList.pfnAppendLaunchCooperativeKernel;
         if( nullptr == pfnAppendLaunchCooperativeKernel )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -2836,7 +2836,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendLaunchKernelIndirect = dditable->ze.CommandList.pfnAppendLaunchKernelIndirect;
         if( nullptr == pfnAppendLaunchKernelIndirect )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -2881,7 +2881,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->dditable;
         auto pfnAppendLaunchMultipleKernelsIndirect = dditable->ze.CommandList.pfnAppendLaunchMultipleKernelsIndirect;
         if( nullptr == pfnAppendLaunchMultipleKernelsIndirect )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<ze_command_list_object_t*>( hCommandList )->handle;
@@ -2918,7 +2918,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnMakeMemoryResident = dditable->ze.Device.pfnMakeMemoryResident;
         if( nullptr == pfnMakeMemoryResident )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -2944,7 +2944,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnEvictMemory = dditable->ze.Device.pfnEvictMemory;
         if( nullptr == pfnEvictMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -2969,7 +2969,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnMakeImageResident = dditable->ze.Device.pfnMakeImageResident;
         if( nullptr == pfnMakeImageResident )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -2997,7 +2997,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnEvictImage = dditable->ze.Device.pfnEvictImage;
         if( nullptr == pfnEvictImage )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -3026,7 +3026,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnCreate = dditable->ze.Sampler.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -3061,7 +3061,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_sampler_object_t*>( hSampler )->dditable;
         auto pfnDestroy = dditable->ze.Sampler.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hSampler = reinterpret_cast<ze_sampler_object_t*>( hSampler )->handle;
@@ -3087,11 +3087,9 @@ extern "C" {
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetDriverProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3102,10 +3100,10 @@ zeGetDriverProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3164,11 +3162,9 @@ zeGetDriverProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetGlobalProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3179,10 +3175,10 @@ zeGetGlobalProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3228,11 +3224,9 @@ zeGetGlobalProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetDeviceProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3243,10 +3237,10 @@ zeGetDeviceProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3323,11 +3317,9 @@ zeGetDeviceProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetCommandQueueProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3338,10 +3330,10 @@ zeGetCommandQueueProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3390,11 +3382,9 @@ zeGetCommandQueueProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetCommandListProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3405,10 +3395,10 @@ zeGetCommandListProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3476,11 +3466,9 @@ zeGetCommandListProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetFenceProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3491,10 +3479,10 @@ zeGetFenceProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3544,11 +3532,9 @@ zeGetFenceProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetEventPoolProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3559,10 +3545,10 @@ zeGetEventPoolProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3612,11 +3598,9 @@ zeGetEventPoolProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetEventProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3627,10 +3611,10 @@ zeGetEventProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3681,11 +3665,9 @@ zeGetEventProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetImageProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3696,10 +3678,10 @@ zeGetImageProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3747,11 +3729,9 @@ zeGetImageProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetModuleProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3762,10 +3742,10 @@ zeGetModuleProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3816,11 +3796,9 @@ zeGetModuleProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetModuleBuildLogProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3831,10 +3809,10 @@ zeGetModuleBuildLogProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3881,11 +3859,9 @@ zeGetModuleBuildLogProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetKernelProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3896,10 +3872,10 @@ zeGetKernelProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3953,11 +3929,9 @@ zeGetKernelProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetSamplerProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3968,10 +3942,10 @@ zeGetSamplerProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 

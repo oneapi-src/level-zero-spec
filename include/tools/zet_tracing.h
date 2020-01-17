@@ -66,12 +66,15 @@ typedef struct _zet_tracer_desc_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == desc
-///         + nullptr == phTracer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZET_TRACER_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == desc->pUserData`
+///         + `nullptr == phTracer`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZET_TRACER_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ze_result_t __zecall
 zetTracerCreate(
@@ -94,9 +97,9 @@ zetTracerCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTracer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTracer`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zetTracerDestroy(
     zet_tracer_handle_t hTracer                     ///< [in][release] handle of tracer object to destroy
@@ -118,10 +121,10 @@ zetTracerDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTracer
-///         + nullptr == pCoreCbs
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTracer`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCoreCbs`
 ze_result_t __zecall
 zetTracerSetPrologues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
@@ -146,10 +149,10 @@ zetTracerSetPrologues(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTracer
-///         + nullptr == pCoreCbs
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTracer`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCoreCbs`
 ze_result_t __zecall
 zetTracerSetEpilogues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
@@ -169,9 +172,8 @@ zetTracerSetEpilogues(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTracer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTracer`
 ze_result_t __zecall
 zetTracerSetEnabled(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer

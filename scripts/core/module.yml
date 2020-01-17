@@ -107,15 +107,12 @@ params:
       name: phBuildLog
       desc: "[out][optional] pointer to handle of module's build log."
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid pDesc->format"
-        - "nullptr == pDesc->pInputModule"
-        - "nullptr == pDesc->phModule"
-        - "0 == pDesc->inputSize"
+    - $X_RESULT_ERROR_INVALID_NATIVE_BINARY
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`0 == desc->inputSize`"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-    - $X_RESULT_ERROR_MODULE_BUILD_FAILURE:
-        - "Failure to build module. See build log for more details."
+    - $X_RESULT_ERROR_MODULE_BUILD_FAILURE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module"
@@ -134,6 +131,8 @@ params:
     - type: "$x_module_handle_t"
       name: hModule
       desc: "[in][release] handle of the module"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module build log object"
@@ -150,6 +149,8 @@ params:
     - type: "$x_module_build_log_handle_t"
       name: hModuleBuildLog
       desc: "[in][release] handle of the module build log object."
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves text string for build log."
@@ -211,9 +212,7 @@ params:
       name: pptr
       desc: "[out] device visible pointer"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid name"
-    - $X_RESULT_ERROR_UNSUPPORTED
+    - $X_RESULT_ERROR_INVALID_GLOBAL_NAME
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve all kernel names in the module."
@@ -297,9 +296,9 @@ params:
       name:  phKernel
       desc: "[out] handle of the Function object"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "nullptr == pDesc->pKernelName"
-        - "invalid value for pDesc->pKernelName"
+    - $X_RESULT_ERROR_INVALID_NULL_POINTER:
+        - "`nullptr == desc->pKernelName`"
+    - $X_RESULT_ERROR_INVALID_KERNEL_NAME
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a kernel object"
@@ -317,6 +316,8 @@ params:
     - type: "$x_kernel_handle_t"
       name: hKernel
       desc: "[in][release] handle of the kernel object"  
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve a function pointer from a module by name"
@@ -338,8 +339,7 @@ params:
       name:  pfnFunction
       desc: "[out] pointer to function."
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid value pFunctionName. Function name must exist in Module."
+    - $X_RESULT_ERROR_INVALID_FUNCTION_NAME
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set group size for a kernel"
@@ -362,6 +362,8 @@ params:
     - type: "uint32_t"
       name: groupSizeZ
       desc: "[in] group size for Z dimension to use for this kernel"
+returns:
+    - $X_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a suggested group size for a kernel given a global size for each dimension."
@@ -394,8 +396,7 @@ params:
       name: groupSizeZ
       desc: "[out] recommended size of group for Z dimension"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid global width"
+    - $X_RESULT_ERROR_INVALID_GLOBAL_WIDTH_DIMENSION
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query a suggested max group count a cooperative kernel."
@@ -411,9 +412,6 @@ params:
     - type: "uint32_t*"
       name: totalGroupCount
       desc: "[out] recommended total group count."
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid number of threads."        
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set kernel argument used on kernel launch."
@@ -437,9 +435,8 @@ params:
       name: pArgValue
       desc: "[in][optional] argument value represented as matching arg type. If null then argument value is considered null."
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid argument index"
-        - "invalid size specified"
+    - $X_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_INDEX
+    - $X_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_SIZE
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Kernel attributes"
@@ -476,9 +473,7 @@ params:
       name: value
       desc: "[in] attribute value to set"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid value for attr"
-        - "invalid value for value"
+    - $X_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the preferred Intermediate cache configuration for a kernel."
@@ -497,8 +492,7 @@ params:
       name: CacheConfig
       desc: "[in] CacheConfig"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "devices do not support CacheConfig"
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
 --- #--------------------------------------------------------------------------
 type: enum
 desc: API version of $x_kernel_properties_t
@@ -603,6 +597,8 @@ params:
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch kernel cooperatively over one or more work groups."
@@ -635,6 +631,8 @@ params:
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"      
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch kernel over one or more work groups using indirect arguments."
@@ -667,6 +665,8 @@ params:
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch multiple kernels over one or more work groups using an array of indirect arguments."
@@ -705,6 +705,8 @@ params:
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for module"

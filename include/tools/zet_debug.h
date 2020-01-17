@@ -68,10 +68,12 @@ typedef struct _zet_debug_config_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == config`
+///         + `nullptr == hDebug`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == config
-///         + nullptr == hDebug
 ///         + an invalid device handle has been supplied
 ///         + an invalid configuration has been supplied
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
@@ -94,10 +96,10 @@ zetDebugAttach(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
 ///         + an invalid debug handle has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugDetach(
     zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
@@ -110,11 +112,12 @@ zetDebugDetach(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pNumThreads`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == pNumThreads
 ///         + an invalid debug handle has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugGetNumThreads(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
@@ -132,7 +135,7 @@ zetDebugGetNumThreads(
 typedef enum _zet_debug_event_flags_t
 {
     ZET_DEBUG_EVENT_FLAG_NONE = 0,                  ///< No event flags
-    ZET_DEBUG_EVENT_FLAG_STOPPED = (1 << 0),        ///< The reporting thread stopped
+    ZET_DEBUG_EVENT_FLAG_STOPPED = ZE_BIT(0),       ///< The reporting thread stopped
 
 } zet_debug_event_flags_t;
 
@@ -216,11 +219,12 @@ typedef struct _zet_debug_event_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or buffer pointer has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///         + the output buffer is too small to hold the event
 ///     - ::ZE_RESULT_NOT_READY
@@ -240,11 +244,11 @@ zetDebugReadEvent(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is already stopped or unavailable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugInterrupt(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
@@ -258,11 +262,11 @@ zetDebugInterrupt(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is already running or unavailable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugResume(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
@@ -285,13 +289,14 @@ typedef enum _zet_debug_memory_space_intel_graphics_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid address has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
 ///         + the memory cannot be accessed from the supplied thread
 ze_result_t __zecall
@@ -311,13 +316,14 @@ zetDebugReadMemory(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid address has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
 ///         + the memory cannot be accessed from the supplied thread
 ze_result_t __zecall
@@ -371,13 +377,14 @@ typedef struct _zet_debug_state_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid offset or size has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugReadState(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
@@ -394,13 +401,14 @@ zetDebugReadState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid offset or size has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugWriteState(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle

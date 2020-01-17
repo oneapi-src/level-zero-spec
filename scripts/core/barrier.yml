@@ -36,6 +36,8 @@ params:
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before executing barrier"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends a global memory ranges barrier into a command list."
@@ -70,6 +72,8 @@ params:
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before executing barrier"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Ensures in-bound writes to the device are globally observable."

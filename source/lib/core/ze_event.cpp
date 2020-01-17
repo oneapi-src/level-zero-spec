@@ -28,12 +28,15 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == desc
-///         + nullptr == phEventPool
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZE_EVENT_POOL_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == phEventPool`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZE_EVENT_POOL_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
@@ -50,7 +53,7 @@ zeEventPoolCreate(
 {
     auto pfnCreate = ze_lib::context.ddiTable.EventPool.pfnCreate;
     if( nullptr == pfnCreate )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnCreate( hDriver, desc, numDevices, phDevices, phEventPool );
 }
@@ -74,9 +77,9 @@ zeEventPoolCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEventPool
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEventPool`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zeEventPoolDestroy(
     ze_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object to destroy
@@ -84,7 +87,7 @@ zeEventPoolDestroy(
 {
     auto pfnDestroy = ze_lib::context.ddiTable.EventPool.pfnDestroy;
     if( nullptr == pfnDestroy )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDestroy( hEventPool );
 }
@@ -108,12 +111,16 @@ zeEventPoolDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEventPool
-///         + nullptr == desc
-///         + nullptr == phEvent
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZE_EVENT_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEventPool`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == phEvent`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZE_EVENT_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->signal
+///         + desc->wait
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ze_result_t __zecall
 zeEventCreate(
@@ -124,7 +131,7 @@ zeEventCreate(
 {
     auto pfnCreate = ze_lib::context.ddiTable.Event.pfnCreate;
     if( nullptr == pfnCreate )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnCreate( hEventPool, desc, phEvent );
 }
@@ -151,9 +158,9 @@ zeEventCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEvent
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zeEventDestroy(
     ze_event_handle_t hEvent                        ///< [in][release] handle of event object to destroy
@@ -161,7 +168,7 @@ zeEventDestroy(
 {
     auto pfnDestroy = ze_lib::context.ddiTable.Event.pfnDestroy;
     if( nullptr == pfnDestroy )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDestroy( hEvent );
 }
@@ -181,10 +188,10 @@ zeEventDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEventPool
-///         + nullptr == phIpc
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEventPool`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phIpc`
 ze_result_t __zecall
 zeEventPoolGetIpcHandle(
     ze_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
@@ -193,7 +200,7 @@ zeEventPoolGetIpcHandle(
 {
     auto pfnGetIpcHandle = ze_lib::context.ddiTable.EventPool.pfnGetIpcHandle;
     if( nullptr == pfnGetIpcHandle )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetIpcHandle( hEventPool, phIpc );
 }
@@ -215,10 +222,10 @@ zeEventPoolGetIpcHandle(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == phEventPool
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phEventPool`
 ze_result_t __zecall
 zeEventPoolOpenIpcHandle(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver to associate with the IPC event pool handle
@@ -228,7 +235,7 @@ zeEventPoolOpenIpcHandle(
 {
     auto pfnOpenIpcHandle = ze_lib::context.ddiTable.EventPool.pfnOpenIpcHandle;
     if( nullptr == pfnOpenIpcHandle )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnOpenIpcHandle( hDriver, hIpc, phEventPool );
 }
@@ -250,9 +257,8 @@ zeEventPoolOpenIpcHandle(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEventPool
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEventPool`
 ze_result_t __zecall
 zeEventPoolCloseIpcHandle(
     ze_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object
@@ -260,7 +266,7 @@ zeEventPoolCloseIpcHandle(
 {
     auto pfnCloseIpcHandle = ze_lib::context.ddiTable.EventPool.pfnCloseIpcHandle;
     if( nullptr == pfnCloseIpcHandle )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnCloseIpcHandle( hEventPool );
 }
@@ -283,10 +289,10 @@ zeEventPoolCloseIpcHandle(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hEvent
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendSignalEvent(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -295,7 +301,7 @@ zeCommandListAppendSignalEvent(
 {
     auto pfnAppendSignalEvent = ze_lib::context.ddiTable.CommandList.pfnAppendSignalEvent;
     if( nullptr == pfnAppendSignalEvent )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendSignalEvent( hCommandList, hEvent );
 }
@@ -312,10 +318,11 @@ zeCommandListAppendSignalEvent(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == phEvents
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phEvents`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendWaitOnEvents(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -326,7 +333,7 @@ zeCommandListAppendWaitOnEvents(
 {
     auto pfnAppendWaitOnEvents = ze_lib::context.ddiTable.CommandList.pfnAppendWaitOnEvents;
     if( nullptr == pfnAppendWaitOnEvents )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
 }
@@ -346,9 +353,9 @@ zeCommandListAppendWaitOnEvents(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEvent
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeEventHostSignal(
     ze_event_handle_t hEvent                        ///< [in] handle of the event
@@ -356,7 +363,7 @@ zeEventHostSignal(
 {
     auto pfnHostSignal = ze_lib::context.ddiTable.Event.pfnHostSignal;
     if( nullptr == pfnHostSignal )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnHostSignal( hEvent );
 }
@@ -377,9 +384,9 @@ zeEventHostSignal(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEvent
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ///     - ::ZE_RESULT_NOT_READY
 ///         + timeout expired
 ze_result_t __zecall
@@ -394,7 +401,7 @@ zeEventHostSynchronize(
 {
     auto pfnHostSynchronize = ze_lib::context.ddiTable.Event.pfnHostSynchronize;
     if( nullptr == pfnHostSynchronize )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnHostSynchronize( hEvent, timeout );
 }
@@ -416,9 +423,9 @@ zeEventHostSynchronize(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEvent
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ///     - ::ZE_RESULT_NOT_READY
 ///         + not signaled
 ze_result_t __zecall
@@ -428,7 +435,7 @@ zeEventQueryStatus(
 {
     auto pfnQueryStatus = ze_lib::context.ddiTable.Event.pfnQueryStatus;
     if( nullptr == pfnQueryStatus )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnQueryStatus( hEvent );
 }
@@ -449,10 +456,10 @@ zeEventQueryStatus(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hEvent
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendEventReset(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -461,7 +468,7 @@ zeCommandListAppendEventReset(
 {
     auto pfnAppendEventReset = ze_lib::context.ddiTable.CommandList.pfnAppendEventReset;
     if( nullptr == pfnAppendEventReset )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAppendEventReset( hCommandList, hEvent );
 }
@@ -481,9 +488,9 @@ zeCommandListAppendEventReset(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEvent
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeEventHostReset(
     ze_event_handle_t hEvent                        ///< [in] handle of the event
@@ -491,7 +498,7 @@ zeEventHostReset(
 {
     auto pfnHostReset = ze_lib::context.ddiTable.Event.pfnHostReset;
     if( nullptr == pfnHostReset )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnHostReset( hEvent );
 }

@@ -50,7 +50,7 @@ extern "C" {
 /// ${line}
 %endfor
 /// 
-%for line in th.make_returns_lines(n, tags, obj):
+%for line in th.make_returns_lines(n, tags, obj, meta=meta):
 /// ${line}
 %endfor
 ${x}_result_t __${x}call
@@ -68,7 +68,7 @@ ${th.make_func_name(n, tags, obj)}(
 %endif
     auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::context.ddiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
     if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
-        return ${X}_RESULT_ERROR_UNSUPPORTED;
+        return ${X}_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 }

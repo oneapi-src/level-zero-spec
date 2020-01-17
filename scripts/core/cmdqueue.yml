@@ -147,6 +147,8 @@ params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
       desc: "[in][release] handle of command queue object to destroy"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Executes a command list in a command queue."
@@ -172,9 +174,10 @@ params:
       name: hFence
       desc: "[in][optional] handle of the fence to signal on completion"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-       - "0 for numCommandLists"
-       - "hFence is in signaled state"
+    - $X_RESULT_ERROR_INVALID_SIZE:
+       - "`0 == numCommandLists`"
+    - $X_RESULT_ERROR_INVALID_COMMAND_LIST_TYPE
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Synchronizes a command queue by waiting on the host."

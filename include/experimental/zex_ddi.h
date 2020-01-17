@@ -41,11 +41,9 @@ typedef struct _zex_global_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zexGetGlobalProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -80,11 +78,9 @@ typedef struct _zex_command_list_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zexGetCommandListProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -133,11 +129,9 @@ typedef struct _zex_command_graph_dditable_t
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zexGetCommandGraphProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested

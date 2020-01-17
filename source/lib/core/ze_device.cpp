@@ -32,10 +32,10 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zeDeviceGet(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -50,7 +50,7 @@ zeDeviceGet(
 {
     auto pfnGet = ze_lib::context.ddiTable.Device.pfnGet;
     if( nullptr == pfnGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGet( hDriver, pCount, phDevices );
 }
@@ -70,10 +70,10 @@ zeDeviceGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zeDeviceGetSubDevices(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device object
@@ -88,7 +88,7 @@ zeDeviceGetSubDevices(
 {
     auto pfnGetSubDevices = ze_lib::context.ddiTable.Device.pfnGetSubDevices;
     if( nullptr == pfnGetSubDevices )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetSubDevices( hDevice, pCount, phSubdevices );
 }
@@ -110,10 +110,10 @@ zeDeviceGetSubDevices(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pDeviceProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pDeviceProperties`
 ze_result_t __zecall
 zeDeviceGetProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -122,7 +122,7 @@ zeDeviceGetProperties(
 {
     auto pfnGetProperties = ze_lib::context.ddiTable.Device.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hDevice, pDeviceProperties );
 }
@@ -143,10 +143,10 @@ zeDeviceGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pComputeProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pComputeProperties`
 ze_result_t __zecall
 zeDeviceGetComputeProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -155,7 +155,7 @@ zeDeviceGetComputeProperties(
 {
     auto pfnGetComputeProperties = ze_lib::context.ddiTable.Device.pfnGetComputeProperties;
     if( nullptr == pfnGetComputeProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetComputeProperties( hDevice, pComputeProperties );
 }
@@ -171,10 +171,10 @@ zeDeviceGetComputeProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pKernelProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pKernelProperties`
 ze_result_t __zecall
 zeDeviceGetKernelProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -183,7 +183,7 @@ zeDeviceGetKernelProperties(
 {
     auto pfnGetKernelProperties = ze_lib::context.ddiTable.Device.pfnGetKernelProperties;
     if( nullptr == pfnGetKernelProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetKernelProperties( hDevice, pKernelProperties );
 }
@@ -207,10 +207,10 @@ zeDeviceGetKernelProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zeDeviceGetMemoryProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -228,7 +228,7 @@ zeDeviceGetMemoryProperties(
 {
     auto pfnGetMemoryProperties = ze_lib::context.ddiTable.Device.pfnGetMemoryProperties;
     if( nullptr == pfnGetMemoryProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetMemoryProperties( hDevice, pCount, pMemProperties );
 }
@@ -250,10 +250,10 @@ zeDeviceGetMemoryProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pMemAccessProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pMemAccessProperties`
 ze_result_t __zecall
 zeDeviceGetMemoryAccessProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -262,7 +262,7 @@ zeDeviceGetMemoryAccessProperties(
 {
     auto pfnGetMemoryAccessProperties = ze_lib::context.ddiTable.Device.pfnGetMemoryAccessProperties;
     if( nullptr == pfnGetMemoryAccessProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetMemoryAccessProperties( hDevice, pMemAccessProperties );
 }
@@ -284,10 +284,10 @@ zeDeviceGetMemoryAccessProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pCacheProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCacheProperties`
 ze_result_t __zecall
 zeDeviceGetCacheProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -296,7 +296,7 @@ zeDeviceGetCacheProperties(
 {
     auto pfnGetCacheProperties = ze_lib::context.ddiTable.Device.pfnGetCacheProperties;
     if( nullptr == pfnGetCacheProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetCacheProperties( hDevice, pCacheProperties );
 }
@@ -317,10 +317,10 @@ zeDeviceGetCacheProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pImageProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pImageProperties`
 ze_result_t __zecall
 zeDeviceGetImageProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -329,7 +329,7 @@ zeDeviceGetImageProperties(
 {
     auto pfnGetImageProperties = ze_lib::context.ddiTable.Device.pfnGetImageProperties;
     if( nullptr == pfnGetImageProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetImageProperties( hDevice, pImageProperties );
 }
@@ -350,11 +350,11 @@ zeDeviceGetImageProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == hPeerDevice
-///         + nullptr == pP2PProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///         + `nullptr == hPeerDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pP2PProperties`
 ze_result_t __zecall
 zeDeviceGetP2PProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
@@ -364,7 +364,7 @@ zeDeviceGetP2PProperties(
 {
     auto pfnGetP2PProperties = ze_lib::context.ddiTable.Device.pfnGetP2PProperties;
     if( nullptr == pfnGetP2PProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
 }
@@ -398,11 +398,11 @@ zeDeviceGetP2PProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == hPeerDevice
-///         + nullptr == value
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///         + `nullptr == hPeerDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == value`
 ze_result_t __zecall
 zeDeviceCanAccessPeer(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
@@ -412,7 +412,7 @@ zeDeviceCanAccessPeer(
 {
     auto pfnCanAccessPeer = ze_lib::context.ddiTable.Device.pfnCanAccessPeer;
     if( nullptr == pfnCanAccessPeer )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnCanAccessPeer( hDevice, hPeerDevice, value );
 }
@@ -432,10 +432,11 @@ zeDeviceCanAccessPeer(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + devices do not support CacheConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + CacheConfig
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ze_result_t __zecall
 zeDeviceSetLastLevelCacheConfig(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device 
@@ -444,7 +445,7 @@ zeDeviceSetLastLevelCacheConfig(
 {
     auto pfnSetLastLevelCacheConfig = ze_lib::context.ddiTable.Device.pfnSetLastLevelCacheConfig;
     if( nullptr == pfnSetLastLevelCacheConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
 }

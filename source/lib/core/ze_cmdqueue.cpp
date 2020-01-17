@@ -36,12 +36,17 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == desc
-///         + nullptr == phCommandQueue
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == phCommandQueue`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->flags
+///         + desc->mode
+///         + desc->priority
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
@@ -53,7 +58,7 @@ zeCommandQueueCreate(
 {
     auto pfnCreate = ze_lib::context.ddiTable.CommandQueue.pfnCreate;
     if( nullptr == pfnCreate )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnCreate( hDevice, desc, phCommandQueue );
 }
@@ -79,9 +84,9 @@ zeCommandQueueCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandQueue
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandQueue`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zeCommandQueueDestroy(
     ze_command_queue_handle_t hCommandQueue         ///< [in][release] handle of command queue object to destroy
@@ -89,7 +94,7 @@ zeCommandQueueDestroy(
 {
     auto pfnDestroy = ze_lib::context.ddiTable.CommandQueue.pfnDestroy;
     if( nullptr == pfnDestroy )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDestroy( hCommandQueue );
 }
@@ -109,12 +114,14 @@ zeCommandQueueDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandQueue
-///         + nullptr == phCommandLists
-///         + 0 for numCommandLists
-///         + hFence is in signaled state
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandQueue`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phCommandLists`
+///     - ::ZE_RESULT_ERROR_INVALID_SIZE
+///         + `0 == numCommandLists`
+///     - ::ZE_RESULT_ERROR_INVALID_COMMAND_LIST_TYPE
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandQueueExecuteCommandLists(
     ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
@@ -126,7 +133,7 @@ zeCommandQueueExecuteCommandLists(
 {
     auto pfnExecuteCommandLists = ze_lib::context.ddiTable.CommandQueue.pfnExecuteCommandLists;
     if( nullptr == pfnExecuteCommandLists )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
 }
@@ -142,9 +149,8 @@ zeCommandQueueExecuteCommandLists(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandQueue
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandQueue`
 ///     - ::ZE_RESULT_NOT_READY
 ///         + timeout expired
 ze_result_t __zecall
@@ -159,7 +165,7 @@ zeCommandQueueSynchronize(
 {
     auto pfnSynchronize = ze_lib::context.ddiTable.CommandQueue.pfnSynchronize;
     if( nullptr == pfnSynchronize )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSynchronize( hCommandQueue, timeout );
 }

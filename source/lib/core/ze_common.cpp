@@ -68,20 +68,8 @@ namespace ze
             str = "result_t::NOT_READY";
             break;
 
-        case result_t::ERROR_UNINITIALIZED:
-            str = "result_t::ERROR_UNINITIALIZED";
-            break;
-
         case result_t::ERROR_DEVICE_LOST:
             str = "result_t::ERROR_DEVICE_LOST";
-            break;
-
-        case result_t::ERROR_UNSUPPORTED:
-            str = "result_t::ERROR_UNSUPPORTED";
-            break;
-
-        case result_t::ERROR_INVALID_ARGUMENT:
-            str = "result_t::ERROR_INVALID_ARGUMENT";
             break;
 
         case result_t::ERROR_OUT_OF_HOST_MEMORY:
@@ -96,24 +84,112 @@ namespace ze
             str = "result_t::ERROR_MODULE_BUILD_FAILURE";
             break;
 
-        case result_t::ERROR_INSUFFICENT_PERMISSIONS:
-            str = "result_t::ERROR_INSUFFICENT_PERMISSIONS";
+        case result_t::ERROR_INSUFFICIENT_PERMISSIONS:
+            str = "result_t::ERROR_INSUFFICIENT_PERMISSIONS";
             break;
 
-        case result_t::ERROR_DEVICE_IS_IN_USE:
-            str = "result_t::ERROR_DEVICE_IS_IN_USE";
+        case result_t::ERROR_NOT_AVAILABLE:
+            str = "result_t::ERROR_NOT_AVAILABLE";
             break;
 
-        case result_t::ERROR_ARRAY_SIZE_TOO_SMALL:
-            str = "result_t::ERROR_ARRAY_SIZE_TOO_SMALL";
+        case result_t::ERROR_UNINITIALIZED:
+            str = "result_t::ERROR_UNINITIALIZED";
             break;
 
-        case result_t::ERROR_DEVICE_ACCESS:
-            str = "result_t::ERROR_DEVICE_ACCESS";
+        case result_t::ERROR_UNSUPPORTED_VERSION:
+            str = "result_t::ERROR_UNSUPPORTED_VERSION";
             break;
 
-        case result_t::ERROR_FEATURE_LOCKED:
-            str = "result_t::ERROR_FEATURE_LOCKED";
+        case result_t::ERROR_UNSUPPORTED_FEATURE:
+            str = "result_t::ERROR_UNSUPPORTED_FEATURE";
+            break;
+
+        case result_t::ERROR_INVALID_ARGUMENT:
+            str = "result_t::ERROR_INVALID_ARGUMENT";
+            break;
+
+        case result_t::ERROR_INVALID_NULL_HANDLE:
+            str = "result_t::ERROR_INVALID_NULL_HANDLE";
+            break;
+
+        case result_t::ERROR_HANDLE_OBJECT_IN_USE:
+            str = "result_t::ERROR_HANDLE_OBJECT_IN_USE";
+            break;
+
+        case result_t::ERROR_INVALID_NULL_POINTER:
+            str = "result_t::ERROR_INVALID_NULL_POINTER";
+            break;
+
+        case result_t::ERROR_INVALID_SIZE:
+            str = "result_t::ERROR_INVALID_SIZE";
+            break;
+
+        case result_t::ERROR_UNSUPPORTED_SIZE:
+            str = "result_t::ERROR_UNSUPPORTED_SIZE";
+            break;
+
+        case result_t::ERROR_UNSUPPORTED_ALIGNMENT:
+            str = "result_t::ERROR_UNSUPPORTED_ALIGNMENT";
+            break;
+
+        case result_t::ERROR_INVALID_SYNCHRONIZATION_OBJECT:
+            str = "result_t::ERROR_INVALID_SYNCHRONIZATION_OBJECT";
+            break;
+
+        case result_t::ERROR_INVALID_ENUMERATION:
+            str = "result_t::ERROR_INVALID_ENUMERATION";
+            break;
+
+        case result_t::ERROR_UNSUPPORTED_ENUMERATION:
+            str = "result_t::ERROR_UNSUPPORTED_ENUMERATION";
+            break;
+
+        case result_t::ERROR_UNSUPPORTED_IMAGE_FORMAT:
+            str = "result_t::ERROR_UNSUPPORTED_IMAGE_FORMAT";
+            break;
+
+        case result_t::ERROR_INVALID_NATIVE_BINARY:
+            str = "result_t::ERROR_INVALID_NATIVE_BINARY";
+            break;
+
+        case result_t::ERROR_INVALID_GLOBAL_NAME:
+            str = "result_t::ERROR_INVALID_GLOBAL_NAME";
+            break;
+
+        case result_t::ERROR_INVALID_KERNEL_NAME:
+            str = "result_t::ERROR_INVALID_KERNEL_NAME";
+            break;
+
+        case result_t::ERROR_INVALID_FUNCTION_NAME:
+            str = "result_t::ERROR_INVALID_FUNCTION_NAME";
+            break;
+
+        case result_t::ERROR_INVALID_GROUP_SIZE_DIMENSION:
+            str = "result_t::ERROR_INVALID_GROUP_SIZE_DIMENSION";
+            break;
+
+        case result_t::ERROR_INVALID_GLOBAL_WIDTH_DIMENSION:
+            str = "result_t::ERROR_INVALID_GLOBAL_WIDTH_DIMENSION";
+            break;
+
+        case result_t::ERROR_INVALID_KERNEL_ARGUMENT_INDEX:
+            str = "result_t::ERROR_INVALID_KERNEL_ARGUMENT_INDEX";
+            break;
+
+        case result_t::ERROR_INVALID_KERNEL_ARGUMENT_SIZE:
+            str = "result_t::ERROR_INVALID_KERNEL_ARGUMENT_SIZE";
+            break;
+
+        case result_t::ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE:
+            str = "result_t::ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE";
+            break;
+
+        case result_t::ERROR_INVALID_COMMAND_LIST_TYPE:
+            str = "result_t::ERROR_INVALID_COMMAND_LIST_TYPE";
+            break;
+
+        case result_t::ERROR_OVERLAPPING_REGIONS:
+            str = "result_t::ERROR_OVERLAPPING_REGIONS";
             break;
 
         case result_t::ERROR_UNKNOWN:

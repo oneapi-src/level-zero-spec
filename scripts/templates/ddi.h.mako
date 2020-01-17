@@ -71,11 +71,9 @@ typedef struct _${tbl['type']}
 ///
 /// @returns
 ///     - ::${X}_RESULT_SUCCESS
-///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::${X}_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::${X}_RESULT_ERROR_UNINITIALIZED
+///     - ::${X}_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::${X}_RESULT_ERROR_UNSUPPORTED_VERSION
 __${x}dllexport ${x}_result_t __${x}call
 ${tbl['export']['name']}(
     %for line in th.make_param_lines(n, tags, tbl['export']):

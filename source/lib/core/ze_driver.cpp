@@ -36,9 +36,8 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for flags
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ze_result_t __zecall
 zeInit(
@@ -51,7 +50,7 @@ zeInit(
 
     auto pfnInit = ze_lib::context.ddiTable.Global.pfnInit;
     if( nullptr == pfnInit )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnInit( flags );
 }
@@ -74,9 +73,8 @@ zeInit(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zeDriverGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
@@ -91,7 +89,7 @@ zeDriverGet(
 {
     auto pfnGet = ze_lib::context.ddiTable.Driver.pfnGet;
     if( nullptr == pfnGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGet( pCount, phDrivers );
 }
@@ -111,10 +109,10 @@ zeDriverGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == version
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == version`
 ze_result_t __zecall
 zeDriverGetApiVersion(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -123,7 +121,7 @@ zeDriverGetApiVersion(
 {
     auto pfnGetApiVersion = ze_lib::context.ddiTable.Driver.pfnGetApiVersion;
     if( nullptr == pfnGetApiVersion )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetApiVersion( hDriver, version );
 }
@@ -144,10 +142,10 @@ zeDriverGetApiVersion(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == pDriverProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pDriverProperties`
 ze_result_t __zecall
 zeDriverGetProperties(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -156,7 +154,7 @@ zeDriverGetProperties(
 {
     auto pfnGetProperties = ze_lib::context.ddiTable.Driver.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hDriver, pDriverProperties );
 }
@@ -176,10 +174,10 @@ zeDriverGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == pIPCProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pIPCProperties`
 ze_result_t __zecall
 zeDriverGetIPCProperties(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -188,7 +186,7 @@ zeDriverGetIPCProperties(
 {
     auto pfnGetIPCProperties = ze_lib::context.ddiTable.Driver.pfnGetIPCProperties;
     if( nullptr == pfnGetIPCProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetIPCProperties( hDriver, pIPCProperties );
 }
@@ -208,11 +206,11 @@ zeDriverGetIPCProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == pFuncName
-///         + nullptr == pfunc
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pFuncName`
+///         + `nullptr == pfunc`
 ze_result_t __zecall
 zeDriverGetExtensionFunctionAddress(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -222,7 +220,7 @@ zeDriverGetExtensionFunctionAddress(
 {
     auto pfnGetExtensionFunctionAddress = ze_lib::context.ddiTable.Driver.pfnGetExtensionFunctionAddress;
     if( nullptr == pfnGetExtensionFunctionAddress )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetExtensionFunctionAddress( hDriver, pFuncName, pfunc );
 }

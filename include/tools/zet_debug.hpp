@@ -63,7 +63,7 @@ namespace zet
         enum class event_flags_t
         {
             DEBUG_EVENT_FLAG_NONE = 0,                      ///< No event flags
-            DEBUG_EVENT_FLAG_STOPPED = (1 << 0),            ///< The reporting thread stopped
+            DEBUG_EVENT_FLAG_STOPPED = ZE_BIT(0),           ///< The reporting thread stopped
 
         };
 

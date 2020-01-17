@@ -201,7 +201,7 @@ function FixGpuFrequency(zet_sysman_handle_t hSysmanDevice, double FreqMHz)
 ```
 
 ## <a name="sdm">Sub-device management</a>
-A Sysman handle cannot be created for a sub-device - ::zetSysmanGet() will return error ::ZE_RESULT_ERROR_UNSUPPORTED if a device handle for a 
+A Sysman handle cannot be created for a sub-device - ::zetSysmanGet() will return error ::ZE_RESULT_ERROR_INVALID_ARGUMENT if a device handle for a 
 sub-device is passed to this function. Instead, the enumerator for device components will return a list of components that are located in each
 sub-device. Properties for each component will indicate in which sub-device it is located. If software wishing to manage components in only one
 sub-device should filter the enumerated components using the sub-device ID (see ::ze_device_properties_t.subdeviceId).

@@ -94,7 +94,7 @@ typedef ${obj['type']} _${th.make_type_name(n, tags, obj)}
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 
-%for line in th.make_returns_lines(n, tags, obj):
+%for line in th.make_returns_lines(n, tags, obj, meta=meta):
 /// ${line}
 %endfor
 ${x}_result_t __${x}call

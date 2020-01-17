@@ -139,21 +139,46 @@ def ZE_BIT( _i ):
 ##   _Analogues_
 ##     - **CUresult**
 class ze_result_v(IntEnum):
-    SUCCESS = 0                                     ## success
-    NOT_READY = 1                                   ## synchronization primitive not signaled
-    ERROR_UNINITIALIZED = auto()                    ## driver is not initialized
-    ERROR_DEVICE_LOST = auto()                      ## device hung, reset, was removed, or driver update occurred
-    ERROR_UNSUPPORTED = auto()                      ## device does not support feature requested
-    ERROR_INVALID_ARGUMENT = auto()                 ## invalid argument provided
-    ERROR_OUT_OF_HOST_MEMORY = auto()               ## insufficient host memory to satisfy call
-    ERROR_OUT_OF_DEVICE_MEMORY = auto()             ## insufficient device memory to satisfy call
-    ERROR_MODULE_BUILD_FAILURE = auto()             ## error in building module
-    ERROR_INSUFFICENT_PERMISSIONS = auto()          ## access denied
-    ERROR_DEVICE_IS_IN_USE = auto()                 ## the device is already in use
-    ERROR_ARRAY_SIZE_TOO_SMALL = auto()             ## an array argument doesn't have enough storage
-    ERROR_DEVICE_ACCESS = auto()                    ## there was a problem accessing device data
-    ERROR_FEATURE_LOCKED = auto()                   ## requested operation is not permitted because the feature is locked
-    ERROR_UNKNOWN = 0x7fffffff                      ## unknown or internal error
+    SUCCESS = 0                                     ## [Core] success
+    NOT_READY = 1                                   ## [Core] synchronization primitive not signaled
+    ERROR_DEVICE_LOST = 0x70000001                  ## [Core] device hung, reset, was removed, or driver update occurred
+    ERROR_OUT_OF_HOST_MEMORY = auto()               ## [Core] insufficient host memory to satisfy call
+    ERROR_OUT_OF_DEVICE_MEMORY = auto()             ## [Core] insufficient device memory to satisfy call
+    ERROR_MODULE_BUILD_FAILURE = auto()             ## [Core] error occurred when building module, see build log for details
+    ERROR_INSUFFICIENT_PERMISSIONS = 0x70010000     ## [Sysman] access denied due to permission level
+    ERROR_NOT_AVAILABLE = auto()                    ## [Sysman] resource already in use and simultaneous access not allowed
+    ERROR_UNINITIALIZED = 0x78000001                ## [Validation] driver is not initialized
+    ERROR_UNSUPPORTED_VERSION = auto()              ## [Validation] generic error code for unsupported versions
+    ERROR_UNSUPPORTED_FEATURE = auto()              ## [Validation] generic error code for unsupported features
+    ERROR_INVALID_ARGUMENT = auto()                 ## [Validation] generic error code for invalid arguments
+    ERROR_INVALID_NULL_HANDLE = auto()              ## [Validation] handle argument is not valid
+    ERROR_HANDLE_OBJECT_IN_USE = auto()             ## [Validation] object pointed to by handle still in-use by device
+    ERROR_INVALID_NULL_POINTER = auto()             ## [Validation] pointer argument may not be nullptr
+    ERROR_INVALID_SIZE = auto()                     ## [Validation] size argument is invalid (e.g., must not be zero)
+    ERROR_UNSUPPORTED_SIZE = auto()                 ## [Validation] size argument is not supported by the device (e.g., too
+                                                    ## large)
+    ERROR_UNSUPPORTED_ALIGNMENT = auto()            ## [Validation] alignment argument is not supported by the device (e.g.,
+                                                    ## too small)
+    ERROR_INVALID_SYNCHRONIZATION_OBJECT = auto()   ## [Validation] synchronization object in invalid state
+    ERROR_INVALID_ENUMERATION = auto()              ## [Validation] enumerator argument is not valid
+    ERROR_UNSUPPORTED_ENUMERATION = auto()          ## [Validation] enumerator argument is not supported by the device
+    ERROR_UNSUPPORTED_IMAGE_FORMAT = auto()         ## [Validation] image format is not supported by the device
+    ERROR_INVALID_NATIVE_BINARY = auto()            ## [Validation] native binary is not supported by the device
+    ERROR_INVALID_GLOBAL_NAME = auto()              ## [Validation] global variable is not found in the module
+    ERROR_INVALID_KERNEL_NAME = auto()              ## [Validation] kernel name is not found in the module
+    ERROR_INVALID_FUNCTION_NAME = auto()            ## [Validation] function name is not found in the module
+    ERROR_INVALID_GROUP_SIZE_DIMENSION = auto()     ## [Validation] group size dimension is not valid for the kernel or
+                                                    ## device
+    ERROR_INVALID_GLOBAL_WIDTH_DIMENSION = auto()   ## [Validation] global width dimension is not valid for the kernel or
+                                                    ## device
+    ERROR_INVALID_KERNEL_ARGUMENT_INDEX = auto()    ## [Validation] kernel argument index is not valid for kernel
+    ERROR_INVALID_KERNEL_ARGUMENT_SIZE = auto()     ## [Validation] kernel argument size does not match kernel
+    ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE = auto()   ## [Validation] value of kernel attribute is not valid for the kernel or
+                                                    ## device
+    ERROR_INVALID_COMMAND_LIST_TYPE = auto()        ## [Validation] command list type does not match command queue type
+    ERROR_OVERLAPPING_REGIONS = auto()              ## [Validation] copy operations do not support overlapping regions of
+                                                    ## memory
+    ERROR_UNKNOWN = 0x7fffffff                      ## [Core] unknown or internal error
 
 class ze_result_t(c_int):
     def __str__(self):

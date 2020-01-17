@@ -30,12 +30,15 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == desc
-///         + nullptr == phTracer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZET_TRACER_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == desc->pUserData`
+///         + `nullptr == phTracer`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZET_TRACER_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ze_result_t __zecall
 zetTracerCreate(
@@ -46,7 +49,7 @@ zetTracerCreate(
 {
     auto pfnCreate = zet_lib::context.ddiTable.Tracer.pfnCreate;
     if( nullptr == pfnCreate )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnCreate( hDriver, desc, phTracer );
 }
@@ -65,9 +68,9 @@ zetTracerCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTracer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTracer`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zetTracerDestroy(
     zet_tracer_handle_t hTracer                     ///< [in][release] handle of tracer object to destroy
@@ -75,7 +78,7 @@ zetTracerDestroy(
 {
     auto pfnDestroy = zet_lib::context.ddiTable.Tracer.pfnDestroy;
     if( nullptr == pfnDestroy )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDestroy( hTracer );
 }
@@ -96,10 +99,10 @@ zetTracerDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTracer
-///         + nullptr == pCoreCbs
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTracer`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCoreCbs`
 ze_result_t __zecall
 zetTracerSetPrologues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
@@ -110,7 +113,7 @@ zetTracerSetPrologues(
 {
     auto pfnSetPrologues = zet_lib::context.ddiTable.Tracer.pfnSetPrologues;
     if( nullptr == pfnSetPrologues )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
 }
@@ -131,10 +134,10 @@ zetTracerSetPrologues(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTracer
-///         + nullptr == pCoreCbs
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTracer`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCoreCbs`
 ze_result_t __zecall
 zetTracerSetEpilogues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
@@ -145,7 +148,7 @@ zetTracerSetEpilogues(
 {
     auto pfnSetEpilogues = zet_lib::context.ddiTable.Tracer.pfnSetEpilogues;
     if( nullptr == pfnSetEpilogues )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
 }
@@ -161,9 +164,8 @@ zetTracerSetEpilogues(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTracer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTracer`
 ze_result_t __zecall
 zetTracerSetEnabled(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
@@ -172,7 +174,7 @@ zetTracerSetEnabled(
 {
     auto pfnSetEnabled = zet_lib::context.ddiTable.Tracer.pfnSetEnabled;
     if( nullptr == pfnSetEnabled )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetEnabled( hTracer, enable );
 }

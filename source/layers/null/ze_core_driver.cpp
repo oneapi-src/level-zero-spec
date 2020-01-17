@@ -8311,11 +8311,8 @@ extern "C" {
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetDriverProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8323,10 +8320,10 @@ zeGetDriverProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -8409,11 +8406,8 @@ zeGetDriverProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetGlobalProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8421,10 +8415,10 @@ zeGetGlobalProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -8442,11 +8436,8 @@ zeGetGlobalProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetDeviceProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8454,10 +8445,10 @@ zeGetDeviceProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -8582,11 +8573,8 @@ zeGetDeviceProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetCommandQueueProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8594,10 +8582,10 @@ zeGetCommandQueueProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -8630,11 +8618,8 @@ zeGetCommandQueueProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetCommandListProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8642,10 +8627,10 @@ zeGetCommandListProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -8773,11 +8758,8 @@ zeGetCommandListProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetFenceProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8785,10 +8767,10 @@ zeGetFenceProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -8826,11 +8808,8 @@ zeGetFenceProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetEventPoolProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8838,10 +8817,10 @@ zeGetEventPoolProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -8879,11 +8858,8 @@ zeGetEventPoolProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetEventProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8891,10 +8867,10 @@ zeGetEventProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -8937,11 +8913,8 @@ zeGetEventProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetImageProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8949,10 +8922,10 @@ zeGetImageProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -8980,11 +8953,8 @@ zeGetImageProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetModuleProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -8992,10 +8962,10 @@ zeGetModuleProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -9038,11 +9008,8 @@ zeGetModuleProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetModuleBuildLogProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -9050,10 +9017,10 @@ zeGetModuleBuildLogProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -9076,11 +9043,8 @@ zeGetModuleBuildLogProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetKernelProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -9088,10 +9052,10 @@ zeGetKernelProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -9149,11 +9113,8 @@ zeGetKernelProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetSamplerProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -9161,10 +9122,10 @@ zeGetSamplerProcAddrTable(
     )
 {
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 

@@ -25,10 +25,13 @@ namespace layer
         auto pfnInit = context.zeDdiTable.Global.pfnInit;
 
         if( nullptr == pfnInit )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
+            if( 1 <= flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
         }
 
         return pfnInit( flags );
@@ -51,12 +54,12 @@ namespace layer
         auto pfnGet = context.zeDdiTable.Driver.pfnGet;
 
         if( nullptr == pfnGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -74,15 +77,15 @@ namespace layer
         auto pfnGetApiVersion = context.zeDdiTable.Driver.pfnGetApiVersion;
 
         if( nullptr == pfnGetApiVersion )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == version )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -100,15 +103,15 @@ namespace layer
         auto pfnGetProperties = context.zeDdiTable.Driver.pfnGetProperties;
 
         if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pDriverProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -126,15 +129,15 @@ namespace layer
         auto pfnGetIPCProperties = context.zeDdiTable.Driver.pfnGetIPCProperties;
 
         if( nullptr == pfnGetIPCProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pIPCProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -153,18 +156,18 @@ namespace layer
         auto pfnGetExtensionFunctionAddress = context.zeDdiTable.Driver.pfnGetExtensionFunctionAddress;
 
         if( nullptr == pfnGetExtensionFunctionAddress )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pFuncName )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pfunc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -188,15 +191,15 @@ namespace layer
         auto pfnGet = context.zeDdiTable.Device.pfnGet;
 
         if( nullptr == pfnGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -220,15 +223,15 @@ namespace layer
         auto pfnGetSubDevices = context.zeDdiTable.Device.pfnGetSubDevices;
 
         if( nullptr == pfnGetSubDevices )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -246,15 +249,15 @@ namespace layer
         auto pfnGetProperties = context.zeDdiTable.Device.pfnGetProperties;
 
         if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pDeviceProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -272,15 +275,15 @@ namespace layer
         auto pfnGetComputeProperties = context.zeDdiTable.Device.pfnGetComputeProperties;
 
         if( nullptr == pfnGetComputeProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pComputeProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -298,15 +301,15 @@ namespace layer
         auto pfnGetKernelProperties = context.zeDdiTable.Device.pfnGetKernelProperties;
 
         if( nullptr == pfnGetKernelProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pKernelProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -333,15 +336,15 @@ namespace layer
         auto pfnGetMemoryProperties = context.zeDdiTable.Device.pfnGetMemoryProperties;
 
         if( nullptr == pfnGetMemoryProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -359,15 +362,15 @@ namespace layer
         auto pfnGetMemoryAccessProperties = context.zeDdiTable.Device.pfnGetMemoryAccessProperties;
 
         if( nullptr == pfnGetMemoryAccessProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pMemAccessProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -385,15 +388,15 @@ namespace layer
         auto pfnGetCacheProperties = context.zeDdiTable.Device.pfnGetCacheProperties;
 
         if( nullptr == pfnGetCacheProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCacheProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -411,15 +414,15 @@ namespace layer
         auto pfnGetImageProperties = context.zeDdiTable.Device.pfnGetImageProperties;
 
         if( nullptr == pfnGetImageProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pImageProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -438,18 +441,18 @@ namespace layer
         auto pfnGetP2PProperties = context.zeDdiTable.Device.pfnGetP2PProperties;
 
         if( nullptr == pfnGetP2PProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hPeerDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pP2PProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -468,18 +471,18 @@ namespace layer
         auto pfnCanAccessPeer = context.zeDdiTable.Device.pfnCanAccessPeer;
 
         if( nullptr == pfnCanAccessPeer )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hPeerDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == value )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -497,12 +500,15 @@ namespace layer
         auto pfnSetLastLevelCacheConfig = context.zeDdiTable.Device.pfnSetLastLevelCacheConfig;
 
         if( nullptr == pfnSetLastLevelCacheConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( 4 <= CacheConfig )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -521,21 +527,30 @@ namespace layer
         auto pfnCreate = context.zeDdiTable.CommandQueue.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phCommandQueue )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 8 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 2 <= desc->mode )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 2 <= desc->priority )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -552,12 +567,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.CommandQueue.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandQueue )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -578,15 +593,18 @@ namespace layer
         auto pfnExecuteCommandLists = context.zeDdiTable.CommandQueue.pfnExecuteCommandLists;
 
         if( nullptr == pfnExecuteCommandLists )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandQueue )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == phCommandLists )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( 0 == numCommandLists )
+                return ZE_RESULT_ERROR_INVALID_SIZE;
 
         }
 
@@ -608,12 +626,12 @@ namespace layer
         auto pfnSynchronize = context.zeDdiTable.CommandQueue.pfnSynchronize;
 
         if( nullptr == pfnSynchronize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandQueue )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -632,21 +650,24 @@ namespace layer
         auto pfnCreate = context.zeDdiTable.CommandList.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 8 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -665,21 +686,30 @@ namespace layer
         auto pfnCreateImmediate = context.zeDdiTable.CommandList.pfnCreateImmediate;
 
         if( nullptr == pfnCreateImmediate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == altdesc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < altdesc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 8 <= altdesc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 2 <= altdesc->mode )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 2 <= altdesc->priority )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -696,12 +726,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.CommandList.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -718,12 +748,12 @@ namespace layer
         auto pfnClose = context.zeDdiTable.CommandList.pfnClose;
 
         if( nullptr == pfnClose )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -740,12 +770,12 @@ namespace layer
         auto pfnReset = context.zeDdiTable.CommandList.pfnReset;
 
         if( nullptr == pfnReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -766,12 +796,12 @@ namespace layer
         auto pfnAppendBarrier = context.zeDdiTable.CommandList.pfnAppendBarrier;
 
         if( nullptr == pfnAppendBarrier )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -795,18 +825,18 @@ namespace layer
         auto pfnAppendMemoryRangesBarrier = context.zeDdiTable.CommandList.pfnAppendMemoryRangesBarrier;
 
         if( nullptr == pfnAppendMemoryRangesBarrier )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pRangeSizes )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pRanges )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -823,12 +853,12 @@ namespace layer
         auto pfnSystemBarrier = context.zeDdiTable.Device.pfnSystemBarrier;
 
         if( nullptr == pfnSystemBarrier )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -849,15 +879,15 @@ namespace layer
         auto pfnRegisterCLMemory = context.zeDdiTable.Device.pfnRegisterCLMemory;
 
         if( nullptr == pfnRegisterCLMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -879,15 +909,15 @@ namespace layer
         auto pfnRegisterCLProgram = context.zeDdiTable.Device.pfnRegisterCLProgram;
 
         if( nullptr == pfnRegisterCLProgram )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == phModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -909,15 +939,15 @@ namespace layer
         auto pfnRegisterCLCommandQueue = context.zeDdiTable.Device.pfnRegisterCLCommandQueue;
 
         if( nullptr == pfnRegisterCLCommandQueue )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == phCommandQueue )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -939,18 +969,18 @@ namespace layer
         auto pfnAppendMemoryCopy = context.zeDdiTable.CommandList.pfnAppendMemoryCopy;
 
         if( nullptr == pfnAppendMemoryCopy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == dstptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == srcptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -972,18 +1002,18 @@ namespace layer
         auto pfnAppendMemoryFill = context.zeDdiTable.CommandList.pfnAppendMemoryFill;
 
         if( nullptr == pfnAppendMemoryFill )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pattern )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1007,24 +1037,24 @@ namespace layer
         auto pfnAppendMemoryCopyRegion = context.zeDdiTable.CommandList.pfnAppendMemoryCopyRegion;
 
         if( nullptr == pfnAppendMemoryCopyRegion )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == dstptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == dstRegion )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == srcptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == srcRegion )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1044,18 +1074,18 @@ namespace layer
         auto pfnAppendImageCopy = context.zeDdiTable.CommandList.pfnAppendImageCopy;
 
         if( nullptr == pfnAppendImageCopy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hDstImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hSrcImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1077,18 +1107,18 @@ namespace layer
         auto pfnAppendImageCopyRegion = context.zeDdiTable.CommandList.pfnAppendImageCopyRegion;
 
         if( nullptr == pfnAppendImageCopyRegion )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hDstImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hSrcImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1109,18 +1139,18 @@ namespace layer
         auto pfnAppendImageCopyToMemory = context.zeDdiTable.CommandList.pfnAppendImageCopyToMemory;
 
         if( nullptr == pfnAppendImageCopyToMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == dstptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hSrcImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == dstptr )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1141,18 +1171,18 @@ namespace layer
         auto pfnAppendImageCopyFromMemory = context.zeDdiTable.CommandList.pfnAppendImageCopyFromMemory;
 
         if( nullptr == pfnAppendImageCopyFromMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hDstImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == srcptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1171,15 +1201,15 @@ namespace layer
         auto pfnAppendMemoryPrefetch = context.zeDdiTable.CommandList.pfnAppendMemoryPrefetch;
 
         if( nullptr == pfnAppendMemoryPrefetch )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1200,18 +1230,21 @@ namespace layer
         auto pfnAppendMemAdvise = context.zeDdiTable.CommandList.pfnAppendMemAdvise;
 
         if( nullptr == pfnAppendMemAdvise )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( 9 <= advice )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -1235,21 +1268,24 @@ namespace layer
         auto pfnCreate = context.zeDdiTable.EventPool.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phEventPool )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_EVENT_POOL_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 2 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -1266,12 +1302,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.EventPool.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hEventPool )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1290,21 +1326,27 @@ namespace layer
         auto pfnCreate = context.zeDdiTable.Event.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hEventPool )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phEvent )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_EVENT_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 4 <= desc->signal )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 4 <= desc->wait )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -1321,12 +1363,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.Event.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hEvent )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1344,15 +1386,15 @@ namespace layer
         auto pfnGetIpcHandle = context.zeDdiTable.EventPool.pfnGetIpcHandle;
 
         if( nullptr == pfnGetIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hEventPool )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == phIpc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1371,15 +1413,15 @@ namespace layer
         auto pfnOpenIpcHandle = context.zeDdiTable.EventPool.pfnOpenIpcHandle;
 
         if( nullptr == pfnOpenIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == phEventPool )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1396,12 +1438,12 @@ namespace layer
         auto pfnCloseIpcHandle = context.zeDdiTable.EventPool.pfnCloseIpcHandle;
 
         if( nullptr == pfnCloseIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hEventPool )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1419,15 +1461,15 @@ namespace layer
         auto pfnAppendSignalEvent = context.zeDdiTable.CommandList.pfnAppendSignalEvent;
 
         if( nullptr == pfnAppendSignalEvent )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hEvent )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1447,15 +1489,15 @@ namespace layer
         auto pfnAppendWaitOnEvents = context.zeDdiTable.CommandList.pfnAppendWaitOnEvents;
 
         if( nullptr == pfnAppendWaitOnEvents )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == phEvents )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1472,12 +1514,12 @@ namespace layer
         auto pfnHostSignal = context.zeDdiTable.Event.pfnHostSignal;
 
         if( nullptr == pfnHostSignal )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hEvent )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1499,12 +1541,12 @@ namespace layer
         auto pfnHostSynchronize = context.zeDdiTable.Event.pfnHostSynchronize;
 
         if( nullptr == pfnHostSynchronize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hEvent )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1521,12 +1563,12 @@ namespace layer
         auto pfnQueryStatus = context.zeDdiTable.Event.pfnQueryStatus;
 
         if( nullptr == pfnQueryStatus )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hEvent )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1544,15 +1586,15 @@ namespace layer
         auto pfnAppendEventReset = context.zeDdiTable.CommandList.pfnAppendEventReset;
 
         if( nullptr == pfnAppendEventReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hEvent )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1569,12 +1611,12 @@ namespace layer
         auto pfnHostReset = context.zeDdiTable.Event.pfnHostReset;
 
         if( nullptr == pfnHostReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hEvent )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1593,21 +1635,24 @@ namespace layer
         auto pfnCreate = context.zeDdiTable.Fence.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandQueue )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phFence )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_FENCE_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 0 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -1624,12 +1669,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.Fence.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hFence )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1651,12 +1696,12 @@ namespace layer
         auto pfnHostSynchronize = context.zeDdiTable.Fence.pfnHostSynchronize;
 
         if( nullptr == pfnHostSynchronize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hFence )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1673,12 +1718,12 @@ namespace layer
         auto pfnQueryStatus = context.zeDdiTable.Fence.pfnQueryStatus;
 
         if( nullptr == pfnQueryStatus )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hFence )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1695,12 +1740,12 @@ namespace layer
         auto pfnReset = context.zeDdiTable.Fence.pfnReset;
 
         if( nullptr == pfnReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hFence )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1719,21 +1764,27 @@ namespace layer
         auto pfnGetProperties = context.zeDdiTable.Image.pfnGetProperties;
 
         if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pImageProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_IMAGE_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 8 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 4 <= desc->type )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -1752,21 +1803,27 @@ namespace layer
         auto pfnCreate = context.zeDdiTable.Image.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_IMAGE_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 8 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 4 <= desc->type )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -1783,12 +1840,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.Image.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -1811,27 +1868,33 @@ namespace layer
         auto pfnAllocSharedMem = context.zeDdiTable.Driver.pfnAllocSharedMem;
 
         if( nullptr == pfnAllocSharedMem )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == device_desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == host_desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT < device_desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
             if( ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT < host_desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 2 <= device_desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 4 <= host_desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -1853,24 +1916,27 @@ namespace layer
         auto pfnAllocDeviceMem = context.zeDdiTable.Driver.pfnAllocDeviceMem;
 
         if( nullptr == pfnAllocDeviceMem )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == device_desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == device_desc )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT < device_desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 2 <= device_desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -1891,21 +1957,24 @@ namespace layer
         auto pfnAllocHostMem = context.zeDdiTable.Driver.pfnAllocHostMem;
 
         if( nullptr == pfnAllocHostMem )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == host_desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT < host_desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 4 <= host_desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -1923,15 +1992,15 @@ namespace layer
         auto pfnFreeMem = context.zeDdiTable.Driver.pfnFreeMem;
 
         if( nullptr == pfnFreeMem )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1951,18 +2020,18 @@ namespace layer
         auto pfnGetMemAllocProperties = context.zeDdiTable.Driver.pfnGetMemAllocProperties;
 
         if( nullptr == pfnGetMemAllocProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pMemAllocProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -1982,15 +2051,15 @@ namespace layer
         auto pfnGetMemAddressRange = context.zeDdiTable.Driver.pfnGetMemAddressRange;
 
         if( nullptr == pfnGetMemAddressRange )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2009,18 +2078,18 @@ namespace layer
         auto pfnGetMemIpcHandle = context.zeDdiTable.Driver.pfnGetMemIpcHandle;
 
         if( nullptr == pfnGetMemIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pIpcHandle )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2041,18 +2110,21 @@ namespace layer
         auto pfnOpenMemIpcHandle = context.zeDdiTable.Driver.pfnOpenMemIpcHandle;
 
         if( nullptr == pfnOpenMemIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( 0 <= flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
             if( nullptr == pptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2070,15 +2142,15 @@ namespace layer
         auto pfnCloseMemIpcHandle = context.zeDdiTable.Driver.pfnCloseMemIpcHandle;
 
         if( nullptr == pfnCloseMemIpcHandle )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDriver )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2098,21 +2170,36 @@ namespace layer
         auto pfnCreate = context.zeDdiTable.Module.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( nullptr == desc->pInputModule )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( nullptr == desc->pBuildFlags )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( nullptr == desc->pConstants )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_MODULE_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 1 <= desc->format )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 0 == desc->inputSize )
+                return ZE_RESULT_ERROR_INVALID_SIZE;
 
         }
 
@@ -2129,12 +2216,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.Module.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -2151,12 +2238,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.ModuleBuildLog.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hModuleBuildLog )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -2175,15 +2262,15 @@ namespace layer
         auto pfnGetString = context.zeDdiTable.ModuleBuildLog.pfnGetString;
 
         if( nullptr == pfnGetString )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hModuleBuildLog )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pSize )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2202,15 +2289,15 @@ namespace layer
         auto pfnGetNativeBinary = context.zeDdiTable.Module.pfnGetNativeBinary;
 
         if( nullptr == pfnGetNativeBinary )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pSize )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2229,18 +2316,18 @@ namespace layer
         auto pfnGetGlobalPointer = context.zeDdiTable.Module.pfnGetGlobalPointer;
 
         if( nullptr == pfnGetGlobalPointer )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pGlobalName )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2264,15 +2351,15 @@ namespace layer
         auto pfnGetKernelNames = context.zeDdiTable.Module.pfnGetKernelNames;
 
         if( nullptr == pfnGetKernelNames )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2291,21 +2378,30 @@ namespace layer
         auto pfnCreate = context.zeDdiTable.Kernel.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( nullptr == desc->pKernelName )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( nullptr == desc->pKernelName )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_KERNEL_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 1 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -2322,12 +2418,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.Kernel.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -2346,18 +2442,18 @@ namespace layer
         auto pfnGetFunctionPointer = context.zeDdiTable.Module.pfnGetFunctionPointer;
 
         if( nullptr == pfnGetFunctionPointer )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hModule )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pFunctionName )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pfnFunction )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2377,12 +2473,12 @@ namespace layer
         auto pfnSetGroupSize = context.zeDdiTable.Kernel.pfnSetGroupSize;
 
         if( nullptr == pfnSetGroupSize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -2405,21 +2501,21 @@ namespace layer
         auto pfnSuggestGroupSize = context.zeDdiTable.Kernel.pfnSuggestGroupSize;
 
         if( nullptr == pfnSuggestGroupSize )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == groupSizeX )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == groupSizeY )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == groupSizeZ )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2437,15 +2533,15 @@ namespace layer
         auto pfnSuggestMaxCooperativeGroupCount = context.zeDdiTable.Kernel.pfnSuggestMaxCooperativeGroupCount;
 
         if( nullptr == pfnSuggestMaxCooperativeGroupCount )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == totalGroupCount )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2466,12 +2562,12 @@ namespace layer
         auto pfnSetArgumentValue = context.zeDdiTable.Kernel.pfnSetArgumentValue;
 
         if( nullptr == pfnSetArgumentValue )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -2490,12 +2586,15 @@ namespace layer
         auto pfnSetAttribute = context.zeDdiTable.Kernel.pfnSetAttribute;
 
         if( nullptr == pfnSetAttribute )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( 2 <= attr )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -2513,12 +2612,15 @@ namespace layer
         auto pfnSetIntermediateCacheConfig = context.zeDdiTable.Kernel.pfnSetIntermediateCacheConfig;
 
         if( nullptr == pfnSetIntermediateCacheConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( 4 <= CacheConfig )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -2536,15 +2638,15 @@ namespace layer
         auto pfnGetProperties = context.zeDdiTable.Kernel.pfnGetProperties;
 
         if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pKernelProperties )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2567,18 +2669,18 @@ namespace layer
         auto pfnAppendLaunchKernel = context.zeDdiTable.CommandList.pfnAppendLaunchKernel;
 
         if( nullptr == pfnAppendLaunchKernel )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pLaunchFuncArgs )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2601,18 +2703,18 @@ namespace layer
         auto pfnAppendLaunchCooperativeKernel = context.zeDdiTable.CommandList.pfnAppendLaunchCooperativeKernel;
 
         if( nullptr == pfnAppendLaunchCooperativeKernel )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pLaunchFuncArgs )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2636,18 +2738,18 @@ namespace layer
         auto pfnAppendLaunchKernelIndirect = context.zeDdiTable.CommandList.pfnAppendLaunchKernelIndirect;
 
         if( nullptr == pfnAppendLaunchKernelIndirect )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hKernel )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pLaunchArgumentsBuffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2675,21 +2777,21 @@ namespace layer
         auto pfnAppendLaunchMultipleKernelsIndirect = context.zeDdiTable.CommandList.pfnAppendLaunchMultipleKernelsIndirect;
 
         if( nullptr == pfnAppendLaunchMultipleKernelsIndirect )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == phKernels )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pCountBuffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == pLaunchArgumentsBuffer )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2708,15 +2810,15 @@ namespace layer
         auto pfnMakeMemoryResident = context.zeDdiTable.Device.pfnMakeMemoryResident;
 
         if( nullptr == pfnMakeMemoryResident )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2735,15 +2837,15 @@ namespace layer
         auto pfnEvictMemory = context.zeDdiTable.Device.pfnEvictMemory;
 
         if( nullptr == pfnEvictMemory )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
@@ -2761,15 +2863,15 @@ namespace layer
         auto pfnMakeImageResident = context.zeDdiTable.Device.pfnMakeImageResident;
 
         if( nullptr == pfnMakeImageResident )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -2787,15 +2889,15 @@ namespace layer
         auto pfnEvictImage = context.zeDdiTable.Device.pfnEvictImage;
 
         if( nullptr == pfnEvictImage )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == hImage )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -2814,21 +2916,27 @@ namespace layer
         auto pfnCreate = context.zeDdiTable.Sampler.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phSampler )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZE_SAMPLER_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 4 <= desc->addressMode )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( 1 <= desc->filterMode )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -2845,12 +2953,12 @@ namespace layer
         auto pfnDestroy = context.zeDdiTable.Sampler.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hSampler )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -2869,11 +2977,8 @@ extern "C" {
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetDriverProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -2883,10 +2988,10 @@ zeGetDriverProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.Driver;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -2941,11 +3046,8 @@ zeGetDriverProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetGlobalProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -2955,10 +3057,10 @@ zeGetGlobalProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.Global;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -2974,11 +3076,8 @@ zeGetGlobalProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetDeviceProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -2988,10 +3087,10 @@ zeGetDeviceProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.Device;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3079,11 +3178,8 @@ zeGetDeviceProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetCommandQueueProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3093,10 +3189,10 @@ zeGetCommandQueueProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.CommandQueue;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3121,11 +3217,8 @@ zeGetCommandQueueProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetCommandListProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3135,10 +3228,10 @@ zeGetCommandListProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.CommandList;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3220,11 +3313,8 @@ zeGetCommandListProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetFenceProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3234,10 +3324,10 @@ zeGetFenceProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.Fence;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3265,11 +3355,8 @@ zeGetFenceProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetEventPoolProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3279,10 +3366,10 @@ zeGetEventPoolProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.EventPool;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3310,11 +3397,8 @@ zeGetEventPoolProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetEventProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3324,10 +3408,10 @@ zeGetEventProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.Event;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3358,11 +3442,8 @@ zeGetEventProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetImageProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3372,10 +3453,10 @@ zeGetImageProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.Image;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3397,11 +3478,8 @@ zeGetImageProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetModuleProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3411,10 +3489,10 @@ zeGetModuleProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.Module;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3445,11 +3523,8 @@ zeGetModuleProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetModuleBuildLogProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3459,10 +3534,10 @@ zeGetModuleBuildLogProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.ModuleBuildLog;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3481,11 +3556,8 @@ zeGetModuleBuildLogProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetKernelProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3495,10 +3567,10 @@ zeGetKernelProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.Kernel;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -3538,11 +3610,8 @@ zeGetKernelProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zeGetSamplerProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -3552,10 +3621,10 @@ zeGetSamplerProcAddrTable(
     auto& dditable = layer::context.zeDdiTable.Sampler;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 

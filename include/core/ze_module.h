@@ -98,20 +98,24 @@ typedef struct _ze_module_desc_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == desc
-///         + nullptr == phModule
-///         + invalid pDesc->format
-///         + nullptr == pDesc->pInputModule
-///         + nullptr == pDesc->phModule
-///         + 0 == pDesc->inputSize
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZE_MODULE_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == desc->pInputModule`
+///         + `nullptr == desc->pBuildFlags`
+///         + `nullptr == desc->pConstants`
+///         + `nullptr == phModule`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZE_MODULE_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->format
+///     - ::ZE_RESULT_ERROR_INVALID_NATIVE_BINARY
+///     - ::ZE_RESULT_ERROR_INVALID_SIZE
+///         + `0 == desc->inputSize`
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::ZE_RESULT_ERROR_MODULE_BUILD_FAILURE
-///         + Failure to build module. See build log for more details.
 ze_result_t __zecall
 zeModuleCreate(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
@@ -140,9 +144,9 @@ zeModuleCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hModule`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zeModuleDestroy(
     ze_module_handle_t hModule                      ///< [in][release] handle of the module
@@ -164,9 +168,9 @@ zeModuleDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModuleBuildLog
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hModuleBuildLog`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zeModuleBuildLogDestroy(
     ze_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
@@ -185,10 +189,10 @@ zeModuleBuildLogDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModuleBuildLog
-///         + nullptr == pSize
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hModuleBuildLog`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pSize`
 ze_result_t __zecall
 zeModuleBuildLogGetString(
     ze_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
@@ -215,10 +219,10 @@ zeModuleBuildLogGetString(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == pSize
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hModule`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pSize`
 ze_result_t __zecall
 zeModuleGetNativeBinary(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
@@ -237,12 +241,12 @@ zeModuleGetNativeBinary(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == pGlobalName
-///         + nullptr == pptr
-///         + invalid name
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hModule`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pGlobalName`
+///         + `nullptr == pptr`
+///     - ::ZE_RESULT_ERROR_INVALID_GLOBAL_NAME
 ze_result_t __zecall
 zeModuleGetGlobalPointer(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
@@ -261,10 +265,10 @@ zeModuleGetGlobalPointer(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hModule`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zeModuleGetKernelNames(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
@@ -319,14 +323,18 @@ typedef struct _ze_kernel_desc_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == desc
-///         + nullptr == phKernel
-///         + nullptr == pDesc->pKernelName
-///         + invalid value for pDesc->pKernelName
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZE_KERNEL_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hModule`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == desc->pKernelName`
+///         + `nullptr == phKernel`
+///         + `nullptr == desc->pKernelName`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZE_KERNEL_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->flags
+///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_NAME
 ze_result_t __zecall
 zeKernelCreate(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
@@ -351,9 +359,9 @@ zeKernelCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zeKernelDestroy(
     ze_kernel_handle_t hKernel                      ///< [in][release] handle of the kernel object
@@ -373,12 +381,12 @@ zeKernelDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == pFunctionName
-///         + nullptr == pfnFunction
-///         + invalid value pFunctionName. Function name must exist in Module.
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hModule`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pFunctionName`
+///         + `nullptr == pfnFunction`
+///     - ::ZE_RESULT_ERROR_INVALID_FUNCTION_NAME
 ze_result_t __zecall
 zeModuleGetFunctionPointer(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
@@ -400,9 +408,9 @@ zeModuleGetFunctionPointer(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION
 ze_result_t __zecall
 zeKernelSetGroupSize(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -425,13 +433,13 @@ zeKernelSetGroupSize(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///         + nullptr == groupSizeX
-///         + nullptr == groupSizeY
-///         + nullptr == groupSizeZ
-///         + invalid global width
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == groupSizeX`
+///         + `nullptr == groupSizeY`
+///         + `nullptr == groupSizeZ`
+///     - ::ZE_RESULT_ERROR_INVALID_GLOBAL_WIDTH_DIMENSION
 ze_result_t __zecall
 zeKernelSuggestGroupSize(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -454,11 +462,10 @@ zeKernelSuggestGroupSize(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///         + nullptr == totalGroupCount
-///         + invalid number of threads.
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == totalGroupCount`
 ze_result_t __zecall
 zeKernelSuggestMaxCooperativeGroupCount(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -479,11 +486,10 @@ zeKernelSuggestMaxCooperativeGroupCount(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///         + invalid argument index
-///         + invalid size specified
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_INDEX
+///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_SIZE
 ze_result_t __zecall
 zeKernelSetArgumentValue(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -526,11 +532,11 @@ typedef enum _ze_kernel_set_attribute_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///         + invalid value for attr
-///         + invalid value for value
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + attr
+///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
 ze_result_t __zecall
 zeKernelSetAttribute(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -553,10 +559,11 @@ zeKernelSetAttribute(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///         + devices do not support CacheConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + CacheConfig
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ze_result_t __zecall
 zeKernelSetIntermediateCacheConfig(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -605,10 +612,10 @@ typedef struct _ze_kernel_properties_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///         + nullptr == pKernelProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pKernelProperties`
 ze_result_t __zecall
 zeKernelGetProperties(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -643,11 +650,12 @@ typedef struct _ze_group_count_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hKernel
-///         + nullptr == pLaunchFuncArgs
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pLaunchFuncArgs`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendLaunchKernel(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -681,11 +689,12 @@ zeCommandListAppendLaunchKernel(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hKernel
-///         + nullptr == pLaunchFuncArgs
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pLaunchFuncArgs`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendLaunchCooperativeKernel(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -718,11 +727,12 @@ zeCommandListAppendLaunchCooperativeKernel(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == hKernel
-///         + nullptr == pLaunchArgumentsBuffer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pLaunchArgumentsBuffer`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendLaunchKernelIndirect(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
@@ -757,12 +767,13 @@ zeCommandListAppendLaunchKernelIndirect(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == phKernels
-///         + nullptr == pCountBuffer
-///         + nullptr == pLaunchArgumentsBuffer
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phKernels`
+///         + `nullptr == pCountBuffer`
+///         + `nullptr == pLaunchArgumentsBuffer`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ze_result_t __zecall
 zeCommandListAppendLaunchMultipleKernelsIndirect(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list

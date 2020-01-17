@@ -144,34 +144,75 @@ name: $x_result_t
 etors:
     - name: $X_RESULT_SUCCESS
       value: "0"
-      desc: "success"
+      desc: "[Core] success"
     - name: $X_RESULT_NOT_READY
       value: "1"
-      desc: "synchronization primitive not signaled"
-    - name: $X_RESULT_ERROR_UNINITIALIZED
-      desc: "driver is not initialized"
+      desc: "[Core] synchronization primitive not signaled"
     - name: $X_RESULT_ERROR_DEVICE_LOST
-      desc: "device hung, reset, was removed, or driver update occurred"
-    - name: $X_RESULT_ERROR_UNSUPPORTED
-      desc: "device does not support feature requested"
-    - name: $X_RESULT_ERROR_INVALID_ARGUMENT
-      desc: "invalid argument provided"
+      value: "0x70000001"
+      desc: "[Core] device hung, reset, was removed, or driver update occurred"
     - name: $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-      desc: "insufficient host memory to satisfy call"
+      desc: "[Core] insufficient host memory to satisfy call"
     - name: $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-      desc: "insufficient device memory to satisfy call"
+      desc: "[Core] insufficient device memory to satisfy call"
     - name: $X_RESULT_ERROR_MODULE_BUILD_FAILURE
-      desc: "error in building module"
-    - name: $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS
-      desc: "access denied"
-    - name: $X_RESULT_ERROR_DEVICE_IS_IN_USE
-      desc: "the device is already in use"
-    - name: $X_RESULT_ERROR_ARRAY_SIZE_TOO_SMALL
-      desc: "an array argument doesn't have enough storage"
-    - name: $X_RESULT_ERROR_DEVICE_ACCESS
-      desc: "there was a problem accessing device data"
-    - name: $X_RESULT_ERROR_FEATURE_LOCKED
-      desc: "requested operation is not permitted because the feature is locked"
+      desc: "[Core] error occurred when building module, see build log for details"
+    - name: $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+      value: "0x70010000"
+      desc: "[Sysman] access denied due to permission level"
+    - name: $X_RESULT_ERROR_NOT_AVAILABLE
+      desc: "[Sysman] resource already in use and simultaneous access not allowed"
+    - name: $X_RESULT_ERROR_UNINITIALIZED
+      value: "0x78000001"
+      desc: "[Validation] driver is not initialized"
+    - name: $X_RESULT_ERROR_UNSUPPORTED_VERSION
+      desc: "[Validation] generic error code for unsupported versions"
+    - name: $X_RESULT_ERROR_UNSUPPORTED_FEATURE
+      desc: "[Validation] generic error code for unsupported features"
+    - name: $X_RESULT_ERROR_INVALID_ARGUMENT
+      desc: "[Validation] generic error code for invalid arguments"
+    - name: $X_RESULT_ERROR_INVALID_NULL_HANDLE
+      desc: "[Validation] handle argument is not valid"
+    - name: $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+      desc: "[Validation] object pointed to by handle still in-use by device"
+    - name: $X_RESULT_ERROR_INVALID_NULL_POINTER
+      desc: "[Validation] pointer argument may not be nullptr"
+    - name: $X_RESULT_ERROR_INVALID_SIZE
+      desc: "[Validation] size argument is invalid (e.g., must not be zero)"
+    - name: $X_RESULT_ERROR_UNSUPPORTED_SIZE
+      desc: "[Validation] size argument is not supported by the device (e.g., too large)"
+    - name: $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+      desc: "[Validation] alignment argument is not supported by the device (e.g., too small)"
+    - name: $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+      desc: "[Validation] synchronization object in invalid state"
+    - name: $X_RESULT_ERROR_INVALID_ENUMERATION
+      desc: "[Validation] enumerator argument is not valid"
+    - name: $X_RESULT_ERROR_UNSUPPORTED_ENUMERATION
+      desc: "[Validation] enumerator argument is not supported by the device"
+    - name: $X_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT
+      desc: "[Validation] image format is not supported by the device"
+    - name: $X_RESULT_ERROR_INVALID_NATIVE_BINARY
+      desc: "[Validation] native binary is not supported by the device"
+    - name: $X_RESULT_ERROR_INVALID_GLOBAL_NAME
+      desc: "[Validation] global variable is not found in the module"
+    - name: $X_RESULT_ERROR_INVALID_KERNEL_NAME
+      desc: "[Validation] kernel name is not found in the module"
+    - name: $X_RESULT_ERROR_INVALID_FUNCTION_NAME
+      desc: "[Validation] function name is not found in the module"
+    - name: $X_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION
+      desc: "[Validation] group size dimension is not valid for the kernel or device"
+    - name: $X_RESULT_ERROR_INVALID_GLOBAL_WIDTH_DIMENSION
+      desc: "[Validation] global width dimension is not valid for the kernel or device"
+    - name: $X_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_INDEX
+      desc: "[Validation] kernel argument index is not valid for kernel"
+    - name: $X_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_SIZE
+      desc: "[Validation] kernel argument size does not match kernel"
+    - name: $X_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
+      desc: "[Validation] value of kernel attribute is not valid for the kernel or device"
+    - name: $X_RESULT_ERROR_INVALID_COMMAND_LIST_TYPE
+      desc: "[Validation] command list type does not match command queue type"
+    - name: $X_RESULT_ERROR_OVERLAPPING_REGIONS
+      desc: "[Validation] copy operations do not support overlapping regions of memory"
     - name: $X_RESULT_ERROR_UNKNOWN
       value: "0x7fffffff"
-      desc: "unknown or internal error"
+      desc: "[Core] unknown or internal error"

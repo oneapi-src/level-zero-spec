@@ -133,9 +133,8 @@ params:
       name: pptr
       desc: "[out] pointer to shared allocation"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "unsupported allocation size"
-        - "unsupported alignment"
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -169,9 +168,8 @@ params:
       name: pptr
       desc: "[out] pointer to device allocation"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "unsupported allocation size"
-        - "unsupported alignment"
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -203,9 +201,8 @@ params:
       name: pptr
       desc: "[out] pointer to host allocation"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "unsupported allocation size"
-        - "unsupported alignment"
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -367,9 +364,6 @@ params:
     - type: "void**"
       name: pptr
       desc: "[out] pointer to device allocation in this process"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid flags"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes an IPC memory handle in a receiving process"

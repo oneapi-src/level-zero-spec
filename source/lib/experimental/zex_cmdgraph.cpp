@@ -29,12 +29,15 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == desc
-///         + nullptr == phCommandGraph
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + ::ZEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == desc`
+///         + `nullptr == phCommandGraph`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+///         + `::ZEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ze_result_t __zecall
@@ -46,7 +49,7 @@ zexCommandGraphCreate(
 {
     auto pfnCreate = zex_lib::context.ddiTable.CommandGraph.pfnCreate;
     if( nullptr == pfnCreate )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnCreate( hDevice, desc, phCommandGraph );
 }
@@ -65,9 +68,9 @@ zexCommandGraphCreate(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandGraph
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandGraph`
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 ze_result_t __zecall
 zexCommandGraphDestroy(
     zex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
@@ -75,7 +78,7 @@ zexCommandGraphDestroy(
 {
     auto pfnDestroy = zex_lib::context.ddiTable.CommandGraph.pfnDestroy;
     if( nullptr == pfnDestroy )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDestroy( hCommandGraph );
 }
@@ -95,9 +98,8 @@ zexCommandGraphDestroy(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandGraph
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandGraph`
 ze_result_t __zecall
 zexCommandGraphClose(
     zex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
@@ -105,7 +107,7 @@ zexCommandGraphClose(
 {
     auto pfnClose = zex_lib::context.ddiTable.CommandGraph.pfnClose;
     if( nullptr == pfnClose )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnClose( hCommandGraph );
 }

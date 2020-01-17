@@ -25,10 +25,13 @@ namespace layer
         auto pfnInit = context.zexDdiTable.Global.pfnInit;
 
         if( nullptr == pfnInit )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
+            if( 1 <= flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
         }
 
         return pfnInit( flags );
@@ -46,15 +49,18 @@ namespace layer
         auto pfnReserveSpace = context.zexDdiTable.CommandList.pfnReserveSpace;
 
         if( nullptr == pfnReserveSpace )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandList )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == ptr )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( 0 == size )
+                return ZE_RESULT_ERROR_INVALID_SIZE;
 
         }
 
@@ -73,21 +79,24 @@ namespace layer
         auto pfnCreate = context.zexDdiTable.CommandGraph.pfnCreate;
 
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == desc )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( nullptr == phCommandGraph )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
             if( ZEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version )
-                return ZE_RESULT_ERROR_UNSUPPORTED;
+                return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 0 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
 
@@ -104,12 +113,12 @@ namespace layer
         auto pfnDestroy = context.zexDdiTable.CommandGraph.pfnDestroy;
 
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandGraph )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -126,12 +135,12 @@ namespace layer
         auto pfnClose = context.zexDdiTable.CommandGraph.pfnClose;
 
         if( nullptr == pfnClose )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
             if( nullptr == hCommandGraph )
-                return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
@@ -150,11 +159,8 @@ extern "C" {
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zexGetGlobalProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -164,10 +170,10 @@ zexGetGlobalProcAddrTable(
     auto& dditable = layer::context.zexDdiTable.Global;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -183,11 +189,8 @@ zexGetGlobalProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zexGetCommandListProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -197,10 +200,10 @@ zexGetCommandListProcAddrTable(
     auto& dditable = layer::context.zexDdiTable.CommandList;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -216,11 +219,8 @@ zexGetCommandListProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zexGetCommandGraphProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -230,10 +230,10 @@ zexGetCommandGraphProcAddrTable(
     auto& dditable = layer::context.zexDdiTable.CommandGraph;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 

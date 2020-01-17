@@ -566,7 +566,7 @@ that contains the following fields:
 
 
 If the requested API version is not supported,
-::ZE_RESULT_ERROR_UNSUPPORTED is returned.  If the tool supports
+::ZE_RESULT_ERROR_UNSUPPORTED_VERSION is returned.  If the tool supports
 different API versions it may try to request a different version.
 
 If the requested API version is supported the following properties are
@@ -634,11 +634,11 @@ address space range.  This allows breakpoints to be contained within one
 sub-device.
 
 Once a tool is attached to a sub-device, any attempt to attach to an
-ancestor device results in ::ZE_RESULT_ERROR_DEVICE_ACCESS.
+ancestor device results in ::ZE_RESULT_ERROR_NOT_AVAILABLE.
 
 Implementations that share code segments across sub-devices will only
 allow attaching to devices.  Any attempt to attach to a sub-device results
-in ::ZE_RESULT_ERROR_UNSUPPORTED.
+in ::ZE_RESULT_ERROR_NOT_AVAILABLE.
 
 
 ### Device Thread Identification and Resource Restriction

@@ -31,11 +31,12 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == ptr
-///         + 0 for size
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
+///     - ::ZE_RESULT_ERROR_INVALID_SIZE
+///         + `0 == size`
 ze_result_t __zecall
 zexCommandListReserveSpace(
     zex_command_list_handle_t hCommandList,         ///< [in] handle of the command list
@@ -45,7 +46,7 @@ zexCommandListReserveSpace(
 {
     auto pfnReserveSpace = zex_lib::context.ddiTable.CommandList.pfnReserveSpace;
     if( nullptr == pfnReserveSpace )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnReserveSpace( hCommandList, size, ptr );
 }

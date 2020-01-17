@@ -125,7 +125,7 @@ etors:
       value: "0"
     - name: $T_DEBUG_EVENT_FLAG_STOPPED
       desc: "The reporting thread stopped"
-      value: "(1 << 0)"
+      value: "$X_BIT(0)"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug event types."

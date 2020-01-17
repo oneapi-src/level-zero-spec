@@ -100,10 +100,10 @@ typedef struct _zet_profile_register_sequence_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hKernel
-///         + nullptr == pInfo
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pInfo`
 ze_result_t __zecall
 zetKernelGetProfileInfo(
     zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel

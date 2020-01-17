@@ -30,11 +30,12 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == phSysman
-///         + Sub-device handles are not supported. Use the device handle.
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + version
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phSysman`
 ze_result_t __zecall
 zetSysmanGet(
     zet_device_handle_t hDevice,                    ///< [in] Handle of the device
@@ -44,7 +45,7 @@ zetSysmanGet(
 {
     auto pfnGet = zet_lib::context.ddiTable.Sysman.pfnGet;
     if( nullptr == pfnGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGet( hDevice, version, phSysman );
 }
@@ -60,10 +61,10 @@ zetSysmanGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanDeviceGetProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -72,7 +73,7 @@ zetSysmanDeviceGetProperties(
 {
     auto pfnDeviceGetProperties = zet_lib::context.ddiTable.Sysman.pfnDeviceGetProperties;
     if( nullptr == pfnDeviceGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDeviceGetProperties( hSysman, pProperties );
 }
@@ -90,10 +91,10 @@ zetSysmanDeviceGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanSchedulerGetSupportedModes(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -111,7 +112,7 @@ zetSysmanSchedulerGetSupportedModes(
 {
     auto pfnSchedulerGetSupportedModes = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetSupportedModes;
     if( nullptr == pfnSchedulerGetSupportedModes )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSchedulerGetSupportedModes( hSysman, pCount, pModes );
 }
@@ -127,10 +128,11 @@ zetSysmanSchedulerGetSupportedModes(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pMode
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pMode`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Device does not support scheduler modes (check using ::zetSysmanSchedulerGetSupportedModes()).
 ze_result_t __zecall
 zetSysmanSchedulerGetCurrentMode(
@@ -140,7 +142,7 @@ zetSysmanSchedulerGetCurrentMode(
 {
     auto pfnSchedulerGetCurrentMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetCurrentMode;
     if( nullptr == pfnSchedulerGetCurrentMode )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSchedulerGetCurrentMode( hSysman, pMode );
 }
@@ -156,10 +158,11 @@ zetSysmanSchedulerGetCurrentMode(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ze_result_t __zecall
 zetSysmanSchedulerGetTimeoutModeProperties(
@@ -171,7 +174,7 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 {
     auto pfnSchedulerGetTimeoutModeProperties = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetTimeoutModeProperties;
     if( nullptr == pfnSchedulerGetTimeoutModeProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSchedulerGetTimeoutModeProperties( hSysman, getDefaults, pConfig );
 }
@@ -187,10 +190,11 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ze_result_t __zecall
 zetSysmanSchedulerGetTimesliceModeProperties(
@@ -202,7 +206,7 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 {
     auto pfnSchedulerGetTimesliceModeProperties = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetTimesliceModeProperties;
     if( nullptr == pfnSchedulerGetTimesliceModeProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
 }
@@ -223,11 +227,12 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pProperties
-///         + nullptr == pNeedReboot
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+///         + `nullptr == pNeedReboot`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
@@ -241,7 +246,7 @@ zetSysmanSchedulerSetTimeoutMode(
 {
     auto pfnSchedulerSetTimeoutMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetTimeoutMode;
     if( nullptr == pfnSchedulerSetTimeoutMode )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSchedulerSetTimeoutMode( hSysman, pProperties, pNeedReboot );
 }
@@ -261,11 +266,12 @@ zetSysmanSchedulerSetTimeoutMode(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pProperties
-///         + nullptr == pNeedReboot
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+///         + `nullptr == pNeedReboot`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
@@ -279,7 +285,7 @@ zetSysmanSchedulerSetTimesliceMode(
 {
     auto pfnSchedulerSetTimesliceMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetTimesliceMode;
     if( nullptr == pfnSchedulerSetTimesliceMode )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSchedulerSetTimesliceMode( hSysman, pProperties, pNeedReboot );
 }
@@ -299,10 +305,11 @@ zetSysmanSchedulerSetTimesliceMode(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pNeedReboot
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pNeedReboot`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
@@ -315,7 +322,7 @@ zetSysmanSchedulerSetExclusiveMode(
 {
     auto pfnSchedulerSetExclusiveMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetExclusiveMode;
     if( nullptr == pfnSchedulerSetExclusiveMode )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSchedulerSetExclusiveMode( hSysman, pNeedReboot );
 }
@@ -335,10 +342,11 @@ zetSysmanSchedulerSetExclusiveMode(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pNeedReboot
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pNeedReboot`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
@@ -351,7 +359,7 @@ zetSysmanSchedulerSetComputeUnitDebugMode(
 {
     auto pfnSchedulerSetComputeUnitDebugMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetComputeUnitDebugMode;
     if( nullptr == pfnSchedulerSetComputeUnitDebugMode )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSchedulerSetComputeUnitDebugMode( hSysman, pNeedReboot );
 }
@@ -370,10 +378,10 @@ zetSysmanSchedulerSetComputeUnitDebugMode(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanPerformanceProfileGetSupported(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -391,7 +399,7 @@ zetSysmanPerformanceProfileGetSupported(
 {
     auto pfnPerformanceProfileGetSupported = zet_lib::context.ddiTable.Sysman.pfnPerformanceProfileGetSupported;
     if( nullptr == pfnPerformanceProfileGetSupported )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnPerformanceProfileGetSupported( hSysman, pCount, pProfiles );
 }
@@ -408,10 +416,10 @@ zetSysmanPerformanceProfileGetSupported(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pProfile
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProfile`
 ze_result_t __zecall
 zetSysmanPerformanceProfileGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -420,7 +428,7 @@ zetSysmanPerformanceProfileGet(
 {
     auto pfnPerformanceProfileGet = zet_lib::context.ddiTable.Sysman.pfnPerformanceProfileGet;
     if( nullptr == pfnPerformanceProfileGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnPerformanceProfileGet( hSysman, pProfile );
 }
@@ -439,10 +447,12 @@ zetSysmanPerformanceProfileGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + profile
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + The specified profile is not valid or not supported on this device (use ::zetSysmanPerformanceProfileGetSupported() to get a list of supported profiles).
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to change the performance profile of the hardware.
 ze_result_t __zecall
@@ -453,7 +463,7 @@ zetSysmanPerformanceProfileSet(
 {
     auto pfnPerformanceProfileSet = zet_lib::context.ddiTable.Sysman.pfnPerformanceProfileSet;
     if( nullptr == pfnPerformanceProfileSet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnPerformanceProfileSet( hSysman, profile );
 }
@@ -469,10 +479,10 @@ zetSysmanPerformanceProfileSet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanProcessesGetState(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
@@ -488,7 +498,7 @@ zetSysmanProcessesGetState(
 {
     auto pfnProcessesGetState = zet_lib::context.ddiTable.Sysman.pfnProcessesGetState;
     if( nullptr == pfnProcessesGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnProcessesGetState( hSysman, pCount, pProcesses );
 }
@@ -500,9 +510,8 @@ zetSysmanProcessesGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
@@ -512,7 +521,7 @@ zetSysmanDeviceReset(
 {
     auto pfnDeviceReset = zet_lib::context.ddiTable.Sysman.pfnDeviceReset;
     if( nullptr == pfnDeviceReset )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDeviceReset( hSysman );
 }
@@ -525,10 +534,10 @@ zetSysmanDeviceReset(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pRepairStatus
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pRepairStatus`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to query this property.
 ze_result_t __zecall
@@ -539,7 +548,7 @@ zetSysmanDeviceGetRepairStatus(
 {
     auto pfnDeviceGetRepairStatus = zet_lib::context.ddiTable.Sysman.pfnDeviceGetRepairStatus;
     if( nullptr == pfnDeviceGetRepairStatus )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDeviceGetRepairStatus( hSysman, pRepairStatus );
 }
@@ -555,10 +564,10 @@ zetSysmanDeviceGetRepairStatus(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanPciGetProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -567,7 +576,7 @@ zetSysmanPciGetProperties(
 {
     auto pfnPciGetProperties = zet_lib::context.ddiTable.Sysman.pfnPciGetProperties;
     if( nullptr == pfnPciGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnPciGetProperties( hSysman, pProperties );
 }
@@ -583,10 +592,10 @@ zetSysmanPciGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pState
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
 ze_result_t __zecall
 zetSysmanPciGetState(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -595,7 +604,7 @@ zetSysmanPciGetState(
 {
     auto pfnPciGetState = zet_lib::context.ddiTable.Sysman.pfnPciGetState;
     if( nullptr == pfnPciGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnPciGetState( hSysman, pState );
 }
@@ -611,10 +620,10 @@ zetSysmanPciGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanPciGetBars(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -629,7 +638,7 @@ zetSysmanPciGetBars(
 {
     auto pfnPciGetBars = zet_lib::context.ddiTable.Sysman.pfnPciGetBars;
     if( nullptr == pfnPciGetBars )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnPciGetBars( hSysman, pCount, pProperties );
 }
@@ -645,10 +654,10 @@ zetSysmanPciGetBars(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pStats
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pStats`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
@@ -659,7 +668,7 @@ zetSysmanPciGetStats(
 {
     auto pfnPciGetStats = zet_lib::context.ddiTable.Sysman.pfnPciGetStats;
     if( nullptr == pfnPciGetStats )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnPciGetStats( hSysman, pStats );
 }
@@ -675,10 +684,10 @@ zetSysmanPciGetStats(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanPowerGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -695,7 +704,7 @@ zetSysmanPowerGet(
 {
     auto pfnPowerGet = zet_lib::context.ddiTable.Sysman.pfnPowerGet;
     if( nullptr == pfnPowerGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnPowerGet( hSysman, pCount, phPower );
 }
@@ -711,10 +720,10 @@ zetSysmanPowerGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPower`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanPowerGetProperties(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
@@ -723,7 +732,7 @@ zetSysmanPowerGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanPower.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hPower, pProperties );
 }
@@ -739,10 +748,10 @@ zetSysmanPowerGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == pEnergy
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPower`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pEnergy`
 ze_result_t __zecall
 zetSysmanPowerGetEnergyCounter(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
@@ -752,7 +761,7 @@ zetSysmanPowerGetEnergyCounter(
 {
     auto pfnGetEnergyCounter = zet_lib::context.ddiTable.SysmanPower.pfnGetEnergyCounter;
     if( nullptr == pfnGetEnergyCounter )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetEnergyCounter( hPower, pEnergy );
 }
@@ -768,9 +777,8 @@ zetSysmanPowerGetEnergyCounter(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPower`
 ze_result_t __zecall
 zetSysmanPowerGetLimits(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
@@ -781,7 +789,7 @@ zetSysmanPowerGetLimits(
 {
     auto pfnGetLimits = zet_lib::context.ddiTable.SysmanPower.pfnGetLimits;
     if( nullptr == pfnGetLimits )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetLimits( hPower, pSustained, pBurst, pPeak );
 }
@@ -797,9 +805,8 @@ zetSysmanPowerGetLimits(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPower`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
@@ -814,7 +821,7 @@ zetSysmanPowerSetLimits(
 {
     auto pfnSetLimits = zet_lib::context.ddiTable.SysmanPower.pfnSetLimits;
     if( nullptr == pfnSetLimits )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetLimits( hPower, pSustained, pBurst, pPeak );
 }
@@ -830,10 +837,11 @@ zetSysmanPowerSetLimits(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == pThreshold
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPower`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pThreshold`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Energy threshold not supported on this power domain (check ::zet_power_properties_t.isEnergyThresholdSupported).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
@@ -846,7 +854,7 @@ zetSysmanPowerGetEnergyThreshold(
 {
     auto pfnGetEnergyThreshold = zet_lib::context.ddiTable.SysmanPower.pfnGetEnergyThreshold;
     if( nullptr == pfnGetEnergyThreshold )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetEnergyThreshold( hPower, pThreshold );
 }
@@ -876,9 +884,9 @@ zetSysmanPowerGetEnergyThreshold(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPower`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Energy threshold not supported on this power domain (check ::zet_power_properties_t.isEnergyThresholdSupported).
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
@@ -892,7 +900,7 @@ zetSysmanPowerSetEnergyThreshold(
 {
     auto pfnSetEnergyThreshold = zet_lib::context.ddiTable.SysmanPower.pfnSetEnergyThreshold;
     if( nullptr == pfnSetEnergyThreshold )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetEnergyThreshold( hPower, threshold );
 }
@@ -908,10 +916,10 @@ zetSysmanPowerSetEnergyThreshold(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanFrequencyGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -928,7 +936,7 @@ zetSysmanFrequencyGet(
 {
     auto pfnFrequencyGet = zet_lib::context.ddiTable.Sysman.pfnFrequencyGet;
     if( nullptr == pfnFrequencyGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnFrequencyGet( hSysman, pCount, phFrequency );
 }
@@ -944,10 +952,10 @@ zetSysmanFrequencyGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanFrequencyGetProperties(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
@@ -956,7 +964,7 @@ zetSysmanFrequencyGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanFrequency.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hFrequency, pProperties );
 }
@@ -975,10 +983,10 @@ zetSysmanFrequencyGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanFrequencyGetAvailableClocks(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Sysman handle of the device.
@@ -994,7 +1002,7 @@ zetSysmanFrequencyGetAvailableClocks(
 {
     auto pfnGetAvailableClocks = zet_lib::context.ddiTable.SysmanFrequency.pfnGetAvailableClocks;
     if( nullptr == pfnGetAvailableClocks )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetAvailableClocks( hFrequency, pCount, phFrequency );
 }
@@ -1010,10 +1018,10 @@ zetSysmanFrequencyGetAvailableClocks(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pLimits
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pLimits`
 ze_result_t __zecall
 zetSysmanFrequencyGetRange(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
@@ -1023,7 +1031,7 @@ zetSysmanFrequencyGetRange(
 {
     auto pfnGetRange = zet_lib::context.ddiTable.SysmanFrequency.pfnGetRange;
     if( nullptr == pfnGetRange )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetRange( hFrequency, pLimits );
 }
@@ -1039,10 +1047,10 @@ zetSysmanFrequencyGetRange(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pLimits
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pLimits`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
@@ -1054,7 +1062,7 @@ zetSysmanFrequencySetRange(
 {
     auto pfnSetRange = zet_lib::context.ddiTable.SysmanFrequency.pfnSetRange;
     if( nullptr == pfnSetRange )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetRange( hFrequency, pLimits );
 }
@@ -1071,10 +1079,10 @@ zetSysmanFrequencySetRange(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pState
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
 ze_result_t __zecall
 zetSysmanFrequencyGetState(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
@@ -1083,7 +1091,7 @@ zetSysmanFrequencyGetState(
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanFrequency.pfnGetState;
     if( nullptr == pfnGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetState( hFrequency, pState );
 }
@@ -1099,10 +1107,10 @@ zetSysmanFrequencyGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pThrottleTime
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pThrottleTime`
 ze_result_t __zecall
 zetSysmanFrequencyGetThrottleTime(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
@@ -1112,7 +1120,7 @@ zetSysmanFrequencyGetThrottleTime(
 {
     auto pfnGetThrottleTime = zet_lib::context.ddiTable.SysmanFrequency.pfnGetThrottleTime;
     if( nullptr == pfnGetThrottleTime )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetThrottleTime( hFrequency, pThrottleTime );
 }
@@ -1128,10 +1136,10 @@ zetSysmanFrequencyGetThrottleTime(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pOcCapabilities
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pOcCapabilities`
 ze_result_t __zecall
 zetSysmanFrequencyOcGetCapabilities(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
@@ -1140,7 +1148,7 @@ zetSysmanFrequencyOcGetCapabilities(
 {
     auto pfnOcGetCapabilities = zet_lib::context.ddiTable.SysmanFrequency.pfnOcGetCapabilities;
     if( nullptr == pfnOcGetCapabilities )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnOcGetCapabilities( hFrequency, pOcCapabilities );
 }
@@ -1156,10 +1164,11 @@ zetSysmanFrequencyOcGetCapabilities(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pOcConfiguration
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pOcConfiguration`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ze_result_t __zecall
 zetSysmanFrequencyOcGetConfig(
@@ -1169,7 +1178,7 @@ zetSysmanFrequencyOcGetConfig(
 {
     auto pfnOcGetConfig = zet_lib::context.ddiTable.SysmanFrequency.pfnOcGetConfig;
     if( nullptr == pfnOcGetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnOcGetConfig( hFrequency, pOcConfiguration );
 }
@@ -1190,14 +1199,15 @@ zetSysmanFrequencyOcGetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pOcConfiguration
-///         + nullptr == pDeviceRestart
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pOcConfiguration`
+///         + `nullptr == pDeviceRestart`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + The specified voltage and/or frequency overclock settings exceed the hardware values (see ::zet_oc_capabilities_t.maxOcFrequency, ::zet_oc_capabilities_t.maxOcVoltage, ::zet_oc_capabilities_t.minOcVoltageOffset, ::zet_oc_capabilities_t.maxOcVoltageOffset).
 ///         + Requested voltage overclock is very high but ::zet_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device.
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
 ///         + Overclocking feature is locked on this frequency domain
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
@@ -1212,7 +1222,7 @@ zetSysmanFrequencyOcSetConfig(
 {
     auto pfnOcSetConfig = zet_lib::context.ddiTable.SysmanFrequency.pfnOcSetConfig;
     if( nullptr == pfnOcSetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnOcSetConfig( hFrequency, pOcConfiguration, pDeviceRestart );
 }
@@ -1228,10 +1238,11 @@ zetSysmanFrequencyOcSetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pOcIccMax
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pOcIccMax`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + Capability ::zet_oc_capabilities_t.isIccMaxSupported is false for this frequency domain
 ze_result_t __zecall
@@ -1243,7 +1254,7 @@ zetSysmanFrequencyOcGetIccMax(
 {
     auto pfnOcGetIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnOcGetIccMax;
     if( nullptr == pfnOcGetIccMax )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnOcGetIccMax( hFrequency, pOcIccMax );
 }
@@ -1260,14 +1271,15 @@ zetSysmanFrequencyOcGetIccMax(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + The specified current limit is too low or too high
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + Capability ::zet_oc_capabilities_t.isIccMaxSupported is false for this frequency domain
 ///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
 ///         + Overclocking feature is locked on this frequency domain
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + The specified current limit is too low or too high
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
@@ -1278,7 +1290,7 @@ zetSysmanFrequencyOcSetIccMax(
 {
     auto pfnOcSetIccMax = zet_lib::context.ddiTable.SysmanFrequency.pfnOcSetIccMax;
     if( nullptr == pfnOcSetIccMax )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnOcSetIccMax( hFrequency, ocIccMax );
 }
@@ -1294,10 +1306,11 @@ zetSysmanFrequencyOcSetIccMax(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + nullptr == pOcTjMax
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pOcTjMax`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ze_result_t __zecall
 zetSysmanFrequencyOcGetTjMax(
@@ -1308,7 +1321,7 @@ zetSysmanFrequencyOcGetTjMax(
 {
     auto pfnOcGetTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnOcGetTjMax;
     if( nullptr == pfnOcGetTjMax )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnOcGetTjMax( hFrequency, pOcTjMax );
 }
@@ -1325,14 +1338,15 @@ zetSysmanFrequencyOcGetTjMax(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFrequency
-///         + The specified temperature limit is too high
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFrequency`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + Capability ::zet_oc_capabilities_t.isTjMaxSupported is false for this frequency domain
 ///     - ::ZE_RESULT_ERROR_FEATURE_LOCKED
 ///         + Overclocking feature is locked on this frequency domain
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + The specified temperature limit is too high
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
@@ -1343,7 +1357,7 @@ zetSysmanFrequencyOcSetTjMax(
 {
     auto pfnOcSetTjMax = zet_lib::context.ddiTable.SysmanFrequency.pfnOcSetTjMax;
     if( nullptr == pfnOcSetTjMax )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnOcSetTjMax( hFrequency, ocTjMax );
 }
@@ -1359,10 +1373,10 @@ zetSysmanFrequencyOcSetTjMax(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanEngineGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -1379,7 +1393,7 @@ zetSysmanEngineGet(
 {
     auto pfnEngineGet = zet_lib::context.ddiTable.Sysman.pfnEngineGet;
     if( nullptr == pfnEngineGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnEngineGet( hSysman, pCount, phEngine );
 }
@@ -1395,10 +1409,10 @@ zetSysmanEngineGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEngine
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEngine`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanEngineGetProperties(
     zet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
@@ -1407,7 +1421,7 @@ zetSysmanEngineGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanEngine.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hEngine, pProperties );
 }
@@ -1423,10 +1437,10 @@ zetSysmanEngineGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEngine
-///         + nullptr == pStats
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEngine`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pStats`
 ze_result_t __zecall
 zetSysmanEngineGetActivity(
     zet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
@@ -1435,7 +1449,7 @@ zetSysmanEngineGetActivity(
 {
     auto pfnGetActivity = zet_lib::context.ddiTable.SysmanEngine.pfnGetActivity;
     if( nullptr == pfnGetActivity )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetActivity( hEngine, pStats );
 }
@@ -1451,10 +1465,10 @@ zetSysmanEngineGetActivity(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanStandbyGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -1471,7 +1485,7 @@ zetSysmanStandbyGet(
 {
     auto pfnStandbyGet = zet_lib::context.ddiTable.Sysman.pfnStandbyGet;
     if( nullptr == pfnStandbyGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnStandbyGet( hSysman, pCount, phStandby );
 }
@@ -1487,10 +1501,10 @@ zetSysmanStandbyGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hStandby
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hStandby`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanStandbyGetProperties(
     zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
@@ -1499,7 +1513,7 @@ zetSysmanStandbyGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanStandby.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hStandby, pProperties );
 }
@@ -1515,10 +1529,10 @@ zetSysmanStandbyGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hStandby
-///         + nullptr == pMode
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hStandby`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pMode`
 ze_result_t __zecall
 zetSysmanStandbyGetMode(
     zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
@@ -1527,7 +1541,7 @@ zetSysmanStandbyGetMode(
 {
     auto pfnGetMode = zet_lib::context.ddiTable.SysmanStandby.pfnGetMode;
     if( nullptr == pfnGetMode )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetMode( hStandby, pMode );
 }
@@ -1543,9 +1557,10 @@ zetSysmanStandbyGetMode(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hStandby
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hStandby`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + mode
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
@@ -1556,7 +1571,7 @@ zetSysmanStandbySetMode(
 {
     auto pfnSetMode = zet_lib::context.ddiTable.SysmanStandby.pfnSetMode;
     if( nullptr == pfnSetMode )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetMode( hStandby, mode );
 }
@@ -1572,10 +1587,10 @@ zetSysmanStandbySetMode(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanFirmwareGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -1592,7 +1607,7 @@ zetSysmanFirmwareGet(
 {
     auto pfnFirmwareGet = zet_lib::context.ddiTable.Sysman.pfnFirmwareGet;
     if( nullptr == pfnFirmwareGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnFirmwareGet( hSysman, pCount, phFirmware );
 }
@@ -1608,10 +1623,10 @@ zetSysmanFirmwareGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFirmware
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFirmware`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanFirmwareGetProperties(
     zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
@@ -1620,7 +1635,7 @@ zetSysmanFirmwareGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanFirmware.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hFirmware, pProperties );
 }
@@ -1636,10 +1651,10 @@ zetSysmanFirmwareGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFirmware
-///         + nullptr == pChecksum
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFirmware`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pChecksum`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
@@ -1650,7 +1665,7 @@ zetSysmanFirmwareGetChecksum(
 {
     auto pfnGetChecksum = zet_lib::context.ddiTable.SysmanFirmware.pfnGetChecksum;
     if( nullptr == pfnGetChecksum )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetChecksum( hFirmware, pChecksum );
 }
@@ -1666,10 +1681,10 @@ zetSysmanFirmwareGetChecksum(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFirmware
-///         + nullptr == pImage
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFirmware`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pImage`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
 ze_result_t __zecall
@@ -1681,7 +1696,7 @@ zetSysmanFirmwareFlash(
 {
     auto pfnFlash = zet_lib::context.ddiTable.SysmanFirmware.pfnFlash;
     if( nullptr == pfnFlash )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnFlash( hFirmware, pImage, size );
 }
@@ -1697,10 +1712,10 @@ zetSysmanFirmwareFlash(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanMemoryGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -1717,7 +1732,7 @@ zetSysmanMemoryGet(
 {
     auto pfnMemoryGet = zet_lib::context.ddiTable.Sysman.pfnMemoryGet;
     if( nullptr == pfnMemoryGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnMemoryGet( hSysman, pCount, phMemory );
 }
@@ -1733,10 +1748,10 @@ zetSysmanMemoryGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMemory
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMemory`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanMemoryGetProperties(
     zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
@@ -1745,7 +1760,7 @@ zetSysmanMemoryGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanMemory.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hMemory, pProperties );
 }
@@ -1761,10 +1776,10 @@ zetSysmanMemoryGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMemory
-///         + nullptr == pState
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMemory`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
 ze_result_t __zecall
 zetSysmanMemoryGetState(
     zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
@@ -1773,7 +1788,7 @@ zetSysmanMemoryGetState(
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanMemory.pfnGetState;
     if( nullptr == pfnGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetState( hMemory, pState );
 }
@@ -1789,10 +1804,10 @@ zetSysmanMemoryGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMemory
-///         + nullptr == pBandwidth
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hMemory`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pBandwidth`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
@@ -1803,7 +1818,7 @@ zetSysmanMemoryGetBandwidth(
 {
     auto pfnGetBandwidth = zet_lib::context.ddiTable.SysmanMemory.pfnGetBandwidth;
     if( nullptr == pfnGetBandwidth )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetBandwidth( hMemory, pBandwidth );
 }
@@ -1819,10 +1834,10 @@ zetSysmanMemoryGetBandwidth(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanFabricPortGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -1839,7 +1854,7 @@ zetSysmanFabricPortGet(
 {
     auto pfnFabricPortGet = zet_lib::context.ddiTable.Sysman.pfnFabricPortGet;
     if( nullptr == pfnFabricPortGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnFabricPortGet( hSysman, pCount, phPort );
 }
@@ -1855,10 +1870,10 @@ zetSysmanFabricPortGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPort
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanFabricPortGetProperties(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
@@ -1867,7 +1882,7 @@ zetSysmanFabricPortGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanFabricPort.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hPort, pProperties );
 }
@@ -1883,10 +1898,10 @@ zetSysmanFabricPortGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPort
-///         + nullptr == pLinkType
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pLinkType`
 ze_result_t __zecall
 zetSysmanFabricPortGetLinkType(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
@@ -1896,7 +1911,7 @@ zetSysmanFabricPortGetLinkType(
 {
     auto pfnGetLinkType = zet_lib::context.ddiTable.SysmanFabricPort.pfnGetLinkType;
     if( nullptr == pfnGetLinkType )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetLinkType( hPort, verbose, pLinkType );
 }
@@ -1912,10 +1927,10 @@ zetSysmanFabricPortGetLinkType(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPort
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
 ze_result_t __zecall
 zetSysmanFabricPortGetConfig(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
@@ -1924,7 +1939,7 @@ zetSysmanFabricPortGetConfig(
 {
     auto pfnGetConfig = zet_lib::context.ddiTable.SysmanFabricPort.pfnGetConfig;
     if( nullptr == pfnGetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetConfig( hPort, pConfig );
 }
@@ -1940,10 +1955,10 @@ zetSysmanFabricPortGetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPort
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
@@ -1954,7 +1969,7 @@ zetSysmanFabricPortSetConfig(
 {
     auto pfnSetConfig = zet_lib::context.ddiTable.SysmanFabricPort.pfnSetConfig;
     if( nullptr == pfnSetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetConfig( hPort, pConfig );
 }
@@ -1971,10 +1986,10 @@ zetSysmanFabricPortSetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPort
-///         + nullptr == pState
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
 ze_result_t __zecall
 zetSysmanFabricPortGetState(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
@@ -1983,7 +1998,7 @@ zetSysmanFabricPortGetState(
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanFabricPort.pfnGetState;
     if( nullptr == pfnGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetState( hPort, pState );
 }
@@ -1999,10 +2014,10 @@ zetSysmanFabricPortGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPort
-///         + nullptr == pThroughput
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pThroughput`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
 ze_result_t __zecall
@@ -2014,7 +2029,7 @@ zetSysmanFabricPortGetThroughput(
 {
     auto pfnGetThroughput = zet_lib::context.ddiTable.SysmanFabricPort.pfnGetThroughput;
     if( nullptr == pfnGetThroughput )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetThroughput( hPort, pThroughput );
 }
@@ -2030,10 +2045,10 @@ zetSysmanFabricPortGetThroughput(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanTemperatureGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -2050,7 +2065,7 @@ zetSysmanTemperatureGet(
 {
     auto pfnTemperatureGet = zet_lib::context.ddiTable.Sysman.pfnTemperatureGet;
     if( nullptr == pfnTemperatureGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnTemperatureGet( hSysman, pCount, phTemperature );
 }
@@ -2066,10 +2081,10 @@ zetSysmanTemperatureGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTemperature
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTemperature`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanTemperatureGetProperties(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
@@ -2078,7 +2093,7 @@ zetSysmanTemperatureGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanTemperature.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hTemperature, pProperties );
 }
@@ -2095,10 +2110,11 @@ zetSysmanTemperatureGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTemperature
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTemperature`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
 ///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
@@ -2111,7 +2127,7 @@ zetSysmanTemperatureGetConfig(
 {
     auto pfnGetConfig = zet_lib::context.ddiTable.SysmanTemperature.pfnGetConfig;
     if( nullptr == pfnGetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetConfig( hTemperature, pConfig );
 }
@@ -2140,11 +2156,11 @@ zetSysmanTemperatureGetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTemperature
-///         + nullptr == pConfig
-///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value.
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTemperature`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor ::ZET_TEMP_SENSORS_GLOBAL
 ///         + Enabling the critical temperature event is not supported - check ::zet_temp_properties_t.isCriticalTempSupported
 ///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
@@ -2152,6 +2168,8 @@ zetSysmanTemperatureGetConfig(
 ///         + User does not have permissions to request this feature.
 ///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
 ///         + Another running process is controlling these settings.
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value.
 ze_result_t __zecall
 zetSysmanTemperatureSetConfig(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
@@ -2160,7 +2178,7 @@ zetSysmanTemperatureSetConfig(
 {
     auto pfnSetConfig = zet_lib::context.ddiTable.SysmanTemperature.pfnSetConfig;
     if( nullptr == pfnSetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetConfig( hTemperature, pConfig );
 }
@@ -2176,10 +2194,10 @@ zetSysmanTemperatureSetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hTemperature
-///         + nullptr == pTemperature
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTemperature`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pTemperature`
 ze_result_t __zecall
 zetSysmanTemperatureGetState(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
@@ -2189,7 +2207,7 @@ zetSysmanTemperatureGetState(
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanTemperature.pfnGetState;
     if( nullptr == pfnGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetState( hTemperature, pTemperature );
 }
@@ -2205,10 +2223,10 @@ zetSysmanTemperatureGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanPsuGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -2225,7 +2243,7 @@ zetSysmanPsuGet(
 {
     auto pfnPsuGet = zet_lib::context.ddiTable.Sysman.pfnPsuGet;
     if( nullptr == pfnPsuGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnPsuGet( hSysman, pCount, phPsu );
 }
@@ -2241,10 +2259,10 @@ zetSysmanPsuGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPsu
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPsu`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanPsuGetProperties(
     zet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
@@ -2253,7 +2271,7 @@ zetSysmanPsuGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanPsu.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hPsu, pProperties );
 }
@@ -2269,10 +2287,10 @@ zetSysmanPsuGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPsu
-///         + nullptr == pState
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPsu`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
 ze_result_t __zecall
 zetSysmanPsuGetState(
     zet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
@@ -2281,7 +2299,7 @@ zetSysmanPsuGetState(
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanPsu.pfnGetState;
     if( nullptr == pfnGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetState( hPsu, pState );
 }
@@ -2297,10 +2315,10 @@ zetSysmanPsuGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanFanGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -2317,7 +2335,7 @@ zetSysmanFanGet(
 {
     auto pfnFanGet = zet_lib::context.ddiTable.Sysman.pfnFanGet;
     if( nullptr == pfnFanGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnFanGet( hSysman, pCount, phFan );
 }
@@ -2333,10 +2351,10 @@ zetSysmanFanGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFan
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFan`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanFanGetProperties(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
@@ -2345,7 +2363,7 @@ zetSysmanFanGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanFan.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hFan, pProperties );
 }
@@ -2361,10 +2379,10 @@ zetSysmanFanGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFan
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFan`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
 ze_result_t __zecall
 zetSysmanFanGetConfig(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
@@ -2373,7 +2391,7 @@ zetSysmanFanGetConfig(
 {
     auto pfnGetConfig = zet_lib::context.ddiTable.SysmanFan.pfnGetConfig;
     if( nullptr == pfnGetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetConfig( hFan, pConfig );
 }
@@ -2389,10 +2407,10 @@ zetSysmanFanGetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFan
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFan`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
@@ -2403,7 +2421,7 @@ zetSysmanFanSetConfig(
 {
     auto pfnSetConfig = zet_lib::context.ddiTable.SysmanFan.pfnSetConfig;
     if( nullptr == pfnSetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetConfig( hFan, pConfig );
 }
@@ -2419,10 +2437,12 @@ zetSysmanFanSetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFan
-///         + nullptr == pSpeed
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFan`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + units
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pSpeed`
 ze_result_t __zecall
 zetSysmanFanGetState(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
@@ -2432,7 +2452,7 @@ zetSysmanFanGetState(
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanFan.pfnGetState;
     if( nullptr == pfnGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetState( hFan, units, pSpeed );
 }
@@ -2448,10 +2468,10 @@ zetSysmanFanGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanLedGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -2468,7 +2488,7 @@ zetSysmanLedGet(
 {
     auto pfnLedGet = zet_lib::context.ddiTable.Sysman.pfnLedGet;
     if( nullptr == pfnLedGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnLedGet( hSysman, pCount, phLed );
 }
@@ -2484,10 +2504,10 @@ zetSysmanLedGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hLed
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hLed`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanLedGetProperties(
     zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
@@ -2496,7 +2516,7 @@ zetSysmanLedGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanLed.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hLed, pProperties );
 }
@@ -2512,10 +2532,10 @@ zetSysmanLedGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hLed
-///         + nullptr == pState
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hLed`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
 ze_result_t __zecall
 zetSysmanLedGetState(
     zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
@@ -2524,7 +2544,7 @@ zetSysmanLedGetState(
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanLed.pfnGetState;
     if( nullptr == pfnGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetState( hLed, pState );
 }
@@ -2540,10 +2560,10 @@ zetSysmanLedGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hLed
-///         + nullptr == pState
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hLed`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 ze_result_t __zecall
@@ -2554,7 +2574,7 @@ zetSysmanLedSetState(
 {
     auto pfnSetState = zet_lib::context.ddiTable.SysmanLed.pfnSetState;
     if( nullptr == pfnSetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetState( hLed, pState );
 }
@@ -2580,10 +2600,10 @@ zetSysmanLedSetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanRasGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -2600,7 +2620,7 @@ zetSysmanRasGet(
 {
     auto pfnRasGet = zet_lib::context.ddiTable.Sysman.pfnRasGet;
     if( nullptr == pfnRasGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnRasGet( hSysman, pCount, phRas );
 }
@@ -2618,10 +2638,10 @@ zetSysmanRasGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hRas
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hRas`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanRasGetProperties(
     zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
@@ -2630,7 +2650,7 @@ zetSysmanRasGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanRas.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hRas, pProperties );
 }
@@ -2655,10 +2675,10 @@ zetSysmanRasGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hRas
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hRas`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
 ze_result_t __zecall
 zetSysmanRasGetConfig(
     zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
@@ -2668,7 +2688,7 @@ zetSysmanRasGetConfig(
 {
     auto pfnGetConfig = zet_lib::context.ddiTable.SysmanRas.pfnGetConfig;
     if( nullptr == pfnGetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetConfig( hRas, pConfig );
 }
@@ -2695,10 +2715,10 @@ zetSysmanRasGetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hRas
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hRas`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_DEVICE_IS_IN_USE
 ///         + Another running process is controlling these settings.
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
@@ -2711,7 +2731,7 @@ zetSysmanRasSetConfig(
 {
     auto pfnSetConfig = zet_lib::context.ddiTable.SysmanRas.pfnSetConfig;
     if( nullptr == pfnSetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetConfig( hRas, pConfig );
 }
@@ -2730,10 +2750,10 @@ zetSysmanRasSetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hRas
-///         + nullptr == pTotalErrors
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hRas`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pTotalErrors`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + Don't have permissions to clear error counters.
 ze_result_t __zecall
@@ -2746,7 +2766,7 @@ zetSysmanRasGetState(
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanRas.pfnGetState;
     if( nullptr == pfnGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetState( hRas, clear, pTotalErrors, pDetails );
 }
@@ -2762,10 +2782,10 @@ zetSysmanRasGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == phEvent
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phEvent`
 ze_result_t __zecall
 zetSysmanEventGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
@@ -2774,7 +2794,7 @@ zetSysmanEventGet(
 {
     auto pfnEventGet = zet_lib::context.ddiTable.Sysman.pfnEventGet;
     if( nullptr == pfnEventGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnEventGet( hSysman, phEvent );
 }
@@ -2791,10 +2811,10 @@ zetSysmanEventGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEvent
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
 ze_result_t __zecall
 zetSysmanEventGetConfig(
     zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
@@ -2804,7 +2824,7 @@ zetSysmanEventGetConfig(
 {
     auto pfnGetConfig = zet_lib::context.ddiTable.SysmanEvent.pfnGetConfig;
     if( nullptr == pfnGetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetConfig( hEvent, pConfig );
 }
@@ -2821,10 +2841,10 @@ zetSysmanEventGetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEvent
-///         + nullptr == pConfig
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
 ze_result_t __zecall
 zetSysmanEventSetConfig(
     zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
@@ -2833,7 +2853,7 @@ zetSysmanEventSetConfig(
 {
     auto pfnSetConfig = zet_lib::context.ddiTable.SysmanEvent.pfnSetConfig;
     if( nullptr == pfnSetConfig )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnSetConfig( hEvent, pConfig );
 }
@@ -2852,10 +2872,10 @@ zetSysmanEventSetConfig(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hEvent
-///         + nullptr == pEvents
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pEvents`
 ze_result_t __zecall
 zetSysmanEventGetState(
     zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
@@ -2866,7 +2886,7 @@ zetSysmanEventGetState(
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanEvent.pfnGetState;
     if( nullptr == pfnGetState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetState( hEvent, clear, pEvents );
 }
@@ -2885,14 +2905,15 @@ zetSysmanEventGetState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == phEvents
-///         + nullptr == pEvents
-///         + One or more of the supplied event handles are for devices that belong to a different driver handle.
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phEvents`
+///         + `nullptr == pEvents`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to listen to events.
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + One or more of the supplied event handles are for devices that belong to a different driver handle.
 ze_result_t __zecall
 zetSysmanEventListen(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
@@ -2909,7 +2930,7 @@ zetSysmanEventListen(
 {
     auto pfnListen = zet_lib::context.ddiTable.SysmanEvent.pfnListen;
     if( nullptr == pfnListen )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnListen( hDriver, timeout, count, phEvents, pEvents );
 }
@@ -2925,10 +2946,10 @@ zetSysmanEventListen(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanDiagnosticsGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
@@ -2945,7 +2966,7 @@ zetSysmanDiagnosticsGet(
 {
     auto pfnDiagnosticsGet = zet_lib::context.ddiTable.Sysman.pfnDiagnosticsGet;
     if( nullptr == pfnDiagnosticsGet )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDiagnosticsGet( hSysman, pCount, phDiagnostics );
 }
@@ -2961,10 +2982,10 @@ zetSysmanDiagnosticsGet(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDiagnostics
-///         + nullptr == pProperties
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDiagnostics`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
 ze_result_t __zecall
 zetSysmanDiagnosticsGetProperties(
     zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
@@ -2973,7 +2994,7 @@ zetSysmanDiagnosticsGetProperties(
 {
     auto pfnGetProperties = zet_lib::context.ddiTable.SysmanDiagnostics.pfnGetProperties;
     if( nullptr == pfnGetProperties )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetProperties( hDiagnostics, pProperties );
 }
@@ -2993,10 +3014,10 @@ zetSysmanDiagnosticsGetProperties(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDiagnostics
-///         + nullptr == pCount
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDiagnostics`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 ze_result_t __zecall
 zetSysmanDiagnosticsGetTests(
     zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
@@ -3012,7 +3033,7 @@ zetSysmanDiagnosticsGetTests(
 {
     auto pfnGetTests = zet_lib::context.ddiTable.SysmanDiagnostics.pfnGetTests;
     if( nullptr == pfnGetTests )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetTests( hDiagnostics, pCount, pTests );
 }
@@ -3034,10 +3055,10 @@ zetSysmanDiagnosticsGetTests(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDiagnostics
-///         + nullptr == pResult
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDiagnostics`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pResult`
 ///     - ::ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
 ///         + User does not have permissions to perform diagnostics.
 ze_result_t __zecall
@@ -3052,7 +3073,7 @@ zetSysmanDiagnosticsRunTests(
 {
     auto pfnRunTests = zet_lib::context.ddiTable.SysmanDiagnostics.pfnRunTests;
     if( nullptr == pfnRunTests )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnRunTests( hDiagnostics, start, end, pResult );
 }

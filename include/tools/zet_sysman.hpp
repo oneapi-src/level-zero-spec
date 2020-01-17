@@ -235,7 +235,7 @@ namespace zet
             RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),        ///< Event is triggered when accelerator RAS uncorrectable errors cross
                                                             ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
                                                             ///< default).
-            ALL = (~0),                                     ///< Specifies all events
+            ALL = 0x0FFF,                                   ///< Specifies all events
 
         };
 

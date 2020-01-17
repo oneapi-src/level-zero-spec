@@ -181,21 +181,46 @@ namespace ze
     ///     - **CUresult**
     enum class result_t
     {
-        SUCCESS = 0,                                    ///< success
-        NOT_READY = 1,                                  ///< synchronization primitive not signaled
-        ERROR_UNINITIALIZED,                            ///< driver is not initialized
-        ERROR_DEVICE_LOST,                              ///< device hung, reset, was removed, or driver update occurred
-        ERROR_UNSUPPORTED,                              ///< device does not support feature requested
-        ERROR_INVALID_ARGUMENT,                         ///< invalid argument provided
-        ERROR_OUT_OF_HOST_MEMORY,                       ///< insufficient host memory to satisfy call
-        ERROR_OUT_OF_DEVICE_MEMORY,                     ///< insufficient device memory to satisfy call
-        ERROR_MODULE_BUILD_FAILURE,                     ///< error in building module
-        ERROR_INSUFFICENT_PERMISSIONS,                  ///< access denied
-        ERROR_DEVICE_IS_IN_USE,                         ///< the device is already in use
-        ERROR_ARRAY_SIZE_TOO_SMALL,                     ///< an array argument doesn't have enough storage
-        ERROR_DEVICE_ACCESS,                            ///< there was a problem accessing device data
-        ERROR_FEATURE_LOCKED,                           ///< requested operation is not permitted because the feature is locked
-        ERROR_UNKNOWN = 0x7fffffff,                     ///< unknown or internal error
+        SUCCESS = 0,                                    ///< [Core] success
+        NOT_READY = 1,                                  ///< [Core] synchronization primitive not signaled
+        ERROR_DEVICE_LOST = 0x70000001,                 ///< [Core] device hung, reset, was removed, or driver update occurred
+        ERROR_OUT_OF_HOST_MEMORY,                       ///< [Core] insufficient host memory to satisfy call
+        ERROR_OUT_OF_DEVICE_MEMORY,                     ///< [Core] insufficient device memory to satisfy call
+        ERROR_MODULE_BUILD_FAILURE,                     ///< [Core] error occurred when building module, see build log for details
+        ERROR_INSUFFICIENT_PERMISSIONS = 0x70010000,    ///< [Sysman] access denied due to permission level
+        ERROR_NOT_AVAILABLE,                            ///< [Sysman] resource already in use and simultaneous access not allowed
+        ERROR_UNINITIALIZED = 0x78000001,               ///< [Validation] driver is not initialized
+        ERROR_UNSUPPORTED_VERSION,                      ///< [Validation] generic error code for unsupported versions
+        ERROR_UNSUPPORTED_FEATURE,                      ///< [Validation] generic error code for unsupported features
+        ERROR_INVALID_ARGUMENT,                         ///< [Validation] generic error code for invalid arguments
+        ERROR_INVALID_NULL_HANDLE,                      ///< [Validation] handle argument is not valid
+        ERROR_HANDLE_OBJECT_IN_USE,                     ///< [Validation] object pointed to by handle still in-use by device
+        ERROR_INVALID_NULL_POINTER,                     ///< [Validation] pointer argument may not be nullptr
+        ERROR_INVALID_SIZE,                             ///< [Validation] size argument is invalid (e.g., must not be zero)
+        ERROR_UNSUPPORTED_SIZE,                         ///< [Validation] size argument is not supported by the device (e.g., too
+                                                        ///< large)
+        ERROR_UNSUPPORTED_ALIGNMENT,                    ///< [Validation] alignment argument is not supported by the device (e.g.,
+                                                        ///< too small)
+        ERROR_INVALID_SYNCHRONIZATION_OBJECT,           ///< [Validation] synchronization object in invalid state
+        ERROR_INVALID_ENUMERATION,                      ///< [Validation] enumerator argument is not valid
+        ERROR_UNSUPPORTED_ENUMERATION,                  ///< [Validation] enumerator argument is not supported by the device
+        ERROR_UNSUPPORTED_IMAGE_FORMAT,                 ///< [Validation] image format is not supported by the device
+        ERROR_INVALID_NATIVE_BINARY,                    ///< [Validation] native binary is not supported by the device
+        ERROR_INVALID_GLOBAL_NAME,                      ///< [Validation] global variable is not found in the module
+        ERROR_INVALID_KERNEL_NAME,                      ///< [Validation] kernel name is not found in the module
+        ERROR_INVALID_FUNCTION_NAME,                    ///< [Validation] function name is not found in the module
+        ERROR_INVALID_GROUP_SIZE_DIMENSION,             ///< [Validation] group size dimension is not valid for the kernel or
+                                                        ///< device
+        ERROR_INVALID_GLOBAL_WIDTH_DIMENSION,           ///< [Validation] global width dimension is not valid for the kernel or
+                                                        ///< device
+        ERROR_INVALID_KERNEL_ARGUMENT_INDEX,            ///< [Validation] kernel argument index is not valid for kernel
+        ERROR_INVALID_KERNEL_ARGUMENT_SIZE,             ///< [Validation] kernel argument size does not match kernel
+        ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE,           ///< [Validation] value of kernel attribute is not valid for the kernel or
+                                                        ///< device
+        ERROR_INVALID_COMMAND_LIST_TYPE,                ///< [Validation] command list type does not match command queue type
+        ERROR_OVERLAPPING_REGIONS,                      ///< [Validation] copy operations do not support overlapping regions of
+                                                        ///< memory
+        ERROR_UNKNOWN = 0x7fffffff,                     ///< [Core] unknown or internal error
 
     };
 

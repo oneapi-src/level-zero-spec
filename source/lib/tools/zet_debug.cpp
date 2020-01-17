@@ -24,10 +24,12 @@ extern "C" {
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == config`
+///         + `nullptr == hDebug`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == config
-///         + nullptr == hDebug
 ///         + an invalid device handle has been supplied
 ///         + an invalid configuration has been supplied
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED
@@ -45,7 +47,7 @@ zetDebugAttach(
 {
     auto pfnAttach = zet_lib::context.ddiTable.Debug.pfnAttach;
     if( nullptr == pfnAttach )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnAttach( hDevice, config, hDebug );
 }
@@ -57,10 +59,10 @@ zetDebugAttach(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
 ///         + an invalid debug handle has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugDetach(
     zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
@@ -68,7 +70,7 @@ zetDebugDetach(
 {
     auto pfnDetach = zet_lib::context.ddiTable.Debug.pfnDetach;
     if( nullptr == pfnDetach )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnDetach( hDebug );
 }
@@ -80,11 +82,12 @@ zetDebugDetach(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pNumThreads`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == pNumThreads
 ///         + an invalid debug handle has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugGetNumThreads(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
@@ -93,7 +96,7 @@ zetDebugGetNumThreads(
 {
     auto pfnGetNumThreads = zet_lib::context.ddiTable.Debug.pfnGetNumThreads;
     if( nullptr == pfnGetNumThreads )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnGetNumThreads( hDebug, pNumThreads );
 }
@@ -105,11 +108,12 @@ zetDebugGetNumThreads(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or buffer pointer has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///         + the output buffer is too small to hold the event
 ///     - ::ZE_RESULT_NOT_READY
@@ -124,7 +128,7 @@ zetDebugReadEvent(
 {
     auto pfnReadEvent = zet_lib::context.ddiTable.Debug.pfnReadEvent;
     if( nullptr == pfnReadEvent )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnReadEvent( hDebug, timeout, size, buffer );
 }
@@ -136,11 +140,11 @@ zetDebugReadEvent(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is already stopped or unavailable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugInterrupt(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
@@ -149,7 +153,7 @@ zetDebugInterrupt(
 {
     auto pfnInterrupt = zet_lib::context.ddiTable.Debug.pfnInterrupt;
     if( nullptr == pfnInterrupt )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnInterrupt( hDebug, threadid );
 }
@@ -161,11 +165,11 @@ zetDebugInterrupt(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is already running or unavailable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugResume(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
@@ -174,7 +178,7 @@ zetDebugResume(
 {
     auto pfnResume = zet_lib::context.ddiTable.Debug.pfnResume;
     if( nullptr == pfnResume )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnResume( hDebug, threadid );
 }
@@ -186,13 +190,14 @@ zetDebugResume(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid address has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
 ///         + the memory cannot be accessed from the supplied thread
 ze_result_t __zecall
@@ -207,7 +212,7 @@ zetDebugReadMemory(
 {
     auto pfnReadMemory = zet_lib::context.ddiTable.Debug.pfnReadMemory;
     if( nullptr == pfnReadMemory )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnReadMemory( hDebug, threadid, memSpace, address, size, buffer );
 }
@@ -219,13 +224,14 @@ zetDebugReadMemory(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid address has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ///     - ::ZE_RESULT_ERROR_DEVICE_ACCESS
 ///         + the memory cannot be accessed from the supplied thread
 ze_result_t __zecall
@@ -240,7 +246,7 @@ zetDebugWriteMemory(
 {
     auto pfnWriteMemory = zet_lib::context.ddiTable.Debug.pfnWriteMemory;
     if( nullptr == pfnWriteMemory )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnWriteMemory( hDebug, threadid, memSpace, address, size, buffer );
 }
@@ -252,13 +258,14 @@ zetDebugWriteMemory(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid offset or size has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugReadState(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
@@ -270,7 +277,7 @@ zetDebugReadState(
 {
     auto pfnReadState = zet_lib::context.ddiTable.Debug.pfnReadState;
     if( nullptr == pfnReadState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnReadState( hDebug, threadid, offset, size, buffer );
 }
@@ -282,13 +289,14 @@ zetDebugReadState(
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDebug`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == buffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDebug
-///         + nullptr == buffer
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid offset or size has been supplied
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
 ze_result_t __zecall
 zetDebugWriteState(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
@@ -300,7 +308,7 @@ zetDebugWriteState(
 {
     auto pfnWriteState = zet_lib::context.ddiTable.Debug.pfnWriteState;
     if( nullptr == pfnWriteState )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnWriteState( hDebug, threadid, offset, size, buffer );
 }
@@ -561,24 +569,19 @@ namespace zet
     /// @brief Converts Debug::event_flags_t to std::string
     std::string to_string( const Debug::event_flags_t val )
     {
+        const auto bits = static_cast<uint32_t>( val );
+
         std::string str;
+        
+        if( 0 == bits )
+            str += "DEBUG_EVENT_FLAG_NONE   ";
+        
+        if( static_cast<uint32_t>(Debug::event_flags_t::DEBUG_EVENT_FLAG_STOPPED) & bits )
+            str += "DEBUG_EVENT_FLAG_STOPPED | ";
 
-        switch( val )
-        {
-        case Debug::event_flags_t::DEBUG_EVENT_FLAG_NONE:
-            str = "Debug::event_flags_t::DEBUG_EVENT_FLAG_NONE";
-            break;
-
-        case Debug::event_flags_t::DEBUG_EVENT_FLAG_STOPPED:
-            str = "Debug::event_flags_t::DEBUG_EVENT_FLAG_STOPPED";
-            break;
-
-        default:
-            str = "Debug::event_flags_t::?";
-            break;
-        };
-
-        return str;
+        return ( str.size() > 3 ) 
+            ? "Debug::event_flags_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Debug::event_flags_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////

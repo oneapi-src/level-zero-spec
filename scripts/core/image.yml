@@ -298,6 +298,7 @@ params:
       name: phImage
       desc: "[out] pointer to handle of image object created"
 returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -316,6 +317,8 @@ params:
     - type: $x_image_handle_t
       name: hImage
       desc: "[in][release] handle of image object to destroy"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for image"

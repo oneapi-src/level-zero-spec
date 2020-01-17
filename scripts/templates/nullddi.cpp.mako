@@ -153,11 +153,8 @@ extern "C" {
 ///
 /// @returns
 ///     - ::${X}_RESULT_SUCCESS
-///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::${X}_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::${X}_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::${X}_RESULT_ERROR_UNSUPPORTED_VERSION
 __${x}dllexport ${x}_result_t __${x}call
 ${tbl['export']['name']}(
     %for line in th.make_param_lines(n, tags, tbl['export']):
@@ -166,10 +163,10 @@ ${tbl['export']['name']}(
     )
 {
     if( nullptr == pDdiTable )
-        return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
+        return ${X}_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( driver::context.version < version )
-        return ${X}_RESULT_ERROR_UNSUPPORTED;
+        return ${X}_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 

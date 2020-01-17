@@ -689,8 +689,7 @@ params:
       name: CacheConfig
       desc: "[in] CacheConfig"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "devices do not support CacheConfig"
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a device"

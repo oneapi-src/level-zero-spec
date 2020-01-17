@@ -38,6 +38,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initializes host, device, or shared memory."
@@ -71,6 +73,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Copy region descriptor"
@@ -124,6 +128,9 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
+returns:
+    - $X_RESULT_ERROR_OVERLAPPING_REGIONS
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a image."
@@ -147,6 +154,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Region descriptor"
@@ -198,6 +207,9 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_OVERLAPPING_REGIONS
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies from a image to device or shared memory."
@@ -225,6 +237,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies to a image from device or shared memory."
@@ -252,6 +266,8 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Asynchronously prefetches shared memory to the device associated with the specified command list"
@@ -344,6 +360,3 @@ params:
     - type: $x_memory_advice_t
       name: advice
       desc: "[in] Memory advice for the memory range"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid value for advice"

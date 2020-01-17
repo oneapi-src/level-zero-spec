@@ -40,11 +40,11 @@ namespace layer
         auto ${th.make_pfn_name(n, tags, obj)} = context.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
 
         if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
-            return ${X}_RESULT_ERROR_UNSUPPORTED;
+            return ${X}_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            %for key, values in th.make_param_checks(n, tags, obj).items():
+            %for key, values in th.make_param_checks(n, tags, obj, meta=meta).items():
             %for val in values:
             if( ${val} )
                 return ${key};
@@ -73,11 +73,8 @@ extern "C" {
 ///
 /// @returns
 ///     - ::${X}_RESULT_SUCCESS
-///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::${X}_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::${X}_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::${X}_RESULT_ERROR_UNSUPPORTED_VERSION
 __${x}dllexport ${x}_result_t __${x}call
 ${tbl['export']['name']}(
     %for line in th.make_param_lines(n, tags, tbl['export']):
@@ -88,10 +85,10 @@ ${tbl['export']['name']}(
     auto& dditable = layer::context.${n}DdiTable.${tbl['name']};
 
     if( nullptr == pDdiTable )
-        return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
+        return ${X}_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( layer::context.version < version )
-        return ${X}_RESULT_ERROR_UNSUPPORTED;
+        return ${X}_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 

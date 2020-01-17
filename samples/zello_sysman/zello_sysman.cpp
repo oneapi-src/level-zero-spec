@@ -358,11 +358,11 @@ bool SetOverclock(zet_sysman_freq_handle_t hFreqDomain)
                 }
                 ret = true;
             }
-            else if (status == ZE_RESULT_ERROR_UNSUPPORTED)
+            else if (status == ZE_RESULT_ERROR_UNSUPPORTED_FEATURE)
             {
                 fprintf(stderr, "ERROR: Overclocking not supported.\n");
             }
-            else if (status == ZE_RESULT_ERROR_FEATURE_LOCKED)
+            else if (status == ZE_RESULT_ERROR_NOT_AVAILABLE)
             {
                 fprintf(stderr, "ERROR: Overclocking locked by the BIOS.\n");
             }
@@ -370,7 +370,7 @@ bool SetOverclock(zet_sysman_freq_handle_t hFreqDomain)
             {
                 fprintf(stderr, "ERROR: The overclock frequency or voltage is too high.\n");
             }
-            else if (status == ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
+            else if (status == ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS )
             {
                 fprintf(stderr, "ERROR: You don't have permission to overclock.\n");
             }
@@ -733,11 +733,11 @@ void DisableSchedulerWatchdog(zet_sysman_handle_t hSysmanDevice)
                 fprintf(stdout, "Schedule mode changed successfully.\n");
             }
         }
-        else if(res == ZE_RESULT_ERROR_UNSUPPORTED)
+        else if(res == ZE_RESULT_ERROR_UNSUPPORTED_FEATURE )
         {
             fprintf(stderr, "ERROR: The timeout scheduler mode is not supported on this device.\n");
         }
-        else if(res == ZE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
+        else if(res == ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS )
         {
             fprintf(stderr, "ERROR: Don't have permissions to change the scheduler mode.\n");
         }
@@ -746,7 +746,7 @@ void DisableSchedulerWatchdog(zet_sysman_handle_t hSysmanDevice)
             fprintf(stderr, "ERROR: Problem calling the API to change the scheduler mode.\n");
         }
     }
-    else if(res == ZE_RESULT_ERROR_UNSUPPORTED)
+    else if(res == ZE_RESULT_ERROR_UNSUPPORTED_FEATURE )
     {
         fprintf(stderr, "ERROR: Scheduler modes are not supported on this device.\n");
     }

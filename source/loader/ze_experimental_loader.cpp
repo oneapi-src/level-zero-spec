@@ -54,7 +54,7 @@ namespace loader
         auto dditable = reinterpret_cast<zex_command_list_object_t*>( hCommandList )->dditable;
         auto pfnReserveSpace = dditable->zex.CommandList.pfnReserveSpace;
         if( nullptr == pfnReserveSpace )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<zex_command_list_object_t*>( hCommandList )->handle;
@@ -80,7 +80,7 @@ namespace loader
         auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
         auto pfnCreate = dditable->zex.CommandGraph.pfnCreate;
         if( nullptr == pfnCreate )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
@@ -115,7 +115,7 @@ namespace loader
         auto dditable = reinterpret_cast<zex_command_graph_object_t*>( hCommandGraph )->dditable;
         auto pfnDestroy = dditable->zex.CommandGraph.pfnDestroy;
         if( nullptr == pfnDestroy )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandGraph = reinterpret_cast<zex_command_graph_object_t*>( hCommandGraph )->handle;
@@ -142,7 +142,7 @@ namespace loader
         auto dditable = reinterpret_cast<zex_command_graph_object_t*>( hCommandGraph )->dditable;
         auto pfnClose = dditable->zex.CommandGraph.pfnClose;
         if( nullptr == pfnClose )
-            return ZE_RESULT_ERROR_UNSUPPORTED;
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hCommandGraph = reinterpret_cast<zex_command_graph_object_t*>( hCommandGraph )->handle;
@@ -165,11 +165,9 @@ extern "C" {
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zexGetGlobalProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -180,10 +178,10 @@ zexGetGlobalProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -229,11 +227,9 @@ zexGetGlobalProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zexGetCommandListProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -244,10 +240,10 @@ zexGetCommandListProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
@@ -293,11 +289,9 @@ zexGetCommandListProcAddrTable(
 ///
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
 zexGetCommandGraphProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
@@ -308,10 +302,10 @@ zexGetCommandGraphProcAddrTable(
         return ZE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_ARGUMENT;
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
     if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED;
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 

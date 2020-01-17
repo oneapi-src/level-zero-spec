@@ -91,9 +91,6 @@ params:
       name: phSampler
       desc: "[out] handle of the sampler"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid pDesc->addressMode"
-        - "invalid pDesc->filterMode"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
@@ -113,6 +110,8 @@ params:
     - type: "$x_sampler_handle_t"
       name: hSampler
       desc: "[in][release] handle of the sampler"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: class
 desc: "c++ wrapper for sampler"

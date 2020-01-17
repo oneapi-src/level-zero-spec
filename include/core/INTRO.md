@@ -128,17 +128,20 @@ There are multiple versions that should be used by the application to determine 
 
 ## Error Handling
 The following design philosophies are adopted in order to reduce Host-side overhead:
-- by default, the driver implementation does no parameter validation of any kind
-    + this can be enabled via environment variables, described below
-- by default, neither the driver nor device provide any protection against the following:
+- neither the driver nor device provide any protection against the following:
     + invalid API programming
     + invalid function arguments
     + function infinite loops or recusions
     + synchronization primitive deadlocks
     + non-visible memory access by the Host or device
     + non-resident memeory access by the device
+- the driver implementation is **not** required to perform API validation of any kind
+    + the driver should ensure well-behaved applications are not burdened with the overhead needed for non-bevaving applications
+    + unless otherwise specified, the driver behavior is undefined when APIs are improperly used
+    + for debug purposes, API validation can be enabled via the [Validation Layers](#v0)
 - all API functions return ::ze_result_t
-    + this allows for a consistent pattern on the application side for catching errors; especially when validation layer is enabled
+    + this enumeration contains error codes for the core APIs and validation layers
+    + this allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled
 
 ## Multithreading and Concurrency
 The following design philosophies are adopted in order to maximize Host thread concurrency:
@@ -180,7 +183,7 @@ Applications should not rely on experimental APIs in production.
 - Experimental APIs are not gaurenteed to be forward or backward capatible between API versions.
 - Experimental APIs are not gaurenteed to be supported in production driver releases; and may appear and disappear from release to release.
 
-An implementation will return ::ZE_RESULT_ERROR_UNSUPPORTED for any experimental API not supported by that driver.
+An implementation will return ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE for any experimental API not supported by that driver.
 
 # <a name="drv">Driver Architecture</a>
 The following section provides high-level driver architecture.
@@ -236,7 +239,6 @@ Each capability is enabled by additional environment variables.
 The validation layer supports the following capabilities:
 - <a name="v1">Parameter Validation</a>
     + checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
-    + functions may return ::ZE_RESULT_ERROR_INVALID_ARGUMENT or ::ZE_RESULT_ERROR_UNSUPPORTED
 - <a name="v2">Handle Lifetime</a>
     + tracks handle allocations, destruction and usage for leaks and invalid usage (e.g., destruction while still in-use by device)
 - <a name="v3">Memory Tracker</a>

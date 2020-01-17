@@ -49,10 +49,12 @@ typedef enum _zet_module_debug_info_format_t
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == pSize
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hModule`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + format
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pSize`
 ze_result_t __zecall
 zetModuleGetDebugInfo(
     zet_module_handle_t hModule,                    ///< [in] handle of the module

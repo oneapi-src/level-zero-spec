@@ -77,12 +77,28 @@ def generate_meta(d, ordinal, meta):
             name = d['class']+name
 
         if name not in meta[type]:
-            meta[type][name] = {'types': [], 'class': ""}
+            meta[type][name] = {'types': [], 'names': [], 'class': ""}
 
         # add values to list
         if 'enum' == type:
+            max_value = -1
             for etor in d['etors']:
                 meta[type][name]['types'].append(etor['name'])
+                if 'value' in etor:
+                    ver = re.match(r"\$X_MAKE_VERSION\(\s*(\d+)\s*\,\s*(\d+)\s*\)", etor['value'])
+                    mask = re.match(r"\$X_BIT\(\s*(\d+)\s*\)", etor['value'])
+                    if ver:
+                        value = (int(ver.group(1)) << 16) + int(ver.group(2))
+                    elif mask:
+                        value = 1 << int(mask.group(1))
+                    elif re.match(r"0x\w+", etor['value']):
+                        value = int(etor['value'], 16)
+                    else:
+                        value = int(etor['value'])
+                else:
+                    value = max_value+1
+                max_value = max(max_value, value)
+            meta[type][name]['max'] = str(max_value)
 
         elif 'macro' == type:   
             if 'value' in d:
@@ -98,6 +114,7 @@ def generate_meta(d, ordinal, meta):
         elif 'struct' == type or 'union' == type:
             for m in d['members']:
                 meta[type][name]['types'].append(m['type'])
+                meta[type][name]['names'].append(m['name'])
 
         if 'class' in d:
             meta[type][name]['class'] = d['class']
