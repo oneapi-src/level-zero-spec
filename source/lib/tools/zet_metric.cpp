@@ -1386,6 +1386,10 @@ namespace zet
         str += std::to_string(val.domain);
         str += "\n";
         
+        str += "MetricGroup::properties_t::maxCommandQueueOrdinal : ";
+        str += std::to_string(val.maxCommandQueueOrdinal);
+        str += "\n";
+        
         str += "MetricGroup::properties_t::metricCount : ";
         str += std::to_string(val.metricCount);
         str += "\n";

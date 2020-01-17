@@ -84,6 +84,11 @@ members:
       name: "domain"
       desc: "[out] metric group domain number. Cannot use simultaneous metric groups from different domains."
     - type: uint32_t
+      name: "maxCommandQueueOrdinal"
+      desc: |
+            [out] tracers and queries of this metric group cannot be submitted to a command queue with a larger ordinal value.
+            See $x_command_queue_desc_t for more information on how to specify the command queue's ordinal.
+    - type: uint32_t
       name: "metricCount"
       desc: "[out] metric count belonging to this group"
 --- #--------------------------------------------------------------------------
