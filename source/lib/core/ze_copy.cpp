@@ -113,6 +113,7 @@ zeCommandListAppendMemoryFill(
 ///       the device on which the command list is created.
 ///     - The region width and height for both src and dst must be same. The
 ///       origins can be different.
+///     - The src and dst regions cannot be overlapping.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -189,6 +190,9 @@ zeCommandListAppendImageCopy(
 /// @brief Copies a region of a image to another image.
 /// 
 /// @details
+///     - The region width and height for both src and dst must be same. The
+///       origins can be different.
+///     - The src and dst regions cannot be overlapping.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -487,6 +491,7 @@ namespace ze
     ///       the device on which the command list is created.
     ///     - The region width and height for both src and dst must be same. The
     ///       origins can be different.
+    ///     - The src and dst regions cannot be overlapping.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -551,6 +556,9 @@ namespace ze
     /// @brief Copies a region of a image to another image.
     /// 
     /// @details
+    ///     - The region width and height for both src and dst must be same. The
+    ///       origins can be different.
+    ///     - The src and dst regions cannot be overlapping.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
