@@ -14,7 +14,7 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 * [Program Debug](#dbg)
 
 # <a name="init">Initialization</a>
-The driver must be initialized by calling ::zetInit after calling ::zeInit and before calling any other experimental function.
+The driver must be initialized by calling ::zetInit after calling ::zeInit and before calling any other tools function.
 Simultaneous calls to ::zetInit are thread-safe.
 
 # <a name="at">API Tracing</a>
