@@ -23,6 +23,39 @@ def validate_doc(d):
         pass
 
 """
+    filters object by version
+"""
+def filter_version(d, max_ver):
+    type = d['type']
+    ver = float(d.get('version', "1.0"))
+    if ver > max_ver:
+        return None
+
+    flt = []
+    if 'enum' == type:
+        for e in d['etors']:
+            ver = float(e.get('version', "1.0"))
+            if ver <= max_ver:
+                flt.append(e)
+        d['etors'] = flt
+
+    elif 'function' == type:
+        for p in d['params']:
+            ver = float(p.get('version', "1.0"))
+            if ver <= max_ver:
+                flt.append(p)
+        d['params'] = flt
+
+    elif 'struct' == type or 'union' == type or 'class' == type:
+        for m in d.get('members',[]):
+            ver = float(m.get('version', "1.0"))
+            if ver <= max_ver:
+                flt.append(m)
+        d['members'] = flt
+
+    return d
+
+"""
     generates SHA512 string for the given object
 """
 def generate_hash(d):
@@ -100,7 +133,7 @@ def generate_meta(d, ordinal, meta):
                 max_value = max(max_value, value)
             meta[type][name]['max'] = str(max_value)
 
-        elif 'macro' == type:   
+        elif 'macro' == type:
             if 'value' in d:
                 meta[type][name]['types'].append(d['value'])
 
@@ -157,7 +190,7 @@ Entry-point:
     Reads each YML file and extracts data
     Returns list of data per file
 """
-def parse(path, meta = {'class':{}}):
+def parse(path, version, meta = {'class':{}}):
     specs = []
     for f in util.findFiles(path, "*.yml"):
         print("Parsing %s..."%f)
@@ -177,9 +210,11 @@ def parse(path, meta = {'class':{}}):
                     header['ordinal'] = "9999"
 
             else:
-                d['hash'] = generate_hash(d)
-                objects.append(d)
-                meta = generate_meta(d, header['ordinal'], meta)
+                d = filter_version(d, float(version))
+                if d:
+                    d['hash'] = generate_hash(d)
+                    objects.append(d)
+                    meta = generate_meta(d, header['ordinal'], meta)
 
         specs.append({
             'name'      : os.path.splitext(os.path.basename(f))[0],

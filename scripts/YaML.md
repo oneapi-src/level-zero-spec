@@ -37,7 +37,7 @@ value: "0"
 #### typedef
 * A typedef initiates the creation of a c/c++ 'typedef' statement in the source code
 * A typedef requires the following scalar fields: "desc", "name" and "value"
-* A typedef may take the following optional scalar fields: "class"
+* A typedef may take the following optional scalar fields: "class" and "version"
 
 ```yml
 type: typedef
@@ -49,7 +49,7 @@ value: "void*"
 #### const
 * A const initiates the creation of a c/c++ 'static const' statement in the source code
 * A const requires the following scalar fields: "desc", "name", "typename" and "value"
-* A typedef may take the following optional scalar fields: "class"
+* A typedef may take the following optional scalar fields: "class" and "version"
 
 ```yml
 type: const
@@ -62,10 +62,10 @@ value: "0"
 #### enum
 * An enum initiates the creation of a c/c++ 'enum' definition in the source code
 * An enum requires the following scalar fields: "desc" and "name"
-* An enum may take the following optional scalar fields: "class"
+* An enum may take the following optional scalar fields: "class" and "version"
 * An enum requires the following sequence of scalars: "etors"
 * An etor requires the following scalar fields: "name" and "desc"
-* An etor may take the following optional scalar field: "value"
+* An etor may take the following optional scalar field: "value" and "version"
 
 ```yml
 type: enum
@@ -82,10 +82,10 @@ etors:
 #### struct/union
 * A struct/union initiates the creation of a c/c++ 'struct/union' definition in the source code
 * A struct/union requires the following scalar fields: "desc" and "name"
-* A struct/union may take the following optional scalar fields: "class"
+* A struct/union may take the following optional scalar fields: "class" and "version"
 * A struct/union requires the following sequence of scalars: "members"
 * A member requires the following scalar fields: "type", "name" and "desc"
-* A member may take the following optional scalar fields: "init"
+* A member may take the following optional scalar fields: "init" and "version"
 * The scripts only support simple 'struct/union' definitions: no bitfields, no functions, no constructors, no overloaded operators, etc.
 
 ```yml
@@ -105,7 +105,7 @@ members:
 * A handle initiates the creation of a c/c++ forwarding 'struct' pointer definition in the source code
 * A handle is a special-case structure for strongly-typed handles
 * A handle requires the following scalar fields: "desc" and "name"
-* A handle may take the following optional scalar fields: "class"
+* A handle may take the following optional scalar fields: "class" and "version"
 
 ```yml
 type: handle
@@ -118,10 +118,11 @@ class: Foo
 * A function initiates the creation of a c/c++ function declaration in the source code
 * A function requires the following scalar fields: "desc" and "name"
 * A function requires the following sequence of scalars: "params"
-* A function may take the following optional scalar fields: "class"
+* A function may take the following optional scalar fields: "class" and "version"
 * A function may take the following optional scalar fields: "decl"
 * A function may take the following optional sequence of sequences: "details", "returns" and "analogue"
 * A param requires the following scalars: "type", "name" and "desc"
+* A param may take the following optional scalar fields: "version"
 * A detail may be a scalar or sequence
 * A return may be a scalar or sequence
 * An analogue must be a scalar
@@ -148,7 +149,9 @@ params:
 * A class initiates the creation of a c++ class declaration in the source code
 * A class requires the following scalar fields: "desc" and "name"
 * A class requires the following sequence of scalars: "members"
+* A class may take the following optional scalar fields: "version"
 * A member requires the following scalar fields: "type", "name" and "desc"
+* A member may take the following optional scalar fields: "version"
 
 ```yml
 type: class

@@ -93,7 +93,7 @@ def validate_md(fpath, meta):
 Entry-point:
     generate markdown documents from templates
 """
-def generate_md(srcpath, dstpath, tags, meta):
+def generate_md(srcpath, dstpath, tags, ver, meta):
     loc = 0
     util.makePath(dstpath)
     util.removeFiles(dstpath, "*.md")
@@ -102,23 +102,25 @@ def generate_md(srcpath, dstpath, tags, meta):
         print("Generating %s..."%fout)
         validate_md(os.path.abspath(fin), meta)
         loc += util.makoWrite(fin, fout,
-            tags=tags)
+            tags=tags,
+            ver=float(ver))
     print("Generated %s lines of markdown.\n"%loc)
 
 """
 Entry-point:
     generate restructedtext documents from templates
 """
-def generate_rst(srcpath, dstpath, tags, meta):
+def generate_rst(srcpath, dstpath, tags, ver, meta):
     loc = 0
     util.makePath(dstpath)
     util.removeFiles(dstpath, "*.rst")
     for fin in util.findFiles(srcpath, "*.rst"):
         fout = os.path.join(dstpath, os.path.basename(fin))
         print("Generating %s..."%fout)
-        loc += util.makoWrite(fin, fout, tags=tags)
-    if (loc > 0):
-        print("Generated %s lines of restructuredtext (rst).\n"%loc)
+        loc += util.makoWrite(fin, fout,
+            tags=tags,
+            ver=float(ver))
+    print("Generated %s lines of reStructuredText (rst).\n"%loc)
 
 
 """

@@ -60,7 +60,8 @@ def main():
     add_argument(parser, "md", "generation of markdown files.", True)
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
-    add_argument(parser, "rst", "generation of markdown files.", False)
+    add_argument(parser, "rst", "generation of markdown files.")
+    parser.add_argument("--ver", type=str, default="1.0", required=False, help="specification version to generate.")
     args = vars(parser.parse_args())
 
     start = time.time()
@@ -80,12 +81,13 @@ def main():
         srcpath = os.path.join("./", section)
         dstpath = os.path.join("../include/", section)
         libpath = os.path.join("../source/lib/", section)
+        docpath = os.path.join("../docs/source/", section)
 
         if args[section] and util.exists(srcpath):
             if meta:
-                specs, meta = parse_specs.parse(srcpath, meta)
+                specs, meta = parse_specs.parse(srcpath, args['ver'], meta)
             else:
-                specs, meta = parse_specs.parse(srcpath)
+                specs, meta = parse_specs.parse(srcpath, args['ver'])
 
             if len(specs) > 0:
                 if args['debug']:
@@ -104,11 +106,10 @@ def main():
                     generate_code.generate_layers("../source/", section, namespace, tags, specs, meta)
 
             if args['rst']:
-                dstpath_rst = os.path.join("../docs/source/", section)
-                generate_docs.generate_rst(srcpath, dstpath_rst, tags, meta)
+                generate_docs.generate_rst(srcpath, docpath, tags, args['ver'], meta)
 
             if args['md']:
-                generate_docs.generate_md(srcpath, dstpath, tags, meta)
+                generate_docs.generate_md(srcpath, dstpath, tags, args['ver'], meta)
 
     if args['debug']:
         util.makoFileListWrite("generated.json")
