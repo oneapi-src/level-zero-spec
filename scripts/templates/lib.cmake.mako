@@ -4,6 +4,7 @@
 
     TARGET_NAME="${TARGET_NAME}"
     CMAKE_CURRENT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+    CMAKE_DL_LIBS="${CMAKE_DL_LIBS}"
 
 %>set(TARGET_NAME ${n}_api)
 
@@ -22,4 +23,8 @@ target_include_directories(${TARGET_NAME}
 target_compile_definitions(${TARGET_NAME}
     PRIVATE
         ${X}_ENABLE_OCL_INTEROP=0
+)
+
+target_link_libraries(${TARGET_NAME}
+    ${CMAKE_DL_LIBS}
 )

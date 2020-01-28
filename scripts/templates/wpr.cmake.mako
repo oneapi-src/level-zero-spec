@@ -4,6 +4,7 @@
 
     TARGET_NAME="${TARGET_NAME}"
     CMAKE_CURRENT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+    CMAKE_DL_LIBS="${CMAKE_DL_LIBS}"
 
 %>set(TARGET_NAME ${n}_api_cpp)
 
@@ -26,4 +27,5 @@ target_compile_definitions(${TARGET_NAME}
 
 target_link_libraries(${TARGET_NAME}
     ${x}_api ${n}_api
+    ${CMAKE_DL_LIBS}
 )

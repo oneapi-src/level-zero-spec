@@ -20,4 +20,5 @@ target_compile_definitions(${TARGET_NAME}
 
 target_link_libraries(${TARGET_NAME}
     ze_api zex_api
+    ${CMAKE_DL_LIBS}
 )
