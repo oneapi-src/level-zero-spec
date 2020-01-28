@@ -1,5 +1,18 @@
-# Source Code
-Header files are generated using [scripts](/scripts/README.md).  
+# Contents
+This repo contains the following:
+- API specification in YaML
+- API programming guide in Markdown
+- API C/C++ header files (generated)
+- API Python module (generated)
+- Sample C++ wrapper (generated)
+- Sample C/C++ import library (generated)
+- Sample driver loader (generated)
+- Sample parameter validation layer (generated)
+- Sample "null" driver (generated)
+- Simple sample applications
+
+# Source Code Generation
+Code is generated using included [Python scripts](/scripts/README.md).  
 
 # Documentation
 [Documentation](https://one-api.gitlab-pages.devtools.intel.com/level_zero/) is generated from source code using Doxygen.
