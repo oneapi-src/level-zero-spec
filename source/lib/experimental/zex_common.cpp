@@ -6,7 +6,7 @@
  *
  * @file zex_common.cpp
  *
- * @brief C++ wrapper of Intel 'One API' Level-Zero Experimental API common types
+ * @brief C++ static library for Intel 'One API' Level-Zero Experimental API common types
  *
  * @cond DEV
  * DO NOT EDIT: generated from /scripts/experimental/common.yml
@@ -18,11 +18,3 @@
 extern "C" {
 
 } // extern "C"
-
-namespace zex
-{
-} // namespace zex
-
-namespace zex
-{
-} // namespace zex

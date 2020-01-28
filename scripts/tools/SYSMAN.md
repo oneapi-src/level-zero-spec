@@ -179,7 +179,7 @@ will provide two handles, one to control the GPU frequency and one to enumerate 
 ![Frequency flow](../images/tools_sysman_freq_flow.png?raw=true) 
 
 In the C API, each class is associated with a unique handle type (e.g. ::${t}_sysman_freq_handle_t refers to a frequency component).
-In the C++ API, each class is a C++ class (e.g. An instance of the class ::${t}::SysmanFrequency refers to a frequency component).
+In the C++ API, each class is a C++ class (e.g. An instance of the class ::${t}_sysman_freq_handle_t refers to a frequency component).
 
 The pseudo code below shows how to use the Sysman API to enumerate all GPU frequency components and fix each to a specific frequency if this is supported:
 

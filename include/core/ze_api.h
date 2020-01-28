@@ -19,7 +19,6 @@
 
 // standard headers
 #include <stdint.h>
-#include <string.h>
 
 // 'core' API headers
 #include "ze_common.h"

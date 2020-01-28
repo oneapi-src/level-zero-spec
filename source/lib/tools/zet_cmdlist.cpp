@@ -6,7 +6,7 @@
  *
  * @file zet_cmdlist.cpp
  *
- * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for Command List
+ * @brief C++ static library for Intel 'One API' Level-Zero Tool APIs for Command List
  *
  * @cond DEV
  * DO NOT EDIT: generated from /scripts/tools/cmdlist.yml
@@ -18,11 +18,3 @@
 extern "C" {
 
 } // extern "C"
-
-namespace zet
-{
-} // namespace zet
-
-namespace zet
-{
-} // namespace zet

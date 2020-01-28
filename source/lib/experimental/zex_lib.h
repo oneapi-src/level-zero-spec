@@ -8,7 +8,7 @@
  *
  */
 #pragma once
-#include "zex_api.hpp"
+#include "zex_api.h"
 #include "zex_ddi.h"
 #include "ze_util.h"
 #include <vector>

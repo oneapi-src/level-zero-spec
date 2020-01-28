@@ -6,7 +6,7 @@
  *
  * @file zet_common.cpp
  *
- * @brief C++ wrapper of Intel 'One API' Level-Zero Tool API common types
+ * @brief C++ static library for Intel 'One API' Level-Zero Tool API common types
  *
  * @cond DEV
  * DO NOT EDIT: generated from /scripts/tools/common.yml
@@ -18,11 +18,3 @@
 extern "C" {
 
 } // extern "C"
-
-namespace zet
-{
-} // namespace zet
-
-namespace zet
-{
-} // namespace zet

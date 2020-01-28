@@ -23,8 +23,11 @@ import re
 #if defined(__cplusplus)
 #pragma once
 
+// C API headers
+#include "${n}_api.h"
+
 %if n != x:
-// 'core' API headers
+// 'core' C++ API headers
 #include "${x}_api.hpp"
 %else:
 // standard headers
@@ -32,6 +35,7 @@ import re
 #include <string.h>
 #include <exception>
 #include <tuple>
+#include <vector>
 #include <string>
 #include <sstream>
 %endif

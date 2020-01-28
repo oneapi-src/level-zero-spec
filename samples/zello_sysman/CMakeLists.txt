@@ -14,10 +14,10 @@ endif()
 
 if(WIN32)
 target_link_libraries(${TARGET_NAME}
-    ze_api zet_api
+    ze_api_cpp zet_api_cpp
 )
 else()
 target_link_libraries(${TARGET_NAME}
-    ze_api zet_api dl
+    ze_api_cpp zet_api_cpp dl
 )
 endif()

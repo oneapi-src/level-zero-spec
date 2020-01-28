@@ -16,7 +16,10 @@
 #if defined(__cplusplus)
 #pragma once
 
-// 'core' API headers
+// C API headers
+#include "zet_api.h"
+
+// 'core' C++ API headers
 #include "ze_api.hpp"
 
 // 'tools' API headers

@@ -31,7 +31,7 @@ RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
 """
     determines if the symbol is known
 """
-def find_symbol_type(name, meta):
+def _find_symbol_type(name, meta):
     for group in meta:
         if name in meta[group]:
             return group
@@ -46,7 +46,7 @@ def find_symbol_type(name, meta):
 """
     validate the markdown file
 """
-def validate_md(fpath, meta):
+def _validate_md(fpath, meta):
     enable = True
     code_block = False
 
@@ -76,7 +76,7 @@ def validate_md(fpath, meta):
             for word in words:
                 symbol = re.sub(RE_EXTRACT_TAG_NAME, r"$\1", word)
                 if symbol:
-                    symbol_type = find_symbol_type(symbol, meta)
+                    symbol_type = _find_symbol_type(symbol, meta)
                     if not symbol_type:
                         print("%s(%s) : error : symbol '%s' not found"%(fpath, iline+1, symbol))
 
@@ -100,7 +100,7 @@ def generate_md(srcpath, dstpath, tags, ver, meta):
     for fin in util.findFiles(srcpath, "*.md"):
         fout = os.path.join(dstpath, os.path.basename(fin))
         print("Generating %s..."%fout)
-        validate_md(os.path.abspath(fin), meta)
+        _validate_md(os.path.abspath(fin), meta)
         loc += util.makoWrite(fin, fout,
             tags=tags,
             ver=float(ver))

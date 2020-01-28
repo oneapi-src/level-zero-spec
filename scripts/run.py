@@ -54,7 +54,9 @@ def main():
     add_argument(parser, "clean", "cleaning previous generated files.")
     add_argument(parser, "lib", "generation of lib files.", True)
     add_argument(parser, "loader", "generation of loader files.", True)
-    add_argument(parser, "layers", "generation of layer files.", True)
+    add_argument(parser, "layers", "generation of validation layer files.", True)
+    add_argument(parser, "drivers", "generation of null driver files.", True)
+    add_argument(parser, "wrapper", "generation of c++ wrapper files.", True)
     add_argument(parser, "build", "running cmake to generate and build projects.")
     add_argument(parser, "debug", "dump intermediate data to disk.")
     add_argument(parser, "md", "generation of markdown files.", True)
@@ -78,38 +80,44 @@ def main():
         for key in configParser.get(section,'tags').split(","):
             tags['$'+key] = configParser.get(section,key)
 
-        srcpath = os.path.join("./", section)
-        dstpath = os.path.join("../include/", section)
-        libpath = os.path.join("../source/lib/", section)
+        ymlpath = os.path.join("./", section)
+        incpath = os.path.join("../include/", section)
+        srcpath = os.path.join("../source/")
         docpath = os.path.join("../docs/source/", section)
 
-        if args[section] and util.exists(srcpath):
+        if args[section] and util.exists(ymlpath):
             if meta:
-                specs, meta = parse_specs.parse(srcpath, args['ver'], meta)
+                specs, meta = parse_specs.parse(ymlpath, args['ver'], meta)
             else:
-                specs, meta = parse_specs.parse(srcpath, args['ver'])
+                specs, meta = parse_specs.parse(ymlpath, args['ver'])
 
             if len(specs) > 0:
                 if args['debug']:
-                    util.jsonWrite(os.path.join(srcpath, "specs.json"), specs)
-                    util.jsonWrite(os.path.join(srcpath, "meta.json"), meta)
+                    util.jsonWrite(os.path.join(ymlpath, "specs.json"), specs)
+                    util.jsonWrite(os.path.join(ymlpath, "meta.json"), meta)
 
-                generate_code.generate_api(dstpath, namespace, tags, specs, meta)
+                generate_code.generate_api(incpath, namespace, tags, specs, meta)
 
                 if args['lib']:
-                    generate_code.generate_lib(libpath, namespace, tags, specs, meta)
+                    generate_code.generate_lib(srcpath, section, namespace, tags, specs, meta)
 
                 if args['loader']:
-                    generate_code.generate_loader("../source/", section, namespace, tags, specs, meta)
+                    generate_code.generate_loader(srcpath, section, namespace, tags, specs, meta)
 
                 if args['layers']:
-                    generate_code.generate_layers("../source/", section, namespace, tags, specs, meta)
+                    generate_code.generate_layers(srcpath, section, namespace, tags, specs, meta)
+
+                if args['drivers']:
+                    generate_code.generate_drivers(srcpath, section, namespace, tags, specs, meta)
+
+                if args['wrapper']:
+                    generate_code.generate_wrapper(srcpath, section, namespace, tags, specs, meta)
 
             if args['rst']:
-                generate_docs.generate_rst(srcpath, docpath, tags, args['ver'], meta)
+                generate_docs.generate_rst(ymlpath, docpath, tags, args['ver'], meta)
 
             if args['md']:
-                generate_docs.generate_md(srcpath, dstpath, tags, args['ver'], meta)
+                generate_docs.generate_md(ymlpath, incpath, tags, args['ver'], meta)
 
     if args['debug']:
         util.makoFileListWrite("generated.json")
