@@ -24,12 +24,6 @@ target_compile_definitions(${TARGET_NAME}
         ${X}_ENABLE_OCL_INTEROP=0
 )
 
-if(WIN32)
 target_link_libraries(${TARGET_NAME}
     ${x}_api ${n}_api
 )
-else()
-target_link_libraries(${TARGET_NAME}
-    ${x}_api ${n}_api dl
-)
-endif()

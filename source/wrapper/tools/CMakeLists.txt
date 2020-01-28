@@ -24,12 +24,6 @@ target_compile_definitions(${TARGET_NAME}
         ZE_ENABLE_OCL_INTEROP=0
 )
 
-if(WIN32)
 target_link_libraries(${TARGET_NAME}
     ze_api zet_api
 )
-else()
-target_link_libraries(${TARGET_NAME}
-    ze_api zet_api dl
-)
-endif()
