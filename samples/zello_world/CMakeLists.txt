@@ -18,6 +18,6 @@ target_link_libraries(${TARGET_NAME}
 )
 else()
 target_link_libraries(${TARGET_NAME}
-    dl ze_api zex_api ze_api_cpp zex_api_cpp
+    ze_api_cpp zex_api_cpp ${CMAKE_DL_LIBS}
 )
 endif()
