@@ -20,11 +20,6 @@ target_include_directories(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_compile_definitions(${TARGET_NAME}
-    PRIVATE
-        ${X}_ENABLE_OCL_INTEROP=0
-)
-
 target_link_libraries(${TARGET_NAME}
     ${x}_api ${n}_api
     ${CMAKE_DL_LIBS}

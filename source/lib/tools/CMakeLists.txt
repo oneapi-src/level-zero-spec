@@ -22,11 +22,6 @@ target_include_directories(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_compile_definitions(${TARGET_NAME}
-    PRIVATE
-        ZE_ENABLE_OCL_INTEROP=0
-)
-
 target_link_libraries(${TARGET_NAME}
     ${CMAKE_DL_LIBS}
 )

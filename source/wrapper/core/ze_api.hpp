@@ -35,7 +35,6 @@
 #include "ze_cmdqueue.hpp"
 #include "ze_cmdlist.hpp"
 #include "ze_barrier.hpp"
-#include "ze_cl_interop.hpp"
 #include "ze_copy.hpp"
 #include "ze_event.hpp"
 #include "ze_fence.hpp"

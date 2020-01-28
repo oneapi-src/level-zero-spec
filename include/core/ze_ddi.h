@@ -314,39 +314,6 @@ typedef ze_result_t (__zecall *ze_pfnDeviceSystemBarrier_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDeviceRegisterCLMemory 
-#if ZE_ENABLE_OCL_INTEROP
-typedef ze_result_t (__zecall *ze_pfnDeviceRegisterCLMemory_t)(
-    ze_device_handle_t,
-    cl_context,
-    cl_mem,
-    void**
-    );
-#endif // ZE_ENABLE_OCL_INTEROP
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDeviceRegisterCLProgram 
-#if ZE_ENABLE_OCL_INTEROP
-typedef ze_result_t (__zecall *ze_pfnDeviceRegisterCLProgram_t)(
-    ze_device_handle_t,
-    cl_context,
-    cl_program,
-    ze_module_handle_t*
-    );
-#endif // ZE_ENABLE_OCL_INTEROP
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeDeviceRegisterCLCommandQueue 
-#if ZE_ENABLE_OCL_INTEROP
-typedef ze_result_t (__zecall *ze_pfnDeviceRegisterCLCommandQueue_t)(
-    ze_device_handle_t,
-    cl_context,
-    cl_command_queue,
-    ze_command_queue_handle_t*
-    );
-#endif // ZE_ENABLE_OCL_INTEROP
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeDeviceMakeMemoryResident 
 typedef ze_result_t (__zecall *ze_pfnDeviceMakeMemoryResident_t)(
     ze_device_handle_t,
@@ -393,21 +360,6 @@ typedef struct _ze_device_dditable_t
     ze_pfnDeviceCanAccessPeer_t                                 pfnCanAccessPeer;
     ze_pfnDeviceSetLastLevelCacheConfig_t                       pfnSetLastLevelCacheConfig;
     ze_pfnDeviceSystemBarrier_t                                 pfnSystemBarrier;
-#if ZE_ENABLE_OCL_INTEROP
-    ze_pfnDeviceRegisterCLMemory_t                              pfnRegisterCLMemory;
-#else
-    void*                                                       pfnRegisterCLMemory;
-#endif // ZE_ENABLE_OCL_INTEROP
-#if ZE_ENABLE_OCL_INTEROP
-    ze_pfnDeviceRegisterCLProgram_t                             pfnRegisterCLProgram;
-#else
-    void*                                                       pfnRegisterCLProgram;
-#endif // ZE_ENABLE_OCL_INTEROP
-#if ZE_ENABLE_OCL_INTEROP
-    ze_pfnDeviceRegisterCLCommandQueue_t                        pfnRegisterCLCommandQueue;
-#else
-    void*                                                       pfnRegisterCLCommandQueue;
-#endif // ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceMakeMemoryResident_t                            pfnMakeMemoryResident;
     ze_pfnDeviceEvictMemory_t                                   pfnEvictMemory;
     ze_pfnDeviceMakeImageResident_t                             pfnMakeImageResident;

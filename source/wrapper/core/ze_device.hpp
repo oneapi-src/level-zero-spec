@@ -602,48 +602,6 @@ namespace ze
             void
             );
 
-#if ZE_ENABLE_OCL_INTEROP
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Registers OpenCL memory with 'One API'
-        /// @returns
-        ///     - void*: pointer to device allocation
-        /// 
-        /// @throws result_t
-        void* __zecall
-        RegisterCLMemory(
-            cl_context context,                             ///< [in] the OpenCL context that created the memory
-            cl_mem mem                                      ///< [in] the OpenCL memory to register
-            );
-#endif // ZE_ENABLE_OCL_INTEROP
-
-#if ZE_ENABLE_OCL_INTEROP
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Registers OpenCL program with 'One API'
-        /// @returns
-        ///     - Module*: pointer to handle of module object created
-        /// 
-        /// @throws result_t
-        Module* __zecall
-        RegisterCLProgram(
-            cl_context context,                             ///< [in] the OpenCL context that created the program
-            cl_program program                              ///< [in] the OpenCL program to register
-            );
-#endif // ZE_ENABLE_OCL_INTEROP
-
-#if ZE_ENABLE_OCL_INTEROP
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Registers OpenCL command queue with 'One API'
-        /// @returns
-        ///     - CommandQueue*: pointer to handle of command queue object created
-        /// 
-        /// @throws result_t
-        CommandQueue* __zecall
-        RegisterCLCommandQueue(
-            cl_context context,                             ///< [in] the OpenCL context that created the command queue
-            cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
-            );
-#endif // ZE_ENABLE_OCL_INTEROP
-
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Makes memory resident for the device.
         /// 

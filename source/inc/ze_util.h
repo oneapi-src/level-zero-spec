@@ -51,14 +51,6 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
-typedef struct _cl_mem* cl_mem;
-typedef struct _cl_command_queue* cl_command_queue;
-typedef struct _cl_context* cl_context;
-typedef struct _cl_program* cl_program;
-#endif
-
-///////////////////////////////////////////////////////////////////////////////
 inline bool getenv_tobool( const char* name )
 {
     const char* env = getenv( name );
