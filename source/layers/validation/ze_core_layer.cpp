@@ -1200,7 +1200,7 @@ namespace layer
             if( ZE_EVENT_POOL_DESC_VERSION_CURRENT < desc->version )
                 return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-            if( 2 <= desc->flags )
+            if( 4 <= desc->flags )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
@@ -1537,6 +1537,39 @@ namespace layer
         }
 
         return pfnHostReset( hEvent );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeEventGetTimestamp
+    ze_result_t __zecall
+    zeEventGetTimestamp(
+        ze_event_handle_t hEvent,                       ///< [in] handle of the event
+        ze_event_timestamp_type_t timestampType,        ///< [in] specifies timestamp type to query for that is associated with
+                                                        ///< hEvent.
+        void* dstptr                                    ///< [in,out] pointer to memory for where timestamp will be written to. The
+                                                        ///< size of tiemstamp is specified in the
+                                                        ///< ::ze_event_timestamp_query_type_t definition.
+        )
+    {
+        auto pfnGetTimestamp = context.zeDdiTable.Event.pfnGetTimestamp;
+
+        if( nullptr == pfnGetTimestamp )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hEvent )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( 3 <= timestampType )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( nullptr == dstptr )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetTimestamp( hEvent, timestampType, dstptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3324,6 +3357,9 @@ zeGetEventProcAddrTable(
 
     dditable.pfnHostReset                                = pDdiTable->pfnHostReset;
     pDdiTable->pfnHostReset                              = layer::zeEventHostReset;
+
+    dditable.pfnGetTimestamp                             = pDdiTable->pfnGetTimestamp;
+    pDdiTable->pfnGetTimestamp                           = layer::zeEventGetTimestamp;
 
     return result;
 }

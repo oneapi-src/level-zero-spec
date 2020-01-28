@@ -41,6 +41,8 @@ typedef enum _ze_event_pool_flag_t
     ZE_EVENT_POOL_FLAG_DEFAULT = 0,                 ///< signals and waits visible to the entire device and peer devices
     ZE_EVENT_POOL_FLAG_HOST_VISIBLE = ZE_BIT(0),    ///< signals and waits are also visible to host
     ZE_EVENT_POOL_FLAG_IPC = ZE_BIT(1),             ///< signals and waits may be shared across processes
+    ZE_EVENT_POOL_FLAG_TIMESTAMP = ZE_BIT(2),       ///< Indicates all events in pool will contain timestamp information that
+                                                    ///< can be queried using ::zeEventGetTimestamp
 
 } ze_event_pool_flag_t;
 
@@ -477,6 +479,49 @@ zeCommandListAppendEventReset(
 ze_result_t __zecall
 zeEventHostReset(
     ze_event_handle_t hEvent                        ///< [in] handle of the event
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported timestamp types
+typedef enum _ze_event_timestamp_type_t
+{
+    ZE_EVENT_TIMESTAMP_GLOBAL_START = 0,            ///< wall-clock time start in GPU clocks for event. Data is uint64_t.
+    ZE_EVENT_TIMESTAMP_GLOBAL_END,                  ///< wall-clock time end in GPU clocks for event.Data is uint64_t.
+    ZE_EVENT_TIMESTAMP_CONTEXT_START,               ///< context time start in GPU clocks for event.  Only includes time while
+                                                    ///< HW context is actively running on GPU. Data is uint64_t.
+    ZE_EVENT_TIMESTAMP_CONTEXT_END,                 ///< context time end in GPU clocks for event.  Only includes time while HW
+                                                    ///< context is actively running on GPU. Data is uint64_t.
+
+} ze_event_timestamp_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Query timestamp information associated with an event. Event must come
+///        from an event pool that was created using
+///        ::ZE_EVENT_POOL_FLAG_TIMESTAMP flag.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + timestampType
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == dstptr`
+///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+ze_result_t __zecall
+zeEventGetTimestamp(
+    ze_event_handle_t hEvent,                       ///< [in] handle of the event
+    ze_event_timestamp_type_t timestampType,        ///< [in] specifies timestamp type to query for that is associated with
+                                                    ///< hEvent.
+    void* dstptr                                    ///< [in,out] pointer to memory for where timestamp will be written to. The
+                                                    ///< size of tiemstamp is specified in the
+                                                    ///< ::ze_event_timestamp_query_type_t definition.
     );
 
 #if defined(__cplusplus)

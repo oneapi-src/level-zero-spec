@@ -1940,6 +1940,30 @@ typedef void (__zecall *ze_pfnEventHostResetCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeEventGetTimestamp 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_event_get_timestamp_params_t
+{
+    ze_event_handle_t* phEvent;
+    ze_event_timestamp_type_t* ptimestampType;
+    void** pdstptr;
+} ze_event_get_timestamp_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeEventGetTimestamp 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnEventGetTimestampCb_t)(
+    ze_event_get_timestamp_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Event callback functions pointers
 typedef struct _ze_event_callbacks_t
 {
@@ -1949,6 +1973,7 @@ typedef struct _ze_event_callbacks_t
     ze_pfnEventHostSynchronizeCb_t                                  pfnHostSynchronizeCb;
     ze_pfnEventQueryStatusCb_t                                      pfnQueryStatusCb;
     ze_pfnEventHostResetCb_t                                        pfnHostResetCb;
+    ze_pfnEventGetTimestampCb_t                                     pfnGetTimestampCb;
 } ze_event_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////

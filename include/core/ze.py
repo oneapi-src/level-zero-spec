@@ -729,6 +729,8 @@ class ze_event_pool_flag_v(IntEnum):
     DEFAULT = 0                                     ## signals and waits visible to the entire device and peer devices
     HOST_VISIBLE = ZE_BIT(0)                        ## signals and waits are also visible to host
     IPC = ZE_BIT(1)                                 ## signals and waits may be shared across processes
+    TIMESTAMP = ZE_BIT(2)                           ## Indicates all events in pool will contain timestamp information that
+                                                    ## can be queried using ::zeEventGetTimestamp
 
 class ze_event_pool_flag_t(c_int):
     def __str__(self):
@@ -783,6 +785,21 @@ class ze_event_desc_t(Structure):
         ("wait", ze_event_scope_flag_t)                                 ## [in] defines the scope of relevant cache hierarchies to invalidate on
                                                                         ## a wait action after the event is complete
     ]
+
+###############################################################################
+## @brief Supported timestamp types
+class ze_event_timestamp_type_v(IntEnum):
+    EVENT_TIMESTAMP_GLOBAL_START = 0                ## wall-clock time start in GPU clocks for event. Data is uint64_t.
+    EVENT_TIMESTAMP_GLOBAL_END = auto()             ## wall-clock time end in GPU clocks for event.Data is uint64_t.
+    EVENT_TIMESTAMP_CONTEXT_START = auto()          ## context time start in GPU clocks for event.  Only includes time while
+                                                    ## HW context is actively running on GPU. Data is uint64_t.
+    EVENT_TIMESTAMP_CONTEXT_END = auto()            ## context time end in GPU clocks for event.  Only includes time while HW
+                                                    ## context is actively running on GPU. Data is uint64_t.
+
+class ze_event_timestamp_type_t(c_int):
+    def __str__(self):
+        return str(ze_event_timestamp_type_v(value))
+
 
 ###############################################################################
 ## @brief API version of ::ze_fence_desc_t
@@ -1926,6 +1943,13 @@ if __use_win_types:
 else:
     _zeEventHostReset_t = CFUNCTYPE( ze_result_t, ze_event_handle_t )
 
+###############################################################################
+## @brief Function-pointer for zeEventGetTimestamp
+if __use_win_types:
+    _zeEventGetTimestamp_t = WINFUNCTYPE( ze_result_t, ze_event_handle_t, ze_event_timestamp_type_t, c_void_p )
+else:
+    _zeEventGetTimestamp_t = CFUNCTYPE( ze_result_t, ze_event_handle_t, ze_event_timestamp_type_t, c_void_p )
+
 
 ###############################################################################
 ## @brief Table of Event functions pointers
@@ -1936,7 +1960,8 @@ class _ze_event_dditable_t(Structure):
         ("pfnHostSignal", c_void_p),                                    ## _zeEventHostSignal_t
         ("pfnHostSynchronize", c_void_p),                               ## _zeEventHostSynchronize_t
         ("pfnQueryStatus", c_void_p),                                   ## _zeEventQueryStatus_t
-        ("pfnHostReset", c_void_p)                                      ## _zeEventHostReset_t
+        ("pfnHostReset", c_void_p),                                     ## _zeEventHostReset_t
+        ("pfnGetTimestamp", c_void_p)                                   ## _zeEventGetTimestamp_t
     ]
 
 ###############################################################################
@@ -2327,6 +2352,7 @@ class ZE_DDI:
         self.zeEventHostSynchronize = _zeEventHostSynchronize_t(self.__dditable.Event.pfnHostSynchronize)
         self.zeEventQueryStatus = _zeEventQueryStatus_t(self.__dditable.Event.pfnQueryStatus)
         self.zeEventHostReset = _zeEventHostReset_t(self.__dditable.Event.pfnHostReset)
+        self.zeEventGetTimestamp = _zeEventGetTimestamp_t(self.__dditable.Event.pfnGetTimestamp)
 
         # call driver to get function pointers
         _Image = _ze_image_dditable_t()
