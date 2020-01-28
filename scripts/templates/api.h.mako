@@ -31,6 +31,7 @@ from templates import helper as th
 %else:
 // standard headers
 #include <stdint.h>
+#include <stddef.h>
 %endif
 
 // '${section}' API headers
