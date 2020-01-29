@@ -1757,6 +1757,35 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeEventGetTimestamp
+    ze_result_t __zecall
+    zeEventGetTimestamp(
+        ze_event_handle_t hEvent,                       ///< [in] handle of the event
+        ze_event_timestamp_type_t timestampType,        ///< [in] specifies timestamp type to query for that is associated with
+                                                        ///< hEvent.
+        void* dstptr                                    ///< [in,out] pointer to memory for where timestamp will be written to. The
+                                                        ///< size of timestamp is specified in the
+                                                        ///< ::ze_event_timestamp_query_type_t definition.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_event_object_t*>( hEvent )->dditable;
+        auto pfnGetTimestamp = dditable->ze.Event.pfnGetTimestamp;
+        if( nullptr == pfnGetTimestamp )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hEvent = reinterpret_cast<ze_event_object_t*>( hEvent )->handle;
+
+        // forward to device-driver
+        result = pfnGetTimestamp( hEvent, timestampType, dstptr );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceCreate
     ze_result_t __zecall
     zeFenceCreate(
@@ -3646,6 +3675,7 @@ zeGetEventProcAddrTable(
             pDdiTable->pfnHostSynchronize                          = loader::zeEventHostSynchronize;
             pDdiTable->pfnQueryStatus                              = loader::zeEventQueryStatus;
             pDdiTable->pfnHostReset                                = loader::zeEventHostReset;
+            pDdiTable->pfnGetTimestamp                             = loader::zeEventGetTimestamp;
         }
         else
         {

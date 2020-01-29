@@ -32,6 +32,9 @@ etors:
     - name: $X_EVENT_POOL_FLAG_IPC
       value: "$X_BIT(1)"
       desc: "signals and waits may be shared across processes"
+    - name: $X_EVENT_POOL_FLAG_TIMESTAMP
+      value: "$X_BIT(2)"
+      desc: "Indicates all events in pool will contain timestamp information that can be queried using $xEventGetTimestamp"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event pool descriptor"
@@ -382,6 +385,41 @@ params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported timestamp types"
+class: $xEventPool
+name: $x_event_timestamp_type_t
+etors:
+    - name: $X_EVENT_TIMESTAMP_GLOBAL_START
+      value: "0"
+      desc: "wall-clock time start in GPU clocks for event. Data is uint64_t."
+    - name: $X_EVENT_TIMESTAMP_GLOBAL_END
+      desc: "wall-clock time end in GPU clocks for event.Data is uint64_t."
+    - name: $X_EVENT_TIMESTAMP_CONTEXT_START
+      desc: "context time start in GPU clocks for event.  Only includes time while HW context is actively running on GPU. Data is uint64_t."
+    - name: $X_EVENT_TIMESTAMP_CONTEXT_END
+      desc: "context time end in GPU clocks for event.  Only includes time while HW context is actively running on GPU. Data is uint64_t."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Query timestamp information associated with an event. Event must come from an event pool that was created using $X_EVENT_POOL_FLAG_TIMESTAMP flag."
+class: $xEvent
+name: GetTimestamp
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+    - type: $x_event_timestamp_type_t
+      name: timestampType
+      desc: "[in] specifies timestamp type to query for that is associated with hEvent."
+    - type: void*
+      name: dstptr
+      desc: "[in,out] pointer to memory for where timestamp will be written to. The size of timestamp is specified in the $x_event_timestamp_query_type_t definition."
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------

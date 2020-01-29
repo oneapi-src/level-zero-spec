@@ -1488,6 +1488,34 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeEventGetTimestamp
+    ze_result_t __zecall
+    zeEventGetTimestamp(
+        ze_event_handle_t hEvent,                       ///< [in] handle of the event
+        ze_event_timestamp_type_t timestampType,        ///< [in] specifies timestamp type to query for that is associated with
+                                                        ///< hEvent.
+        void* dstptr                                    ///< [in,out] pointer to memory for where timestamp will be written to. The
+                                                        ///< size of timestamp is specified in the
+                                                        ///< ::ze_event_timestamp_query_type_t definition.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetTimestamp = context.zeDdiTable.Event.pfnGetTimestamp;
+        if( nullptr != pfnGetTimestamp )
+        {
+            result = pfnGetTimestamp( hEvent, timestampType, dstptr );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceCreate
     ze_result_t __zecall
     zeFenceCreate(
@@ -5804,6 +5832,65 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeEventGetTimestamp
+    ze_result_t __zecall
+    zeEventGetTimestamp(
+        ze_event_handle_t hEvent,                       ///< [in] handle of the event
+        ze_event_timestamp_type_t timestampType,        ///< [in] specifies timestamp type to query for that is associated with
+                                                        ///< hEvent.
+        void* dstptr                                    ///< [in,out] pointer to memory for where timestamp will be written to. The
+                                                        ///< size of timestamp is specified in the
+                                                        ///< ::ze_event_timestamp_query_type_t definition.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_event_get_timestamp_params_t in_params = {
+            &hEvent,
+            &timestampType,
+            &dstptr
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Event;
+                if( nullptr != table.pfnGetTimestampCb )
+                    table.pfnGetTimestampCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeEventGetTimestamp( hEvent, timestampType, dstptr );
+
+        // capture parameters
+        ze_event_get_timestamp_params_t out_params = {
+            &hEvent,
+            &timestampType,
+            &dstptr
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Event;
+                if( nullptr != table.pfnGetTimestampCb )
+                    table.pfnGetTimestampCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceCreate
     ze_result_t __zecall
     zeFenceCreate(
@@ -8919,6 +9006,11 @@ zeGetEventProcAddrTable(
         pDdiTable->pfnHostReset                              = instrumented::zeEventHostReset;
     else
         pDdiTable->pfnHostReset                              = driver::zeEventHostReset;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetTimestamp                           = instrumented::zeEventGetTimestamp;
+    else
+        pDdiTable->pfnGetTimestamp                           = driver::zeEventGetTimestamp;
 
     return result;
 }

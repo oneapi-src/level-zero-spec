@@ -942,6 +942,14 @@ typedef ze_result_t (__zecall *ze_pfnEventHostReset_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeEventGetTimestamp 
+typedef ze_result_t (__zecall *ze_pfnEventGetTimestamp_t)(
+    ze_event_handle_t,
+    ze_event_timestamp_type_t,
+    void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Event functions pointers
 typedef struct _ze_event_dditable_t
 {
@@ -951,6 +959,7 @@ typedef struct _ze_event_dditable_t
     ze_pfnEventHostSynchronize_t                                pfnHostSynchronize;
     ze_pfnEventQueryStatus_t                                    pfnQueryStatus;
     ze_pfnEventHostReset_t                                      pfnHostReset;
+    ze_pfnEventGetTimestamp_t                                   pfnGetTimestamp;
 } ze_event_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

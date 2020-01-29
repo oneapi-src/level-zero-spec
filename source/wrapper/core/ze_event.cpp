@@ -524,6 +524,34 @@ namespace ze
             throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Event::HostReset" );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Query timestamp information associated with an event. Event must come
+    ///        from an event pool that was created using
+    ///        ::ZE_EVENT_POOL_FLAG_TIMESTAMP flag.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Event::GetTimestamp(
+        EventPool::event_timestamp_type_t timestampType,///< [in] specifies timestamp type to query for that is associated with
+                                                        ///< hEvent.
+        void* dstptr                                    ///< [in,out] pointer to memory for where timestamp will be written to. The
+                                                        ///< size of timestamp is specified in the
+                                                        ///< ::ze_event_timestamp_query_type_t definition.
+        )
+    {
+        auto result = static_cast<result_t>( ::zeEventGetTimestamp(
+            reinterpret_cast<ze_event_handle_t>( getHandle() ),
+            static_cast<ze_event_timestamp_type_t>( timestampType ),
+            dstptr ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Event::GetTimestamp" );
+    }
+
 } // namespace ze
 
 namespace ze
@@ -564,10 +592,45 @@ namespace ze
         
         if( static_cast<uint32_t>(EventPool::flag_t::IPC) & bits )
             str += "IPC | ";
+        
+        if( static_cast<uint32_t>(EventPool::flag_t::TIMESTAMP) & bits )
+            str += "TIMESTAMP | ";
 
         return ( str.size() > 3 ) 
             ? "EventPool::flag_t::{ " + str.substr(0, str.size() - 3) + " }"
             : "EventPool::flag_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts EventPool::event_timestamp_type_t to std::string
+    std::string to_string( const EventPool::event_timestamp_type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case EventPool::event_timestamp_type_t::EVENT_TIMESTAMP_GLOBAL_START:
+            str = "EventPool::event_timestamp_type_t::EVENT_TIMESTAMP_GLOBAL_START";
+            break;
+
+        case EventPool::event_timestamp_type_t::EVENT_TIMESTAMP_GLOBAL_END:
+            str = "EventPool::event_timestamp_type_t::EVENT_TIMESTAMP_GLOBAL_END";
+            break;
+
+        case EventPool::event_timestamp_type_t::EVENT_TIMESTAMP_CONTEXT_START:
+            str = "EventPool::event_timestamp_type_t::EVENT_TIMESTAMP_CONTEXT_START";
+            break;
+
+        case EventPool::event_timestamp_type_t::EVENT_TIMESTAMP_CONTEXT_END:
+            str = "EventPool::event_timestamp_type_t::EVENT_TIMESTAMP_CONTEXT_END";
+            break;
+
+        default:
+            str = "EventPool::event_timestamp_type_t::?";
+            break;
+        };
+
+        return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
