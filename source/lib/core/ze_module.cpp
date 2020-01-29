@@ -542,15 +542,55 @@ zeKernelSetArgumentValue(
 ze_result_t __zecall
 zeKernelSetAttribute(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-    ze_kernel_set_attribute_t attr,                 ///< [in] attribute to set
-    uint32_t value                                  ///< [in] attribute value to set
+    ze_kernel_attribute_t attr,                     ///< [in] attribute to set
+    uint32_t size,                                  ///< [in] size in bytes of kernel attribute value.
+    const void* pValue                              ///< [in][optional] pointer to attribute value.
     )
 {
     auto pfnSetAttribute = ze_lib::context.ddiTable.Kernel.pfnSetAttribute;
     if( nullptr == pfnSetAttribute )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSetAttribute( hKernel, attr, value );
+    return pfnSetAttribute( hKernel, attr, size, pValue );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Gets a kernel attribute
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads with the
+///       same function handle.
+///     - The implementation of this function should be lock-free.
+///     - The caller sets pValue to nullptr when querying only for size.
+///     - The caller must provide memory for pValue querying when querying size.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hKernel`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + attr
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pSize`
+///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
+ze_result_t __zecall
+zeKernelGetAttribute(
+    ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+    ze_kernel_attribute_t attr,                     ///< [in] attribute to get. Documentation for ::ze_kernel_attribute_t for
+                                                    ///< return type information for pValue.
+    uint32_t* pSize,                                ///< [in,out] size in bytes needed for kernel attribute value. If pValue is
+                                                    ///< nullptr then the size needed for pValue memory will be written to
+                                                    ///< pSize. Only need to query size for arbitrary sized attributes.
+    void* pValue                                    ///< [in,out][optional] pointer to attribute value result.
+    )
+{
+    auto pfnGetAttribute = ze_lib::context.ddiTable.Kernel.pfnGetAttribute;
+    if( nullptr == pfnGetAttribute )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    return pfnGetAttribute( hKernel, attr, pSize, pValue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

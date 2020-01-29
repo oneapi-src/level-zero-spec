@@ -564,17 +564,50 @@ namespace ze
     /// @throws result_t
     void __zecall
     Kernel::SetAttribute(
-        set_attribute_t attr,                           ///< [in] attribute to set
-        uint32_t value                                  ///< [in] attribute value to set
+        attribute_t attr,                               ///< [in] attribute to set
+        uint32_t size,                                  ///< [in] size in bytes of kernel attribute value.
+        const void* pValue                              ///< [in][optional] pointer to attribute value.
         )
     {
         auto result = static_cast<result_t>( ::zeKernelSetAttribute(
             reinterpret_cast<ze_kernel_handle_t>( getHandle() ),
-            static_cast<ze_kernel_set_attribute_t>( attr ),
-            value ) );
+            static_cast<ze_kernel_attribute_t>( attr ),
+            size,
+            pValue ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Kernel::SetAttribute" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Gets a kernel attribute
+    /// 
+    /// @details
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same function handle.
+    ///     - The implementation of this function should be lock-free.
+    ///     - The caller sets pValue to nullptr when querying only for size.
+    ///     - The caller must provide memory for pValue querying when querying size.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Kernel::GetAttribute(
+        attribute_t attr,                               ///< [in] attribute to get. Documentation for ::ze_kernel_attribute_t for
+                                                        ///< return type information for pValue.
+        uint32_t* pSize,                                ///< [in,out] size in bytes needed for kernel attribute value. If pValue is
+                                                        ///< nullptr then the size needed for pValue memory will be written to
+                                                        ///< pSize. Only need to query size for arbitrary sized attributes.
+        void* pValue                                    ///< [in,out][optional] pointer to attribute value result.
+        )
+    {
+        auto result = static_cast<result_t>( ::zeKernelGetAttribute(
+            reinterpret_cast<ze_kernel_handle_t>( getHandle() ),
+            static_cast<ze_kernel_attribute_t>( attr ),
+            pSize,
+            pValue ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Kernel::GetAttribute" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -987,27 +1020,31 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Kernel::set_attribute_t to std::string
-    std::string to_string( const Kernel::set_attribute_t val )
+    /// @brief Converts Kernel::attribute_t to std::string
+    std::string to_string( const Kernel::attribute_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS:
-            str = "Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS";
+        case Kernel::attribute_t::KERNEL_ATTR_INDIRECT_HOST_ACCESS:
+            str = "Kernel::attribute_t::KERNEL_ATTR_INDIRECT_HOST_ACCESS";
             break;
 
-        case Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS:
-            str = "Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS";
+        case Kernel::attribute_t::KERNEL_ATTR_INDIRECT_DEVICE_ACCESS:
+            str = "Kernel::attribute_t::KERNEL_ATTR_INDIRECT_DEVICE_ACCESS";
             break;
 
-        case Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_SHARED_ACCESS:
-            str = "Kernel::set_attribute_t::KERNEL_SET_ATTR_INDIRECT_SHARED_ACCESS";
+        case Kernel::attribute_t::KERNEL_ATTR_INDIRECT_SHARED_ACCESS:
+            str = "Kernel::attribute_t::KERNEL_ATTR_INDIRECT_SHARED_ACCESS";
+            break;
+
+        case Kernel::attribute_t::KERNEL_ATTR_SOURCE_ATTRIBUTE:
+            str = "Kernel::attribute_t::KERNEL_ATTR_SOURCE_ATTRIBUTE";
             break;
 
         default:
-            str = "Kernel::set_attribute_t::?";
+            str = "Kernel::attribute_t::?";
             break;
         };
 

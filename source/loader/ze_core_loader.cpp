@@ -2700,8 +2700,9 @@ namespace loader
     ze_result_t __zecall
     zeKernelSetAttribute(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
-        ze_kernel_set_attribute_t attr,                 ///< [in] attribute to set
-        uint32_t value                                  ///< [in] attribute value to set
+        ze_kernel_attribute_t attr,                     ///< [in] attribute to set
+        uint32_t size,                                  ///< [in] size in bytes of kernel attribute value.
+        const void* pValue                              ///< [in][optional] pointer to attribute value.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -2716,7 +2717,37 @@ namespace loader
         hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
 
         // forward to device-driver
-        result = pfnSetAttribute( hKernel, attr, value );
+        result = pfnSetAttribute( hKernel, attr, size, pValue );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeKernelGetAttribute
+    ze_result_t __zecall
+    zeKernelGetAttribute(
+        ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
+        ze_kernel_attribute_t attr,                     ///< [in] attribute to get. Documentation for ::ze_kernel_attribute_t for
+                                                        ///< return type information for pValue.
+        uint32_t* pSize,                                ///< [in,out] size in bytes needed for kernel attribute value. If pValue is
+                                                        ///< nullptr then the size needed for pValue memory will be written to
+                                                        ///< pSize. Only need to query size for arbitrary sized attributes.
+        void* pValue                                    ///< [in,out][optional] pointer to attribute value result.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_kernel_object_t*>( hKernel )->dditable;
+        auto pfnGetAttribute = dditable->ze.Kernel.pfnGetAttribute;
+        if( nullptr == pfnGetAttribute )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hKernel = reinterpret_cast<ze_kernel_object_t*>( hKernel )->handle;
+
+        // forward to device-driver
+        result = pfnGetAttribute( hKernel, attr, pSize, pValue );
 
         return result;
     }
@@ -3939,6 +3970,7 @@ zeGetKernelProcAddrTable(
             pDdiTable->pfnSuggestMaxCooperativeGroupCount          = loader::zeKernelSuggestMaxCooperativeGroupCount;
             pDdiTable->pfnSetArgumentValue                         = loader::zeKernelSetArgumentValue;
             pDdiTable->pfnSetAttribute                             = loader::zeKernelSetAttribute;
+            pDdiTable->pfnGetAttribute                             = loader::zeKernelGetAttribute;
             pDdiTable->pfnGetProperties                            = loader::zeKernelGetProperties;
         }
         else

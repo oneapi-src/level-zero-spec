@@ -1190,17 +1190,21 @@ class ze_kernel_desc_t(Structure):
 ## @remarks
 ##   _Analogues_
 ##     - **cl_kernel_exec_info**
-class ze_kernel_set_attribute_v(IntEnum):
-    KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS = 0        ## Indicates that the function accesses host allocations indirectly
-                                                    ## (default: false)
-    KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS = auto() ## Indicates that the function accesses device allocations indirectly
-                                                    ## (default: false)
-    KERNEL_SET_ATTR_INDIRECT_SHARED_ACCESS = auto() ## Indicates that the function accesses shared allocations indirectly
-                                                    ## (default: false)
+class ze_kernel_attribute_v(IntEnum):
+    KERNEL_ATTR_INDIRECT_HOST_ACCESS = 0            ## Indicates that the function accesses host allocations indirectly
+                                                    ## (default: false, type: bool_t)
+    KERNEL_ATTR_INDIRECT_DEVICE_ACCESS = auto()     ## Indicates that the function accesses device allocations indirectly
+                                                    ## (default: false, type: bool_t)
+    KERNEL_ATTR_INDIRECT_SHARED_ACCESS = auto()     ## Indicates that the function accesses shared allocations indirectly
+                                                    ## (default: false, type: bool_t)
+    KERNEL_ATTR_SOURCE_ATTRIBUTE = auto()           ## Declared kernel attributes (i.e. can be specified with __attribute__
+                                                    ## in runtime language). (type: char[]) Returned as a null-terminated
+                                                    ## string and each attribute is separated by a space.
+                                                    ## ::zeKernelSetAttribute is not supported for this.
 
-class ze_kernel_set_attribute_t(c_int):
+class ze_kernel_attribute_t(c_int):
     def __str__(self):
-        return str(ze_kernel_set_attribute_v(value))
+        return str(ze_kernel_attribute_v(value))
 
 
 ###############################################################################
@@ -2138,9 +2142,16 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zeKernelSetAttribute
 if __use_win_types:
-    _zeKernelSetAttribute_t = WINFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_kernel_set_attribute_t, c_ulong )
+    _zeKernelSetAttribute_t = WINFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_kernel_attribute_t, c_ulong, c_void_p )
 else:
-    _zeKernelSetAttribute_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_kernel_set_attribute_t, c_ulong )
+    _zeKernelSetAttribute_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_kernel_attribute_t, c_ulong, c_void_p )
+
+###############################################################################
+## @brief Function-pointer for zeKernelGetAttribute
+if __use_win_types:
+    _zeKernelGetAttribute_t = WINFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_kernel_attribute_t, POINTER(c_ulong), c_void_p )
+else:
+    _zeKernelGetAttribute_t = CFUNCTYPE( ze_result_t, ze_kernel_handle_t, ze_kernel_attribute_t, POINTER(c_ulong), c_void_p )
 
 ###############################################################################
 ## @brief Function-pointer for zeKernelGetProperties
@@ -2162,6 +2173,7 @@ class _ze_kernel_dditable_t(Structure):
         ("pfnSuggestMaxCooperativeGroupCount", c_void_p),               ## _zeKernelSuggestMaxCooperativeGroupCount_t
         ("pfnSetArgumentValue", c_void_p),                              ## _zeKernelSetArgumentValue_t
         ("pfnSetAttribute", c_void_p),                                  ## _zeKernelSetAttribute_t
+        ("pfnGetAttribute", c_void_p),                                  ## _zeKernelGetAttribute_t
         ("pfnGetProperties", c_void_p)                                  ## _zeKernelGetProperties_t
     ]
 
@@ -2421,6 +2433,7 @@ class ZE_DDI:
         self.zeKernelSuggestMaxCooperativeGroupCount = _zeKernelSuggestMaxCooperativeGroupCount_t(self.__dditable.Kernel.pfnSuggestMaxCooperativeGroupCount)
         self.zeKernelSetArgumentValue = _zeKernelSetArgumentValue_t(self.__dditable.Kernel.pfnSetArgumentValue)
         self.zeKernelSetAttribute = _zeKernelSetAttribute_t(self.__dditable.Kernel.pfnSetAttribute)
+        self.zeKernelGetAttribute = _zeKernelGetAttribute_t(self.__dditable.Kernel.pfnGetAttribute)
         self.zeKernelGetProperties = _zeKernelGetProperties_t(self.__dditable.Kernel.pfnGetProperties)
 
         # call driver to get function pointers
