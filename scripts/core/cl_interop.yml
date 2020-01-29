@@ -1,0 +1,76 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs for OpenCL Interoperability"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Registers OpenCL memory with $OneApi"
+condition: "$X_ENABLE_OCL_INTEROP"
+class: $xDevice
+name: RegisterCLMemory
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle to the device"
+    - type: cl_context
+      name: context
+      desc: "[in] the OpenCL context that created the memory"
+    - type: cl_mem
+      name: mem
+      desc: "[in] the OpenCL memory to register"
+    - type: "void**"
+      name: ptr
+      desc: "[out] pointer to device allocation"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Registers OpenCL program with $OneApi"
+condition: "$X_ENABLE_OCL_INTEROP"
+class: $xDevice
+name: RegisterCLProgram
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle to the device"
+    - type: cl_context
+      name: context
+      desc: "[in] the OpenCL context that created the program"
+    - type: cl_program
+      name: program
+      desc: "[in] the OpenCL program to register"
+    - type: "$x_module_handle_t*"
+      name: phModule
+      desc: "[out] pointer to handle of module object created"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Registers OpenCL command queue with $OneApi"
+condition: "$X_ENABLE_OCL_INTEROP"
+class: $xDevice
+name: RegisterCLCommandQueue
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle to the device"
+    - type: cl_context
+      name: context
+      desc: "[in] the OpenCL context that created the command queue"
+    - type: cl_command_queue
+      name: command_queue
+      desc: "[in] the OpenCL command queue to register"
+    - type: "$x_command_queue_handle_t*"
+      name: phCommandQueue
+      desc: "[out] pointer to handle of command queue object created"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY

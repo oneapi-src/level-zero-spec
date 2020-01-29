@@ -1035,7 +1035,47 @@ The following sample code demonstrate a sequence for using fine-grain residency 
 ```
 
 ${"##"} <a name="oi">OpenCL Interoperability</a>
-Interoperability with OpenCL is currently being re-designed and planned for a future release.
+Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ Level-Zero for a subset of types.
+The APIs are designed to be OS agnostics and allow implementations to optimize for unified device drivers;
+while allowing less-optimal interopability across different device types and/or vendors.
+
+There are three OpenCL types that can be shared for interoperability:
+1. **cl_mem** - an OpenCL buffer object
+2. **cl_program** - an OpenCL program object
+3. **cl_command_queue** - an OpenCL command queue object
+
+${"###"} cl_mem
+OpenCL buffer objects may be registered for use as a Level-Zero device memory allocation.
+Registering an OpenCL buffer object with Level-Zero merely obtains a pointer to the underlying device memory
+allocation and does not alter the lifetime of the device memory underlying the OpenCL buffer object.
+Freeing the Level-Zero device memory allocation effectively "un-registers" the allocation from Level-Zero, 
+and should be performed before the OpenCL buffer object is destroyed.
+Using the Level-Zero device memory allocation after destroying its associated OpenCL buffer object will
+result in undefined behavior.
+
+Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or Level-Zero APIs.
+
+${"###"} cl_program
+Level-Zero modules are always in a compiled state and therefore prior to retrieving an ::${x}_module_handle_t from
+a cl_program the caller must ensure the cl_program is compiled and linked.
+
+${"###"} cl_command_queue
+Sharing OpenCL command queues provide opportunities to minimize transition costs when submitting work from
+an OpenCL queue followed by submitting work to Level-Zero command queue and vice-versa.  Enqueuing Level-Zero command lists
+to Level-Zero command queues are immediately submitted to the device.  OpenCL implementations, however, may not
+necessarily submit tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.
+To minimize overhead between sharing command queues, applications must explicitly submit OpenCL command 
+queues using clFlush, clFinish or similar operations prior to enqueuing an Level-Zero command list.
+Failing to explicitly submit device work may result in undefined behavior.  
+
+Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  It provides knowledge for the
+driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.
+
+Memory contents as reflected by any caching schemes will be consistent such that, for example, a memory write
+in an OpenCL command queue can be read by a subsequent Level-Zero command list without any special application action. 
+The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
+will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
+Level-Zero command list.  In most cases, command queue sharing may be much more efficient. 
 
 ${"##"} <a name="ipc">Inter-Process Communication</a>
 There are two types of Inter-Process Communication (IPC) APIs for using Level-Zero allocations across processes:

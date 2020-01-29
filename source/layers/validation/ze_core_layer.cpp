@@ -866,6 +866,96 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLMemory
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLMemory(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the memory
+        cl_mem mem,                                     ///< [in] the OpenCL memory to register
+        void** ptr                                      ///< [out] pointer to device allocation
+        )
+    {
+        auto pfnRegisterCLMemory = context.zeDdiTable.Device.pfnRegisterCLMemory;
+
+        if( nullptr == pfnRegisterCLMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == ptr )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnRegisterCLMemory( hDevice, context, mem, ptr );
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLProgram
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLProgram(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the program
+        cl_program program,                             ///< [in] the OpenCL program to register
+        ze_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
+        )
+    {
+        auto pfnRegisterCLProgram = context.zeDdiTable.Device.pfnRegisterCLProgram;
+
+        if( nullptr == pfnRegisterCLProgram )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == phModule )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnRegisterCLProgram( hDevice, context, program, phModule );
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLCommandQueue
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLCommandQueue(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the command queue
+        cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
+        ze_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
+        )
+    {
+        auto pfnRegisterCLCommandQueue = context.zeDdiTable.Device.pfnRegisterCLCommandQueue;
+
+        if( nullptr == pfnRegisterCLCommandQueue )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == phCommandQueue )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryCopy
     ze_result_t __zecall
     zeCommandListAppendMemoryCopy(
@@ -3048,6 +3138,30 @@ zeGetDeviceProcAddrTable(
 
     dditable.pfnSystemBarrier                            = pDdiTable->pfnSystemBarrier;
     pDdiTable->pfnSystemBarrier                          = layer::zeDeviceSystemBarrier;
+
+#if ZE_ENABLE_OCL_INTEROP
+    dditable.pfnRegisterCLMemory                         = pDdiTable->pfnRegisterCLMemory;
+    pDdiTable->pfnRegisterCLMemory                       = layer::zeDeviceRegisterCLMemory;
+#else
+    dditable.pfnRegisterCLMemory                         = nullptr;
+    pDdiTable->pfnRegisterCLMemory                       = nullptr;
+#endif
+
+#if ZE_ENABLE_OCL_INTEROP
+    dditable.pfnRegisterCLProgram                        = pDdiTable->pfnRegisterCLProgram;
+    pDdiTable->pfnRegisterCLProgram                      = layer::zeDeviceRegisterCLProgram;
+#else
+    dditable.pfnRegisterCLProgram                        = nullptr;
+    pDdiTable->pfnRegisterCLProgram                      = nullptr;
+#endif
+
+#if ZE_ENABLE_OCL_INTEROP
+    dditable.pfnRegisterCLCommandQueue                   = pDdiTable->pfnRegisterCLCommandQueue;
+    pDdiTable->pfnRegisterCLCommandQueue                 = layer::zeDeviceRegisterCLCommandQueue;
+#else
+    dditable.pfnRegisterCLCommandQueue                   = nullptr;
+    pDdiTable->pfnRegisterCLCommandQueue                 = nullptr;
+#endif
 
     dditable.pfnMakeMemoryResident                       = pDdiTable->pfnMakeMemoryResident;
     pDdiTable->pfnMakeMemoryResident                     = layer::zeDeviceMakeMemoryResident;

@@ -718,6 +718,93 @@ typedef void (__zecall *ze_pfnDeviceSystemBarrierCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDeviceRegisterCLMemory 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+#if ZE_ENABLE_OCL_INTEROP
+typedef struct _ze_device_register_cl_memory_params_t
+{
+    ze_device_handle_t* phDevice;
+    cl_context* pcontext;
+    cl_mem* pmem;
+    void*** pptr;
+} ze_device_register_cl_memory_params_t;
+#endif // ZE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDeviceRegisterCLMemory 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+#if ZE_ENABLE_OCL_INTEROP
+typedef void (__zecall *ze_pfnDeviceRegisterCLMemoryCb_t)(
+    ze_device_register_cl_memory_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+#endif // ZE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDeviceRegisterCLProgram 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+#if ZE_ENABLE_OCL_INTEROP
+typedef struct _ze_device_register_cl_program_params_t
+{
+    ze_device_handle_t* phDevice;
+    cl_context* pcontext;
+    cl_program* pprogram;
+    ze_module_handle_t** pphModule;
+} ze_device_register_cl_program_params_t;
+#endif // ZE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDeviceRegisterCLProgram 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+#if ZE_ENABLE_OCL_INTEROP
+typedef void (__zecall *ze_pfnDeviceRegisterCLProgramCb_t)(
+    ze_device_register_cl_program_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+#endif // ZE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeDeviceRegisterCLCommandQueue 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+#if ZE_ENABLE_OCL_INTEROP
+typedef struct _ze_device_register_cl_command_queue_params_t
+{
+    ze_device_handle_t* phDevice;
+    cl_context* pcontext;
+    cl_command_queue* pcommand_queue;
+    ze_command_queue_handle_t** pphCommandQueue;
+} ze_device_register_cl_command_queue_params_t;
+#endif // ZE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeDeviceRegisterCLCommandQueue 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+#if ZE_ENABLE_OCL_INTEROP
+typedef void (__zecall *ze_pfnDeviceRegisterCLCommandQueueCb_t)(
+    ze_device_register_cl_command_queue_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+#endif // ZE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeDeviceMakeMemoryResident 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -828,6 +915,21 @@ typedef struct _ze_device_callbacks_t
     ze_pfnDeviceCanAccessPeerCb_t                                   pfnCanAccessPeerCb;
     ze_pfnDeviceSetLastLevelCacheConfigCb_t                         pfnSetLastLevelCacheConfigCb;
     ze_pfnDeviceSystemBarrierCb_t                                   pfnSystemBarrierCb;
+#if ZE_ENABLE_OCL_INTEROP
+    ze_pfnDeviceRegisterCLMemoryCb_t                                pfnRegisterCLMemoryCb;
+#else
+    void*                                                           pfnRegisterCLMemoryCb;
+#endif // ZE_ENABLE_OCL_INTEROP
+#if ZE_ENABLE_OCL_INTEROP
+    ze_pfnDeviceRegisterCLProgramCb_t                               pfnRegisterCLProgramCb;
+#else
+    void*                                                           pfnRegisterCLProgramCb;
+#endif // ZE_ENABLE_OCL_INTEROP
+#if ZE_ENABLE_OCL_INTEROP
+    ze_pfnDeviceRegisterCLCommandQueueCb_t                          pfnRegisterCLCommandQueueCb;
+#else
+    void*                                                           pfnRegisterCLCommandQueueCb;
+#endif // ZE_ENABLE_OCL_INTEROP
     ze_pfnDeviceMakeMemoryResidentCb_t                              pfnMakeMemoryResidentCb;
     ze_pfnDeviceEvictMemoryCb_t                                     pfnEvictMemoryCb;
     ze_pfnDeviceMakeImageResidentCb_t                               pfnMakeImageResidentCb;

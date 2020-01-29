@@ -39,6 +39,12 @@ name: __$xdllexport
 value: __declspec(dllexport)
 altvalue: ""
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Disable OpenCL interoperability functions if not explicitly defined"
+condition: "!defined($X_ENABLE_OCL_INTEROP)"
+name: "$X_ENABLE_OCL_INTEROP"
+value: "0"
+--- #--------------------------------------------------------------------------
 type: typedef
 desc: "compiler-independent type"
 name: $x_bool_t

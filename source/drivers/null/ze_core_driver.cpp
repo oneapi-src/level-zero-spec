@@ -796,6 +796,94 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLMemory
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLMemory(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the memory
+        cl_mem mem,                                     ///< [in] the OpenCL memory to register
+        void** ptr                                      ///< [out] pointer to device allocation
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnRegisterCLMemory = context.zeDdiTable.Device.pfnRegisterCLMemory;
+        if( nullptr != pfnRegisterCLMemory )
+        {
+            result = pfnRegisterCLMemory( hDevice, context, mem, ptr );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLProgram
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLProgram(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the program
+        cl_program program,                             ///< [in] the OpenCL program to register
+        ze_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnRegisterCLProgram = context.zeDdiTable.Device.pfnRegisterCLProgram;
+        if( nullptr != pfnRegisterCLProgram )
+        {
+            result = pfnRegisterCLProgram( hDevice, context, program, phModule );
+        }
+        else
+        {
+            // generic implementation
+            *phModule = reinterpret_cast<ze_module_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLCommandQueue
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLCommandQueue(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the command queue
+        cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
+        ze_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnRegisterCLCommandQueue = context.zeDdiTable.Device.pfnRegisterCLCommandQueue;
+        if( nullptr != pfnRegisterCLCommandQueue )
+        {
+            result = pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+        }
+        else
+        {
+            // generic implementation
+            *phCommandQueue = reinterpret_cast<ze_command_queue_handle_t>( context.get() );
+
+        }
+
+        return result;
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryCopy
     ze_result_t __zecall
     zeCommandListAppendMemoryCopy(
@@ -4207,6 +4295,189 @@ namespace instrumented
 
         return result;
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLMemory
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLMemory(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the memory
+        cl_mem mem,                                     ///< [in] the OpenCL memory to register
+        void** ptr                                      ///< [out] pointer to device allocation
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_device_register_cl_memory_params_t in_params = {
+            &hDevice,
+            &context,
+            &mem,
+            &ptr
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Device;
+                if( nullptr != table.pfnRegisterCLMemoryCb )
+                    table.pfnRegisterCLMemoryCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeDeviceRegisterCLMemory( hDevice, context, mem, ptr );
+
+        // capture parameters
+        ze_device_register_cl_memory_params_t out_params = {
+            &hDevice,
+            &context,
+            &mem,
+            &ptr
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Device;
+                if( nullptr != table.pfnRegisterCLMemoryCb )
+                    table.pfnRegisterCLMemoryCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLProgram
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLProgram(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the program
+        cl_program program,                             ///< [in] the OpenCL program to register
+        ze_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_device_register_cl_program_params_t in_params = {
+            &hDevice,
+            &context,
+            &program,
+            &phModule
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Device;
+                if( nullptr != table.pfnRegisterCLProgramCb )
+                    table.pfnRegisterCLProgramCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeDeviceRegisterCLProgram( hDevice, context, program, phModule );
+
+        // capture parameters
+        ze_device_register_cl_program_params_t out_params = {
+            &hDevice,
+            &context,
+            &program,
+            &phModule
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Device;
+                if( nullptr != table.pfnRegisterCLProgramCb )
+                    table.pfnRegisterCLProgramCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLCommandQueue
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLCommandQueue(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the command queue
+        cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
+        ze_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // capture parameters
+        ze_device_register_cl_command_queue_params_t in_params = {
+            &hDevice,
+            &context,
+            &command_queue,
+            &phCommandQueue
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zePrologueCbs.Device;
+                if( nullptr != table.pfnRegisterCLCommandQueueCb )
+                    table.pfnRegisterCLCommandQueueCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::zeDeviceRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+
+        // capture parameters
+        ze_device_register_cl_command_queue_params_t out_params = {
+            &hDevice,
+            &context,
+            &command_queue,
+            &phCommandQueue
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].zeEpilogueCbs.Device;
+                if( nullptr != table.pfnRegisterCLCommandQueueCb )
+                    table.pfnRegisterCLCommandQueueCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryCopy
@@ -8261,6 +8532,33 @@ zeGetDeviceProcAddrTable(
         pDdiTable->pfnSystemBarrier                          = instrumented::zeDeviceSystemBarrier;
     else
         pDdiTable->pfnSystemBarrier                          = driver::zeDeviceSystemBarrier;
+
+#if ZE_ENABLE_OCL_INTEROP
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnRegisterCLMemory                       = instrumented::zeDeviceRegisterCLMemory;
+    else
+        pDdiTable->pfnRegisterCLMemory                       = driver::zeDeviceRegisterCLMemory;
+#else
+    pDdiTable->pfnRegisterCLMemory                       = nullptr;
+#endif
+
+#if ZE_ENABLE_OCL_INTEROP
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnRegisterCLProgram                      = instrumented::zeDeviceRegisterCLProgram;
+    else
+        pDdiTable->pfnRegisterCLProgram                      = driver::zeDeviceRegisterCLProgram;
+#else
+    pDdiTable->pfnRegisterCLProgram                      = nullptr;
+#endif
+
+#if ZE_ENABLE_OCL_INTEROP
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnRegisterCLCommandQueue                 = instrumented::zeDeviceRegisterCLCommandQueue;
+    else
+        pDdiTable->pfnRegisterCLCommandQueue                 = driver::zeDeviceRegisterCLCommandQueue;
+#else
+    pDdiTable->pfnRegisterCLCommandQueue                 = nullptr;
+#endif
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnMakeMemoryResident                     = instrumented::zeDeviceMakeMemoryResident;

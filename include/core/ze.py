@@ -41,6 +41,10 @@ def ZE_MINOR_VERSION( _ver ):
 # __zedllexport not required for python
 
 ###############################################################################
+## @brief Disable OpenCL interoperability functions if not explicitly defined
+ZE_ENABLE_OCL_INTEROP = 0
+
+###############################################################################
 ## @brief compiler-independent type
 class ze_bool_t(c_ubyte):
     pass
@@ -1507,6 +1511,15 @@ if __use_win_types:
     _zeDeviceSystemBarrier_t = WINFUNCTYPE( ze_result_t, ze_device_handle_t )
 else:
     _zeDeviceSystemBarrier_t = CFUNCTYPE( ze_result_t, ze_device_handle_t )
+
+###############################################################################
+## @brief Function-pointer for zeDeviceRegisterCLMemory
+
+###############################################################################
+## @brief Function-pointer for zeDeviceRegisterCLProgram
+
+###############################################################################
+## @brief Function-pointer for zeDeviceRegisterCLCommandQueue
 
 ###############################################################################
 ## @brief Function-pointer for zeDeviceMakeMemoryResident

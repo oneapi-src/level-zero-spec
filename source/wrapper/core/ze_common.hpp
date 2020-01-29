@@ -60,6 +60,14 @@
 #endif // __zedllexport
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef ZE_ENABLE_OCL_INTEROP
+#if !defined(ZE_ENABLE_OCL_INTEROP)
+/// @brief Disable OpenCL interoperability functions if not explicitly defined
+#define ZE_ENABLE_OCL_INTEROP  0
+#endif // !defined(ZE_ENABLE_OCL_INTEROP)
+#endif // ZE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef ZE_MAX_IPC_HANDLE_SIZE
 /// @brief Maximum IPC handle size
 #define ZE_MAX_IPC_HANDLE_SIZE  64

@@ -8,6 +8,7 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_cmdqueue.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_cmdlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_barrier.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_cl_interop.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_copy.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_event.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_fence.cpp
@@ -21,6 +22,11 @@ add_library(${TARGET_NAME}
 target_include_directories(${TARGET_NAME}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_compile_definitions(${TARGET_NAME}
+    PRIVATE
+        ZE_ENABLE_OCL_INTEROP=0
 )
 
 target_link_libraries(${TARGET_NAME}

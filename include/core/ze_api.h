@@ -28,6 +28,7 @@
 #include "ze_cmdqueue.h"
 #include "ze_cmdlist.h"
 #include "ze_barrier.h"
+#include "ze_cl_interop.h"
 #include "ze_copy.h"
 #include "ze_event.h"
 #include "ze_fence.h"

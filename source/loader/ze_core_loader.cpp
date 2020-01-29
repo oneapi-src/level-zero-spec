@@ -932,6 +932,115 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLMemory
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLMemory(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the memory
+        cl_mem mem,                                     ///< [in] the OpenCL memory to register
+        void** ptr                                      ///< [out] pointer to device allocation
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
+        auto pfnRegisterCLMemory = dditable->ze.Device.pfnRegisterCLMemory;
+        if( nullptr == pfnRegisterCLMemory )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        result = pfnRegisterCLMemory( hDevice, context, mem, ptr );
+
+        return result;
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLProgram
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLProgram(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the program
+        cl_program program,                             ///< [in] the OpenCL program to register
+        ze_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
+        auto pfnRegisterCLProgram = dditable->ze.Device.pfnRegisterCLProgram;
+        if( nullptr == pfnRegisterCLProgram )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        result = pfnRegisterCLProgram( hDevice, context, program, phModule );
+
+        try
+        {
+            // convert driver handle to loader handle
+            *phModule = reinterpret_cast<ze_module_handle_t>(
+                ze_module_factory.getInstance( *phModule, dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+
+        return result;
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceRegisterCLCommandQueue
+    #if ZE_ENABLE_OCL_INTEROP
+    ze_result_t __zecall
+    zeDeviceRegisterCLCommandQueue(
+        ze_device_handle_t hDevice,                     ///< [in] handle to the device
+        cl_context context,                             ///< [in] the OpenCL context that created the command queue
+        cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
+        ze_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
+        auto pfnRegisterCLCommandQueue = dditable->ze.Device.pfnRegisterCLCommandQueue;
+        if( nullptr == pfnRegisterCLCommandQueue )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        result = pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+
+        try
+        {
+            // convert driver handle to loader handle
+            *phCommandQueue = reinterpret_cast<ze_command_queue_handle_t>(
+                ze_command_queue_factory.getInstance( *phCommandQueue, dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+
+        return result;
+    }
+    #endif // ZE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryCopy
     ze_result_t __zecall
     zeCommandListAppendMemoryCopy(
@@ -3170,6 +3279,21 @@ zeGetDeviceProcAddrTable(
             pDdiTable->pfnCanAccessPeer                            = loader::zeDeviceCanAccessPeer;
             pDdiTable->pfnSetLastLevelCacheConfig                  = loader::zeDeviceSetLastLevelCacheConfig;
             pDdiTable->pfnSystemBarrier                            = loader::zeDeviceSystemBarrier;
+        #if ZE_ENABLE_OCL_INTEROP
+            pDdiTable->pfnRegisterCLMemory                         = loader::zeDeviceRegisterCLMemory;
+        #else
+            pDdiTable->pfnRegisterCLMemory                         = nullptr;
+        #endif
+        #if ZE_ENABLE_OCL_INTEROP
+            pDdiTable->pfnRegisterCLProgram                        = loader::zeDeviceRegisterCLProgram;
+        #else
+            pDdiTable->pfnRegisterCLProgram                        = nullptr;
+        #endif
+        #if ZE_ENABLE_OCL_INTEROP
+            pDdiTable->pfnRegisterCLCommandQueue                   = loader::zeDeviceRegisterCLCommandQueue;
+        #else
+            pDdiTable->pfnRegisterCLCommandQueue                   = nullptr;
+        #endif
             pDdiTable->pfnMakeMemoryResident                       = loader::zeDeviceMakeMemoryResident;
             pDdiTable->pfnEvictMemory                              = loader::zeDeviceEvictMemory;
             pDdiTable->pfnMakeImageResident                        = loader::zeDeviceMakeImageResident;
