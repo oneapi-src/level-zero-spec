@@ -94,6 +94,26 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Floating Point capabilities
+        /// 
+        /// @details
+        ///     - floating-point capabilities of the device.
+        enum class floating_point_capabilities_t
+        {
+            FP_CAPS_NONE = 0,                               ///< None
+            FP_CAPS_DENORM = ZE_BIT( 0 ),                   ///< Supports denorms
+            FP_CAPS_INF_NAN = ZE_BIT( 1 ),                  ///< Supports INF and quiet NaNs
+            FP_CAPS_ROUND_TO_NEAREST = ZE_BIT( 2 ),         ///< Supports rounding to nearest even rounding mode
+            FP_CAPS_ROUND_TO_ZERO = ZE_BIT( 3 ),            ///< Supports rounding to zero.
+            FP_CAPS_ROUND_TO_INF = ZE_BIT( 4 ),             ///< Supports rounding to both positive and negative INF.
+            FP_CAPS_FMA = ZE_BIT( 5 ),                      ///< Supports IEEE754-2008 fused multiply-add.
+            FP_CAPS_ROUNDED_DIVIDE_SQRT = ZE_BIT( 6 ),      ///< Supports rounding as defined by IEEE754 for divide and sqrt
+                                                            ///< operations.
+            FP_CAPS_SOFT_FLOAT = ZE_BIT( 7 ),               ///< Uses software implementation for basic floating-point operations.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::ze_device_memory_properties_t
         enum class memory_properties_version_t
         {
@@ -239,6 +259,8 @@ namespace ze
             bool_t fp64Supported;                           ///< [out] Supports 64-bit floating-point operations
             bool_t int64AtomicsSupported;                   ///< [out] Supports 64-bit atomic operations
             bool_t dp4aSupported;                           ///< [out] Supports four component dot product and accumulate operations
+            floating_point_capabilities_t singleFpCapabilities; ///< [out] Capabilities for single-precision floating-point operations.
+            floating_point_capabilities_t doubleFpCapabilities; ///< [out] Capabilities for double-precision floating-point operations.
             uint32_t maxArgumentsSize;                      ///< [out] Maximum kernel argument size that is supported.
             uint32_t printfBufferSize;                      ///< [out] Maximum size of internal buffer that holds output of printf
                                                             ///< calls from kernel.
@@ -742,6 +764,10 @@ namespace ze
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::native_kernel_uuid_t to std::string
     std::string to_string( const Device::native_kernel_uuid_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::floating_point_capabilities_t to std::string
+    std::string to_string( const Device::floating_point_capabilities_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::kernel_properties_t to std::string

@@ -291,6 +291,41 @@ members:
       name: "id[$X_MAX_NATIVE_KERNEL_UUID_SIZE]"
       desc: "Opaque data representing a native kernel UUID"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Floating Point capabilities"
+class: $xDevice
+name: $x_floating_point_capabilities_t
+details:
+    - "floating-point capabilities of the device."
+etors:
+    - name: $X_FP_CAPS_NONE
+      value: "0"
+      desc: "None"
+    - name: $X_FP_CAPS_DENORM
+      value: "$X_BIT( 0 )"
+      desc: "Supports denorms"
+    - name: $X_FP_CAPS_INF_NAN
+      value: "$X_BIT( 1 )"
+      desc: "Supports INF and quiet NaNs"
+    - name: $X_FP_CAPS_ROUND_TO_NEAREST
+      value: "$X_BIT( 2 )"
+      desc: "Supports rounding to nearest even rounding mode"
+    - name: $X_FP_CAPS_ROUND_TO_ZERO
+      value: "$X_BIT( 3 )"
+      desc: "Supports rounding to zero."
+    - name: $X_FP_CAPS_ROUND_TO_INF
+      value: "$X_BIT( 4 )"
+      desc: "Supports rounding to both positive and negative INF."
+    - name: $X_FP_CAPS_FMA
+      value: "$X_BIT( 5 )"
+      desc: "Supports IEEE754-2008 fused multiply-add."
+    - name: $X_FP_CAPS_ROUNDED_DIVIDE_SQRT
+      value: "$X_BIT( 6 )"
+      desc: "Supports rounding as defined by IEEE754 for divide and sqrt operations."
+    - name: $X_FP_CAPS_SOFT_FLOAT
+      value: "$X_BIT( 7 )"
+      desc: "Uses software implementation for basic floating-point operations."
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties queried using $xDeviceGetKernelProperties"
 class: $xDevice
@@ -325,6 +360,12 @@ members:
     - type: $x_bool_t
       name: dp4aSupported
       desc: "[out] Supports four component dot product and accumulate operations"
+    - type: $x_floating_point_capabilities_t
+      name: singleFpCapabilities
+      desc: "[out] Capabilities for single-precision floating-point operations."
+    - type: $x_floating_point_capabilities_t
+      name: doubleFpCapabilities
+      desc: "[out] Capabilities for double-precision floating-point operations."
     - type: uint32_t
       name: maxArgumentsSize
       desc: "[out] Maximum kernel argument size that is supported."
