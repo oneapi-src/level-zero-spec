@@ -770,7 +770,6 @@ Use ::${x}KernelSetAttribute to get attributes for a kernel object.
 
 ```c
     // Does kernel perform indirect device access.
-    bool_t isIndirect = false;
     ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
     ...
     
@@ -994,7 +993,7 @@ This can be done by inspecting API parameters, including kernel arguments.
 However, in cases where the devices does **not** support page-faulting _and_ the driver is incapable of determining whether an allocation will be accessed by the device,
 such as multiple levels of indirection, there are two methods available:
 1. the application may set the ::${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
- + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_attribute_t ($X_KERNEL_ATTR_INDIRECT_HOST_ACCESS, DEVICE_ACCESS, or SHARED_ACCESS).
+ + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_attribute_t (${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, DEVICE_ACCESS, or SHARED_ACCESS).
  + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueExecuteCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 2. explcit ::${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
  + if the application over-commits device memory, then a call to ::${x}DeviceMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -1012,7 +1011,8 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
     ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as kernel argument and appended into command list
-    ${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+    bool hasIndirectHostAccess = true;
+    ${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, sizeof(bool), &hasIndirectHostAccess);
     ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
     ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
     ...

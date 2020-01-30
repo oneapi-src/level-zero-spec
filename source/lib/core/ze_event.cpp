@@ -529,8 +529,8 @@ zeEventGetTimestamp(
     ze_event_timestamp_type_t timestampType,        ///< [in] specifies timestamp type to query for that is associated with
                                                     ///< hEvent.
     void* dstptr                                    ///< [in,out] pointer to memory for where timestamp will be written to. The
-                                                    ///< size of timestamp is specified in the
-                                                    ///< ::ze_event_timestamp_query_type_t definition.
+                                                    ///< size of timestamp is specified in the ::ze_event_timestamp_type_t
+                                                    ///< definition.
     )
 {
     auto pfnGetTimestamp = ze_lib::context.ddiTable.Event.pfnGetTimestamp;

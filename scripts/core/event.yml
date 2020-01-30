@@ -419,7 +419,7 @@ params:
       desc: "[in] specifies timestamp type to query for that is associated with hEvent."
     - type: void*
       name: dstptr
-      desc: "[in,out] pointer to memory for where timestamp will be written to. The size of timestamp is specified in the $x_event_timestamp_query_type_t definition."
+      desc: "[in,out] pointer to memory for where timestamp will be written to. The size of timestamp is specified in the $x_event_timestamp_type_t definition."
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
