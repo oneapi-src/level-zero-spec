@@ -33,8 +33,8 @@ The Level-Zero API provides the lowest-level, fine-grain and most explicit contr
 Most applications should not require the additional control provided by the Level-Zero API.
 The Level-Zero API is intended for providing explicit controls needed by higher-level runtime APIs and libraries.
 
-While heavily influenced by other low-level APIs, such as OpenCL, the Level-Zero APIs are designed to evolve independently.
-While heavily influenced by GPU archtiecture, the Level-Zero APIs are designed to be supportable across different compute device architectures, such as FPGAs, CSAs, etc.
+While initially influenced by other low-level APIs, such as OpenCL and Vulkan, the Level-Zero APIs are designed to evolve independently.
+While initially influenced by GPU archtiecture, the Level-Zero APIs are designed to be supportable across different compute device architectures, such as FPGAs, CSAs, etc.
 
 ## Devices
 The API architecture exposes both physical and logical abstraction of the underlying devices capabilities. 
@@ -192,18 +192,19 @@ The following section provides high-level driver architecture.
 @image latex intro_driver.png
 
 ## Library
-A static library is provided to allow applications to make direct API calls without understanding the underlying driver architecture. 
-For example, C/C++ applications should include "ze_api.h" (C) or "ze_api.hpp" (C++11) and link with "ze_api.lib".
+A static import library shall be provided to allow applications to make direct API calls without understanding the underlying driver interfaces. 
+C/C++ applications may include "ze_api.h" and link with "ze_api.lib".
 
 ## Loader
 The loader initiates the loading of the driver(s) and layer(s).
 The loader exports all API functions to the static library via per-process API function pointer table(s).
-Each driver and layer must below the loader will also export its API/DDI functions via per-process function pointer table(s).
 The export function and table definitions are defined in "ze_ddi.h".
+Each driver and layer below the loader must also export its DDI functions via per-process function pointer table(s).
+This model simplifies the implementation of layers to intercept and forward DDI functions to additional layer(s) and driver(s).
 
 The loader is dynamically linked with the application using the "ze_loader.dll" (windows) or "ze_loader.so" (linux).
 The loader is vendor agnostic, but must be aware of the names of vendor-specific device driver names. 
-(Note: these are currently hard-coded but a registration method will be adopted when multiple vendors are supported.)
+(Note: need to define the registration method to allow 3rd party layers and drivers to be supported.)
 
 The loader dynamically loads each vendor's device driver(s) present in the system and queries each per-process function pointer table(s).
 If only one device driver needs to be loaded, then the loader layer may be entirely bypassed.
@@ -270,9 +271,9 @@ The following table documents the supported knobs for overriding default driver 
 | Memory              | ZE_ENABLE_SHARED_IN_DEVICE_ALLOC          | {**0**, 1}        | Forces all shared allocations into device memory                                  |
 | Validation          | [ZE_ENABLE_VALIDATION_LAYER](#v0)         | {**0**, 1}        | Enables validation layer for debugging                                            |
 | ^                   | [ZE_ENABLE_PARAMETER_VALIDATION](#v1)     | {**0**, 1}        | Enables the validation level for parameters                                       |
-| ^                   | [ZE_ENABLE_HANDLE_LIFETIME](#v2)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime                         |
-| ^                   | [ZE_ENABLE_MEMORY_TRACKER](#v3)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
-| ^                   | [ZE_ENABLE_THREADING_VALIDATION](#v4)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
+| ^                   | [ZE_ENABLE_HANDLE_LIFETIME](#v2)          | {**0**, 1}        | Enables the validation level for tracking handle lifetime [future]                |
+| ^                   | [ZE_ENABLE_MEMORY_TRACKER](#v3)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime [future]                |
+| ^                   | [ZE_ENABLE_THREADING_VALIDATION](#v4)     | {**0**, 1}        | Enables the validation level for multithreading usage [future]                    |
 | Instrumentation     | [ZE_ENABLE_INSTRUMENTATION_LAYER](#i0)    | {**0**, 1}        | Enables instrumentation layer for profiling                                       |
 | ^                   | [ZE_ENABLE_API_TRACING](#i1)              | {**0**, 1}        | Enables the instrumentation for API tracing                                       |
 | ^                   | [ZE_ENABLE_METRICS](#i2)                  | {**0**, 1}        | Enables the instrumentation for device metrics                                    |
