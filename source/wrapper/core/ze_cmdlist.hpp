@@ -41,18 +41,15 @@ namespace ze
         enum class flag_t
         {
             NONE = 0,                                       ///< default behavior
-            COPY_ONLY = ZE_BIT(0),                          ///< command list **only** contains copy operations (and synchronization primitives).
-                                                            ///< this command list may **only** be submitted to a command queue created
-                                                            ///< with ::ZE_COMMAND_QUEUE_FLAG_COPY_ONLY.
-            RELAXED_ORDERING = ZE_BIT(1),                   ///< driver may reorder programs and copys between barriers and
+            RELAXED_ORDERING = ZE_BIT(0),                   ///< driver may reorder programs and copys between barriers and
                                                             ///< synchronization primitives.
                                                             ///< using this flag may increase Host overhead of ::zeCommandListClose.
                                                             ///< therefore, this flag should **not** be set for low-latency usage-models.
-            MAXIMIZE_THROUGHPUT = ZE_BIT(2),                ///< driver may perform additional optimizations that increase dexecution
+            MAXIMIZE_THROUGHPUT = ZE_BIT(1),                ///< driver may perform additional optimizations that increase dexecution
                                                             ///< throughput. 
                                                             ///< using this flag may increase Host overhead of ::zeCommandListClose and ::zeCommandQueueExecuteCommandLists.
                                                             ///< therefore, this flag should **not** be set for low-latency usage-models.
-            EXPLICIT_ONLY = ZE_BIT(3),                      ///< command list should be optimized for submission to a single command
+            EXPLICIT_ONLY = ZE_BIT(2),                      ///< command list should be optimized for submission to a single command
                                                             ///< queue and device engine.
                                                             ///< driver **must** disable any implicit optimizations for distributing
                                                             ///< work across multiple engines.
@@ -83,6 +80,8 @@ namespace ze
         struct desc_t
         {
             desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::ZE_COMMAND_LIST_DESC_VERSION_CURRENT
+            uint32_t commandQueueGroupOrdinal;              ///< [in] command queue group ordinal to which this command list will be
+                                                            ///< submitted
             flag_t flags = flag_t::NONE;                    ///< [in] creation flags
 
         };

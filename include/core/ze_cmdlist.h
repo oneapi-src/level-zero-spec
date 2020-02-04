@@ -39,18 +39,15 @@ typedef enum _ze_command_list_desc_version_t
 typedef enum _ze_command_list_flag_t
 {
     ZE_COMMAND_LIST_FLAG_NONE = 0,                  ///< default behavior
-    ZE_COMMAND_LIST_FLAG_COPY_ONLY = ZE_BIT(0),     ///< command list **only** contains copy operations (and synchronization primitives).
-                                                    ///< this command list may **only** be submitted to a command queue created
-                                                    ///< with ::ZE_COMMAND_QUEUE_FLAG_COPY_ONLY.
-    ZE_COMMAND_LIST_FLAG_RELAXED_ORDERING = ZE_BIT(1),  ///< driver may reorder programs and copys between barriers and
+    ZE_COMMAND_LIST_FLAG_RELAXED_ORDERING = ZE_BIT(0),  ///< driver may reorder programs and copys between barriers and
                                                     ///< synchronization primitives.
                                                     ///< using this flag may increase Host overhead of ::zeCommandListClose.
                                                     ///< therefore, this flag should **not** be set for low-latency usage-models.
-    ZE_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT = ZE_BIT(2),   ///< driver may perform additional optimizations that increase dexecution
+    ZE_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT = ZE_BIT(1),   ///< driver may perform additional optimizations that increase dexecution
                                                     ///< throughput. 
                                                     ///< using this flag may increase Host overhead of ::zeCommandListClose and ::zeCommandQueueExecuteCommandLists.
                                                     ///< therefore, this flag should **not** be set for low-latency usage-models.
-    ZE_COMMAND_LIST_FLAG_EXPLICIT_ONLY = ZE_BIT(3), ///< command list should be optimized for submission to a single command
+    ZE_COMMAND_LIST_FLAG_EXPLICIT_ONLY = ZE_BIT(2), ///< command list should be optimized for submission to a single command
                                                     ///< queue and device engine.
                                                     ///< driver **must** disable any implicit optimizations for distributing
                                                     ///< work across multiple engines.
@@ -64,6 +61,8 @@ typedef enum _ze_command_list_flag_t
 typedef struct _ze_command_list_desc_t
 {
     ze_command_list_desc_version_t version;         ///< [in] ::ZE_COMMAND_LIST_DESC_VERSION_CURRENT
+    uint32_t commandQueueGroupOrdinal;              ///< [in] command queue group ordinal to which this command list will be
+                                                    ///< submitted
     ze_command_list_flag_t flags;                   ///< [in] creation flags
 
 } ze_command_list_desc_t;
@@ -125,7 +124,6 @@ zeCommandListCreate(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 ///         + `::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < altdesc->version`
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
-///         + altdesc->flags
 ///         + altdesc->mode
 ///         + altdesc->priority
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY

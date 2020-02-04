@@ -189,6 +189,49 @@ zeDeviceGetKernelProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves command queue group properties of the device.
+/// 
+/// @details
+///     - Properties are reported for each physical command queue type supported
+///       by the device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkGetPhysicalDeviceQueueFamilyProperties**
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
+ze_result_t __zecall
+zeDeviceGetCommandQueueGroupProperties(
+    ze_device_handle_t hDevice,                     ///< [in] handle of the device
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of command queue group properties.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of command queue group properties available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< command queue group properties.
+                                                    ///< if count is larger than the number of command queue group properties
+                                                    ///< available, then the driver will update the value with the correct
+                                                    ///< number of command queue group properties available.
+    ze_command_queue_group_properties_t* pCommandQueueGroupProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                    ///< command queue group properties
+    )
+{
+    auto pfnGetCommandQueueGroupProperties = ze_lib::context.ddiTable.Device.pfnGetCommandQueueGroupProperties;
+    if( nullptr == pfnGetCommandQueueGroupProperties )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    return pfnGetCommandQueueGroupProperties( hDevice, pCount, pCommandQueueGroupProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves local memory properties of the device.
 /// 
 /// @details

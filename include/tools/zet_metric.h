@@ -93,10 +93,10 @@ typedef struct _zet_metric_group_properties_t
     zet_metric_group_sampling_type_t samplingType;  ///< [out] metric group sampling type
     uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
                                                     ///< groups from different domains.
-    uint32_t maxCommandQueueOrdinal;                ///< [out] tracers and queries of this metric group cannot be submitted to
-                                                    ///< a command queue with a larger ordinal value.
+    uint32_t maxCommandQueueGroupOrdinal;           ///< [out] tracers and queries of this metric group cannot be submitted to
+                                                    ///< a command queue group with a larger ordinal value.
                                                     ///< See ::ze_command_queue_desc_t for more information on how to specify
-                                                    ///< the command queue's ordinal.
+                                                    ///< the command queue's group ordinal.
     uint32_t metricCount;                           ///< [out] metric count belonging to this group
 
 } zet_metric_group_properties_t;

@@ -806,8 +806,8 @@ namespace zet
         str += std::to_string(val.domain);
         str += "\n";
         
-        str += "MetricGroup::properties_t::maxCommandQueueOrdinal : ";
-        str += std::to_string(val.maxCommandQueueOrdinal);
+        str += "MetricGroup::properties_t::maxCommandQueueGroupOrdinal : ";
+        str += std::to_string(val.maxCommandQueueGroupOrdinal);
         str += "\n";
         
         str += "MetricGroup::properties_t::metricCount : ";

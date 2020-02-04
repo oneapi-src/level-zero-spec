@@ -346,10 +346,10 @@ class zet_metric_group_properties_t(Structure):
         ("samplingType", zet_metric_group_sampling_type_t),             ## [out] metric group sampling type
         ("domain", c_ulong),                                            ## [out] metric group domain number. Cannot use simultaneous metric
                                                                         ## groups from different domains.
-        ("maxCommandQueueOrdinal", c_ulong),                            ## [out] tracers and queries of this metric group cannot be submitted to
-                                                                        ## a command queue with a larger ordinal value.
+        ("maxCommandQueueGroupOrdinal", c_ulong),                       ## [out] tracers and queries of this metric group cannot be submitted to
+                                                                        ## a command queue group with a larger ordinal value.
                                                                         ## See ::ze_command_queue_desc_t for more information on how to specify
-                                                                        ## the command queue's ordinal.
+                                                                        ## the command queue's group ordinal.
         ("metricCount", c_ulong)                                        ## [out] metric count belonging to this group
     ]
 

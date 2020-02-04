@@ -130,9 +130,6 @@ namespace driver
             ze_device_properties_t deviceProperties = {};
             deviceProperties.version = ZE_DEVICE_PROPERTIES_VERSION_CURRENT;
             deviceProperties.type = ZE_DEVICE_TYPE_GPU;
-            deviceProperties.maxCommandQueues = 1;
-            deviceProperties.numAsyncComputeEngines = 1;
-            deviceProperties.numAsyncCopyEngines = 1;
             strcpy( deviceProperties.name, "Null Device" );
 
             *pDeviceProperties = deviceProperties;
@@ -148,6 +145,25 @@ namespace driver
             computeProperties.version = ZE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT;
 
             *pComputeProperties = computeProperties;
+            return ZE_RESULT_SUCCESS;
+        };
+
+        //////////////////////////////////////////////////////////////////////////
+        zeDdiTable.Device.pfnGetCommandQueueGroupProperties = [](
+            ze_device_handle_t,
+            uint32_t* pCount,
+            ze_command_queue_group_properties_t* pCommandQueueGroupProperties )
+        {
+            if( nullptr != pCommandQueueGroupProperties )
+            {
+                ze_command_queue_group_properties_t commandQueueGroupProperties = {};
+                commandQueueGroupProperties.version = ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT;
+                commandQueueGroupProperties.flags = ZE_COMMAND_QUEUE_GROUP_FLAG_NONE;
+
+                *pCommandQueueGroupProperties = commandQueueGroupProperties;
+            }
+            *pCount = 1;
+
             return ZE_RESULT_SUCCESS;
         };
 
