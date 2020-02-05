@@ -271,28 +271,29 @@ ${"###"} Creation
 The following sample code demonstrates a basic sequence for creation of command queues:
 ```c
     // Discover all command queue types
-    uint32_t queueGroupCount = 0;_
-    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &queueGroupCount, nullptr);
+    uint32_t cmdqueueGroupCount = 0;_
+    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, nullptr);
 
-    ${x}_command_queue_group_properties_t* allQueueGroups = (${x}_command_queue_group_properties_t*)
-        malloc(queueGroupCount * sizeof(${x}_command_queue_group_properties_t));
-    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &queueGroupCount, allQueues);
+    ${x}_command_queue_group_properties_t* cmdqueueGroupProperties = (${x}_command_queue_group_properties_t*)
+        malloc(cmdqueueGroupCount * sizeof(${x}_command_queue_group_properties_t));
+    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, allQueues);
 
     // Find a proper command queue
-    uint32_t command_queue_group_ordinal = queueGroupCount;
-    for(uint32_t i = 0; i < queueGroupCount; ++i) {
-        if(0 == (${X}_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY & allQueueGroups[i].flags)) {
+    uint32_t computeQueueGroupOrdinal = cmdqueueGroupCount;
+    for(uint32_t i = 0; i < cmdqueueGroupCount; ++i) {
+        if( cmdqueueGroupProperties.computeSupported )
             command_queue_ordinal = i;
             break;
         }
     }
-    if(command_queue_group_ordinal == queueGroupCount)
+    if(computeQueueGroupOrdinal == cmdqueueGroupCount)
         return; // no compute queues found
 
     // Create a command queue
     ${x}_command_queue_desc_t commandQueueDesc = {
         ${X}_COMMAND_QUEUE_DESC_VERSION_CURRENT,
-        command_queue_group_ordinal,
+        computeQueueGroupOrdinal,
+        ${X}_COMMAND_QUEUE_FLAG_NONE,
         ${X}_COMMAND_QUEUE_MODE_DEFAULT,
         ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
         0
@@ -351,7 +352,7 @@ The following sample code demonstrates a basic sequence for creation of command 
     // Create a command list
     ${x}_command_list_desc_t commandListDesc = {
         ${X}_COMMAND_LIST_DESC_VERSION_CURRENT,
-        command_queue_group_ordinal,
+        computeQueueGroupOrdinal,
         ${X}_COMMAND_LIST_FLAG_NONE
     };
     ${x}_command_list_handle_t hCommandList;
@@ -411,7 +412,8 @@ The following sample code demonstrates a basic sequence for creation and usage o
     // Create an immediate command list
     ${x}_command_queue_desc_t commandQueueDesc = {
         ${X}_COMMAND_QUEUE_DESC_VERSION_CURRENT,
-        command_queue_group_ordinal,
+        computeQueueGroupOrdinal,
+        ${X}_COMMAND_QUEUE_FLAG_NONE,
         ${X}_COMMAND_QUEUE_MODE_DEFAULT,
         ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
         0

@@ -122,22 +122,6 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Supported command queue group flags
-        enum class command_queue_group_flag_t
-        {
-            NONE = 0,                                       ///< default behavior
-            COMPUTE_ONLY = ZE_BIT(0),                       ///< command queue group only supports enqueing compute commands.
-            COPY_ONLY = ZE_BIT(1),                          ///< command queue group only supports enqueing copy commands.
-            SINGLE_SLICE_ONLY = ZE_BIT(2),                  ///< command queue group reserves and cannot comsume more than a single
-                                                            ///< slice. 'slice' size is device-specific.  cannot be combined with
-                                                            ///< ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY.
-            SUPPORTS_COOPERATIVE_KERNELS = ZE_BIT(3),       ///< command queue group supports command list with cooperative kernels.
-                                                            ///< See ::zeCommandListAppendLaunchCooperativeKernel for more details.
-                                                            ///< cannot be combined with ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::ze_device_memory_properties_t
         enum class memory_properties_version_t
         {
@@ -295,7 +279,12 @@ namespace ze
         struct command_queue_group_properties_t
         {
             command_queue_group_properties_version_t version = command_queue_group_properties_version_t::CURRENT;   ///< [in] ::ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT
-            command_queue_group_flag_t flags;               ///< [out] capability flags of the command queue group.
+            bool_t computeSupported;                        ///< [out] command queue group supports enqueing compute commands.
+            bool_t copySupported;                           ///< [out] command queue group supports enqueing copy commands.
+            bool_t singleSliceSupported;                    ///< [out] command queue group supports reserving a single slice. 'slice'
+                                                            ///< size is reported by ::ze_device_properties_t.
+            bool_t cooperativeKernelsSupported;             ///< [out] command queue group supports cooperative kernels. See
+                                                            ///< ::zeCommandListAppendLaunchCooperativeKernel for more details.
 
         };
 
@@ -835,10 +824,6 @@ namespace ze
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::command_queue_group_properties_version_t to std::string
     std::string to_string( const Device::command_queue_group_properties_version_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::command_queue_group_flag_t to std::string
-    std::string to_string( const Device::command_queue_group_flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::command_queue_group_properties_t to std::string

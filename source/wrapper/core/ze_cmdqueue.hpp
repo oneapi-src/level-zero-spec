@@ -37,6 +37,15 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported command queue flags
+        enum class flag_t
+        {
+            NONE = 0,                                       ///< default behavior
+            SINGLE_SLICE_ONLY = ZE_BIT(0),                  ///< command queue reserves and cannot comsume more than a single slice.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Supported command queue modes
         enum class mode_t
         {
@@ -64,6 +73,7 @@ namespace ze
         {
             desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT
             uint32_t ordinal;                               ///< [in] command queue group ordinal
+            flag_t flags;                                   ///< [in] usage flags
             mode_t mode = mode_t::DEFAULT;                  ///< [in] operation mode
             priority_t priority = priority_t::NORMAL;       ///< [in] priority
 
@@ -190,6 +200,10 @@ namespace ze
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandQueue::desc_version_t to std::string
     std::string to_string( const CommandQueue::desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandQueue::flag_t to std::string
+    std::string to_string( const CommandQueue::flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandQueue::mode_t to std::string

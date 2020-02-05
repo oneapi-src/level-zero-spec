@@ -392,27 +392,6 @@ etors:
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported command queue group flags"
-class: $xDevice
-name: $x_command_queue_group_flag_t
-etors:
-    - name: $X_COMMAND_QUEUE_GROUP_FLAG_NONE
-      value: "0"
-      desc: "default behavior"
-    - name: $X_COMMAND_QUEUE_GROUP_FLAG_COMPUTE_ONLY
-      value: "$X_BIT(0)"
-      desc: "command queue group only supports enqueing compute commands."
-    - name: $X_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY
-      value: "$X_BIT(1)"
-      desc: "command queue group only supports enqueing copy commands."
-    - name: $X_COMMAND_QUEUE_GROUP_FLAG_SINGLE_SLICE_ONLY
-      value: "$X_BIT(2)"
-      desc: "command queue group reserves and cannot comsume more than a single slice. 'slice' size is device-specific.  cannot be combined with $X_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY."
-    - name: $X_COMMAND_QUEUE_GROUP_FLAG_SUPPORTS_COOPERATIVE_KERNELS
-      value: "$X_BIT(3)"
-      desc: "command queue group supports command list with cooperative kernels. See $xCommandListAppendLaunchCooperativeKernel for more details. cannot be combined with $X_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY."      
---- #--------------------------------------------------------------------------
 type: struct
 desc: "Command queue group properties queried using $xDeviceGetCommandQueueGroupProperties"
 class: $xDevice
@@ -422,9 +401,18 @@ members:
       name: version
       desc: "[in] $X_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT"
       init: $X_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT
-    - type: $x_command_queue_group_flag_t
-      name: flags
-      desc: "[out] capability flags of the command queue group."
+    - type: $x_bool_t
+      name: computeSupported
+      desc: "[out] command queue group supports enqueing compute commands."
+    - type: $x_bool_t
+      name: copySupported
+      desc: "[out] command queue group supports enqueing copy commands."
+    - type: $x_bool_t
+      name: singleSliceSupported
+      desc: "[out] command queue group supports reserving a single slice. 'slice' size is reported by $x_device_properties_t."
+    - type: $x_bool_t
+      name: cooperativeKernelsSupported
+      desc: "[out] command queue group supports cooperative kernels. See $xCommandListAppendLaunchCooperativeKernel for more details."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves command queue group properties of the device."

@@ -208,6 +208,25 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandQueue::flag_t to std::string
+    std::string to_string( const CommandQueue::flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "NONE   ";
+        
+        if( static_cast<uint32_t>(CommandQueue::flag_t::SINGLE_SLICE_ONLY) & bits )
+            str += "SINGLE_SLICE_ONLY | ";
+
+        return ( str.size() > 3 ) 
+            ? "CommandQueue::flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "CommandQueue::flag_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandQueue::mode_t to std::string
     std::string to_string( const CommandQueue::mode_t val )
     {
@@ -275,6 +294,10 @@ namespace ze
         
         str += "CommandQueue::desc_t::ordinal : ";
         str += std::to_string(val.ordinal);
+        str += "\n";
+        
+        str += "CommandQueue::desc_t::flags : ";
+        str += to_string(val.flags);
         str += "\n";
         
         str += "CommandQueue::desc_t::mode : ";

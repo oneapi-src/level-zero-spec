@@ -578,6 +578,9 @@ namespace layer
             if( ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
                 return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
+            if( 1 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
             if( 2 <= desc->mode )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
@@ -733,6 +736,9 @@ namespace layer
 
             if( ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < altdesc->version )
                 return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 1 <= altdesc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
             if( 2 <= altdesc->mode )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
