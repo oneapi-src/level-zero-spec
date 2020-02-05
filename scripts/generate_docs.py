@@ -120,7 +120,15 @@ def generate_rst(srcpath, dstpath, tags, ver, meta):
         loc += util.makoWrite(fin, fout,
             tags=tags,
             ver=float(ver))
-    print("Generated %s lines of reStructuredText (rst).\n"%loc)
+
+    if (loc > 0):
+        print("Generated %s lines of reStructuredText (rst).\n"%loc)
+        
+        fin = os.path.join("templates", "api_listing.mako")
+        fout = os.path.join(dstpath, "api.rst")
+        groupname = os.path.basename(dstpath).capitalize()
+        util.makoWrite(fin, fout, groupname = groupname)
+        
 
 
 """
@@ -133,10 +141,10 @@ def generate_html_from_rst():  # This will become generate_html() once MD path i
     util.removePath("../docs/xml")
     util.makePath("../docs/xml")
     print("Generating doxygen...")
-    cmdline = "doxygen Doxyfile"
+    cmdline = "doxygen DoxyfileRST"
     os.system(cmdline)
     print("Generating HTML...")
-    cmdline = "sphinx-build -w ../docs/source/warnings.txt -b html ../docs/source .."
+    cmdline = "sphinx-build -M html ../docs/source .."
     os.system(cmdline)
 
 """

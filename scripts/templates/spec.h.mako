@@ -21,6 +21,10 @@ from templates import helper as th
  * @endcond
  *
  */
+/** \addtogroup ${groupname}
+ * @{
+ */
+ 
 #ifndef _${N}_${name.upper()}_H
 #define _${N}_${name.upper()}_H
 #if defined(__cplusplus)
@@ -136,3 +140,5 @@ typedef struct _${th.make_type_name(n, tags, obj)} ${th.make_type_name(n, tags, 
 #endif
 
 #endif // _${N}_${name.upper()}_H
+
+/** @} */

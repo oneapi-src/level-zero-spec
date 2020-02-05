@@ -15,6 +15,7 @@ def _mako_spec_cpp(path, namespace, tags, specs, meta, ext):
     loc = 0
     template = "spec%s.mako"%ext
     fin = os.path.join("templates", template)
+    groupname = os.path.basename(os.path.normpath(path)).capitalize()
 
     files = []
     for s in specs:
@@ -32,7 +33,8 @@ def _mako_spec_cpp(path, namespace, tags, specs, meta, ext):
             namespace=namespace,
             tags=tags,
             specs=specs,
-            meta = meta)
+            meta = meta,
+            groupname = groupname)
     return loc, files
 
 """

@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Tools
+ * @{
+ */
+ 
 #ifndef _ZET_SYSMAN_H
 #define _ZET_SYSMAN_H
 #if defined(__cplusplus)
@@ -3643,3 +3647,5 @@ zetSysmanDiagnosticsRunTests(
 #endif
 
 #endif // _ZET_SYSMAN_H
+
+/** @} */

@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Tools
+ * @{
+ */
+ 
 #ifndef _ZET_COMMON_H
 #define _ZET_COMMON_H
 #if defined(__cplusplus)
@@ -407,3 +411,5 @@ typedef struct _zet_tracer_desc_t zet_tracer_desc_t;
 #endif
 
 #endif // _ZET_COMMON_H
+
+/** @} */

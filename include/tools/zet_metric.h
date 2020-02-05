@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Tools
+ * @{
+ */
+ 
 #ifndef _ZET_METRIC_H
 #define _ZET_METRIC_H
 #if defined(__cplusplus)
@@ -670,3 +674,5 @@ zetMetricQueryGetData(
 #endif
 
 #endif // _ZET_METRIC_H
+
+/** @} */

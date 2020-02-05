@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Core
+ * @{
+ */
+ 
 #ifndef _ZE_COMMON_H
 #define _ZE_COMMON_H
 #if defined(__cplusplus)
@@ -348,3 +352,5 @@ typedef struct _ze_sampler_desc_t ze_sampler_desc_t;
 #endif
 
 #endif // _ZE_COMMON_H
+
+/** @} */

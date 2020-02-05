@@ -43,4 +43,6 @@ oneAPI Level 0 Specification
    :maxdepth: 1
    :caption: API Documentation
 
-   api/library_root
+   core/api.rst
+   tools/api.rst
+   

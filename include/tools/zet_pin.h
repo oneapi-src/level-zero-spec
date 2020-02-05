@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Tools
+ * @{
+ */
+ 
 #ifndef _ZET_PIN_H
 #define _ZET_PIN_H
 #if defined(__cplusplus)
@@ -115,3 +119,5 @@ zetKernelGetProfileInfo(
 #endif
 
 #endif // _ZET_PIN_H
+
+/** @} */

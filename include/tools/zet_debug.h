@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Tools
+ * @{
+ */
+ 
 #ifndef _ZET_DEBUG_H
 #define _ZET_DEBUG_H
 #if defined(__cplusplus)
@@ -423,3 +427,5 @@ zetDebugWriteState(
 #endif
 
 #endif // _ZET_DEBUG_H
+
+/** @} */

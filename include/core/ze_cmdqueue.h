@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Core
+ * @{
+ */
+ 
 #ifndef _ZE_CMDQUEUE_H
 #define _ZE_CMDQUEUE_H
 #if defined(__cplusplus)
@@ -207,3 +211,5 @@ zeCommandQueueSynchronize(
 #endif
 
 #endif // _ZE_CMDQUEUE_H
+
+/** @} */

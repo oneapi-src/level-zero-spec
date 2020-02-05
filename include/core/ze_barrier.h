@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Core
+ * @{
+ */
+ 
 #ifndef _ZE_BARRIER_H
 #define _ZE_BARRIER_H
 #if defined(__cplusplus)
@@ -130,3 +134,5 @@ zeDeviceSystemBarrier(
 #endif
 
 #endif // _ZE_BARRIER_H
+
+/** @} */

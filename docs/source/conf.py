@@ -41,15 +41,13 @@ release = u''
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
-    # 'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'breathe',
-    'exhale'
+    'breathe'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -210,15 +208,6 @@ primary_domain = 'cpp'
 
 # Tell sphinx what the pygments highlight language should be.
 highlight_language = 'cpp'
-
-exhale_args = {
-    # These arguments are required
-    "containmentFolder":     "./api",
-    "rootFileName":          "library_root.rst",
-    "rootFileTitle":         "Library API",
-    "doxygenStripFromPath":  "..",
-    "fullApiSubSectionTitle": 'Full API'
-}
 
 def setup(app):
     app.add_css_file('custom.css')

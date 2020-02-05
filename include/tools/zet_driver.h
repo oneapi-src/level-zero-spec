@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Tools
+ * @{
+ */
+ 
 #ifndef _ZET_DRIVER_H
 #define _ZET_DRIVER_H
 #if defined(__cplusplus)
@@ -58,3 +62,5 @@ zetInit(
 #endif
 
 #endif // _ZET_DRIVER_H
+
+/** @} */

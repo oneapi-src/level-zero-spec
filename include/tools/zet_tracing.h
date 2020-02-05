@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Tools
+ * @{
+ */
+ 
 #ifndef _ZET_TRACING_H
 #define _ZET_TRACING_H
 #if defined(__cplusplus)
@@ -185,3 +189,5 @@ zetTracerSetEnabled(
 #endif
 
 #endif // _ZET_TRACING_H
+
+/** @} */

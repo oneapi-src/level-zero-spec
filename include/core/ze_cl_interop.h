@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Core
+ * @{
+ */
+ 
 #ifndef _ZE_CL_INTEROP_H
 #define _ZE_CL_INTEROP_H
 #if defined(__cplusplus)
@@ -100,3 +104,5 @@ zeDeviceRegisterCLCommandQueue(
 #endif
 
 #endif // _ZE_CL_INTEROP_H
+
+/** @} */

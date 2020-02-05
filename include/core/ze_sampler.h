@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Core
+ * @{
+ */
+ 
 #ifndef _ZE_SAMPLER_H
 #define _ZE_SAMPLER_H
 #if defined(__cplusplus)
@@ -136,3 +140,5 @@ zeSamplerDestroy(
 #endif
 
 #endif // _ZE_SAMPLER_H
+
+/** @} */

@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Core
+ * @{
+ */
+ 
 #ifndef _ZE_FENCE_H
 #define _ZE_FENCE_H
 #if defined(__cplusplus)
@@ -194,3 +198,5 @@ zeFenceReset(
 #endif
 
 #endif // _ZE_FENCE_H
+
+/** @} */

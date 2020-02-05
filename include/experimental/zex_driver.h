@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Experimental
+ * @{
+ */
+ 
 #ifndef _ZEX_DRIVER_H
 #define _ZEX_DRIVER_H
 #if defined(__cplusplus)
@@ -58,3 +62,5 @@ zexInit(
 #endif
 
 #endif // _ZEX_DRIVER_H
+
+/** @} */

@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Core
+ * @{
+ */
+ 
 #ifndef _ZE_DRIVER_H
 #define _ZE_DRIVER_H
 #if defined(__cplusplus)
@@ -268,3 +272,5 @@ zeDriverGetExtensionFunctionAddress(
 #endif
 
 #endif // _ZE_DRIVER_H
+
+/** @} */

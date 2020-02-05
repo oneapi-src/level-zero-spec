@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Experimental
+ * @{
+ */
+ 
 #ifndef _ZEX_COMMON_H
 #define _ZEX_COMMON_H
 #if defined(__cplusplus)
@@ -43,3 +47,5 @@ typedef struct _zex_command_graph_desc_t zex_command_graph_desc_t;
 #endif
 
 #endif // _ZEX_COMMON_H
+
+/** @} */

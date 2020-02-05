@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Core
+ * @{
+ */
+ 
 #ifndef _ZE_MEMORY_H
 #define _ZE_MEMORY_H
 #if defined(__cplusplus)
@@ -437,3 +441,5 @@ zeDriverCloseMemIpcHandle(
 #endif
 
 #endif // _ZE_MEMORY_H
+
+/** @} */

@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Tools
+ * @{
+ */
+ 
 #ifndef _ZET_MODULE_H
 #define _ZET_MODULE_H
 #if defined(__cplusplus)
@@ -68,3 +72,5 @@ zetModuleGetDebugInfo(
 #endif
 
 #endif // _ZET_MODULE_H
+
+/** @} */

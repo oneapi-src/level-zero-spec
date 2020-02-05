@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Experimental
+ * @{
+ */
+ 
 #ifndef _ZEX_CMDGRAPH_H
 #define _ZEX_CMDGRAPH_H
 #if defined(__cplusplus)
@@ -130,3 +134,5 @@ zexCommandGraphClose(
 #endif
 
 #endif // _ZEX_CMDGRAPH_H
+
+/** @} */

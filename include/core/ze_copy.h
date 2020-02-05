@@ -13,6 +13,10 @@
  * @endcond
  *
  */
+/** \addtogroup Core
+ * @{
+ */
+ 
 #ifndef _ZE_COPY_H
 #define _ZE_COPY_H
 #if defined(__cplusplus)
@@ -405,3 +409,5 @@ zeCommandListAppendMemAdvise(
 #endif
 
 #endif // _ZE_COPY_H
+
+/** @} */
