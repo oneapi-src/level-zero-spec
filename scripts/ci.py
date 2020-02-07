@@ -15,7 +15,7 @@ Entry-point:
     publishes HTML for GitLab pages
 """
 def publish_gitlab_html():
-    src_html_dir = os.path.join(root_dir, "html")
+    src_html_dir = os.path.join(root_dir, "docs", "html")
     src_img_dir = os.path.join(root_dir, "images")
     tmp_dir = os.path.join(root_dir, ".public")
     tmp_img_dir = os.path.join(root_dir, ".public/images")
