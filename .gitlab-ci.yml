@@ -65,3 +65,22 @@ linux:
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Release ..
     - make
+
+package:
+  stage: build
+  script:
+    - 
+  artifacts:
+    name: "%CI_JOB_NAME%"
+    paths:
+      - include/
+      - docs/reference.JSON
+    expire_in: 1 week
+  only:
+    refs:
+      - master
+      - staging_ci
+  tags:
+    - win
+    - git
+    - docs
