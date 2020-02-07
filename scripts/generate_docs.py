@@ -130,30 +130,48 @@ def generate_rst(srcpath, dstpath, tags, ver, meta):
         util.makoWrite(fin, fout, groupname = groupname)
         
 
+"""
+Entry-point:
+    generate reference JSON file
+"""
+def generate_ref(dstpath, ref):
+    refpath = os.path.join(dstpath, "ref")
+    util.removePath(refpath)
+    util.makePath(refpath)
+
+    util.jsonWrite(os.path.join(refpath, "level_zero.json"), ref)
 
 """
 Entry-point:
     generate HTML files using Rst and Doxygen template
 """
-def generate_html_from_rst():  # This will become generate_html() once MD path is removed.
-    util.removePath("../html")
-    util.removePath("../latex")
-    util.removePath("../docs/xml")
-    util.makePath("../docs/xml")
+def generate_html_from_rst(dstpath):  # This will become generate_html() once MD path is removed.
+    htmlpath = os.path.join(dstpath, "html")
+    latexpath = os.path.join(dstpath, "latex")
+    xmlpath = os.path.join(dstpath, "xml")
+    util.removePath(htmlpath)
+    util.removePath(latexpath)
+    util.removePath(xmlpath)
+    util.makePath(xmlpath)
+
     print("Generating doxygen...")
     cmdline = "doxygen DoxyfileRST"
     os.system(cmdline)
+
     print("Generating HTML...")
-    cmdline = "sphinx-build -M html ../docs/source .."
+    cmdline = "sphinx-build -M html %s .."%os.path.join(dstpath, "source")
     os.system(cmdline)
 
 """
 Entry-point:
     generate HTML files using Doxygen template
 """
-def generate_html():
-    util.removePath("../html")
-    util.removePath("../latex")
+def generate_html(dstpath):
+    htmlpath = os.path.join(dstpath, "html")
+    latexpath = os.path.join(dstpath, "latex")
+    util.removePath(htmlpath)
+    util.removePath(latexpath)
+
     print("Generating HTML/LaTeX...")
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
@@ -162,7 +180,9 @@ def generate_html():
 Entry-point:
     generate PDF file using generated LaTeX files
 """
-def generate_pdf():
+def generate_pdf(dstpath):
+    latexpath = os.path.join(dstpath, "latex")
+
     print("Generating PDF..")
-    cmdline = "..\latex\make.bat"
+    cmdline = "%s"%os.path.join(latexpath, "make.bat")
     os.system(cmdline)

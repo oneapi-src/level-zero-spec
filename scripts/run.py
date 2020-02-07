@@ -73,6 +73,9 @@ def main():
 
     specs = None
 
+    srcpath = os.path.join("../source/")
+    docpath = os.path.join("../docs/")
+
     # generate code
     for idx, section in enumerate(configParser.sections()):
         namespace = configParser.get(section,'namespace')
@@ -82,8 +85,7 @@ def main():
 
         ymlpath = os.path.join("./", section)
         incpath = os.path.join("../include/", section)
-        srcpath = os.path.join("../source/")
-        docpath = os.path.join("../docs/source/", section)
+        rstpath = os.path.join(docpath, "source", section)
 
         if args[section] and util.exists(ymlpath):
             if specs:
@@ -114,7 +116,7 @@ def main():
                     generate_code.generate_wrapper(srcpath, section, namespace, tags, specs[0], specs[1])
 
             if args['rst']:
-                generate_docs.generate_rst(ymlpath, docpath, tags, args['ver'], specs[1])
+                generate_docs.generate_rst(ymlpath, rstpath, tags, args['ver'], specs[1])
 
             if args['md']:
                 generate_docs.generate_md(ymlpath, incpath, tags, args['ver'], specs[1])
@@ -122,7 +124,7 @@ def main():
     if args['debug']:
         util.makoFileListWrite("generated.json")
 
-    util.jsonWrite("../docs/reference.json", specs[2])
+    generate_docs.generate_ref(docpath, specs[2])
 
     # build code
     if args['build']:
@@ -131,12 +133,12 @@ def main():
     # generate documentation
     if args['html']:
         if args['rst']:
-            generate_docs.generate_html_from_rst()
+            generate_docs.generate_html_from_rst(docpath)
         else:
-            generate_docs.generate_html()
+            generate_docs.generate_html(docpath)
 
     if args['pdf']:
-        generate_docs.generate_pdf()
+        generate_docs.generate_pdf(docpath)
 
     print("\nCompleted in %.1f seconds!"%(time.time() - start))
 
