@@ -2,8 +2,9 @@
 %><%
 %>
 
+==============================
 ${groupname} API
-===================
+==============================
 
 .. doxygengroup:: ${groupname}
-   :contentonly
+   :content-only:

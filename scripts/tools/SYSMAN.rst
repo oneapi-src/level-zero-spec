@@ -259,8 +259,8 @@ provided for all components in each class.
 |                       |                       | set color where       |
 |                       |                       | applicable            |
 +-----------------------+-----------------------+-----------------------+
-| `Diagnostics <#con>`_ | SCAN test suiteARRAY  | Run all or a subset   |
-| _                     | test suite            | of diagnostic tests   |
+| `Diagnostics <#con>`__| SCAN test suiteARRAY  | Run all or a subset   |
+|                       | test suite            | of diagnostic tests   |
 |                       |                       | in the test suite     |
 +-----------------------+-----------------------+-----------------------+
 
@@ -279,8 +279,8 @@ the figure below:
 .. image:: ../../../images/tools_sysman_freq_flow.png
 
 In the C API, each class is associated with a unique handle type
-(e.g. ${t}_sysman_freq_handle_t refers to a frequency component). In
-the C++ API, each class is a C++ class (e.g. An instance of the class
+(e.g. ${t}_sysman_freq_handle_t refers to a frequency component). In
+the C++ API, each class is a C++ class (e.g. An instance of the class
 ${t}::SysmanFrequency refers to a frequency component).
 
 The pseudo code below shows how to use the Sysman API to enumerate all
@@ -360,7 +360,7 @@ Events
 ------
 
 Events are a way to determine if changes have occurred on a device
-e.g. new RAS errors without polling the Sysman API. An application
+e.g. new RAS errors without polling the Sysman API. An application
 registers the events that it wishes to receive notification about and
 then it listens for notifications. The application can choose to block
 when listening - this will put the calling application thread to sleep
@@ -1134,17 +1134,17 @@ Routing rules determine the flow of traffic through the fabric.
 The figure below shows four devices, each with two fabric ports. Each
 port has a link that connects it to a port on another device. In this
 example, the devices are connected in a ring. Device A and D can access
-each other’s memory through either device B or device C depending on how
+each other's memory through either device B or device C depending on how
 the fabric routing rules are configured. If the connection between
 device B and D goes down, the routing rules can be modified such that
-device B and D can still access each other’s memory by going through two
+device B and D can still access each other's memory by going through two
 hops in the fabric (device A and C).
 
 .. image:: ../../../images/tools_sysman_fabric.png
 
 The API permits enumerating all the ports available on a device. Each
 port has a universal unique identifier (UUID). If the port is connected
-to another port, the API will provide the remote port’s UUID. By
+to another port, the API will provide the remote port's UUID. By
 enumerating all ports on all devices that are connected to the fabric,
 an application can build a topology map of connectivity.
 
@@ -1172,13 +1172,13 @@ information about the types of quality degradation that are being
 observed. If the port is in a red state, the API provides additional
 information about the causes of the instability.
 
-When a port’s health state changes, the event
+When a port's health state changes, the event
 ${T}_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH is triggered.
 
 The API permits measuring the receive and transmit bandwidth flowing
 through each port. It also provides the maximum receive and transmit
 speed (frequency/number of lanes) of each port and the current speeds
-which can be lower if operating in a degraded state. Note that a port’s
+which can be lower if operating in a degraded state. Note that a port's
 receive and transmit speeds are not necessarily the same.
 
 Since ports can pass data directly through to another port, the measured
@@ -1519,8 +1519,7 @@ feature of certain devices that attempts to correct random bit errors
 and provide redundancy where permanent damage has occurred.
 
 If a device supports RAS, it maintains counters for hardware and
-software errors. There are two types of errors and they are defined in
-${t}_ras_error_type_t:
+software errors. There are two types of errors and they are defined in ${t}_ras_error_type_t:
 
 +-----------------------------------+-----------------------------------+
 | Error Type                        | Description                       |
@@ -1837,13 +1836,13 @@ tests in each:
                        output("    Test %u: %s", pTests[i].index, pTests[i].name)
        free_memory(...)
 
-.. _events-1:
+.. _events-2:
 
 Events
 ------
 
 Events are a way to determine if changes have occurred on a device
-e.g. new RAS errors. An application registers the events that it wishes
+e.g. new RAS errors. An application registers the events that it wishes
 to receive notification about and then it queries to receive
 notifications. The query can request a blocking wait - this will put the
 calling application thread to sleep until new notifications are

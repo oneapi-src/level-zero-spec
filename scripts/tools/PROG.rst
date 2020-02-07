@@ -39,7 +39,7 @@ The callbacks are defined as a collection of per-API function pointers, with the
 
 * params : a structure capturing pointers to the input and output parameters of the current instance
 * result : the current value of the return value
-* pTracerUserData : the user’s pointer for the tracer’s data
+* pTracerUserData : the user's pointer for the tracer's data
 * ppTracerInstanceUserData : a per-tracer, per-instance storage location; typically used for passing data from the prologue to the epilogue
 
 Note: since the creation of a tracer requires a device, on first glance
@@ -172,7 +172,7 @@ of counters, and a programmable network of connections that work with a
 separate set of counters as well as other types of counters. For sake of
 simplicity, the smallest unit of configuration is a Metric Group. Metric
 Groups are sets of metrics that provide certain perspective on
-workload’s performance. The groups aggregate metrics, define device
+workload's performance. The groups aggregate metrics, define device
 programming and available collection methods. An application may choose
 to collect data from a number of Metric Groups provided that they all
 belong to different domains. Domains_ are used as a software
@@ -190,8 +190,8 @@ supporting each of the sampling types Time-based_ and Event-based_.
 All available sampling types are defined in ${t}_metric_group_sampling_type_t.
 
 - Information about supported sampling types for a given Metric Group is provided in ${t}_metric_group_properties_t.samplingType.
-- It’s possible that a device provides multiple Metric Groups with the same names but different sampling types.
-- When enumerating, it’s important to choose a Metric Group which supports the desired sampling type.
+- It's possible that a device provides multiple Metric Groups with the same names but different sampling types.
+- When enumerating, it's important to choose a Metric Group which supports the desired sampling type.
 
 .. _Domains:
 
@@ -203,7 +203,7 @@ Every Metric Group belongs to a given domain
 
 - The Metric Group typically define a uniform device counter configuration used for measurements.
 - Each domain represents an exclusive resource used by the Metric Group.
-- It’s possible to simultaneously gather data for two different Metric Groups, only if they belong to a different domain i.e. Metric Groups that can be collected concurrently will have different domain values.
+- It's possible to simultaneously gather data for two different Metric Groups, only if they belong to a different domain i.e. Metric Groups that can be collected concurrently will have different domain values.
 
 Enumeration
 -----------
@@ -224,7 +224,7 @@ may choose to run the workload multiple times, recording different set
 of Metric Groups each time. Usually care must be taken to ensure
 run-to-run stability and result repeatability if metrics from different
 runs are meant to be used together. When enumerating Metric tree to find
-a desired Metric Group, it’s important to know in advance which sampling
+a desired Metric Group, it's important to know in advance which sampling
 type it will be used.
 
 To enumerate through the Metric tree:
@@ -233,12 +233,12 @@ To enumerate through the Metric tree:
 2. Call ${t}MetricGroupGet to obtain all Metric Groups.
 3. Iterate over all available Metric Groups.
 
-    - At this point it’s possible to check e.g. Metric Group name, domain or sampling type.
+    - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
     - Metric Group names may not be unique.
 
 4. For each Metric Group obtain their Metric count calling ${t}MetricGroupGetProperties with Metric Group handle (${t}_metric_group_handle_t) and checking ${t}_metric_group_properties_t.metricCount.
 5. Iterate over available Metrics using ${t}MetricGet with parent Metric Group (${t}_metric_group_handle_t).
-6. Check Metric properties (e.g. name, description) calling ${t}MetricGetProperties with parent Metric (${t}_metric_handle_t).
+6. Check Metric properties (e.g. name, description) calling ${t}MetricGetProperties with parent Metric (${t}_metric_handle_t).
 
 The following pseudo-code demonstrates a basic enumeration over all
 available metric groups and their metrics. Additionally, it returns a
@@ -291,7 +291,7 @@ Use the ${t}DeviceActivateMetricGroups API call to configure the device
 for data collection.
 
 - Subsequent calls to the function will disable device programming for the metric groups not selected for activation.
-- To avoid undefined results only call the ${t}DeviceActivateMetricGroups between experiments i.e. while not collecting data.
+- To avoid undefined results only call the ${t}DeviceActivateMetricGroups between experiments i.e. while not collecting data.
 
 Programming restrictions:
 
@@ -563,7 +563,7 @@ Inter-Function Instrumentation
 The following capabilities allow for a tool to intercept and redirect
 function calls:
 
-* Inter-module function calls - the ability to call functions between different modules; e.g., the application’s module and a tool’s module
+* Inter-module function calls - the ability to call functions between different modules; e.g., the application's module and a tool's module
 * API-Tracing_
 
 For example, a tool may use API Tracing in any of the following ways:
@@ -578,9 +578,9 @@ Intra-Function Instrumentation
 
 The following capabilities allow for a tool to inject instructions within a kernel:
 
-* ${t}ModuleGetDebugInfo - allows a tool to query standard debug info for an application’s module
+* ${t}ModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
 * ${t}KernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
-* ${x}ModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application’s module, instrument it, then create a new module using the intrumented version
+* ${x}ModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
 * API-Tracing_ - same usage as Inter-Function Instrumentation above
 
 Compilation
@@ -613,14 +613,14 @@ ${x}ModuleGetFunctionPointer to retrieve the Host and device address of
 each function in the module.
 
 There are no APIs provided for the actual instrumentation. Instead this
-is left up to the tool itself to decode the application module’s native
+is left up to the tool itself to decode the application module's native
 binary and inject native instructions. This model prevents the
 instrumentation from being manipulated by the compiler.
 
 Execution
 ~~~~~~~~~
 
-If a tool requires changing the address of an application’s function,
+If a tool requires changing the address of an application's function,
 then it should use API Tracing; for example,
 ${x}ModuleGetFunctionPointer and all flavors of
 ${x}CommandListAppendLaunchKernel.
@@ -637,7 +637,7 @@ The program debug APIs provide tools a basic framework for inserting
 breakpoints and accessing register values of device programs, as they
 are executing on the device.
 
-(more details coming soon…)
+(more details coming soon...)
 
 .. |Metrics| image:: ../images/tools_metric_hierarchy.png?raw=true
 .. |MetricTracer| image:: ../images/tools_metric_tracer.png?raw=true

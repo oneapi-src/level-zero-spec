@@ -90,7 +90,7 @@ submission to a specific sub-device.
 Peer-to-Peer Communication
 --------------------------
 
-Peer to Peer API’s provide capabilities to marshall data across Host to
+Peer to Peer API's provide capabilities to marshall data across Host to
 Device, Device to Host and Device to Device. The data marshalling API
 can be scheduled as asynchronous operations or can be synchronized with
 kernel execution through command queues. Data coherency is maintained by
@@ -100,7 +100,7 @@ Inter-Process Communication
 ---------------------------
 
 The API allows sharing of memory objects across different device
-processes. Since each process has it’s own virtual address space, there
+processes. Since each process has it's own virtual address space, there
 is no guarantee that the same virtual address will be available when the
 memory object is shared in new process. There are a set of APIs that
 makes it easier to share the memory objects with ease.
@@ -142,7 +142,7 @@ conflicts within the API, or with other APIs and libraries:
 - all driver entry points are prefixed with ${x}
 - all types follow \**${x}_<name>_t*\* convention
 - all macros and enumerator values use all caps \**${X}_<SCOPE>_<NAME>*\* convention
-- all functions use camel case **${x}<Object><Action>** convention - exception: since “driver” functions use implicit <Object>, it is omitted
+- all functions use camel case **${x}<Object><Action>** convention - exception: since "driver" functions use implicit <Object>, it is omitted
 - all structure members and function parameters use camel case convention
 
 In addition, the following coding standards are followed:
@@ -243,9 +243,9 @@ The primary usage-models enabled by these rules is:
 Experimental API Support
 ------------------------
 
-Features which are still being considered for inclusion into the “Core”
+Features which are still being considered for inclusion into the "Core"
 API, but require additional experimentation by application vendors
-before ratification, are exposed as “Experimental” APIs.
+before ratification, are exposed as "Experimental" APIs.
 
 Applications should not rely on experimental APIs in production. -
 Experimental APIs may be added and removed from the API at any time;
@@ -267,8 +267,8 @@ Library
 
 A static library is provided to allow applications to make direct API
 calls without understanding the underlying driver architecture. For
-example, C/C++ applications should include “${x}_api.h” (C) or
-“${x}_api.hpp” (C++11) and link with “${x}_api.lib”.
+example, C/C++ applications should include "${x}_api.h" (C) or
+"${x}_api.hpp" (C++11) and link with "${x}_api.lib".
 
 Loader
 ------
@@ -278,16 +278,16 @@ loader exports all API functions to the static library via per-process
 API function pointer table(s). Each driver and layer must below the
 loader will also export its API/DDI functions via per-process function
 pointer table(s). The export function and table definitions are defined
-in “${x}_ddi.h”.
+in "${x}_ddi.h".
 
 The loader is dynamically linked with the application using the
-“${x}_loader.dll” (windows) or “${x}_loader.so” (linux). The loader is
+"${x}_loader.dll" (windows) or "${x}_loader.so" (linux). The loader is
 vendor agnostic, but must be aware of the names of vendor-specific
 device driver names. (Note: these are currently hard-coded but a
 registration method will be adopted when multiple vendors are
 supported.)
 
-The loader dynamically loads each vendor’s device driver(s) present in
+The loader dynamically loads each vendor's device driver(s) present in
 the system and queries each per-process function pointer table(s). If
 only one device driver needs to be loaded, then the loader layer may be
 entirely bypassed.
@@ -296,7 +296,7 @@ The following diagram illustrates the expected loading sequence:
 
 .. image:: ../../../images/intro_loader.png
 
-Thus, the loader’s internal function pointer table entries may point to:
+Thus, the loader's internal function pointer table entries may point to:
 
 + validation layer intercepts (if enabled),
 + instrumentation layer intercepts (if enabled),
@@ -310,7 +310,7 @@ The device driver(s) contain the device-specific implementations of the APIs.
 The device driver(s) are dynamically linked using a *${x}_vendor_type.dll*
 (windows) / *${x}_vendor_type.so* (linux); where *vendor* and *type* are
 names chosen by the device vendor. For example, Intel GPUs use the name:
-“${x}_intc_gpu”.
+"${x}_intc_gpu".
 
 Validation Layer
 ----------------
@@ -416,19 +416,19 @@ devices and the number of sub-devices for each device.
 
 The following examples demonstrate proper usage:
 
-- "" (empty string) = disabled; i.e. all devices and sub-devices are reported. This is the default value.
+- "" (empty string) = disabled; i.e. all devices and sub-devices are reported. This is the default value.
 - Two devices, each with four sub-devices
 
-    + “FF” = all devices and sub-devices are reported (same as default)
-    + “0F” = only device 0 (with all its sub-devices) is reported
-    + “F0” = only device 1 (with all its sub-devices) is reported as device 0'
-    + “AA” = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1
+    + "FF" = all devices and sub-devices are reported (same as default)
+    + "0F" = only device 0 (with all its sub-devices) is reported
+    + "F0" = only device 1 (with all its sub-devices) is reported as device 0'
+    + "AA" = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1
 
 - Two devices, device 0 with one sub-device and device 1 with two sub-devices
 
-    + “07” = all devices and sub-devices are reported (same as default) + “01” = only device 0 (with all its sub-devices) is reported
-    + “06” = only device 1 (with all its sub-devices) is reported as device 0
-    + “05” = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
+    + "07" = all devices and sub-devices are reported (same as default) + "01" = only device 0 (with all its sub-devices) is reported
+    + "06" = only device 1 (with all its sub-devices) is reported as device 0
+    + "05" = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
 
 .. _Tools:
 
@@ -436,32 +436,32 @@ Tools
 =====
 
 Level-Zero APIs specific for supporting 3rd-party tools are separated
-from “Core” into “Tools” APIs. The “Tools” APIs are designed to provided
+from "Core" into "Tools" APIs. The "Tools" APIs are designed to provided
 low-level access to device capabilities in order to support 3rd-party
 tools, but are not intended to replace or directly interface 3rd-party
-tools. The “Tools” APIs are still available for direct application use.
+tools. The "Tools" APIs are still available for direct application use.
 
 The following diagram illustrates how 3rd-party tools may utilize the instrumentation layer:
 
 .. image:: ../../../images/intro_tools.png
 
-The “Tools” APIs provide the following capabilities for 3rd-party tools:
+The "Tools" APIs provide the following capabilities for 3rd-party tools:
 
 - Allow for callbacks to be registered, in order to be notified of specific application events.
 - Allow for device metrics to be queried, in order to profile application usage.
 - Allow for application programs to be instrumented with custom instructions, for low-level code profiling.
 - Allow for application programs to be debugged using breakpoints and register access.
 
-See the “Tools” programming guide for more details.
+See the "Tools" programming guide for more details.
 
 .. _system-management-1:
 
 System Management
 =================
 
-All global management of accelerator resources are separated from “Core” into the “Sysman” API.
+All global management of accelerator resources are separated from "Core" into the "Sysman" API.
 
-The “Sysman” API provides in-band access to the following features for each accelerator device:
+The "Sysman" API provides in-band access to the following features for each accelerator device:
 
 - Query inventory information
 - Query information about host processes using the device
@@ -488,5 +488,5 @@ operations on resources. Most queries are available to any user with the
 exception of those that could be used for side-channel attacks. The
 systems administrator can tighten/relax the default permissions.
 
-See the “Sysman” programming guide for more details.
+See the "Sysman" programming guide for more details.
 
