@@ -68,8 +68,6 @@ linux:
 
 package:
   stage: build
-  script:
-    - 
   artifacts:
     name: "%CI_JOB_NAME%"
     paths:
