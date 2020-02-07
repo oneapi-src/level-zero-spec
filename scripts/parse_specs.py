@@ -8,11 +8,12 @@ import os
 import util
 import re
 import hashlib
+import json
 
 """
     validate documents meet some basic requirements of code generation
 """
-def validate_doc(d):
+def _validate_doc(d):
     for item in d:
         # error: struct/unions may not contain handles
         # error: invalid/unknown tag
@@ -25,7 +26,7 @@ def validate_doc(d):
 """
     filters object by version
 """
-def filter_version(d, max_ver):
+def _filter_version(d, max_ver):
     type = d['type']
     ver = float(d.get('version', "1.0"))
     if ver > max_ver:
@@ -58,7 +59,7 @@ def filter_version(d, max_ver):
 """
     generates SHA512 string for the given object
 """
-def generate_hash(d):
+def _generate_hash(d):
     h = None
     # functions-only (for now)...
     if re.match(r"function", d['type']):
@@ -77,7 +78,7 @@ def generate_hash(d):
 """
     generates meta-data on all objects
 """
-def generate_meta(d, ordinal, meta):
+def _generate_meta(d, ordinal, meta):
     type = d['type']
     name = re.sub(r"(\w+)\(.*\)", r"\1", d['name']) # removes '()' part of macros
 
@@ -186,11 +187,42 @@ def generate_meta(d, ordinal, meta):
     return meta
 
 """
+    generates reference-data on all objects
+"""
+def _generate_ref(d, tags, ref):
+    # create dict if typename is not already known...
+    type = d['type']
+    if type not in ref:
+        ref[type] = {}
+
+    name = re.sub(r"(\w+)\(.*\)", r"\1", d['name']) # removes '()' part of macros
+
+    # convert dict to json-string
+    dstr = json.dumps(d)
+
+    # replace all tags with values
+    for key, value in tags.items():
+        dstr = re.sub(r"-%s"%re.escape(key), "-"+value, dstr)
+        dstr = re.sub(re.escape(key), value, dstr)
+        dstr = re.sub(re.escape(key.upper()), value.upper(), dstr)
+
+        name = re.sub(re.escape(key), value, name)
+        name = re.sub(re.escape(key.upper()), value.upper(), name)
+
+    # convert json-string back to dict
+    d = json.loads(dstr)
+
+    # update ref
+    ref[type][name] = d
+    return ref
+
+
+"""
 Entry-point:
     Reads each YML file and extracts data
     Returns list of data per file
 """
-def parse(path, version, meta = {'class':{}}):
+def parse(path, version, tags, meta = {'class':{}}, ref = {}):
     specs = []
     for f in util.findFiles(path, "*.yml"):
         print("Parsing %s..."%f)
@@ -210,11 +242,15 @@ def parse(path, version, meta = {'class':{}}):
                     header['ordinal'] = "9999"
 
             else:
-                d = filter_version(d, float(version))
+                d = _filter_version(d, float(version))
                 if d:
-                    d['hash'] = generate_hash(d)
+                    hash = _generate_hash(d)
+                    if hash:
+                        d['hash'] = hash
+
                     objects.append(d)
-                    meta = generate_meta(d, header['ordinal'], meta)
+                    meta = _generate_meta(d, header['ordinal'], meta)
+                    ref = _generate_ref(d, tags, ref)
 
         specs.append({
             'name'      : os.path.splitext(os.path.basename(f))[0],
@@ -225,4 +261,4 @@ def parse(path, version, meta = {'class':{}}):
     print("Parsed %s files and found:"%len(specs))
     for key in meta:
         print(" - %s %s(s)"%(len(meta[key]),key))
-    return sorted(specs, key=lambda x: x['header']['ordinal']), meta
+    return sorted(specs, key=lambda x: x['header']['ordinal']), meta, ref

@@ -71,7 +71,7 @@ def main():
     if args['clean']:
         clean()
 
-    meta = None
+    specs = None
 
     # generate code
     for idx, section in enumerate(configParser.sections()):
@@ -86,41 +86,43 @@ def main():
         docpath = os.path.join("../docs/source/", section)
 
         if args[section] and util.exists(ymlpath):
-            if meta:
-                specs, meta = parse_specs.parse(ymlpath, args['ver'], meta)
+            if specs:
+                specs = parse_specs.parse(ymlpath, args['ver'], tags, specs[1], specs[2])
             else:
-                specs, meta = parse_specs.parse(ymlpath, args['ver'])
+                specs = parse_specs.parse(ymlpath, args['ver'], tags)
 
             if len(specs) > 0:
                 if args['debug']:
-                    util.jsonWrite(os.path.join(ymlpath, "specs.json"), specs)
-                    util.jsonWrite(os.path.join(ymlpath, "meta.json"), meta)
+                    util.jsonWrite(os.path.join(ymlpath, "specs.json"), specs[0])
+                    util.jsonWrite(os.path.join(ymlpath, "meta.json"), specs[1])
 
-                generate_code.generate_api(incpath, namespace, tags, specs, meta)
+                generate_code.generate_api(incpath, namespace, tags, specs[0], specs[1])
 
                 if args['lib']:
-                    generate_code.generate_lib(srcpath, section, namespace, tags, specs, meta)
+                    generate_code.generate_lib(srcpath, section, namespace, tags, specs[0], specs[1])
 
                 if args['loader']:
-                    generate_code.generate_loader(srcpath, section, namespace, tags, specs, meta)
+                    generate_code.generate_loader(srcpath, section, namespace, tags, specs[0], specs[1])
 
                 if args['layers']:
-                    generate_code.generate_layers(srcpath, section, namespace, tags, specs, meta)
+                    generate_code.generate_layers(srcpath, section, namespace, tags, specs[0], specs[1])
 
                 if args['drivers']:
-                    generate_code.generate_drivers(srcpath, section, namespace, tags, specs, meta)
+                    generate_code.generate_drivers(srcpath, section, namespace, tags, specs[0], specs[1])
 
                 if args['wrapper']:
-                    generate_code.generate_wrapper(srcpath, section, namespace, tags, specs, meta)
+                    generate_code.generate_wrapper(srcpath, section, namespace, tags, specs[0], specs[1])
 
             if args['rst']:
-                generate_docs.generate_rst(ymlpath, docpath, tags, args['ver'], meta)
+                generate_docs.generate_rst(ymlpath, docpath, tags, args['ver'], specs[1])
 
             if args['md']:
-                generate_docs.generate_md(ymlpath, incpath, tags, args['ver'], meta)
+                generate_docs.generate_md(ymlpath, incpath, tags, args['ver'], specs[1])
 
     if args['debug']:
         util.makoFileListWrite("generated.json")
+
+    util.jsonWrite("../docs/reference.json", specs[2])
 
     # build code
     if args['build']:
