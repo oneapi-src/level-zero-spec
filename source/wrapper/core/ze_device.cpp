@@ -572,8 +572,8 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::floating_point_capabilities_t to std::string
-    std::string to_string( const Device::floating_point_capabilities_t val )
+    /// @brief Converts Device::fp_capabilities_t to std::string
+    std::string to_string( const Device::fp_capabilities_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
 
@@ -582,33 +582,33 @@ namespace ze
         if( 0 == bits )
             str += "FP_CAPS_NONE   ";
         
-        if( static_cast<uint32_t>(Device::floating_point_capabilities_t::FP_CAPS_DENORM) & bits )
+        if( static_cast<uint32_t>(Device::fp_capabilities_t::FP_CAPS_DENORM) & bits )
             str += "FP_CAPS_DENORM | ";
         
-        if( static_cast<uint32_t>(Device::floating_point_capabilities_t::FP_CAPS_INF_NAN) & bits )
+        if( static_cast<uint32_t>(Device::fp_capabilities_t::FP_CAPS_INF_NAN) & bits )
             str += "FP_CAPS_INF_NAN | ";
         
-        if( static_cast<uint32_t>(Device::floating_point_capabilities_t::FP_CAPS_ROUND_TO_NEAREST) & bits )
+        if( static_cast<uint32_t>(Device::fp_capabilities_t::FP_CAPS_ROUND_TO_NEAREST) & bits )
             str += "FP_CAPS_ROUND_TO_NEAREST | ";
         
-        if( static_cast<uint32_t>(Device::floating_point_capabilities_t::FP_CAPS_ROUND_TO_ZERO) & bits )
+        if( static_cast<uint32_t>(Device::fp_capabilities_t::FP_CAPS_ROUND_TO_ZERO) & bits )
             str += "FP_CAPS_ROUND_TO_ZERO | ";
         
-        if( static_cast<uint32_t>(Device::floating_point_capabilities_t::FP_CAPS_ROUND_TO_INF) & bits )
+        if( static_cast<uint32_t>(Device::fp_capabilities_t::FP_CAPS_ROUND_TO_INF) & bits )
             str += "FP_CAPS_ROUND_TO_INF | ";
         
-        if( static_cast<uint32_t>(Device::floating_point_capabilities_t::FP_CAPS_FMA) & bits )
+        if( static_cast<uint32_t>(Device::fp_capabilities_t::FP_CAPS_FMA) & bits )
             str += "FP_CAPS_FMA | ";
         
-        if( static_cast<uint32_t>(Device::floating_point_capabilities_t::FP_CAPS_ROUNDED_DIVIDE_SQRT) & bits )
+        if( static_cast<uint32_t>(Device::fp_capabilities_t::FP_CAPS_ROUNDED_DIVIDE_SQRT) & bits )
             str += "FP_CAPS_ROUNDED_DIVIDE_SQRT | ";
         
-        if( static_cast<uint32_t>(Device::floating_point_capabilities_t::FP_CAPS_SOFT_FLOAT) & bits )
+        if( static_cast<uint32_t>(Device::fp_capabilities_t::FP_CAPS_SOFT_FLOAT) & bits )
             str += "FP_CAPS_SOFT_FLOAT | ";
 
         return ( str.size() > 3 ) 
-            ? "Device::floating_point_capabilities_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Device::floating_point_capabilities_t::{ ? }";
+            ? "Device::fp_capabilities_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Device::fp_capabilities_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -988,6 +988,10 @@ namespace ze
         
         str += "Device::kernel_properties_t::dp4aSupported : ";
         str += std::to_string(val.dp4aSupported);
+        str += "\n";
+        
+        str += "Device::kernel_properties_t::halfFpCapabilities : ";
+        str += to_string(val.halfFpCapabilities);
         str += "\n";
         
         str += "Device::kernel_properties_t::singleFpCapabilities : ";

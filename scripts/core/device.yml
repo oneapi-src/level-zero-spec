@@ -288,7 +288,7 @@ members:
 type: enum
 desc: "Floating Point capabilities"
 class: $xDevice
-name: $x_floating_point_capabilities_t
+name: $x_fp_capabilities_t
 details:
     - "floating-point capabilities of the device."
 etors:
@@ -354,10 +354,13 @@ members:
     - type: $x_bool_t
       name: dp4aSupported
       desc: "[out] Supports four component dot product and accumulate operations"
-    - type: $x_floating_point_capabilities_t
+    - type: $x_fp_capabilities_t
+      name: halfFpCapabilities
+      desc: "[out] Capabilities for half-precision floating-point operations."
+    - type: $x_fp_capabilities_t
       name: singleFpCapabilities
       desc: "[out] Capabilities for single-precision floating-point operations."
-    - type: $x_floating_point_capabilities_t
+    - type: $x_fp_capabilities_t
       name: doubleFpCapabilities
       desc: "[out] Capabilities for double-precision floating-point operations."
     - type: uint32_t

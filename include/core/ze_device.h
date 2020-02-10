@@ -272,7 +272,7 @@ typedef struct _ze_native_kernel_uuid_t
 /// 
 /// @details
 ///     - floating-point capabilities of the device.
-typedef enum _ze_floating_point_capabilities_t
+typedef enum _ze_fp_capabilities_t
 {
     ZE_FP_CAPS_NONE = 0,                            ///< None
     ZE_FP_CAPS_DENORM = ZE_BIT( 0 ),                ///< Supports denorms
@@ -285,7 +285,7 @@ typedef enum _ze_floating_point_capabilities_t
                                                     ///< operations.
     ZE_FP_CAPS_SOFT_FLOAT = ZE_BIT( 7 ),            ///< Uses software implementation for basic floating-point operations.
 
-} ze_floating_point_capabilities_t;
+} ze_fp_capabilities_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device properties queried using ::zeDeviceGetKernelProperties
@@ -305,8 +305,9 @@ typedef struct _ze_device_kernel_properties_t
     ze_bool_t fp64Supported;                        ///< [out] Supports 64-bit floating-point operations
     ze_bool_t int64AtomicsSupported;                ///< [out] Supports 64-bit atomic operations
     ze_bool_t dp4aSupported;                        ///< [out] Supports four component dot product and accumulate operations
-    ze_floating_point_capabilities_t singleFpCapabilities;  ///< [out] Capabilities for single-precision floating-point operations.
-    ze_floating_point_capabilities_t doubleFpCapabilities;  ///< [out] Capabilities for double-precision floating-point operations.
+    ze_fp_capabilities_t halfFpCapabilities;        ///< [out] Capabilities for half-precision floating-point operations.
+    ze_fp_capabilities_t singleFpCapabilities;      ///< [out] Capabilities for single-precision floating-point operations.
+    ze_fp_capabilities_t doubleFpCapabilities;      ///< [out] Capabilities for double-precision floating-point operations.
     uint32_t maxArgumentsSize;                      ///< [out] Maximum kernel argument size that is supported.
     uint32_t printfBufferSize;                      ///< [out] Maximum size of internal buffer that holds output of printf
                                                     ///< calls from kernel.

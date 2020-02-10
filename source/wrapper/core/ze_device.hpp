@@ -98,7 +98,7 @@ namespace ze
         /// 
         /// @details
         ///     - floating-point capabilities of the device.
-        enum class floating_point_capabilities_t
+        enum class fp_capabilities_t
         {
             FP_CAPS_NONE = 0,                               ///< None
             FP_CAPS_DENORM = ZE_BIT( 0 ),                   ///< Supports denorms
@@ -265,8 +265,9 @@ namespace ze
             bool_t fp64Supported;                           ///< [out] Supports 64-bit floating-point operations
             bool_t int64AtomicsSupported;                   ///< [out] Supports 64-bit atomic operations
             bool_t dp4aSupported;                           ///< [out] Supports four component dot product and accumulate operations
-            floating_point_capabilities_t singleFpCapabilities; ///< [out] Capabilities for single-precision floating-point operations.
-            floating_point_capabilities_t doubleFpCapabilities; ///< [out] Capabilities for double-precision floating-point operations.
+            fp_capabilities_t halfFpCapabilities;           ///< [out] Capabilities for half-precision floating-point operations.
+            fp_capabilities_t singleFpCapabilities;         ///< [out] Capabilities for single-precision floating-point operations.
+            fp_capabilities_t doubleFpCapabilities;         ///< [out] Capabilities for double-precision floating-point operations.
             uint32_t maxArgumentsSize;                      ///< [out] Maximum kernel argument size that is supported.
             uint32_t printfBufferSize;                      ///< [out] Maximum size of internal buffer that holds output of printf
                                                             ///< calls from kernel.
@@ -814,8 +815,8 @@ namespace ze
     std::string to_string( const Device::native_kernel_uuid_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::floating_point_capabilities_t to std::string
-    std::string to_string( const Device::floating_point_capabilities_t val );
+    /// @brief Converts Device::fp_capabilities_t to std::string
+    std::string to_string( const Device::fp_capabilities_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::kernel_properties_t to std::string

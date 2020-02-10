@@ -386,7 +386,7 @@ class ze_native_kernel_uuid_t(Structure):
 ## 
 ## @details
 ##     - floating-point capabilities of the device.
-class ze_floating_point_capabilities_v(IntEnum):
+class ze_fp_capabilities_v(IntEnum):
     FP_CAPS_NONE = 0                                ## None
     FP_CAPS_DENORM = ZE_BIT( 0 )                    ## Supports denorms
     FP_CAPS_INF_NAN = ZE_BIT( 1 )                   ## Supports INF and quiet NaNs
@@ -398,9 +398,9 @@ class ze_floating_point_capabilities_v(IntEnum):
                                                     ## operations.
     FP_CAPS_SOFT_FLOAT = ZE_BIT( 7 )                ## Uses software implementation for basic floating-point operations.
 
-class ze_floating_point_capabilities_t(c_int):
+class ze_fp_capabilities_t(c_int):
     def __str__(self):
-        return str(ze_floating_point_capabilities_v(value))
+        return str(ze_fp_capabilities_v(value))
 
 
 ###############################################################################
@@ -421,8 +421,9 @@ class ze_device_kernel_properties_t(Structure):
         ("fp64Supported", ze_bool_t),                                   ## [out] Supports 64-bit floating-point operations
         ("int64AtomicsSupported", ze_bool_t),                           ## [out] Supports 64-bit atomic operations
         ("dp4aSupported", ze_bool_t),                                   ## [out] Supports four component dot product and accumulate operations
-        ("singleFpCapabilities", ze_c_floating_poc_int_capabilities_t), ## [out] Capabilities for single-precision floating-point operations.
-        ("doubleFpCapabilities", ze_c_floating_poc_int_capabilities_t), ## [out] Capabilities for double-precision floating-point operations.
+        ("halfFpCapabilities", ze_fp_capabilities_t),                   ## [out] Capabilities for half-precision floating-point operations.
+        ("singleFpCapabilities", ze_fp_capabilities_t),                 ## [out] Capabilities for single-precision floating-point operations.
+        ("doubleFpCapabilities", ze_fp_capabilities_t),                 ## [out] Capabilities for double-precision floating-point operations.
         ("maxArgumentsSize", c_ulong),                                  ## [out] Maximum kernel argument size that is supported.
         ("printfBufferSize", c_ulong)                                   ## [out] Maximum size of internal buffer that holds output of printf
                                                                         ## calls from kernel.
