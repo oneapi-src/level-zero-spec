@@ -27,8 +27,6 @@ extern "C" {
 ///       signalled prior to the execution of the barrier.
 ///     - This command blocks all following commands from beginning until the
 ///       execution of the barrier completes.
-///     - Memory and cache hierarchies are flushed and invalidated sufficient
-///       for device and host access.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -71,8 +69,6 @@ zeCommandListAppendBarrier(
 ///       signalled prior to the execution of the barrier.
 ///     - This command blocks all following commands from beginning until the
 ///       execution of the barrier completes.
-///     - Memory and cache hierarchies are flushed and invalidated sufficient
-///       for device and host access.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
