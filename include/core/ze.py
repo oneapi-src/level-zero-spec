@@ -38,6 +38,10 @@ def ZE_MINOR_VERSION( _ver ):
 
 ###############################################################################
 ## @brief Microsoft-specific dllexport storage-class attribute
+__zedllexport = __declspec(dllexport)
+
+###############################################################################
+## @brief GCC-specific dllexport storage-class attribute
 # __zedllexport not required for python
 
 ###############################################################################

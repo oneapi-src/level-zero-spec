@@ -33,7 +33,7 @@ namespace loader
     using driver_vector_t = std::vector< driver_t >;
 
     ///////////////////////////////////////////////////////////////////////////////
-    class context_t
+    class __zedlllocal context_t
     {
     public:
         ze_api_version_t version = ZE_API_VERSION_1_0;

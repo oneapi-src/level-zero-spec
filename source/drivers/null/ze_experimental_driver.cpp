@@ -17,7 +17,7 @@ namespace driver
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexInit
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexInit(
         ze_init_flag_t flags                            ///< [in] initialization flags
         )
@@ -40,7 +40,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandListReserveSpace
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexCommandListReserveSpace(
         zex_command_list_handle_t hCommandList,         ///< [in] handle of the command list
         size_t size,                                    ///< [in] size (in bytes) to reserve
@@ -65,7 +65,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandGraphCreate
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexCommandGraphCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         const zex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
@@ -92,7 +92,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandGraphDestroy
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexCommandGraphDestroy(
         zex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
         )
@@ -116,7 +116,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandGraphClose
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexCommandGraphClose(
         zex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
         )
@@ -143,7 +143,7 @@ namespace instrumented
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexInit
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexInit(
         ze_init_flag_t flags                            ///< [in] initialization flags
         )
@@ -193,7 +193,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandListReserveSpace
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexCommandListReserveSpace(
         zex_command_list_handle_t hCommandList,         ///< [in] handle of the command list
         size_t size,                                    ///< [in] size (in bytes) to reserve
@@ -249,7 +249,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandGraphCreate
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexCommandGraphCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         const zex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
@@ -305,7 +305,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandGraphDestroy
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexCommandGraphDestroy(
         zex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
         )
@@ -355,7 +355,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandGraphClose
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zexCommandGraphClose(
         zex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
         )

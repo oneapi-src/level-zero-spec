@@ -20,7 +20,7 @@ struct dditable_t
 
 //////////////////////////////////////////////////////////////////////////
 template<typename _handle_t>
-class object_t
+class __zedlllocal object_t
 {
 public:
     using handle_t = _handle_t;

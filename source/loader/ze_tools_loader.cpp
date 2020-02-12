@@ -46,7 +46,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetInit
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetInit(
         ze_init_flag_t flags                            ///< [in] initialization flags
         )
@@ -66,7 +66,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugAttach
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugAttach(
         zet_device_handle_t hDevice,                    ///< [in] device handle
         const zet_debug_config_t* config,               ///< [in] the debug configuration
@@ -103,7 +103,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugDetach
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugDetach(
         zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
         )
@@ -130,7 +130,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugGetNumThreads
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugGetNumThreads(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t* pNumThreads                           ///< [out] the maximal number of threads
@@ -155,7 +155,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugReadEvent
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugReadEvent(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
@@ -182,7 +182,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugInterrupt
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugInterrupt(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
@@ -207,7 +207,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugResume
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugResume(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
@@ -232,7 +232,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugReadMemory
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugReadMemory(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
@@ -261,7 +261,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugWriteMemory
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugWriteMemory(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
@@ -290,7 +290,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugReadState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugReadState(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t threadid,                              ///< [in] the thread context
@@ -318,7 +318,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugWriteState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDebugWriteState(
         zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
         uint64_t threadid,                              ///< [in] the thread context
@@ -346,7 +346,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricGroupGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricGroupGet(
         zet_device_handle_t hDevice,                    ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
@@ -391,7 +391,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricGroupGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricGroupGetProperties(
         zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
         zet_metric_group_properties_t* pProperties      ///< [in,out] metric group properties
@@ -416,7 +416,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricGroupCalculateMetricValues
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricGroupCalculateMetricValues(
         zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
         size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
@@ -452,7 +452,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricGet(
         zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
         uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
@@ -495,7 +495,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricGetProperties(
         zet_metric_handle_t hMetric,                    ///< [in] handle of the metric
         zet_metric_properties_t* pProperties            ///< [in,out] metric properties
@@ -520,7 +520,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDeviceActivateMetricGroups
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetDeviceActivateMetricGroups(
         zet_device_handle_t hDevice,                    ///< [in] handle of the device
         uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
@@ -551,7 +551,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricTracerOpen
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricTracerOpen(
         zet_device_handle_t hDevice,                    ///< [in] handle of the device
         zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
@@ -597,7 +597,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetCommandListAppendMetricTracerMarker
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetCommandListAppendMetricTracerMarker(
         zet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
         zet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
@@ -626,7 +626,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricTracerClose
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricTracerClose(
         zet_metric_tracer_handle_t hMetricTracer        ///< [in][release] handle of the metric tracer
         )
@@ -653,7 +653,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricTracerReadData
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricTracerReadData(
         zet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
         uint32_t maxReportCount,                        ///< [in] the maximum number of reports the application wants to receive.
@@ -688,7 +688,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricQueryPoolCreate
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricQueryPoolCreate(
         zet_device_handle_t hDevice,                    ///< [in] handle of the device
         zet_metric_group_handle_t hMetricGroup,         ///< [in] metric group associated with the query object.
@@ -729,7 +729,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricQueryPoolDestroy
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricQueryPoolDestroy(
         zet_metric_query_pool_handle_t hMetricQueryPool ///< [in][release] handle of the metric query pool
         )
@@ -756,7 +756,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricQueryCreate
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricQueryCreate(
         zet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
         uint32_t index,                                 ///< [in] index of the query within the pool
@@ -793,7 +793,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricQueryDestroy
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricQueryDestroy(
         zet_metric_query_handle_t hMetricQuery          ///< [in][release] handle of metric query
         )
@@ -820,7 +820,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricQueryReset
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricQueryReset(
         zet_metric_query_handle_t hMetricQuery          ///< [in] handle of metric query
         )
@@ -844,7 +844,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetCommandListAppendMetricQueryBegin
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetCommandListAppendMetricQueryBegin(
         zet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
         zet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
@@ -872,7 +872,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetCommandListAppendMetricQueryEnd
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetCommandListAppendMetricQueryEnd(
         zet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
         zet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
@@ -904,7 +904,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetCommandListAppendMetricMemoryBarrier
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetCommandListAppendMetricMemoryBarrier(
         zet_command_list_handle_t hCommandList          ///< [in] handle of the command list
         )
@@ -928,7 +928,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetMetricQueryGetData
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetMetricQueryGetData(
         zet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
         size_t* pRawDataSize,                           ///< [in,out] pointer to size in bytes of raw data requested to read.
@@ -961,7 +961,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetModuleGetDebugInfo
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetModuleGetDebugInfo(
         zet_module_handle_t hModule,                    ///< [in] handle of the module
         zet_module_debug_info_format_t format,          ///< [in] debug info format requested
@@ -988,7 +988,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetKernelGetProfileInfo
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetKernelGetProfileInfo(
         zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
         zet_profile_info_t* pInfo                       ///< [out] pointer to profile info
@@ -1013,7 +1013,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanGet(
         zet_device_handle_t hDevice,                    ///< [in] Handle of the device
         zet_sysman_version_t version,                   ///< [in] Sysman version that application was built with
@@ -1050,7 +1050,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDeviceGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanDeviceGetProperties(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_sysman_properties_t* pProperties            ///< [in] Structure that will contain information about the device.
@@ -1075,7 +1075,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGetSupportedModes
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanSchedulerGetSupportedModes(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
@@ -1109,7 +1109,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGetCurrentMode
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanSchedulerGetCurrentMode(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
@@ -1134,7 +1134,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGetTimeoutModeProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanSchedulerGetTimeoutModeProperties(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
@@ -1161,7 +1161,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGetTimesliceModeProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanSchedulerGetTimesliceModeProperties(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
@@ -1188,7 +1188,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerSetTimeoutMode
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanSchedulerSetTimeoutMode(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
@@ -1215,7 +1215,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerSetTimesliceMode
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanSchedulerSetTimesliceMode(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
@@ -1242,7 +1242,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerSetExclusiveMode
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanSchedulerSetExclusiveMode(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -1268,7 +1268,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerSetComputeUnitDebugMode
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanSchedulerSetComputeUnitDebugMode(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -1294,7 +1294,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPerformanceProfileGetSupported
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPerformanceProfileGetSupported(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of performance profiles.
@@ -1328,7 +1328,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPerformanceProfileGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPerformanceProfileGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_perf_profile_t* pProfile                    ///< [in] The performance profile currently loaded.
@@ -1353,7 +1353,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPerformanceProfileSet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPerformanceProfileSet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_perf_profile_t profile                      ///< [in] The performance profile to load.
@@ -1378,7 +1378,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanProcessesGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanProcessesGetState(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
@@ -1410,7 +1410,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDeviceReset
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanDeviceReset(
         zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
         )
@@ -1434,7 +1434,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDeviceGetRepairStatus
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanDeviceGetRepairStatus(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
         zet_repair_status_t* pRepairStatus              ///< [in] Will indicate if the device was repaired
@@ -1459,7 +1459,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPciGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPciGetProperties(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
@@ -1484,7 +1484,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPciGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPciGetState(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
@@ -1509,7 +1509,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPciGetBars
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPciGetBars(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of PCI bars.
@@ -1540,7 +1540,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPciGetStats
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPciGetStats(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         zet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
@@ -1565,7 +1565,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPowerGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -1610,7 +1610,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPowerGetProperties(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
         zet_power_properties_t* pProperties             ///< [in] Structure that will contain property data.
@@ -1635,7 +1635,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGetEnergyCounter
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPowerGetEnergyCounter(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
         zet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
@@ -1661,7 +1661,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGetLimits
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPowerGetLimits(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
         zet_power_sustained_limit_t* pSustained,        ///< [in][optional] The sustained power limit.
@@ -1688,7 +1688,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerSetLimits
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPowerSetLimits(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
         const zet_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
@@ -1715,7 +1715,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerGetEnergyThreshold
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPowerGetEnergyThreshold(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
         zet_energy_threshold_t* pThreshold              ///< [in] Returns information about the energy threshold setting -
@@ -1741,7 +1741,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPowerSetEnergyThreshold
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPowerSetEnergyThreshold(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
         double threshold                                ///< [in] The energy threshold to be set in joules.
@@ -1766,7 +1766,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -1811,7 +1811,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyGetProperties(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
@@ -1836,7 +1836,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetAvailableClocks
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyGetAvailableClocks(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
@@ -1868,7 +1868,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetRange
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyGetRange(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
@@ -1894,7 +1894,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencySetRange
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencySetRange(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
@@ -1920,7 +1920,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyGetState(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
@@ -1945,7 +1945,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyGetThrottleTime
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyGetThrottleTime(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
@@ -1971,7 +1971,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyOcGetCapabilities
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyOcGetCapabilities(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
@@ -1996,7 +1996,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyOcGetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyOcGetConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
@@ -2021,7 +2021,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyOcSetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyOcSetConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         zet_oc_config_t* pOcConfiguration,              ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
@@ -2048,7 +2048,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyOcGetIccMax
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyOcGetIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
@@ -2074,7 +2074,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyOcSetIccMax
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyOcSetIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
@@ -2099,7 +2099,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyOcGetTjMax
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyOcGetTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
@@ -2125,7 +2125,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFrequencyOcSetTjMax
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFrequencyOcSetTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
         double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
@@ -2150,7 +2150,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanEngineGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanEngineGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2195,7 +2195,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanEngineGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanEngineGetProperties(
         zet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
         zet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
@@ -2220,7 +2220,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanEngineGetActivity
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanEngineGetActivity(
         zet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
         zet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
@@ -2245,7 +2245,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanStandbyGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanStandbyGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2290,7 +2290,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanStandbyGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanStandbyGetProperties(
         zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
         zet_standby_properties_t* pProperties           ///< [in] Will contain the standby hardware properties.
@@ -2315,7 +2315,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanStandbyGetMode
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanStandbyGetMode(
         zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
         zet_standby_promo_mode_t* pMode                 ///< [in] Will contain the current standby mode.
@@ -2340,7 +2340,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanStandbySetMode
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanStandbySetMode(
         zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
         zet_standby_promo_mode_t mode                   ///< [in] New standby mode.
@@ -2365,7 +2365,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFirmwareGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFirmwareGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2410,7 +2410,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFirmwareGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFirmwareGetProperties(
         zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
         zet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
@@ -2435,7 +2435,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFirmwareGetChecksum
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFirmwareGetChecksum(
         zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
         uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
@@ -2460,7 +2460,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFirmwareFlash
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFirmwareFlash(
         zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
         void* pImage,                                   ///< [in] Image of the new firmware to flash.
@@ -2486,7 +2486,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanMemoryGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanMemoryGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2531,7 +2531,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanMemoryGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanMemoryGetProperties(
         zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
         zet_mem_properties_t* pProperties               ///< [in] Will contain memory properties.
@@ -2556,7 +2556,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanMemoryGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanMemoryGetState(
         zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
         zet_mem_state_t* pState                         ///< [in] Will contain the current health and allocated memory.
@@ -2581,7 +2581,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanMemoryGetBandwidth
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanMemoryGetBandwidth(
         zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
         zet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
@@ -2606,7 +2606,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFabricPortGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFabricPortGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2651,7 +2651,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFabricPortGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFabricPortGetProperties(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
         zet_fabric_port_properties_t* pProperties       ///< [in] Will contain properties of the Fabric Port.
@@ -2676,7 +2676,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFabricPortGetLinkType
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFabricPortGetLinkType(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
         ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
@@ -2702,7 +2702,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFabricPortGetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFabricPortGetConfig(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
         zet_fabric_port_config_t* pConfig               ///< [in] Will contain configuration of the Fabric Port.
@@ -2727,7 +2727,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFabricPortSetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFabricPortSetConfig(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
         const zet_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
@@ -2752,7 +2752,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFabricPortGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFabricPortGetState(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
         zet_fabric_port_state_t* pState                 ///< [in] Will contain the current state of the Fabric Port
@@ -2777,7 +2777,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFabricPortGetThroughput
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFabricPortGetThroughput(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
         zet_fabric_port_throughput_t* pThroughput       ///< [in] Will contain the Fabric port throughput counters and maximum
@@ -2803,7 +2803,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanTemperatureGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanTemperatureGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2848,7 +2848,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanTemperatureGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanTemperatureGetProperties(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
         zet_temp_properties_t* pProperties              ///< [in] Will contain the temperature sensor properties.
@@ -2873,7 +2873,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanTemperatureGetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanTemperatureGetConfig(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
         zet_temp_config_t* pConfig                      ///< [in] Returns current configuration.
@@ -2898,7 +2898,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanTemperatureSetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanTemperatureSetConfig(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
         const zet_temp_config_t* pConfig                ///< [in] New configuration.
@@ -2923,7 +2923,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanTemperatureGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanTemperatureGetState(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
         double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
@@ -2949,7 +2949,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPsuGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPsuGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2994,7 +2994,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPsuGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPsuGetProperties(
         zet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
         zet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
@@ -3019,7 +3019,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanPsuGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanPsuGetState(
         zet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
         zet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
@@ -3044,7 +3044,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFanGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFanGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -3089,7 +3089,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFanGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFanGetProperties(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         zet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
@@ -3114,7 +3114,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFanGetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFanGetConfig(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         zet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
@@ -3139,7 +3139,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFanSetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFanSetConfig(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         const zet_fan_config_t* pConfig                 ///< [in] New fan configuration.
@@ -3164,7 +3164,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanFanGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanFanGetState(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         zet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
@@ -3190,7 +3190,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanLedGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanLedGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -3235,7 +3235,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanLedGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanLedGetProperties(
         zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
         zet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
@@ -3260,7 +3260,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanLedGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanLedGetState(
         zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
         zet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
@@ -3285,7 +3285,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanLedSetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanLedSetState(
         zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
         const zet_led_state_t* pState                   ///< [in] New state of the LED.
@@ -3310,7 +3310,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanRasGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanRasGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -3355,7 +3355,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanRasGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanRasGetProperties(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         zet_ras_properties_t* pProperties               ///< [in] Structure describing RAS properties
@@ -3380,7 +3380,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanRasGetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanRasGetConfig(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         zet_ras_config_t* pConfig                       ///< [in] Will be populed with the current RAS configuration - thresholds
@@ -3406,7 +3406,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanRasSetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanRasSetConfig(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         const zet_ras_config_t* pConfig                 ///< [in] Change the RAS configuration - thresholds used to trigger events
@@ -3431,7 +3431,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanRasGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanRasGetState(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
@@ -3458,7 +3458,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanEventGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanEventGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
         zet_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
@@ -3494,7 +3494,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanEventGetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanEventGetConfig(
         zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
         zet_event_config_t* pConfig                     ///< [in] Will contain the current event configuration (list of registered
@@ -3520,7 +3520,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanEventSetConfig
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanEventSetConfig(
         zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
         const zet_event_config_t* pConfig               ///< [in] New event configuration (list of registered events).
@@ -3545,7 +3545,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanEventGetState
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanEventGetState(
         zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
         ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
@@ -3572,7 +3572,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanEventListen
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanEventListen(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
@@ -3609,7 +3609,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDiagnosticsGet
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanDiagnosticsGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -3654,7 +3654,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDiagnosticsGetProperties
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanDiagnosticsGetProperties(
         zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
         zet_diag_properties_t* pProperties              ///< [in] Structure describing the properties of a diagnostics test suite
@@ -3679,7 +3679,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDiagnosticsGetTests
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanDiagnosticsGetTests(
         zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
@@ -3711,7 +3711,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanDiagnosticsRunTests
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetSysmanDiagnosticsRunTests(
         zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
         uint32_t start,                                 ///< [in] The index of the first test to run. Set to
@@ -3740,7 +3740,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetTracerCreate
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetTracerCreate(
         zet_driver_handle_t hDriver,                    ///< [in] handle of the driver
         const zet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
@@ -3777,7 +3777,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetTracerDestroy
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetTracerDestroy(
         zet_tracer_handle_t hTracer                     ///< [in][release] handle of tracer object to destroy
         )
@@ -3804,7 +3804,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetTracerSetPrologues
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetTracerSetPrologues(
         zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
@@ -3831,7 +3831,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetTracerSetEpilogues
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetTracerSetEpilogues(
         zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
@@ -3858,7 +3858,7 @@ namespace loader
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetTracerSetEnabled
-    ze_result_t __zecall
+    __zedlllocal ze_result_t __zecall
     zetTracerSetEnabled(
         zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         ze_bool_t enable                                ///< [in] enable the tracer if true; disable if false
