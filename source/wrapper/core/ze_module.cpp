@@ -664,8 +664,8 @@ namespace ze
     /// @brief Launch kernel over one or more work groups.
     /// 
     /// @details
-    ///     - This may **not** be called for a command list created with
-    ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
+    ///     - This may **only** be called for a command list created with command
+    ///       queue group ordinal that supports compute.
     ///     - This function may **not** be called from simultaneous threads with the
     ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -707,8 +707,8 @@ namespace ze
     /// @brief Launch kernel cooperatively over one or more work groups.
     /// 
     /// @details
-    ///     - This may **not** be called for a command list created with
-    ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
+    ///     - This may **only** be called for a command list created with command
+    ///       queue group ordinal that supports compute.
     ///     - This may only be used for a command list that are submitted to command
     ///       queue with cooperative flag set.
     ///     - This function may **not** be called from simultaneous threads with the
@@ -757,8 +757,8 @@ namespace ze
     ///     - The launch arguments need to be device visible.
     ///     - The launch arguments buffer may not be reused until the function has
     ///       completed on the device.
-    ///     - This may **not** be called for a command list created with
-    ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
+    ///     - This may **only** be called for a command list created with command
+    ///       queue group ordinal that supports compute.
     ///     - This function may **not** be called from simultaneous threads with the
     ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -805,8 +805,8 @@ namespace ze
     ///     - The array of launch arguments need to be device visible.
     ///     - The array of launch arguments buffer may not be reused until the
     ///       kernel has completed on the device.
-    ///     - This may **not** be called for a command list created with
-    ///       ::ZE_COMMAND_LIST_FLAG_COPY_ONLY.
+    ///     - This may **only** be called for a command list created with command
+    ///       queue group ordinal that supports compute.
     ///     - This function may **not** be called from simultaneous threads with the
     ///       same command list handle.
     ///     - The implementation of this function should be lock-free.

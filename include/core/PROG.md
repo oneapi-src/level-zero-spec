@@ -251,7 +251,7 @@ stream.
 
 ### Creation
 - The application explicitly binds the logical command queue to a physical command queue, via its ordinal at creation time.
-- The number and properties of physical command queues is queried by using zeDeviceGetCommandQueueGroupProperties.
+- The number and properties of physical command queues is queried by using ::zeDeviceGetCommandQueueGroupProperties.
 - Multiple logical command queues may be created that use the same physical command queue. For example,
   an application may create a logical command queue per Host thread with different scheduling priorities.
 - However, because each logical command queue allocates a logical hardware context, an application 
@@ -360,9 +360,9 @@ The following sample code demonstrates a basic sequence for creation of command 
 - There is no implicit association between a command list and a logical command queue. 
   Therefore, a command list may be submitted to any or multiple logical command queues.
 - However, if a command list is meant to be submitted to a physical copy-only command queue,
-  then it must be created using a command queue group ordinal with the
-  ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY property, and submitted to a logical command
-  queue created using the same ordinal.
+  then it must be created using a command queue group ordinal,
+  with only ::ze_command_queue_group_properties_t.copySupported is enabled,
+  and submitted to a logical command queue created using the same ordinal.
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
@@ -905,7 +905,7 @@ device to generate the parameters.
 Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ::zeCommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
 The command list must be submitted to a logical command queue that was created with an ordinal of a physical command queue
-that supports the ::ZE_COMMAND_QUEUE_GROUP_FLAG_SUPPORTS_COOPERATIVE_KERNELS flag.
+that supports the ::ze_command_queue_group_properties_t.cooperativeKernelsSupported is enabled.
 Finally, there is a ::zeKernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
 
 In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
@@ -963,11 +963,6 @@ that there is not enough local sub-device memory for the allocation. The driver 
 sub-device allocations over to another sub-device's local memory. However, the application can retry using the
 parent device and the driver will decide where to place the allocation.
 
-One thing to note is that the ordinal that is used when creating a command queue is relative to the sub-device.
-This ordinal specifies which physical compute queue on the device or sub-device to map the logical queue to. 
-The application needs to query ::ze_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
-See ::ze_command_queue_desc_t for more details.
-
 A 16-byte unique device identifier (uuid) can be obtained for a device or sub-device using ::zeDeviceGetProperties.
 
 ```c
@@ -993,15 +988,45 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     void* pMemForSubDevice2;
     zeDriverAllocDeviceMem(hDriver, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
     ...
+```
 
-    ...
-    // Check that cmd queue ordinal that was chosen is valid.
-    assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
+One thing to note is that the command queue group ordinal that is used when creating a command queue is relative to the sub-device.
+The application needs to query ::zeDeviceGetCommandQueueGroupProperties from the sub-device to determine how to set this ordinal.
 
-    ze_command_queue_handle_t commandQueueForSubDevice2;
-    zeCommandQueueCreate(hSubdevice, &desc, &commandQueueForSubDevice2);
+```c
+    // Discover all command queue types
+    uint32_t cmdqueueGroupCount = 0;_
+    zeDeviceGetCommandQueueGroupProperties(hSubdevice, &cmdqueueGroupCount, nullptr);
+
+    ze_command_queue_group_properties_t* cmdqueueGroupProperties = (ze_command_queue_group_properties_t*)
+        malloc(cmdqueueGroupCount * sizeof(ze_command_queue_group_properties_t));
+    zeDeviceGetCommandQueueGroupProperties(hSubdevice, &cmdqueueGroupCount, allQueues);
+
+    // Find a proper command queue of the sub-device
+    uint32_t computeQueueGroupOrdinal = cmdqueueGroupCount;
+    for(uint32_t i = 0; i < cmdqueueGroupCount; ++i) {
+        if( cmdqueueGroupProperties.computeSupported )
+            command_queue_ordinal = i;
+            break;
+        }
+    }
+    if(computeQueueGroupOrdinal == cmdqueueGroupCount)
+        return; // no compute queues found
+
+    // Create a command queue
+    ze_command_queue_desc_t commandQueueDesc = {
+        ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT,
+        computeQueueGroupOrdinal,
+        ZE_COMMAND_QUEUE_FLAG_NONE,
+        ZE_COMMAND_QUEUE_MODE_DEFAULT,
+        ZE_COMMAND_QUEUE_PRIORITY_NORMAL,
+        0
+    };
+    ze_command_queue_handle_t hCommandQueue;
+    zeCommandQueueCreate(hSubdevice, &commandQueueDesc, &hCommandQueue);
     ...
 ```
+
 
 ## <a name="res">Device Residency</a>
 For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
