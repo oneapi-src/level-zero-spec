@@ -19,3 +19,8 @@ target_compile_definitions(${TARGET_NAME}
     PRIVATE
         ZE_ENABLE_OCL_INTEROP=0
 )
+
+if(UNIX)
+    set(GCC_COVERAGE_COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+endif()
