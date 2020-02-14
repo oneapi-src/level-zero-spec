@@ -1,4 +1,5 @@
-﻿<%
+﻿
+<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
@@ -32,11 +33,10 @@ Most applications should not require the additional control provided by
 the Level-Zero API. The Level-Zero API is intended for providing
 explicit controls needed by higher-level runtime APIs and libraries.
 
-While heavily influenced by other low-level APIs, such as OpenCL, the
-Level-Zero APIs are designed to evolve independently. While heavily
-influenced by GPU archtiecture, the Level-Zero APIs are designed to be
-supportable across different compute device architectures, such as
-FPGAs, Deep learning accelerators, etc.
+While initially influenced by other low-level APIs, such as OpenCL and Vulkan,
+the Level-Zero APIs are designed to evolve independently. While initially
+influenced by GPU archtiecture, the Level-Zero APIs are designed to be supportable
+across different compute device architectures, such as FPGAs, CSAs, etc.
 
 Devices
 -------
@@ -138,12 +138,13 @@ Naming Convention
 
 The following naming conventions are followed in order to avoid
 conflicts within the API, or with other APIs and libraries:
-
+## --validate=off
 - all driver entry points are prefixed with ${x}
 - all types follow \**${x}_<name>_t*\* convention
 - all macros and enumerator values use all caps \**${X}_<SCOPE>_<NAME>*\* convention
 - all functions use camel case **${x}<Object><Action>** convention - exception: since "driver" functions use implicit <Object>, it is omitted
 - all structure members and function parameters use camel case convention
+## --validate=on
 
 In addition, the following coding standards are followed:
 - all function input parameters precede output parameters
@@ -188,10 +189,13 @@ The following design philosophies are adopted in order to reduce Host-side overh
    * Synchronization primitive deadlocks
    * Non-visible memory access by the Host or device
    * Non-resident memeory access by the device
-
+* The driver implementation is **not** required to perform API validation of any kind
+   * The driver should ensure well-behaved applications are not burdened with the overhead needed for non-bevaving applications
+   * Unless otherwise specified, the driver behavior is undefined when APIs are improperly used
+   * For debug purposes, API validation can be enabled via the [Validation Layers](#v0)
 * All API functions return ::${x}_result_t
-
-   * This allows for a consistent pattern on the application side for catching errors; especially when validation layer is enabled
+   * This enumeration contains error codes for the core APIs and validation layers
+   * This allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled
 
 Multithreading and Concurrency
 ------------------------------
@@ -247,13 +251,12 @@ Features which are still being considered for inclusion into the "Core"
 API, but require additional experimentation by application vendors
 before ratification, are exposed as "Experimental" APIs.
 
-Applications should not rely on experimental APIs in production. -
-Experimental APIs may be added and removed from the API at any time;
-with or without an official API revision.
+Applications should not rely on experimental APIs in production.
+- Experimental APIs may be added and removed from the API at any time; with or without an official API revision.
 - Experimental APIs are not guaranteed to be forward or backward capatible between API versions.
 - Experimental APIs are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.
 
-An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED for any experimental API not supported by that driver.
+An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED_FEATURE for any experimental API not supported by that driver.
 
 Driver Architecture
 ===================
@@ -265,10 +268,13 @@ The following section provides high-level driver architecture.
 Library
 -------
 
-A static library is provided to allow applications to make direct API
-calls without understanding the underlying driver architecture. For
-example, C/C++ applications should include "${x}_api.h" (C) or
-"${x}_api.hpp" (C++11) and link with "${x}_api.lib".
+A static import library shall be provided to allow applications
+to make direct API calls without understanding the underlying
+driver interfaces. 
+
+## --validate=off
+C/C++ applications may include "${x}_api.h" and link with "${x}_api.lib".
+## --validate=on
 
 Loader
 ------
@@ -278,10 +284,14 @@ loader exports all API functions to the static library via per-process
 API function pointer table(s). Each driver and layer must below the
 loader will also export its API/DDI functions via per-process function
 pointer table(s). The export function and table definitions are defined
+## --validate=off
 in "${x}_ddi.h".
+## --validate=on
 
 The loader is dynamically linked with the application using the
+## --validate=off
 "${x}_loader.dll" (windows) or "${x}_loader.so" (linux). The loader is
+## --validate=on
 vendor agnostic, but must be aware of the names of vendor-specific
 device driver names. (Note: these are currently hard-coded but a
 registration method will be adopted when multiple vendors are
@@ -307,10 +317,12 @@ Device Drivers
 
 The device driver(s) contain the device-specific implementations of the APIs.
 
+## --validate=off
 The device driver(s) are dynamically linked using a *${x}_vendor_type.dll*
 (windows) / *${x}_vendor_type.so* (linux); where *vendor* and *type* are
 names chosen by the device vendor. For example, Intel GPUs use the name:
 "${x}_intc_gpu".
+## --validate=on
 
 Validation Layer
 ----------------
@@ -333,7 +345,6 @@ The validation layer supports the following capabilities:
 - Parameter Validation
 
     + checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
-    + functions may return ::${X}_RESULT_ERROR_INVALID_ARGUMENT or ::${X}_RESULT_ERROR_UNSUPPORTED
 
 - Handle Lifetime
 
@@ -375,7 +386,7 @@ Environment Variables
 
 The following table documents the supported knobs for overriding default
 driver behavior.
-
+## --validate=off
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
@@ -403,6 +414,7 @@ driver behavior.
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
 |                 | ${X}_ENABLE_PROGRAM_DEBUGGING         | {**0**, 1} | Enables the instrumentation for program debugging                                 |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+## --validate=on
 
 Affinity Mask
 ~~~~~~~~~~~~~
@@ -413,8 +425,9 @@ applications in another process, respectively. The affinity mask is
 specified via an environment variable as a string of hexadecimal values.
 The value is specific to system configuration; e.g., the number of
 devices and the number of sub-devices for each device.
-
+## --validate=off
 The following examples demonstrate proper usage:
+## --validate=on
 
 - "" (empty string) = disabled; i.e. all devices and sub-devices are reported. This is the default value.
 - Two devices, each with four sub-devices

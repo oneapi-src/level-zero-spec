@@ -1,4 +1,5 @@
-﻿<%
+﻿
+<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
@@ -8,9 +9,9 @@
 Initialization
 ==============
 
-The driver must be initialized by calling ${t}Init after calling
-${x}Init and before calling any other experimental function.
-Simultaneous calls to ${t}Init are thread-safe.
+The driver must be initialized by calling ::${t}Init after calling ::${x}Init
+and before calling any other experimental function. Simultaneous calls
+to ::${t}Init are thread-safe.
 
 .. _API-Tracing:
 
@@ -31,8 +32,8 @@ Registration
 
 Tools may independently register for enter and exist callbacks for individual API calls, per driver instance.
 
-* ${t}TracerSetPrologues is used to specify all the enter callbacks
-* ${t}TracerSetEpilogues is used to specify all the exist callbacks
+* ::${t}TracerSetPrologues is used to specify all the enter callbacks
+* ::${t}TracerSetEpilogues is used to specify all the exist callbacks
 * If the value of a callback is nullptr, then it will be ignored.
 
 The callbacks are defined as a collection of per-API function pointers, with the following parameters:
@@ -43,7 +44,7 @@ The callbacks are defined as a collection of per-API function pointers, with the
 * ppTracerInstanceUserData : a per-tracer, per-instance storage location; typically used for passing data from the prologue to the epilogue
 
 Note: since the creation of a tracer requires a device, on first glance
-it appears that ${x}Init, ${x}DriverGet and ${x}DeviceGet are not
+it appears that ::${x}Init, ::${x}DriverGet and ::${x}DeviceGet are not
 traceable. However, these APIs **are** traceable for all calls
 subsequent from the creation and enabling of the tracer itself.
 
@@ -51,11 +52,11 @@ Enabling/Disabling and Destruction
 ----------------------------------
 
 The tracer is created in a disabled state and must be explicitly enabled
-by calling ${t}TracerSetEnabled. The implementation gaurentees that
+by calling ::${t}TracerSetEnabled. The implementation guaranteed that
 prologues and epilogues will always be executed in pairs; i.e.
 
-* if the prologue was called then the epilogue is gaurenteed to be called, even if another thread disabled the tracer between execution
-* if the prologue was not called then the epilogue is gaurenteed not to be called, even if another thread enabled the tracer between execution
+* if the prologue was called then the epilogue is guaranteed to be called, even if another thread disabled the tracer between execution
+* if the prologue was not called then the epilogue is guaranteed not to be called, even if another thread enabled the tracer between execution
 
 The tracer should be disabled by the application before the tracer is
 destoryed. If multiple threads are in-flight, then it is still possbile
@@ -63,13 +64,12 @@ that callbacks will continue to execute even after the tracer is
 disabled; specifically due to the pairing rules above. Due to the
 complexity involved in ensuring no threads are still or will be
 executing a callback even after its been disabled, the implementation
-will stall and wait for any outstanding threads during
-${t}TracerDestroy.
+will stall and wait for any outstanding threads during ::${t}TracerDestroy.
 
 The following pseudo-code demonstrates a basic usage of API tracing:
 
 .. code:: c
-
+## --validate=off
        typedef struct _my_tracer_data_t
        {
            uint32_t instance;
@@ -108,7 +108,7 @@ The following pseudo-code demonstrates a basic usage of API tracing:
            
            free(instance_data);
        }
-
+## --validate=on
        void TracingExample( ... )
        {
            my_tracer_data_t tracer_data = {};
@@ -187,9 +187,9 @@ terms of reading metric values. Each Metric Group provides information
 which sampling types it supports. There are separate sets of APIs
 supporting each of the sampling types Time-based_ and Event-based_.
 
-All available sampling types are defined in ${t}_metric_group_sampling_type_t.
+All available sampling types are defined in ::${t}_metric_group_sampling_type_t.
 
-- Information about supported sampling types for a given Metric Group is provided in ${t}_metric_group_properties_t.samplingType.
+- Information about supported sampling types for a given Metric Group is provided in ::${t}_metric_group_properties_t.samplingType.
 - It's possible that a device provides multiple Metric Groups with the same names but different sampling types.
 - When enumerating, it's important to choose a Metric Group which supports the desired sampling type.
 
@@ -198,8 +198,7 @@ All available sampling types are defined in ${t}_metric_group_sampling_type_t.
 Domains
 ~~~~~~~
 
-Every Metric Group belongs to a given domain
-(${t}_metric_group_properties_t.domain).
+Every Metric Group belongs to a given domain (::${t}_metric_group_properties_t.domain).
 
 - The Metric Group typically define a uniform device counter configuration used for measurements.
 - Each domain represents an exclusive resource used by the Metric Group.
@@ -215,8 +214,8 @@ All available metrics are organized into Metric Groups.
 
 The following APIs provide all the information needed for identification and usage.
 
-- Metric Group properties are accessed through function ${t}MetricGroupGetProperties, returning ${t}_metric_group_properties_t.
-- Metric properties are accessed through function ${t}MetricGetProperties, returning ${t}_metric_properties_t.
+- Metric Group properties are accessed through function ::${t}MetricGroupGetProperties, returning ::${t}_metric_group_properties_t.
+- Metric properties are accessed through function ::${t}MetricGetProperties, returning ::${t}_metric_properties_t.
 
 A common tool flow is to enumerate metrics looking for a specific Metric
 Group. Depending on the metrics required for a specific scenario a tool
@@ -229,16 +228,16 @@ type it will be used.
 
 To enumerate through the Metric tree:
 
-1. Call ${t}MetricGroupGet to obtain Metric Group count.
-2. Call ${t}MetricGroupGet to obtain all Metric Groups.
+1. Call ::${t}MetricGroupGet to obtain Metric Group count.
+2. Call ::${t}MetricGroupGet to obtain all Metric Groups.
 3. Iterate over all available Metric Groups.
 
     - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
     - Metric Group names may not be unique.
 
-4. For each Metric Group obtain their Metric count calling ${t}MetricGroupGetProperties with Metric Group handle (${t}_metric_group_handle_t) and checking ${t}_metric_group_properties_t.metricCount.
-5. Iterate over available Metrics using ${t}MetricGet with parent Metric Group (${t}_metric_group_handle_t).
-6. Check Metric properties (e.g. name, description) calling ${t}MetricGetProperties with parent Metric (${t}_metric_handle_t).
+4. For each Metric Group obtain their Metric count calling ::${t}MetricGroupGetProperties with Metric Group handle (::${t}_metric_group_handle_t) and checking ${t}_metric_group_properties_t.metricCount.
+5. Iterate over available Metrics using ::${t}MetricGet with parent Metric Group (::${t}_metric_group_handle_t).
+6. Check Metric properties (e.g. name, description) calling ::${t}MetricGetProperties with parent Metric (::${t}_metric_handle_t).
 
 The following pseudo-code demonstrates a basic enumeration over all
 available metric groups and their metrics. Additionally, it returns a
@@ -287,17 +286,17 @@ measurements.
 Configuration
 -------------
 
-Use the ${t}DeviceActivateMetricGroups API call to configure the device
+Use the ::${t}DeviceActivateMetricGroups API call to configure the device
 for data collection.
 
 - Subsequent calls to the function will disable device programming for the metric groups not selected for activation.
-- To avoid undefined results only call the ${t}DeviceActivateMetricGroups between experiments i.e. while not collecting data.
+- To avoid undefined results only call the ::${t}DeviceActivateMetricGroups between experiments i.e. while not collecting data.
 
 Programming restrictions:
 
-- Any combination of metric groups can be configured simultaneously provided that all of them have different ${t}_metric_group_properties_t.domain.
-- MetricGroup must be active until ${t}MetricQueryGetData and ${t}MetricTracerClose.
-- Conflicting Groups cannot be activated, in such case the call to ${t}DeviceActivateMetricGroups would fail.
+- Any combination of metric groups can be configured simultaneously provided that all of them have different ::${t}_metric_group_properties_t.domain.
+- MetricGroup must be active until ::${t}MetricQueryGetData and ::${t}MetricTracerClose.
+- Conflicting Groups cannot be activated, in such case the call to ::${t}DeviceActivateMetricGroups would fail.
 
 Collection
 ----------
@@ -313,10 +312,10 @@ Metric Tracer
 ~~~~~~~~~~~~~
 
 Time-based collection uses a simple Open, Wait, Read, Close scheme:
-- ${t}MetricTracerOpen opens the tracer.
-- ${x}EventHostSynchronize and ${x}EventQueryStatus can be used to wait for data.
-- ${t}MetricTracerReadData reads the data to be later processed by ${t}MetricGroupCalculateMetricValues.
-- ${t}MetricTracerClose closes the tracer.
+- ::${t}MetricTracerOpen opens the tracer.
+- ::${x}EventHostSynchronize and ::${x}EventQueryStatus can be used to wait for data.
+- ::${t}MetricTracerReadData reads the data to be later processed by ::${t}MetricGroupCalculateMetricValues.
+- ::${t}MetricTracerClose closes the tracer.
 
 .. image:: ../../../images/tools_metric_tracer.png
 
@@ -388,16 +387,16 @@ Metric Query
 
 Event-based collection uses a simple Begin, End, GetData scheme:
 
-- ${t}CommandListAppendMetricQueryBegin defines the start counting event
-- ${t}CommandListAppendMetricQueryEnd defines the finish counting event
-- ${t}MetricQueryGetData reads the raw data to be later processed by ${t}MetricGroupCalculateMetricValues.
+- ::${t}CommandListAppendMetricQueryBegin defines the start counting event
+- ::${t}CommandListAppendMetricQueryEnd defines the finish counting event
+- ::${t}MetricQueryGetData reads the raw data to be later processed by ::${t}MetricGroupCalculateMetricValues.
 
 Typically, multiple queries are used and recycled to characterize a workload. A Query Pool is used to efficiently use and reuse device memory for multiple queries.
 
-- ${t}MetricQueryPoolCreate creates a pool of homogeneous queries.
-- ${t}MetricQueryPoolDestroy frees the pool. The application must ensure no queries within the pool are in-use before freeing the pool.
-- ${t}MetricQueryCreate obtains a handle to a unique location in the pool.
-- ${t}MetricQueryReset allows for low-cost recycling of a location in the pool.
+- ::${t}MetricQueryPoolCreate creates a pool of homogeneous queries.
+- ::${t}MetricQueryPoolDestroy frees the pool. The application must ensure no queries within the pool are in-use before freeing the pool.
+- ::${t}MetricQueryCreate obtains a handle to a unique location in the pool.
+- ::${t}MetricQueryReset allows for low-cost recycling of a location in the pool.
 
 .. image:: ../../../images/tools_metric_query.png
 
@@ -471,7 +470,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
 Calculation
 -----------
 
-Both MetricTracer and MetricQueryPool collect the data in device specific, raw form that is not suitable for application processing. To calculate metric values use ${t}MetricGroupCalculateMetricValues.
+Both MetricTracer and MetricQueryPool collect the data in device specific, raw form that is not suitable for application processing. To calculate metric values use ::${t}MetricGroupCalculateMetricValues.
 
 The following pseudo-code demonstrates a basic sequence for metric calculation and interpretation:
 
@@ -568,19 +567,19 @@ function calls:
 
 For example, a tool may use API Tracing in any of the following ways:
 
-* ${x}ModuleCreate - replace a module handle with instrumented module handle for all functions
-* ${x}KernelCreate - replace a kernel handle with instrumented kernel handle for all call sites
-* ${x}ModuleGetFunctionPointer - replace a function pointer with instrumented function pointer for all call sites
-* ${x}CommandListAppendLaunchKernel - replace a kernel handle with instrumented kernel handle at call site
+* ::${x}ModuleCreate - replace a module handle with instrumented module handle for all functions
+* ::${x}KernelCreate - replace a kernel handle with instrumented kernel handle for all call sites
+* ::${x}ModuleGetFunctionPointer - replace a function pointer with instrumented function pointer for all call sites
+* ::${x}CommandListAppendLaunchKernel - replace a kernel handle with instrumented kernel handle at call site
 
 Intra-Function Instrumentation
 ------------------------------
 
 The following capabilities allow for a tool to inject instructions within a kernel:
 
-* ${t}ModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
-* ${t}KernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
-* ${x}ModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
+* ::${t}ModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
+* ::${t}KernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
+* ::${x}ModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
 * API-Tracing_ - same usage as Inter-Function Instrumentation above
 
 Compilation
@@ -589,11 +588,13 @@ Compilation
 A module must be compiled with foreknowledge that instrumentation will
 be performed in order for the compiler to generate the proper profiling
 meta-data. Therefore, when the instrumentation layer is enabled, a new
+## --validate=off
 build flag is supported: "-${t}-profile-flags", where "" must be a
-combination of ${t}_profile_flag_t, in hexidecimal.
+## --validate=on
+combination of ::${t}_profile_flag_t, in hexidecimal.
 
 As an example, a tool could use API Tracing to inject this build flag on
-each ${x}ModuleCreate call that the tool wishes to instrument. In
+each ::${x}ModuleCreate call that the tool wishes to instrument. In
 another example, a tool could recompile a Module using the build flag
 and use API Tracing to replace the application's Module handle with it's
 own.
@@ -602,15 +603,14 @@ Instrumentation
 ~~~~~~~~~~~~~~~
 
 Once the module has been compiled with instrumentation enabled, a tool
-may use ${t}ModuleGetDebugInfo and ${t}KernelGetProfileInfo in order
+may use ::${t}ModuleGetDebugInfo and ::${t}KernelGetProfileInfo in order
 to decode the application's instructions and register usage for each
 function in the module.
 
 If a tool requires additional functions to be used, it may create other
-module(s) and use ${x}ModuleGetFunctionPointer to call functions between
-the application and tool modules. A tool may use
-${x}ModuleGetFunctionPointer to retrieve the Host and device address of
-each function in the module.
+module(s) and use ::${x}ModuleGetFunctionPointer to call functions between
+the application and tool modules. A tool may use ::${x}ModuleGetFunctionPointer
+to retrieve the Host and device address of each function in the module.
 
 There are no APIs provided for the actual instrumentation. Instead this
 is left up to the tool itself to decode the application module's native
@@ -621,9 +621,8 @@ Execution
 ~~~~~~~~~
 
 If a tool requires changing the address of an application's function,
-then it should use API Tracing; for example,
-${x}ModuleGetFunctionPointer and all flavors of
-${x}CommandListAppendLaunchKernel.
+then it should use API Tracing; for example, ::${x}ModuleGetFunctionPointer
+and all flavors of ::${x}CommandListAppendLaunchKernel.
 
 Program Debug
 =============

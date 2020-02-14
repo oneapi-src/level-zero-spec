@@ -24,6 +24,8 @@ RE_DOXY_LINK    = r".*\:\:\$\{\w\}.*"
 RE_CODE_BLOCK_BEGIN = r"^\`\`\`c$"
 RE_CODE_BLOCK_END   = r"^\`\`\`$"
 
+RE_CODE_BLOCK_BEGIN_RST = r"..\scode::"
+
 RE_EXTRACT_NAME     = r"\$\{\w\}\w+"
 RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
 
@@ -58,10 +60,14 @@ def _validate_md(fpath, meta):
             enable = False
             continue
 
-        if re.match(RE_CODE_BLOCK_BEGIN, line):
+        if re.match(RE_CODE_BLOCK_BEGIN, line) or re.match(RE_CODE_BLOCK_BEGIN_RST, line):
             code_block = True
             continue
         elif re.match(RE_CODE_BLOCK_END, line):
+            code_block = False
+            continue
+        # code is always indented
+        elif re.match(r'\w', line) and code_block:
             code_block = False
             continue
 
@@ -117,6 +123,7 @@ def generate_rst(srcpath, dstpath, tags, ver, meta):
     for fin in util.findFiles(srcpath, "*.rst"):
         fout = os.path.join(dstpath, os.path.basename(fin))
         print("Generating %s..."%fout)
+        _validate_md(os.path.abspath(fin), meta)
         loc += util.makoWrite(fin, fout,
             tags=tags,
             ver=float(ver))
@@ -158,8 +165,9 @@ def generate_html_from_rst(dstpath):  # This will become generate_html() once MD
     cmdline = "doxygen DoxyfileRST"
     os.system(cmdline)
 
-    print("Generating HTML...")
-    cmdline = "sphinx-build -M html %s .."%os.path.join(dstpath, "source")
+    print("Generating HTML for RST...")
+    cmdline = "sphinx-build -M html %s ..\docs"%os.path.join(dstpath, "source")
+    print(cmdline)
     os.system(cmdline)
 
 """

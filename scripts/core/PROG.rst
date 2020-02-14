@@ -1,4 +1,5 @@
-﻿<%
+﻿
+<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
@@ -35,7 +36,7 @@ Initialization and Discovery
 The driver must be initialized by calling Init before any other
 function. This function will load and initialize all Level-Zero
 driver(s) in the system for all threads in the current process.
-Simultaneous calls to ${x}Init are thread-safe and only one instance of
+Simultaneous calls to ::${x}Init are thread-safe and only one instance of
 driver(s) will be loaded per-process. This function will allow queries
 of the available driver instances in the system.
 
@@ -331,13 +332,13 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 Execution
 ~~~~~~~~~
 
--  Command lists submitted to a command queue are **immediately** executed in a fifo manner.
--  Command queue submission is free-treaded, allowing multiple Host threads to
-   share the same command queue.
--  If multiple Host threads enter the same command queue simultaneously, then execution order
-   is undefined.
--  Command lists created with ::${X}_COMMAND_LIST_FLAG_COPY_ONLY may only be submitted to
-   command queues created with ::${X}_COMMAND_QUEUE_FLAG_COPY_ONLY.
+- Command lists submitted to a command queue are **immediately** executed in a fifo manner.
+- Command queue submission is free-treaded, allowing multiple Host threads to
+  share the same command queue.
+- If multiple Host threads enter the same command queue simultaneously, then execution order
+  is undefined.
+- Command lists can only be executed on a command queue with an identical command queue group ordinal,
+  see more details below.
 
 Destruction
 ~~~~~~~~~~~
@@ -398,14 +399,18 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 Submission
 ~~~~~~~~~~
 
--  There is no implicit association between a command list and a command queue.
-   Therefore, a command list may be submitted to any, or multiple command queues.
-   However, if a command list is meant to be submitted to a copy-only command queue
-   then the ::${X}_COMMAND_LIST_FLAG_COPY_ONLY must be set at creation.
--  The application is responsible for calling close before submission to a command queue.
--  Command lists do not inherit state from other command lists executed on the same
-   command queue.  i.e. each command list begins execution in its own default state.
--  A command list may be submitted multiple times. It is up to the application to ensure that the command list can be executed multiple times. Events, for example, must be explicitly reset prior to re-execution.
+- There is no implicit association between a command list and a logical command queue. 
+  Therefore, a command list may be submitted to any or multiple logical command queues.
+- However, if a command list is meant to be submitted to a physical copy-only command queue,
+  then it must be created using a command queue group ordinal,
+  with only ::${x}_command_queue_group_properties_t.copySupported is enabled,
+  and submitted to a logical command queue created using the same ordinal.
+- The application is responsible for calling close before submission to a command queue.
+- Command lists do not inherit state from other command lists executed on the same
+  command queue.  i.e. each command list begins execution in its own default state.
+- A command list may be submitted multiple times.  It is up to the application to ensure 
+  that the command list can be executed multiple times.
+  For example, event must be explicitly reset prior to re-execution.
 
 The following pseudo-code demonstrates submission of commands to a command queue, via a command list:
 
@@ -757,6 +762,7 @@ Module Build Options
 
 Module build options can be passed with ::${x}_module_desc_t as a string.
 
+## --validate=off
 +--------------------------------------------+----------------------------------------------------+----------+----------------+
 | Build Option                               | Description                                        | Default  | Device Support |
 +============================================+====================================================+==========+================+
@@ -766,6 +772,7 @@ Module build options can be passed with ::${x}_module_desc_t as a string.
 +--------------------------------------------+----------------------------------------------------+----------+----------------+
 | -${x}-opt-large-register-file                | Increase number of registers available to threads. | Disabled | GPU            |
 +--------------------------------------------+----------------------------------------------------+----------+----------------+
+## --validate=on
 
 Module Specialization Constants
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -890,22 +897,36 @@ Use ::${x}KernelSetAttribute to set attributes for a kernel object.
 
 .. code:: c
 
-       // Kernel performs indirect device access.
-       ${x}KernelSetAttribute(hKernel, ${X}_KERNEL_SET_ATTR_INDIRECT_DEVICE_ACCESS, true);
-       ...
+    // Kernel performs indirect device access.
+    bool_t isIndirect = true;
+    ${x}KernelSetAttribute(hKernel, ${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
+    ...
 
-See ::${x}_kernel_set_attribute_t for more information on the ?set? attributes.
+Use ::${x}KernelSetAttribute to get attributes for a kernel object.
+
+.. code:: c
+
+    // Does kernel perform indirect device access.
+    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
+    ...
+    
+    uint32_t strSize = 0; // Size of string + null terminator
+    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, nullptr );
+    char* pAttributes = allocate(strSize);
+    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, pAttributes );
+    ...
+
+See ::${x}_kernel_attribute_t for more information on the "set" and "get" attributes.
 
 Use ::${x}KernelGetProperties to query invariant properties from a kernel object.
 
 .. code:: c
+    ...
+    ${x}_kernel_properties_t kernelProperties;
 
-       ...
-       ${x}_kernel_properties_t kernelProperties;
-
-       // 
-       ${x}KernelGetProperties(hKernel, &kernelProperties);
-       ...
+    // 
+    ${x}KernelGetProperties(hKernel, &kernelProperties);
+    ...
 
 See ::${x}_kernel_properties_t for more information for kernel properties.
 
@@ -994,7 +1015,7 @@ The launch arguments contain thread group dimensions.
        // Append launch kernel
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
-::${x}CommandListAppendLaunchKernelIndirect allows the launch parameters to be supplied indirectly in a
+The function ::${x}CommandListAppendLaunchKernelIndirect allows the launch parameters to be supplied indirectly in a
 buffer that the device reads instead of the command itself. This allows for the previous operations on the
 device to generate the parameters.
 
@@ -1013,10 +1034,11 @@ Cooperative Kernels
 
 Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ::${x}CommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
-The command list must be submitted to a command queue that was created with the ::${X}_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_KERNELS command queue flag.
-Finally, there is a ::${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
+The command list must be submitted to a logical command queue that was created with an ordinal of a physical command queue
+that supports the ::${x}_command_queue_group_properties_t.cooperativeKernelsSupported is enabled. Finally, there is
+a ::${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
 
-In order to invoke a function on the device an application must call one of the CommandListAppendLaunch\* functions for
+In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
 a command list. The most basic version of these is ::${x}CommandListAppendLaunchKernel which takes a
 command list, function, launch arguments, and an optional synchronization event used to signal completion.
 The launch arguments contain thread group dimensions.
@@ -1151,7 +1173,7 @@ as multiple levels of indirection, there are two methods available:
 
 1. The application may set the ::${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 
-       + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_set_attribute_t
+       + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_attribute_t (${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, DEVICE_ACCESS, or SHARED_ACCESS).
        + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueExecuteCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
 2. Explcit ::${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
@@ -1173,9 +1195,11 @@ The following pseudo-code demonstrate a sequence for using coarse-grain residenc
        ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
 
        // 'begin' is passed as kernel argument and appended into command list
-       ${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
+       bool hasIndirectHostAccess = true;
+       ${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, sizeof(bool), &hasIndirectHostAccess);
        ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+
        ...
 
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -1377,7 +1401,7 @@ The following code examples demonstrate how to use the event IPC APIs:
 
    a. receiving process creates event at location
 
-   .. code:: c
+.. code:: c
 
        ${x}_event_handle_t hEvent;
        ${x}_event_desc_t eventDesc = {

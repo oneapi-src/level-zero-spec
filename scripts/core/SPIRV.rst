@@ -1,4 +1,5 @@
-﻿<%
+﻿
+<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
@@ -38,8 +39,7 @@ specification.
 Supported SPIR-V Versions
 -------------------------
 
-The maximum SPIR-V version supported by a device is described by
-${x}_device_kernel_properties_t.spirvVersionSupported.
+The maximum SPIR-V version supported by a device is described by ::${x}_device_kernel_properties_t.spirvVersionSupported.
 
 Extended Instruction Sets
 -------------------------
@@ -176,10 +176,10 @@ that declare the following capabilities:
 -  **Vector16**
 -  **GenericPointer**
 -  **Groups**
--  **ImageBasic** (for devices supporting ${x}_device_image_properties_t::supported)
--  **Float16** (for devices supporting ${x}_device_kernel_properties_t.fp16Supported)
--  **Float64** (for devices supporting ${x}_device_kernel_properties_t.fp64Supported)
--  **Int64Atomics** (for devices supporting ${x}_device_kernel_properties_t.int64AtomicsSupported)
+-  **ImageBasic** (for devices supporting ::${x}_device_image_properties_t.supported)
+-  **Float16** (for devices supporting ::${x}_device_kernel_properties_t.fp16Supported)
+-  **Float64** (for devices supporting ::${x}_device_kernel_properties_t.fp64Supported)
+-  **Int64Atomics** (for devices supporting ::${x}_device_kernel_properties_t.int64AtomicsSupported)
 
 If the ${OneApi} environment supports the **ImageBasic** capability,
 then the following capabilities must also be supported:
@@ -245,7 +245,7 @@ For all *Atomic Instructions*:
 -  32-bit integer types are supported for the *Result Type* and/or type
    of *Value*. 64-bit integer types are optionally supported for the
    *Result Type* and/or type of *Value* for devices supporting
-   ${x}_device_kernel_properties_t.int64AtomicsSupported.
+   ::${x}_device_kernel_properties_t.int64AtomicsSupported.
 -  The *Pointer* operand must be a pointer to the **Function**,
    **Workgroup**, **CrossWorkGroup**, or **Generic** *Storage Classes*.
 
