@@ -68,7 +68,9 @@ will stall and wait for any outstanding threads during ::${t}TracerDestroy.
 
 The following pseudo-code demonstrates a basic usage of API tracing:
 
+
 .. code:: c
+
 ## --validate=off
        typedef struct _my_tracer_data_t
        {
@@ -109,6 +111,7 @@ The following pseudo-code demonstrates a basic usage of API tracing:
            free(instance_data);
        }
 ## --validate=on
+
        void TracingExample( ... )
        {
            my_tracer_data_t tracer_data = {};

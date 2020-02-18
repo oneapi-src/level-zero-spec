@@ -91,10 +91,10 @@ Memory and Images
 
 There are two types of allocations:
 
-1. Memory_ - linear, unformatted allocations for direct access from both the host and device.
-2. Images_ - non-linear, formatted allocations for direct access from the device.
+1. :ref:`LinearMemory` - linear, unformatted allocations for direct access from both the host and device.
+2. :ref:`Images` - non-linear, formatted allocations for direct access from the device.
 
-.. _Memory:
+.. _LinearMemory:
 
 Memory
 ------
@@ -921,6 +921,7 @@ See ::${x}_kernel_attribute_t for more information on the "set" and "get" attrib
 Use ::${x}KernelGetProperties to query invariant properties from a kernel object.
 
 .. code:: c
+
     ...
     ${x}_kernel_properties_t kernelProperties;
 
@@ -1401,7 +1402,7 @@ The following code examples demonstrate how to use the event IPC APIs:
 
    a. receiving process creates event at location
 
-.. code:: c
+   .. code:: c
 
        ${x}_event_handle_t hEvent;
        ${x}_event_desc_t eventDesc = {

@@ -459,7 +459,7 @@ The available scheduler operating modes are given by the enum ::${t}_sched_mode_
 |                                     | work within some timeout            |
 |                                     | interval, then submits the other    |
 |                                     | work.It is possible to configure    |
-|                                     | (::${t}_sched_timeout_properties_t)   |
+|                                     | (::${t}_sched_timeout_properties_t)  |
 |                                     |                                     |
 |                                     | the watchdog timeout which          |
 |                                     | controls the maximum time the       |
@@ -587,7 +587,7 @@ The device can be reset using the following function:
 +-----------------------------------+-----------------------------------+
 
 PCI link operations
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 The following functions permit getting data about the PCI endpoint for the device:
 
@@ -907,35 +907,35 @@ full circuitry of the device, the following modifications can be made:
 
 -  Decrease the voltage
 
-Frequency/voltage overclocking is accomplished by calling ::${t}SysmanFrequencyOcSetConfig() with a new overclock configuration ::${t}_oc_config_t.
-There are two modes that control the way voltage is handled when overclocking the frequency:
+Frequency/voltage overclocking is accomplished by calling ::${t}SysmanFrequencyOcSetConfig()
+with a new overclock configuration ::${t}_oc_config_t. There are two modes that control the
+way voltage is handled when overclocking the frequency:
 
-
-+-----------------------------------+-----------------------------------+
-| Voltage overclock mode            | Description                       |
-+===================================+===================================+
-| ::${T}_OC_MODE_OVERRIDE            | In this mode, a fixed             |
-|                                   | user-supplied voltage             |
-|                                   | (::${t}_oc_config_t.voltageTarget+ |
-|                                   |  ::${t}_oc_config_t.voltageOffset) |
-|                                   | is applied at all times,          |
-|                                   | independent of the frequency      |
-|                                   | request. This is not efficient but|
-|                                   |can improve stability by avoiding  |
-|                                   |power-supply voltage changes as the|
-|                                   |frequency changes.                 |
-+-----------------------------------+-----------------------------------+
-| ::${T}_OC_MODE_OVERRIDE            | In this mode, a fixed             |
-|                                   | user-supplied voltage is applied  |
-|                                   | at all times, independent of the  |
-|                                   | frequency request. This is not    |
-|                                   | efficient but can improve         |
-|                                   | stability by avoiding             |
-|                                   | power-supply voltage changes as   |
-|                                   | the frequency changes. Generally  |
-|                                   | this mode is used in conjunction  |
-|                                   | with a fixed frequency.           |
-+-----------------------------------+-----------------------------------+
++-----------------------------------+-------------------------------------------+
+| Voltage overclock mode            | Description                               |
++===================================+===========================================+
+| ::${T}_OC_MODE_OVERRIDE            | In this mode, a fixed                     |
+|                                   | user-supplied voltage                     |
+|                                   | (::${t}_oc_config_t.voltageTarget +        |
+|                                   | ::${t}_oc_config_t.voltageOffset)          |
+|                                   | is applied at all times,                  |
+|                                   | independent of the frequency              |
+|                                   | request. This is not efficient but        |
+|                                   | can improve stability by avoiding         |
+|                                   | power-supply voltage changes as the       |
+|                                   | frequency changes.                        |
++-----------------------------------+-------------------------------------------+
+| ::${T}_OC_MODE_OVERRIDE            | In this mode, a fixed                     |
+|                                   | user-supplied voltage is applied          |
+|                                   | at all times, independent of the          |
+|                                   | frequency request. This is not            |
+|                                   | efficient but can improve                 |
+|                                   | stability by avoiding                     |
+|                                   | power-supply voltage changes as           |
+|                                   | the frequency changes. Generally          |
+|                                   | this mode is used in conjunction          |
+|                                   | with a fixed frequency.                   |
++-----------------------------------+-------------------------------------------+
 
 The following functions are provided to handle overclocking:
 
@@ -1063,8 +1063,6 @@ The following functions are provided to manage firmwares on the device:
 +------------------------------------+-----------------------------------+
 
 .. _Memory:
-
-    Memory
 
 Querying memory modules
 -----------------------
@@ -1345,6 +1343,7 @@ temperature events:
 |                                         |                       | high.                 |
 +-----------------------------------------+-----------------------+-----------------------+
 ## --validate=on
+
 The following function can be used to manage temperature sensors:
 
 +---------------------------------------+-----------------------------------+
@@ -1636,6 +1635,7 @@ of each category depends on the error type (correctable, uncorrectable).
 |                       | the display.                     | the display.                       |
 +-----------------------+----------------------------------+------------------------------------+
 ## --validate=on
+
 Each RAS error type can trigger events when the error counters exceed
 thresholds. The events are listed in the table below. Software can use
 the functions ::${t}SysmanRasGetConfig() and ::${t}SysmanRasSetConfig() to
@@ -1655,6 +1655,7 @@ error counters.
 |                                   | CTABLE_ERRORS                     |
 +-----------------------------------+-----------------------------------+
 ## --validate=on
+
 The table below summaries all the RAS management functions:
 
 +-----------------------------------+-----------------------------------+
