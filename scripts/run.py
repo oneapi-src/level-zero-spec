@@ -62,7 +62,7 @@ def main():
     add_argument(parser, "md", "generation of markdown files.", True)
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
-    add_argument(parser, "rst", "generation of markdown files.")
+    add_argument(parser, "rst", "generation of markdown files.", True)
     parser.add_argument("--ver", type=str, default="1.0", required=False, help="specification version to generate.")
     args = vars(parser.parse_args())
 
