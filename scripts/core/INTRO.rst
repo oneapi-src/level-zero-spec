@@ -35,7 +35,7 @@ explicit controls needed by higher-level runtime APIs and libraries.
 
 While initially influenced by other low-level APIs, such as OpenCL and Vulkan,
 the Level-Zero APIs are designed to evolve independently. While initially
-influenced by GPU archtiecture, the Level-Zero APIs are designed to be supportable
+influenced by GPU architecture, the Level-Zero APIs are designed to be supportable
 across different compute device architectures, such as FPGAs, CSAs, etc.
 
 Devices
@@ -70,7 +70,7 @@ For GPUs, the API exposes two levels of the device memory hierarchy:
 The API allows allocation of buffers and images at device and sub device
 granularity with full cacheablity hints.
 
-- Buffers are transperant memory accessed through virtual address pointers
+- Buffers are transparent memory accessed through virtual address pointers
 - Images are opaque objects accessed through handles
 
 The memory APIs provide allocation methods to allocate either device,
@@ -94,13 +94,13 @@ Peer to Peer API's provide capabilities to marshall data across Host to
 Device, Device to Host and Device to Device. The data marshalling API
 can be scheduled as asynchronous operations or can be synchronized with
 kernel execution through command queues. Data coherency is maintained by
-the driver with out any explicit involement from the application.
+the driver without any explicit involvement from the application.
 
 Inter-Process Communication
 ---------------------------
 
 The API allows sharing of memory objects across different device
-processes. Since each process has it's own virtual address space, there
+processes. Since each process has its own virtual address space, there
 is no guarantee that the same virtual address will be available when the
 memory object is shared in new process. There are a set of APIs that
 makes it easier to share the memory objects with ease.
@@ -110,9 +110,9 @@ System Management
 
 The API provides in-band ability to query the performance, power and
 health of accelerator resources. It also enables controlling the
-performance and power profile of these resources. Finally it provides
-access to maintanence facilities such as performing hardware diagnostics
-or updating firmwares.
+performance and power profile of these resources. Finally, it provides
+access to maintenance facilities such as performing hardware diagnostics
+or updating firmware.
 
 API Specification
 =================
@@ -185,12 +185,12 @@ The following design philosophies are adopted in order to reduce Host-side overh
 
    * Invalid API programming
    * Invalid function arguments
-   * Function infinite loops or recusions
+   * Function infinite loops or recursions
    * Synchronization primitive deadlocks
    * Non-visible memory access by the Host or device
-   * Non-resident memeory access by the device
+   * Non-resident memory access by the device
 * The driver implementation is **not** required to perform API validation of any kind
-   * The driver should ensure well-behaved applications are not burdened with the overhead needed for non-bevaving applications
+   * The driver should ensure well-behaved applications are not burdened with the overhead needed for non-behaving applications
    * Unless otherwise specified, the driver behavior is undefined when APIs are improperly used
    * For debug purposes, API validation can be enabled via the [Validation Layers](#v0)
 * All API functions return ::${x}_result_t
@@ -218,7 +218,7 @@ The following design philosophies are adopted in order to maximize Host thread c
 
     + the application is responsible for tracking ownership and explicitly freeing handles and memory
     + the application is responsible for ensuring that all driver objects and memory are no longer in-use by the device before freeing; otherwise the Host or device may fault
-    + no implcit garabage collection is supported by the driver
+    + no implicit garabage collection is supported by the driver
 
 In general, the API is designed to be free-threaded rather than thread-safe.
 This provides multithreaded applications with complete 
@@ -253,7 +253,7 @@ before ratification, are exposed as "Experimental" APIs.
 
 Applications should not rely on experimental APIs in production.
 - Experimental APIs may be added and removed from the API at any time; with or without an official API revision.
-- Experimental APIs are not guaranteed to be forward or backward capatible between API versions.
+- Experimental APIs are not guaranteed to be forward or backward compatible between API versions.
 - Experimental APIs are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.
 
 An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED_FEATURE for any experimental API not supported by that driver.

@@ -13,7 +13,7 @@ Drivers
 A driver represents a collection of physical devices in the system using the same Level-Zero driver.
 
 - The application may query the number of Level-Zero drivers installed on the system and the properties of each driver.
-- More than one driver may be available in the system. For example, one driver may support two GPUs from one vendor, another driver support a GPU from a different vendor, and finally a different driver may support an FPGA.
+- More than one driver may be available in the system. For example, one driver may support two GPUs from one vendor, another driver supports a GPU from a different vendor, and finally a different driver may support an FPGA.
 - A driver is primarily used to allocate and manage resources that are used by multiple devices.
 - Memory is **not** implicitly shared across all devices supported by a driver. However, it is available to be explicitly shared.
 
@@ -150,7 +150,7 @@ In summary:
 +===================+=======================================+=================+============================+================+==========+
 | **Host**          | Host                                  | Host            | Yes                        | Host           | N/A      |
 |                   |                                       +-----------------+----------------------------+----------------+----------+
-|                   |                                       | Any Device      | Yes (perhabs over PCIe)    | Device         | No       |
+|                   |                                       | Any Device      | Yes (perhaps over PCIe)    | Device         | No       |
 +-------------------+---------------------------------------+-----------------+----------------------------+----------------+----------+
 | **Device**        | Specific Device                       | Host            | No                         | Host           | No       |
 |                   |                                       +-----------------+----------------------------+----------------+----------+
@@ -221,10 +221,10 @@ Images
 
 An image is used to store multi-dimensional and format-defined memory
 for optimal device access. An image's contents can be copied to and from
-other images, as well as host-accessable memory allocations. This is the
+other images, as well as host-accessible memory allocations. This is the
 only method for host access to the contents of an image. This
 methodology allows for device-specific encoding of image contents (e.g.,
-tile swizzle patterns, loseless compression, etc.) and avoids exposing
+tile swizzle patterns, lossless compression, etc.) and avoids exposing
 these details in the API in a backwards compatible fashion.
 
 .. code:: c
@@ -274,7 +274,7 @@ configuration:
 Command Queues and Command Lists
 ================================
 
-The following are the motivations for seperating a command queue from a command list:
+The following are the motivations for separating a command queue from a command list:
 
 - Command queues are mostly associated with physical device properties, such as the number of input streams.
 - Command queues provide (near) zero-latency access to the device.
@@ -449,7 +449,7 @@ A special type of command list can be used for very low-latency submission usage
 - An immediate command list is both a command list and an implicit command queue.
 - An immediate command list is created using a command queue descriptor.
 - Commands submitted to an immediate command list are immediately executed on the device.
-- An immediate command list is not required to be closed or reset. However, usage will be honored and expected behaviors will be followed.
+- An immediate command list is not required to be closed or reset. However, usage will be honored, and expected behaviors will be followed.
 
 The following pseudo-code demonstrates a basic sequence for creation and usage of immediate command lists:
 
@@ -482,7 +482,7 @@ The following diagram illustrates the relationship of capabilities of these type
 
 .. image:: ../../../images/core_sync.png
 
-The following are the motivations for seperating the different types of synchronization primitives:
+The following are the motivations for separating the different types of synchronization primitives:
 
 - Allows device-specific optimizations for certain types of primitives:
 
@@ -505,7 +505,7 @@ A fence is a heavyweight synchronization primitive used to communicate to the ho
 
 - A fence is associated with a single command queue.
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists) and can only be waited upon from the host.
-- A fence guarantees both execution completion and memory coherency, across the device and host, prior to being signalled.
+- A fence guarantees both execution completion and memory coherency, across the device and host, prior to being signaled.
 - A fence only has two states: not signaled and signaled.
 - A fence can only be reset from the Host.
 - A fence cannot be shared across processes.
@@ -537,7 +537,7 @@ The primary usage model(s) for fences are to notify the Host when a command list
 - Recycling of other synchronization primitives
 - Explicit memory residency.
 
-The following diagram illustrates fences signalled after command lists on execution:
+The following diagram illustrates fences signaled after command lists on execution:
 
 .. image:: ../../../images/core_fence.png
 
@@ -552,10 +552,10 @@ An event is used to communicate fine-grain host-to-device, device-to-host or dev
 
        + signaled from within a device's command list and waited upon within the same command list
        + signaled from within a device's command list and waited upon from the host, another command queue or another device
-       + signaled from the host, and waited upon from within a device?s command list.
+       + signaled from the host, and waited upon from within a device's command list.
 
 - An event only has two states: not signaled and signaled.
-- An event doesn?t implicitly reset. Signaling a signaled event (or resetting an unsignaled event) is valid and has no effect on the state of the event.
+- An event doesn't implicitly reset. Signaling a signaled event (or resetting an unsignaled event) is valid and has no effect on the state of the event.
 - An event can be explicitly reset from the Host or device.
 - An event can be appended into multiple command lists simultaneously.
 - An event can be shared across devices and processes.
@@ -566,7 +566,7 @@ An event is used to communicate fine-grain host-to-device, device-to-host or dev
 
 - An event intended to be signaled by the host, another command queue or another device after command list submission to a command queue may prevent subsequent forward progress within the command queue itself.
 
-       + This can create create bubbles in the pipeline or deadlock situations if not correctly scheduled.
+       + This can create bubbles in the pipeline or deadlock situations if not correctly scheduled.
 
 An event pool is used for creation of individual events:
 
@@ -602,7 +602,7 @@ The following pseudo-code demonstrates a sequence for creation and submission of
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
        ...
 
-The following diagram illustrates an event being signalled between kernels within a command list:
+The following diagram illustrates an event being signaled between kernels within a command list:
 
 .. image:: ../../../images/core_event.png
 
@@ -629,9 +629,9 @@ The following pseudo-code demonstrates a sequence for submission of a brute-forc
 Execution Barriers
 ------------------
 
-Commands executed on a command list are only guarenteed to start in the same order in which they are submitted; i.e.?there is no implicit definition of the order of completion.
+Commands executed on a command list are only guaranteed to start in the same order in which they are submitted; i.e.?there is no implicit definition of the order of completion.
 
-- Fences provide implicit, coarse-grain control to indicate that all previous commands must complete prior to the fence being signalled.
+- Fences provide implicit, coarse-grain control to indicate that all previous commands must complete prior to the fence being signaled.
 - Events provide explicit, fine-grain control over execution dependencies between commands; allowing more opportunities for concurrent execution and higher device utilization.
 
 The following pseudo-code demonstrates a sequence for submission of a fine-grain execution-only dependency using events:
@@ -650,17 +650,17 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
        // Ensure hKernel1 completes before signaling hEvent1
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
 
-       // Ensure hEvent1 is signalled before starting hKernel2
+       // Ensure hEvent1 is signaled before starting hKernel2
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
        ...
 
 Memory Barriers
 ---------------
 
-Commands executed on a command list are *not* guarenteed to maintain memory coherency with other commands;
+Commands executed on a command list are *not* guaranteed to maintain memory coherency with other commands;
 i.e. there is no implicit memory or cache coherency.
 
-- Fences provide implicit, coarse-grain control to indicate that all caches and memory are coherent across the device and Host prior to the fence being signalled.
+- Fences provide implicit, coarse-grain control to indicate that all caches and memory are coherent across the device and Host prior to the fence being signaled.
 - Events provide explicit, fine-grain control over cache and memory coherency dependencies between commands; allowing more opportunities for concurrent execution and higher device utilization.
 
 The following pseudo-code demonstrates a sequence for submission of a fine-grain memory dependency using events:
@@ -670,7 +670,7 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
        ${x}_event_desc_t event1Desc = {
            ${X}_EVENT_DESC_VERSION_CURRENT,
            0,
-           ${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signalled
+           ${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signaled
            ${X}_EVENT_SCOPE_FLAG_NONE
        };
        ${x}_event_handle_t hEvent1;
@@ -679,7 +679,7 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
        // Ensure hKernel1 memory writes are fully coherent across the device before signaling hEvent1
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
 
-       // Ensure hEvent1 is signalled before starting hKernel2
+       // Ensure hEvent1 is signaled before starting hKernel2
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
        ...
 
@@ -709,7 +709,7 @@ There are multiple levels of constructs needed for executing kernels on the devi
 1. Modules_ represent a single translation unit that consists of kernels that have been compiled together.
 2. Kernels_ represent the kernel within the module that will be launched directly from a command list.
 
-The following diagram provides a high level overview of the major parts
+The following diagram provides a high-level overview of the major parts
 of the system.
 
 .. image:: ../../../images/core_module.png
@@ -837,7 +837,7 @@ The ::${x}ModuleCreate function can optionally generate a build log object ::${x
 Module Caching with Native Binaries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Disk caching of modules is not supported by the driver. If a disk cache for modules is desired then it is the
+Disk caching of modules is not supported by the driver. If a disk cache for modules is desired, then it is the
 responsibility of the application to implement this using ::${x}ModuleGetNativeBinary.
 
 .. code:: c
@@ -941,7 +941,7 @@ Kernel Group Size
 
 The group size for a kernel can be set using ::${x}KernelSetGroupSize. If a group size is not
 set prior to appending a kernel into a command list then a default will be chosen.
-The group size can updated over a series of append operations. The driver will copy the
+The group size can be updated over a series of append operations. The driver will copy the
 group size information when appending the kernel into the command list.
 
 .. code:: c
@@ -1098,13 +1098,13 @@ control of scheduling and memory allocation to a sub-partition of the device.
 There are functions to query and obtain a sub-device but outside of these
 functions there are no distinction between sub-devices and devices.
 
-Use ::${x}DeviceGetSubDevices to confirm subdevices are supported and to
+Use ::${x}DeviceGetSubDevices to confirm sub-devices are supported and to
 obtain a sub-device handle. There are additional device properties in
 ::${x}_device_properties_t for sub-devices to confirm a device is a
 sub-device and to query the sub-device id. This is useful when needing
 to pass a sub-device handle to another library.
 
-To allocate memory and dispatch tasks to a particular sub-device then
+To allocate memory and dispatch tasks to a specific sub-device then
 obtain the sub-device handle and use this with memory and command
 queue/lists APIs. Local memory allocation will be placed in the local
 memory that is attached to the sub-device. An out-of-memory error
@@ -1243,7 +1243,7 @@ OpenCL Interoperability
 Interoperability with OpenCL is currently only supported *from* OpenCL
 *to* Level-Zero for a subset of types. The APIs are designed to be OS
 agnostics and allow implementations to optimize for unified device
-drivers; while allowing less-optimal interopability across different
+drivers; while allowing less optimal interoperability across different
 device types and/or vendors.
 
 There are three OpenCL types that can be shared for interoperability:
@@ -1287,7 +1287,7 @@ necessarily submit tasks to the device unless forced by explicit OpenCL
 API such as clFlush or clFinish. To minimize overhead between sharing
 command queues, applications must explicitly submit OpenCL command
 queues using clFlush, clFinish or similar operations prior to enqueuing
-an Level-Zero command list. Failing to explicitly submit device work may
+a Level-Zero command list. Failing to explicitly submit device work may
 result in undefined behavior.
 
 Sharing an OpenCL command queue doesn't alter the lifetime of the API
@@ -1301,7 +1301,7 @@ read by a subsequent Level-Zero command list without any special
 application action. The cost to ensure memory consistency may be
 implementation dependent. The performance of sharing command queues will
 be no worse than an application submitting work to OpenCL, calling
-clFinish followed by submitting an Level-Zero command list. In most
+clFinish followed by submitting a Level-Zero command list. In most
 cases, command queue sharing may be much more efficient.
 
 Inter-Process Communication
@@ -1409,7 +1409,7 @@ The following code examples demonstrate how to use the event IPC APIs:
            ${X}_EVENT_DESC_VERSION_CURRENT,
            5,
            ${X}_EVENT_SCOPE_FLAG_NONE,
-           ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signalled
+           ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
        ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
@@ -1427,7 +1427,7 @@ The following code examples demonstrate how to use the event IPC APIs:
            ${X}_EVENT_DESC_VERSION_CURRENT,
            5,
            ${X}_EVENT_SCOPE_FLAG_NONE,
-           ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signalled
+           ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
        ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
