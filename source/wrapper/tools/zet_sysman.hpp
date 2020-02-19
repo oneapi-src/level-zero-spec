@@ -1103,8 +1103,8 @@ namespace zet
             ze::bool_t enable;                              ///< [in,out] Indicates if the energy threshold is enabled.
             double threshold;                               ///< [in,out] The energy threshold in Joules. Will be 0.0 if no threshold
                                                             ///< has been set.
-            uint32_t processId;                             ///< [in,out] The host process ID that set the energy threshold. Will be -1
-                                                            ///< if no threshold has been set.
+            uint32_t processId;                             ///< [in,out] The host process ID that set the energy threshold. Will be
+                                                            ///< 0xFFFFFFFF if no threshold has been set.
 
         };
 

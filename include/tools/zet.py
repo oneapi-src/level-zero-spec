@@ -925,8 +925,8 @@ class zet_energy_threshold_t(Structure):
         ("enable", ze_bool_t),                                          ## [in,out] Indicates if the energy threshold is enabled.
         ("threshold", c_double),                                        ## [in,out] The energy threshold in Joules. Will be 0.0 if no threshold
                                                                         ## has been set.
-        ("processId", c_ulong)                                          ## [in,out] The host process ID that set the energy threshold. Will be -1
-                                                                        ## if no threshold has been set.
+        ("processId", c_ulong)                                          ## [in,out] The host process ID that set the energy threshold. Will be
+                                                                        ## 0xFFFFFFFF if no threshold has been set.
     ]
 
 ###############################################################################

@@ -822,7 +822,7 @@ members:
       desc: "[in,out] The energy threshold in Joules. Will be 0.0 if no threshold has been set."
     - type: uint32_t
       name: processId
-      desc: "[in,out] The host process ID that set the energy threshold. Will be -1 if no threshold has been set."
+      desc: "[in,out] The host process ID that set the energy threshold. Will be 0xFFFFFFFF if no threshold has been set."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of power domains"
