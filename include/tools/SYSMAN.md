@@ -451,7 +451,7 @@ The following functions are provided to manage the power of the device:
 | Function                              | Description |
 | :---                                  | :---        |
 | ::zetSysmanPowerGet()                | Enumerate the power domains. |
-| ::zetSysmanPowerGetProperties()      | Get the maximum power limit that can be specified when changing the power limits of a specific power domain. |
+| ::zetSysmanPowerGetProperties()      | Get the minimum/maximum power limit that can be specified when changing the power limits of a specific power domain. |
 | ::zetSysmanPowerGetEnergyCounter()   | Read the energy consumption of the specific domain. |
 | ::zetSysmanPowerGetLimits()          | Get the sustained/burst/peak power limits for the specific power domain. |
 | ::zetSysmanPowerSetLimits()          | Set the sustained/burst/peak power limits for the specific power domain. |
