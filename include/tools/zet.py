@@ -2172,9 +2172,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetSysmanPerformanceProfileGetSupported
 if __use_win_types:
-    _zetSysmanPerformanceProfileGetSupported_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_perf_profile_t) )
+    _zetSysmanPerformanceProfileGetSupported_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, c_ulong )
 else:
-    _zetSysmanPerformanceProfileGetSupported_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_perf_profile_t) )
+    _zetSysmanPerformanceProfileGetSupported_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, c_ulong )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanPerformanceProfileGet

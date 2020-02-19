@@ -641,8 +641,7 @@ typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetComputeUnitDebugMode_t)(
 /// @brief Function-pointer for zetSysmanPerformanceProfileGetSupported 
 typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceProfileGetSupported_t)(
     zet_sysman_handle_t,
-    uint32_t*,
-    zet_perf_profile_t*
+    uint32_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
