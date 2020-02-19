@@ -1297,7 +1297,9 @@ namespace layer
         uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of processes currently using the device.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of processes.
+                                                        ///< if count is non-zero but less than the number of processes, the driver
+                                                        ///< will set to the number of processes currently using the device and
+                                                        ///< return the error ::ZE_RESULT_ERROR_INVALID_SIZE.
                                                         ///< if count is larger than the number of processes, then the driver will
                                                         ///< update the value with the correct number of processes that are returned.
         zet_process_state_t* pProcesses                 ///< [in,out][optional][range(0, *pCount)] array of process information,

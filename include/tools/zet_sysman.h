@@ -519,6 +519,11 @@ typedef struct _zet_process_state_t
 /// @brief Get information about host processes using the device
 /// 
 /// @details
+///     - The number of processes connected to the device is dynamic. This means
+///       that between a call to determine the correct value of pCount and the
+///       subsequent call, the number of processes may have increased. It is
+///       recommended that a large array be passed in so as to avoid receiving
+///       the error ::ZE_RESULT_ERROR_INVALID_SIZE.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -530,13 +535,17 @@ typedef struct _zet_process_state_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
+///     - ::ZE_RESULT_ERROR_INVALID_SIZE
+///         + The provided value of pCount is not big enough to store information about all the processes currently attached to the device.
 ze_result_t __zecall
 zetSysmanProcessesGetState(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of processes currently using the device.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of processes.
+                                                    ///< if count is non-zero but less than the number of processes, the driver
+                                                    ///< will set to the number of processes currently using the device and
+                                                    ///< return the error ::ZE_RESULT_ERROR_INVALID_SIZE.
                                                     ///< if count is larger than the number of processes, then the driver will
                                                     ///< update the value with the correct number of processes that are returned.
     zet_process_state_t* pProcesses                 ///< [in,out][optional][range(0, *pCount)] array of process information,

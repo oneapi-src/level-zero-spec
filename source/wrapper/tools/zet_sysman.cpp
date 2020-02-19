@@ -533,6 +533,11 @@ namespace zet
     /// @brief Get information about host processes using the device
     /// 
     /// @details
+    ///     - The number of processes connected to the device is dynamic. This means
+    ///       that between a call to determine the correct value of pCount and the
+    ///       subsequent call, the number of processes may have increased. It is
+    ///       recommended that a large array be passed in so as to avoid receiving
+    ///       the error ::ZE_RESULT_ERROR_INVALID_SIZE.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -542,7 +547,9 @@ namespace zet
         uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of processes currently using the device.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of processes.
+                                                        ///< if count is non-zero but less than the number of processes, the driver
+                                                        ///< will set to the number of processes currently using the device and
+                                                        ///< return the error ::ZE_RESULT_ERROR_INVALID_SIZE.
                                                         ///< if count is larger than the number of processes, then the driver will
                                                         ///< update the value with the correct number of processes that are returned.
         process_state_t* pProcesses                     ///< [in,out][optional][range(0, *pCount)] array of process information,
