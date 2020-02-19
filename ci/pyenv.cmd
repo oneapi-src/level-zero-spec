@@ -99,7 +99,7 @@ if exist "%VDIR%" (
     python -m pip install --upgrade pip
 
     :: Install PIP modules here
-    python -m pip install mako markupsafe pyyaml setuptools sphinx breathe sphinx_rtd_theme
+    python -m pip install -r %_CI_TOOLS_DIR%\requirements.txt
 
     call "%VDIR%\Scripts\deactivate.bat"
 
