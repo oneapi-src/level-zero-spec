@@ -46,9 +46,9 @@ def _find_symbol_type(name, meta):
     return None
 
 """
-    validate the markdown file
+    validate the reStructuredText file
 """
-def _validate_md(fpath, meta):
+def _validate_rst(fpath, meta):
     enable = True
     code_block = False
 
@@ -97,24 +97,7 @@ def _validate_md(fpath, meta):
 
 """
 Entry-point:
-    generate markdown documents from templates
-"""
-def generate_md(srcpath, dstpath, tags, ver, meta):
-    loc = 0
-    util.makePath(dstpath)
-    util.removeFiles(dstpath, "*.md")
-    for fin in util.findFiles(srcpath, "*.md"):
-        fout = os.path.join(dstpath, os.path.basename(fin))
-        print("Generating %s..."%fout)
-        _validate_md(os.path.abspath(fin), meta)
-        loc += util.makoWrite(fin, fout,
-            tags=tags,
-            ver=float(ver))
-    print("Generated %s lines of markdown.\n"%loc)
-
-"""
-Entry-point:
-    generate restructedtext documents from templates
+    generate restructuredtext documents from templates
 """
 def generate_rst(srcpath, dstpath, tags, ver, meta):
     loc = 0
@@ -123,7 +106,7 @@ def generate_rst(srcpath, dstpath, tags, ver, meta):
     for fin in util.findFiles(srcpath, "*.rst"):
         fout = os.path.join(dstpath, os.path.basename(fin))
         print("Generating %s..."%fout)
-        _validate_md(os.path.abspath(fin), meta)
+        _validate_rst(os.path.abspath(fin), meta)
         loc += util.makoWrite(fin, fout,
             tags=tags,
             ver=float(ver))
@@ -150,9 +133,9 @@ def generate_ref(dstpath, ref):
 
 """
 Entry-point:
-    generate HTML files using Rst and Doxygen template
+    generate HTML files using reStructuredText and Doxygen template
 """
-def generate_html_from_rst(dstpath):  # This will become generate_html() once MD path is removed.
+def generate_html(dstpath):
     htmlpath = os.path.join(dstpath, "html")
     latexpath = os.path.join(dstpath, "latex")
     xmlpath = os.path.join(dstpath, "xml")
@@ -162,26 +145,12 @@ def generate_html_from_rst(dstpath):  # This will become generate_html() once MD
     util.makePath(xmlpath)
 
     print("Generating doxygen...")
-    cmdline = "doxygen DoxyfileRST"
+    cmdline = "doxygen Doxyfile"
     os.system(cmdline)
 
-    print("Generating HTML for RST...")
+    print("Generating HTML from reStructuredText...")
     cmdline = "sphinx-build -M html %s ..\docs"%os.path.join(dstpath, "source")
     print(cmdline)
-    os.system(cmdline)
-
-"""
-Entry-point:
-    generate HTML files using Doxygen template
-"""
-def generate_html(dstpath):
-    htmlpath = os.path.join(dstpath, "html")
-    latexpath = os.path.join(dstpath, "latex")
-    util.removePath(htmlpath)
-    util.removePath(latexpath)
-
-    print("Generating HTML/LaTeX...")
-    cmdline = "doxygen Doxyfile"
     os.system(cmdline)
 
 """

@@ -59,10 +59,9 @@ def main():
     add_argument(parser, "wrapper", "generation of c++ wrapper files.", True)
     add_argument(parser, "build", "running cmake to generate and build projects.")
     add_argument(parser, "debug", "dump intermediate data to disk.")
-    add_argument(parser, "md", "generation of markdown files.", True)
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
-    add_argument(parser, "rst", "generation of markdown files.", True)
+    add_argument(parser, "rst", "generation of reStructuredText files.", True)
     parser.add_argument("--ver", type=str, default="1.0", required=False, help="specification version to generate.")
     args = vars(parser.parse_args())
 
@@ -118,9 +117,6 @@ def main():
             if args['rst']:
                 generate_docs.generate_rst(ymlpath, rstpath, tags, args['ver'], specs[1])
 
-            if args['md']:
-                generate_docs.generate_md(ymlpath, incpath, tags, args['ver'], specs[1])
-
     if args['debug']:
         util.makoFileListWrite("generated.json")
 
@@ -132,10 +128,7 @@ def main():
 
     # generate documentation
     if args['html']:
-        if args['rst']:
-            generate_docs.generate_html_from_rst(docpath)
-        else:
-            generate_docs.generate_html(docpath)
+        generate_docs.generate_html(docpath)
 
     if args['pdf']:
         generate_docs.generate_pdf(docpath)
