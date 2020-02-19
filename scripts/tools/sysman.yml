@@ -645,9 +645,9 @@ members:
     - type: uint64_t
       name: "txCounter"
       desc: "[out] Monotonic counter for the number of bytes transmitted (including replays)"
-    - type: uint64_t
-      name: "maxBandwidth"
-      desc: "[out] The maximum bandwidth in bytes/sec under the current configuration"
+    - type: $t_pci_speed_t
+      name: "speed"
+      desc: "[out] The current speed of the link"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get PCI properties - address, max speed"
