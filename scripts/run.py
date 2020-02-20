@@ -129,7 +129,7 @@ def main():
 
     # generate documentation
     if args['html']:
-        generate_docs.generate_html(docpath)
+        generate_docs.generate_html(docpath, args['ver'])
 
     if args['pdf']:
         generate_docs.generate_pdf(docpath)

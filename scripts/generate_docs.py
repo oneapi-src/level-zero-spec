@@ -117,7 +117,7 @@ def generate_rst(srcpath, dstpath, tags, ver, meta):
         fin = os.path.join("templates", "api_listing.mako")
         fout = os.path.join(dstpath, "api.rst")
         groupname = os.path.basename(dstpath).capitalize()
-        util.makoWrite(fin, fout, groupname = groupname)
+        util.makoWrite(fin, fout, groupname = groupname, ver=float(ver))
         
 
 """
@@ -135,21 +135,29 @@ def generate_ref(dstpath, ref):
 Entry-point:
     generate HTML files using reStructuredText and Doxygen template
 """
-def generate_html(dstpath):
+def generate_html(dstpath, ver):
     htmlpath = os.path.join(dstpath, "html")
     latexpath = os.path.join(dstpath, "latex")
     xmlpath = os.path.join(dstpath, "xml")
+    sourcepath = os.path.join(dstpath, "source")
     util.removePath(htmlpath)
     util.removePath(latexpath)
     util.removePath(xmlpath)
     util.makePath(xmlpath)
 
+    # Generate sphinx configuration file with version.
+    loc = 0
+    loc += util.makoWrite(
+        "./templates/conf.py.mako",
+        os.path.join(sourcepath, "conf.py"),
+        ver=float(ver))
+
     print("Generating doxygen...")
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
 
-    print("Generating HTML from reStructuredText...")
-    cmdline = "sphinx-build -M html %s ..\docs"%os.path.join(dstpath, "source")
+    print("Generating HTML...")
+    cmdline = "sphinx-build -M html %s ..\docs"%sourcepath
     print(cmdline)
     os.system(cmdline)
 

@@ -1,5 +1,6 @@
 
-
+<%
+%>
 # -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.
@@ -26,7 +27,7 @@ copyright = u'2020, Intel'
 author = u'Intel'
 
 # The short X.Y version
-version = u'1.0'
+version = u'${ver}'
 # The full version, including alpha/beta/rc tags
 release = u''
 
