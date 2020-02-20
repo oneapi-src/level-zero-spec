@@ -189,11 +189,15 @@ The following design philosophies are adopted in order to reduce Host-side overh
    * Synchronization primitive deadlocks
    * Non-visible memory access by the Host or device
    * Non-resident memory access by the device
+
 * The driver implementation is **not** required to perform API validation of any kind
+
    * The driver should ensure well-behaved applications are not burdened with the overhead needed for non-behaving applications
    * Unless otherwise specified, the driver behavior is undefined when APIs are improperly used
    * For debug purposes, API validation can be enabled via the [Validation Layers](#v0)
+
 * All API functions return ::${x}_result_t
+
    * This enumeration contains error codes for the core APIs and validation layers
    * This allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled
 
@@ -386,6 +390,7 @@ Environment Variables
 
 The following table documents the supported knobs for overriding default
 driver behavior.
+
 ## --validate=off
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |

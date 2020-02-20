@@ -1371,7 +1371,7 @@ The following code examples demonstrate how to use the event IPC APIs:
 
 1. First, the event pool is created, packaged, and sent on the sending process:
 
-.. code:: c
+    .. code:: c
 
        // create event pool
        ${x}_event_pool_desc_t eventPoolDesc = {
@@ -1389,7 +1389,7 @@ The following code examples demonstrate how to use the event IPC APIs:
 
 2. Next, the event pool is received and un-packaged on the receiving process:
 
-.. code:: c
+    .. code:: c
 
        // get IPC handle from other process
        ${x}_ipc_event_pool_handle_t hIpcEventPool;
@@ -1403,7 +1403,7 @@ The following code examples demonstrate how to use the event IPC APIs:
 
    a. receiving process creates event at location
 
-   .. code:: c
+    .. code:: c
 
        ${x}_event_handle_t hEvent;
        ${x}_event_desc_t eventDesc = {
@@ -1421,7 +1421,7 @@ The following code examples demonstrate how to use the event IPC APIs:
 
    b. sending process creates event at same location
 
-   .. code:: c
+    .. code:: c
 
        ${x}_event_handle_t hEvent;
        ${x}_event_desc_t eventDesc = {
@@ -1438,14 +1438,14 @@ The following code examples demonstrate how to use the event IPC APIs:
 
 4. To cleanup, first close the pool handle in the receiving process:
 
-.. code:: c
+    .. code:: c
 
        ${x}EventDestroy(hEvent);
        ${x}EventPoolCloseIpcHandle(&hEventPool);
 
 5. Finally, free the event pool handle in the sending process:
 
-.. code:: c
+    .. code:: c
 
        ${x}EventDestroy(hEvent);
        ${x}EventPoolDestroy(hEventPool);

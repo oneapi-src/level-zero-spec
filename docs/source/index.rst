@@ -1,5 +1,5 @@
 ..
-  Copyright 2019 Intel Corporation
+  Copyright 2020 Intel Corporation
 
 .. sphinx-infodev documentation master file, created by
    sphinx-quickstart on Sun Aug 11 19:58:43 2019.

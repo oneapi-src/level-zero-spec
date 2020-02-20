@@ -24,7 +24,7 @@ RE_DOXY_LINK    = r".*\:\:\$\{\w\}.*"
 RE_CODE_BLOCK_BEGIN = r"^\`\`\`c$"
 RE_CODE_BLOCK_END   = r"^\`\`\`$"
 
-RE_CODE_BLOCK_BEGIN_RST = r"..\scode::"
+RE_CODE_BLOCK_BEGIN_RST = r"\s*..\scode::"
 
 RE_EXTRACT_NAME     = r"\$\{\w\}\w+"
 RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
