@@ -120,7 +120,8 @@ def main():
     if args['debug']:
         util.makoFileListWrite("generated.json")
 
-    generate_docs.generate_ref(docpath, specs[2])
+    if specs:
+        generate_docs.generate_ref(docpath, specs[2])
 
     # build code
     if args['build']:

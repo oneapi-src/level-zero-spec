@@ -21,8 +21,6 @@ Once setup, a Python virtual environment with all necessary PIP modules will be 
 
 ### Activate the python virtual environment
 
-**NOTE:** Whenever new PIP modules are added you must perform a *reset* first. You can know by checking commit messages or if you run into errors.
-
 ```
 local> ci\pyenv.cmd up
 ```
@@ -32,6 +30,14 @@ which will give you prompt as follows:
 Python 3.6.5
 
 (pyvirtualenv) root>
+```
+
+### Updating PIP modules in python virtual environment
+
+Ideally, the PIP modules don't change too often. But if Python complains you can try to update the modules with the following command.
+
+```
+local> ci\pyenv.cmd update_pip
 ```
 
 ### Deactivate python virtual environment
@@ -47,3 +53,15 @@ This will remove all files associated with the python virtual environment. Usefu
 ```
 local> ci\pyenv.cmd reset
 ```
+
+## Troubleshooting
+
+### 'doxygen' is not recognized as an internal or external command
+
+Doxygen was added when pyenv.cmd setup the environment so you need to add it to your path by running the following in your shell:
+
+```console
+set PATH=<PATH TO YOUR REPO>\one-api\level_zero\third_party\doxygen_1.8.15.windows.x64;%PATH%
+```
+
+*Note:* this dependent on the location specified in *third_party\windows_docs.yml* and may change in the future. Refer to the file for correct location.

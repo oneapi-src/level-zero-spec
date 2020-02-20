@@ -69,13 +69,14 @@ The following pseudo-code demonstrates a basic initialization and device discove
                ${x}DeviceGetProperties(allDevices[d], &device_properties);
        
                if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
+                   hDriver = allDrivers[i];
                    hDevice = allDevices[d];
                    break;
                }
            }
 
            free(allDevices);
-           if(nullptr != hDevice) {
+           if(nullptr != hDriver) {
                break;
            }
        }
