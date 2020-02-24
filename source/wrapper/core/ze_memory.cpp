@@ -41,10 +41,6 @@ namespace ze
     ///       shared access capabilities.
     ///     - The application may call this function from simultaneous threads.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cudaMallocManaged**
-    /// 
     /// @returns
     ///     - void*: pointer to shared allocation
     /// 
@@ -83,10 +79,6 @@ namespace ze
     ///     - In general, a device allocation may only be accessed by the device
     ///       that owns it.
     ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cudaMalloc**
     /// 
     /// @returns
     ///     - void*: pointer to device allocation
@@ -127,10 +119,6 @@ namespace ze
     ///       to or from devices.
     ///     - The application may call this function from simultaneous threads.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cudaHostAlloc**
-    /// 
     /// @returns
     ///     - void*: pointer to host allocation
     /// 
@@ -168,11 +156,6 @@ namespace ze
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same pointer.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cudaFree**
-    ///     - **cudaFreeHost**
-    /// 
     /// @throws result_t
     void __zecall
     Driver::FreeMem(
@@ -192,10 +175,6 @@ namespace ze
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
     ///     - Device*: device associated with this allocation
@@ -241,10 +220,6 @@ namespace ze
     /// @details
     ///     - The application may call this function from simultaneous threads.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuMemGetAddressRange**
-    /// 
     /// @throws result_t
     void __zecall
     Driver::GetMemAddressRange(
@@ -271,10 +246,6 @@ namespace ze
     ///     - Takes a pointer to the base of a device memory allocation and exports
     ///       it for use in another process.
     ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcGetMemHandle**
     /// 
     /// @returns
     ///     - ipc_mem_handle_t: Returned IPC memory handle
@@ -308,10 +279,6 @@ namespace ze
     ///     - The device pointer in this process should not be freed with
     ///       ::zeDriverFreeMem, but rather with ::zeDriverCloseMemIpcHandle.
     ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcOpenMemHandle**
     /// 
     /// @returns
     ///     - void*: pointer to device allocation in this process
@@ -347,10 +314,6 @@ namespace ze
     ///       this process using ::zeDriverOpenMemIpcHandle.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same pointer.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcCloseMemHandle**
     /// 
     /// @throws result_t
     void __zecall

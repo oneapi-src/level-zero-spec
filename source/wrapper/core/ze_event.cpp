@@ -145,7 +145,6 @@ namespace ze
     ///   _Analogues_
     ///     - **clCreateUserEvent**
     ///     - vkCreateEvent
-    ///     - cuEventCreate
     /// 
     /// @returns
     ///     - Event*: pointer to handle of event object created
@@ -200,7 +199,6 @@ namespace ze
     ///   _Analogues_
     ///     - **clReleaseEvent**
     ///     - vkDestroyEvent
-    ///     - cuEventDestroy
     /// 
     /// @throws result_t
     void __zecall
@@ -223,10 +221,6 @@ namespace ze
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcGetEventHandle**
     /// 
     /// @returns
     ///     - ipc_event_pool_handle_t: Returned IPC event handle
@@ -257,10 +251,6 @@ namespace ze
     ///     - The event handle in this process should not be freed with
     ///       ::zeEventPoolDestroy, but rather with ::zeEventPoolCloseIpcHandle.
     ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcOpenMemHandle**
     /// 
     /// @returns
     ///     - EventPool*: pointer handle of event pool object created
@@ -308,10 +298,6 @@ namespace ze
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same event pool handle.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcCloseMemHandle**
-    /// 
     /// @throws result_t
     void __zecall
     EventPool::CloseIpcHandle(
@@ -336,7 +322,6 @@ namespace ze
     /// @remarks
     ///   _Analogues_
     ///     - **clSetUserEventStatus**
-    ///     - cuEventRecord
     ///     - vkCmdSetEvent
     /// 
     /// @throws result_t
@@ -418,7 +403,6 @@ namespace ze
     /// @remarks
     ///   _Analogues_
     ///     - clWaitForEvents
-    ///     - cuEventSynchronize
     /// 
     /// @returns
     ///     - bool_t:'0' when RESULT_NOT_READY
@@ -454,7 +438,6 @@ namespace ze
     ///   _Analogues_
     ///     - **clGetEventInfo**
     ///     - vkGetEventStatus
-    ///     - cuEventQuery
     /// 
     /// @returns
     ///     - bool_t:'0' when RESULT_NOT_READY

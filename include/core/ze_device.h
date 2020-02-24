@@ -34,10 +34,6 @@ extern "C" {
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGet**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -164,8 +160,6 @@ typedef struct _ze_device_properties_t
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceGetName
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -225,7 +219,6 @@ typedef struct _ze_device_compute_properties_t
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -422,8 +415,6 @@ typedef struct _ze_device_memory_properties_t
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceTotalMem
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -496,8 +487,6 @@ typedef struct _ze_device_memory_access_properties_t
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceTotalMem
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -547,8 +536,6 @@ typedef struct _ze_device_cache_properties_t
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceTotalMem
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -601,10 +588,6 @@ typedef struct _ze_device_image_properties_t
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGetAttribute**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -645,10 +628,6 @@ typedef struct _ze_device_p2p_properties_t
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cudaDeviceGetP2PAttribute**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -686,10 +665,6 @@ zeDeviceGetP2PProperties(
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cudaDeviceCanAccessPeer**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -725,10 +700,6 @@ typedef enum _ze_cache_config_t
 /// @details
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same device handle.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaFuncSetCacheConfig **
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

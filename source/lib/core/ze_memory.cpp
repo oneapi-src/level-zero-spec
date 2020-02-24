@@ -37,10 +37,6 @@ extern "C" {
 ///       shared access capabilities.
 ///     - The application may call this function from simultaneous threads.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cudaMallocManaged**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -88,10 +84,6 @@ zeDriverAllocSharedMem(
 ///       that owns it.
 ///     - The application may call this function from simultaneous threads.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cudaMalloc**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -138,10 +130,6 @@ zeDriverAllocDeviceMem(
 ///       to or from devices.
 ///     - The application may call this function from simultaneous threads.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cudaHostAlloc**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -186,11 +174,6 @@ zeDriverAllocHostMem(
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same pointer.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cudaFree**
-///     - **cudaFreeHost**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -217,10 +200,6 @@ zeDriverFreeMem(
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuPointerGetAttribute**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -251,10 +230,6 @@ zeDriverGetMemAllocProperties(
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuMemGetAddressRange**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -287,10 +262,6 @@ zeDriverGetMemAddressRange(
 ///     - Takes a pointer to the base of a device memory allocation and exports
 ///       it for use in another process.
 ///     - The application may call this function from simultaneous threads.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuIpcGetMemHandle**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -325,10 +296,6 @@ zeDriverGetMemIpcHandle(
 ///     - The device pointer in this process should not be freed with
 ///       ::zeDriverFreeMem, but rather with ::zeDriverCloseMemIpcHandle.
 ///     - The application may call this function from simultaneous threads.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuIpcOpenMemHandle**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -365,10 +332,6 @@ zeDriverOpenMemIpcHandle(
 ///       this process using ::zeDriverOpenMemIpcHandle.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same pointer.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuIpcCloseMemHandle**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

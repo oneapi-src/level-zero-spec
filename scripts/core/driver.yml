@@ -32,8 +32,6 @@ details:
     - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
     - "Only one instance of a driver per process will be initialized."
     - "This function is thread-safe for scenarios where multiple libraries may initialize the driver simultaneously."
-analogue:
-    - "**cuInit**"
 params:
     - type: $x_init_flag_t
       name: flags
@@ -82,8 +80,6 @@ desc: "Returns the API version supported by the specified driver"
 class: $xDriver
 name: GetApiVersion
 ordinal: "1"
-analogue:
-    - "**cuCtxGetApiVersion**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -141,7 +137,6 @@ class: $xDriver
 name: GetProperties
 ordinal: "1"
 analogue:
-    - "**cuDriverGetVersion**"
     - "**clGetPlatformInfo**"
 details:
     - "The application may call this function from simultaneous threads."
@@ -184,8 +179,6 @@ desc: "Retrieves IPC attributes of the driver"
 class: $xDriver
 name: GetIPCProperties
 ordinal: "1"
-analogue:
-    - "**cuDeviceGetAttribute**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

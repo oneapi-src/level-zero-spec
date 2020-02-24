@@ -78,10 +78,6 @@ typedef struct _ze_sampler_desc_t
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuTexObjectCreate**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -115,10 +111,6 @@ zeSamplerCreate(
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same sampler handle.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleUnload**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

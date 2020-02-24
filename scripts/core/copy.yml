@@ -302,7 +302,6 @@ details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
-    - cudaMemPrefetchAsync
     - clEnqueueSVMMigrateMem
 params:
     - type: $x_command_list_handle_t
@@ -346,8 +345,6 @@ type: function
 desc: "Provides advice about the use of a shared memory range"
 class: $xCommandList
 name: AppendMemAdvise
-analogue:
-    - "**cudaMemAdvise**"
 details:
     - "Memory advice is a performance hint only and is not required for functional correctness."
     - "Memory advice can be used to override driver heuristics to explicitly control shared memory behavior."

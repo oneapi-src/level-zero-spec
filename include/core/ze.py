@@ -138,10 +138,6 @@ def ZE_BIT( _i ):
 
 ###############################################################################
 ## @brief Defines Return/Error codes
-## 
-## @remarks
-##   _Analogues_
-##     - **CUresult**
 class ze_result_v(IntEnum):
     SUCCESS = 0                                     ## [Core] success
     NOT_READY = 1                                   ## [Core] synchronization primitive not signaled

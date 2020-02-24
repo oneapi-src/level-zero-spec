@@ -24,10 +24,6 @@ extern "C" {
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGet**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -102,8 +98,6 @@ zeDeviceGetSubDevices(
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceGetName
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -136,7 +130,6 @@ zeDeviceGetProperties(
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -242,8 +235,6 @@ zeDeviceGetCommandQueueGroupProperties(
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceTotalMem
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -285,8 +276,6 @@ zeDeviceGetMemoryProperties(
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceTotalMem
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -319,8 +308,6 @@ zeDeviceGetMemoryAccessProperties(
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetAttribute**
-///     - cuDeviceTotalMem
 ///     - clGetDeviceInfo
 /// 
 /// @returns
@@ -352,10 +339,6 @@ zeDeviceGetCacheProperties(
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGetAttribute**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -384,10 +367,6 @@ zeDeviceGetImageProperties(
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaDeviceGetP2PAttribute**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -433,10 +412,6 @@ zeDeviceGetP2PProperties(
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cudaDeviceCanAccessPeer**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -466,10 +441,6 @@ zeDeviceCanAccessPeer(
 /// @details
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same device handle.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaFuncSetCacheConfig **
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

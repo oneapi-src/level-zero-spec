@@ -38,10 +38,6 @@ extern "C" {
 ///     - This function is thread-safe for scenarios where multiple libraries
 ///       may initialize the driver simultaneously.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuInit**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED

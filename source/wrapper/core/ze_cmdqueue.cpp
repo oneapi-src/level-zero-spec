@@ -45,8 +45,6 @@ namespace ze
     /// @remarks
     ///   _Analogues_
     ///     - **clCreateCommandQueue**
-    ///     - cuCtxCreate
-    ///     - cuCtxGetCurrent
     /// 
     /// @returns
     ///     - CommandQueue*: pointer to handle of command queue object created
@@ -100,7 +98,6 @@ namespace ze
     /// @remarks
     ///   _Analogues_
     ///     - **clReleaseCommandQueue**
-    ///     - cuCtxDestroy
     /// 
     /// @throws result_t
     void __zecall

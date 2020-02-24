@@ -47,10 +47,6 @@ typedef enum _ze_init_flag_t
 ///     - This function is thread-safe for scenarios where multiple libraries
 ///       may initialize the driver simultaneously.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuInit**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -114,10 +110,6 @@ typedef enum _ze_api_version_t
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuCtxGetApiVersion**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -175,7 +167,6 @@ typedef struct _ze_driver_properties_t
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDriverGetVersion**
 ///     - **clGetPlatformInfo**
 /// 
 /// @returns
@@ -218,10 +209,6 @@ typedef struct _ze_driver_ipc_properties_t
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGetAttribute**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

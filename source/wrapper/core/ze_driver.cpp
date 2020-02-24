@@ -40,10 +40,6 @@ namespace ze
     ///     - This function is thread-safe for scenarios where multiple libraries
     ///       may initialize the driver simultaneously.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuInit**
-    /// 
     /// @throws result_t
     void __zecall
     Init(
@@ -117,10 +113,6 @@ namespace ze
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuCtxGetApiVersion**
-    /// 
     /// @returns
     ///     - api_version_t: api version
     /// 
@@ -151,7 +143,6 @@ namespace ze
     /// 
     /// @remarks
     ///   _Analogues_
-    ///     - **cuDriverGetVersion**
     ///     - **clGetPlatformInfo**
     /// 
     /// @throws result_t
@@ -174,10 +165,6 @@ namespace ze
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGetAttribute**
     /// 
     /// @returns
     ///     - ipc_properties_t: query result for IPC properties

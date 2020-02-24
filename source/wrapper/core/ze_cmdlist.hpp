@@ -481,7 +481,6 @@ namespace ze
         /// 
         /// @remarks
         ///   _Analogues_
-        ///     - cudaMemPrefetchAsync
         ///     - clEnqueueSVMMigrateMem
         /// @throws result_t
         void __zecall
@@ -508,10 +507,6 @@ namespace ze
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same command list handle.
         ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cudaMemAdvise**
         /// @throws result_t
         void __zecall
         AppendMemAdvise(
@@ -532,7 +527,6 @@ namespace ze
         /// @remarks
         ///   _Analogues_
         ///     - **clSetUserEventStatus**
-        ///     - cuEventRecord
         ///     - vkCmdSetEvent
         /// @throws result_t
         void __zecall
@@ -581,10 +575,6 @@ namespace ze
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same command list handle.
         ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuLaunchKernel**
         /// @throws result_t
         void __zecall
         AppendLaunchKernel(
@@ -609,10 +599,6 @@ namespace ze
         ///     - The implementation of this function should be lock-free.
         ///     - Use ::zeKernelSuggestMaxCooperativeGroupCount to recommend max group
         ///       count for device for cooperative functions that device supports.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cudaLaunchCooperativeKernel**
         /// @throws result_t
         void __zecall
         AppendLaunchCooperativeKernel(
@@ -636,10 +622,6 @@ namespace ze
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same command list handle.
         ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuLaunchKernel**
         /// @throws result_t
         void __zecall
         AppendLaunchKernelIndirect(
@@ -665,10 +647,6 @@ namespace ze
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same command list handle.
         ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuLaunchKernel**
         /// @throws result_t
         void __zecall
         AppendLaunchMultipleKernelsIndirect(

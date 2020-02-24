@@ -126,10 +126,6 @@ namespace ze
         ///       specialization constants.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuModuleLoad**
         /// @returns
         ///     - Module*: pointer to handle of module object created
         ///     - ModuleBuildLog*: pointer to handle of module's build log.
@@ -153,10 +149,6 @@ namespace ze
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same module handle.
         ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuModuleUnload**
         /// @throws result_t
         static void __zecall
         Destroy(
@@ -411,10 +403,6 @@ namespace ze
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuModuleGetFunction**
         /// @returns
         ///     - Kernel*: handle of the Function object
         /// 
@@ -449,10 +437,6 @@ namespace ze
         /// @details
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same kernel handle.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cudaFuncSetCacheConfig **
         /// @throws result_t
         void __zecall
         SetIntermediateCacheConfig(
@@ -576,10 +560,6 @@ namespace ze
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuFuncGetAttribute**
         /// @throws result_t
         void __zecall
         GetProperties(

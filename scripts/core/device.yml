@@ -16,8 +16,6 @@ class: $xDevice
 name: Get
 decl: static
 ordinal: "0"
-analogue:
-    - "**cuDeviceGet**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -175,8 +173,6 @@ class: $xDevice
 name: GetProperties
 ordinal: "1"
 analogue:
-    - "**cuDeviceGetAttribute**"
-    - cuDeviceGetName
     - clGetDeviceInfo
 details:
     - "The application may call this function from simultaneous threads."
@@ -249,7 +245,6 @@ class: $xDevice
 name: GetComputeProperties
 ordinal: "1"
 analogue:
-    - "**cuDeviceGetAttribute**"
     - clGetDeviceInfo
 details:
     - "The application may call this function from simultaneous threads."
@@ -477,8 +472,6 @@ class: $xDevice
 name: GetMemoryProperties
 ordinal: "1"
 analogue:
-    - "**cuDeviceGetAttribute**"
-    - cuDeviceTotalMem
     - clGetDeviceInfo
 details:
     - "Properties are reported for each physical memory type supported by the device."
@@ -562,8 +555,6 @@ class: $xDevice
 name: GetMemoryAccessProperties
 ordinal: "1"
 analogue:
-    - "**cuDeviceGetAttribute**"
-    - cuDeviceTotalMem
     - clGetDeviceInfo
 details:
     - "The application may call this function from simultaneous threads."
@@ -619,8 +610,6 @@ class: $xDevice
 name: GetCacheProperties
 ordinal: "1"
 analogue:
-    - "**cuDeviceGetAttribute**"
-    - cuDeviceTotalMem
     - clGetDeviceInfo
 details:
     - "The application may call this function from simultaneous threads."
@@ -684,8 +673,6 @@ desc: "Retrieves image X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT of the 
 class: $xDevice
 name: GetImageProperties
 ordinal: "1"
-analogue:
-    - "**cuDeviceGetAttribute**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -727,8 +714,6 @@ desc: "Retrieves Peer-to-Peer properties between one device and a peer devices"
 class: $xDevice
 name: GetP2PProperties
 ordinal: "1"
-analogue:
-    - "**cudaDeviceGetP2PAttribute**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -748,8 +733,6 @@ desc: "Queries if one device can directly access peer device allocations"
 class: $xDevice
 name: CanAccessPeer
 ordinal: "2"
-analogue:
-    - "**cudaDeviceCanAccessPeer**"
 details:
     - "Any device can access any other device within a node through a scale-up fabric."
     - "The following are conditions for CanAccessPeer query.":
@@ -795,8 +778,6 @@ name: SetLastLevelCacheConfig
 ordinal: "2"
 details:
     - "The application may **not** call this function from simultaneous threads with the same device handle."
-analogue:
-    - "**cudaFuncSetCacheConfig **"
 params:
     - type: "$x_device_handle_t"
       name: hDevice

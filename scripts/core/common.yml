@@ -144,8 +144,6 @@ value: "( 1 << _i )"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Defines Return/Error codes"
-analogue:
-    - "**CUresult**"
 name: $x_result_t
 etors:
     - name: $X_RESULT_SUCCESS

@@ -160,7 +160,6 @@ ordinal: "0"
 analogue:
     - "**clCreateUserEvent**"
     - vkCreateEvent
-    - cuEventCreate
 details:
     - "Multiple events cannot be created using the same location within the same pool."
     - "The application may call this function from simultaneous threads."
@@ -192,7 +191,6 @@ details:
 analogue:
      - "**clReleaseEvent**"
      - vkDestroyEvent
-     - cuEventDestroy
 params:
     - type: $x_event_handle_t
       name: hEvent
@@ -204,8 +202,6 @@ type: function
 desc: "Gets an IPC event pool handle for the specified event handle that can be shared with another process."
 class: $xEventPool
 name: GetIpcHandle
-analogue:
-    - "**cuIpcGetEventHandle**"
 details:
     - "The application may call this function from simultaneous threads."
 params:
@@ -221,8 +217,6 @@ desc: "Opens an IPC event pool handle to retrieve an event pool handle from anot
 class: $xEventPool
 name: OpenIpcHandle
 decl: static
-analogue:
-    - "**cuIpcOpenMemHandle**"
 details:
     - "The event handle in this process should not be freed with $xEventPoolDestroy, but rather with $xEventPoolCloseIpcHandle."
     - "The application may call this function from simultaneous threads."
@@ -241,8 +235,6 @@ type: function
 desc: "Closes an IPC event handle in the current process."
 class: $xEventPool
 name: CloseIpcHandle
-analogue:
-    - "**cuIpcCloseMemHandle**"
 details:
     - "Closes an IPC event handle by destroying events that were opened in this process using $xEventPoolOpenIpcHandle."
     - "The application may **not** call this function from simultaneous threads with the same event pool handle."
@@ -257,7 +249,6 @@ class: $xCommandList
 name: AppendSignalEvent
 analogue:
     - "**clSetUserEventStatus**"
-    - cuEventRecord
     - vkCmdSetEvent
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
@@ -314,7 +305,6 @@ class: $xEvent
 name: HostSynchronize
 analogue:
     - clWaitForEvents
-    - cuEventSynchronize
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -340,7 +330,6 @@ name: QueryStatus
 analogue:
     - "**clGetEventInfo**"
     - vkGetEventStatus
-    - cuEventQuery
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

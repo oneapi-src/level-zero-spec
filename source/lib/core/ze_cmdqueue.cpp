@@ -29,8 +29,6 @@ extern "C" {
 /// @remarks
 ///   _Analogues_
 ///     - **clCreateCommandQueue**
-///     - cuCtxCreate
-///     - cuCtxGetCurrent
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -78,7 +76,6 @@ zeCommandQueueCreate(
 /// @remarks
 ///   _Analogues_
 ///     - **clReleaseCommandQueue**
-///     - cuCtxDestroy
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

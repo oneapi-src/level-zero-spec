@@ -74,8 +74,6 @@ class: $xSampler
 name: Create
 decl: static
 ordinal: "0"
-analogue:
-    - "**cuTexObjectCreate**"
 details:
     - "The sampler can only be used on the device on which it was created."
     - "The application may call this function from simultaneous threads."
@@ -99,8 +97,6 @@ class: $xSampler
 name: Destroy
 decl: static
 ordinal: "0"
-analogue:
-    - "**cuModuleUnload**"
 details:
     - "The application is responsible for making sure the device is not currently referencing the sampler before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this module"

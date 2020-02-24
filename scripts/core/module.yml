@@ -79,8 +79,6 @@ class: $xModule
 name: Create
 decl: static
 ordinal: "0"
-analogue:
-    - "**cuModuleLoad**"
 details:
     - "Compiles the module for execution on the device."
     - "The module can only be used on the device on which it was created."
@@ -120,8 +118,6 @@ class: $xModule
 name: Destroy
 decl: static
 ordinal: "0"
-analogue:
-    - "**cuModuleUnload**"
 details:
     - "The application is responsible for making sure the device is not currently referencing the module before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this module"
@@ -280,8 +276,6 @@ class: $xKernel
 name: Create
 decl: static
 ordinal: "0"
-analogue:
-    - "**cuModuleGetFunction**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -512,8 +506,6 @@ name: SetIntermediateCacheConfig
 ordinal: "2"
 details:
     - "The application may **not** call this function from simultaneous threads with the same kernel handle."
-analogue:
-    - "**cudaFuncSetCacheConfig **"
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
@@ -567,8 +559,6 @@ type: function
 desc: "Retrieve kernel properties."
 class: $xKernel
 name: GetProperties
-analogue:
-    - "**cuFuncGetAttribute**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -602,8 +592,6 @@ type: function
 desc: "Launch kernel over one or more work groups."
 class: $xCommandList
 name: AppendLaunchKernel
-analogue:
-    - "**cuLaunchKernel**"
 details:
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
@@ -634,8 +622,6 @@ type: function
 desc: "Launch kernel cooperatively over one or more work groups."
 class: $xCommandList
 name: AppendLaunchCooperativeKernel
-analogue:
-    - "**cudaLaunchCooperativeKernel**"
 details:
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
     - "This may only be used for a command list that are submitted to command queue with cooperative flag set."
@@ -668,8 +654,6 @@ type: function
 desc: "Launch kernel over one or more work groups using indirect arguments."
 class: $xCommandList
 name: AppendLaunchKernelIndirect
-analogue:
-    - "**cuLaunchKernel**"
 details:
     - "The launch arguments need to be device visible."
     - "The launch arguments buffer may not be reused until the function has completed on the device."
@@ -702,8 +686,6 @@ type: function
 desc: "Launch multiple kernels over one or more work groups using an array of indirect arguments."
 class: $xCommandList
 name: AppendLaunchMultipleKernelsIndirect
-analogue:
-    - "**cuLaunchKernel**"
 details:
     - "The array of launch arguments need to be device visible."
     - "The array of launch arguments buffer may not be reused until the kernel has completed on the device."

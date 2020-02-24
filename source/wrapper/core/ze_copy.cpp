@@ -300,7 +300,6 @@ namespace ze
     /// 
     /// @remarks
     ///   _Analogues_
-    ///     - cudaMemPrefetchAsync
     ///     - clEnqueueSVMMigrateMem
     /// 
     /// @throws result_t
@@ -337,10 +336,6 @@ namespace ze
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cudaMemAdvise**
     /// 
     /// @throws result_t
     void __zecall

@@ -183,10 +183,6 @@ namespace ze
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Defines Return/Error codes
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **CUresult**
     enum class result_t
     {
         SUCCESS = 0,                                    ///< [Core] success

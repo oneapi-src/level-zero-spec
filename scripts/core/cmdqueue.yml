@@ -93,8 +93,6 @@ decl: static
 ordinal: "0"
 analogue:
     - "**clCreateCommandQueue**"
-    - cuCtxCreate
-    - cuCtxGetCurrent
 details:
     - "The command queue can only be used on the device on which it was created."
     - "The application may call this function from simultaneous threads."
@@ -121,7 +119,6 @@ decl: static
 ordinal: "0"
 analogue:
     - "**clReleaseCommandQueue**"
-    - cuCtxDestroy
 details:
     - "The application is responsible for making sure the device is not currently referencing the command queue before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this command queue"

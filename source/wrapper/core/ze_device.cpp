@@ -38,10 +38,6 @@ namespace ze
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGet**
-    /// 
     /// @throws result_t
     void __zecall
     Device::Get(
@@ -141,8 +137,6 @@ namespace ze
     /// 
     /// @remarks
     ///   _Analogues_
-    ///     - **cuDeviceGetAttribute**
-    ///     - cuDeviceGetName
     ///     - clGetDeviceInfo
     /// 
     /// @throws result_t
@@ -168,7 +162,6 @@ namespace ze
     /// 
     /// @remarks
     ///   _Analogues_
-    ///     - **cuDeviceGetAttribute**
     ///     - clGetDeviceInfo
     /// 
     /// @throws result_t
@@ -254,8 +247,6 @@ namespace ze
     /// 
     /// @remarks
     ///   _Analogues_
-    ///     - **cuDeviceGetAttribute**
-    ///     - cuDeviceTotalMem
     ///     - clGetDeviceInfo
     /// 
     /// @throws result_t
@@ -291,8 +282,6 @@ namespace ze
     /// 
     /// @remarks
     ///   _Analogues_
-    ///     - **cuDeviceGetAttribute**
-    ///     - cuDeviceTotalMem
     ///     - clGetDeviceInfo
     /// 
     /// @throws result_t
@@ -318,8 +307,6 @@ namespace ze
     /// 
     /// @remarks
     ///   _Analogues_
-    ///     - **cuDeviceGetAttribute**
-    ///     - cuDeviceTotalMem
     ///     - clGetDeviceInfo
     /// 
     /// @throws result_t
@@ -344,10 +331,6 @@ namespace ze
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGetAttribute**
-    /// 
     /// @throws result_t
     void __zecall
     Device::GetImageProperties(
@@ -369,10 +352,6 @@ namespace ze
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cudaDeviceGetP2PAttribute**
     /// 
     /// @throws result_t
     void __zecall
@@ -411,10 +390,6 @@ namespace ze
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cudaDeviceCanAccessPeer**
-    /// 
     /// @returns
     ///     - bool_t: returned access capability
     /// 
@@ -443,10 +418,6 @@ namespace ze
     /// @details
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same device handle.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cudaFuncSetCacheConfig **
     /// 
     /// @throws result_t
     void __zecall

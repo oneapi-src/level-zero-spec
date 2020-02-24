@@ -41,10 +41,6 @@ namespace ze
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuTexObjectCreate**
-    /// 
     /// @returns
     ///     - Sampler*: handle of the sampler
     /// 
@@ -93,10 +89,6 @@ namespace ze
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same sampler handle.
     ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuModuleUnload**
     /// 
     /// @throws result_t
     void __zecall

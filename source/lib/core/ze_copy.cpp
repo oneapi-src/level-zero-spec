@@ -334,7 +334,6 @@ zeCommandListAppendImageCopyFromMemory(
 /// 
 /// @remarks
 ///   _Analogues_
-///     - cudaMemPrefetchAsync
 ///     - clEnqueueSVMMigrateMem
 /// 
 /// @returns
@@ -377,10 +376,6 @@ zeCommandListAppendMemoryPrefetch(
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cudaMemAdvise**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

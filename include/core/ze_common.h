@@ -163,10 +163,6 @@ typedef struct _ze_ipc_event_pool_handle_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Defines Return/Error codes
-/// 
-/// @remarks
-///   _Analogues_
-///     - **CUresult**
 typedef enum _ze_result_t
 {
     ZE_RESULT_SUCCESS = 0,                          ///< [Core] success

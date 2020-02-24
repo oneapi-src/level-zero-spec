@@ -105,7 +105,6 @@ zeEventPoolDestroy(
 ///   _Analogues_
 ///     - **clCreateUserEvent**
 ///     - vkCreateEvent
-///     - cuEventCreate
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -152,7 +151,6 @@ zeEventCreate(
 ///   _Analogues_
 ///     - **clReleaseEvent**
 ///     - vkDestroyEvent
-///     - cuEventDestroy
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -179,10 +177,6 @@ zeEventDestroy(
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuIpcGetEventHandle**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -213,10 +207,6 @@ zeEventPoolGetIpcHandle(
 ///     - The event handle in this process should not be freed with
 ///       ::zeEventPoolDestroy, but rather with ::zeEventPoolCloseIpcHandle.
 ///     - The application may call this function from simultaneous threads.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuIpcOpenMemHandle**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -249,10 +239,6 @@ zeEventPoolOpenIpcHandle(
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same event pool handle.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuIpcCloseMemHandle**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -282,7 +268,6 @@ zeEventPoolCloseIpcHandle(
 /// @remarks
 ///   _Analogues_
 ///     - **clSetUserEventStatus**
-///     - cuEventRecord
 ///     - vkCmdSetEvent
 /// 
 /// @returns
@@ -378,7 +363,6 @@ zeEventHostSignal(
 /// @remarks
 ///   _Analogues_
 ///     - clWaitForEvents
-///     - cuEventSynchronize
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -417,7 +401,6 @@ zeEventHostSynchronize(
 ///   _Analogues_
 ///     - **clGetEventInfo**
 ///     - vkGetEventStatus
-///     - cuEventQuery
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

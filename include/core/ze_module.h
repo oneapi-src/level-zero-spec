@@ -91,10 +91,6 @@ typedef struct _ze_module_desc_t
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleLoad**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -136,10 +132,6 @@ zeModuleCreate(
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same module handle.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleUnload**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -315,10 +307,6 @@ typedef struct _ze_kernel_desc_t
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuModuleGetFunction**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -589,10 +577,6 @@ zeKernelGetAttribute(
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same kernel handle.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cudaFuncSetCacheConfig **
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -642,10 +626,6 @@ typedef struct _ze_kernel_properties_t
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuFuncGetAttribute**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -679,10 +659,6 @@ typedef struct _ze_group_count_t
 ///     - This function may **not** be called from simultaneous threads with the
 ///       same command list handle.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -719,10 +695,6 @@ zeCommandListAppendLaunchKernel(
 ///     - Use ::zeKernelSuggestMaxCooperativeGroupCount to recommend max group
 ///       count for device for cooperative functions that device supports.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cudaLaunchCooperativeKernel**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -756,10 +728,6 @@ zeCommandListAppendLaunchCooperativeKernel(
 ///     - This function may **not** be called from simultaneous threads with the
 ///       same command list handle.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
@@ -796,10 +764,6 @@ zeCommandListAppendLaunchKernelIndirect(
 ///     - This function may **not** be called from simultaneous threads with the
 ///       same command list handle.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuLaunchKernel**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

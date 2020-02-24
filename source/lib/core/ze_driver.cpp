@@ -28,10 +28,6 @@ extern "C" {
 ///     - This function is thread-safe for scenarios where multiple libraries
 ///       may initialize the driver simultaneously.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuInit**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -101,10 +97,6 @@ zeDriverGet(
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
-/// @remarks
-///   _Analogues_
-///     - **cuCtxGetApiVersion**
-/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -135,7 +127,6 @@ zeDriverGetApiVersion(
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDriverGetVersion**
 ///     - **clGetPlatformInfo**
 /// 
 /// @returns
@@ -165,10 +156,6 @@ zeDriverGetProperties(
 /// @details
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGetAttribute**
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS

@@ -147,10 +147,6 @@ namespace ze
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuIpcGetEventHandle**
         /// @returns
         ///     - ipc_event_pool_handle_t: Returned IPC event handle
         /// 
@@ -168,10 +164,6 @@ namespace ze
         ///     - The event handle in this process should not be freed with
         ///       ::zeEventPoolDestroy, but rather with ::zeEventPoolCloseIpcHandle.
         ///     - The application may call this function from simultaneous threads.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuIpcOpenMemHandle**
         /// @returns
         ///     - EventPool*: pointer handle of event pool object created
         /// 
@@ -190,10 +182,6 @@ namespace ze
         ///       this process using ::zeEventPoolOpenIpcHandle.
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same event pool handle.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuIpcCloseMemHandle**
         /// @throws result_t
         void __zecall
         CloseIpcHandle(
@@ -286,7 +274,6 @@ namespace ze
         ///   _Analogues_
         ///     - **clCreateUserEvent**
         ///     - vkCreateEvent
-        ///     - cuEventCreate
         /// @returns
         ///     - Event*: pointer to handle of event object created
         /// 
@@ -313,7 +300,6 @@ namespace ze
         ///   _Analogues_
         ///     - **clReleaseEvent**
         ///     - vkDestroyEvent
-        ///     - cuEventDestroy
         /// @throws result_t
         static void __zecall
         Destroy(
@@ -346,7 +332,6 @@ namespace ze
         /// @remarks
         ///   _Analogues_
         ///     - clWaitForEvents
-        ///     - cuEventSynchronize
         /// @returns
         ///     - bool_t:'0' when RESULT_NOT_READY
         /// @throws result_t
@@ -370,7 +355,6 @@ namespace ze
         ///   _Analogues_
         ///     - **clGetEventInfo**
         ///     - vkGetEventStatus
-        ///     - cuEventQuery
         /// @returns
         ///     - bool_t:'0' when RESULT_NOT_READY
         /// @throws result_t

@@ -34,10 +34,6 @@ namespace zex
     ///     - This function is thread-safe for scenarios where multiple libraries
     ///       may initialize the driver simultaneously.
     /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuInit**
-    /// 
     /// @throws result_t
     void __zecall
     Init(
