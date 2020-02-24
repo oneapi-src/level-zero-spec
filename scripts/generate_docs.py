@@ -99,7 +99,7 @@ def _validate_rst(fpath, meta):
 Entry-point:
     generate restructuredtext documents from templates
 """
-def generate_rst(srcpath, dstpath, tags, ver, meta):
+def generate_rst(srcpath, dstpath, tags, ver, meta, specs):
     loc = 0
     util.makePath(dstpath)
     util.removeFiles(dstpath, "*.rst")
@@ -110,14 +110,18 @@ def generate_rst(srcpath, dstpath, tags, ver, meta):
         loc += util.makoWrite(fin, fout,
             tags=tags,
             ver=float(ver))
+    print("Generated %s lines of reStructuredText (rst).\n"%loc)
 
     if (loc > 0):
-        print("Generated %s lines of reStructuredText (rst).\n"%loc)
-        
         fin = os.path.join("templates", "api_listing.mako")
         fout = os.path.join(dstpath, "api.rst")
         groupname = os.path.basename(dstpath).capitalize()
-        util.makoWrite(fin, fout, groupname = groupname, ver=float(ver))
+        util.makoWrite(fin, fout,
+            groupname=groupname,
+            ver=float(ver),
+            tags=tags,
+            meta=meta,
+            specs=specs)
         
 
 """

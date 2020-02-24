@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Tools
- * @{
- */
  
 #ifndef _ZET_CMDLIST_H
 #define _ZET_CMDLIST_H
@@ -35,5 +32,3 @@ extern "C" {
 #endif
 
 #endif // _ZET_CMDLIST_H
-
-/** @} */

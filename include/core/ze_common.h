@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_COMMON_H
 #define _ZE_COMMON_H
@@ -215,9 +212,6 @@ typedef enum _ze_result_t
 
 } ze_result_t;
 
-/** \addtogroup ForwardDecls
- * @{
- */
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare ze_ipc_mem_handle_t
 typedef struct _ze_ipc_mem_handle_t ze_ipc_mem_handle_t;
@@ -359,11 +353,8 @@ typedef struct _ze_group_count_t ze_group_count_t;
 typedef struct _ze_sampler_desc_t ze_sampler_desc_t;
 
 
-/** @} */
 #if defined(__cplusplus)
 } // extern "C"
 #endif
 
 #endif // _ZE_COMMON_H
-
-/** @} */

@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Experimental
- * @{
- */
  
 #ifndef _ZEX_DRIVER_H
 #define _ZEX_DRIVER_H
@@ -62,5 +59,3 @@ zexInit(
 #endif
 
 #endif // _ZEX_DRIVER_H
-
-/** @} */

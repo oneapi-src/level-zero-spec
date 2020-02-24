@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_CMDLIST_H
 #define _ZE_CMDLIST_H
@@ -210,5 +207,3 @@ zeCommandListReset(
 #endif
 
 #endif // _ZE_CMDLIST_H
-
-/** @} */

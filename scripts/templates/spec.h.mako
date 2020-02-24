@@ -21,9 +21,6 @@ from templates import helper as th
  * @endcond
  *
  */
-/** \addtogroup ${groupname}
- * @{
- */
  
 #ifndef _${N}_${name.upper()}_H
 #define _${N}_${name.upper()}_H
@@ -128,9 +125,6 @@ typedef struct _${th.subt(n, tags, obj['name'])} *${th.subt(n, tags, obj['name']
 %endfor # obj in objects
 ## FORWARD-DECLARE STRUCTS ####################################################
 %if re.match(r"common", name):
-/** \addtogroup ForwardDecls
- * @{
- */
 %for obj in th.extract_objs(specs, 'struct'):
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare ${th.make_type_name(n, tags, obj)}
@@ -138,12 +132,9 @@ typedef struct _${th.make_type_name(n, tags, obj)} ${th.make_type_name(n, tags, 
 
 %endfor
 
-/** @} */
 %endif
 #if defined(__cplusplus)
 } // extern "C"
 #endif
 
 #endif // _${N}_${name.upper()}_H
-
-/** @} */

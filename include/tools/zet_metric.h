@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Tools
- * @{
- */
  
 #ifndef _ZET_METRIC_H
 #define _ZET_METRIC_H
@@ -674,5 +671,3 @@ zetMetricQueryGetData(
 #endif
 
 #endif // _ZET_METRIC_H
-
-/** @} */

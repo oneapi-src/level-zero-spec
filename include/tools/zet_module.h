@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Tools
- * @{
- */
  
 #ifndef _ZET_MODULE_H
 #define _ZET_MODULE_H
@@ -72,5 +69,3 @@ zetModuleGetDebugInfo(
 #endif
 
 #endif // _ZET_MODULE_H
-
-/** @} */

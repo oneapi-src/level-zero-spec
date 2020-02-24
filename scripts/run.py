@@ -115,7 +115,7 @@ def main():
                     generate_code.generate_wrapper(srcpath, section, namespace, tags, specs[0], specs[1])
 
             if args['rst']:
-                generate_docs.generate_rst(ymlpath, rstpath, tags, args['ver'], specs[1])
+                generate_docs.generate_rst(ymlpath, rstpath, tags, args['ver'], specs[1], specs[0])
 
     if args['debug']:
         util.makoFileListWrite("generated.json")

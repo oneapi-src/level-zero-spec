@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Tools
- * @{
- */
  
 #ifndef _ZET_TRACING_H
 #define _ZET_TRACING_H
@@ -189,5 +186,3 @@ zetTracerSetEnabled(
 #endif
 
 #endif // _ZET_TRACING_H
-
-/** @} */

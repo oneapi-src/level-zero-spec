@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Tools
- * @{
- */
  
 #ifndef _ZET_DEVICE_H
 #define _ZET_DEVICE_H
@@ -35,5 +32,3 @@ extern "C" {
 #endif
 
 #endif // _ZET_DEVICE_H
-
-/** @} */

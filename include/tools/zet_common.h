@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Tools
- * @{
- */
  
 #ifndef _ZET_COMMON_H
 #define _ZET_COMMON_H
@@ -134,9 +131,6 @@ typedef struct _zet_sysman_diag_handle_t *zet_sysman_diag_handle_t;
 /// @brief Handle for a Sysman device event
 typedef struct _zet_sysman_event_handle_t *zet_sysman_event_handle_t;
 
-/** \addtogroup ForwardDecls
- * @{
- */
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_debug_config_v1_t
 typedef struct _zet_debug_config_v1_t zet_debug_config_v1_t;
@@ -410,11 +404,8 @@ typedef struct _zet_diag_properties_t zet_diag_properties_t;
 typedef struct _zet_tracer_desc_t zet_tracer_desc_t;
 
 
-/** @} */
 #if defined(__cplusplus)
 } // extern "C"
 #endif
 
 #endif // _ZET_COMMON_H
-
-/** @} */

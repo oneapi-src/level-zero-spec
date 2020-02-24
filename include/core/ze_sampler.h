@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_SAMPLER_H
 #define _ZE_SAMPLER_H
@@ -140,5 +137,3 @@ zeSamplerDestroy(
 #endif
 
 #endif // _ZE_SAMPLER_H
-
-/** @} */

@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_RESIDENCY_H
 #define _ZE_RESIDENCY_H
@@ -138,5 +135,3 @@ zeDeviceEvictImage(
 #endif
 
 #endif // _ZE_RESIDENCY_H
-
-/** @} */

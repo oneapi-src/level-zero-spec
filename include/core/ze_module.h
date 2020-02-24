@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_MODULE_H
 #define _ZE_MODULE_H
@@ -836,5 +833,3 @@ zeCommandListAppendLaunchMultipleKernelsIndirect(
 #endif
 
 #endif // _ZE_MODULE_H
-
-/** @} */

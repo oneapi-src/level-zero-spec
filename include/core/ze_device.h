@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_DEVICE_H
 #define _ZE_DEVICE_H
@@ -753,5 +750,3 @@ zeDeviceSetLastLevelCacheConfig(
 #endif
 
 #endif // _ZE_DEVICE_H
-
-/** @} */

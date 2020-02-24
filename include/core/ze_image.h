@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_IMAGE_H
 #define _ZE_IMAGE_H
@@ -282,5 +279,3 @@ zeImageDestroy(
 #endif
 
 #endif // _ZE_IMAGE_H
-
-/** @} */

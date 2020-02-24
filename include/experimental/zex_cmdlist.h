@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Experimental
- * @{
- */
  
 #ifndef _ZEX_CMDLIST_H
 #define _ZEX_CMDLIST_H
@@ -62,5 +59,3 @@ zexCommandListReserveSpace(
 #endif
 
 #endif // _ZEX_CMDLIST_H
-
-/** @} */

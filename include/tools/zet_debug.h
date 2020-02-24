@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Tools
- * @{
- */
  
 #ifndef _ZET_DEBUG_H
 #define _ZET_DEBUG_H
@@ -427,5 +424,3 @@ zetDebugWriteState(
 #endif
 
 #endif // _ZET_DEBUG_H
-
-/** @} */

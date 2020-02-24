@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_CL_INTEROP_H
 #define _ZE_CL_INTEROP_H
@@ -104,5 +101,3 @@ zeDeviceRegisterCLCommandQueue(
 #endif
 
 #endif // _ZE_CL_INTEROP_H
-
-/** @} */

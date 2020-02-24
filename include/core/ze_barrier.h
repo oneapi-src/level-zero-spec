@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_BARRIER_H
 #define _ZE_BARRIER_H
@@ -130,5 +127,3 @@ zeDeviceSystemBarrier(
 #endif
 
 #endif // _ZE_BARRIER_H
-
-/** @} */

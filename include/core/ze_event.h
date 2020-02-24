@@ -13,9 +13,6 @@
  * @endcond
  *
  */
-/** \addtogroup Core
- * @{
- */
  
 #ifndef _ZE_EVENT_H
 #define _ZE_EVENT_H
@@ -533,5 +530,3 @@ zeEventGetTimestamp(
 #endif
 
 #endif // _ZE_EVENT_H
-
-/** @} */

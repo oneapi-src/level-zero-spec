@@ -201,10 +201,8 @@ cpp_index_common_prefix = ['ze::', 'zet::']
 
 cpp_id_attributes = ['__zecall']
 
-breathe_projects = {
-    project:"../xml"
-}
-breathe_default_project = project
+breathe_projects = { "LevelZero": "../xml" }
+breathe_default_project = "LevelZero"
 
 # Tell sphinx what the primary language being documented is.
 primary_domain = 'cpp'
