@@ -21,46 +21,6 @@ oneAPI Level Zero Specification - Version ${ver}
 ## Generate section title and links table
 #################################################################
 ## -------------------------
-## Enums
-## -------------------------
- <%isempty = True%>
-%for obj in objects:
-%if re.match(r"enum", obj['type']):
-%if isempty: # only display section title if there is content.
-%if needstitle:
-<%needstitle = False%>
-${title} API
-============================================================
-%endif
-* Enumerations
-
-<%isempty = False%>
-%endif
-    * :ref:`${th.make_type_name(n, tags, obj).replace("_", "-")}`
-%endif
-%endfor # obj in objects
-
-## -------------------------
-## Structs/Unions
-## -------------------------
- <%isempty = True%>
-%for obj in objects:
-%if re.match(r"struct|union", obj['type']):
-%if isempty: # only display section title if there is content.
-%if needstitle:
-<%needstitle = False%>
-${title} API
-============================================================
-%endif
-* Structures
-
-<%isempty = False%>
-%endif
-    * :ref:`${th.make_type_name(n, tags, obj).replace("_", "-")}`
-%endif
-%endfor # obj in objects
-
-## -------------------------
 ## Functions
 ## -------------------------
  <%isempty = True%>
@@ -69,7 +29,7 @@ ${title} API
 %if isempty: # only display section title if there is content.
 %if needstitle:
 <%needstitle = False%>
-${title} API
+${title}
 ============================================================
 %endif
 * Functions
@@ -81,7 +41,73 @@ ${title} API
 %endfor # obj in objects
 
 #################################################################
+## -------------------------
+## Enums
+## -------------------------
+ <%isempty = True%>
+%for obj in objects:
+%if re.match(r"enum", obj['type']):
+%if isempty: # only display section title if there is content.
+%if needstitle:
+<%needstitle = False%>
+${title}
+============================================================
+%endif
+* Enumerations
+
+<%isempty = False%>
+%endif
+    * :ref:`${th.make_type_name(n, tags, obj).replace("_", "-")}`
+%endif
+%endfor # obj in objects
+
+#################################################################
+## -------------------------
+## Structs/Unions
+## -------------------------
+ <%isempty = True%>
+%for obj in objects:
+%if re.match(r"struct|union", obj['type']):
+%if isempty: # only display section title if there is content.
+%if needstitle:
+<%needstitle = False%>
+${title}
+============================================================
+%endif
+* Structures
+
+<%isempty = False%>
+%endif
+    * :ref:`${th.make_type_name(n, tags, obj).replace("_", "-")}`
+%endif
+%endfor # obj in objects
+
+#################################################################
 ## Generate API documentation
+#################################################################
+## -------------------------
+## Functions
+## -------------------------
+<%isempty = True%>
+%for obj in objects:
+%if re.match(r"function", obj['type']) and ("condition" not in obj):
+%if isempty: # only display section title if there is content.
+${title} Functions
+------------------------------------------------------------------------------
+<%isempty = False%>
+%endif
+
+.. _${th.make_func_name(n, tags, obj).replace("_", "-")}:
+
+${th.make_func_name(n, tags, obj)}
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: ${th.make_func_name(n, tags, obj)}
+    :project: LevelZero
+
+%endif
+%endfor # obj in objects
+
 #################################################################
 ## -------------------------
 ## Enums
@@ -105,7 +131,7 @@ ${th.make_type_name(n, tags, obj)}
 
 %endif
 %endfor # obj in objects
-
+#################################################################
 ## -------------------------
 ## Structs/Unions
 ## -------------------------
@@ -130,29 +156,6 @@ ${th.make_type_name(n, tags, obj)}
 .. doxygenunion:: ${th.make_type_name(n, tags, obj)}
     :project: LevelZero
 %endif
-
-%endif
-%endfor # obj in objects
-
-## -------------------------
-## Functions
-## -------------------------
-<%isempty = True%>
-%for obj in objects:
-%if re.match(r"function", obj['type']) and ("condition" not in obj):
-%if isempty: # only display section title if there is content.
-${title} Functions
-------------------------------------------------------------------------------
-<%isempty = False%>
-%endif
-
-.. _${th.make_func_name(n, tags, obj).replace("_", "-")}:
-
-${th.make_func_name(n, tags, obj)}
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. doxygenfunction:: ${th.make_func_name(n, tags, obj)}
-    :project: LevelZero
 
 %endif
 %endfor # obj in objects
