@@ -22,7 +22,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u'oneL0 Specification'
+project = u'Level Zero Specification'
 copyright = u'2020, Intel'
 author = u'Intel'
 
@@ -113,7 +113,7 @@ html_static_path = []
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'oneL0-spec'
+htmlhelp_basename = 'oneAPI-LevelZero-spec'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -140,7 +140,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'oneL0-spec.tex', u'oneL0 Specification',
+    (master_doc, 'oneapi-levelzero-spec.tex', u'oneAPI Level Zero Specification',
      u'Intel', 'manual'),
 ]
 
@@ -150,7 +150,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'oneL0-spec', u'oneL0 Specification',
+    (master_doc, 'oneapi-levelzero-spec', u'oneAPI Level Zero Specification',
      [author], 1)
 ]
 
@@ -161,8 +161,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'oneL0-spec', u'oneL0 Specification',
-     author, 'Intel', 'Specification for oneL0 (oneAPI Level-0).',
+    (master_doc, 'oneAPI Level Zero Spec', u'oneAPI Level Zero Specification',
+     author, 'Intel', 'Specification for oneAPI Level Zero.',
      'Miscellaneous'),
 ]
 
