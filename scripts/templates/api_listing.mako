@@ -151,6 +151,8 @@ ${th.make_type_name(n, tags, obj)}
 %if re.match(r"struct", obj['type']):
 .. doxygenstruct:: ${th.make_type_name(n, tags, obj)}
     :project: LevelZero
+    :members:
+    :undoc-members:
 %endif
 %if re.match(r"union", obj['type']):
 .. doxygenunion:: ${th.make_type_name(n, tags, obj)}
