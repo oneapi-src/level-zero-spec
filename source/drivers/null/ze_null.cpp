@@ -158,8 +158,7 @@ namespace driver
             {
                 ze_command_queue_group_properties_t commandQueueGroupProperties = {};
                 commandQueueGroupProperties.version = ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT;
-                commandQueueGroupProperties.computeSupported = 1;
-                commandQueueGroupProperties.copySupported = 1;
+                commandQueueGroupProperties.flags = ZE_COMMAND_QUEUE_GROUP_FLAG_NONE;
 
                 *pCommandQueueGroupProperties = commandQueueGroupProperties;
             }

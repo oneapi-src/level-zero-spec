@@ -36,15 +36,6 @@ typedef enum _ze_command_queue_desc_version_t
 } ze_command_queue_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported command queue flags
-typedef enum _ze_command_queue_flag_t
-{
-    ZE_COMMAND_QUEUE_FLAG_NONE = 0,                 ///< default behavior
-    ZE_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY = ZE_BIT(0),///< command queue reserves and cannot comsume more than a single slice.
-
-} ze_command_queue_flag_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command queue modes
 typedef enum _ze_command_queue_mode_t
 {
@@ -72,7 +63,6 @@ typedef struct _ze_command_queue_desc_t
 {
     ze_command_queue_desc_version_t version;        ///< [in] ::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT
     uint32_t ordinal;                               ///< [in] command queue group ordinal
-    ze_command_queue_flag_t flags;                  ///< [in] usage flags
     ze_command_queue_mode_t mode;                   ///< [in] operation mode
     ze_command_queue_priority_t priority;           ///< [in] priority
 
@@ -103,7 +93,6 @@ typedef struct _ze_command_queue_desc_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 ///         + `::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version`
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
-///         + desc->flags
 ///         + desc->mode
 ///         + desc->priority
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY

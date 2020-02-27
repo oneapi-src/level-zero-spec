@@ -603,6 +603,34 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::command_queue_group_flag_t to std::string
+    std::string to_string( const Device::command_queue_group_flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "NONE   ";
+        
+        if( static_cast<uint32_t>(Device::command_queue_group_flag_t::COMPUTE_ONLY) & bits )
+            str += "COMPUTE_ONLY | ";
+        
+        if( static_cast<uint32_t>(Device::command_queue_group_flag_t::COPY_ONLY) & bits )
+            str += "COPY_ONLY | ";
+        
+        if( static_cast<uint32_t>(Device::command_queue_group_flag_t::SINGLE_SLICE_ONLY) & bits )
+            str += "SINGLE_SLICE_ONLY | ";
+        
+        if( static_cast<uint32_t>(Device::command_queue_group_flag_t::SUPPORTS_COOPERATIVE_KERNELS) & bits )
+            str += "SUPPORTS_COOPERATIVE_KERNELS | ";
+
+        return ( str.size() > 3 ) 
+            ? "Device::command_queue_group_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Device::command_queue_group_flag_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::memory_properties_version_t to std::string
     std::string to_string( const Device::memory_properties_version_t val )
     {
@@ -994,20 +1022,8 @@ namespace ze
         str += to_string(val.version);
         str += "\n";
         
-        str += "Device::command_queue_group_properties_t::computeSupported : ";
-        str += std::to_string(val.computeSupported);
-        str += "\n";
-        
-        str += "Device::command_queue_group_properties_t::copySupported : ";
-        str += std::to_string(val.copySupported);
-        str += "\n";
-        
-        str += "Device::command_queue_group_properties_t::singleSliceSupported : ";
-        str += std::to_string(val.singleSliceSupported);
-        str += "\n";
-        
-        str += "Device::command_queue_group_properties_t::cooperativeKernelsSupported : ";
-        str += std::to_string(val.cooperativeKernelsSupported);
+        str += "Device::command_queue_group_properties_t::flags : ";
+        str += to_string(val.flags);
         str += "\n";
 
         return str;

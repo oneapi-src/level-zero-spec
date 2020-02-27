@@ -20,18 +20,6 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported command queue flags"
-class: $xCommandQueue
-name: $x_command_queue_flag_t
-etors:
-    - name: $X_COMMAND_QUEUE_FLAG_NONE
-      value: "0"
-      desc: "default behavior"
-    - name: $X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY
-      value: "$X_BIT(0)"
-      desc: "command queue reserves and cannot comsume more than a single slice."
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported command queue modes"
 class: $xCommandQueue
 name: $x_command_queue_mode_t
@@ -73,9 +61,6 @@ members:
     - type: uint32_t
       name: ordinal
       desc: "[in] command queue group ordinal"
-    - type: $x_command_queue_flag_t
-      name: flags
-      desc: "[in] usage flags"
     - type: $x_command_queue_mode_t
       name: mode
       desc: "[in] operation mode"
