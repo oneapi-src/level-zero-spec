@@ -5,6 +5,7 @@ import re
     N=n.upper()
 
     x=tags['$x']
+    common_header=n+"_common.hpp"
 %>/*
  *
  * Copyright (C) 2019 Intel Corporation
@@ -41,8 +42,11 @@ import re
 %endif
 
 // '${section}' API headers
+#include "${common_header}"
 %for f in files:
+%if not re.match(common_header, f):
 #include "${f}"
+%endif
 %endfor
 
 #endif // defined(__cplusplus)

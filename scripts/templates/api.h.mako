@@ -6,6 +6,7 @@ from templates import helper as th
     N=n.upper()
 
     x=tags['$x']
+    common_header=n+"_common.h"
 %>/*
  *
  * Copyright (C) 2019 Intel Corporation
@@ -35,8 +36,11 @@ from templates import helper as th
 %endif
 
 // '${section}' API headers
+#include "${common_header}"
 %for f in files:
+%if not re.match(common_header, f):
 #include "${f}"
+%endif
 %endfor
 
 #endif // _${N}_API_H
