@@ -349,9 +349,16 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
-    - type: "uint32_t"
-      name: supported
-      desc: "[in,out] A bit field of (1<<$t_perf_profile_t) profiles that are supported."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of performance profiles.
+            if count is zero, then the driver will update the value with the total number of supported performance profiles.
+            if count is non-zero, then driver will only retrieve that number of supported performance profiles.
+            if count is larger than the number of supported performance profiles, then the driver will update the value with the correct number of supported performance profiles that are returned.
+    - type: "$t_perf_profile_t*"
+      name: pProfiles
+      desc: "[in,out][optional][range(0, *pCount)] Array of supported performance profiles"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current pre-configured performance profile being used by the hardware"

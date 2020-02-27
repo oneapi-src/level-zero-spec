@@ -462,13 +462,22 @@ namespace zet
     /// @throws result_t
     void __zecall
     Sysman::PerformanceProfileGetSupported(
-        uint32_t supported                              ///< [in,out] A bit field of (1<<::zet_perf_profile_t) profiles that are
-                                                        ///< supported.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of performance profiles.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of supported performance profiles.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< supported performance profiles.
+                                                        ///< if count is larger than the number of supported performance profiles,
+                                                        ///< then the driver will update the value with the correct number of
+                                                        ///< supported performance profiles that are returned.
+        perf_profile_t* pProfiles                       ///< [in,out][optional][range(0, *pCount)] Array of supported performance
+                                                        ///< profiles
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanPerformanceProfileGetSupported(
             reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
-            supported ) );
+            pCount,
+            reinterpret_cast<zet_perf_profile_t*>( pProfiles ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::PerformanceProfileGetSupported" );
