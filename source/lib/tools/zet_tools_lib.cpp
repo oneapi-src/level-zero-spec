@@ -16,7 +16,7 @@
 namespace zet_lib
 {
     ///////////////////////////////////////////////////////////////////////////////
-    __zedlllocal ze_result_t context_t::Init()
+    ze_result_t context_t::Init()
     {
         loader = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "ze_loader" ) );
 

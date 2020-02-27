@@ -37,12 +37,6 @@ desc: "Microsoft-specific dllexport storage-class attribute"
 condition: "defined(_WIN32)"
 name: __$xdllexport
 value: __declspec(dllexport)
---- #--------------------------------------------------------------------------
-type: macro
-desc: "GCC-specific dllexport storage-class attribute"
-condition: "__GNUC__ >= 4"
-name: __$xdllexport
-value: __attribute__ ((visibility ("default")))
 altvalue: ""
 --- #--------------------------------------------------------------------------
 type: macro

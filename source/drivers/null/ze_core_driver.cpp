@@ -17,7 +17,7 @@ namespace driver
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeInit
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeInit(
         ze_init_flag_t flags                            ///< [in] initialization flags
         )
@@ -40,7 +40,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGet
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGet(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                         ///< if count is zero, then the loader will update the value with the total
@@ -73,7 +73,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetApiVersion
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetApiVersion(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_api_version_t* version                       ///< [out] api version
@@ -97,7 +97,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetProperties(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_driver_properties_t* pDriverProperties       ///< [in,out] query result for driver properties
@@ -121,7 +121,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetIPCProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetIPCProperties(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_driver_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
@@ -145,7 +145,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetExtensionFunctionAddress
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetExtensionFunctionAddress(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const char* pFuncName,                          ///< [in] name of the extension function
@@ -170,7 +170,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGet
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGet(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
@@ -203,7 +203,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetSubDevices
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetSubDevices(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
@@ -236,7 +236,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_properties_t* pDeviceProperties       ///< [in,out] query result for device properties
@@ -260,7 +260,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetComputeProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetComputeProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_compute_properties_t* pComputeProperties  ///< [in,out] query result for compute properties
@@ -284,7 +284,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetKernelProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetKernelProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
@@ -308,7 +308,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetMemoryProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties.
@@ -341,7 +341,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryAccessProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetMemoryAccessProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_memory_access_properties_t* pMemAccessProperties  ///< [in,out] query result for memory access properties
@@ -365,7 +365,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetCacheProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetCacheProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_cache_properties_t* pCacheProperties  ///< [in,out] query result for cache properties
@@ -389,7 +389,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetImageProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetImageProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_image_properties_t* pImageProperties  ///< [in,out] query result for image properties
@@ -413,7 +413,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetP2PProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetP2PProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         ze_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -438,7 +438,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceCanAccessPeer
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceCanAccessPeer(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         ze_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -463,7 +463,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceSetLastLevelCacheConfig
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceSetLastLevelCacheConfig(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device 
         ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -487,7 +487,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandQueueCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandQueueCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         const ze_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -514,7 +514,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandQueueDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandQueueDestroy(
         ze_command_queue_handle_t hCommandQueue         ///< [in][release] handle of command queue object to destroy
         )
@@ -538,7 +538,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandQueueExecuteCommandLists
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandQueueExecuteCommandLists(
         ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
         uint32_t numCommandLists,                       ///< [in] number of command lists to execute
@@ -565,7 +565,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandQueueSynchronize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandQueueSynchronize(
         ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
@@ -593,7 +593,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         const ze_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
@@ -620,7 +620,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListCreateImmediate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListCreateImmediate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         const ze_command_queue_desc_t* altdesc,         ///< [in] pointer to command queue descriptor
@@ -647,7 +647,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListDestroy(
         ze_command_list_handle_t hCommandList           ///< [in][release] handle of command list object to destroy
         )
@@ -671,7 +671,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListClose
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListClose(
         ze_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
         )
@@ -694,7 +694,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListReset
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListReset(
         ze_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
         )
@@ -717,7 +717,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendBarrier
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendBarrier(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
@@ -744,7 +744,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryRangesBarrier
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryRangesBarrier(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numRanges,                             ///< [in] number of memory ranges
@@ -774,7 +774,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceSystemBarrier
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceSystemBarrier(
         ze_device_handle_t hDevice                      ///< [in] handle of the device
         )
@@ -798,7 +798,7 @@ namespace driver
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceRegisterCLMemory
     #if ZE_ENABLE_OCL_INTEROP
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceRegisterCLMemory(
         ze_device_handle_t hDevice,                     ///< [in] handle to the device
         cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -826,7 +826,7 @@ namespace driver
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceRegisterCLProgram
     #if ZE_ENABLE_OCL_INTEROP
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceRegisterCLProgram(
         ze_device_handle_t hDevice,                     ///< [in] handle to the device
         cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -856,7 +856,7 @@ namespace driver
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceRegisterCLCommandQueue
     #if ZE_ENABLE_OCL_INTEROP
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceRegisterCLCommandQueue(
         ze_device_handle_t hDevice,                     ///< [in] handle to the device
         cl_context context,                             ///< [in] the OpenCL context that created the command queue
@@ -885,7 +885,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryCopy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryCopy(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -912,7 +912,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryFill
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryFill(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* ptr,                                      ///< [in] pointer to memory to initialize
@@ -940,7 +940,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryCopyRegion
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryCopyRegion(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -976,7 +976,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendImageCopy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendImageCopy(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         ze_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -1002,7 +1002,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendImageCopyRegion
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendImageCopyRegion(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         ze_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -1030,7 +1030,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendImageCopyToMemory
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendImageCopyToMemory(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -1057,7 +1057,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendImageCopyFromMemory
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendImageCopyFromMemory(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         ze_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -1084,7 +1084,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryPrefetch
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryPrefetch(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
@@ -1109,7 +1109,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemAdvise
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemAdvise(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         ze_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
@@ -1136,7 +1136,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolCreate(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const ze_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
@@ -1168,7 +1168,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolDestroy(
         ze_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object to destroy
         )
@@ -1192,7 +1192,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventCreate(
         ze_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
         const ze_event_desc_t* desc,                    ///< [in] pointer to event descriptor
@@ -1219,7 +1219,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventDestroy(
         ze_event_handle_t hEvent                        ///< [in][release] handle of event object to destroy
         )
@@ -1243,7 +1243,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolGetIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolGetIpcHandle(
         ze_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
         ze_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
@@ -1267,7 +1267,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolOpenIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolOpenIpcHandle(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver to associate with the IPC event pool handle
         ze_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
@@ -1294,7 +1294,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolCloseIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolCloseIpcHandle(
         ze_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object
         )
@@ -1318,7 +1318,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendSignalEvent
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendSignalEvent(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_event_handle_t hEvent                        ///< [in] handle of the event
@@ -1342,7 +1342,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendWaitOnEvents
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendWaitOnEvents(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
@@ -1368,7 +1368,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventHostSignal
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventHostSignal(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
@@ -1391,7 +1391,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventHostSynchronize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventHostSynchronize(
         ze_event_handle_t hEvent,                       ///< [in] handle of the event
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
@@ -1419,7 +1419,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventQueryStatus
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventQueryStatus(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
@@ -1442,7 +1442,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendEventReset
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendEventReset(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_event_handle_t hEvent                        ///< [in] handle of the event
@@ -1466,7 +1466,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventHostReset
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventHostReset(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
@@ -1489,7 +1489,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventGetTimestamp
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventGetTimestamp(
         ze_event_handle_t hEvent,                       ///< [in] handle of the event
         ze_event_timestamp_type_t timestampType,        ///< [in] specifies timestamp type to query for that is associated with
@@ -1517,7 +1517,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceCreate(
         ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
         const ze_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
@@ -1544,7 +1544,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceDestroy(
         ze_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
         )
@@ -1568,7 +1568,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceHostSynchronize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceHostSynchronize(
         ze_fence_handle_t hFence,                       ///< [in] handle of the fence
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
@@ -1596,7 +1596,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceQueryStatus
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceQueryStatus(
         ze_fence_handle_t hFence                        ///< [in] handle of the fence
         )
@@ -1619,7 +1619,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceReset
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceReset(
         ze_fence_handle_t hFence                        ///< [in] handle of the fence
         )
@@ -1642,7 +1642,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeImageGetProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeImageGetProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         const ze_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -1667,7 +1667,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeImageCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeImageCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         const ze_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -1694,7 +1694,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeImageDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeImageDestroy(
         ze_image_handle_t hImage                        ///< [in][release] handle of image object to destroy
         )
@@ -1718,7 +1718,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverAllocSharedMem
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverAllocSharedMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
@@ -1747,7 +1747,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverAllocDeviceMem
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverAllocDeviceMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
@@ -1775,7 +1775,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverAllocHostMem
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverAllocHostMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const ze_host_mem_alloc_desc_t* host_desc,      ///< [in] pointer to host mem alloc descriptor
@@ -1802,7 +1802,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverFreeMem
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverFreeMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         void* ptr                                       ///< [in][release] pointer to memory to free
@@ -1826,7 +1826,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetMemAllocProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetMemAllocProperties(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
@@ -1854,7 +1854,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetMemAddressRange
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetMemAddressRange(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
@@ -1880,7 +1880,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetMemIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetMemIpcHandle(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] pointer to the device memory allocation
@@ -1905,7 +1905,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverOpenMemIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverOpenMemIpcHandle(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
@@ -1932,7 +1932,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverCloseMemIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverCloseMemIpcHandle(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr                                 ///< [in][release] pointer to device allocation in this process
@@ -1956,7 +1956,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         const ze_module_desc_t* desc,                   ///< [in] pointer to module descriptor
@@ -1986,7 +1986,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleDestroy(
         ze_module_handle_t hModule                      ///< [in][release] handle of the module
         )
@@ -2010,7 +2010,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleBuildLogDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleBuildLogDestroy(
         ze_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
         )
@@ -2034,7 +2034,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleBuildLogGetString
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleBuildLogGetString(
         ze_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
         size_t* pSize,                                  ///< [in,out] size of build log string.
@@ -2059,7 +2059,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleGetNativeBinary
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleGetNativeBinary(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
@@ -2084,7 +2084,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleGetGlobalPointer
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleGetGlobalPointer(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         const char* pGlobalName,                        ///< [in] name of global variable in module
@@ -2109,7 +2109,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleGetKernelNames
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleGetKernelNames(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
@@ -2139,7 +2139,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelCreate(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         const ze_kernel_desc_t* desc,                   ///< [in] pointer to kernel descriptor
@@ -2166,7 +2166,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelDestroy(
         ze_kernel_handle_t hKernel                      ///< [in][release] handle of the kernel object
         )
@@ -2190,7 +2190,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleGetFunctionPointer
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleGetFunctionPointer(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
@@ -2215,7 +2215,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetGroupSize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSetGroupSize(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
@@ -2241,7 +2241,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSuggestGroupSize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSuggestGroupSize(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t globalSizeX,                           ///< [in] global width for X dimension
@@ -2270,7 +2270,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSuggestMaxCooperativeGroupCount
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSuggestMaxCooperativeGroupCount(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t* totalGroupCount                       ///< [out] recommended total group count.
@@ -2294,7 +2294,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetArgumentValue
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSetArgumentValue(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
@@ -2321,7 +2321,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetAttribute
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSetAttribute(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         ze_kernel_attribute_t attr,                     ///< [in] attribute to set
@@ -2347,7 +2347,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelGetAttribute
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelGetAttribute(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         ze_kernel_attribute_t attr,                     ///< [in] attribute to get. Documentation for ::ze_kernel_attribute_t for
@@ -2376,7 +2376,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSetIntermediateCacheConfig(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -2400,7 +2400,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelGetProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelGetProperties(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         ze_kernel_properties_t* pKernelProperties       ///< [in,out] query result for kernel properties.
@@ -2424,7 +2424,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchKernel
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendLaunchKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -2453,7 +2453,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchCooperativeKernel
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendLaunchCooperativeKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -2482,7 +2482,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchKernelIndirect
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendLaunchKernelIndirect(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -2512,7 +2512,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchMultipleKernelsIndirect
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendLaunchMultipleKernelsIndirect(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numKernels,                            ///< [in] maximum number of kernels to launch
@@ -2546,7 +2546,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceMakeMemoryResident
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceMakeMemoryResident(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         void* ptr,                                      ///< [in] pointer to memory to make resident
@@ -2571,7 +2571,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceEvictMemory
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceEvictMemory(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         void* ptr,                                      ///< [in] pointer to memory to evict
@@ -2596,7 +2596,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceMakeImageResident
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceMakeImageResident(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_image_handle_t hImage                        ///< [in] handle of image to make resident
@@ -2620,7 +2620,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceEvictImage
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceEvictImage(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_image_handle_t hImage                        ///< [in] handle of image to make evict
@@ -2644,7 +2644,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeSamplerCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeSamplerCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         const ze_sampler_desc_t* desc,                  ///< [in] pointer to sampler descriptor
@@ -2671,7 +2671,7 @@ namespace driver
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeSamplerDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeSamplerDestroy(
         ze_sampler_handle_t hSampler                    ///< [in][release] handle of the sampler
         )
@@ -2699,7 +2699,7 @@ namespace instrumented
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeInit
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeInit(
         ze_init_flag_t flags                            ///< [in] initialization flags
         )
@@ -2749,7 +2749,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGet
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGet(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                         ///< if count is zero, then the loader will update the value with the total
@@ -2808,7 +2808,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetApiVersion
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetApiVersion(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_api_version_t* version                       ///< [out] api version
@@ -2861,7 +2861,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetProperties(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_driver_properties_t* pDriverProperties       ///< [in,out] query result for driver properties
@@ -2914,7 +2914,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetIPCProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetIPCProperties(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_driver_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
@@ -2967,7 +2967,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetExtensionFunctionAddress
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetExtensionFunctionAddress(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const char* pFuncName,                          ///< [in] name of the extension function
@@ -3023,7 +3023,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGet
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGet(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
@@ -3084,7 +3084,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetSubDevices
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetSubDevices(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
@@ -3145,7 +3145,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_properties_t* pDeviceProperties       ///< [in,out] query result for device properties
@@ -3198,7 +3198,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetComputeProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetComputeProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_compute_properties_t* pComputeProperties  ///< [in,out] query result for compute properties
@@ -3251,7 +3251,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetKernelProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetKernelProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
@@ -3304,7 +3304,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetMemoryProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties.
@@ -3368,7 +3368,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryAccessProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetMemoryAccessProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_memory_access_properties_t* pMemAccessProperties  ///< [in,out] query result for memory access properties
@@ -3421,7 +3421,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetCacheProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetCacheProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_cache_properties_t* pCacheProperties  ///< [in,out] query result for cache properties
@@ -3474,7 +3474,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetImageProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetImageProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_device_image_properties_t* pImageProperties  ///< [in,out] query result for image properties
@@ -3527,7 +3527,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetP2PProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceGetP2PProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         ze_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -3583,7 +3583,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceCanAccessPeer
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceCanAccessPeer(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         ze_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -3639,7 +3639,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceSetLastLevelCacheConfig
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceSetLastLevelCacheConfig(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device 
         ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -3692,7 +3692,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandQueueCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandQueueCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         const ze_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -3748,7 +3748,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandQueueDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandQueueDestroy(
         ze_command_queue_handle_t hCommandQueue         ///< [in][release] handle of command queue object to destroy
         )
@@ -3798,7 +3798,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandQueueExecuteCommandLists
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandQueueExecuteCommandLists(
         ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
         uint32_t numCommandLists,                       ///< [in] number of command lists to execute
@@ -3858,7 +3858,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandQueueSynchronize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandQueueSynchronize(
         ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
@@ -3915,7 +3915,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         const ze_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
@@ -3971,7 +3971,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListCreateImmediate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListCreateImmediate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         const ze_command_queue_desc_t* altdesc,         ///< [in] pointer to command queue descriptor
@@ -4027,7 +4027,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListDestroy(
         ze_command_list_handle_t hCommandList           ///< [in][release] handle of command list object to destroy
         )
@@ -4077,7 +4077,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListClose
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListClose(
         ze_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
         )
@@ -4127,7 +4127,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListReset
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListReset(
         ze_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
         )
@@ -4177,7 +4177,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendBarrier
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendBarrier(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
@@ -4237,7 +4237,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryRangesBarrier
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryRangesBarrier(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numRanges,                             ///< [in] number of memory ranges
@@ -4306,7 +4306,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceSystemBarrier
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceSystemBarrier(
         ze_device_handle_t hDevice                      ///< [in] handle of the device
         )
@@ -4357,7 +4357,7 @@ namespace instrumented
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceRegisterCLMemory
     #if ZE_ENABLE_OCL_INTEROP
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceRegisterCLMemory(
         ze_device_handle_t hDevice,                     ///< [in] handle to the device
         cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -4418,7 +4418,7 @@ namespace instrumented
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceRegisterCLProgram
     #if ZE_ENABLE_OCL_INTEROP
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceRegisterCLProgram(
         ze_device_handle_t hDevice,                     ///< [in] handle to the device
         cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -4479,7 +4479,7 @@ namespace instrumented
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceRegisterCLCommandQueue
     #if ZE_ENABLE_OCL_INTEROP
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceRegisterCLCommandQueue(
         ze_device_handle_t hDevice,                     ///< [in] handle to the device
         cl_context context,                             ///< [in] the OpenCL context that created the command queue
@@ -4539,7 +4539,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryCopy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryCopy(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -4601,7 +4601,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryFill
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryFill(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* ptr,                                      ///< [in] pointer to memory to initialize
@@ -4666,7 +4666,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryCopyRegion
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryCopyRegion(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -4747,7 +4747,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendImageCopy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendImageCopy(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         ze_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -4806,7 +4806,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendImageCopyRegion
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendImageCopyRegion(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         ze_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -4871,7 +4871,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendImageCopyToMemory
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendImageCopyToMemory(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -4933,7 +4933,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendImageCopyFromMemory
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendImageCopyFromMemory(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         ze_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -4995,7 +4995,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemoryPrefetch
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemoryPrefetch(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
@@ -5051,7 +5051,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendMemAdvise
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendMemAdvise(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
         ze_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
@@ -5113,7 +5113,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolCreate(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const ze_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
@@ -5178,7 +5178,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolDestroy(
         ze_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object to destroy
         )
@@ -5228,7 +5228,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventCreate(
         ze_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
         const ze_event_desc_t* desc,                    ///< [in] pointer to event descriptor
@@ -5284,7 +5284,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventDestroy(
         ze_event_handle_t hEvent                        ///< [in][release] handle of event object to destroy
         )
@@ -5334,7 +5334,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolGetIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolGetIpcHandle(
         ze_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
         ze_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
@@ -5387,7 +5387,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolOpenIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolOpenIpcHandle(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver to associate with the IPC event pool handle
         ze_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
@@ -5443,7 +5443,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventPoolCloseIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventPoolCloseIpcHandle(
         ze_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object
         )
@@ -5493,7 +5493,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendSignalEvent
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendSignalEvent(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_event_handle_t hEvent                        ///< [in] handle of the event
@@ -5546,7 +5546,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendWaitOnEvents
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendWaitOnEvents(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
@@ -5603,7 +5603,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventHostSignal
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventHostSignal(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
@@ -5653,7 +5653,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventHostSynchronize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventHostSynchronize(
         ze_event_handle_t hEvent,                       ///< [in] handle of the event
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
@@ -5710,7 +5710,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventQueryStatus
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventQueryStatus(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
@@ -5760,7 +5760,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendEventReset
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendEventReset(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_event_handle_t hEvent                        ///< [in] handle of the event
@@ -5813,7 +5813,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventHostReset
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventHostReset(
         ze_event_handle_t hEvent                        ///< [in] handle of the event
         )
@@ -5863,7 +5863,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeEventGetTimestamp
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeEventGetTimestamp(
         ze_event_handle_t hEvent,                       ///< [in] handle of the event
         ze_event_timestamp_type_t timestampType,        ///< [in] specifies timestamp type to query for that is associated with
@@ -5922,7 +5922,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceCreate(
         ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
         const ze_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
@@ -5978,7 +5978,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceDestroy(
         ze_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
         )
@@ -6028,7 +6028,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceHostSynchronize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceHostSynchronize(
         ze_fence_handle_t hFence,                       ///< [in] handle of the fence
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
@@ -6085,7 +6085,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceQueryStatus
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceQueryStatus(
         ze_fence_handle_t hFence                        ///< [in] handle of the fence
         )
@@ -6135,7 +6135,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeFenceReset
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeFenceReset(
         ze_fence_handle_t hFence                        ///< [in] handle of the fence
         )
@@ -6185,7 +6185,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeImageGetProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeImageGetProperties(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         const ze_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -6241,7 +6241,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeImageCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeImageCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         const ze_image_desc_t* desc,                    ///< [in] pointer to image descriptor
@@ -6297,7 +6297,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeImageDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeImageDestroy(
         ze_image_handle_t hImage                        ///< [in][release] handle of image object to destroy
         )
@@ -6347,7 +6347,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverAllocSharedMem
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverAllocSharedMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
@@ -6415,7 +6415,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverAllocDeviceMem
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverAllocDeviceMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
@@ -6480,7 +6480,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverAllocHostMem
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverAllocHostMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const ze_host_mem_alloc_desc_t* host_desc,      ///< [in] pointer to host mem alloc descriptor
@@ -6542,7 +6542,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverFreeMem
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverFreeMem(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         void* ptr                                       ///< [in][release] pointer to memory to free
@@ -6595,7 +6595,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetMemAllocProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetMemAllocProperties(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
@@ -6654,7 +6654,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetMemAddressRange
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetMemAddressRange(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
@@ -6713,7 +6713,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverGetMemIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverGetMemIpcHandle(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] pointer to the device memory allocation
@@ -6769,7 +6769,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverOpenMemIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverOpenMemIpcHandle(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         ze_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
@@ -6831,7 +6831,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDriverCloseMemIpcHandle
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDriverCloseMemIpcHandle(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr                                 ///< [in][release] pointer to device allocation in this process
@@ -6884,7 +6884,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         const ze_module_desc_t* desc,                   ///< [in] pointer to module descriptor
@@ -6943,7 +6943,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleDestroy(
         ze_module_handle_t hModule                      ///< [in][release] handle of the module
         )
@@ -6993,7 +6993,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleBuildLogDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleBuildLogDestroy(
         ze_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
         )
@@ -7043,7 +7043,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleBuildLogGetString
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleBuildLogGetString(
         ze_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
         size_t* pSize,                                  ///< [in,out] size of build log string.
@@ -7099,7 +7099,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleGetNativeBinary
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleGetNativeBinary(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
@@ -7155,7 +7155,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleGetGlobalPointer
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleGetGlobalPointer(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         const char* pGlobalName,                        ///< [in] name of global variable in module
@@ -7211,7 +7211,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleGetKernelNames
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleGetKernelNames(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
@@ -7272,7 +7272,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelCreate(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         const ze_kernel_desc_t* desc,                   ///< [in] pointer to kernel descriptor
@@ -7328,7 +7328,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelDestroy(
         ze_kernel_handle_t hKernel                      ///< [in][release] handle of the kernel object
         )
@@ -7378,7 +7378,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeModuleGetFunctionPointer
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeModuleGetFunctionPointer(
         ze_module_handle_t hModule,                     ///< [in] handle of the module
         const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
@@ -7434,7 +7434,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetGroupSize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSetGroupSize(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
@@ -7493,7 +7493,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSuggestGroupSize
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSuggestGroupSize(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t globalSizeX,                           ///< [in] global width for X dimension
@@ -7561,7 +7561,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSuggestMaxCooperativeGroupCount
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSuggestMaxCooperativeGroupCount(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t* totalGroupCount                       ///< [out] recommended total group count.
@@ -7614,7 +7614,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetArgumentValue
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSetArgumentValue(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
@@ -7674,7 +7674,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetAttribute
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSetAttribute(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         ze_kernel_attribute_t attr,                     ///< [in] attribute to set
@@ -7733,7 +7733,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelGetAttribute
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelGetAttribute(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         ze_kernel_attribute_t attr,                     ///< [in] attribute to get. Documentation for ::ze_kernel_attribute_t for
@@ -7795,7 +7795,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelSetIntermediateCacheConfig
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelSetIntermediateCacheConfig(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -7848,7 +7848,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeKernelGetProperties
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeKernelGetProperties(
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
         ze_kernel_properties_t* pKernelProperties       ///< [in,out] query result for kernel properties.
@@ -7901,7 +7901,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchKernel
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendLaunchKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -7967,7 +7967,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchCooperativeKernel
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendLaunchCooperativeKernel(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -8033,7 +8033,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchKernelIndirect
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendLaunchKernelIndirect(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -8100,7 +8100,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeCommandListAppendLaunchMultipleKernelsIndirect
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeCommandListAppendLaunchMultipleKernelsIndirect(
         ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numKernels,                            ///< [in] maximum number of kernels to launch
@@ -8175,7 +8175,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceMakeMemoryResident
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceMakeMemoryResident(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         void* ptr,                                      ///< [in] pointer to memory to make resident
@@ -8231,7 +8231,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceEvictMemory
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceEvictMemory(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         void* ptr,                                      ///< [in] pointer to memory to evict
@@ -8287,7 +8287,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceMakeImageResident
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceMakeImageResident(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_image_handle_t hImage                        ///< [in] handle of image to make resident
@@ -8340,7 +8340,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceEvictImage
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeDeviceEvictImage(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         ze_image_handle_t hImage                        ///< [in] handle of image to make evict
@@ -8393,7 +8393,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeSamplerCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeSamplerCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device
         const ze_sampler_desc_t* desc,                  ///< [in] pointer to sampler descriptor
@@ -8449,7 +8449,7 @@ namespace instrumented
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeSamplerDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zeSamplerDestroy(
         ze_sampler_handle_t hSampler                    ///< [in][release] handle of the sampler
         )

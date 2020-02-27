@@ -50,13 +50,6 @@
 #  error "Unsupported OS"
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-#if !defined(_WIN32) && (__GNUC__ >= 4)
-#define __zedlllocal  __attribute__ ((visibility ("hidden")))
-#else
-#define __zedlllocal
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
 typedef struct _cl_mem* cl_mem;

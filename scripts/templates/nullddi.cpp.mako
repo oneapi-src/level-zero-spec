@@ -32,7 +32,7 @@ namespace driver
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    __${x}dlllocal ${x}_result_t __${x}call
+    ${x}_result_t __${x}call
     ${fname}(
         %for line in th.make_param_lines(n, tags, obj):
         ${line}
@@ -85,7 +85,7 @@ namespace instrumented
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    __${x}dlllocal ${x}_result_t __${x}call
+    ${x}_result_t __${x}call
     ${fname}(
         %for line in th.make_param_lines(n, tags, obj):
         ${line}

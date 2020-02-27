@@ -17,7 +17,7 @@ namespace layer
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexInit
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zexInit(
         ze_init_flag_t flags                            ///< [in] initialization flags
         )
@@ -39,7 +39,7 @@ namespace layer
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandListReserveSpace
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zexCommandListReserveSpace(
         zex_command_list_handle_t hCommandList,         ///< [in] handle of the command list
         size_t size,                                    ///< [in] size (in bytes) to reserve
@@ -69,7 +69,7 @@ namespace layer
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandGraphCreate
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zexCommandGraphCreate(
         ze_device_handle_t hDevice,                     ///< [in] handle of the device object
         const zex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
@@ -105,7 +105,7 @@ namespace layer
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandGraphDestroy
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zexCommandGraphDestroy(
         zex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
         )
@@ -127,7 +127,7 @@ namespace layer
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandGraphClose
-    __zedlllocal ze_result_t __zecall
+    ze_result_t __zecall
     zexCommandGraphClose(
         zex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
         )
