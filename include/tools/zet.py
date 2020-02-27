@@ -830,7 +830,8 @@ class zet_pci_stats_t(Structure):
         ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
         ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted (including
                                                                         ## replays)
-        ("speed", zet_pci_speed_t)                                      ## [out] The current speed of the link
+        ("maxBandwidth", c_ulonglong)                                   ## [out] The maximum bandwidth in bytes/sec under the current
+                                                                        ## configuration
     ]
 
 ###############################################################################

@@ -378,7 +378,8 @@ namespace zet
             uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
             uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
                                                             ///< replays)
-            pci_speed_t speed;                              ///< [out] The current speed of the link
+            uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
+                                                            ///< configuration
 
         };
 

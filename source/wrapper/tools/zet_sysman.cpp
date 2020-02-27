@@ -3457,8 +3457,8 @@ namespace zet
         str += std::to_string(val.txCounter);
         str += "\n";
         
-        str += "Sysman::pci_stats_t::speed : ";
-        str += to_string(val.speed);
+        str += "Sysman::pci_stats_t::maxBandwidth : ";
+        str += std::to_string(val.maxBandwidth);
         str += "\n";
 
         return str;
