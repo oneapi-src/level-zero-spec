@@ -317,41 +317,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDeviceGetCommandQueueGroupProperties
-    __zedlllocal ze_result_t __zecall
-    zeDeviceGetCommandQueueGroupProperties(
-        ze_device_handle_t hDevice,                     ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of command queue group properties.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of command queue group properties available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< command queue group properties.
-                                                        ///< if count is larger than the number of command queue group properties
-                                                        ///< available, then the driver will update the value with the correct
-                                                        ///< number of command queue group properties available.
-        ze_command_queue_group_properties_t* pCommandQueueGroupProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
-                                                        ///< command queue group properties
-        )
-    {
-        auto pfnGetCommandQueueGroupProperties = context.zeDdiTable.Device.pfnGetCommandQueueGroupProperties;
-
-        if( nullptr == pfnGetCommandQueueGroupProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDevice )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetCommandQueueGroupProperties( hDevice, pCount, pCommandQueueGroupProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryProperties
     __zedlllocal ze_result_t __zecall
     zeDeviceGetMemoryProperties(
@@ -578,6 +543,9 @@ namespace layer
             if( ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
                 return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
+            if( 8 <= desc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
             if( 2 <= desc->mode )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
@@ -698,7 +666,7 @@ namespace layer
             if( ZE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version )
                 return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-            if( 4 <= desc->flags )
+            if( 8 <= desc->flags )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
         }
@@ -733,6 +701,9 @@ namespace layer
 
             if( ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < altdesc->version )
                 return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+            if( 8 <= altdesc->flags )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
             if( 2 <= altdesc->mode )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
@@ -3211,9 +3182,6 @@ zeGetDeviceProcAddrTable(
 
     dditable.pfnGetKernelProperties                      = pDdiTable->pfnGetKernelProperties;
     pDdiTable->pfnGetKernelProperties                    = layer::zeDeviceGetKernelProperties;
-
-    dditable.pfnGetCommandQueueGroupProperties           = pDdiTable->pfnGetCommandQueueGroupProperties;
-    pDdiTable->pfnGetCommandQueueGroupProperties         = layer::zeDeviceGetCommandQueueGroupProperties;
 
     dditable.pfnGetMemoryProperties                      = pDdiTable->pfnGetMemoryProperties;
     pDdiTable->pfnGetMemoryProperties                    = layer::zeDeviceGetMemoryProperties;

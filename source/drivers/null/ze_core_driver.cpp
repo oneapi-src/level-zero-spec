@@ -307,39 +307,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDeviceGetCommandQueueGroupProperties
-    __zedlllocal ze_result_t __zecall
-    zeDeviceGetCommandQueueGroupProperties(
-        ze_device_handle_t hDevice,                     ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of command queue group properties.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of command queue group properties available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< command queue group properties.
-                                                        ///< if count is larger than the number of command queue group properties
-                                                        ///< available, then the driver will update the value with the correct
-                                                        ///< number of command queue group properties available.
-        ze_command_queue_group_properties_t* pCommandQueueGroupProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
-                                                        ///< command queue group properties
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetCommandQueueGroupProperties = context.zeDdiTable.Device.pfnGetCommandQueueGroupProperties;
-        if( nullptr != pfnGetCommandQueueGroupProperties )
-        {
-            result = pfnGetCommandQueueGroupProperties( hDevice, pCount, pCommandQueueGroupProperties );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryProperties
     __zedlllocal ze_result_t __zecall
     zeDeviceGetMemoryProperties(
@@ -3328,70 +3295,6 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].zeEpilogueCbs.Device;
                 if( nullptr != table.pfnGetKernelPropertiesCb )
                     table.pfnGetKernelPropertiesCb( &out_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zeDeviceGetCommandQueueGroupProperties
-    __zedlllocal ze_result_t __zecall
-    zeDeviceGetCommandQueueGroupProperties(
-        ze_device_handle_t hDevice,                     ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of command queue group properties.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of command queue group properties available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< command queue group properties.
-                                                        ///< if count is larger than the number of command queue group properties
-                                                        ///< available, then the driver will update the value with the correct
-                                                        ///< number of command queue group properties available.
-        ze_command_queue_group_properties_t* pCommandQueueGroupProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
-                                                        ///< command queue group properties
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // capture parameters
-        ze_device_get_command_queue_group_properties_params_t in_params = {
-            &hDevice,
-            &pCount,
-            &pCommandQueueGroupProperties
-        };
-
-        // create storage locations for callbacks
-        std::vector<void*> instanceUserData;
-        instanceUserData.resize( context.tracerData.size() );
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zePrologueCbs.Device;
-                if( nullptr != table.pfnGetCommandQueueGroupPropertiesCb )
-                    table.pfnGetCommandQueueGroupPropertiesCb( &in_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        result = driver::zeDeviceGetCommandQueueGroupProperties( hDevice, pCount, pCommandQueueGroupProperties );
-
-        // capture parameters
-        ze_device_get_command_queue_group_properties_params_t out_params = {
-            &hDevice,
-            &pCount,
-            &pCommandQueueGroupProperties
-        };
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zeEpilogueCbs.Device;
-                if( nullptr != table.pfnGetCommandQueueGroupPropertiesCb )
-                    table.pfnGetCommandQueueGroupPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8771,11 +8674,6 @@ zeGetDeviceProcAddrTable(
         pDdiTable->pfnGetKernelProperties                    = instrumented::zeDeviceGetKernelProperties;
     else
         pDdiTable->pfnGetKernelProperties                    = driver::zeDeviceGetKernelProperties;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetCommandQueueGroupProperties         = instrumented::zeDeviceGetCommandQueueGroupProperties;
-    else
-        pDdiTable->pfnGetCommandQueueGroupProperties         = driver::zeDeviceGetCommandQueueGroupProperties;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnGetMemoryProperties                    = instrumented::zeDeviceGetMemoryProperties;
