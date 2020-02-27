@@ -37,6 +37,22 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported command queue flags
+        enum class flag_t
+        {
+            NONE = 0,                                       ///< default behavior
+            COPY_ONLY = ZE_BIT(0),                          ///< command queue only supports enqueing copy-only command lists
+            LOGICAL_ONLY = ZE_BIT(1),                       ///< command queue is not tied to a physical command queue; driver may
+                                                            ///< dynamically assign based on usage
+            SINGLE_SLICE_ONLY = ZE_BIT(2),                  ///< command queue reserves and cannot comsume more than a single slice.
+                                                            ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
+            SUPPORTS_COOPERATIVE_KERNELS = ZE_BIT(3),       ///< command queue supports command list with cooperative kernels. See
+                                                            ///< ::zeCommandListAppendLaunchCooperativeKernel for more details. cannot
+                                                            ///< be combined with COPY_ONLY.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Supported command queue modes
         enum class mode_t
         {
@@ -63,9 +79,16 @@ namespace ze
         struct desc_t
         {
             desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT
-            uint32_t ordinal;                               ///< [in] command queue group ordinal
+            flag_t flags = flag_t::NONE;                    ///< [in] creation flags
             mode_t mode = mode_t::DEFAULT;                  ///< [in] operation mode
             priority_t priority = priority_t::NORMAL;       ///< [in] priority
+            uint32_t ordinal = 0;                           ///< [in] if logical-only flag is set, then will be ignored;
+                                                            ///< if supports-cooperative-kernels is set, then may be ignored;
+                                                            ///< else-if copy-only flag is set, then must be less than ::ze_device_properties_t.numAsyncCopyEngines;
+                                                            ///< otherwise must be less than
+                                                            ///< ::ze_device_properties_t.numAsyncComputeEngines. When using sub-devices
+                                                            ///< the ::ze_device_properties_t.numAsyncComputeEngines must be queried
+                                                            ///< from the sub-device being used.
 
         };
 
@@ -187,6 +210,10 @@ namespace ze
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandQueue::desc_version_t to std::string
     std::string to_string( const CommandQueue::desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandQueue::flag_t to std::string
+    std::string to_string( const CommandQueue::flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandQueue::mode_t to std::string

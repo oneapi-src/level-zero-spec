@@ -42,6 +42,7 @@ extern "C" {
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 ///         + `::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version`
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + desc->flags
 ///         + desc->mode
 ///         + desc->priority
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY

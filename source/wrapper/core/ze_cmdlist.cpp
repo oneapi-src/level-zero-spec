@@ -237,6 +237,9 @@ namespace ze
         if( 0 == bits )
             str += "NONE   ";
         
+        if( static_cast<uint32_t>(CommandList::flag_t::COPY_ONLY) & bits )
+            str += "COPY_ONLY | ";
+        
         if( static_cast<uint32_t>(CommandList::flag_t::RELAXED_ORDERING) & bits )
             str += "RELAXED_ORDERING | ";
         
@@ -315,10 +318,6 @@ namespace ze
         
         str += "CommandList::desc_t::version : ";
         str += to_string(val.version);
-        str += "\n";
-        
-        str += "CommandList::desc_t::commandQueueGroupOrdinal : ";
-        str += std::to_string(val.commandQueueGroupOrdinal);
         str += "\n";
         
         str += "CommandList::desc_t::flags : ";

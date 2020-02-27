@@ -114,30 +114,6 @@ namespace ze
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::ze_command_queue_group_properties_t
-        enum class command_queue_group_properties_version_t
-        {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Supported command queue group flags
-        enum class command_queue_group_flag_t
-        {
-            NONE = 0,                                       ///< default behavior
-            COMPUTE_ONLY = ZE_BIT(0),                       ///< command queue group only supports enqueing compute commands.
-            COPY_ONLY = ZE_BIT(1),                          ///< command queue group only supports enqueing copy commands.
-            SINGLE_SLICE_ONLY = ZE_BIT(2),                  ///< command queue group reserves and cannot comsume more than a single
-                                                            ///< slice. 'slice' size is device-specific.  cannot be combined with
-                                                            ///< ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY.
-            SUPPORTS_COOPERATIVE_KERNELS = ZE_BIT(3),       ///< command queue group supports command list with cooperative kernels.
-                                                            ///< See ::zeCommandListAppendLaunchCooperativeKernel for more details.
-                                                            ///< cannot be combined with ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::ze_device_memory_properties_t
         enum class memory_properties_version_t
         {
@@ -221,7 +197,9 @@ namespace ze
             bool_t unifiedMemorySupported;                  ///< [out] Supports unified physical memory between Host and device.
             bool_t eccMemorySupported;                      ///< [out] Supports error correction memory access.
             bool_t onDemandPageFaultsSupported;             ///< [out] Supports on-demand page-faulting.
-            uint32_t maxHardwareContexts;                   ///< [out] Maximum number of logical hardware contexts.
+            uint32_t maxCommandQueues;                      ///< [out] Maximum number of logical command queues.
+            uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
+            uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
             uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                             ///< priority.
             uint32_t numThreadsPerEU;                       ///< [out] Number of threads per EU.
@@ -287,16 +265,6 @@ namespace ze
             uint32_t maxArgumentsSize;                      ///< [out] Maximum kernel argument size that is supported.
             uint32_t printfBufferSize;                      ///< [out] Maximum size of internal buffer that holds output of printf
                                                             ///< calls from kernel.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Command queue group properties queried using
-        ///        ::zeDeviceGetCommandQueueGroupProperties
-        struct command_queue_group_properties_t
-        {
-            command_queue_group_properties_version_t version = command_queue_group_properties_version_t::CURRENT;   ///< [in] ::ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT
-            command_queue_group_flag_t flags;               ///< [out] capability flags of the command queue group.
 
         };
 
@@ -481,33 +449,6 @@ namespace ze
         void __zecall
         GetKernelProperties(
             kernel_properties_t* pKernelProperties          ///< [in,out] query result for kernel properties
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves command queue group properties of the device.
-        /// 
-        /// @details
-        ///     - Properties are reported for each physical command queue type supported
-        ///       by the device.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **vkGetPhysicalDeviceQueueFamilyProperties**
-        /// @throws result_t
-        void __zecall
-        GetCommandQueueGroupProperties(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of command queue group properties.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of command queue group properties available.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of
-                                                            ///< command queue group properties.
-                                                            ///< if count is larger than the number of command queue group properties
-                                                            ///< available, then the driver will update the value with the correct
-                                                            ///< number of command queue group properties available.
-            command_queue_group_properties_t* pCommandQueueGroupProperties = nullptr///< [in,out][optional][range(0, *pCount)] array of query results for
-                                                            ///< command queue group properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -803,18 +744,6 @@ namespace ze
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::kernel_properties_t to std::string
     std::string to_string( const Device::kernel_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::command_queue_group_properties_version_t to std::string
-    std::string to_string( const Device::command_queue_group_properties_version_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::command_queue_group_flag_t to std::string
-    std::string to_string( const Device::command_queue_group_flag_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::command_queue_group_properties_t to std::string
-    std::string to_string( const Device::command_queue_group_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::memory_properties_version_t to std::string
