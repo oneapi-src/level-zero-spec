@@ -845,8 +845,6 @@ class zet_power_properties_t(Structure):
                                                                         ## user has permissions.
         ("isEnergyThresholdSupported", ze_bool_t),                      ## [out] Indicates if this power domain supports the energy threshold
                                                                         ## event (::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
-        ("defaultLimit", c_ulong),                                      ## [out] The factory default TDP power limit of the part in milliwatts.
-        ("minLimit", c_ulong),                                          ## [out] The minimum power limit in milliwatts that can be requested.
         ("maxLimit", c_ulong)                                           ## [out] The maximum power limit in milliwatts that can be requested.
     ]
 

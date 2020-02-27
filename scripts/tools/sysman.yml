@@ -744,12 +744,6 @@ members:
       name: "isEnergyThresholdSupported"
       desc: "[out] Indicates if this power domain supports the energy threshold event ($T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED)."
     - type: uint32_t
-      name: "defaultLimit"
-      desc: "[out] The factory default TDP power limit of the part in milliwatts."  
-    - type: uint32_t
-      name: "minLimit"
-      desc: "[out] The minimum power limit in milliwatts that can be requested."  
-    - type: uint32_t
       name: "maxLimit"
       desc: "[out] The maximum power limit in milliwatts that can be requested."  
 --- #--------------------------------------------------------------------------

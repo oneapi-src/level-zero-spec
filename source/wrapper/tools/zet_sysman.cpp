@@ -3495,14 +3495,6 @@ namespace zet
         str += std::to_string(val.isEnergyThresholdSupported);
         str += "\n";
         
-        str += "SysmanPower::power_properties_t::defaultLimit : ";
-        str += std::to_string(val.defaultLimit);
-        str += "\n";
-        
-        str += "SysmanPower::power_properties_t::minLimit : ";
-        str += std::to_string(val.minLimit);
-        str += "\n";
-        
         str += "SysmanPower::power_properties_t::maxLimit : ";
         str += std::to_string(val.maxLimit);
         str += "\n";
