@@ -6,7 +6,6 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.h
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_loader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_loader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_loader.cpp
 )
 

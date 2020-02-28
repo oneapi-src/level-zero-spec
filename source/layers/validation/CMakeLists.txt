@@ -5,7 +5,6 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_layer.h
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_layer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_layer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_layer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_layer.cpp
 )
 

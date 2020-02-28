@@ -14,7 +14,6 @@
 struct dditable_t
 {
     ze_dditable_t   ze;
-    zex_dditable_t  zex;
     zet_dditable_t  zet;
 };
 

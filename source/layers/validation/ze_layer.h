@@ -9,7 +9,6 @@
  */
 #pragma once
 #include "ze_ddi.h"
-#include "zex_ddi.h"
 #include "zet_ddi.h"
 #include "ze_util.h"
 
@@ -27,7 +26,6 @@ namespace layer
         bool enableThreadingValidation = false;
 
         ze_dditable_t   zeDdiTable = {};
-        zex_dditable_t  zexDdiTable = {};
         zet_dditable_t  zetDdiTable = {};
 
         context_t();

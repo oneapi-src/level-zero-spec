@@ -11,13 +11,11 @@
 #include <vector>
 
 #include "ze_ddi.h"
-#include "zex_ddi.h"
 #include "zet_ddi.h"
 #include "ze_util.h"
 
 #include "ze_object.h"
 #include "ze_core_loader.h"
-#include "ze_experimental_loader.h"
 #include "ze_tools_loader.h"
 
 namespace loader
