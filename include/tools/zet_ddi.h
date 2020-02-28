@@ -509,16 +509,14 @@ typedef ze_result_t (__zecall *zet_pfnTracerDestroy_t)(
 /// @brief Function-pointer for zetTracerSetPrologues 
 typedef ze_result_t (__zecall *zet_pfnTracerSetPrologues_t)(
     zet_tracer_handle_t,
-    zet_core_callbacks_t*,
-    zet_experimental_callbacks_t*
+    zet_core_callbacks_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetTracerSetEpilogues 
 typedef ze_result_t (__zecall *zet_pfnTracerSetEpilogues_t)(
     zet_tracer_handle_t,
-    zet_core_callbacks_t*,
-    zet_experimental_callbacks_t*
+    zet_core_callbacks_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////

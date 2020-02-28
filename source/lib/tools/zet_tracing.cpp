@@ -106,16 +106,14 @@ zetTracerDestroy(
 ze_result_t __zecall
 zetTracerSetPrologues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-    zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-    zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                    ///< pointers
+    zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
     )
 {
     auto pfnSetPrologues = zet_lib::context.ddiTable.Tracer.pfnSetPrologues;
     if( nullptr == pfnSetPrologues )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
+    return pfnSetPrologues( hTracer, pCoreCbs );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,16 +139,14 @@ zetTracerSetPrologues(
 ze_result_t __zecall
 zetTracerSetEpilogues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-    zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-    zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                    ///< pointers
+    zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
     )
 {
     auto pfnSetEpilogues = zet_lib::context.ddiTable.Tracer.pfnSetEpilogues;
     if( nullptr == pfnSetEpilogues )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
+    return pfnSetEpilogues( hTracer, pCoreCbs );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -3419,9 +3419,7 @@ namespace driver
     ze_result_t __zecall
     zetTracerSetPrologues(
         zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-        zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                        ///< pointers
+        zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -3430,7 +3428,7 @@ namespace driver
         auto pfnSetPrologues = context.zetDdiTable.Tracer.pfnSetPrologues;
         if( nullptr != pfnSetPrologues )
         {
-            result = pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
+            result = pfnSetPrologues( hTracer, pCoreCbs );
         }
         else
         {
@@ -3445,9 +3443,7 @@ namespace driver
     ze_result_t __zecall
     zetTracerSetEpilogues(
         zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-        zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                        ///< pointers
+        zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -3456,7 +3452,7 @@ namespace driver
         auto pfnSetEpilogues = context.zetDdiTable.Tracer.pfnSetEpilogues;
         if( nullptr != pfnSetEpilogues )
         {
-            result = pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
+            result = pfnSetEpilogues( hTracer, pCoreCbs );
         }
         else
         {

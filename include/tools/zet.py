@@ -1764,11 +1764,6 @@ class zet_core_callbacks_t(ze_callbacks_t):
     pass
 
 ###############################################################################
-## @brief Alias the existing callbacks definition for 'experimental' callbacks
-class zet_experimental_callbacks_t(zex_callbacks_t):
-    pass
-
-###############################################################################
 ## @brief API version of ::zet_tracer_desc_t
 class zet_tracer_desc_version_v(IntEnum):
     CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
@@ -2067,16 +2062,16 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetTracerSetPrologues
 if __use_win_types:
-    _zetTracerSetPrologues_t = WINFUNCTYPE( ze_result_t, zet_tracer_handle_t, POINTER(zet_core_callbacks_t), POINTER(zet_experimental_callbacks_t) )
+    _zetTracerSetPrologues_t = WINFUNCTYPE( ze_result_t, zet_tracer_handle_t, POINTER(zet_core_callbacks_t) )
 else:
-    _zetTracerSetPrologues_t = CFUNCTYPE( ze_result_t, zet_tracer_handle_t, POINTER(zet_core_callbacks_t), POINTER(zet_experimental_callbacks_t) )
+    _zetTracerSetPrologues_t = CFUNCTYPE( ze_result_t, zet_tracer_handle_t, POINTER(zet_core_callbacks_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetTracerSetEpilogues
 if __use_win_types:
-    _zetTracerSetEpilogues_t = WINFUNCTYPE( ze_result_t, zet_tracer_handle_t, POINTER(zet_core_callbacks_t), POINTER(zet_experimental_callbacks_t) )
+    _zetTracerSetEpilogues_t = WINFUNCTYPE( ze_result_t, zet_tracer_handle_t, POINTER(zet_core_callbacks_t) )
 else:
-    _zetTracerSetEpilogues_t = CFUNCTYPE( ze_result_t, zet_tracer_handle_t, POINTER(zet_core_callbacks_t), POINTER(zet_experimental_callbacks_t) )
+    _zetTracerSetEpilogues_t = CFUNCTYPE( ze_result_t, zet_tracer_handle_t, POINTER(zet_core_callbacks_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetTracerSetEnabled

@@ -325,26 +325,22 @@ namespace instrumented
             //////////////////////////////////////////////////////////////////////////
             driver::context.zetDdiTable.Tracer.pfnSetPrologues = [](
                 zet_tracer_handle_t hTracer,
-                zet_core_callbacks_t* pCoreCbs,
-                zet_experimental_callbacks_t* pExperimentalCbs )
+                zet_core_callbacks_t* pCoreCbs)
             {
                 auto index = reinterpret_cast<size_t>( hTracer );
 
                 context.tracerData[ index ].zePrologueCbs = *pCoreCbs;
-                if( pExperimentalCbs ) context.tracerData[ index ].zexPrologueCbs = *pExperimentalCbs;
                 return ZE_RESULT_SUCCESS;
             };
 
             //////////////////////////////////////////////////////////////////////////
             driver::context.zetDdiTable.Tracer.pfnSetEpilogues = [](
                 zet_tracer_handle_t hTracer,
-                zet_core_callbacks_t* pCoreCbs,
-                zet_experimental_callbacks_t* pExperimentalCbs )
+                zet_core_callbacks_t* pCoreCbs)
             {
                 auto index = reinterpret_cast<size_t>( hTracer );
 
                 context.tracerData[ index ].zeEpilogueCbs = *pCoreCbs;
-                if( pExperimentalCbs ) context.tracerData[ index ].zexEpilogueCbs = *pExperimentalCbs;
                 return ZE_RESULT_SUCCESS;
             };
 

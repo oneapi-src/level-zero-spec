@@ -3617,9 +3617,7 @@ namespace layer
     ze_result_t __zecall
     zetTracerSetPrologues(
         zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-        zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                        ///< pointers
+        zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
         )
     {
         auto pfnSetPrologues = context.zetDdiTable.Tracer.pfnSetPrologues;
@@ -3637,7 +3635,7 @@ namespace layer
 
         }
 
-        return pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
+        return pfnSetPrologues( hTracer, pCoreCbs );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3645,9 +3643,7 @@ namespace layer
     ze_result_t __zecall
     zetTracerSetEpilogues(
         zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-        zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                        ///< pointers
+        zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
         )
     {
         auto pfnSetEpilogues = context.zetDdiTable.Tracer.pfnSetEpilogues;
@@ -3665,7 +3661,7 @@ namespace layer
 
         }
 
-        return pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
+        return pfnSetEpilogues( hTracer, pCoreCbs );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

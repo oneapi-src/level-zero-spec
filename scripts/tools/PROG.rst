@@ -127,8 +127,8 @@ The following pseudo-code demonstrates a basic usage of API tracing:
            prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchKernel;
            epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchKernel;
 
-           ${t}TracerSetPrologues(hTracer, &prologCbs, nullptr);
-           ${t}TracerSetEpilogues(hTracer, &epilogCbs, nullptr);
+           ${t}TracerSetPrologues(hTracer, &prologCbs);
+           ${t}TracerSetEpilogues(hTracer, &epilogCbs);
 
            ${t}TracerSetEnabled(hTracer, true);
 

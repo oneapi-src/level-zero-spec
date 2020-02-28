@@ -34,10 +34,6 @@ extern "C" {
 typedef ze_callbacks_t zet_core_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Alias the existing callbacks definition for 'experimental' callbacks
-typedef zex_callbacks_t zet_experimental_callbacks_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::zet_tracer_desc_t
 typedef enum _zet_tracer_desc_version_t
 {
@@ -129,9 +125,7 @@ zetTracerDestroy(
 ze_result_t __zecall
 zetTracerSetPrologues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-    zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-    zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                    ///< pointers
+    zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -157,9 +151,7 @@ zetTracerSetPrologues(
 ze_result_t __zecall
 zetTracerSetEpilogues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-    zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-    zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                    ///< pointers
+    zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////

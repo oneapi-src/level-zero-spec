@@ -119,15 +119,12 @@ namespace zet
     /// @throws result_t
     void __zecall
     Tracer::SetPrologues(
-        core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
-        experimental_callbacks_t* pExperimentalCbs      ///< [in][optional] pointer to table of 'experimental' callback function
-                                                        ///< pointers
+        core_callbacks_t* pCoreCbs                      ///< [in] pointer to table of 'core' callback function pointers
         )
     {
         auto result = static_cast<result_t>( ::zetTracerSetPrologues(
             reinterpret_cast<zet_tracer_handle_t>( getHandle() ),
-            reinterpret_cast<zet_core_callbacks_t*>( pCoreCbs ),
-            reinterpret_cast<zet_experimental_callbacks_t*>( pExperimentalCbs ) ) );
+            reinterpret_cast<zet_core_callbacks_t*>( pCoreCbs ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Tracer::SetPrologues" );
@@ -148,15 +145,12 @@ namespace zet
     /// @throws result_t
     void __zecall
     Tracer::SetEpilogues(
-        core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
-        experimental_callbacks_t* pExperimentalCbs      ///< [in][optional] pointer to table of 'experimental' callback function
-                                                        ///< pointers
+        core_callbacks_t* pCoreCbs                      ///< [in] pointer to table of 'core' callback function pointers
         )
     {
         auto result = static_cast<result_t>( ::zetTracerSetEpilogues(
             reinterpret_cast<zet_tracer_handle_t>( getHandle() ),
-            reinterpret_cast<zet_core_callbacks_t*>( pCoreCbs ),
-            reinterpret_cast<zet_experimental_callbacks_t*>( pExperimentalCbs ) ) );
+            reinterpret_cast<zet_core_callbacks_t*>( pCoreCbs ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Tracer::SetEpilogues" );

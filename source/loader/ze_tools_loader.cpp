@@ -3809,9 +3809,7 @@ namespace loader
     ze_result_t __zecall
     zetTracerSetPrologues(
         zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-        zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                        ///< pointers
+        zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -3826,7 +3824,7 @@ namespace loader
         hTracer = reinterpret_cast<zet_tracer_object_t*>( hTracer )->handle;
 
         // forward to device-driver
-        result = pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
+        result = pfnSetPrologues( hTracer, pCoreCbs );
 
         return result;
     }
@@ -3836,9 +3834,7 @@ namespace loader
     ze_result_t __zecall
     zetTracerSetEpilogues(
         zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
-        zet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        zet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
-                                                        ///< pointers
+        zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -3853,7 +3849,7 @@ namespace loader
         hTracer = reinterpret_cast<zet_tracer_object_t*>( hTracer )->handle;
 
         // forward to device-driver
-        result = pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
+        result = pfnSetEpilogues( hTracer, pCoreCbs );
 
         return result;
     }

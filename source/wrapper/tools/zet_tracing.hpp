@@ -35,10 +35,6 @@ namespace zet
         using core_callbacks_t = ze_callbacks_t;
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Alias the existing callbacks definition for 'experimental' callbacks
-        using experimental_callbacks_t = zex_callbacks_t;
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::zet_tracer_desc_t
         enum class desc_version_t
         {
@@ -131,9 +127,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         SetPrologues(
-            core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
-            experimental_callbacks_t* pExperimentalCbs = nullptr///< [in][optional] pointer to table of 'experimental' callback function
-                                                            ///< pointers
+            core_callbacks_t* pCoreCbs                      ///< [in] pointer to table of 'core' callback function pointers
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -150,9 +144,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         SetEpilogues(
-            core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
-            experimental_callbacks_t* pExperimentalCbs = nullptr///< [in][optional] pointer to table of 'experimental' callback function
-                                                            ///< pointers
+            core_callbacks_t* pCoreCbs                      ///< [in] pointer to table of 'core' callback function pointers
             );
 
         ///////////////////////////////////////////////////////////////////////////////
