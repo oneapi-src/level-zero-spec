@@ -10,7 +10,6 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for API Tracing"
 includes:
     - "$x_callbacks.h"
-    - "$e_callbacks.h"
 --- #--------------------------------------------------------------------------
 type: typedef
 desc: "Alias the existing callbacks definition for 'core' callbacks"

@@ -5,7 +5,6 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.h
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_driver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_driver.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_driver.cpp
 )
 
