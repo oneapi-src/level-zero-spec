@@ -777,12 +777,8 @@ namespace ze
         str += std::to_string(val.numSubslicesPerSlice);
         str += "\n";
         
-        str += "Device::properties_t::numSlicesPerTile : ";
-        str += std::to_string(val.numSlicesPerTile);
-        str += "\n";
-        
-        str += "Device::properties_t::numTiles : ";
-        str += std::to_string(val.numTiles);
+        str += "Device::properties_t::numSlices : ";
+        str += std::to_string(val.numSlices);
         str += "\n";
         
         str += "Device::properties_t::timerResolution : ";

@@ -24,7 +24,7 @@ A device represents a physical device in the system that support Level-Zero.
 
 - The application may query the number devices supported by a driver.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
-- Device may expose sub-devices that allow finer-grained partition and control; such as each tile of a multi-tile devices.
+- Device may expose sub-devices that allow finer-grained control of physical or logical partitions of a device.
 
 The following diagram illustrates the relationship between the driver, device and other objects described in this document.
 

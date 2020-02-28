@@ -146,9 +146,9 @@ typedef struct _ze_device_properties_t
     uint32_t physicalEUSimdWidth;                   ///< [out] The physical EU simd width.
     uint32_t numEUsPerSubslice;                     ///< [out] Number of EUs per sub-slice.
     uint32_t numSubslicesPerSlice;                  ///< [out] Number of sub-slices per slice.
-    uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
-    uint32_t numTiles;                              ///< [out] Number of tiles.
-    uint64_t timerResolution;                       ///< [out] Returns the resolution of device timer in nanoseconds.
+    uint32_t numSlices;                             ///< [out] Number of slices.
+    uint64_t timerResolution;                       ///< [out] Returns the resolution of device timer in nanoseconds used for
+                                                    ///< profiling, timestamps, etc.
     char name[ZE_MAX_DEVICE_NAME];                  ///< [out] Device name
 
 } ze_device_properties_t;

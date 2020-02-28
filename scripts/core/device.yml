@@ -161,14 +161,11 @@ members:
       name: numSubslicesPerSlice
       desc: "[out] Number of sub-slices per slice."
     - type: uint32_t
-      name: numSlicesPerTile
-      desc: "[out] Number of slices per tile."
-    - type: uint32_t
-      name: numTiles
-      desc: "[out] Number of tiles."
+      name: numSlices
+      desc: "[out] Number of slices."
     - type: uint64_t
       name: timerResolution
-      desc: "[out] Returns the resolution of device timer in nanoseconds."
+      desc: "[out] Returns the resolution of device timer in nanoseconds used for profiling, timestamps, etc."
     - type: char
       name: "name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"

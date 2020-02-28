@@ -319,9 +319,9 @@ class ze_device_properties_t(Structure):
         ("physicalEUSimdWidth", c_ulong),                               ## [out] The physical EU simd width.
         ("numEUsPerSubslice", c_ulong),                                 ## [out] Number of EUs per sub-slice.
         ("numSubslicesPerSlice", c_ulong),                              ## [out] Number of sub-slices per slice.
-        ("numSlicesPerTile", c_ulong),                                  ## [out] Number of slices per tile.
-        ("numTiles", c_ulong),                                          ## [out] Number of tiles.
-        ("timerResolution", c_ulonglong),                               ## [out] Returns the resolution of device timer in nanoseconds.
+        ("numSlices", c_ulong),                                         ## [out] Number of slices.
+        ("timerResolution", c_ulonglong),                               ## [out] Returns the resolution of device timer in nanoseconds used for
+                                                                        ## profiling, timestamps, etc.
         ("name", c_char * ZE_MAX_DEVICE_NAME)                           ## [out] Device name
     ]
 

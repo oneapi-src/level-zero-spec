@@ -78,11 +78,12 @@ host or shared memory. The APIs enable both implicit and explicit
 management of the resources by the application or runtimes. The
 interface also provides query capabilities for all memory objects.
 
-Multi-Die Device Support
-------------------------
+Subdevice Support
+--------------------------------------
 
-The API represents tiles as sub-devices and there are functions to query
-and obtain a sub-device. Outside of these functions there are no
+The API supports sub-devices and there are functions to query
+and obtain a sub-device. A sub-device can represent a physical or
+logical partition of the device. Outside of these functions there are no
 distinction between sub-devices and devices. For example, a sub-device
 can be used with memory allocation and tasks and allow placement and
 submission to a specific sub-device.
