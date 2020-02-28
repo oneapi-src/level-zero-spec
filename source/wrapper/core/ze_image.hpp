@@ -146,7 +146,7 @@ namespace ze
         struct format_desc_t
         {
             format_layout_t layout;                         ///< [in] image format component layout
-            format_type_t type;                             ///< [in] image format type. Media formats can not be used for
+            format_type_t type;                             ///< [in] image format type. Media formats can't be used for
                                                             ///< ::ZE_IMAGE_TYPE_BUFFER.
             format_swizzle_t x;                             ///< [in] image component swizzle into channel x
             format_swizzle_t y;                             ///< [in] image component swizzle into channel y

@@ -41,10 +41,10 @@ namespace ze
         enum class flag_t
         {
             NONE = 0,                                       ///< default behavior
-            COPY_ONLY = ZE_BIT(0),                          ///< command queue only supports enqueing copy-only command lists
+            COPY_ONLY = ZE_BIT(0),                          ///< command queue only supports enqueuing copy-only command lists
             LOGICAL_ONLY = ZE_BIT(1),                       ///< command queue is not tied to a physical command queue; driver may
                                                             ///< dynamically assign based on usage
-            SINGLE_SLICE_ONLY = ZE_BIT(2),                  ///< command queue reserves and cannot comsume more than a single slice.
+            SINGLE_SLICE_ONLY = ZE_BIT(2),                  ///< command queue reserves and cannot consume more than a single slice.
                                                             ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
             SUPPORTS_COOPERATIVE_KERNELS = ZE_BIT(3),       ///< command queue supports command list with cooperative kernels. See
                                                             ///< ::zeCommandListAppendLaunchCooperativeKernel for more details. cannot

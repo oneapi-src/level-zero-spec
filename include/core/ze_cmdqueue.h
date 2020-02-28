@@ -40,10 +40,10 @@ typedef enum _ze_command_queue_desc_version_t
 typedef enum _ze_command_queue_flag_t
 {
     ZE_COMMAND_QUEUE_FLAG_NONE = 0,                 ///< default behavior
-    ZE_COMMAND_QUEUE_FLAG_COPY_ONLY = ZE_BIT(0),    ///< command queue only supports enqueing copy-only command lists
+    ZE_COMMAND_QUEUE_FLAG_COPY_ONLY = ZE_BIT(0),    ///< command queue only supports enqueuing copy-only command lists
     ZE_COMMAND_QUEUE_FLAG_LOGICAL_ONLY = ZE_BIT(1), ///< command queue is not tied to a physical command queue; driver may
                                                     ///< dynamically assign based on usage
-    ZE_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY = ZE_BIT(2),///< command queue reserves and cannot comsume more than a single slice.
+    ZE_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY = ZE_BIT(2),///< command queue reserves and cannot consume more than a single slice.
                                                     ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
     ZE_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_KERNELS = ZE_BIT(3), ///< command queue supports command list with cooperative kernels. See
                                                     ///< ::zeCommandListAppendLaunchCooperativeKernel for more details. cannot

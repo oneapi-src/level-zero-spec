@@ -361,7 +361,7 @@ zeEventHostSignal(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief The current host thread waits on an event to be signalled.
+/// @brief The current host thread waits on an event to be signaled.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.

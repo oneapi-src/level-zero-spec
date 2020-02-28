@@ -28,7 +28,7 @@ namespace ze
     ///     - If numWaitEvents is zero, then all previous commands are completed
     ///       prior to the execution of the barrier.
     ///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
-    ///       signalled prior to the execution of the barrier.
+    ///       signaled prior to the execution of the barrier.
     ///     - This command blocks all following commands from beginning until the
     ///       execution of the barrier completes.
     ///     - The application may **not** call this function from simultaneous
@@ -72,7 +72,7 @@ namespace ze
     ///     - If numWaitEvents is zero, then all previous commands are completed
     ///       prior to the execution of the barrier.
     ///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
-    ///       signalled prior to the execution of the barrier.
+    ///       signaled prior to the execution of the barrier.
     ///     - This command blocks all following commands from beginning until the
     ///       execution of the barrier completes.
     ///     - The application may **not** call this function from simultaneous

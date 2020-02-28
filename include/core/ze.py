@@ -591,10 +591,10 @@ class ze_command_queue_desc_version_t(c_int):
 ## @brief Supported command queue flags
 class ze_command_queue_flag_v(IntEnum):
     NONE = 0                                        ## default behavior
-    COPY_ONLY = ZE_BIT(0)                           ## command queue only supports enqueing copy-only command lists
+    COPY_ONLY = ZE_BIT(0)                           ## command queue only supports enqueuing copy-only command lists
     LOGICAL_ONLY = ZE_BIT(1)                        ## command queue is not tied to a physical command queue; driver may
                                                     ## dynamically assign based on usage
-    SINGLE_SLICE_ONLY = ZE_BIT(2)                   ## command queue reserves and cannot comsume more than a single slice.
+    SINGLE_SLICE_ONLY = ZE_BIT(2)                   ## command queue reserves and cannot consume more than a single slice.
                                                     ## 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
     SUPPORTS_COOPERATIVE_KERNELS = ZE_BIT(3)        ## command queue supports command list with cooperative kernels. See
                                                     ## ::zeCommandListAppendLaunchCooperativeKernel for more details. cannot
@@ -966,7 +966,7 @@ class ze_image_format_swizzle_t(c_int):
 class ze_image_format_desc_t(Structure):
     _fields_ = [
         ("layout", ze_image_format_layout_t),                           ## [in] image format component layout
-        ("type", ze_image_format_type_t),                               ## [in] image format type. Media formats can not be used for
+        ("type", ze_image_format_type_t),                               ## [in] image format type. Media formats can't be used for
                                                                         ## ::ZE_IMAGE_TYPE_BUFFER.
         ("x", ze_image_format_swizzle_t),                               ## [in] image component swizzle into channel x
         ("y", ze_image_format_swizzle_t),                               ## [in] image component swizzle into channel y

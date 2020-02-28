@@ -300,7 +300,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
-desc: "The current host thread waits on an event to be signalled."
+desc: "The current host thread waits on an event to be signaled."
 class: $xEvent
 name: HostSynchronize
 analogue:

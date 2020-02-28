@@ -166,7 +166,7 @@ members:
       desc: "[in] image format component layout"
     - type: $x_image_format_type_t
       name: type
-      desc: "[in] image format type. Media formats can not be used for $X_IMAGE_TYPE_BUFFER."
+      desc: "[in] image format type. Media formats can't be used for $X_IMAGE_TYPE_BUFFER."
     - type: $x_image_format_swizzle_t
       name: x
       desc: "[in] image component swizzle into channel x"
