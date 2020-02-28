@@ -27,29 +27,30 @@ def _validate_doc(d):
     filters object by version
 """
 def _filter_version(d, max_ver):
+    default_version = "0.91"
     type = d['type']
-    ver = float(d.get('version', "1.0"))
+    ver = float(d.get('version', default_version))
     if ver > max_ver:
         return None
 
     flt = []
     if 'enum' == type:
         for e in d['etors']:
-            ver = float(e.get('version', "1.0"))
+            ver = float(e.get('version', default_version))
             if ver <= max_ver:
                 flt.append(e)
         d['etors'] = flt
 
     elif 'function' == type:
         for p in d['params']:
-            ver = float(p.get('version', "1.0"))
+            ver = float(p.get('version', default_version))
             if ver <= max_ver:
                 flt.append(p)
         d['params'] = flt
 
     elif 'struct' == type or 'union' == type or 'class' == type:
         for m in d.get('members',[]):
-            ver = float(m.get('version', "1.0"))
+            ver = float(m.get('version', default_version))
             if ver <= max_ver:
                 flt.append(m)
         d['members'] = flt

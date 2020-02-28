@@ -26,7 +26,7 @@ copyright = u'2020, Intel'
 author = u'Intel'
 
 # The short X.Y version
-version = u'1.0'
+version = u'0.91'
 # The full version, including alpha/beta/rc tags
 release = u''
 
