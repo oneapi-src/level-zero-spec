@@ -724,7 +724,7 @@ The following functions are provided to manage the power of the device:
 +======================================+==================================================+
 | ::${t}SysmanPowerGet()                | Enumerate the power domains.                     |
 +--------------------------------------+--------------------------------------------------+
-| ::${t}SysmanPowerGetProperties()      | Get the minimum/maximum power limit that         |
+| ::${t}SysmanPowerGetProperties()      | Get the maximum power limit that                 |
 |                                      | can be specified when changing                   |
 |                                      | the power limits of a specific                   |
 |                                      | power domain.                                    |
@@ -2116,7 +2116,7 @@ API calls:
 +--------------------------------------+-----------------------------------+
 | Function                             | Description                       |
 +======================================+===================================+
-| ::${t}SysmanPciGetStats()             | Access to total PCI throughtput   |
+| ::${t}SysmanPciGetStats()             | Access to total PCI throughput    |
 |                                      | and number of packets can reveal  |
 |                                      | useful information about the      |
 |                                      | workload                          |

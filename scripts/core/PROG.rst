@@ -338,8 +338,8 @@ Execution
   share the same command queue.
 - If multiple Host threads enter the same command queue simultaneously, then execution order
   is undefined.
-- Command lists can only be executed on a command queue with an identical command queue group ordinal,
-  see more details below.
+- Command lists created with ::ZE_COMMAND_LIST_FLAG_COPY_ONLY may only be submitted to
+  command queues created with ::ZE_COMMAND_QUEUE_FLAG_COPY_ONLY.
 
 Destruction
 ~~~~~~~~~~~
@@ -400,18 +400,16 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 Submission
 ~~~~~~~~~~
 
-- There is no implicit association between a command list and a logical command queue. 
-  Therefore, a command list may be submitted to any or multiple logical command queues.
-- However, if a command list is meant to be submitted to a physical copy-only command queue,
-  then it must be created using a command queue group ordinal,
-  with only ::${x}_command_queue_group_properties_t.copySupported is enabled,
-  and submitted to a logical command queue created using the same ordinal.
+- There is no implicit association between a command list and a command queue. 
+  Therefore, a command list may be submitted to any, or multiple command queues.
+  However, if a command list is meant to be submitted to a copy-only command queue
+  then the ::ZE_COMMAND_LIST_FLAG_COPY_ONLY must be set at creation.
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
-- A command list may be submitted multiple times.  It is up to the application to ensure 
-  that the command list can be executed multiple times.
-  For example, event must be explicitly reset prior to re-execution.
+- A command list may be submitted multiple times.  It is up to the application to ensure
+  that the command list can be executed multiple times.  Events, for example, must be
+  explicitly reset prior to re-execution.
 
 The following pseudo-code demonstrates submission of commands to a command queue, via a command list:
 
@@ -1036,9 +1034,8 @@ Cooperative Kernels
 
 Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ::${x}CommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
-The command list must be submitted to a logical command queue that was created with an ordinal of a physical command queue
-that supports the ::${x}_command_queue_group_properties_t.cooperativeKernelsSupported is enabled. Finally, there is
-a ::${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that the device supports.
+Finally, there is a ::${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that
+the device supports.
 
 In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
 a command list. The most basic version of these is ::${x}CommandListAppendLaunchKernel which takes a
