@@ -227,7 +227,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     Sysman::DeviceGetProperties(
-        properties_t* pProperties                       ///< [in] Structure that will contain information about the device.
+        properties_t* pProperties                       ///< [in,out] Structure that will contain information about the device.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanDeviceGetProperties(
@@ -281,7 +281,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     Sysman::SchedulerGetCurrentMode(
-        sched_mode_t* pMode                             ///< [in] Will contain the current scheduler mode.
+        sched_mode_t* pMode                             ///< [in,out] Will contain the current scheduler mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerGetCurrentMode(
@@ -304,7 +304,7 @@ namespace zet
     Sysman::SchedulerGetTimeoutModeProperties(
         ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
-        sched_timeout_properties_t* pConfig             ///< [in] Will contain the current parameters for this mode.
+        sched_timeout_properties_t* pConfig             ///< [in,out] Will contain the current parameters for this mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerGetTimeoutModeProperties(
@@ -328,7 +328,7 @@ namespace zet
     Sysman::SchedulerGetTimesliceModeProperties(
         ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
-        sched_timeslice_properties_t* pConfig           ///< [in] Will contain the current parameters for this mode.
+        sched_timeslice_properties_t* pConfig           ///< [in,out] Will contain the current parameters for this mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerGetTimesliceModeProperties(
@@ -494,7 +494,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     Sysman::PerformanceProfileGet(
-        perf_profile_t* pProfile                        ///< [in] The performance profile currently loaded.
+        perf_profile_t* pProfile                        ///< [in,out] The performance profile currently loaded.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanPerformanceProfileGet(
@@ -588,7 +588,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     Sysman::DeviceGetRepairStatus(
-        repair_status_t* pRepairStatus                  ///< [in] Will indicate if the device was repaired
+        repair_status_t* pRepairStatus                  ///< [in,out] Will indicate if the device was repaired
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanDeviceGetRepairStatus(
@@ -609,7 +609,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     Sysman::PciGetProperties(
-        pci_properties_t* pProperties                   ///< [in] Will contain the PCI properties.
+        pci_properties_t* pProperties                   ///< [in,out] Will contain the PCI properties.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanPciGetProperties(
@@ -630,7 +630,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     Sysman::PciGetState(
-        pci_state_t* pState                             ///< [in] Will contain the PCI properties.
+        pci_state_t* pState                             ///< [in,out] Will contain the PCI properties.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanPciGetState(
@@ -679,7 +679,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     Sysman::PciGetStats(
-        pci_stats_t* pStats                             ///< [in] Will contain a snapshot of the latest stats.
+        pci_stats_t* pStats                             ///< [in,out] Will contain a snapshot of the latest stats.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanPciGetStats(
@@ -752,7 +752,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanPower::GetProperties(
-        power_properties_t* pProperties                 ///< [in] Structure that will contain property data.
+        power_properties_t* pProperties                 ///< [in,out] Structure that will contain property data.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanPowerGetProperties(
@@ -773,7 +773,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanPower::GetEnergyCounter(
-        power_energy_counter_t* pEnergy                 ///< [in] Will contain the latest snapshot of the energy counter and
+        power_energy_counter_t* pEnergy                 ///< [in,out] Will contain the latest snapshot of the energy counter and
                                                         ///< timestamp when the last counter value was measured.
         )
     {
@@ -795,9 +795,9 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanPower::GetLimits(
-        power_sustained_limit_t* pSustained,            ///< [in][optional] The sustained power limit.
-        power_burst_limit_t* pBurst,                    ///< [in][optional] The burst power limit.
-        power_peak_limit_t* pPeak                       ///< [in][optional] The peak power limit.
+        power_sustained_limit_t* pSustained,            ///< [in,out][optional] The sustained power limit.
+        power_burst_limit_t* pBurst,                    ///< [in,out][optional] The burst power limit.
+        power_peak_limit_t* pPeak                       ///< [in,out][optional] The peak power limit.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanPowerGetLimits(
@@ -845,7 +845,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanPower::GetEnergyThreshold(
-        energy_threshold_t* pThreshold                  ///< [in] Returns information about the energy threshold setting -
+        energy_threshold_t* pThreshold                  ///< [in,out] Returns information about the energy threshold setting -
                                                         ///< enabled/energy threshold/process ID.
         )
     {
@@ -954,7 +954,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::GetProperties(
-        freq_properties_t* pProperties                  ///< [in] The frequency properties for the specified domain.
+        freq_properties_t* pProperties                  ///< [in,out] The frequency properties for the specified domain.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyGetProperties(
@@ -1007,7 +1007,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::GetRange(
-        freq_range_t* pLimits                           ///< [in] The range between which the hardware can operate for the
+        freq_range_t* pLimits                           ///< [in,out] The range between which the hardware can operate for the
                                                         ///< specified domain.
         )
     {
@@ -1052,7 +1052,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::GetState(
-        freq_state_t* pState                            ///< [in] Frequency state for the specified domain.
+        freq_state_t* pState                            ///< [in,out] Frequency state for the specified domain.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyGetState(
@@ -1073,7 +1073,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::GetThrottleTime(
-        freq_throttle_time_t* pThrottleTime             ///< [in] Will contain a snapshot of the throttle time counters for the
+        freq_throttle_time_t* pThrottleTime             ///< [in,out] Will contain a snapshot of the throttle time counters for the
                                                         ///< specified domain.
         )
     {
@@ -1095,7 +1095,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::OcGetCapabilities(
-        oc_capabilities_t* pOcCapabilities              ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
+        oc_capabilities_t* pOcCapabilities              ///< [in,out] Pointer to the capabilities structure
+                                                        ///< ::zet_oc_capabilities_t.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyOcGetCapabilities(
@@ -1116,7 +1117,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::OcGetConfig(
-        oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+        oc_config_t* pOcConfiguration                   ///< [in,out] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyOcGetConfig(
@@ -1166,8 +1167,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::OcGetIccMax(
-        double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
-                                                        ///< return.
+        double* pOcIccMax                               ///< [in,out] Will contain the maximum current limit in Amperes on
+                                                        ///< successful return.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyOcGetIccMax(
@@ -1210,8 +1211,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFrequency::OcGetTjMax(
-        double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
-                                                        ///< successful return.
+        double* pOcTjMax                                ///< [in,out] Will contain the maximum temperature limit in degrees Celsius
+                                                        ///< on successful return.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFrequencyOcGetTjMax(
@@ -1306,7 +1307,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanEngine::GetProperties(
-        engine_properties_t* pProperties                ///< [in] The properties for the specified engine group.
+        engine_properties_t* pProperties                ///< [in,out] The properties for the specified engine group.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanEngineGetProperties(
@@ -1327,7 +1328,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanEngine::GetActivity(
-        engine_stats_t* pStats                          ///< [in] Will contain a snapshot of the engine group activity counters.
+        engine_stats_t* pStats                          ///< [in,out] Will contain a snapshot of the engine group activity
+                                                        ///< counters.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanEngineGetActivity(
@@ -1400,7 +1402,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanStandby::GetProperties(
-        standby_properties_t* pProperties               ///< [in] Will contain the standby hardware properties.
+        standby_properties_t* pProperties               ///< [in,out] Will contain the standby hardware properties.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanStandbyGetProperties(
@@ -1421,7 +1423,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanStandby::GetMode(
-        standby_promo_mode_t* pMode                     ///< [in] Will contain the current standby mode.
+        standby_promo_mode_t* pMode                     ///< [in,out] Will contain the current standby mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanStandbyGetMode(
@@ -1515,7 +1517,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFirmware::GetProperties(
-        firmware_properties_t* pProperties              ///< [in] Pointer to an array that will hold the properties of the firmware
+        firmware_properties_t* pProperties              ///< [in,out] Pointer to an array that will hold the properties of the
+                                                        ///< firmware
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFirmwareGetProperties(
@@ -1536,7 +1539,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFirmware::GetChecksum(
-        uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
+        uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFirmwareGetChecksum(
@@ -1632,7 +1635,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanMemory::GetProperties(
-        mem_properties_t* pProperties                   ///< [in] Will contain memory properties.
+        mem_properties_t* pProperties                   ///< [in,out] Will contain memory properties.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanMemoryGetProperties(
@@ -1653,7 +1656,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanMemory::GetState(
-        mem_state_t* pState                             ///< [in] Will contain the current health and allocated memory.
+        mem_state_t* pState                             ///< [in,out] Will contain the current health and allocated memory.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanMemoryGetState(
@@ -1674,7 +1677,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanMemory::GetBandwidth(
-        mem_bandwidth_t* pBandwidth                     ///< [in] Will contain a snapshot of the bandwidth counters.
+        mem_bandwidth_t* pBandwidth                     ///< [in,out] Will contain a snapshot of the bandwidth counters.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanMemoryGetBandwidth(
@@ -1747,7 +1750,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFabricPort::GetProperties(
-        fabric_port_properties_t* pProperties           ///< [in] Will contain properties of the Fabric Port.
+        fabric_port_properties_t* pProperties           ///< [in,out] Will contain properties of the Fabric Port.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFabricPortGetProperties(
@@ -1769,7 +1772,8 @@ namespace zet
     void __zecall
     SysmanFabricPort::GetLinkType(
         ze::bool_t verbose,                             ///< [in] Set to true to get a more detailed report.
-        fabric_link_type_t* pLinkType                   ///< [in] Will contain details about the link attached to the Fabric port.
+        fabric_link_type_t* pLinkType                   ///< [in,out] Will contain details about the link attached to the Fabric
+                                                        ///< port.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFabricPortGetLinkType(
@@ -1791,7 +1795,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFabricPort::GetConfig(
-        fabric_port_config_t* pConfig                   ///< [in] Will contain configuration of the Fabric Port.
+        fabric_port_config_t* pConfig                   ///< [in,out] Will contain configuration of the Fabric Port.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFabricPortGetConfig(
@@ -1834,7 +1838,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFabricPort::GetState(
-        fabric_port_state_t* pState                     ///< [in] Will contain the current state of the Fabric Port
+        fabric_port_state_t* pState                     ///< [in,out] Will contain the current state of the Fabric Port
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFabricPortGetState(
@@ -1855,7 +1859,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFabricPort::GetThroughput(
-        fabric_port_throughput_t* pThroughput           ///< [in] Will contain the Fabric port throughput counters and maximum
+        fabric_port_throughput_t* pThroughput           ///< [in,out] Will contain the Fabric port throughput counters and maximum
                                                         ///< bandwidth.
         )
     {
@@ -1929,7 +1933,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanTemperature::GetProperties(
-        temp_properties_t* pProperties                  ///< [in] Will contain the temperature sensor properties.
+        temp_properties_t* pProperties                  ///< [in,out] Will contain the temperature sensor properties.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanTemperatureGetProperties(
@@ -1951,7 +1955,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanTemperature::GetConfig(
-        temp_config_t* pConfig                          ///< [in] Returns current configuration.
+        temp_config_t* pConfig                          ///< [in,out] Returns current configuration.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanTemperatureGetConfig(
@@ -2006,8 +2010,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanTemperature::GetState(
-        double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
-                                                        ///< degrees Celcius.
+        double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
+                                                        ///< in degrees Celcius.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanTemperatureGetState(
@@ -2080,7 +2084,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanPsu::GetProperties(
-        psu_properties_t* pProperties                   ///< [in] Will contain the properties of the power supply.
+        psu_properties_t* pProperties                   ///< [in,out] Will contain the properties of the power supply.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanPsuGetProperties(
@@ -2101,7 +2105,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanPsu::GetState(
-        psu_state_t* pState                             ///< [in] Will contain the current state of the power supply.
+        psu_state_t* pState                             ///< [in,out] Will contain the current state of the power supply.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanPsuGetState(
@@ -2174,7 +2178,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFan::GetProperties(
-        fan_properties_t* pProperties                   ///< [in] Will contain the properties of the fan.
+        fan_properties_t* pProperties                   ///< [in,out] Will contain the properties of the fan.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFanGetProperties(
@@ -2195,7 +2199,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFan::GetConfig(
-        fan_config_t* pConfig                           ///< [in] Will contain the current configuration of the fan.
+        fan_config_t* pConfig                           ///< [in,out] Will contain the current configuration of the fan.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFanGetConfig(
@@ -2238,7 +2242,8 @@ namespace zet
     void __zecall
     SysmanFan::GetState(
         fan_speed_units_t units,                        ///< [in] The units in which the fan speed should be returned.
-        uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
+        uint32_t* pSpeed                                ///< [in,out] Will contain the current speed of the fan in the units
+                                                        ///< requested.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFanGetState(
@@ -2312,7 +2317,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanLed::GetProperties(
-        led_properties_t* pProperties                   ///< [in] Will contain the properties of the LED.
+        led_properties_t* pProperties                   ///< [in,out] Will contain the properties of the LED.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanLedGetProperties(
@@ -2333,7 +2338,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanLed::GetState(
-        led_state_t* pState                             ///< [in] Will contain the current state of the LED.
+        led_state_t* pState                             ///< [in,out] Will contain the current state of the LED.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanLedGetState(
@@ -2439,7 +2444,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanRas::GetProperties(
-        ras_properties_t* pProperties                   ///< [in] Structure describing RAS properties
+        ras_properties_t* pProperties                   ///< [in,out] Structure describing RAS properties
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanRasGetProperties(
@@ -2469,8 +2474,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanRas::GetConfig(
-        ras_config_t* pConfig                           ///< [in] Will be populed with the current RAS configuration - thresholds
-                                                        ///< used to trigger events
+        ras_config_t* pConfig                           ///< [in,out] Will be populed with the current RAS configuration -
+                                                        ///< thresholds used to trigger events
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanRasGetConfig(
@@ -2527,8 +2532,8 @@ namespace zet
     void __zecall
     SysmanRas::GetState(
         ze::bool_t clear,                               ///< [in] Set to 1 to clear the counters of this type
-        uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
-        ras_details_t* pDetails                         ///< [in][optional] Breakdown of where errors have occurred
+        uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
+        ras_details_t* pDetails                         ///< [in,out][optional] Breakdown of where errors have occurred
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanRasGetState(
@@ -2594,8 +2599,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanEvent::GetConfig(
-        event_config_t* pConfig                         ///< [in] Will contain the current event configuration (list of registered
-                                                        ///< events).
+        event_config_t* pConfig                         ///< [in,out] Will contain the current event configuration (list of
+                                                        ///< registered events).
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanEventGetConfig(
@@ -2642,7 +2647,7 @@ namespace zet
     void __zecall
     SysmanEvent::GetState(
         ze::bool_t clear,                               ///< [in] Indicates if the event list for this device should be cleared.
-        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+        uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zet_sysman_event_type_t that have been
                                                         ///< triggered by this device.
         )
     {
@@ -2674,7 +2679,7 @@ namespace zet
                                                         ///< ::ZET_EVENT_WAIT_INFINITE to block until events arrive.
         uint32_t count,                                 ///< [in] Number of handles in phEvents
         SysmanEvent** ppEvents,                         ///< [in][range(0, count)] Handle of events that should be listened to
-        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+        uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zet_sysman_event_type_t that have been
                                                         ///< triggered by any of the supplied event handles. If timeout is not
                                                         ///< ::ZET_EVENT_WAIT_INFINITE and this value is
                                                         ///< ::ZET_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
@@ -2759,7 +2764,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanDiagnostics::GetProperties(
-        diag_properties_t* pProperties                  ///< [in] Structure describing the properties of a diagnostics test suite
+        diag_properties_t* pProperties                  ///< [in,out] Structure describing the properties of a diagnostics test
+                                                        ///< suite
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanDiagnosticsGetProperties(
@@ -2823,7 +2829,7 @@ namespace zet
                                                         ///< ::ZET_DIAG_FIRST_TEST_INDEX to start from the beginning.
         uint32_t end,                                   ///< [in] The index of the last test to run. Set to
                                                         ///< ::ZET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
-        diag_result_t* pResult                          ///< [in] The result of the diagnostics
+        diag_result_t* pResult                          ///< [in,out] The result of the diagnostics
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanDiagnosticsRunTests(

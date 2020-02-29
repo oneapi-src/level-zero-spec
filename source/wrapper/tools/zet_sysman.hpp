@@ -436,7 +436,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         DeviceGetProperties(
-            properties_t* pProperties                       ///< [in] Structure that will contain information about the device.
+            properties_t* pProperties                       ///< [in,out] Structure that will contain information about the device.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -471,7 +471,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         SchedulerGetCurrentMode(
-            sched_mode_t* pMode                             ///< [in] Will contain the current scheduler mode.
+            sched_mode_t* pMode                             ///< [in,out] Will contain the current scheduler mode.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -485,7 +485,7 @@ namespace zet
         SchedulerGetTimeoutModeProperties(
             ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                             ///< this mode, otherwise it will return the current properties.
-            sched_timeout_properties_t* pConfig             ///< [in] Will contain the current parameters for this mode.
+            sched_timeout_properties_t* pConfig             ///< [in,out] Will contain the current parameters for this mode.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -499,7 +499,7 @@ namespace zet
         SchedulerGetTimesliceModeProperties(
             ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                             ///< this mode, otherwise it will return the current properties.
-            sched_timeslice_properties_t* pConfig           ///< [in] Will contain the current parameters for this mode.
+            sched_timeslice_properties_t* pConfig           ///< [in,out] Will contain the current parameters for this mode.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -607,7 +607,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         PerformanceProfileGet(
-            perf_profile_t* pProfile                        ///< [in] The performance profile currently loaded.
+            perf_profile_t* pProfile                        ///< [in,out] The performance profile currently loaded.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -665,7 +665,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         DeviceGetRepairStatus(
-            repair_status_t* pRepairStatus                  ///< [in] Will indicate if the device was repaired
+            repair_status_t* pRepairStatus                  ///< [in,out] Will indicate if the device was repaired
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -677,7 +677,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         PciGetProperties(
-            pci_properties_t* pProperties                   ///< [in] Will contain the PCI properties.
+            pci_properties_t* pProperties                   ///< [in,out] Will contain the PCI properties.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -689,7 +689,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         PciGetState(
-            pci_state_t* pState                             ///< [in] Will contain the PCI properties.
+            pci_state_t* pState                             ///< [in,out] Will contain the PCI properties.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -719,7 +719,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         PciGetStats(
-            pci_stats_t* pStats                             ///< [in] Will contain a snapshot of the latest stats.
+            pci_stats_t* pStats                             ///< [in,out] Will contain a snapshot of the latest stats.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1150,7 +1150,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            power_properties_t* pProperties                 ///< [in] Structure that will contain property data.
+            power_properties_t* pProperties                 ///< [in,out] Structure that will contain property data.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1162,7 +1162,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetEnergyCounter(
-            power_energy_counter_t* pEnergy                 ///< [in] Will contain the latest snapshot of the energy counter and
+            power_energy_counter_t* pEnergy                 ///< [in,out] Will contain the latest snapshot of the energy counter and
                                                             ///< timestamp when the last counter value was measured.
             );
 
@@ -1175,9 +1175,9 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetLimits(
-            power_sustained_limit_t* pSustained = nullptr,  ///< [in][optional] The sustained power limit.
-            power_burst_limit_t* pBurst = nullptr,          ///< [in][optional] The burst power limit.
-            power_peak_limit_t* pPeak = nullptr             ///< [in][optional] The peak power limit.
+            power_sustained_limit_t* pSustained = nullptr,  ///< [in,out][optional] The sustained power limit.
+            power_burst_limit_t* pBurst = nullptr,          ///< [in,out][optional] The burst power limit.
+            power_peak_limit_t* pPeak = nullptr             ///< [in,out][optional] The peak power limit.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1203,7 +1203,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetEnergyThreshold(
-            energy_threshold_t* pThreshold                  ///< [in] Returns information about the energy threshold setting -
+            energy_threshold_t* pThreshold                  ///< [in,out] Returns information about the energy threshold setting -
                                                             ///< enabled/energy threshold/process ID.
             );
 
@@ -1437,7 +1437,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            freq_properties_t* pProperties                  ///< [in] The frequency properties for the specified domain.
+            freq_properties_t* pProperties                  ///< [in,out] The frequency properties for the specified domain.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1471,7 +1471,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetRange(
-            freq_range_t* pLimits                           ///< [in] The range between which the hardware can operate for the
+            freq_range_t* pLimits                           ///< [in,out] The range between which the hardware can operate for the
                                                             ///< specified domain.
             );
 
@@ -1498,7 +1498,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetState(
-            freq_state_t* pState                            ///< [in] Frequency state for the specified domain.
+            freq_state_t* pState                            ///< [in,out] Frequency state for the specified domain.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1510,7 +1510,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetThrottleTime(
-            freq_throttle_time_t* pThrottleTime             ///< [in] Will contain a snapshot of the throttle time counters for the
+            freq_throttle_time_t* pThrottleTime             ///< [in,out] Will contain a snapshot of the throttle time counters for the
                                                             ///< specified domain.
             );
 
@@ -1523,7 +1523,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         OcGetCapabilities(
-            oc_capabilities_t* pOcCapabilities              ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
+            oc_capabilities_t* pOcCapabilities              ///< [in,out] Pointer to the capabilities structure
+                                                            ///< ::zet_oc_capabilities_t.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1535,7 +1536,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         OcGetConfig(
-            oc_config_t* pOcConfiguration                   ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+            oc_config_t* pOcConfiguration                   ///< [in,out] Pointer to the configuration structure ::zet_oc_config_t.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1566,8 +1567,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         OcGetIccMax(
-            double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
-                                                            ///< return.
+            double* pOcIccMax                               ///< [in,out] Will contain the maximum current limit in Amperes on
+                                                            ///< successful return.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1592,8 +1593,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         OcGetTjMax(
-            double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
-                                                            ///< successful return.
+            double* pOcTjMax                                ///< [in,out] Will contain the maximum temperature limit in degrees Celsius
+                                                            ///< on successful return.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1694,7 +1695,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            engine_properties_t* pProperties                ///< [in] The properties for the specified engine group.
+            engine_properties_t* pProperties                ///< [in,out] The properties for the specified engine group.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1706,7 +1707,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetActivity(
-            engine_stats_t* pStats                          ///< [in] Will contain a snapshot of the engine group activity counters.
+            engine_stats_t* pStats                          ///< [in,out] Will contain a snapshot of the engine group activity
+                                                            ///< counters.
             );
 
     };
@@ -1780,7 +1782,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            standby_properties_t* pProperties               ///< [in] Will contain the standby hardware properties.
+            standby_properties_t* pProperties               ///< [in,out] Will contain the standby hardware properties.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1792,7 +1794,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetMode(
-            standby_promo_mode_t* pMode                     ///< [in] Will contain the current standby mode.
+            standby_promo_mode_t* pMode                     ///< [in,out] Will contain the current standby mode.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1863,7 +1865,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            firmware_properties_t* pProperties              ///< [in] Pointer to an array that will hold the properties of the firmware
+            firmware_properties_t* pProperties              ///< [in,out] Pointer to an array that will hold the properties of the
+                                                            ///< firmware
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1875,7 +1878,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetChecksum(
-            uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
+            uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2009,7 +2012,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            mem_properties_t* pProperties                   ///< [in] Will contain memory properties.
+            mem_properties_t* pProperties                   ///< [in,out] Will contain memory properties.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2021,7 +2024,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetState(
-            mem_state_t* pState                             ///< [in] Will contain the current health and allocated memory.
+            mem_state_t* pState                             ///< [in,out] Will contain the current health and allocated memory.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2033,7 +2036,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetBandwidth(
-            mem_bandwidth_t* pBandwidth                     ///< [in] Will contain a snapshot of the bandwidth counters.
+            mem_bandwidth_t* pBandwidth                     ///< [in,out] Will contain a snapshot of the bandwidth counters.
             );
 
     };
@@ -2214,7 +2217,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            fabric_port_properties_t* pProperties           ///< [in] Will contain properties of the Fabric Port.
+            fabric_port_properties_t* pProperties           ///< [in,out] Will contain properties of the Fabric Port.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2227,7 +2230,8 @@ namespace zet
         void __zecall
         GetLinkType(
             ze::bool_t verbose,                             ///< [in] Set to true to get a more detailed report.
-            fabric_link_type_t* pLinkType                   ///< [in] Will contain details about the link attached to the Fabric port.
+            fabric_link_type_t* pLinkType                   ///< [in,out] Will contain details about the link attached to the Fabric
+                                                            ///< port.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2239,7 +2243,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetConfig(
-            fabric_port_config_t* pConfig                   ///< [in] Will contain configuration of the Fabric Port.
+            fabric_port_config_t* pConfig                   ///< [in,out] Will contain configuration of the Fabric Port.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2264,7 +2268,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetState(
-            fabric_port_state_t* pState                     ///< [in] Will contain the current state of the Fabric Port
+            fabric_port_state_t* pState                     ///< [in,out] Will contain the current state of the Fabric Port
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2276,7 +2280,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetThroughput(
-            fabric_port_throughput_t* pThroughput           ///< [in] Will contain the Fabric port throughput counters and maximum
+            fabric_port_throughput_t* pThroughput           ///< [in,out] Will contain the Fabric port throughput counters and maximum
                                                             ///< bandwidth.
             );
 
@@ -2379,7 +2383,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            temp_properties_t* pProperties                  ///< [in] Will contain the temperature sensor properties.
+            temp_properties_t* pProperties                  ///< [in,out] Will contain the temperature sensor properties.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2392,7 +2396,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetConfig(
-            temp_config_t* pConfig                          ///< [in] Returns current configuration.
+            temp_config_t* pConfig                          ///< [in,out] Returns current configuration.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2429,8 +2433,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetState(
-            double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
-                                                            ///< degrees Celcius.
+            double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
+                                                            ///< in degrees Celcius.
             );
 
     };
@@ -2508,7 +2512,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            psu_properties_t* pProperties                   ///< [in] Will contain the properties of the power supply.
+            psu_properties_t* pProperties                   ///< [in,out] Will contain the properties of the power supply.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2520,7 +2524,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetState(
-            psu_state_t* pState                             ///< [in] Will contain the current state of the power supply.
+            psu_state_t* pState                             ///< [in,out] Will contain the current state of the power supply.
             );
 
     };
@@ -2621,7 +2625,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            fan_properties_t* pProperties                   ///< [in] Will contain the properties of the fan.
+            fan_properties_t* pProperties                   ///< [in,out] Will contain the properties of the fan.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2633,7 +2637,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetConfig(
-            fan_config_t* pConfig                           ///< [in] Will contain the current configuration of the fan.
+            fan_config_t* pConfig                           ///< [in,out] Will contain the current configuration of the fan.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2658,7 +2662,8 @@ namespace zet
         void __zecall
         GetState(
             fan_speed_units_t units,                        ///< [in] The units in which the fan speed should be returned.
-            uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
+            uint32_t* pSpeed                                ///< [in,out] Will contain the current speed of the fan in the units
+                                                            ///< requested.
             );
 
     };
@@ -2727,7 +2732,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            led_properties_t* pProperties                   ///< [in] Will contain the properties of the LED.
+            led_properties_t* pProperties                   ///< [in,out] Will contain the properties of the LED.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2739,7 +2744,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetState(
-            led_state_t* pState                             ///< [in] Will contain the current state of the LED.
+            led_state_t* pState                             ///< [in,out] Will contain the current state of the LED.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2865,7 +2870,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            ras_properties_t* pProperties                   ///< [in] Structure describing RAS properties
+            ras_properties_t* pProperties                   ///< [in,out] Structure describing RAS properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2886,8 +2891,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetConfig(
-            ras_config_t* pConfig                           ///< [in] Will be populed with the current RAS configuration - thresholds
-                                                            ///< used to trigger events
+            ras_config_t* pConfig                           ///< [in,out] Will be populed with the current RAS configuration -
+                                                            ///< thresholds used to trigger events
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2926,8 +2931,8 @@ namespace zet
         void __zecall
         GetState(
             ze::bool_t clear,                               ///< [in] Set to 1 to clear the counters of this type
-            uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
-            ras_details_t* pDetails = nullptr               ///< [in][optional] Breakdown of where errors have occurred
+            uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
+            ras_details_t* pDetails = nullptr               ///< [in,out][optional] Breakdown of where errors have occurred
             );
 
     };
@@ -3017,7 +3022,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetProperties(
-            diag_properties_t* pProperties                  ///< [in] Structure describing the properties of a diagnostics test suite
+            diag_properties_t* pProperties                  ///< [in,out] Structure describing the properties of a diagnostics test
+                                                            ///< suite
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -3062,7 +3068,7 @@ namespace zet
                                                             ///< ::ZET_DIAG_FIRST_TEST_INDEX to start from the beginning.
             uint32_t end,                                   ///< [in] The index of the last test to run. Set to
                                                             ///< ::ZET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
-            diag_result_t* pResult                          ///< [in] The result of the diagnostics
+            diag_result_t* pResult                          ///< [in,out] The result of the diagnostics
             );
 
     };
@@ -3119,8 +3125,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetConfig(
-            event_config_t* pConfig                         ///< [in] Will contain the current event configuration (list of registered
-                                                            ///< events).
+            event_config_t* pConfig                         ///< [in,out] Will contain the current event configuration (list of
+                                                            ///< registered events).
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -3149,7 +3155,7 @@ namespace zet
         void __zecall
         GetState(
             ze::bool_t clear,                               ///< [in] Indicates if the event list for this device should be cleared.
-            uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zet_sysman_event_type_t that have been
                                                             ///< triggered by this device.
             );
 
@@ -3171,7 +3177,7 @@ namespace zet
                                                             ///< ::ZET_EVENT_WAIT_INFINITE to block until events arrive.
             uint32_t count,                                 ///< [in] Number of handles in phEvents
             SysmanEvent** ppEvents,                         ///< [in][range(0, count)] Handle of events that should be listened to
-            uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zet_sysman_event_type_t that have been
                                                             ///< triggered by any of the supplied event handles. If timeout is not
                                                             ///< ::ZET_EVENT_WAIT_INFINITE and this value is
                                                             ///< ::ZET_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.

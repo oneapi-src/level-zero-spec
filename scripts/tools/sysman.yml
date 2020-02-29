@@ -102,7 +102,7 @@ params:
       desc: "[in] Sysman handle of the device."
     - type: $t_sysman_properties_t*
       name: pProperties
-      desc: "[in] Structure that will contain information about the device."
+      desc: "[in,out] Structure that will contain information about the device."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -186,7 +186,7 @@ params:
       desc: "[in] Sysman handle of the device."
     - type: $t_sched_mode_t*
       name: pMode
-      desc: "[in] Will contain the current scheduler mode."
+      desc: "[in,out] Will contain the current scheduler mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Device does not support scheduler modes (check using $tSysmanSchedulerGetSupportedModes())."
@@ -207,7 +207,7 @@ params:
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
     - type: $t_sched_timeout_properties_t*
       name: pConfig
-      desc: "[in] Will contain the current parameters for this mode."
+      desc: "[in,out] Will contain the current parameters for this mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
@@ -228,7 +228,7 @@ params:
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
     - type: $t_sched_timeslice_properties_t*
       name: pConfig
-      desc: "[in] Will contain the current parameters for this mode."
+      desc: "[in,out] Will contain the current parameters for this mode."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "This scheduler mode is not supported (check using $tSysmanSchedulerGetSupportedModes())."
@@ -373,7 +373,7 @@ params:
       desc: "[in] Sysman handle of the device."
     - type: $t_perf_profile_t*
       name: pProfile
-      desc: "[in] The performance profile currently loaded."
+      desc: "[in,out] The performance profile currently loaded."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Load a pre-configured performance profile"
@@ -474,7 +474,7 @@ params:
       desc: "[in] Sysman handle for the device"
     - type: $t_repair_status_t*
       name: pRepairStatus
-      desc: "[in] Will indicate if the device was repaired"
+      desc: "[in,out] Will indicate if the device was repaired"
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this property."
@@ -669,7 +669,7 @@ params:
       desc: "[in] Sysman handle of the device."
     - type: $t_pci_properties_t*
       name: pProperties
-      desc: "[in] Will contain the PCI properties."
+      desc: "[in,out] Will contain the PCI properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current PCI state - current speed"
@@ -684,7 +684,7 @@ params:
       desc: "[in] Sysman handle of the device."
     - type: $t_pci_state_t*
       name: pState
-      desc: "[in] Will contain the PCI properties."
+      desc: "[in,out] Will contain the PCI properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get information about each configured bar"
@@ -721,7 +721,7 @@ params:
       desc: "[in] Sysman handle of the device."
     - type: $t_pci_stats_t*
       name: pStats
-      desc: "[in] Will contain a snapshot of the latest stats."
+      desc: "[in,out] Will contain a snapshot of the latest stats."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."
@@ -863,7 +863,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_power_properties_t*
       name: pProperties
-      desc: "[in] Structure that will contain property data."
+      desc: "[in,out] Structure that will contain property data."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get energy counter"
@@ -878,7 +878,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_power_energy_counter_t*
       name: pEnergy
-      desc: "[in] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
+      desc: "[in,out] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get power limits"
@@ -893,13 +893,13 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_power_sustained_limit_t*
       name: pSustained
-      desc: "[in][optional] The sustained power limit."
+      desc: "[in,out][optional] The sustained power limit."
     - type: $t_power_burst_limit_t*
       name: pBurst
-      desc: "[in][optional] The burst power limit."
+      desc: "[in,out][optional] The burst power limit."
     - type: $t_power_peak_limit_t*
       name: pPeak
-      desc: "[in][optional] The peak power limit."
+      desc: "[in,out][optional] The peak power limit."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set power limits"
@@ -940,7 +940,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_energy_threshold_t*
       name: pThreshold
-      desc: "[in] Returns information about the energy threshold setting - enabled/energy threshold/process ID."
+      desc: "[in,out] Returns information about the energy threshold setting - enabled/energy threshold/process ID."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Energy threshold not supported on this power domain (check $t_power_properties_t.isEnergyThresholdSupported)."
@@ -1208,7 +1208,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_freq_properties_t*
       name: pProperties
-      desc: "[in] The frequency properties for the specified domain."
+      desc: "[in,out] The frequency properties for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get available non-overclocked hardware clock frequencies for the frequency domain"
@@ -1246,7 +1246,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_freq_range_t*
       name: pLimits
-      desc: "[in] The range between which the hardware can operate for the specified domain."
+      desc: "[in,out] The range between which the hardware can operate for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set frequency range between which the hardware can operate."
@@ -1279,7 +1279,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_freq_state_t*
       name: pState
-      desc: "[in] Frequency state for the specified domain."
+      desc: "[in,out] Frequency state for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get frequency throttle time"
@@ -1294,7 +1294,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_freq_throttle_time_t*
       name: pThrottleTime
-      desc: "[in] Will contain a snapshot of the throttle time counters for the specified domain."
+      desc: "[in,out] Will contain a snapshot of the throttle time counters for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the overclocking capabilities."
@@ -1309,7 +1309,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_oc_capabilities_t*
       name: pOcCapabilities
-      desc: "[in] Pointer to the capabilities structure $t_oc_capabilities_t."
+      desc: "[in,out] Pointer to the capabilities structure $t_oc_capabilities_t."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the current overclocking configuration."
@@ -1324,7 +1324,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_oc_config_t*
       name: pOcConfiguration
-      desc: "[in] Pointer to the configuration structure $t_oc_config_t."
+      desc: "[in,out] Pointer to the configuration structure $t_oc_config_t."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
@@ -1370,7 +1370,7 @@ params:
       desc: "[in] Handle for the component."
     - type: double*
       name: pOcIccMax
-      desc: "[in] Will contain the maximum current limit in Amperes on successful return."
+      desc: "[in,out] Will contain the maximum current limit in Amperes on successful return."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
@@ -1415,7 +1415,7 @@ params:
       desc: "[in] Handle for the component."
     - type: double*
       name: pOcTjMax
-      desc: "[in] Will contain the maximum temperature limit in degrees Celsius on successful return."
+      desc: "[in,out] Will contain the maximum temperature limit in degrees Celsius on successful return."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
@@ -1530,7 +1530,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_engine_properties_t*
       name: pProperties
-      desc: "[in] The properties for the specified engine group."
+      desc: "[in,out] The properties for the specified engine group."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the activity stats for an engine group"
@@ -1545,7 +1545,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_engine_stats_t*
       name: pStats
-      desc: "[in] Will contain a snapshot of the engine group activity counters."
+      desc: "[in,out] Will contain a snapshot of the engine group activity counters."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -1618,7 +1618,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_standby_properties_t*
       name: pProperties
-      desc: "[in] Will contain the standby hardware properties."
+      desc: "[in,out] Will contain the standby hardware properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the current standby promotion mode"
@@ -1633,7 +1633,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_standby_promo_mode_t*
       name: pMode
-      desc: "[in] Will contain the current standby mode."
+      desc: "[in,out] Will contain the current standby mode."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set standby promotion mode"
@@ -1709,7 +1709,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_firmware_properties_t*
       name: pProperties
-      desc: "[in] Pointer to an array that will hold the properties of the firmware"
+      desc: "[in,out] Pointer to an array that will hold the properties of the firmware"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get firmware checksum"
@@ -1724,7 +1724,7 @@ params:
       desc: "[in] Handle for the component."
     - type: uint32_t*
       name: pChecksum
-      desc: "[in] Calculated checksum of the installed firmware."
+      desc: "[in,out] Calculated checksum of the installed firmware."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."
@@ -1881,7 +1881,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_mem_properties_t*
       name: pProperties
-      desc: "[in] Will contain memory properties."
+      desc: "[in,out] Will contain memory properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory state - health, allocated"
@@ -1896,7 +1896,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_mem_state_t*
       name: pState
-      desc: "[in] Will contain the current health and allocated memory."
+      desc: "[in,out] Will contain the current health and allocated memory."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory bandwidth"
@@ -1911,7 +1911,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_mem_bandwidth_t*
       name: pBandwidth
-      desc: "[in] Will contain a snapshot of the bandwidth counters."
+      desc: "[in,out] Will contain a snapshot of the bandwidth counters."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."
@@ -2148,7 +2148,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_fabric_port_properties_t*
       name: pProperties
-      desc: "[in] Will contain properties of the Fabric Port."
+      desc: "[in,out] Will contain properties of the Fabric Port."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get Fabric port link type"
@@ -2166,7 +2166,7 @@ params:
       desc: "[in] Set to true to get a more detailed report."
     - type: $t_fabric_link_type_t*
       name: pLinkType
-      desc: "[in] Will contain details about the link attached to the Fabric port."
+      desc: "[in,out] Will contain details about the link attached to the Fabric port."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get Fabric port configuration"
@@ -2181,7 +2181,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_fabric_port_config_t*
       name: pConfig
-      desc: "[in] Will contain configuration of the Fabric Port."
+      desc: "[in,out] Will contain configuration of the Fabric Port."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set Fabric port configuration"
@@ -2214,7 +2214,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_fabric_port_state_t*
       name: pState
-      desc: "[in] Will contain the current state of the Fabric Port"
+      desc: "[in,out] Will contain the current state of the Fabric Port"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get Fabric port throughput"
@@ -2229,7 +2229,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_fabric_port_throughput_t*
       name: pThroughput
-      desc: "[in] Will contain the Fabric port throughput counters and maximum bandwidth."
+      desc: "[in,out] Will contain the Fabric port throughput counters and maximum bandwidth."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."
@@ -2339,7 +2339,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_temp_properties_t*
       name: pProperties
-      desc: "[in] Will contain the temperature sensor properties."
+      desc: "[in,out] Will contain the temperature sensor properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get temperature configuration for this sensor - which events are triggered and the trigger conditions"
@@ -2354,7 +2354,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_temp_config_t*
       name: pConfig
-      desc: "[in] Returns current configuration."
+      desc: "[in,out] Returns current configuration."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
@@ -2404,7 +2404,7 @@ params:
       desc: "[in] Handle for the component."
     - type: double*
       name: pTemperature
-      desc: "[in] Will contain the temperature read from the specified sensor in degrees Celcius."
+      desc: "[in,out] Will contain the temperature read from the specified sensor in degrees Celcius."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PSU voltage status"
@@ -2490,7 +2490,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_psu_properties_t*
       name: pProperties
-      desc: "[in] Will contain the properties of the power supply."
+      desc: "[in,out] Will contain the properties of the power supply."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current power supply state"
@@ -2505,7 +2505,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_psu_state_t*
       name: pState
-      desc: "[in] Will contain the current state of the power supply."
+      desc: "[in,out] Will contain the current state of the power supply."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -2629,7 +2629,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_fan_properties_t*
       name: pProperties
-      desc: "[in] Will contain the properties of the fan."
+      desc: "[in,out] Will contain the properties of the fan."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current fan configuration"
@@ -2644,7 +2644,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_fan_config_t*
       name: pConfig
-      desc: "[in] Will contain the current configuration of the fan."
+      desc: "[in,out] Will contain the current configuration of the fan."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set fan configuration"
@@ -2680,7 +2680,7 @@ params:
       desc: "[in] The units in which the fan speed should be returned."
     - type: uint32_t*
       name: pSpeed
-      desc: "[in] Will contain the current speed of the fan in the units requested."
+      desc: "[in,out] Will contain the current speed of the fan in the units requested."
 
 --- #--------------------------------------------------------------------------
 type: struct
@@ -2754,7 +2754,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_led_properties_t*
       name: pProperties
-      desc: "[in] Will contain the properties of the LED."
+      desc: "[in,out] Will contain the properties of the LED."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current state of a LED - on/off, color"
@@ -2769,7 +2769,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_led_state_t*
       name: pState
-      desc: "[in] Will contain the current state of the LED."
+      desc: "[in,out] Will contain the current state of the LED."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set state of a LED - on/off, color"
@@ -2899,7 +2899,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_ras_properties_t*
       name: pProperties
-      desc: "[in] Structure describing RAS properties"
+      desc: "[in,out] Structure describing RAS properties"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get RAS error thresholds that control when RAS events are generated"
@@ -2917,7 +2917,7 @@ params:
       desc: "[in] Handle for the component."
     - type: "$t_ras_config_t*"
       name: pConfig
-      desc: "[in] Will be populed with the current RAS configuration - thresholds used to trigger events"
+      desc: "[in,out] Will be populed with the current RAS configuration - thresholds used to trigger events"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set RAS error thresholds that control when RAS events are generated"
@@ -2961,10 +2961,10 @@ params:
       desc: "[in] Set to 1 to clear the counters of this type"
     - type: uint64_t*
       name: pTotalErrors
-      desc: "[in] The number total number of errors that have occurred"
+      desc: "[in,out] The number total number of errors that have occurred"
     - type: $t_ras_details_t*
       name: pDetails
-      desc: "[in][optional] Breakdown of where errors have occurred"
+      desc: "[in,out][optional] Breakdown of where errors have occurred"
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "Don't have permissions to clear error counters."
@@ -3057,7 +3057,7 @@ params:
       desc: "[in] The event handle for the device"
     - type: "$t_event_config_t*"
       name: pConfig
-      desc: "[in] Will contain the current event configuration (list of registered events)."
+      desc: "[in,out] Will contain the current event configuration (list of registered events)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set a new event configuration (list of registered events) on the specified device event handler"
@@ -3091,7 +3091,7 @@ params:
       desc: "[in] Indicates if the event list for this device should be cleared."
     - type: "uint32_t*"
       name: pEvents
-      desc: "[in] Bitfield of events $t_sysman_event_type_t that have been triggered by this device."
+      desc: "[in,out] Bitfield of events $t_sysman_event_type_t that have been triggered by this device."
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Don't wait - just check if there are any new events"
@@ -3127,7 +3127,7 @@ params:
       desc: "[in][range(0, count)] Handle of events that should be listened to"
     - type: "uint32_t*"
       name: pEvents
-      desc: "[in] Bitfield of events $t_sysman_event_type_t that have been triggered by any of the supplied event handles. If timeout is not $T_EVENT_WAIT_INFINITE and this value is $T_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred."
+      desc: "[in,out] Bitfield of events $t_sysman_event_type_t that have been triggered by any of the supplied event handles. If timeout is not $T_EVENT_WAIT_INFINITE and this value is $T_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to listen to events."
@@ -3238,7 +3238,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_diag_properties_t*
       name: pProperties
-      desc: "[in] Structure describing the properties of a diagnostics test suite"
+      desc: "[in,out] Structure describing the properties of a diagnostics test suite"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get individual tests that can be run separately. Not all test suites permit running individual tests - check $t_diag_properties_t.haveTests"
@@ -3283,7 +3283,7 @@ params:
       desc: "[in] The index of the last test to run. Set to $T_DIAG_LAST_TEST_INDEX to complete all tests after the start test."
     - type: $t_diag_result_t*
       name: pResult
-      desc: "[in] The result of the diagnostics"
+      desc: "[in,out] The result of the diagnostics"
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform diagnostics."

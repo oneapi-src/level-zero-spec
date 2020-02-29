@@ -948,7 +948,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanDeviceGetProperties(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_sysman_properties_t* pProperties            ///< [in] Structure that will contain information about the device.
+        zet_sysman_properties_t* pProperties            ///< [in,out] Structure that will contain information about the device.
         )
     {
         auto pfnDeviceGetProperties = context.zetDdiTable.Sysman.pfnDeviceGetProperties;
@@ -1009,7 +1009,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanSchedulerGetCurrentMode(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_sched_mode_t* pMode                         ///< [in] Will contain the current scheduler mode.
+        zet_sched_mode_t* pMode                         ///< [in,out] Will contain the current scheduler mode.
         )
     {
         auto pfnSchedulerGetCurrentMode = context.zetDdiTable.Sysman.pfnSchedulerGetCurrentMode;
@@ -1037,7 +1037,7 @@ namespace layer
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
-        zet_sched_timeout_properties_t* pConfig         ///< [in] Will contain the current parameters for this mode.
+        zet_sched_timeout_properties_t* pConfig         ///< [in,out] Will contain the current parameters for this mode.
         )
     {
         auto pfnSchedulerGetTimeoutModeProperties = context.zetDdiTable.Sysman.pfnSchedulerGetTimeoutModeProperties;
@@ -1065,7 +1065,7 @@ namespace layer
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
         ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
-        zet_sched_timeslice_properties_t* pConfig       ///< [in] Will contain the current parameters for this mode.
+        zet_sched_timeslice_properties_t* pConfig       ///< [in,out] Will contain the current parameters for this mode.
         )
     {
         auto pfnSchedulerGetTimesliceModeProperties = context.zetDdiTable.Sysman.pfnSchedulerGetTimesliceModeProperties;
@@ -1242,7 +1242,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPerformanceProfileGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_perf_profile_t* pProfile                    ///< [in] The performance profile currently loaded.
+        zet_perf_profile_t* pProfile                    ///< [in,out] The performance profile currently loaded.
         )
     {
         auto pfnPerformanceProfileGet = context.zetDdiTable.Sysman.pfnPerformanceProfileGet;
@@ -1351,7 +1351,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanDeviceGetRepairStatus(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-        zet_repair_status_t* pRepairStatus              ///< [in] Will indicate if the device was repaired
+        zet_repair_status_t* pRepairStatus              ///< [in,out] Will indicate if the device was repaired
         )
     {
         auto pfnDeviceGetRepairStatus = context.zetDdiTable.Sysman.pfnDeviceGetRepairStatus;
@@ -1377,7 +1377,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPciGetProperties(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
+        zet_pci_properties_t* pProperties               ///< [in,out] Will contain the PCI properties.
         )
     {
         auto pfnPciGetProperties = context.zetDdiTable.Sysman.pfnPciGetProperties;
@@ -1403,7 +1403,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPciGetState(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
+        zet_pci_state_t* pState                         ///< [in,out] Will contain the PCI properties.
         )
     {
         auto pfnPciGetState = context.zetDdiTable.Sysman.pfnPciGetState;
@@ -1461,7 +1461,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPciGetStats(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
+        zet_pci_stats_t* pStats                         ///< [in,out] Will contain a snapshot of the latest stats.
         )
     {
         auto pfnPciGetStats = context.zetDdiTable.Sysman.pfnPciGetStats;
@@ -1521,7 +1521,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPowerGetProperties(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_power_properties_t* pProperties             ///< [in] Structure that will contain property data.
+        zet_power_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanPower.pfnGetProperties;
@@ -1547,7 +1547,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPowerGetEnergyCounter(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
+        zet_power_energy_counter_t* pEnergy             ///< [in,out] Will contain the latest snapshot of the energy counter and
                                                         ///< timestamp when the last counter value was measured.
         )
     {
@@ -1574,9 +1574,9 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPowerGetLimits(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_power_sustained_limit_t* pSustained,        ///< [in][optional] The sustained power limit.
-        zet_power_burst_limit_t* pBurst,                ///< [in][optional] The burst power limit.
-        zet_power_peak_limit_t* pPeak                   ///< [in][optional] The peak power limit.
+        zet_power_sustained_limit_t* pSustained,        ///< [in,out][optional] The sustained power limit.
+        zet_power_burst_limit_t* pBurst,                ///< [in,out][optional] The burst power limit.
+        zet_power_peak_limit_t* pPeak                   ///< [in,out][optional] The peak power limit.
         )
     {
         auto pfnGetLimits = context.zetDdiTable.SysmanPower.pfnGetLimits;
@@ -1624,7 +1624,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPowerGetEnergyThreshold(
         zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zet_energy_threshold_t* pThreshold              ///< [in] Returns information about the energy threshold setting -
+        zet_energy_threshold_t* pThreshold              ///< [in,out] Returns information about the energy threshold setting -
                                                         ///< enabled/energy threshold/process ID.
         )
     {
@@ -1708,7 +1708,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyGetProperties(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
+        zet_freq_properties_t* pProperties              ///< [in,out] The frequency properties for the specified domain.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanFrequency.pfnGetProperties;
@@ -1767,7 +1767,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyGetRange(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_range_t* pLimits                       ///< [in] The range between which the hardware can operate for the
+        zet_freq_range_t* pLimits                       ///< [in,out] The range between which the hardware can operate for the
                                                         ///< specified domain.
         )
     {
@@ -1821,7 +1821,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyGetState(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
+        zet_freq_state_t* pState                        ///< [in,out] Frequency state for the specified domain.
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanFrequency.pfnGetState;
@@ -1847,7 +1847,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyGetThrottleTime(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
+        zet_freq_throttle_time_t* pThrottleTime         ///< [in,out] Will contain a snapshot of the throttle time counters for the
                                                         ///< specified domain.
         )
     {
@@ -1874,7 +1874,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyOcGetCapabilities(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_capabilities_t* pOcCapabilities          ///< [in] Pointer to the capabilities structure ::zet_oc_capabilities_t.
+        zet_oc_capabilities_t* pOcCapabilities          ///< [in,out] Pointer to the capabilities structure
+                                                        ///< ::zet_oc_capabilities_t.
         )
     {
         auto pfnOcGetCapabilities = context.zetDdiTable.SysmanFrequency.pfnOcGetCapabilities;
@@ -1900,7 +1901,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyOcGetConfig(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zet_oc_config_t* pOcConfiguration               ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+        zet_oc_config_t* pOcConfiguration               ///< [in,out] Pointer to the configuration structure ::zet_oc_config_t.
         )
     {
         auto pfnOcGetConfig = context.zetDdiTable.SysmanFrequency.pfnOcGetConfig;
@@ -1957,8 +1958,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyOcGetIccMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        double* pOcIccMax                               ///< [in] Will contain the maximum current limit in Amperes on successful
-                                                        ///< return.
+        double* pOcIccMax                               ///< [in,out] Will contain the maximum current limit in Amperes on
+                                                        ///< successful return.
         )
     {
         auto pfnOcGetIccMax = context.zetDdiTable.SysmanFrequency.pfnOcGetIccMax;
@@ -2007,8 +2008,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFrequencyOcGetTjMax(
         zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        double* pOcTjMax                                ///< [in] Will contain the maximum temperature limit in degrees Celsius on
-                                                        ///< successful return.
+        double* pOcTjMax                                ///< [in,out] Will contain the maximum temperature limit in degrees Celsius
+                                                        ///< on successful return.
         )
     {
         auto pfnOcGetTjMax = context.zetDdiTable.SysmanFrequency.pfnOcGetTjMax;
@@ -2091,7 +2092,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanEngineGetProperties(
         zet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
-        zet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
+        zet_engine_properties_t* pProperties            ///< [in,out] The properties for the specified engine group.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanEngine.pfnGetProperties;
@@ -2117,7 +2118,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanEngineGetActivity(
         zet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
-        zet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
+        zet_engine_stats_t* pStats                      ///< [in,out] Will contain a snapshot of the engine group activity
+                                                        ///< counters.
         )
     {
         auto pfnGetActivity = context.zetDdiTable.SysmanEngine.pfnGetActivity;
@@ -2177,7 +2179,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanStandbyGetProperties(
         zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
-        zet_standby_properties_t* pProperties           ///< [in] Will contain the standby hardware properties.
+        zet_standby_properties_t* pProperties           ///< [in,out] Will contain the standby hardware properties.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanStandby.pfnGetProperties;
@@ -2203,7 +2205,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanStandbyGetMode(
         zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
-        zet_standby_promo_mode_t* pMode                 ///< [in] Will contain the current standby mode.
+        zet_standby_promo_mode_t* pMode                 ///< [in,out] Will contain the current standby mode.
         )
     {
         auto pfnGetMode = context.zetDdiTable.SysmanStandby.pfnGetMode;
@@ -2289,7 +2291,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFirmwareGetProperties(
         zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
-        zet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
+        zet_firmware_properties_t* pProperties          ///< [in,out] Pointer to an array that will hold the properties of the
+                                                        ///< firmware
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanFirmware.pfnGetProperties;
@@ -2315,7 +2318,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFirmwareGetChecksum(
         zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
-        uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
+        uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
         )
     {
         auto pfnGetChecksum = context.zetDdiTable.SysmanFirmware.pfnGetChecksum;
@@ -2402,7 +2405,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanMemoryGetProperties(
         zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zet_mem_properties_t* pProperties               ///< [in] Will contain memory properties.
+        zet_mem_properties_t* pProperties               ///< [in,out] Will contain memory properties.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanMemory.pfnGetProperties;
@@ -2428,7 +2431,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanMemoryGetState(
         zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zet_mem_state_t* pState                         ///< [in] Will contain the current health and allocated memory.
+        zet_mem_state_t* pState                         ///< [in,out] Will contain the current health and allocated memory.
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanMemory.pfnGetState;
@@ -2454,7 +2457,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanMemoryGetBandwidth(
         zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
+        zet_mem_bandwidth_t* pBandwidth                 ///< [in,out] Will contain a snapshot of the bandwidth counters.
         )
     {
         auto pfnGetBandwidth = context.zetDdiTable.SysmanMemory.pfnGetBandwidth;
@@ -2514,7 +2517,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFabricPortGetProperties(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zet_fabric_port_properties_t* pProperties       ///< [in] Will contain properties of the Fabric Port.
+        zet_fabric_port_properties_t* pProperties       ///< [in,out] Will contain properties of the Fabric Port.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanFabricPort.pfnGetProperties;
@@ -2541,7 +2544,8 @@ namespace layer
     zetSysmanFabricPortGetLinkType(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
         ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
-        zet_fabric_link_type_t* pLinkType               ///< [in] Will contain details about the link attached to the Fabric port.
+        zet_fabric_link_type_t* pLinkType               ///< [in,out] Will contain details about the link attached to the Fabric
+                                                        ///< port.
         )
     {
         auto pfnGetLinkType = context.zetDdiTable.SysmanFabricPort.pfnGetLinkType;
@@ -2567,7 +2571,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFabricPortGetConfig(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zet_fabric_port_config_t* pConfig               ///< [in] Will contain configuration of the Fabric Port.
+        zet_fabric_port_config_t* pConfig               ///< [in,out] Will contain configuration of the Fabric Port.
         )
     {
         auto pfnGetConfig = context.zetDdiTable.SysmanFabricPort.pfnGetConfig;
@@ -2619,7 +2623,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFabricPortGetState(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zet_fabric_port_state_t* pState                 ///< [in] Will contain the current state of the Fabric Port
+        zet_fabric_port_state_t* pState                 ///< [in,out] Will contain the current state of the Fabric Port
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanFabricPort.pfnGetState;
@@ -2645,7 +2649,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFabricPortGetThroughput(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zet_fabric_port_throughput_t* pThroughput       ///< [in] Will contain the Fabric port throughput counters and maximum
+        zet_fabric_port_throughput_t* pThroughput       ///< [in,out] Will contain the Fabric port throughput counters and maximum
                                                         ///< bandwidth.
         )
     {
@@ -2706,7 +2710,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanTemperatureGetProperties(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        zet_temp_properties_t* pProperties              ///< [in] Will contain the temperature sensor properties.
+        zet_temp_properties_t* pProperties              ///< [in,out] Will contain the temperature sensor properties.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanTemperature.pfnGetProperties;
@@ -2732,7 +2736,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanTemperatureGetConfig(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        zet_temp_config_t* pConfig                      ///< [in] Returns current configuration.
+        zet_temp_config_t* pConfig                      ///< [in,out] Returns current configuration.
         )
     {
         auto pfnGetConfig = context.zetDdiTable.SysmanTemperature.pfnGetConfig;
@@ -2784,8 +2788,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanTemperatureGetState(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        double* pTemperature                            ///< [in] Will contain the temperature read from the specified sensor in
-                                                        ///< degrees Celcius.
+        double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
+                                                        ///< in degrees Celcius.
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanTemperature.pfnGetState;
@@ -2845,7 +2849,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPsuGetProperties(
         zet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
-        zet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
+        zet_psu_properties_t* pProperties               ///< [in,out] Will contain the properties of the power supply.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanPsu.pfnGetProperties;
@@ -2871,7 +2875,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPsuGetState(
         zet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
-        zet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
+        zet_psu_state_t* pState                         ///< [in,out] Will contain the current state of the power supply.
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanPsu.pfnGetState;
@@ -2931,7 +2935,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFanGetProperties(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-        zet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
+        zet_fan_properties_t* pProperties               ///< [in,out] Will contain the properties of the fan.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanFan.pfnGetProperties;
@@ -2957,7 +2961,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanFanGetConfig(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-        zet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
+        zet_fan_config_t* pConfig                       ///< [in,out] Will contain the current configuration of the fan.
         )
     {
         auto pfnGetConfig = context.zetDdiTable.SysmanFan.pfnGetConfig;
@@ -3010,7 +3014,8 @@ namespace layer
     zetSysmanFanGetState(
         zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
         zet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
-        uint32_t* pSpeed                                ///< [in] Will contain the current speed of the fan in the units requested.
+        uint32_t* pSpeed                                ///< [in,out] Will contain the current speed of the fan in the units
+                                                        ///< requested.
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanFan.pfnGetState;
@@ -3073,7 +3078,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanLedGetProperties(
         zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
-        zet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
+        zet_led_properties_t* pProperties               ///< [in,out] Will contain the properties of the LED.
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanLed.pfnGetProperties;
@@ -3099,7 +3104,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanLedGetState(
         zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
-        zet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
+        zet_led_state_t* pState                         ///< [in,out] Will contain the current state of the LED.
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanLed.pfnGetState;
@@ -3185,7 +3190,7 @@ namespace layer
     ze_result_t __zecall
     zetSysmanRasGetProperties(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
-        zet_ras_properties_t* pProperties               ///< [in] Structure describing RAS properties
+        zet_ras_properties_t* pProperties               ///< [in,out] Structure describing RAS properties
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanRas.pfnGetProperties;
@@ -3211,8 +3216,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanRasGetConfig(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
-        zet_ras_config_t* pConfig                       ///< [in] Will be populed with the current RAS configuration - thresholds
-                                                        ///< used to trigger events
+        zet_ras_config_t* pConfig                       ///< [in,out] Will be populed with the current RAS configuration -
+                                                        ///< thresholds used to trigger events
         )
     {
         auto pfnGetConfig = context.zetDdiTable.SysmanRas.pfnGetConfig;
@@ -3265,8 +3270,8 @@ namespace layer
     zetSysmanRasGetState(
         zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
         ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
-        uint64_t* pTotalErrors,                         ///< [in] The number total number of errors that have occurred
-        zet_ras_details_t* pDetails                     ///< [in][optional] Breakdown of where errors have occurred
+        uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
+        zet_ras_details_t* pDetails                     ///< [in,out][optional] Breakdown of where errors have occurred
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanRas.pfnGetState;
@@ -3318,8 +3323,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanEventGetConfig(
         zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
-        zet_event_config_t* pConfig                     ///< [in] Will contain the current event configuration (list of registered
-                                                        ///< events).
+        zet_event_config_t* pConfig                     ///< [in,out] Will contain the current event configuration (list of
+                                                        ///< registered events).
         )
     {
         auto pfnGetConfig = context.zetDdiTable.SysmanEvent.pfnGetConfig;
@@ -3372,7 +3377,7 @@ namespace layer
     zetSysmanEventGetState(
         zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
         ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
-        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+        uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zet_sysman_event_type_t that have been
                                                         ///< triggered by this device.
         )
     {
@@ -3404,7 +3409,7 @@ namespace layer
                                                         ///< ::ZET_EVENT_WAIT_INFINITE to block until events arrive.
         uint32_t count,                                 ///< [in] Number of handles in phEvents
         zet_sysman_event_handle_t* phEvents,            ///< [in][range(0, count)] Handle of events that should be listened to
-        uint32_t* pEvents                               ///< [in] Bitfield of events ::zet_sysman_event_type_t that have been
+        uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zet_sysman_event_type_t that have been
                                                         ///< triggered by any of the supplied event handles. If timeout is not
                                                         ///< ::ZET_EVENT_WAIT_INFINITE and this value is
                                                         ///< ::ZET_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
@@ -3470,7 +3475,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanDiagnosticsGetProperties(
         zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
-        zet_diag_properties_t* pProperties              ///< [in] Structure describing the properties of a diagnostics test suite
+        zet_diag_properties_t* pProperties              ///< [in,out] Structure describing the properties of a diagnostics test
+                                                        ///< suite
         )
     {
         auto pfnGetProperties = context.zetDdiTable.SysmanDiagnostics.pfnGetProperties;
@@ -3533,7 +3539,7 @@ namespace layer
                                                         ///< ::ZET_DIAG_FIRST_TEST_INDEX to start from the beginning.
         uint32_t end,                                   ///< [in] The index of the last test to run. Set to
                                                         ///< ::ZET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
-        zet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
+        zet_diag_result_t* pResult                      ///< [in,out] The result of the diagnostics
         )
     {
         auto pfnRunTests = context.zetDdiTable.SysmanDiagnostics.pfnRunTests;
