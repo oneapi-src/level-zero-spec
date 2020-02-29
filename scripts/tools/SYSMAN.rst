@@ -638,7 +638,7 @@ If the voltage and frequency are too high, two conditions can occur:
 2. Over-temperature - The device is generating too much heat that cannot
    be dissipated fast enough. The Punit monitors temperatures and reacts
    when the sensors show the maximum temperature exceeds the threshold
-   TjMax (typically 100 degrees celcius).
+   TjMax (typically 100 degrees Celsius).
 
 When either of these conditions occurs, the Punit throttles the
 frequencies/voltages of the device down to their minimum values,
