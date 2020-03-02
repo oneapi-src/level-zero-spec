@@ -75,7 +75,7 @@ typedef struct _zex_command_graph_desc_t
 ///         + desc->flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zexCommandGraphCreate(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device object
     const zex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
@@ -99,7 +99,7 @@ zexCommandGraphCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandGraph`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zexCommandGraphDestroy(
     zex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
     );
@@ -121,7 +121,7 @@ zexCommandGraphDestroy(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandGraph`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zexCommandGraphClose(
     zex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     );

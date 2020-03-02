@@ -53,7 +53,7 @@ extern "C" {
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandList`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendBarrier(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
@@ -86,7 +86,7 @@ zeCommandListAppendBarrier(
 ///         + `nullptr == pRangeSizes`
 ///         + `nullptr == pRanges`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendMemoryRangesBarrier(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
@@ -117,7 +117,7 @@ zeCommandListAppendMemoryRangesBarrier(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hDevice`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeDeviceSystemBarrier(
     ze_device_handle_t hDevice                      ///< [in] handle of the device
     );

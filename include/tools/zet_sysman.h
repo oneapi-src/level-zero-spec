@@ -54,7 +54,7 @@ typedef enum _zet_sysman_version_t
 ///         + version
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == phSysman`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanGet(
     zet_device_handle_t hDevice,                    ///< [in] Handle of the device
     zet_sysman_version_t version,                   ///< [in] Sysman version that application was built with
@@ -109,7 +109,7 @@ typedef struct _zet_sysman_properties_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanDeviceGetProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sysman_properties_t* pProperties            ///< [in,out] Structure that will contain information about the device.
@@ -186,7 +186,7 @@ typedef struct _zet_sched_timeslice_properties_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanSchedulerGetSupportedModes(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
@@ -218,7 +218,7 @@ zetSysmanSchedulerGetSupportedModes(
 ///         + `nullptr == pMode`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Device does not support scheduler modes (check using ::zetSysmanSchedulerGetSupportedModes()).
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanSchedulerGetCurrentMode(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sched_mode_t* pMode                         ///< [in,out] Will contain the current scheduler mode.
@@ -241,7 +241,7 @@ zetSysmanSchedulerGetCurrentMode(
 ///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanSchedulerGetTimeoutModeProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
@@ -266,7 +266,7 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 ///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanSchedulerGetTimesliceModeProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
@@ -299,7 +299,7 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanSchedulerSetTimeoutMode(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
@@ -331,7 +331,7 @@ zetSysmanSchedulerSetTimeoutMode(
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanSchedulerSetTimesliceMode(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
@@ -362,7 +362,7 @@ zetSysmanSchedulerSetTimesliceMode(
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanSchedulerSetExclusiveMode(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -392,7 +392,7 @@ zetSysmanSchedulerSetExclusiveMode(
 ///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanSchedulerSetComputeUnitDebugMode(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
@@ -430,7 +430,7 @@ typedef enum _zet_perf_profile_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPerformanceProfileGetSupported(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of performance profiles.
@@ -461,7 +461,7 @@ zetSysmanPerformanceProfileGetSupported(
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProfile`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPerformanceProfileGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_perf_profile_t* pProfile                    ///< [in,out] The performance profile currently loaded.
@@ -489,7 +489,7 @@ zetSysmanPerformanceProfileGet(
 ///         + The specified profile is not valid or not supported on this device (use ::zetSysmanPerformanceProfileGetSupported() to get a list of supported profiles).
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to change the performance profile of the hardware.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPerformanceProfileSet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_perf_profile_t profile                      ///< [in] The performance profile to load.
@@ -534,7 +534,7 @@ typedef struct _zet_process_state_t
 ///         + `nullptr == pCount`
 ///     - ::ZE_RESULT_ERROR_INVALID_SIZE
 ///         + The provided value of pCount is not big enough to store information about all the processes currently attached to the device.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanProcessesGetState(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
@@ -560,7 +560,7 @@ zetSysmanProcessesGetState(
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanDeviceReset(
     zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
     );
@@ -589,7 +589,7 @@ typedef enum _zet_repair_status_t
 ///         + `nullptr == pRepairStatus`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this property.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanDeviceGetRepairStatus(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     zet_repair_status_t* pRepairStatus              ///< [in,out] Will indicate if the device was repaired
@@ -740,7 +740,7 @@ typedef struct _zet_pci_stats_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPciGetProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_pci_properties_t* pProperties               ///< [in,out] Will contain the PCI properties.
@@ -761,7 +761,7 @@ zetSysmanPciGetProperties(
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPciGetState(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_pci_state_t* pState                         ///< [in,out] Will contain the PCI properties.
@@ -782,7 +782,7 @@ zetSysmanPciGetState(
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPciGetBars(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of PCI bars.
@@ -811,7 +811,7 @@ zetSysmanPciGetBars(
 ///         + `nullptr == pStats`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPciGetStats(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_pci_stats_t* pStats                         ///< [in,out] Will contain a snapshot of the latest stats.
@@ -933,7 +933,7 @@ typedef struct _zet_energy_threshold_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPowerGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -962,7 +962,7 @@ zetSysmanPowerGet(
 ///         + `nullptr == hPower`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPowerGetProperties(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     zet_power_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
@@ -983,7 +983,7 @@ zetSysmanPowerGetProperties(
 ///         + `nullptr == hPower`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pEnergy`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPowerGetEnergyCounter(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     zet_power_energy_counter_t* pEnergy             ///< [in,out] Will contain the latest snapshot of the energy counter and
@@ -1003,7 +1003,7 @@ zetSysmanPowerGetEnergyCounter(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hPower`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPowerGetLimits(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     zet_power_sustained_limit_t* pSustained,        ///< [in,out][optional] The sustained power limit.
@@ -1028,7 +1028,7 @@ zetSysmanPowerGetLimits(
 ///         + User does not have permissions to make these modifications.
 ///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPowerSetLimits(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     const zet_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
@@ -1055,7 +1055,7 @@ zetSysmanPowerSetLimits(
 ///         + Energy threshold not supported on this power domain (check ::zet_power_properties_t.isEnergyThresholdSupported).
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPowerGetEnergyThreshold(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     zet_energy_threshold_t* pThreshold              ///< [in,out] Returns information about the energy threshold setting -
@@ -1095,7 +1095,7 @@ zetSysmanPowerGetEnergyThreshold(
 ///         + User does not have permissions to request this feature.
 ///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + Another running process has set the energy threshold.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPowerSetEnergyThreshold(
     zet_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
     double threshold                                ///< [in] The energy threshold to be set in joules.
@@ -1287,7 +1287,7 @@ typedef struct _zet_oc_config_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -1316,7 +1316,7 @@ zetSysmanFrequencyGet(
 ///         + `nullptr == hFrequency`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyGetProperties(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_freq_properties_t* pProperties              ///< [in,out] The frequency properties for the specified domain.
@@ -1340,7 +1340,7 @@ zetSysmanFrequencyGetProperties(
 ///         + `nullptr == hFrequency`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyGetAvailableClocks(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
@@ -1368,7 +1368,7 @@ zetSysmanFrequencyGetAvailableClocks(
 ///         + `nullptr == hFrequency`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pLimits`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyGetRange(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_freq_range_t* pLimits                       ///< [in,out] The range between which the hardware can operate for the
@@ -1392,7 +1392,7 @@ zetSysmanFrequencyGetRange(
 ///         + `nullptr == pLimits`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencySetRange(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     const zet_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
@@ -1415,7 +1415,7 @@ zetSysmanFrequencySetRange(
 ///         + `nullptr == hFrequency`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyGetState(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_freq_state_t* pState                        ///< [in,out] Frequency state for the specified domain.
@@ -1436,7 +1436,7 @@ zetSysmanFrequencyGetState(
 ///         + `nullptr == hFrequency`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pThrottleTime`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyGetThrottleTime(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_freq_throttle_time_t* pThrottleTime         ///< [in,out] Will contain a snapshot of the throttle time counters for the
@@ -1458,7 +1458,7 @@ zetSysmanFrequencyGetThrottleTime(
 ///         + `nullptr == hFrequency`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pOcCapabilities`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyOcGetCapabilities(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_capabilities_t* pOcCapabilities          ///< [in,out] Pointer to the capabilities structure
@@ -1482,7 +1482,7 @@ zetSysmanFrequencyOcGetCapabilities(
 ///         + `nullptr == pOcConfiguration`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyOcGetConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_config_t* pOcConfiguration               ///< [in,out] Pointer to the configuration structure ::zet_oc_config_t.
@@ -1517,7 +1517,7 @@ zetSysmanFrequencyOcGetConfig(
 ///         + Overclocking feature is locked on this frequency domain
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyOcSetConfig(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     zet_oc_config_t* pOcConfiguration,              ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
@@ -1543,7 +1543,7 @@ zetSysmanFrequencyOcSetConfig(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
 ///         + Capability ::zet_oc_capabilities_t.isIccMaxSupported is false for this frequency domain
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyOcGetIccMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double* pOcIccMax                               ///< [in,out] Will contain the maximum current limit in Amperes on
@@ -1573,7 +1573,7 @@ zetSysmanFrequencyOcGetIccMax(
 ///         + The specified current limit is too low or too high
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyOcSetIccMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
@@ -1596,7 +1596,7 @@ zetSysmanFrequencyOcSetIccMax(
 ///         + `nullptr == pOcTjMax`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zet_oc_capabilities_t.isOcSupported)
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyOcGetTjMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double* pOcTjMax                                ///< [in,out] Will contain the maximum temperature limit in degrees Celsius
@@ -1626,7 +1626,7 @@ zetSysmanFrequencyOcGetTjMax(
 ///         + The specified temperature limit is too high
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFrequencyOcSetTjMax(
     zet_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
     double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
@@ -1690,7 +1690,7 @@ typedef struct _zet_engine_stats_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanEngineGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -1719,7 +1719,7 @@ zetSysmanEngineGet(
 ///         + `nullptr == hEngine`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanEngineGetProperties(
     zet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
     zet_engine_properties_t* pProperties            ///< [in,out] The properties for the specified engine group.
@@ -1740,7 +1740,7 @@ zetSysmanEngineGetProperties(
 ///         + `nullptr == hEngine`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pStats`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanEngineGetActivity(
     zet_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
     zet_engine_stats_t* pStats                      ///< [in,out] Will contain a snapshot of the engine group activity
@@ -1791,7 +1791,7 @@ typedef enum _zet_standby_promo_mode_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanStandbyGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -1820,7 +1820,7 @@ zetSysmanStandbyGet(
 ///         + `nullptr == hStandby`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanStandbyGetProperties(
     zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
     zet_standby_properties_t* pProperties           ///< [in,out] Will contain the standby hardware properties.
@@ -1841,7 +1841,7 @@ zetSysmanStandbyGetProperties(
 ///         + `nullptr == hStandby`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pMode`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanStandbyGetMode(
     zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
     zet_standby_promo_mode_t* pMode                 ///< [in,out] Will contain the current standby mode.
@@ -1864,7 +1864,7 @@ zetSysmanStandbyGetMode(
 ///         + mode
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanStandbySetMode(
     zet_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
     zet_standby_promo_mode_t mode                   ///< [in] New standby mode.
@@ -1899,7 +1899,7 @@ typedef struct _zet_firmware_properties_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFirmwareGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -1928,7 +1928,7 @@ zetSysmanFirmwareGet(
 ///         + `nullptr == hFirmware`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFirmwareGetProperties(
     zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
     zet_firmware_properties_t* pProperties          ///< [in,out] Pointer to an array that will hold the properties of the
@@ -1952,7 +1952,7 @@ zetSysmanFirmwareGetProperties(
 ///         + `nullptr == pChecksum`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFirmwareGetChecksum(
     zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
     uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
@@ -1975,7 +1975,7 @@ zetSysmanFirmwareGetChecksum(
 ///         + `nullptr == pImage`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFirmwareFlash(
     zet_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
     void* pImage,                                   ///< [in] Image of the new firmware to flash.
@@ -2073,7 +2073,7 @@ typedef struct _zet_mem_bandwidth_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanMemoryGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2102,7 +2102,7 @@ zetSysmanMemoryGet(
 ///         + `nullptr == hMemory`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanMemoryGetProperties(
     zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
     zet_mem_properties_t* pProperties               ///< [in,out] Will contain memory properties.
@@ -2123,7 +2123,7 @@ zetSysmanMemoryGetProperties(
 ///         + `nullptr == hMemory`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanMemoryGetState(
     zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
     zet_mem_state_t* pState                         ///< [in,out] Will contain the current health, free memory, total memory
@@ -2147,7 +2147,7 @@ zetSysmanMemoryGetState(
 ///         + `nullptr == pBandwidth`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanMemoryGetBandwidth(
     zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
     zet_mem_bandwidth_t* pBandwidth                 ///< [in,out] Will contain a snapshot of the bandwidth counters.
@@ -2323,7 +2323,7 @@ typedef struct _zet_fabric_port_throughput_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFabricPortGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2352,7 +2352,7 @@ zetSysmanFabricPortGet(
 ///         + `nullptr == hPort`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFabricPortGetProperties(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
     zet_fabric_port_properties_t* pProperties       ///< [in,out] Will contain properties of the Fabric Port.
@@ -2373,7 +2373,7 @@ zetSysmanFabricPortGetProperties(
 ///         + `nullptr == hPort`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pLinkType`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFabricPortGetLinkType(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
     ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
@@ -2396,7 +2396,7 @@ zetSysmanFabricPortGetLinkType(
 ///         + `nullptr == hPort`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFabricPortGetConfig(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
     zet_fabric_port_config_t* pConfig               ///< [in,out] Will contain configuration of the Fabric Port.
@@ -2419,7 +2419,7 @@ zetSysmanFabricPortGetConfig(
 ///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFabricPortSetConfig(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
     const zet_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
@@ -2441,7 +2441,7 @@ zetSysmanFabricPortSetConfig(
 ///         + `nullptr == hPort`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFabricPortGetState(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
     zet_fabric_port_state_t* pState                 ///< [in,out] Will contain the current state of the Fabric Port
@@ -2464,7 +2464,7 @@ zetSysmanFabricPortGetState(
 ///         + `nullptr == pThroughput`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFabricPortGetThroughput(
     zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
     zet_fabric_port_throughput_t* pThroughput       ///< [in,out] Will contain the Fabric port throughput counters and maximum
@@ -2543,7 +2543,7 @@ typedef struct _zet_temp_config_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanTemperatureGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2572,7 +2572,7 @@ zetSysmanTemperatureGet(
 ///         + `nullptr == hTemperature`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanTemperatureGetProperties(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
     zet_temp_properties_t* pProperties              ///< [in,out] Will contain the temperature sensor properties.
@@ -2599,7 +2599,7 @@ zetSysmanTemperatureGetProperties(
 ///         + One or both of the thresholds is not supported - check ::zet_temp_properties_t.isThreshold1Supported and ::zet_temp_properties_t.isThreshold2Supported
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanTemperatureGetConfig(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
     zet_temp_config_t* pConfig                      ///< [in,out] Returns current configuration.
@@ -2643,7 +2643,7 @@ zetSysmanTemperatureGetConfig(
 ///         + Another running process is controlling these settings.
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + One or both the thresholds is above TjMax (see ::zetSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanTemperatureSetConfig(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
     const zet_temp_config_t* pConfig                ///< [in] New configuration.
@@ -2664,7 +2664,7 @@ zetSysmanTemperatureSetConfig(
 ///         + `nullptr == hTemperature`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pTemperature`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanTemperatureGetState(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
     double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
@@ -2719,7 +2719,7 @@ typedef struct _zet_psu_state_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPsuGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2748,7 +2748,7 @@ zetSysmanPsuGet(
 ///         + `nullptr == hPsu`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPsuGetProperties(
     zet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
     zet_psu_properties_t* pProperties               ///< [in,out] Will contain the properties of the power supply.
@@ -2769,7 +2769,7 @@ zetSysmanPsuGetProperties(
 ///         + `nullptr == hPsu`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanPsuGetState(
     zet_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
     zet_psu_state_t* pState                         ///< [in,out] Will contain the current state of the power supply.
@@ -2852,7 +2852,7 @@ typedef struct _zet_fan_config_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFanGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -2881,7 +2881,7 @@ zetSysmanFanGet(
 ///         + `nullptr == hFan`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFanGetProperties(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     zet_fan_properties_t* pProperties               ///< [in,out] Will contain the properties of the fan.
@@ -2902,7 +2902,7 @@ zetSysmanFanGetProperties(
 ///         + `nullptr == hFan`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFanGetConfig(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     zet_fan_config_t* pConfig                       ///< [in,out] Will contain the current configuration of the fan.
@@ -2925,7 +2925,7 @@ zetSysmanFanGetConfig(
 ///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFanSetConfig(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     const zet_fan_config_t* pConfig                 ///< [in] New fan configuration.
@@ -2948,7 +2948,7 @@ zetSysmanFanSetConfig(
 ///         + units
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pSpeed`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanFanGetState(
     zet_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
     zet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
@@ -2995,7 +2995,7 @@ typedef struct _zet_led_state_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanLedGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -3024,7 +3024,7 @@ zetSysmanLedGet(
 ///         + `nullptr == hLed`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanLedGetProperties(
     zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
     zet_led_properties_t* pProperties               ///< [in,out] Will contain the properties of the LED.
@@ -3045,7 +3045,7 @@ zetSysmanLedGetProperties(
 ///         + `nullptr == hLed`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanLedGetState(
     zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
     zet_led_state_t* pState                         ///< [in,out] Will contain the current state of the LED.
@@ -3068,7 +3068,7 @@ zetSysmanLedGetState(
 ///         + `nullptr == pState`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanLedSetState(
     zet_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
     const zet_led_state_t* pState                   ///< [in] New state of the LED.
@@ -3166,7 +3166,7 @@ typedef struct _zet_ras_config_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanRasGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -3197,7 +3197,7 @@ zetSysmanRasGet(
 ///         + `nullptr == hRas`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanRasGetProperties(
     zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
     zet_ras_properties_t* pProperties               ///< [in,out] Structure describing RAS properties
@@ -3227,7 +3227,7 @@ zetSysmanRasGetProperties(
 ///         + `nullptr == hRas`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanRasGetConfig(
     zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
     zet_ras_config_t* pConfig                       ///< [in,out] Will be populed with the current RAS configuration -
@@ -3264,7 +3264,7 @@ zetSysmanRasGetConfig(
 ///         + Another running process is controlling these settings.
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + Don't have permissions to set thresholds.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanRasSetConfig(
     zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
     const zet_ras_config_t* pConfig                 ///< [in] Change the RAS configuration - thresholds used to trigger events
@@ -3290,7 +3290,7 @@ zetSysmanRasSetConfig(
 ///         + `nullptr == pTotalErrors`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + Don't have permissions to clear error counters.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanRasGetState(
     zet_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
     ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
@@ -3356,7 +3356,7 @@ typedef struct _zet_event_config_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == phEvent`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanEventGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
     zet_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
@@ -3378,7 +3378,7 @@ zetSysmanEventGet(
 ///         + `nullptr == hEvent`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanEventGetConfig(
     zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
     zet_event_config_t* pConfig                     ///< [in,out] Will contain the current event configuration (list of
@@ -3401,7 +3401,7 @@ zetSysmanEventGetConfig(
 ///         + `nullptr == hEvent`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanEventSetConfig(
     zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
     const zet_event_config_t* pConfig               ///< [in] New event configuration (list of registered events).
@@ -3425,7 +3425,7 @@ zetSysmanEventSetConfig(
 ///         + `nullptr == hEvent`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pEvents`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanEventGetState(
     zet_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
     ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
@@ -3468,7 +3468,7 @@ zetSysmanEventGetState(
 ///         + User does not have permissions to listen to events.
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + One or more of the supplied event handles are for devices that belong to a different driver handle.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanEventListen(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
@@ -3554,7 +3554,7 @@ typedef struct _zet_diag_properties_t
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanDiagnosticsGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
@@ -3583,7 +3583,7 @@ zetSysmanDiagnosticsGet(
 ///         + `nullptr == hDiagnostics`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanDiagnosticsGetProperties(
     zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
     zet_diag_properties_t* pProperties              ///< [in,out] Structure describing the properties of a diagnostics test
@@ -3609,7 +3609,7 @@ zetSysmanDiagnosticsGetProperties(
 ///         + `nullptr == hDiagnostics`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanDiagnosticsGetTests(
     zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
@@ -3645,7 +3645,7 @@ zetSysmanDiagnosticsGetTests(
 ///         + `nullptr == pResult`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform diagnostics.
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetSysmanDiagnosticsRunTests(
     zet_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
     uint32_t start,                                 ///< [in] The index of the first test to run. Set to

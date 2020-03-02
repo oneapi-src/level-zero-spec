@@ -105,7 +105,7 @@ typedef struct _zet_profile_register_sequence_t
 ///         + `nullptr == hKernel`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pInfo`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetKernelGetProfileInfo(
     zet_kernel_handle_t hKernel,                    ///< [in] handle to kernel
     zet_profile_info_t* pInfo                       ///< [out] pointer to profile info

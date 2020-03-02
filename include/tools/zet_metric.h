@@ -41,7 +41,7 @@ extern "C" {
 ///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricGroupGet(
     zet_device_handle_t hDevice,                    ///< [in] handle of the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
@@ -116,7 +116,7 @@ typedef struct _zet_metric_group_properties_t
 ///         + `nullptr == hMetricGroup`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricGroupGetProperties(
     zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     zet_metric_group_properties_t* pProperties      ///< [in,out] metric group properties
@@ -185,7 +185,7 @@ typedef struct _zet_typed_value_t
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pRawData`
 ///         + `nullptr == pMetricValueCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricGroupCalculateMetricValues(
     zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
@@ -216,7 +216,7 @@ zetMetricGroupCalculateMetricValues(
 ///         + `nullptr == hMetricGroup`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricGet(
     zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
@@ -289,7 +289,7 @@ typedef struct _zet_metric_properties_t
 ///         + `nullptr == hMetric`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricGetProperties(
     zet_metric_handle_t hMetric,                    ///< [in] handle of the metric
     zet_metric_properties_t* pProperties            ///< [in,out] metric properties
@@ -310,7 +310,7 @@ zetMetricGetProperties(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hDevice`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDeviceActivateMetricGroups(
     zet_device_handle_t hDevice,                    ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
@@ -358,7 +358,7 @@ typedef struct _zet_metric_tracer_desc_t
 ///         + `::ZET_METRIC_TRACER_DESC_VERSION_CURRENT < desc->version`
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricTracerOpen(
     zet_device_handle_t hDevice,                    ///< [in] handle of the device
     zet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
@@ -382,7 +382,7 @@ zetMetricTracerOpen(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandList`
 ///         + `nullptr == hMetricTracer`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetCommandListAppendMetricTracerMarker(
     zet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     zet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
@@ -402,7 +402,7 @@ zetCommandListAppendMetricTracerMarker(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hMetricTracer`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricTracerClose(
     zet_metric_tracer_handle_t hMetricTracer        ///< [in][release] handle of the metric tracer
     );
@@ -421,7 +421,7 @@ zetMetricTracerClose(
 ///         + `nullptr == hMetricTracer`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pRawDataSize`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricTracerReadData(
     zet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
     uint32_t maxReportCount,                        ///< [in] the maximum number of reports the application wants to receive.
@@ -484,7 +484,7 @@ typedef struct _zet_metric_query_pool_desc_t
 ///         + `::ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < desc->version`
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///         + desc->flags
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricQueryPoolCreate(
     zet_device_handle_t hDevice,                    ///< [in] handle of the device
     zet_metric_group_handle_t hMetricGroup,         ///< [in] metric group associated with the query object.
@@ -511,7 +511,7 @@ zetMetricQueryPoolCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hMetricQueryPool`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricQueryPoolDestroy(
     zet_metric_query_pool_handle_t hMetricQueryPool ///< [in][release] handle of the metric query pool
     );
@@ -530,7 +530,7 @@ zetMetricQueryPoolDestroy(
 ///         + `nullptr == hMetricQueryPool`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == phMetricQuery`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricQueryCreate(
     zet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
     uint32_t index,                                 ///< [in] index of the query within the pool
@@ -553,7 +553,7 @@ zetMetricQueryCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hMetricQuery`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricQueryDestroy(
     zet_metric_query_handle_t hMetricQuery          ///< [in][release] handle of metric query
     );
@@ -573,7 +573,7 @@ zetMetricQueryDestroy(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hMetricQuery`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricQueryReset(
     zet_metric_query_handle_t hMetricQuery          ///< [in] handle of metric query
     );
@@ -592,7 +592,7 @@ zetMetricQueryReset(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandList`
 ///         + `nullptr == hMetricQuery`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetCommandListAppendMetricQueryBegin(
     zet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     zet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
@@ -613,7 +613,7 @@ zetCommandListAppendMetricQueryBegin(
 ///         + `nullptr == hCommandList`
 ///         + `nullptr == hMetricQuery`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetCommandListAppendMetricQueryEnd(
     zet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     zet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
@@ -633,7 +633,7 @@ zetCommandListAppendMetricQueryEnd(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandList`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetCommandListAppendMetricMemoryBarrier(
     zet_command_list_handle_t hCommandList          ///< [in] handle of the command list
     );
@@ -652,7 +652,7 @@ zetCommandListAppendMetricMemoryBarrier(
 ///         + `nullptr == hMetricQuery`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pRawDataSize`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetMetricQueryGetData(
     zet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
     size_t* pRawDataSize,                           ///< [in,out] pointer to size in bytes of raw data requested to read.

@@ -83,7 +83,7 @@ typedef struct _zet_debug_config_t
 ///         + caller does not have sufficient permissions
 ///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + a debugger is already attached
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugAttach(
     zet_device_handle_t hDevice,                    ///< [in] device handle
     const zet_debug_config_t* config,               ///< [in] the debug configuration
@@ -101,7 +101,7 @@ zetDebugAttach(
 ///         + `nullptr == hDebug`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + an invalid debug handle has been supplied
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugDetach(
     zet_debug_session_handle_t hDebug               ///< [in][release] debug session handle
     );
@@ -119,7 +119,7 @@ zetDebugDetach(
 ///         + `nullptr == pNumThreads`
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + an invalid debug handle has been supplied
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugGetNumThreads(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t* pNumThreads                           ///< [out] the maximal number of threads
@@ -230,7 +230,7 @@ typedef struct _zet_debug_event_t
 ///         + the output buffer is too small to hold the event
 ///     - ::ZE_RESULT_NOT_READY
 ///         + the timeout expired
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugReadEvent(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t timeout,                               ///< [in] timeout in milliseconds (or ::ZET_DEBUG_TIMEOUT_INFINITE)
@@ -250,7 +250,7 @@ zetDebugReadEvent(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is already stopped or unavailable
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugInterrupt(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t threadid                               ///< [in] the thread to inerrupt or ::ZET_DEBUG_THREAD_ALL
@@ -268,7 +268,7 @@ zetDebugInterrupt(
 ///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is already running or unavailable
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugResume(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t threadid                               ///< [in] the thread to resume or ::ZET_DEBUG_THREAD_ALL
@@ -300,7 +300,7 @@ typedef enum _zet_debug_memory_space_intel_graphics_t
 ///         + an invalid address has been supplied
 ///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + the memory cannot be accessed from the supplied thread
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugReadMemory(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
@@ -327,7 +327,7 @@ zetDebugReadMemory(
 ///         + an invalid address has been supplied
 ///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
 ///         + the memory cannot be accessed from the supplied thread
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugWriteMemory(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t threadid,                              ///< [in] the thread context or ::ZET_DEBUG_THREAD_NONE
@@ -386,7 +386,7 @@ typedef struct _zet_debug_state_t
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid offset or size has been supplied
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugReadState(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t threadid,                              ///< [in] the thread context
@@ -410,7 +410,7 @@ zetDebugReadState(
 ///         + an invalid debug handle or thread identifier has been supplied
 ///         + the thread is running or unavailable
 ///         + an invalid offset or size has been supplied
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zetDebugWriteState(
     zet_debug_session_handle_t hDebug,              ///< [in] debug session handle
     uint64_t threadid,                              ///< [in] the thread context

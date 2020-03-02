@@ -78,7 +78,7 @@ typedef struct _ze_fence_desc_t
 ///         + desc->flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeFenceCreate(
     ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
     const ze_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
@@ -108,7 +108,7 @@ zeFenceCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hFence`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeFenceDestroy(
     ze_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
     );
@@ -133,7 +133,7 @@ zeFenceDestroy(
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ///     - ::ZE_RESULT_NOT_READY
 ///         + timeout expired
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeFenceHostSynchronize(
     ze_fence_handle_t hFence,                       ///< [in] handle of the fence
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
@@ -163,7 +163,7 @@ zeFenceHostSynchronize(
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ///     - ::ZE_RESULT_NOT_READY
 ///         + not signaled
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeFenceQueryStatus(
     ze_fence_handle_t hFence                        ///< [in] handle of the fence
     );
@@ -185,7 +185,7 @@ zeFenceQueryStatus(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hFence`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeFenceReset(
     ze_fence_handle_t hFence                        ///< [in] handle of the fence
     );

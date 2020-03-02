@@ -41,7 +41,7 @@ extern "C" {
 ///         + `nullptr == ptr`
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeDeviceRegisterCLMemory(
     ze_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the memory
@@ -64,7 +64,7 @@ zeDeviceRegisterCLMemory(
 ///         + `nullptr == phModule`
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeDeviceRegisterCLProgram(
     ze_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the program
@@ -87,7 +87,7 @@ zeDeviceRegisterCLProgram(
 ///         + `nullptr == phCommandQueue`
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeDeviceRegisterCLCommandQueue(
     ze_device_handle_t hDevice,                     ///< [in] handle to the device
     cl_context context,                             ///< [in] the OpenCL context that created the command queue
