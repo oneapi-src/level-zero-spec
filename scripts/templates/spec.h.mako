@@ -98,7 +98,7 @@ typedef ${obj['type']} _${th.make_type_name(n, tags, obj)}
 %for line in th.make_returns_lines(n, tags, obj, meta=meta):
 /// ${line}
 %endfor
-${x}_result_t __${x}call
+__${x}dllexport ${x}_result_t __${x}call
 ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_param_lines(n, tags, obj):
     ${line}

@@ -54,7 +54,7 @@ extern "C" {
 ///         + `nullptr == dstptr`
 ///         + `nullptr == srcptr`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendMemoryCopy(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -91,7 +91,7 @@ zeCommandListAppendMemoryCopy(
 ///         + `nullptr == ptr`
 ///         + `nullptr == pattern`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendMemoryFill(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* ptr,                                      ///< [in] pointer to memory to initialize
@@ -142,7 +142,7 @@ typedef struct _ze_copy_region_t
 ///         + `nullptr == srcRegion`
 ///     - ::ZE_RESULT_ERROR_OVERLAPPING_REGIONS
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendMemoryCopyRegion(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -181,7 +181,7 @@ zeCommandListAppendMemoryCopyRegion(
 ///         + `nullptr == hDstImage`
 ///         + `nullptr == hSrcImage`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendImageCopy(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     ze_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -224,7 +224,7 @@ typedef struct _ze_image_region_t
 ///         + `nullptr == hSrcImage`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ///     - ::ZE_RESULT_ERROR_OVERLAPPING_REGIONS
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendImageCopyRegion(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     ze_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -258,7 +258,7 @@ zeCommandListAppendImageCopyRegion(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == dstptr`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendImageCopyToMemory(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
@@ -291,7 +291,7 @@ zeCommandListAppendImageCopyToMemory(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == srcptr`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendImageCopyFromMemory(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     ze_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
@@ -333,7 +333,7 @@ zeCommandListAppendImageCopyFromMemory(
 ///         + `nullptr == hCommandList`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == ptr`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendMemoryPrefetch(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
@@ -387,7 +387,7 @@ typedef enum _ze_memory_advice_t
 ///         + `nullptr == ptr`
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///         + advice
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeCommandListAppendMemAdvise(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of command list
     ze_device_handle_t hDevice,                     ///< [in] device associated with the memory advice

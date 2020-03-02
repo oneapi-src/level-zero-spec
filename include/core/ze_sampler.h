@@ -93,7 +93,7 @@ typedef struct _ze_sampler_desc_t
 ///         + desc->addressMode
 ///         + desc->filterMode
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeSamplerCreate(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     const ze_sampler_desc_t* desc,                  ///< [in] pointer to sampler descriptor
@@ -119,7 +119,7 @@ zeSamplerCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hSampler`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zeSamplerDestroy(
     ze_sampler_handle_t hSampler                    ///< [in][release] handle of the sampler
     );

@@ -47,7 +47,7 @@ extern "C" {
 ///         + `nullptr == ptr`
 ///     - ::ZE_RESULT_ERROR_INVALID_SIZE
 ///         + `0 == size`
-ze_result_t __zecall
+__zedllexport ze_result_t __zecall
 zexCommandListReserveSpace(
     zex_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     size_t size,                                    ///< [in] size (in bytes) to reserve
