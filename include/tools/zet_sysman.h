@@ -2030,8 +2030,8 @@ typedef struct _zet_mem_properties_t
 typedef struct _zet_mem_state_t
 {
     zet_mem_health_t health;                        ///< [out] Indicates the health of the memory
-    uint64_t allocatedSize;                         ///< [out] The total allocated bytes
-    uint64_t maxSize;                               ///< [out] The total allocatable memory in bytes (can be less than
+    uint64_t free;                                  ///< [out] The free memory in bytes
+    uint64_t size;                                  ///< [out] The total allocatable memory in bytes (can be less than
                                                     ///< ::zet_mem_properties_t.physicalSize)
 
 } zet_mem_state_t;
@@ -2109,7 +2109,7 @@ zetSysmanMemoryGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get memory state - health, allocated
+/// @brief Get memory state - health, free memory, total size
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2126,7 +2126,8 @@ zetSysmanMemoryGetProperties(
 ze_result_t __zecall
 zetSysmanMemoryGetState(
     zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-    zet_mem_state_t* pState                         ///< [in,out] Will contain the current health and allocated memory.
+    zet_mem_state_t* pState                         ///< [in,out] Will contain the current health, free memory, total memory
+                                                    ///< size.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

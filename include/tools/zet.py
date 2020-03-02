@@ -1239,8 +1239,8 @@ class zet_mem_properties_t(Structure):
 class zet_mem_state_t(Structure):
     _fields_ = [
         ("health", zet_mem_health_t),                                   ## [out] Indicates the health of the memory
-        ("allocatedSize", c_ulonglong),                                 ## [out] The total allocated bytes
-        ("maxSize", c_ulonglong)                                        ## [out] The total allocatable memory in bytes (can be less than
+        ("free", c_ulonglong),                                          ## [out] The free memory in bytes
+        ("size", c_ulonglong)                                           ## [out] The total allocatable memory in bytes (can be less than
                                                                         ## ::zet_mem_properties_t.physicalSize)
     ]
 

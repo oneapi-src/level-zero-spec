@@ -1647,7 +1647,7 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get memory state - health, allocated
+    /// @brief Get memory state - health, free memory, total size
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -1656,7 +1656,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanMemory::GetState(
-        mem_state_t* pState                             ///< [in,out] Will contain the current health and allocated memory.
+        mem_state_t* pState                             ///< [in,out] Will contain the current health, free memory, total memory
+                                                        ///< size.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanMemoryGetState(
@@ -4139,12 +4140,12 @@ namespace zet
         str += to_string(val.health);
         str += "\n";
         
-        str += "SysmanMemory::mem_state_t::allocatedSize : ";
-        str += std::to_string(val.allocatedSize);
+        str += "SysmanMemory::mem_state_t::free : ";
+        str += std::to_string(val.free);
         str += "\n";
         
-        str += "SysmanMemory::mem_state_t::maxSize : ";
-        str += std::to_string(val.maxSize);
+        str += "SysmanMemory::mem_state_t::size : ";
+        str += std::to_string(val.size);
         str += "\n";
 
         return str;

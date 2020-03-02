@@ -1778,7 +1778,7 @@ zetSysmanMemoryGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get memory state - health, allocated
+/// @brief Get memory state - health, free memory, total size
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1795,7 +1795,8 @@ zetSysmanMemoryGetProperties(
 ze_result_t __zecall
 zetSysmanMemoryGetState(
     zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-    zet_mem_state_t* pState                         ///< [in,out] Will contain the current health and allocated memory.
+    zet_mem_state_t* pState                         ///< [in,out] Will contain the current health, free memory, total memory
+                                                    ///< size.
     )
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanMemory.pfnGetState;

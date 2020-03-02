@@ -1816,10 +1816,10 @@ members:
       name: health
       desc: "[out] Indicates the health of the memory"
     - type: uint64_t
-      name: allocatedSize
-      desc: "[out] The total allocated bytes"
+      name: free
+      desc: "[out] The free memory in bytes"
     - type: uint64_t
-      name: maxSize
+      name: size
       desc: "[out] The total allocatable memory in bytes (can be less than $t_mem_properties_t.physicalSize)"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -1884,7 +1884,7 @@ params:
       desc: "[in,out] Will contain memory properties."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get memory state - health, allocated"
+desc: "Get memory state - health, free memory, total size"
 class: $tSysmanMemory
 name: GetState
 details:
@@ -1896,7 +1896,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_mem_state_t*
       name: pState
-      desc: "[in,out] Will contain the current health and allocated memory."
+      desc: "[in,out] Will contain the current health, free memory, total memory size."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory bandwidth"

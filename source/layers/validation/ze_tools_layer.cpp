@@ -2431,7 +2431,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanMemoryGetState(
         zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zet_mem_state_t* pState                         ///< [in,out] Will contain the current health and allocated memory.
+        zet_mem_state_t* pState                         ///< [in,out] Will contain the current health, free memory, total memory
+                                                        ///< size.
         )
     {
         auto pfnGetState = context.zetDdiTable.SysmanMemory.pfnGetState;
