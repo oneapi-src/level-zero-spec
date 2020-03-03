@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for Metric
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools/metric.yml
- * @endcond
- *
  */
 #ifndef _ZET_METRIC_HPP
 #define _ZET_METRIC_HPP

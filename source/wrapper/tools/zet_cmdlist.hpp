@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for Command List
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools/cmdlist.yml
- * @endcond
- *
  */
 #ifndef _ZET_CMDLIST_HPP
 #define _ZET_CMDLIST_HPP

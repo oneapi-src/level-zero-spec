@@ -6,10 +6,6 @@
  *
  * @file ze_api.hpp
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core
- * @endcond
- *
  */
 #ifndef _ZE_API_HPP
 #define _ZE_API_HPP

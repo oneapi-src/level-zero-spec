@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero API common types
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/common.yml
- * @endcond
- *
  */
 #include "ze_api.hpp"
 #include "ze_singleton.h"

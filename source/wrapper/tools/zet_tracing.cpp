@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for API Tracing
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools/tracing.yml
- * @endcond
- *
  */
 #include "zet_api.hpp"
 #include "ze_singleton.h"

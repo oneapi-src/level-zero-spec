@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero Tool APIs for Program Debug
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools/debug.yml
- * @endcond
- *
  */
  
 #ifndef _ZET_DEBUG_H

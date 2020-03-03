@@ -14,10 +14,6 @@ import re
  *
  * @file ${n}_api.hpp
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/${section}
- * @endcond
- *
  */
 #ifndef _${N}_API_HPP
 #define _${N}_API_HPP

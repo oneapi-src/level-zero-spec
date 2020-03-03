@@ -6,10 +6,6 @@
  *
  * @file zet_api.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools
- * @endcond
- *
  */
 #ifndef _ZET_API_H
 #define _ZET_API_H

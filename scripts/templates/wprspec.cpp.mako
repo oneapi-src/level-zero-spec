@@ -25,10 +25,6 @@ def define_dbg(obj, tags):
  *
  * @brief C++ wrapper of ${th.subt(n, tags, header['desc'])}
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
- * @endcond
- *
  */
 #include "${n}_api.hpp"
 #include "${x}_singleton.h"

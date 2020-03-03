@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero APIs
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools/driver.yml
- * @endcond
- *
  */
  
 #ifndef _ZET_DRIVER_H

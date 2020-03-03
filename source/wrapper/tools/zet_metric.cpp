@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for Metric
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools/metric.yml
- * @endcond
- *
  */
 #include "zet_api.hpp"
 #include "ze_singleton.h"

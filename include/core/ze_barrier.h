@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero APIs for Barrier
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/barrier.yml
- * @endcond
- *
  */
  
 #ifndef _ZE_BARRIER_H

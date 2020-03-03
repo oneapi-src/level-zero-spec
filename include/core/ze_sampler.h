@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero APIs for Sampler
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/sampler.yml
- * @endcond
- *
  */
  
 #ifndef _ZE_SAMPLER_H

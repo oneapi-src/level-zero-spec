@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero Tool APIs for API Tracing
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools/tracing.yml
- * @endcond
- *
  */
  
 #ifndef _ZET_TRACING_H

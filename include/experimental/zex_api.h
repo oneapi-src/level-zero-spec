@@ -6,10 +6,6 @@
  *
  * @file zex_api.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/experimental
- * @endcond
- *
  */
 #ifndef _ZEX_API_H
 #define _ZEX_API_H

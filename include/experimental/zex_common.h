@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero Experimental API common types
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/experimental/common.yml
- * @endcond
- *
  */
  
 #ifndef _ZEX_COMMON_H

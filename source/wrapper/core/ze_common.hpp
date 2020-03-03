@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero API common types
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/common.yml
- * @endcond
- *
  */
 #ifndef _ZE_COMMON_HPP
 #define _ZE_COMMON_HPP

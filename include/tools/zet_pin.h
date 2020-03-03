@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero Tool APIs for Program Instrumentation (PIN)
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools/pin.yml
- * @endcond
- *
  */
  
 #ifndef _ZET_PIN_H

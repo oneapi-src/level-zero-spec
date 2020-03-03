@@ -6,10 +6,6 @@
  *
  * @file zex_callbacks.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/experimental
- * @endcond
- *
  */
 #ifndef _ZEX_CALLBACKS_H
 #define _ZEX_CALLBACKS_H

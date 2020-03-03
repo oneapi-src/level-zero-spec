@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero APIs for Event
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/event.yml
- * @endcond
- *
  */
  
 #ifndef _ZE_EVENT_H

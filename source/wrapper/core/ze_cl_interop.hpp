@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero APIs for OpenCL Interoperability
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/cl_interop.yml
- * @endcond
- *
  */
 #ifndef _ZE_CL_INTEROP_HPP
 #define _ZE_CL_INTEROP_HPP

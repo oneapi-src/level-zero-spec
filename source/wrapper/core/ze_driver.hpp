@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero APIs
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/driver.yml
- * @endcond
- *
  */
 #ifndef _ZE_DRIVER_HPP
 #define _ZE_DRIVER_HPP
