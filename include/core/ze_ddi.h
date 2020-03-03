@@ -6,10 +6,6 @@
  *
  * @file ze_ddi.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core
- * @endcond
- *
  */
 #ifndef _ZE_DDI_H
 #define _ZE_DDI_H

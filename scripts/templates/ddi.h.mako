@@ -15,10 +15,6 @@ from templates import helper as th
  *
  * @file ${n}_ddi.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/${section}
- * @endcond
- *
  */
 #ifndef _${N}_DDI_H
 #define _${N}_DDI_H

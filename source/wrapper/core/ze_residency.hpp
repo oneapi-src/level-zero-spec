@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero APIs for Memory Residency
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/residency.yml
- * @endcond
- *
  */
 #ifndef _ZE_RESIDENCY_HPP
 #define _ZE_RESIDENCY_HPP

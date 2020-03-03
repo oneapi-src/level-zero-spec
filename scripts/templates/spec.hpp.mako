@@ -33,10 +33,6 @@ def declare_dbg(obj, tags):
  *
  * @brief C++ wrapper of ${th.subt(n, tags, header['desc'])}
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
- * @endcond
- *
  */
 #ifndef _${N}_${name.upper()}_HPP
 #define _${N}_${name.upper()}_HPP

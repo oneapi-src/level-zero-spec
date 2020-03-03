@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero APIs for Command Queue
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/cmdqueue.yml
- * @endcond
- *
  */
  
 #ifndef _ZE_CMDQUEUE_H

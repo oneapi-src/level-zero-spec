@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero APIs for Images
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/image.yml
- * @endcond
- *
  */
 #ifndef _ZE_IMAGE_HPP
 #define _ZE_IMAGE_HPP

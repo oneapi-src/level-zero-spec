@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero APIs for Fence
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/fence.yml
- * @endcond
- *
  */
 #ifndef _ZE_FENCE_HPP
 #define _ZE_FENCE_HPP

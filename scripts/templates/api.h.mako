@@ -15,10 +15,6 @@ from templates import helper as th
  *
  * @file ${n}_api.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/${section}
- * @endcond
- *
  */
 #ifndef _${N}_API_H
 #define _${N}_API_H

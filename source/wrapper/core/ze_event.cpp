@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero APIs for Event
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/event.yml
- * @endcond
- *
  */
 #include "ze_api.hpp"
 #include "ze_singleton.h"

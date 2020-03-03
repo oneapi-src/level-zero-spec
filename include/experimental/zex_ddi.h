@@ -6,10 +6,6 @@
  *
  * @file zex_ddi.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/experimental
- * @endcond
- *
  */
 #ifndef _ZEX_DDI_H
 #define _ZEX_DDI_H

@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for System Resource Management (Sysman)
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools/sysman.yml
- * @endcond
- *
  */
 #include "zet_api.hpp"
 #include "ze_singleton.h"

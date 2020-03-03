@@ -6,10 +6,6 @@
  *
  * @file ze_callbacks.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core
- * @endcond
- *
  */
 #ifndef _ZE_CALLBACKS_H
 #define _ZE_CALLBACKS_H

@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero APIs for Module
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/module.yml
- * @endcond
- *
  */
  
 #ifndef _ZE_MODULE_H

@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero Experimental APIs for Command List
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/experimental/cmdlist.yml
- * @endcond
- *
  */
  
 #ifndef _ZEX_CMDLIST_H

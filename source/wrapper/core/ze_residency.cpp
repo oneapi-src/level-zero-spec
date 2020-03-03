@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero APIs for Memory Residency
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/residency.yml
- * @endcond
- *
  */
 #include "ze_api.hpp"
 #include "ze_singleton.h"

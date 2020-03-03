@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero APIs
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/experimental/driver.yml
- * @endcond
- *
  */
 #include "zex_api.hpp"
 #include "ze_singleton.h"

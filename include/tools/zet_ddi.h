@@ -6,10 +6,6 @@
  *
  * @file zet_ddi.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/tools
- * @endcond
- *
  */
 #ifndef _ZET_DDI_H
 #define _ZET_DDI_H

@@ -8,10 +8,6 @@
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero APIs for Copies
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/copy.yml
- * @endcond
- *
  */
 #ifndef _ZE_COPY_HPP
 #define _ZE_COPY_HPP

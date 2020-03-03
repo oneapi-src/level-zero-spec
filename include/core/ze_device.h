@@ -8,10 +8,6 @@
  *
  * @brief Intel 'One API' Level-Zero APIs for Device
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/core/device.yml
- * @endcond
- *
  */
  
 #ifndef _ZE_DEVICE_H
