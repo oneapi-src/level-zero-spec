@@ -1107,9 +1107,9 @@ memory modules:
 | ::${t}SysmanMemoryGetBandwidth()   | Returns memory bandwidth counters |
 |                                   | for a module.                     |
 +-----------------------------------+-----------------------------------+
-| ::${t}SysmanMemoryGetState()       | Returns the current health, free  |
-|                                   | memory and total physical memory  |
-|                                   | for a memory module.              |
+| ::${t}SysmanMemoryGetState()       | Returns the currently health and  |
+|                                   | allocated memory size for a       |
+|                                   | module.                           |
 +-----------------------------------+-----------------------------------+
 
 .. _Fabric-Port:

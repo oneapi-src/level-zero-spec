@@ -1949,8 +1949,8 @@ namespace zet
         struct mem_state_t
         {
             mem_health_t health;                            ///< [out] Indicates the health of the memory
-            uint64_t free;                                  ///< [out] The free memory in bytes
-            uint64_t size;                                  ///< [out] The total allocatable memory in bytes (can be less than
+            uint64_t allocatedSize;                         ///< [out] The total allocated bytes
+            uint64_t maxSize;                               ///< [out] The total allocatable memory in bytes (can be less than
                                                             ///< ::zet_mem_properties_t.physicalSize)
 
         };
@@ -2016,7 +2016,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get memory state - health, free memory, total size
+        /// @brief Get memory state - health, allocated
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2024,8 +2024,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetState(
-            mem_state_t* pState                             ///< [in,out] Will contain the current health, free memory, total memory
-                                                            ///< size.
+            mem_state_t* pState                             ///< [in,out] Will contain the current health and allocated memory.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
