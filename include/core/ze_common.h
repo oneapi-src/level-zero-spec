@@ -56,6 +56,16 @@ extern "C" {
 #endif // __zecall
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef __ze_api_export
+#if defined(_WIN32)
+/// @brief Microsoft-specific dllexport storage-class attribute
+#define __ze_api_export  __declspec(dllexport)
+#else
+#define __ze_api_export  
+#endif // defined(_WIN32)
+#endif // __ze_api_export
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef __zedllexport
 #if defined(_WIN32)
 /// @brief Microsoft-specific dllexport storage-class attribute

@@ -113,7 +113,7 @@ typedef struct _ze_module_desc_t
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::ZE_RESULT_ERROR_MODULE_BUILD_FAILURE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeModuleCreate(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     const ze_module_desc_t* desc,                   ///< [in] pointer to module descriptor
@@ -140,7 +140,7 @@ zeModuleCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hModule`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeModuleDestroy(
     ze_module_handle_t hModule                      ///< [in][release] handle of the module
     );
@@ -164,7 +164,7 @@ zeModuleDestroy(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hModuleBuildLog`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeModuleBuildLogDestroy(
     ze_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
     );
@@ -186,7 +186,7 @@ zeModuleBuildLogDestroy(
 ///         + `nullptr == hModuleBuildLog`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pSize`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeModuleBuildLogGetString(
     ze_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
     size_t* pSize,                                  ///< [in,out] size of build log string.
@@ -216,7 +216,7 @@ zeModuleBuildLogGetString(
 ///         + `nullptr == hModule`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pSize`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeModuleGetNativeBinary(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
     size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
@@ -240,7 +240,7 @@ zeModuleGetNativeBinary(
 ///         + `nullptr == pGlobalName`
 ///         + `nullptr == pptr`
 ///     - ::ZE_RESULT_ERROR_INVALID_GLOBAL_NAME
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeModuleGetGlobalPointer(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pGlobalName,                        ///< [in] name of global variable in module
@@ -262,7 +262,7 @@ zeModuleGetGlobalPointer(
 ///         + `nullptr == hModule`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeModuleGetKernelNames(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
     uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
@@ -324,7 +324,7 @@ typedef struct _ze_kernel_desc_t
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///         + desc->flags
 ///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_NAME
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelCreate(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
     const ze_kernel_desc_t* desc,                   ///< [in] pointer to kernel descriptor
@@ -351,7 +351,7 @@ zeKernelCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hKernel`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelDestroy(
     ze_kernel_handle_t hKernel                      ///< [in][release] handle of the kernel object
     );
@@ -376,7 +376,7 @@ zeKernelDestroy(
 ///         + `nullptr == pFunctionName`
 ///         + `nullptr == pfnFunction`
 ///     - ::ZE_RESULT_ERROR_INVALID_FUNCTION_NAME
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeModuleGetFunctionPointer(
     ze_module_handle_t hModule,                     ///< [in] handle of the module
     const char* pFunctionName,                      ///< [in] Name of function to retrieve function pointer for.
@@ -400,7 +400,7 @@ zeModuleGetFunctionPointer(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hKernel`
 ///     - ::ZE_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelSetGroupSize(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this kernel
@@ -429,7 +429,7 @@ zeKernelSetGroupSize(
 ///         + `nullptr == groupSizeY`
 ///         + `nullptr == groupSizeZ`
 ///     - ::ZE_RESULT_ERROR_INVALID_GLOBAL_WIDTH_DIMENSION
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelSuggestGroupSize(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     uint32_t globalSizeX,                           ///< [in] global width for X dimension
@@ -455,7 +455,7 @@ zeKernelSuggestGroupSize(
 ///         + `nullptr == hKernel`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == totalGroupCount`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelSuggestMaxCooperativeGroupCount(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     uint32_t* totalGroupCount                       ///< [out] recommended total group count.
@@ -479,7 +479,7 @@ zeKernelSuggestMaxCooperativeGroupCount(
 ///         + `nullptr == hKernel`
 ///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_INDEX
 ///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_SIZE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelSetArgumentValue(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
@@ -530,7 +530,7 @@ typedef enum _ze_kernel_attribute_t
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///         + attr
 ///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelSetAttribute(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     ze_kernel_attribute_t attr,                     ///< [in] attribute to set
@@ -559,7 +559,7 @@ zeKernelSetAttribute(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pSize`
 ///     - ::ZE_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelGetAttribute(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     ze_kernel_attribute_t attr,                     ///< [in] attribute to get. Documentation for ::ze_kernel_attribute_t for
@@ -586,7 +586,7 @@ zeKernelGetAttribute(
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///         + CacheConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelSetIntermediateCacheConfig(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     ze_cache_config_t CacheConfig                   ///< [in] CacheConfig
@@ -634,7 +634,7 @@ typedef struct _ze_kernel_properties_t
 ///         + `nullptr == hKernel`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pKernelProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeKernelGetProperties(
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
     ze_kernel_properties_t* pKernelProperties       ///< [in,out] query result for kernel properties.
@@ -670,7 +670,7 @@ typedef struct _ze_group_count_t
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pLaunchFuncArgs`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListAppendLaunchKernel(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -705,7 +705,7 @@ zeCommandListAppendLaunchKernel(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pLaunchFuncArgs`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListAppendLaunchCooperativeKernel(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -739,7 +739,7 @@ zeCommandListAppendLaunchCooperativeKernel(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pLaunchArgumentsBuffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListAppendLaunchKernelIndirect(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_kernel_handle_t hKernel,                     ///< [in] handle of the kernel object
@@ -776,7 +776,7 @@ zeCommandListAppendLaunchKernelIndirect(
 ///         + `nullptr == pCountBuffer`
 ///         + `nullptr == pLaunchArgumentsBuffer`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListAppendLaunchMultipleKernelsIndirect(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numKernels,                            ///< [in] maximum number of kernels to launch

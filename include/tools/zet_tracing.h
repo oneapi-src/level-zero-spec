@@ -72,7 +72,7 @@ typedef struct _zet_tracer_desc_t
 ///         + `::ZET_TRACER_DESC_VERSION_CURRENT < desc->version`
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zetTracerCreate(
     zet_driver_handle_t hDriver,                    ///< [in] handle of the driver
     const zet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
@@ -96,7 +96,7 @@ zetTracerCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hTracer`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zetTracerDestroy(
     zet_tracer_handle_t hTracer                     ///< [in][release] handle of tracer object to destroy
     );
@@ -121,7 +121,7 @@ zetTracerDestroy(
 ///         + `nullptr == hTracer`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCoreCbs`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zetTracerSetPrologues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
     zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
@@ -147,7 +147,7 @@ zetTracerSetPrologues(
 ///         + `nullptr == hTracer`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCoreCbs`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zetTracerSetEpilogues(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
     zet_core_callbacks_t* pCoreCbs                  ///< [in] pointer to table of 'core' callback function pointers
@@ -166,7 +166,7 @@ zetTracerSetEpilogues(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hTracer`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zetTracerSetEnabled(
     zet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
     ze_bool_t enable                                ///< [in] enable the tracer if true; disable if false

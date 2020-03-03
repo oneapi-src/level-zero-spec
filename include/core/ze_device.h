@@ -42,7 +42,7 @@ extern "C" {
 ///         + `nullptr == hDriver`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGet(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
@@ -73,7 +73,7 @@ zeDeviceGet(
 ///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGetSubDevices(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
@@ -172,7 +172,7 @@ typedef struct _ze_device_properties_t
 ///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pDeviceProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGetProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_device_properties_t* pDeviceProperties       ///< [in,out] query result for device properties
@@ -231,7 +231,7 @@ typedef struct _ze_device_compute_properties_t
 ///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pComputeProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGetComputeProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_device_compute_properties_t* pComputeProperties  ///< [in,out] query result for compute properties
@@ -321,7 +321,7 @@ typedef struct _ze_device_kernel_properties_t
 ///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pKernelProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGetKernelProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
@@ -368,7 +368,7 @@ typedef struct _ze_device_memory_properties_t
 ///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGetMemoryProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties.
@@ -440,7 +440,7 @@ typedef struct _ze_device_memory_access_properties_t
 ///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pMemAccessProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGetMemoryAccessProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_device_memory_access_properties_t* pMemAccessProperties  ///< [in,out] query result for memory access properties
@@ -489,7 +489,7 @@ typedef struct _ze_device_cache_properties_t
 ///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCacheProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGetCacheProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_device_cache_properties_t* pCacheProperties  ///< [in,out] query result for cache properties
@@ -539,7 +539,7 @@ typedef struct _ze_device_image_properties_t
 ///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pImageProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGetImageProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_device_image_properties_t* pImageProperties  ///< [in,out] query result for image properties
@@ -580,7 +580,7 @@ typedef struct _ze_device_p2p_properties_t
 ///         + `nullptr == hPeerDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pP2PProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceGetP2PProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     ze_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -617,7 +617,7 @@ zeDeviceGetP2PProperties(
 ///         + `nullptr == hPeerDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == value`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceCanAccessPeer(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     ze_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
@@ -653,7 +653,7 @@ typedef enum _ze_cache_config_t
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///         + CacheConfig
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceSetLastLevelCacheConfig(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device 
     ze_cache_config_t CacheConfig                   ///< [in] CacheConfig

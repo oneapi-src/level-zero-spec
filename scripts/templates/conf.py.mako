@@ -1,6 +1,4 @@
 
-<%
-%>
 # -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.
@@ -199,7 +197,7 @@ todo_include_todos = True
 
 cpp_index_common_prefix = ['ze::', 'zet::']
 
-cpp_id_attributes = ['__zedllexport', '__zecall']
+cpp_id_attributes = ['__ze_api_export', '__zecall']
 
 breathe_projects = { "LevelZero": "../xml" }
 breathe_default_project = "LevelZero"

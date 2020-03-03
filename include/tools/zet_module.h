@@ -56,7 +56,7 @@ typedef enum _zet_module_debug_info_format_t
 ///         + format
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pSize`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zetModuleGetDebugInfo(
     zet_module_handle_t hModule,                    ///< [in] handle of the module
     zet_module_debug_info_format_t format,          ///< [in] debug info format requested

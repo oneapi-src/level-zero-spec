@@ -46,7 +46,7 @@ extern "C" {
 ///         + `nullptr == ptr`
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceMakeMemoryResident(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to make resident
@@ -73,7 +73,7 @@ zeDeviceMakeMemoryResident(
 ///         + `nullptr == ptr`
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceEvictMemory(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to evict
@@ -98,7 +98,7 @@ zeDeviceEvictMemory(
 ///         + `nullptr == hImage`
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceMakeImageResident(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_image_handle_t hImage                        ///< [in] handle of image to make resident
@@ -124,7 +124,7 @@ zeDeviceMakeImageResident(
 ///         + `nullptr == hImage`
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDeviceEvictImage(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_image_handle_t hImage                        ///< [in] handle of image to make evict

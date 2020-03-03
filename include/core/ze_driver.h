@@ -54,7 +54,7 @@ typedef enum _ze_init_flag_t
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///         + flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeInit(
     ze_init_flag_t flags                            ///< [in] initialization flags
     );
@@ -79,7 +79,7 @@ zeInit(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                     ///< if count is zero, then the loader will update the value with the total
@@ -118,7 +118,7 @@ typedef enum _ze_api_version_t
 ///         + `nullptr == hDriver`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == version`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverGetApiVersion(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     ze_api_version_t* version                       ///< [out] api version
@@ -177,7 +177,7 @@ typedef struct _ze_driver_properties_t
 ///         + `nullptr == hDriver`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pDriverProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverGetProperties(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     ze_driver_properties_t* pDriverProperties       ///< [in,out] query result for driver properties
@@ -218,7 +218,7 @@ typedef struct _ze_driver_ipc_properties_t
 ///         + `nullptr == hDriver`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pIPCProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverGetIPCProperties(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     ze_driver_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
@@ -244,7 +244,7 @@ zeDriverGetIPCProperties(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pFuncName`
 ///         + `nullptr == pfunc`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverGetExtensionFunctionAddress(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const char* pFuncName,                          ///< [in] name of the extension function

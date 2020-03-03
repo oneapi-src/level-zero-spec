@@ -124,7 +124,7 @@ typedef struct _ze_host_mem_alloc_desc_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverAllocSharedMem(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
@@ -162,7 +162,7 @@ zeDriverAllocSharedMem(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverAllocDeviceMem(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const ze_device_mem_alloc_desc_t* device_desc,  ///< [in] pointer to device mem alloc descriptor
@@ -200,7 +200,7 @@ zeDriverAllocDeviceMem(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverAllocHostMem(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const ze_host_mem_alloc_desc_t* host_desc,      ///< [in] pointer to host mem alloc descriptor
@@ -228,7 +228,7 @@ zeDriverAllocHostMem(
 ///         + `nullptr == hDriver`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == ptr`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverFreeMem(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     void* ptr                                       ///< [in][release] pointer to memory to free
@@ -279,7 +279,7 @@ typedef struct _ze_memory_allocation_properties_t
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == ptr`
 ///         + `nullptr == pMemAllocProperties`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverGetMemAllocProperties(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] memory pointer to query
@@ -301,7 +301,7 @@ zeDriverGetMemAllocProperties(
 ///         + `nullptr == hDriver`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == ptr`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverGetMemAddressRange(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] memory pointer to query
@@ -327,7 +327,7 @@ zeDriverGetMemAddressRange(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == ptr`
 ///         + `nullptr == pIpcHandle`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverGetMemIpcHandle(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] pointer to the device memory allocation
@@ -364,7 +364,7 @@ typedef enum _ze_ipc_memory_flag_t
 ///         + flags
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pptr`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverOpenMemIpcHandle(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     ze_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
@@ -390,7 +390,7 @@ zeDriverOpenMemIpcHandle(
 ///         + `nullptr == hDriver`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == ptr`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeDriverCloseMemIpcHandle(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr                                 ///< [in][release] pointer to device allocation in this process

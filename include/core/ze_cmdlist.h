@@ -95,7 +95,7 @@ typedef struct _ze_command_list_desc_t
 ///         + desc->flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListCreate(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device object
     const ze_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
@@ -131,7 +131,7 @@ zeCommandListCreate(
 ///         + altdesc->priority
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListCreateImmediate(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device object
     const ze_command_queue_desc_t* altdesc,         ///< [in] pointer to command queue descriptor
@@ -157,7 +157,7 @@ zeCommandListCreateImmediate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandList`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListDestroy(
     ze_command_list_handle_t hCommandList           ///< [in][release] handle of command list object to destroy
     );
@@ -176,7 +176,7 @@ zeCommandListDestroy(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandList`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListClose(
     ze_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     );
@@ -198,7 +198,7 @@ zeCommandListClose(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandList`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListReset(
     ze_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     );

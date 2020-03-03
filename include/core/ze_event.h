@@ -79,7 +79,7 @@ typedef struct _ze_event_pool_desc_t
 ///         + desc->flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventPoolCreate(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const ze_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
@@ -113,7 +113,7 @@ zeEventPoolCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hEventPool`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventPoolDestroy(
     ze_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object to destroy
     );
@@ -184,7 +184,7 @@ typedef struct _ze_event_desc_t
 ///         + desc->signal
 ///         + desc->wait
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventCreate(
     ze_event_pool_handle_t hEventPool,              ///< [in] handle of the event pool
     const ze_event_desc_t* desc,                    ///< [in] pointer to event descriptor
@@ -215,7 +215,7 @@ zeEventCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hEvent`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventDestroy(
     ze_event_handle_t hEvent                        ///< [in][release] handle of event object to destroy
     );
@@ -235,7 +235,7 @@ zeEventDestroy(
 ///         + `nullptr == hEventPool`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == phIpc`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventPoolGetIpcHandle(
     ze_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
     ze_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
@@ -258,7 +258,7 @@ zeEventPoolGetIpcHandle(
 ///         + `nullptr == hDriver`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == phEventPool`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventPoolOpenIpcHandle(
     ze_driver_handle_t hDriver,                     ///< [in] handle of the driver to associate with the IPC event pool handle
     ze_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
@@ -280,7 +280,7 @@ zeEventPoolOpenIpcHandle(
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hEventPool`
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventPoolCloseIpcHandle(
     ze_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object
     );
@@ -306,7 +306,7 @@ zeEventPoolCloseIpcHandle(
 ///         + `nullptr == hCommandList`
 ///         + `nullptr == hEvent`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListAppendSignalEvent(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_event_handle_t hEvent                        ///< [in] handle of the event
@@ -329,7 +329,7 @@ zeCommandListAppendSignalEvent(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == phEvents`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListAppendWaitOnEvents(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
@@ -355,7 +355,7 @@ zeCommandListAppendWaitOnEvents(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hEvent`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventHostSignal(
     ze_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -380,7 +380,7 @@ zeEventHostSignal(
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ///     - ::ZE_RESULT_NOT_READY
 ///         + timeout expired
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventHostSynchronize(
     ze_event_handle_t hEvent,                       ///< [in] handle of the event
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
@@ -411,7 +411,7 @@ zeEventHostSynchronize(
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 ///     - ::ZE_RESULT_NOT_READY
 ///         + not signaled
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventQueryStatus(
     ze_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -436,7 +436,7 @@ zeEventQueryStatus(
 ///         + `nullptr == hCommandList`
 ///         + `nullptr == hEvent`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandListAppendEventReset(
     ze_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     ze_event_handle_t hEvent                        ///< [in] handle of the event
@@ -460,7 +460,7 @@ zeCommandListAppendEventReset(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hEvent`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventHostReset(
     ze_event_handle_t hEvent                        ///< [in] handle of the event
     );
@@ -498,7 +498,7 @@ typedef enum _ze_event_timestamp_type_t
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == dstptr`
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeEventGetTimestamp(
     ze_event_handle_t hEvent,                       ///< [in] handle of the event
     ze_event_timestamp_type_t timestampType,        ///< [in] specifies timestamp type to query for that is associated with

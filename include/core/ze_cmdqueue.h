@@ -121,7 +121,7 @@ typedef struct _ze_command_queue_desc_t
 ///         + desc->priority
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandQueueCreate(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device object
     const ze_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
@@ -151,7 +151,7 @@ zeCommandQueueCreate(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hCommandQueue`
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandQueueDestroy(
     ze_command_queue_handle_t hCommandQueue         ///< [in][release] handle of command queue object to destroy
     );
@@ -179,7 +179,7 @@ zeCommandQueueDestroy(
 ///         + `0 == numCommandLists`
 ///     - ::ZE_RESULT_ERROR_INVALID_COMMAND_LIST_TYPE
 ///     - ::ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandQueueExecuteCommandLists(
     ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to execute
@@ -203,7 +203,7 @@ zeCommandQueueExecuteCommandLists(
 ///         + `nullptr == hCommandQueue`
 ///     - ::ZE_RESULT_NOT_READY
 ///         + timeout expired
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zeCommandQueueSynchronize(
     ze_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before

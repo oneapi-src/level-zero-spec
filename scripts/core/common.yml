@@ -35,6 +35,13 @@ altvalue: ""
 type: macro
 desc: "Microsoft-specific dllexport storage-class attribute"
 condition: "defined(_WIN32)"
+name: __$x_api_export
+value: __declspec(dllexport)
+altvalue: ""
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Microsoft-specific dllexport storage-class attribute"
+condition: "defined(_WIN32)"
 name: __$xdllexport
 value: __declspec(dllexport)
 altvalue: ""

@@ -45,7 +45,7 @@ extern "C" {
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
 ///         + flags
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-__zedllexport ze_result_t __zecall
+__ze_api_export ze_result_t __zecall
 zetInit(
     ze_init_flag_t flags                            ///< [in] initialization flags
     );
