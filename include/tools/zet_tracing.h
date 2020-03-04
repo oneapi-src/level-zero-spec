@@ -32,7 +32,7 @@ typedef ze_callbacks_t zet_core_callbacks_t;
 /// @brief API version of ::zet_tracer_desc_t
 typedef enum _zet_tracer_desc_version_t
 {
-    ZET_TRACER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZET_TRACER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ), ///< version 0.91
 
 } zet_tracer_desc_version_t;
 

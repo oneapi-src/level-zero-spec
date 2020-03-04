@@ -72,8 +72,8 @@ details:
     - "API versions contain major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION"
 etors:
     - name: $X_API_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "1.0"
+      value: "$X_MAKE_VERSION( 0, 91 )"
+      desc: "0.91"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the API version supported by the specified driver"
@@ -97,8 +97,8 @@ class: $xDriver
 name: $x_driver_properties_version_t
 etors:
     - name: $X_DRIVER_PROPERTIES_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
+      value: "$X_MAKE_VERSION( 0, 91 )"
+      desc: "version 0.91"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum driver universal unique id (UUID) size in bytes"
@@ -155,8 +155,8 @@ class: $xDriver
 name: $x_driver_ipc_properties_version_t
 etors:
     - name: $X_DRIVER_IPC_PROPERTIES_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
+      value: "$X_MAKE_VERSION( 0, 91 )"
+      desc: "version 0.91"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "IPC properties queried using $xDriverGetIPCProperties"

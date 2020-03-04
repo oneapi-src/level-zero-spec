@@ -15,8 +15,8 @@ class: $xModule
 name: $x_module_desc_version_t
 etors:
     - name: $X_MODULE_DESC_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
+      value: "$X_MAKE_VERSION( 0, 91 )"
+      desc: "version 0.91"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported module creation input formats"
@@ -238,8 +238,8 @@ class: $xKernel
 name: $x_kernel_desc_version_t
 etors:
     - name: $X_KERNEL_DESC_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
+      value: "$X_MAKE_VERSION( 0, 91 )"
+      desc: "version 0.91"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported kernel creation flags"
@@ -522,8 +522,8 @@ class: $xKernel
 name: $x_kernel_properties_version_t
 etors:
     - name: $X_KERNEL_PROPERTIES_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
+      value: "$X_MAKE_VERSION( 0, 91 )"
+      desc: "version 0.91"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device name string size"

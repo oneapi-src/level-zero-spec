@@ -27,7 +27,7 @@ extern "C" {
 /// @brief API version of ::ze_sampler_desc_t
 typedef enum _ze_sampler_desc_version_t
 {
-    ZE_SAMPLER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_SAMPLER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ), ///< version 0.91
 
 } ze_sampler_desc_version_t;
 

@@ -27,7 +27,7 @@ extern "C" {
 /// @brief API version of ::zet_profile_info_t
 typedef enum _zet_profile_info_version_t
 {
-    ZET_PROFILE_INFO_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZET_PROFILE_INFO_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),///< version 0.91
 
 } zet_profile_info_version_t;
 

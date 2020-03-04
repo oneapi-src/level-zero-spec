@@ -27,7 +27,7 @@ extern "C" {
 /// @brief API version of Sysman
 typedef enum _zet_sysman_version_t
 {
-    ZET_SYSMAN_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZET_SYSMAN_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } zet_sysman_version_t;
 

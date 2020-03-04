@@ -27,7 +27,7 @@ extern "C" {
 /// @brief API version of ::ze_image_desc_t
 typedef enum _ze_image_desc_version_t
 {
-    ZE_IMAGE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_IMAGE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),   ///< version 0.91
 
 } ze_image_desc_version_t;
 
@@ -157,7 +157,7 @@ typedef struct _ze_image_desc_t
 /// @brief API version of ::ze_image_properties_t
 typedef enum _ze_image_properties_version_t
 {
-    ZE_IMAGE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_IMAGE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ), ///< version 0.91
 
 } ze_image_properties_version_t;
 

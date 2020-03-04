@@ -89,7 +89,7 @@ namespace zet
         /// @brief API version of Sysman
         enum class version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 

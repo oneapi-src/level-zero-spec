@@ -30,7 +30,7 @@ class zex_command_graph_handle_t(c_void_p):
 ###############################################################################
 ## @brief API version of ::zex_command_graph_desc_t
 class zex_command_graph_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class zex_command_graph_desc_version_t(c_int):
     def __str__(self):

@@ -106,7 +106,7 @@ namespace zet
         /// @brief API version of ::zet_metric_group_properties_t
         enum class properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 
@@ -235,7 +235,7 @@ namespace zet
         /// @brief API version of ::zet_metric_properties_t
         enum class properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 
@@ -320,7 +320,7 @@ namespace zet
         /// @brief API version of ::zet_metric_tracer_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 
@@ -427,7 +427,7 @@ namespace zet
         /// @brief API version of ::zet_metric_query_pool_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 

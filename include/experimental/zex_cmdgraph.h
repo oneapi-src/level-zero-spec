@@ -27,7 +27,7 @@ extern "C" {
 /// @brief API version of ::zex_command_graph_desc_t
 typedef enum _zex_command_graph_desc_version_t
 {
-    ZEX_COMMAND_GRAPH_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZEX_COMMAND_GRAPH_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } zex_command_graph_desc_version_t;
 

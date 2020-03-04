@@ -27,7 +27,7 @@ extern "C" {
 /// @brief API version of ::ze_device_mem_alloc_desc_t
 typedef enum _ze_device_mem_alloc_desc_version_t
 {
-    ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),///< version 0.91
 
 } ze_device_mem_alloc_desc_version_t;
 
@@ -56,7 +56,7 @@ typedef struct _ze_device_mem_alloc_desc_t
 /// @brief API version of ::ze_host_mem_alloc_desc_t
 typedef enum _ze_host_mem_alloc_desc_version_t
 {
-    ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } ze_host_mem_alloc_desc_version_t;
 
@@ -234,7 +234,7 @@ zeDriverFreeMem(
 /// @brief API version of ::ze_memory_allocation_properties_t
 typedef enum _ze_memory_allocation_properties_version_t
 {
-    ZE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ), ///< version 0.91
 
 } ze_memory_allocation_properties_version_t;
 

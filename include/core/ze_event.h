@@ -27,7 +27,7 @@ extern "C" {
 /// @brief API version of ::ze_event_pool_desc_t
 typedef enum _ze_event_pool_desc_version_t
 {
-    ZE_EVENT_POOL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_EVENT_POOL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } ze_event_pool_desc_version_t;
 
@@ -118,7 +118,7 @@ zeEventPoolDestroy(
 /// @brief API version of ::ze_event_desc_t
 typedef enum _ze_event_desc_version_t
 {
-    ZE_EVENT_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_EVENT_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),   ///< version 0.91
 
 } ze_event_desc_version_t;
 

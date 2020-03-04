@@ -85,7 +85,7 @@ zeDeviceGetSubDevices(
 /// @brief API version of ::ze_device_properties_t
 typedef enum _ze_device_properties_version_t
 {
-    ZE_DEVICE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),///< version 0.91
 
 } ze_device_properties_version_t;
 
@@ -178,7 +178,7 @@ zeDeviceGetProperties(
 /// @brief API version of ::ze_device_compute_properties_t
 typedef enum _ze_device_compute_properties_version_t
 {
-    ZE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),///< version 0.91
 
 } ze_device_compute_properties_version_t;
 
@@ -237,7 +237,7 @@ zeDeviceGetComputeProperties(
 /// @brief API version of ::ze_device_kernel_properties_t
 typedef enum _ze_device_kernel_properties_version_t
 {
-    ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ), ///< version 0.91
 
 } ze_device_kernel_properties_version_t;
 
@@ -327,7 +327,7 @@ zeDeviceGetKernelProperties(
 /// @brief API version of ::ze_device_memory_properties_t
 typedef enum _ze_device_memory_properties_version_t
 {
-    ZE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ), ///< version 0.91
 
 } ze_device_memory_properties_version_t;
 
@@ -383,7 +383,7 @@ zeDeviceGetMemoryProperties(
 /// @brief API version of ::ze_device_memory_access_properties_t
 typedef enum _ze_device_memory_access_properties_version_t
 {
-    ZE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } ze_device_memory_access_properties_version_t;
 
@@ -446,7 +446,7 @@ zeDeviceGetMemoryAccessProperties(
 /// @brief API version of ::ze_device_cache_properties_t
 typedef enum _ze_device_cache_properties_version_t
 {
-    ZE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } ze_device_cache_properties_version_t;
 
@@ -495,7 +495,7 @@ zeDeviceGetCacheProperties(
 /// @brief API version of ::ze_device_image_properties_t
 typedef enum _ze_device_image_properties_version_t
 {
-    ZE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } ze_device_image_properties_version_t;
 
@@ -545,7 +545,7 @@ zeDeviceGetImageProperties(
 /// @brief API version of ::ze_device_p2p_properties_t
 typedef enum _ze_device_p2p_properties_version_t
 {
-    ZE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),///< version 0.91
 
 } ze_device_p2p_properties_version_t;
 

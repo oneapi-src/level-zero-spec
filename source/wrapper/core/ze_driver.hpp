@@ -72,7 +72,7 @@ namespace ze
         ///       ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION
         enum class api_version_t
         {
-            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< 1.0
+            _1_0 = ZE_MAKE_VERSION( 0, 91 ),                ///< 0.91
 
         };
 
@@ -80,7 +80,7 @@ namespace ze
         /// @brief API version of ::ze_driver_properties_t
         enum class properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 
@@ -88,7 +88,7 @@ namespace ze
         /// @brief API version of ::ze_driver_ipc_properties_t
         enum class ipc_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 
@@ -96,7 +96,7 @@ namespace ze
         /// @brief API version of ::ze_device_mem_alloc_desc_t
         enum class device_mem_alloc_desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 
@@ -114,7 +114,7 @@ namespace ze
         /// @brief API version of ::ze_host_mem_alloc_desc_t
         enum class host_mem_alloc_desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 
@@ -133,7 +133,7 @@ namespace ze
         /// @brief API version of ::ze_memory_allocation_properties_t
         enum class memory_allocation_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 0, 91 ),             ///< version 0.91
 
         };
 

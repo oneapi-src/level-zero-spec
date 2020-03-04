@@ -95,7 +95,7 @@ zeDriverGet(
 ///       ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION
 typedef enum _ze_api_version_t
 {
-    ZE_API_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< 1.0
+    ZE_API_VERSION_1_0 = ZE_MAKE_VERSION( 0, 91 ),  ///< 0.91
 
 } ze_api_version_t;
 
@@ -124,7 +124,7 @@ zeDriverGetApiVersion(
 /// @brief API version of ::ze_driver_properties_t
 typedef enum _ze_driver_properties_version_t
 {
-    ZE_DRIVER_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DRIVER_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),///< version 0.91
 
 } ze_driver_properties_version_t;
 
@@ -183,7 +183,7 @@ zeDriverGetProperties(
 /// @brief API version of ::ze_driver_ipc_properties_t
 typedef enum _ze_driver_ipc_properties_version_t
 {
-    ZE_DRIVER_IPC_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DRIVER_IPC_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),///< version 0.91
 
 } ze_driver_ipc_properties_version_t;
 

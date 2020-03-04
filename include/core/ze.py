@@ -203,7 +203,7 @@ class ze_init_flag_t(c_int):
 ##     - API versions contain major and minor attributes, use
 ##       ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION
 class ze_api_version_v(IntEnum):
-    _1_0 = ZE_MAKE_VERSION( 1, 0 )                  ## 1.0
+    _1_0 = ZE_MAKE_VERSION( 0, 91 )                 ## 0.91
 
 class ze_api_version_t(c_int):
     def __str__(self):
@@ -213,7 +213,7 @@ class ze_api_version_t(c_int):
 ###############################################################################
 ## @brief API version of ::ze_driver_properties_t
 class ze_driver_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_driver_properties_version_t(c_int):
     def __str__(self):
@@ -245,7 +245,7 @@ class ze_driver_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_driver_ipc_properties_t
 class ze_driver_ipc_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_driver_ipc_properties_version_t(c_int):
     def __str__(self):
@@ -266,7 +266,7 @@ class ze_driver_ipc_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_device_properties_t
 class ze_device_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_device_properties_version_t(c_int):
     def __str__(self):
@@ -332,7 +332,7 @@ class ze_device_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_device_compute_properties_t
 class ze_device_compute_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_device_compute_properties_version_t(c_int):
     def __str__(self):
@@ -365,7 +365,7 @@ class ze_device_compute_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_device_kernel_properties_t
 class ze_device_kernel_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_device_kernel_properties_version_t(c_int):
     def __str__(self):
@@ -434,7 +434,7 @@ class ze_device_kernel_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_device_memory_properties_t
 class ze_device_memory_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_device_memory_properties_version_t(c_int):
     def __str__(self):
@@ -455,7 +455,7 @@ class ze_device_memory_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_device_memory_access_properties_t
 class ze_device_memory_access_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_device_memory_access_properties_version_t(c_int):
     def __str__(self):
@@ -496,7 +496,7 @@ class ze_device_memory_access_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_device_cache_properties_t
 class ze_device_cache_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_device_cache_properties_version_t(c_int):
     def __str__(self):
@@ -521,7 +521,7 @@ class ze_device_cache_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_device_image_properties_t
 class ze_device_image_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_device_image_properties_version_t(c_int):
     def __str__(self):
@@ -550,7 +550,7 @@ class ze_device_image_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_device_p2p_properties_t
 class ze_device_p2p_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_device_p2p_properties_version_t(c_int):
     def __str__(self):
@@ -584,7 +584,7 @@ class ze_cache_config_t(c_int):
 ###############################################################################
 ## @brief API version of ::ze_command_queue_desc_t
 class ze_command_queue_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_command_queue_desc_version_t(c_int):
     def __str__(self):
@@ -655,7 +655,7 @@ class ze_command_queue_desc_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_command_list_desc_t
 class ze_command_list_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_command_list_desc_version_t(c_int):
     def __str__(self):
@@ -745,7 +745,7 @@ class ze_memory_advice_t(c_int):
 ###############################################################################
 ## @brief API version of ::ze_event_pool_desc_t
 class ze_event_pool_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_event_pool_desc_version_t(c_int):
     def __str__(self):
@@ -778,7 +778,7 @@ class ze_event_pool_desc_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_event_desc_t
 class ze_event_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_event_desc_version_t(c_int):
     def __str__(self):
@@ -833,7 +833,7 @@ class ze_event_timestamp_type_t(c_int):
 ###############################################################################
 ## @brief API version of ::ze_fence_desc_t
 class ze_fence_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_fence_desc_version_t(c_int):
     def __str__(self):
@@ -861,7 +861,7 @@ class ze_fence_desc_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_image_desc_t
 class ze_image_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_image_desc_version_t(c_int):
     def __str__(self):
@@ -1001,7 +1001,7 @@ class ze_image_desc_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_image_properties_t
 class ze_image_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_image_properties_version_t(c_int):
     def __str__(self):
@@ -1031,7 +1031,7 @@ class ze_image_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_device_mem_alloc_desc_t
 class ze_device_mem_alloc_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_device_mem_alloc_desc_version_t(c_int):
     def __str__(self):
@@ -1063,7 +1063,7 @@ class ze_device_mem_alloc_desc_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_host_mem_alloc_desc_t
 class ze_host_mem_alloc_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_host_mem_alloc_desc_version_t(c_int):
     def __str__(self):
@@ -1094,7 +1094,7 @@ class ze_host_mem_alloc_desc_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_memory_allocation_properties_t
 class ze_memory_allocation_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_memory_allocation_properties_version_t(c_int):
     def __str__(self):
@@ -1137,7 +1137,7 @@ class ze_ipc_memory_flag_t(c_int):
 ###############################################################################
 ## @brief API version of ::ze_module_desc_t
 class ze_module_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_module_desc_version_t(c_int):
     def __str__(self):
@@ -1182,7 +1182,7 @@ class ze_module_desc_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_kernel_desc_t
 class ze_kernel_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_kernel_desc_version_t(c_int):
     def __str__(self):
@@ -1235,7 +1235,7 @@ class ze_kernel_attribute_t(c_int):
 ###############################################################################
 ## @brief API version of ::ze_kernel_properties_t
 class ze_kernel_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_kernel_properties_version_t(c_int):
     def __str__(self):
@@ -1270,7 +1270,7 @@ class ze_group_count_t(Structure):
 ###############################################################################
 ## @brief API version of ::ze_sampler_desc_t
 class ze_sampler_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
 
 class ze_sampler_desc_version_t(c_int):
     def __str__(self):

@@ -932,7 +932,7 @@ namespace layer
             if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
-            if( 65536 <= version )
+            if( 91 <= version )
                 return ZE_RESULT_ERROR_INVALID_ENUMERATION;
 
             if( nullptr == phSysman )

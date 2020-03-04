@@ -27,7 +27,7 @@ extern "C" {
 /// @brief API version of ::ze_module_desc_t
 typedef enum _ze_module_desc_version_t
 {
-    ZE_MODULE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_MODULE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } ze_module_desc_version_t;
 
@@ -274,7 +274,7 @@ zeModuleGetKernelNames(
 /// @brief API version of ::ze_kernel_desc_t
 typedef enum _ze_kernel_desc_version_t
 {
-    ZE_KERNEL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_KERNEL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } ze_kernel_desc_version_t;
 
@@ -592,7 +592,7 @@ zeKernelSetIntermediateCacheConfig(
 /// @brief API version of ::ze_kernel_properties_t
 typedef enum _ze_kernel_properties_version_t
 {
-    ZE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),///< version 0.91
 
 } ze_kernel_properties_version_t;
 

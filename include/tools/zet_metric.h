@@ -76,7 +76,7 @@ typedef enum _zet_metric_group_sampling_type_t
 /// @brief API version of ::zet_metric_group_properties_t
 typedef enum _zet_metric_group_properties_version_t
 {
-    ZET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ), ///< version 0.91
 
 } zet_metric_group_properties_version_t;
 
@@ -252,7 +252,7 @@ zetMetricGet(
 /// @brief API version of ::zet_metric_properties_t
 typedef enum _zet_metric_properties_version_t
 {
-    ZET_METRIC_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZET_METRIC_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),   ///< version 0.91
 
 } zet_metric_properties_version_t;
 
@@ -318,7 +318,7 @@ zetDeviceActivateMetricGroups(
 /// @brief API version of ::zet_metric_tracer_desc_t
 typedef enum _zet_metric_tracer_desc_version_t
 {
-    ZET_METRIC_TRACER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZET_METRIC_TRACER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } zet_metric_tracer_desc_version_t;
 
@@ -437,7 +437,7 @@ zetMetricTracerReadData(
 /// @brief API version of ::zet_metric_query_pool_desc_t
 typedef enum _zet_metric_query_pool_desc_version_t
 {
-    ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
 
 } zet_metric_query_pool_desc_version_t;
 
