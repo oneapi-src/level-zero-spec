@@ -81,6 +81,7 @@ namespace ${n}
         %endfor
         )<%
         wparams, rvalue = th.make_wrapper_params(n, tags, obj, meta, specs)
+        release_items = []  # free all memory on bad_alloc exception
 %>
     {
         %for item in wparams:
@@ -147,14 +148,14 @@ namespace ${n}
                 %if item['ctor']['factory']:
                 ${item['name']}[ i ] = ${item['ctor']['factory']}.getInstance( ${", ".join(item['ctor']['params'])} );
                 %else:
-                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(item['ctor']['params'])} );
+                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(item['ctor']['params'])} );<%release_items.append(item['name'])%>
                 %endif
             %else:
             for( uint32_t i = ${item['range'][0]}; i < ${item['range'][1]}; ++i )
                 %if item['ctor']['factory']:
                 ${item['name']}[ i ] = ${item['ctor']['factory']}.getInstance( ${", ".join(item['ctor']['params'])} );
                 %else:
-                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(item['ctor']['params'])} );
+                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(item['ctor']['params'])} );<%release_items.append(item['name'])%>
                 %endif
             %endif
             %elif item['optional']:
@@ -162,13 +163,13 @@ namespace ${n}
                 %if item['ctor']['factory']:
                 *${item['name']} =  ${item['ctor']['factory']}.getInstance( ${", ".join(item['ctor']['params'])} );
                 %else:
-                *${item['name']} =  new ${item['class']}( ${", ".join(item['ctor']['params'])} );
+                *${item['name']} =  new ${item['class']}( ${", ".join(item['ctor']['params'])} );<%release_items.append(item['name'])%>
                 %endif
             %else:
             %if item['ctor']['factory']:
             ${item['name']} = ${item['ctor']['factory']}.getInstance( ${", ".join(item['ctor']['params'])} );
             %else:
-            ${item['name']} = new ${item['class']}( ${", ".join(item['ctor']['params'])} );
+            ${item['name']} = new ${item['class']}( ${", ".join(item['ctor']['params'])} );<%release_items.append(item['name'])%>
             %endif
             %endif
         }
@@ -199,6 +200,12 @@ namespace ${n}
             delete ${item['name']};
             ${item['name']} = nullptr;
             %endif
+            %for release_item in release_items:
+            %if release_item != item['name']:
+            delete ${release_item};
+            ${release_item} = nullptr;
+            %endif
+            %endfor
 
             %endif
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );

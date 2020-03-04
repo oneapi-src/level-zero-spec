@@ -126,6 +126,8 @@ namespace ze
                 delete *ppBuildLog;
                 *ppBuildLog =  nullptr;
             }
+            delete pModule;
+            pModule = nullptr;
 
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "ze::Module::Create" );
         }
