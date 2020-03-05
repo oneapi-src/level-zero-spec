@@ -2315,7 +2315,7 @@ namespace zet
                                                             ///< threshold to above.
             ze::bool_t enableHighToLow;                     ///< [in,out] Trigger an event when the temperature crosses from above the
                                                             ///< threshold to below.
-            double threshold;                               ///< [in,out] The threshold in degrees Celcius.
+            double threshold;                               ///< [in,out] The threshold in degrees Celsius.
 
         };
 
@@ -2423,7 +2423,7 @@ namespace zet
         void __zecall
         GetState(
             double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
-                                                            ///< in degrees Celcius.
+                                                            ///< in degrees Celsius.
             );
 
     };

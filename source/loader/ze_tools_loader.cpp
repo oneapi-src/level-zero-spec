@@ -2925,7 +2925,7 @@ namespace loader
     zetSysmanTemperatureGetState(
         zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
         double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
-                                                        ///< in degrees Celcius.
+                                                        ///< in degrees Celsius.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;

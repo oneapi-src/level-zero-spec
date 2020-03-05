@@ -1998,7 +1998,7 @@ namespace zet
     void __zecall
     SysmanTemperature::GetState(
         double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
-                                                        ///< in degrees Celcius.
+                                                        ///< in degrees Celsius.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanTemperatureGetState(

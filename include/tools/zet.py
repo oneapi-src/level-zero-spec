@@ -1450,7 +1450,7 @@ class zet_temp_threshold_t(Structure):
                                                                         ## threshold to above.
         ("enableHighToLow", ze_bool_t),                                 ## [in,out] Trigger an event when the temperature crosses from above the
                                                                         ## threshold to below.
-        ("threshold", c_double)                                         ## [in,out] The threshold in degrees Celcius.
+        ("threshold", c_double)                                         ## [in,out] The threshold in degrees Celsius.
     ]
 
 ###############################################################################

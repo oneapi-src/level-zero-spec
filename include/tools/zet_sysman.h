@@ -2494,7 +2494,7 @@ typedef struct _zet_temp_threshold_t
                                                     ///< threshold to above.
     ze_bool_t enableHighToLow;                      ///< [in,out] Trigger an event when the temperature crosses from above the
                                                     ///< threshold to below.
-    double threshold;                               ///< [in,out] The threshold in degrees Celcius.
+    double threshold;                               ///< [in,out] The threshold in degrees Celsius.
 
 } zet_temp_threshold_t;
 
@@ -2656,7 +2656,7 @@ __ze_api_export ze_result_t __zecall
 zetSysmanTemperatureGetState(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
     double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
-                                                    ///< in degrees Celcius.
+                                                    ///< in degrees Celsius.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

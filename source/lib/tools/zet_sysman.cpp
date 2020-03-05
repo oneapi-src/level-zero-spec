@@ -2207,7 +2207,7 @@ ze_result_t __zecall
 zetSysmanTemperatureGetState(
     zet_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
     double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
-                                                    ///< in degrees Celcius.
+                                                    ///< in degrees Celsius.
     )
 {
     auto pfnGetState = zet_lib::context.ddiTable.SysmanTemperature.pfnGetState;

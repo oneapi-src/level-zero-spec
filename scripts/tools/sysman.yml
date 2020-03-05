@@ -2283,7 +2283,7 @@ members:
       desc: "[in,out] Trigger an event when the temperature crosses from above the threshold to below."
     - type: double
       name: "threshold"
-      desc: "[in,out] The threshold in degrees Celcius."
+      desc: "[in,out] The threshold in degrees Celsius."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature configuration - which events should be triggered and the trigger conditions."
@@ -2403,7 +2403,7 @@ params:
       desc: "[in] Handle for the component."
     - type: double*
       name: pTemperature
-      desc: "[in,out] Will contain the temperature read from the specified sensor in degrees Celcius."
+      desc: "[in,out] Will contain the temperature read from the specified sensor in degrees Celsius."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PSU voltage status"
