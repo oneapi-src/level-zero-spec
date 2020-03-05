@@ -1207,16 +1207,8 @@ namespace layer
     ze_result_t __zecall
     zetSysmanPerformanceProfileGetSupported(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of performance profiles.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of supported performance profiles.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< supported performance profiles.
-                                                        ///< if count is larger than the number of supported performance profiles,
-                                                        ///< then the driver will update the value with the correct number of
-                                                        ///< supported performance profiles that are returned.
-        zet_perf_profile_t* pProfiles                   ///< [in,out][optional][range(0, *pCount)] Array of supported performance
-                                                        ///< profiles
+        uint32_t* pSupported                            ///< [in,out] A bit field of (1<<::zet_perf_profile_t) profiles that are
+                                                        ///< supported.
         )
     {
         auto pfnPerformanceProfileGetSupported = context.zetDdiTable.Sysman.pfnPerformanceProfileGetSupported;
@@ -1229,12 +1221,12 @@ namespace layer
             if( nullptr == hSysman )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
-            if( nullptr == pCount )
+            if( nullptr == pSupported )
                 return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
-        return pfnPerformanceProfileGetSupported( hSysman, pCount, pProfiles );
+        return pfnPerformanceProfileGetSupported( hSysman, pSupported );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
