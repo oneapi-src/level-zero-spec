@@ -1012,6 +1012,8 @@ namespace zet
                                                             ///< user has permissions.
             ze::bool_t isEnergyThresholdSupported;          ///< [out] Indicates if this power domain supports the energy threshold
                                                             ///< event (::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
+            uint32_t defaultLimit;                          ///< [out] The factory default TDP power limit of the part in milliwatts.
+            uint32_t minLimit;                              ///< [out] The minimum power limit in milliwatts that can be requested.
             uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
 
         };
