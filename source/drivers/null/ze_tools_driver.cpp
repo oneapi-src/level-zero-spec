@@ -2319,7 +2319,8 @@ namespace driver
     ze_result_t __zecall
     zetSysmanMemoryGetBandwidth(
         zet_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zet_mem_bandwidth_t* pBandwidth                 ///< [in,out] Will contain a snapshot of the bandwidth counters.
+        zet_mem_bandwidth_t* pBandwidth                 ///< [in,out] Will contain the current health, free memory, total memory
+                                                        ///< size.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;

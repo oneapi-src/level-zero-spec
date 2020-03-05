@@ -1664,7 +1664,8 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanMemory::GetBandwidth(
-        mem_bandwidth_t* pBandwidth                     ///< [in,out] Will contain a snapshot of the bandwidth counters.
+        mem_bandwidth_t* pBandwidth                     ///< [in,out] Will contain the current health, free memory, total memory
+                                                        ///< size.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanMemoryGetBandwidth(
@@ -4134,12 +4135,12 @@ namespace zet
         str += to_string(val.health);
         str += "\n";
         
-        str += "SysmanMemory::mem_state_t::allocatedSize : ";
-        str += std::to_string(val.allocatedSize);
+        str += "SysmanMemory::mem_state_t::free : ";
+        str += std::to_string(val.free);
         str += "\n";
         
-        str += "SysmanMemory::mem_state_t::maxSize : ";
-        str += std::to_string(val.maxSize);
+        str += "SysmanMemory::mem_state_t::size : ";
+        str += std::to_string(val.size);
         str += "\n";
 
         return str;

@@ -1815,10 +1815,10 @@ members:
       name: health
       desc: "[out] Indicates the health of the memory"
     - type: uint64_t
-      name: allocatedSize
-      desc: "[out] The total allocated bytes"
+      name: free
+      desc: "[out] The free memory in bytes"
     - type: uint64_t
-      name: maxSize
+      name: size
       desc: "[out] The total allocatable memory in bytes (can be less than $t_mem_properties_t.physicalSize)"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -1910,7 +1910,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_mem_bandwidth_t*
       name: pBandwidth
-      desc: "[in,out] Will contain a snapshot of the bandwidth counters."
+      desc: "[in,out] Will contain the current health, free memory, total memory size."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."

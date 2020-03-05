@@ -1938,8 +1938,8 @@ namespace zet
         struct mem_state_t
         {
             mem_health_t health;                            ///< [out] Indicates the health of the memory
-            uint64_t allocatedSize;                         ///< [out] The total allocated bytes
-            uint64_t maxSize;                               ///< [out] The total allocatable memory in bytes (can be less than
+            uint64_t free;                                  ///< [out] The free memory in bytes
+            uint64_t size;                                  ///< [out] The total allocatable memory in bytes (can be less than
                                                             ///< ::zet_mem_properties_t.physicalSize)
 
         };
@@ -2025,7 +2025,8 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetBandwidth(
-            mem_bandwidth_t* pBandwidth                     ///< [in,out] Will contain a snapshot of the bandwidth counters.
+            mem_bandwidth_t* pBandwidth                     ///< [in,out] Will contain the current health, free memory, total memory
+                                                            ///< size.
             );
 
     };
