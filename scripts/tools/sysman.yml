@@ -580,25 +580,13 @@ desc: "PCI bar types"
 class: $tSysman
 name: $t_pci_bar_type_t
 etors:
-    - name: $T_PCI_BAR_TYPE_CONFIG
-      value: "0"
-      desc: "PCI configuration space"
     - name: $T_PCI_BAR_TYPE_MMIO
+      value: "0"
       desc: "MMIO registers"
-    - name: $T_PCI_BAR_TYPE_VRAM
-      desc: "VRAM aperture"
     - name: $T_PCI_BAR_TYPE_ROM
       desc: "ROM aperture"
-    - name: $T_PCI_BAR_TYPE_VGA_IO
-      desc: "Legacy VGA IO ports"
-    - name: $T_PCI_BAR_TYPE_VGA_MEM
-      desc: "Legacy VGA memory"
-    - name: $T_PCI_BAR_TYPE_INDIRECT_IO
-      desc: "Indirect IO port access"
-    - name: $T_PCI_BAR_TYPE_INDIRECT_MEM
-      desc: "Indirect memory access"
-    - name: $T_PCI_BAR_TYPE_OTHER
-      desc: "Other type of PCI bar"
+    - name: $T_PCI_BAR_TYPE_MEM
+      desc: "Device memory"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Properties of a pci bar"

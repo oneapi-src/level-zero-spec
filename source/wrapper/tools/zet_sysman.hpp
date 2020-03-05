@@ -182,15 +182,9 @@ namespace zet
         /// @brief PCI bar types
         enum class pci_bar_type_t
         {
-            CONFIG = 0,                                     ///< PCI configuration space
-            MMIO,                                           ///< MMIO registers
-            VRAM,                                           ///< VRAM aperture
+            MMIO = 0,                                       ///< MMIO registers
             ROM,                                            ///< ROM aperture
-            VGA_IO,                                         ///< Legacy VGA IO ports
-            VGA_MEM,                                        ///< Legacy VGA memory
-            INDIRECT_IO,                                    ///< Indirect IO port access
-            INDIRECT_MEM,                                   ///< Indirect memory access
-            OTHER,                                          ///< Other type of PCI bar
+            MEM,                                            ///< Device memory
 
         };
 

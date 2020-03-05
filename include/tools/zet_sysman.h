@@ -660,15 +660,9 @@ typedef struct _zet_pci_state_t
 /// @brief PCI bar types
 typedef enum _zet_pci_bar_type_t
 {
-    ZET_PCI_BAR_TYPE_CONFIG = 0,                    ///< PCI configuration space
-    ZET_PCI_BAR_TYPE_MMIO,                          ///< MMIO registers
-    ZET_PCI_BAR_TYPE_VRAM,                          ///< VRAM aperture
+    ZET_PCI_BAR_TYPE_MMIO = 0,                      ///< MMIO registers
     ZET_PCI_BAR_TYPE_ROM,                           ///< ROM aperture
-    ZET_PCI_BAR_TYPE_VGA_IO,                        ///< Legacy VGA IO ports
-    ZET_PCI_BAR_TYPE_VGA_MEM,                       ///< Legacy VGA memory
-    ZET_PCI_BAR_TYPE_INDIRECT_IO,                   ///< Indirect IO port access
-    ZET_PCI_BAR_TYPE_INDIRECT_MEM,                  ///< Indirect memory access
-    ZET_PCI_BAR_TYPE_OTHER,                         ///< Other type of PCI bar
+    ZET_PCI_BAR_TYPE_MEM,                           ///< Device memory
 
 } zet_pci_bar_type_t;
 

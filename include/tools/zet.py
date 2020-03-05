@@ -780,15 +780,9 @@ class zet_pci_state_t(Structure):
 ###############################################################################
 ## @brief PCI bar types
 class zet_pci_bar_type_v(IntEnum):
-    CONFIG = 0                                      ## PCI configuration space
-    MMIO = auto()                                   ## MMIO registers
-    VRAM = auto()                                   ## VRAM aperture
+    MMIO = 0                                        ## MMIO registers
     ROM = auto()                                    ## ROM aperture
-    VGA_IO = auto()                                 ## Legacy VGA IO ports
-    VGA_MEM = auto()                                ## Legacy VGA memory
-    INDIRECT_IO = auto()                            ## Indirect IO port access
-    INDIRECT_MEM = auto()                           ## Indirect memory access
-    OTHER = auto()                                  ## Other type of PCI bar
+    MEM = auto()                                    ## Device memory
 
 class zet_pci_bar_type_t(c_int):
     def __str__(self):

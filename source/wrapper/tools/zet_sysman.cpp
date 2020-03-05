@@ -3057,40 +3057,16 @@ namespace zet
 
         switch( val )
         {
-        case Sysman::pci_bar_type_t::CONFIG:
-            str = "Sysman::pci_bar_type_t::CONFIG";
-            break;
-
         case Sysman::pci_bar_type_t::MMIO:
             str = "Sysman::pci_bar_type_t::MMIO";
-            break;
-
-        case Sysman::pci_bar_type_t::VRAM:
-            str = "Sysman::pci_bar_type_t::VRAM";
             break;
 
         case Sysman::pci_bar_type_t::ROM:
             str = "Sysman::pci_bar_type_t::ROM";
             break;
 
-        case Sysman::pci_bar_type_t::VGA_IO:
-            str = "Sysman::pci_bar_type_t::VGA_IO";
-            break;
-
-        case Sysman::pci_bar_type_t::VGA_MEM:
-            str = "Sysman::pci_bar_type_t::VGA_MEM";
-            break;
-
-        case Sysman::pci_bar_type_t::INDIRECT_IO:
-            str = "Sysman::pci_bar_type_t::INDIRECT_IO";
-            break;
-
-        case Sysman::pci_bar_type_t::INDIRECT_MEM:
-            str = "Sysman::pci_bar_type_t::INDIRECT_MEM";
-            break;
-
-        case Sysman::pci_bar_type_t::OTHER:
-            str = "Sysman::pci_bar_type_t::OTHER";
+        case Sysman::pci_bar_type_t::MEM:
+            str = "Sysman::pci_bar_type_t::MEM";
             break;
 
         default:
