@@ -716,8 +716,7 @@ typedef struct _zet_pci_stats_t
     uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
     uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
                                                     ///< replays)
-    uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
-                                                    ///< configuration
+    zet_pci_speed_t speed;                          ///< [out] The current speed of the link
 
 } zet_pci_stats_t;
 
