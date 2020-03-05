@@ -1739,8 +1739,13 @@ current state of RAS errors:
 Performing diagnostics
 ----------------------
 
-Diagnostics is the process of taking a device offline and requesting
-that the hardware run self-checks and repairs. This is achieved using
+Diagnostics is the process of requesting that the hardware run self-checks
+and repairs. 
+
+**WARNING:** Performing diagnostics can destroy current device state.
+It is important that all workloads are stopped before initiating.
+
+This is achieved using
 the function ::${t}SysmanDiagnosticsRunTests(). On return from the
 function, software can use the diagnostics return code
 (::${t}_diag_result_t) to determine the new course of action:

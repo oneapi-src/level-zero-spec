@@ -2801,6 +2801,8 @@ namespace zet
     /// @brief Run a diagnostics test suite, either all tests or a subset of tests.
     /// 
     /// @details
+    ///     - WARNING: Performancing diagnostics may destroy current device state
+    ///       information. Gracefully close any running workloads before initiating.
     ///     - To run all tests in a test suite, set start =
     ///       ::ZET_DIAG_FIRST_TEST_INDEX and end = ::ZET_DIAG_LAST_TEST_INDEX.
     ///     - If the test suite permits running individual tests,
