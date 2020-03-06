@@ -79,11 +79,9 @@ zetSysmanDeviceGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get a list of supported scheduler modes
+/// @brief Get handle to a scheduler component
 /// 
 /// @details
-///     - If zero modes are returned, control of scheduler modes are not
-///       supported.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -96,29 +94,28 @@ zetSysmanDeviceGetProperties(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 ze_result_t __zecall
-zetSysmanSchedulerGetSupportedModes(
+zetSysmanSchedulerGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of supported modes.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of
-                                                    ///< supported scheduler modes.
-                                                    ///< if count is larger than the number of supported scheduler modes, then
-                                                    ///< the driver will update the value with the correct number of supported
-                                                    ///< scheduler modes that are returned.
-    zet_sched_mode_t* pModes                        ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
-                                                    ///< modes
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zet_sysman_sched_handle_t* phScheduler          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     )
 {
-    auto pfnSchedulerGetSupportedModes = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetSupportedModes;
-    if( nullptr == pfnSchedulerGetSupportedModes )
+    auto pfnSchedulerGet = zet_lib::context.ddiTable.Sysman.pfnSchedulerGet;
+    if( nullptr == pfnSchedulerGet )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSchedulerGetSupportedModes( hSysman, pCount, pModes );
+    return pfnSchedulerGet( hSysman, pCount, phScheduler );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current scheduler mode
+/// @brief Get properties related to a scheduler component
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -129,22 +126,50 @@ zetSysmanSchedulerGetSupportedModes(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+ze_result_t __zecall
+zetSysmanSchedulerGetProperties(
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Handle for the component.
+    zet_sched_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
+    )
+{
+    auto pfnGetProperties = zet_lib::context.ddiTable.SysmanScheduler.pfnGetProperties;
+    if( nullptr == pfnGetProperties )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    return pfnGetProperties( hScheduler, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current scheduling mode in effect on a scheduler component.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pMode`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + Device does not support scheduler modes (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ze_result_t __zecall
 zetSysmanSchedulerGetCurrentMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     zet_sched_mode_t* pMode                         ///< [in,out] Will contain the current scheduler mode.
     )
 {
-    auto pfnSchedulerGetCurrentMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetCurrentMode;
-    if( nullptr == pfnSchedulerGetCurrentMode )
+    auto pfnGetCurrentMode = zet_lib::context.ddiTable.SysmanScheduler.pfnGetCurrentMode;
+    if( nullptr == pfnGetCurrentMode )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSchedulerGetCurrentMode( hSysman, pMode );
+    return pfnGetCurrentMode( hScheduler, pMode );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -159,24 +184,24 @@ zetSysmanSchedulerGetCurrentMode(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ze_result_t __zecall
 zetSysmanSchedulerGetTimeoutModeProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     zet_sched_timeout_properties_t* pConfig         ///< [in,out] Will contain the current parameters for this mode.
     )
 {
-    auto pfnSchedulerGetTimeoutModeProperties = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetTimeoutModeProperties;
-    if( nullptr == pfnSchedulerGetTimeoutModeProperties )
+    auto pfnGetTimeoutModeProperties = zet_lib::context.ddiTable.SysmanScheduler.pfnGetTimeoutModeProperties;
+    if( nullptr == pfnGetTimeoutModeProperties )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSchedulerGetTimeoutModeProperties( hSysman, getDefaults, pConfig );
+    return pfnGetTimeoutModeProperties( hScheduler, getDefaults, pConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -191,24 +216,24 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ze_result_t __zecall
 zetSysmanSchedulerGetTimesliceModeProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     zet_sched_timeslice_properties_t* pConfig       ///< [in,out] Will contain the current parameters for this mode.
     )
 {
-    auto pfnSchedulerGetTimesliceModeProperties = zet_lib::context.ddiTable.Sysman.pfnSchedulerGetTimesliceModeProperties;
-    if( nullptr == pfnSchedulerGetTimesliceModeProperties )
+    auto pfnGetTimesliceModeProperties = zet_lib::context.ddiTable.SysmanScheduler.pfnGetTimesliceModeProperties;
+    if( nullptr == pfnGetTimesliceModeProperties )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
+    return pfnGetTimesliceModeProperties( hScheduler, getDefaults, pConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -228,27 +253,27 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-///         + `nullptr == pNeedReboot`
+///         + `nullptr == pNeedReload`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimeoutMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     zet_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
-    ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                    ///< scheduler mode.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
     )
 {
-    auto pfnSchedulerSetTimeoutMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetTimeoutMode;
-    if( nullptr == pfnSchedulerSetTimeoutMode )
+    auto pfnSetTimeoutMode = zet_lib::context.ddiTable.SysmanScheduler.pfnSetTimeoutMode;
+    if( nullptr == pfnSetTimeoutMode )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSchedulerSetTimeoutMode( hSysman, pProperties, pNeedReboot );
+    return pfnSetTimeoutMode( hScheduler, pProperties, pNeedReload );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -267,27 +292,27 @@ zetSysmanSchedulerSetTimeoutMode(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-///         + `nullptr == pNeedReboot`
+///         + `nullptr == pNeedReload`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetTimesliceMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     zet_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
-    ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                    ///< scheduler mode.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
     )
 {
-    auto pfnSchedulerSetTimesliceMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetTimesliceMode;
-    if( nullptr == pfnSchedulerSetTimesliceMode )
+    auto pfnSetTimesliceMode = zet_lib::context.ddiTable.SysmanScheduler.pfnSetTimesliceMode;
+    if( nullptr == pfnSetTimesliceMode )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSchedulerSetTimesliceMode( hSysman, pProperties, pNeedReboot );
+    return pfnSetTimesliceMode( hScheduler, pProperties, pNeedReload );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -306,25 +331,25 @@ zetSysmanSchedulerSetTimesliceMode(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pNeedReboot`
+///         + `nullptr == pNeedReload`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetExclusiveMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                    ///< scheduler mode.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
     )
 {
-    auto pfnSchedulerSetExclusiveMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetExclusiveMode;
-    if( nullptr == pfnSchedulerSetExclusiveMode )
+    auto pfnSetExclusiveMode = zet_lib::context.ddiTable.SysmanScheduler.pfnSetExclusiveMode;
+    if( nullptr == pfnSetExclusiveMode )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSchedulerSetExclusiveMode( hSysman, pNeedReboot );
+    return pfnSetExclusiveMode( hScheduler, pNeedReload );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -343,25 +368,25 @@ zetSysmanSchedulerSetExclusiveMode(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pNeedReboot`
+///         + `nullptr == pNeedReload`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 ze_result_t __zecall
 zetSysmanSchedulerSetComputeUnitDebugMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                    ///< scheduler mode.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
     )
 {
-    auto pfnSchedulerSetComputeUnitDebugMode = zet_lib::context.ddiTable.Sysman.pfnSchedulerSetComputeUnitDebugMode;
-    if( nullptr == pfnSchedulerSetComputeUnitDebugMode )
+    auto pfnSetComputeUnitDebugMode = zet_lib::context.ddiTable.SysmanScheduler.pfnSetComputeUnitDebugMode;
+    if( nullptr == pfnSetComputeUnitDebugMode )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnSchedulerSetComputeUnitDebugMode( hSysman, pNeedReboot );
+    return pfnSetComputeUnitDebugMode( hScheduler, pNeedReload );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

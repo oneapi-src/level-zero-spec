@@ -711,17 +711,17 @@ void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
     }
 }
 
-void DisableSchedulerWatchdog(zet_sysman_handle_t hSysmanDevice)
+void DisableSchedulerQueueWatchdog(zet_sysman_sched_handle_t hScheduler)
 {
     ze_result_t res;
     zet_sched_mode_t currentMode;
-    res = zetSysmanSchedulerGetCurrentMode(hSysmanDevice, &currentMode);
+    res = zetSysmanSchedulerGetCurrentMode(hScheduler, &currentMode);
     if (res == ZE_RESULT_SUCCESS)
     {
         ze_bool_t requireReboot;
         zet_sched_timeout_properties_t props;
         props.watchdogTimeout = ZET_SCHED_WATCHDOG_DISABLE;
-        res = zetSysmanSchedulerSetTimeoutMode(hSysmanDevice, &props, &requireReboot);
+        res = zetSysmanSchedulerSetTimeoutMode(hScheduler, &props, &requireReboot);
         if (res == ZE_RESULT_SUCCESS)
         {
             if (requireReboot)
@@ -753,6 +753,23 @@ void DisableSchedulerWatchdog(zet_sysman_handle_t hSysmanDevice)
     else
     {
         fprintf(stderr, "ERROR: Problem calling the API.\n");
+    }
+}
+
+void DisableSchedulerQueueWatchdog(zet_sysman_handle_t hSysmanDevice)
+{
+    uint32_t numSchedulerQueues;
+    if (zetSysmanSchedulerGet(hSysmanDevice, &numSchedulerQueues, NULL) == ZE_RESULT_SUCCESS)
+    {
+        zet_sysman_sched_handle_t* phScheduler =
+            (zet_sysman_sched_handle_t*)malloc(numSchedulerQueues * sizeof(zet_sysman_sched_handle_t));
+        if (zetSysmanSchedulerGet(hSysmanDevice, &numSchedulerQueues, phScheduler) == ZE_RESULT_SUCCESS)
+        {
+            for (uint32_t index = 0; index < numSchedulerQueues; index++)
+            {
+                DisableSchedulerQueueWatchdog(phScheduler[index]);
+            }
+        }
     }
 }
 

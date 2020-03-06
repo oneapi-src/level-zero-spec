@@ -28,6 +28,16 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    SysmanScheduler::SysmanScheduler( 
+        sysman_sched_handle_t handle,                   ///< [in] handle of Sysman object
+        Sysman* pSysman                                 ///< [in] pointer to owner object
+        ) :
+        m_handle( handle ),
+        m_pSysman( pSysman )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     SysmanPower::SysmanPower( 
         sysman_pwr_handle_t handle,                     ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
@@ -235,40 +245,59 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get a list of supported scheduler modes
+    /// @brief Get handle to a scheduler component
     /// 
     /// @details
-    ///     - If zero modes are returned, control of scheduler modes are not
-    ///       supported.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerGetSupportedModes(
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+    Sysman::SchedulerGet(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of supported modes.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< supported scheduler modes.
-                                                        ///< if count is larger than the number of supported scheduler modes, then
-                                                        ///< the driver will update the value with the correct number of supported
-                                                        ///< scheduler modes that are returned.
-        sched_mode_t* pModes                            ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
-                                                        ///< modes
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        SysmanScheduler** ppScheduler                   ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                        ///< of this type
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanSchedulerGetSupportedModes(
+        thread_local std::vector<zet_sysman_sched_handle_t> hScheduler;
+        hScheduler.resize( ( ppScheduler ) ? *pCount : 0 );
+
+        auto result = static_cast<result_t>( ::zetSysmanSchedulerGet(
             reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
             pCount,
-            reinterpret_cast<zet_sched_mode_t*>( pModes ) ) );
+            hScheduler.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerGetSupportedModes" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerGet" );
+
+        for( uint32_t i = 0; ( ppScheduler ) && ( i < *pCount ); ++i )
+            ppScheduler[ i ] = nullptr;
+
+        try
+        {
+            for( uint32_t i = 0; ( ppScheduler ) && ( i < *pCount ); ++i )
+                ppScheduler[ i ] = new SysmanScheduler( reinterpret_cast<sysman_sched_handle_t>( hScheduler[ i ] ), this );
+        }
+        catch( std::bad_alloc& )
+        {
+            for( uint32_t i = 0; ( ppScheduler ) && ( i < *pCount ); ++i )
+            {
+                delete ppScheduler[ i ];
+                ppScheduler[ i ] = nullptr;
+            }
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerGet" );
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get current scheduler mode
+    /// @brief Get properties related to a scheduler component
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -276,16 +305,37 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerGetCurrentMode(
-        sched_mode_t* pMode                             ///< [in,out] Will contain the current scheduler mode.
+    SysmanScheduler::GetProperties(
+        sched_properties_t* pProperties                 ///< [in,out] Structure that will contain property data.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanSchedulerGetProperties(
+            reinterpret_cast<zet_sysman_sched_handle_t>( getHandle() ),
+            reinterpret_cast<zet_sched_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanScheduler::GetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current scheduling mode in effect on a scheduler component.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanScheduler::GetCurrentMode(
+        Sysman::sched_mode_t* pMode                     ///< [in,out] Will contain the current scheduler mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerGetCurrentMode(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<zet_sysman_sched_handle_t>( getHandle() ),
             reinterpret_cast<zet_sched_mode_t*>( pMode ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerGetCurrentMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanScheduler::GetCurrentMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -297,19 +347,19 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerGetTimeoutModeProperties(
+    SysmanScheduler::GetTimeoutModeProperties(
         ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
-        sched_timeout_properties_t* pConfig             ///< [in,out] Will contain the current parameters for this mode.
+        Sysman::sched_timeout_properties_t* pConfig     ///< [in,out] Will contain the current parameters for this mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerGetTimeoutModeProperties(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<zet_sysman_sched_handle_t>( getHandle() ),
             static_cast<ze_bool_t>( getDefaults ),
             reinterpret_cast<zet_sched_timeout_properties_t*>( pConfig ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerGetTimeoutModeProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanScheduler::GetTimeoutModeProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -321,19 +371,19 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerGetTimesliceModeProperties(
+    SysmanScheduler::GetTimesliceModeProperties(
         ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
-        sched_timeslice_properties_t* pConfig           ///< [in,out] Will contain the current parameters for this mode.
+        Sysman::sched_timeslice_properties_t* pConfig   ///< [in,out] Will contain the current parameters for this mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerGetTimesliceModeProperties(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<zet_sysman_sched_handle_t>( getHandle() ),
             static_cast<ze_bool_t>( getDefaults ),
             reinterpret_cast<zet_sched_timeslice_properties_t*>( pConfig ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerGetTimesliceModeProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanScheduler::GetTimesliceModeProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -350,19 +400,19 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerSetTimeoutMode(
-        sched_timeout_properties_t* pProperties,        ///< [in] The properties to use when configurating this mode.
-        ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                        ///< scheduler mode.
+    SysmanScheduler::SetTimeoutMode(
+        Sysman::sched_timeout_properties_t* pProperties,///< [in] The properties to use when configurating this mode.
+        ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerSetTimeoutMode(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<zet_sysman_sched_handle_t>( getHandle() ),
             reinterpret_cast<zet_sched_timeout_properties_t*>( pProperties ),
-            reinterpret_cast<ze_bool_t*>( pNeedReboot ) ) );
+            reinterpret_cast<ze_bool_t*>( pNeedReload ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerSetTimeoutMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanScheduler::SetTimeoutMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -378,19 +428,19 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerSetTimesliceMode(
-        sched_timeslice_properties_t* pProperties,      ///< [in] The properties to use when configurating this mode.
-        ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                        ///< scheduler mode.
+    SysmanScheduler::SetTimesliceMode(
+        Sysman::sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
+        ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerSetTimesliceMode(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<zet_sysman_sched_handle_t>( getHandle() ),
             reinterpret_cast<zet_sched_timeslice_properties_t*>( pProperties ),
-            reinterpret_cast<ze_bool_t*>( pNeedReboot ) ) );
+            reinterpret_cast<ze_bool_t*>( pNeedReload ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerSetTimesliceMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanScheduler::SetTimesliceMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -406,17 +456,17 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerSetExclusiveMode(
-        ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                        ///< scheduler mode.
+    SysmanScheduler::SetExclusiveMode(
+        ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerSetExclusiveMode(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
-            reinterpret_cast<ze_bool_t*>( pNeedReboot ) ) );
+            reinterpret_cast<zet_sysman_sched_handle_t>( getHandle() ),
+            reinterpret_cast<ze_bool_t*>( pNeedReload ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerSetExclusiveMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanScheduler::SetExclusiveMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -432,17 +482,17 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::SchedulerSetComputeUnitDebugMode(
-        ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                        ///< scheduler mode.
+    SysmanScheduler::SetComputeUnitDebugMode(
+        ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanSchedulerSetComputeUnitDebugMode(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
-            reinterpret_cast<ze_bool_t*>( pNeedReboot ) ) );
+            reinterpret_cast<zet_sysman_sched_handle_t>( getHandle() ),
+            reinterpret_cast<ze_bool_t*>( pNeedReload ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::SchedulerSetComputeUnitDebugMode" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanScheduler::SetComputeUnitDebugMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3440,6 +3490,35 @@ namespace zet
         
         str += "Sysman::pci_stats_t::speed : ";
         str += to_string(val.speed);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanScheduler::sched_properties_t to std::string
+    std::string to_string( const SysmanScheduler::sched_properties_t val )
+    {
+        std::string str;
+        
+        str += "SysmanScheduler::sched_properties_t::onSubdevice : ";
+        str += std::to_string(val.onSubdevice);
+        str += "\n";
+        
+        str += "SysmanScheduler::sched_properties_t::subdeviceId : ";
+        str += std::to_string(val.subdeviceId);
+        str += "\n";
+        
+        str += "SysmanScheduler::sched_properties_t::canControl : ";
+        str += std::to_string(val.canControl);
+        str += "\n";
+        
+        str += "SysmanScheduler::sched_properties_t::engines : ";
+        str += std::to_string(val.engines);
+        str += "\n";
+        
+        str += "SysmanScheduler::sched_properties_t::supportedModes : ";
+        str += std::to_string(val.supportedModes);
         str += "\n";
 
         return str;

@@ -52,6 +52,9 @@ namespace loader
     using zet_sysman_object_t                 = object_t < zet_sysman_handle_t >;
     using zet_sysman_factory_t                = singleton_factory_t < zet_sysman_object_t, zet_sysman_handle_t >;
 
+    using zet_sysman_sched_object_t           = object_t < zet_sysman_sched_handle_t >;
+    using zet_sysman_sched_factory_t          = singleton_factory_t < zet_sysman_sched_object_t, zet_sysman_sched_handle_t >;
+
     using zet_sysman_pwr_object_t             = object_t < zet_sysman_pwr_handle_t >;
     using zet_sysman_pwr_factory_t            = singleton_factory_t < zet_sysman_pwr_object_t, zet_sysman_pwr_handle_t >;
 

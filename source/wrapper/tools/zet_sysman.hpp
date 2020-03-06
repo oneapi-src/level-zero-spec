@@ -284,7 +284,7 @@ namespace zet
             uint32_t processId;                             ///< [out] Host OS process ID.
             int64_t memSize;                                ///< [out] Device memory size in bytes allocated by this process (may not
                                                             ///< necessarily be resident on the device at the time of reading).
-            int64_t engines;                                ///< [out] Bitfield of accelerator engines being used by this process (or
+            uint64_t engines;                               ///< [out] Bitfield of accelerator engines being used by this process (or
                                                             ///< 1<<::zet_engine_type_t together).
 
         };
@@ -429,137 +429,23 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get a list of supported scheduler modes
+        /// @brief Get handle to a scheduler component
         /// 
         /// @details
-        ///     - If zero modes are returned, control of scheduler modes are not
-        ///       supported.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SchedulerGetSupportedModes(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+        SchedulerGet(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                             ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of supported modes.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of
-                                                            ///< supported scheduler modes.
-                                                            ///< if count is larger than the number of supported scheduler modes, then
-                                                            ///< the driver will update the value with the correct number of supported
-                                                            ///< scheduler modes that are returned.
-            sched_mode_t* pModes = nullptr                  ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
-                                                            ///< modes
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current scheduler mode
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SchedulerGetCurrentMode(
-            sched_mode_t* pMode                             ///< [in,out] Will contain the current scheduler mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get scheduler config for mode ::ZET_SCHED_MODE_TIMEOUT
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SchedulerGetTimeoutModeProperties(
-            ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
-                                                            ///< this mode, otherwise it will return the current properties.
-            sched_timeout_properties_t* pConfig             ///< [in,out] Will contain the current parameters for this mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get scheduler config for mode ::ZET_SCHED_MODE_TIMESLICE
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SchedulerGetTimesliceModeProperties(
-            ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
-                                                            ///< this mode, otherwise it will return the current properties.
-            sched_timeslice_properties_t* pConfig           ///< [in,out] Will contain the current parameters for this mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_TIMEOUT or update scheduler
-        ///        mode parameters if already running in this mode.
-        /// 
-        /// @details
-        ///     - This mode is optimized for multiple applications or contexts
-        ///       submitting work to the hardware. When higher priority work arrives,
-        ///       the scheduler attempts to pause the current executing work within some
-        ///       timeout interval, then submits the other work.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SchedulerSetTimeoutMode(
-            sched_timeout_properties_t* pProperties,        ///< [in] The properties to use when configurating this mode.
-            ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                            ///< scheduler mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_TIMESLICE or update
-        ///        scheduler mode parameters if already running in this mode.
-        /// 
-        /// @details
-        ///     - This mode is optimized to provide fair sharing of hardware execution
-        ///       time between multiple contexts submitting work to the hardware
-        ///       concurrently.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SchedulerSetTimesliceMode(
-            sched_timeslice_properties_t* pProperties,      ///< [in] The properties to use when configurating this mode.
-            ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                            ///< scheduler mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_EXCLUSIVE
-        /// 
-        /// @details
-        ///     - This mode is optimized for single application/context use-cases. It
-        ///       permits a context to run indefinitely on the hardware without being
-        ///       preempted or terminated. All pending work for other contexts must wait
-        ///       until the running context completes with no further submitted work.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SchedulerSetExclusiveMode(
-            ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                            ///< scheduler mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG
-        /// 
-        /// @details
-        ///     - This mode is optimized for application debug. It ensures that only one
-        ///       command queue can execute work on the hardware at a given time. Work
-        ///       is permitted to run as long as needed without enforcing any scheduler
-        ///       fairness policies.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SchedulerSetComputeUnitDebugMode(
-            ze::bool_t* pNeedReboot                         ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                            ///< scheduler mode.
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            SysmanScheduler** ppScheduler = nullptr         ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -986,6 +872,178 @@ namespace zet
                                                             ///< that are returned.
             SysmanDiagnostics** ppDiagnostics = nullptr     ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
+            );
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device scheduler queue
+    class SysmanScheduler
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Properties related to scheduler component
+        struct sched_properties_t
+        {
+            ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
+                                                            ///< that the resource is on the device of the calling Sysman handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            ze::bool_t canControl;                          ///< [out] Software can change the scheduler component configuration
+                                                            ///< assuming the user has permissions.
+            uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are controlled by this
+                                                            ///< scheduler component (bitfield of 1<<::zet_engine_type_t).
+            uint32_t supportedModes;                        ///< [out] Bitfield of scheduler modes that can be configured for this
+                                                            ///< scheduler component (bitfield of 1<<::zet_sched_mode_t).
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        sysman_sched_handle_t m_handle = nullptr;       ///< [in] handle of Sysman object
+        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        SysmanScheduler( void ) = delete;
+        SysmanScheduler( 
+            sysman_sched_handle_t handle,                   ///< [in] handle of Sysman object
+            Sysman* pSysman                                 ///< [in] pointer to owner object
+            );
+
+        ~SysmanScheduler( void ) = default;
+
+        SysmanScheduler( SysmanScheduler const& other ) = delete;
+        void operator=( SysmanScheduler const& other ) = delete;
+
+        SysmanScheduler( SysmanScheduler&& other ) = delete;
+        void operator=( SysmanScheduler&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getSysman( void ) const { return m_pSysman; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get properties related to a scheduler component
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetProperties(
+            sched_properties_t* pProperties                 ///< [in,out] Structure that will contain property data.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get current scheduling mode in effect on a scheduler component.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetCurrentMode(
+            Sysman::sched_mode_t* pMode                     ///< [in,out] Will contain the current scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get scheduler config for mode ::ZET_SCHED_MODE_TIMEOUT
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetTimeoutModeProperties(
+            ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
+                                                            ///< this mode, otherwise it will return the current properties.
+            Sysman::sched_timeout_properties_t* pConfig     ///< [in,out] Will contain the current parameters for this mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get scheduler config for mode ::ZET_SCHED_MODE_TIMESLICE
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetTimesliceModeProperties(
+            ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
+                                                            ///< this mode, otherwise it will return the current properties.
+            Sysman::sched_timeslice_properties_t* pConfig   ///< [in,out] Will contain the current parameters for this mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_TIMEOUT or update scheduler
+        ///        mode parameters if already running in this mode.
+        /// 
+        /// @details
+        ///     - This mode is optimized for multiple applications or contexts
+        ///       submitting work to the hardware. When higher priority work arrives,
+        ///       the scheduler attempts to pause the current executing work within some
+        ///       timeout interval, then submits the other work.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetTimeoutMode(
+            Sysman::sched_timeout_properties_t* pProperties,///< [in] The properties to use when configurating this mode.
+            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                            ///< apply the new scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_TIMESLICE or update
+        ///        scheduler mode parameters if already running in this mode.
+        /// 
+        /// @details
+        ///     - This mode is optimized to provide fair sharing of hardware execution
+        ///       time between multiple contexts submitting work to the hardware
+        ///       concurrently.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetTimesliceMode(
+            Sysman::sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
+            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                            ///< apply the new scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_EXCLUSIVE
+        /// 
+        /// @details
+        ///     - This mode is optimized for single application/context use-cases. It
+        ///       permits a context to run indefinitely on the hardware without being
+        ///       preempted or terminated. All pending work for other contexts must wait
+        ///       until the running context completes with no further submitted work.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetExclusiveMode(
+            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                            ///< apply the new scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG
+        /// 
+        /// @details
+        ///     - This mode is optimized for application debug. It ensures that only one
+        ///       command queue can execute work on the hardware at a given time. Work
+        ///       is permitted to run as long as needed without enforcing any scheduler
+        ///       fairness policies.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetComputeUnitDebugMode(
+            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                            ///< apply the new scheduler mode.
             );
 
     };
@@ -3258,6 +3316,10 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::event_type_t to std::string
     std::string to_string( const Sysman::event_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanScheduler::sched_properties_t to std::string
+    std::string to_string( const SysmanScheduler::sched_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanPower::power_properties_t to std::string

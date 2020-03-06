@@ -132,6 +132,22 @@ typedef enum _zet_sched_mode_t
 } zet_sched_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Properties related to scheduler component
+typedef struct _zet_sched_properties_t
+{
+    ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling Sysman handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    ze_bool_t canControl;                           ///< [out] Software can change the scheduler component configuration
+                                                    ///< assuming the user has permissions.
+    uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are controlled by this
+                                                    ///< scheduler component (bitfield of 1<<::zet_engine_type_t).
+    uint32_t supportedModes;                        ///< [out] Bitfield of scheduler modes that can be configured for this
+                                                    ///< scheduler component (bitfield of 1<<::zet_sched_mode_t).
+
+} zet_sched_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_SCHED_WATCHDOG_DISABLE
 /// @brief Disable forward progress guard timeout.
 #define ZET_SCHED_WATCHDOG_DISABLE  (~(0ULL))
@@ -166,11 +182,9 @@ typedef struct _zet_sched_timeslice_properties_t
 } zet_sched_timeslice_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get a list of supported scheduler modes
+/// @brief Get handle to a scheduler component
 /// 
 /// @details
-///     - If zero modes are returned, control of scheduler modes are not
-///       supported.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -183,22 +197,21 @@ typedef struct _zet_sched_timeslice_properties_t
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zetSysmanSchedulerGetSupportedModes(
+zetSysmanSchedulerGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of supported modes.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of
-                                                    ///< supported scheduler modes.
-                                                    ///< if count is larger than the number of supported scheduler modes, then
-                                                    ///< the driver will update the value with the correct number of supported
-                                                    ///< scheduler modes that are returned.
-    zet_sched_mode_t* pModes                        ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
-                                                    ///< modes
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zet_sysman_sched_handle_t* phScheduler          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current scheduler mode
+/// @brief Get properties related to a scheduler component
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -209,14 +222,35 @@ zetSysmanSchedulerGetSupportedModes(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+__ze_api_export ze_result_t __zecall
+zetSysmanSchedulerGetProperties(
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Handle for the component.
+    zet_sched_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current scheduling mode in effect on a scheduler component.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pMode`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + Device does not support scheduler modes (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 __ze_api_export ze_result_t __zecall
 zetSysmanSchedulerGetCurrentMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     zet_sched_mode_t* pMode                         ///< [in,out] Will contain the current scheduler mode.
     );
 
@@ -232,14 +266,14 @@ zetSysmanSchedulerGetCurrentMode(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 __ze_api_export ze_result_t __zecall
 zetSysmanSchedulerGetTimeoutModeProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     zet_sched_timeout_properties_t* pConfig         ///< [in,out] Will contain the current parameters for this mode.
@@ -257,14 +291,14 @@ zetSysmanSchedulerGetTimeoutModeProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 __ze_api_export ze_result_t __zecall
 zetSysmanSchedulerGetTimesliceModeProperties(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                     ///< this mode, otherwise it will return the current properties.
     zet_sched_timeslice_properties_t* pConfig       ///< [in,out] Will contain the current parameters for this mode.
@@ -287,20 +321,20 @@ zetSysmanSchedulerGetTimesliceModeProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-///         + `nullptr == pNeedReboot`
+///         + `nullptr == pNeedReload`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 __ze_api_export ze_result_t __zecall
 zetSysmanSchedulerSetTimeoutMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     zet_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
-    ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                    ///< scheduler mode.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -319,20 +353,20 @@ zetSysmanSchedulerSetTimeoutMode(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
-///         + `nullptr == pNeedReboot`
+///         + `nullptr == pNeedReload`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 __ze_api_export ze_result_t __zecall
 zetSysmanSchedulerSetTimesliceMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
     zet_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
-    ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                    ///< scheduler mode.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -351,18 +385,18 @@ zetSysmanSchedulerSetTimesliceMode(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pNeedReboot`
+///         + `nullptr == pNeedReload`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 __ze_api_export ze_result_t __zecall
 zetSysmanSchedulerSetExclusiveMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                    ///< scheduler mode.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -381,18 +415,18 @@ zetSysmanSchedulerSetExclusiveMode(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pNeedReboot`
+///         + `nullptr == pNeedReload`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler mode is not supported (check using ::zetSysmanSchedulerGetSupportedModes()).
+///         + This scheduler component does not support scheduler modes.
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make this modification.
 __ze_api_export ze_result_t __zecall
 zetSysmanSchedulerSetComputeUnitDebugMode(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                    ///< scheduler mode.
+    zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -495,7 +529,7 @@ typedef struct _zet_process_state_t
     uint32_t processId;                             ///< [out] Host OS process ID.
     int64_t memSize;                                ///< [out] Device memory size in bytes allocated by this process (may not
                                                     ///< necessarily be resident on the device at the time of reading).
-    int64_t engines;                                ///< [out] Bitfield of accelerator engines being used by this process (or
+    uint64_t engines;                               ///< [out] Bitfield of accelerator engines being used by this process (or
                                                     ///< 1<<::zet_engine_type_t together).
 
 } zet_process_state_t;

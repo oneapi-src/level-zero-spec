@@ -440,12 +440,12 @@ path to the executable - this information is not returned by the API.
 Scheduler operations
 ~~~~~~~~~~~~~~~~~~~~
 
-On some devices, it is possible to change the way the scheduler executes
-workloads. To find out if this is supported, execute the function
-::${t}SysmanSchedulerGetCurrentMode() and check that it does not return
-an error.
+Scheduler components control how workloads are executed on accelerator
+engines and how to share the hardware resources when multiple workloads are
+submitted concurrently. This policy is referred to as a scheduler mode.
 
-The available scheduler operating modes are given by the enum ::${t}_sched_mode_t:
+The available scheduler operating modes are given by the enum
+::${t}_sched_mode_t and summarized in the table below:
 
 +-------------------------------------+-------------------------------------+
 | Scheduler mode                      | Description                         |
@@ -460,14 +460,13 @@ The available scheduler operating modes are given by the enum ::${t}_sched_mode_
 |                                     | interval, then submits the other    |
 |                                     | work.It is possible to configure    |
 |                                     | (::${t}_sched_timeout_properties_t)  |
-|                                     |                                     |
 |                                     | the watchdog timeout which          |
 |                                     | controls the maximum time the       |
 |                                     | scheduler will wait for a           |
 |                                     | workload to complete a batch of     |
 |                                     | work or yield to other              |
 |                                     | applications before it is           |
-|                                     | terminated.If the watchdog          |
+|                                     | terminated. If the watchdog         |
 |                                     | timeout is set to                   |
 |                                     | ::${T}_SCHED_WATCHDOG_DISABLE, the   |
 |                                     | scheduler enforces no fairness.     |
@@ -512,12 +511,22 @@ The available scheduler operating modes are given by the enum ::${t}_sched_mode_
 |                                     | policies.                           |
 +-------------------------------------+-------------------------------------+
 
-The following functions are available for changing the behavior of the
-scheduler:
+A device can have multiple scheduler components. Each scheduler component controls
+the workload execution behavior on one or more accelerator engines
+(::${t}_engine_type_t). The following functions are available for changing
+the scheduler mode for each scheduler component:
 
 +--------------------------------------------------+-----------------------------------+
 | Function                                         | Description                       |
 +==================================================+===================================+
+| ::${t}SysmanSchedulerGet()                        | Get handles to each scheduler     |
+|                                                  | component.                        |
++--------------------------------------------------+-----------------------------------+
+| ::${t}SysmanSchedulerGetProperties()             | Get properties of a scheduler      |
+|                                                  | component (sub-device, engines    |
+|                                                  | linked to this scheduler,         |
+|                                                  | supported scheduler modes.        |
++--------------------------------------------------+-----------------------------------+
 | ::${t}SysmanSchedulerGetCurrentMode()             | Get the current scheduler mode    |
 |                                                  | (timeout, timeslice, exclusive,   |
 |                                                  | single command queue)             |
@@ -548,29 +557,35 @@ while permitting other work to attempt to run:
 .. code:: c
 
    function DisableSchedulerWatchdog(${t}_sysman_handle_t hSysmanDevice)
-        ${x}_result_t res
-        ${t}_sched_mode_t currentMode
-        res = ${t}SysmanSchedulerGetCurrentMode(hSysmanDevice, &currentMode)
-        if (res == ${X}_RESULT_SUCCESS)
-            ${x}_bool_t requireReboot
-            ${t}_sched_timeout_properties_t props
-            props.watchdogTimeout = ${T}_SCHED_WATCHDOG_DISABLE
-            res = ${t}SysmanSchedulerSetTimeoutMode(hSysmanDevice, &props, &requireReboot)
-            if (res == ${X}_RESULT_SUCCESS)
-                if (requireReboot)
-                    output("WARNING: Reboot required to complete desired configuration.")
-                else
-                    output("Schedule mode changed successfully.")
-            else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
-                output("ERROR: The timeout scheduler mode is not supported on this device.")
-            else if(res == ${X}_RESULT_ERROR_INSUFFICIENT_PERMISSIONS)
-                output("ERROR: Don't have permissions to change the scheduler mode.")
-            else
-                output("ERROR: Problem calling the API to change the scheduler mode.")
-        else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
-            output("ERROR: Scheduler modes are not supported on this device.")
-        else
-            output("ERROR: Problem calling the API.")
+       uint32_t numSched
+       if ((${t}SysmanSchedulerGet(hSysmanDevice, &numSched, NULL) == ${X}_RESULT_SUCCESS))
+           ${t}_sysman_sched_handle_t* pSchedHandles =
+               allocate_memory(numSched * sizeof(${t}_sysman_sched_handle_t))
+           if (${t}SysmanSchedulerGet(hSysmanDevice, &numSched, pSchedHandles) == ${X}_RESULT_SUCCESS)
+               for (index = 0 .. numSched-1)
+                   ${x}_result_t res
+                   ${t}_sched_mode_t currentMode
+                   res = ${t}SysmanSchedulerGetCurrentMode(pSchedHandles[index], &currentMode)
+                   if (res == ${X}_RESULT_SUCCESS)
+                       ${x}_bool_t requireReload
+                       ${t}_sched_timeout_properties_t props
+                       props.watchdogTimeout = ${T}_SCHED_WATCHDOG_DISABLE
+                       res = ${t}SysmanSchedulerSetTimeoutMode(pSchedHandles[index], &props, &requireReload)
+                       if (res == ${X}_RESULT_SUCCESS)
+                           if (requireReload)
+                               output("WARNING: Reload the driver to complete desired configuration.")
+                           else
+                               output("Schedule mode changed successfully.")
+                       else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
+                           output("ERROR: The timeout scheduler mode is not supported on this device.")
+                       else if(res == ${X}_RESULT_ERROR_INSUFFICIENT_PERMISSIONS)
+                           output("ERROR: Don't have permissions to change the scheduler mode.")
+                       else
+                           output("ERROR: Problem calling the API to change the scheduler mode.")
+                   else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
+                       output("ERROR: Scheduler modes are not supported on this device.")
+                   else
+                       output("ERROR: Problem calling the API.")
 
 Device reset
 ~~~~~~~~~~~~
@@ -2191,6 +2206,10 @@ function:
 | ::${t}SysmanDeviceGetProperties()                  | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
 | ::${t}SysmanDeviceWasRepaired()                    | read-only     | read-only   | read-only   | no-access   |
++---------------------------------------------------+---------------+-------------+-------------+-------------+
+| ::${t}SysmanSchedulerGet()                         | read-only     | read-only   | read-only   | no-access   |
++---------------------------------------------------+---------------+-------------+-------------+-------------+
+| ::${t}SysmanSchedulerGetProperties()               | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
 | ::${t}SysmanSchedulerGetCurrentMode()              | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+

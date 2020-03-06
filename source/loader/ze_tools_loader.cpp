@@ -28,6 +28,7 @@ namespace loader
     zet_metric_query_factory_t          zet_metric_query_factory;
     zet_tracer_factory_t                zet_tracer_factory;
     zet_sysman_factory_t                zet_sysman_factory;
+    zet_sysman_sched_factory_t          zet_sysman_sched_factory;
     zet_sysman_pwr_factory_t            zet_sysman_pwr_factory;
     zet_sysman_freq_factory_t           zet_sysman_freq_factory;
     zet_sysman_engine_factory_t         zet_sysman_engine_factory;
@@ -1074,35 +1075,71 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanSchedulerGetSupportedModes
+    /// @brief Intercept function for zetSysmanSchedulerGet
     ze_result_t __zecall
-    zetSysmanSchedulerGetSupportedModes(
+    zetSysmanSchedulerGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of scheduler modes.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of supported modes.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< supported scheduler modes.
-                                                        ///< if count is larger than the number of supported scheduler modes, then
-                                                        ///< the driver will update the value with the correct number of supported
-                                                        ///< scheduler modes that are returned.
-        zet_sched_mode_t* pModes                        ///< [in,out][optional][range(0, *pCount)] Array of supported scheduler
-                                                        ///< modes
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zet_sysman_sched_handle_t* phScheduler          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnSchedulerGetSupportedModes = dditable->zet.Sysman.pfnSchedulerGetSupportedModes;
-        if( nullptr == pfnSchedulerGetSupportedModes )
+        auto pfnSchedulerGet = dditable->zet.Sysman.pfnSchedulerGet;
+        if( nullptr == pfnSchedulerGet )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnSchedulerGetSupportedModes( hSysman, pCount, pModes );
+        result = pfnSchedulerGet( hSysman, pCount, phScheduler );
+
+        try
+        {
+            // convert driver handles to loader handles
+            for( size_t i = 0; ( nullptr != phScheduler ) && ( i < *pCount ); ++i )
+                phScheduler[ i ] = reinterpret_cast<zet_sysman_sched_handle_t>(
+                    zet_sysman_sched_factory.getInstance( phScheduler[ i ], dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanSchedulerGetProperties
+    ze_result_t __zecall
+    zetSysmanSchedulerGetProperties(
+        zet_sysman_sched_handle_t hScheduler,           ///< [in] Handle for the component.
+        zet_sched_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->dditable;
+        auto pfnGetProperties = dditable->zet.SysmanScheduler.pfnGetProperties;
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hScheduler = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->handle;
+
+        // forward to device-driver
+        result = pfnGetProperties( hScheduler, pProperties );
 
         return result;
     }
@@ -1111,23 +1148,23 @@ namespace loader
     /// @brief Intercept function for zetSysmanSchedulerGetCurrentMode
     ze_result_t __zecall
     zetSysmanSchedulerGetCurrentMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
         zet_sched_mode_t* pMode                         ///< [in,out] Will contain the current scheduler mode.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnSchedulerGetCurrentMode = dditable->zet.Sysman.pfnSchedulerGetCurrentMode;
-        if( nullptr == pfnSchedulerGetCurrentMode )
+        auto dditable = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->dditable;
+        auto pfnGetCurrentMode = dditable->zet.SysmanScheduler.pfnGetCurrentMode;
+        if( nullptr == pfnGetCurrentMode )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hScheduler = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->handle;
 
         // forward to device-driver
-        result = pfnSchedulerGetCurrentMode( hSysman, pMode );
+        result = pfnGetCurrentMode( hScheduler, pMode );
 
         return result;
     }
@@ -1136,7 +1173,7 @@ namespace loader
     /// @brief Intercept function for zetSysmanSchedulerGetTimeoutModeProperties
     ze_result_t __zecall
     zetSysmanSchedulerGetTimeoutModeProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
         ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         zet_sched_timeout_properties_t* pConfig         ///< [in,out] Will contain the current parameters for this mode.
@@ -1145,16 +1182,16 @@ namespace loader
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnSchedulerGetTimeoutModeProperties = dditable->zet.Sysman.pfnSchedulerGetTimeoutModeProperties;
-        if( nullptr == pfnSchedulerGetTimeoutModeProperties )
+        auto dditable = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->dditable;
+        auto pfnGetTimeoutModeProperties = dditable->zet.SysmanScheduler.pfnGetTimeoutModeProperties;
+        if( nullptr == pfnGetTimeoutModeProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hScheduler = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->handle;
 
         // forward to device-driver
-        result = pfnSchedulerGetTimeoutModeProperties( hSysman, getDefaults, pConfig );
+        result = pfnGetTimeoutModeProperties( hScheduler, getDefaults, pConfig );
 
         return result;
     }
@@ -1163,7 +1200,7 @@ namespace loader
     /// @brief Intercept function for zetSysmanSchedulerGetTimesliceModeProperties
     ze_result_t __zecall
     zetSysmanSchedulerGetTimesliceModeProperties(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
         ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
                                                         ///< this mode, otherwise it will return the current properties.
         zet_sched_timeslice_properties_t* pConfig       ///< [in,out] Will contain the current parameters for this mode.
@@ -1172,16 +1209,16 @@ namespace loader
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnSchedulerGetTimesliceModeProperties = dditable->zet.Sysman.pfnSchedulerGetTimesliceModeProperties;
-        if( nullptr == pfnSchedulerGetTimesliceModeProperties )
+        auto dditable = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->dditable;
+        auto pfnGetTimesliceModeProperties = dditable->zet.SysmanScheduler.pfnGetTimesliceModeProperties;
+        if( nullptr == pfnGetTimesliceModeProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hScheduler = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->handle;
 
         // forward to device-driver
-        result = pfnSchedulerGetTimesliceModeProperties( hSysman, getDefaults, pConfig );
+        result = pfnGetTimesliceModeProperties( hScheduler, getDefaults, pConfig );
 
         return result;
     }
@@ -1190,25 +1227,25 @@ namespace loader
     /// @brief Intercept function for zetSysmanSchedulerSetTimeoutMode
     ze_result_t __zecall
     zetSysmanSchedulerSetTimeoutMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
         zet_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
-        ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                        ///< scheduler mode.
+        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnSchedulerSetTimeoutMode = dditable->zet.Sysman.pfnSchedulerSetTimeoutMode;
-        if( nullptr == pfnSchedulerSetTimeoutMode )
+        auto dditable = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->dditable;
+        auto pfnSetTimeoutMode = dditable->zet.SysmanScheduler.pfnSetTimeoutMode;
+        if( nullptr == pfnSetTimeoutMode )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hScheduler = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->handle;
 
         // forward to device-driver
-        result = pfnSchedulerSetTimeoutMode( hSysman, pProperties, pNeedReboot );
+        result = pfnSetTimeoutMode( hScheduler, pProperties, pNeedReload );
 
         return result;
     }
@@ -1217,25 +1254,25 @@ namespace loader
     /// @brief Intercept function for zetSysmanSchedulerSetTimesliceMode
     ze_result_t __zecall
     zetSysmanSchedulerSetTimesliceMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
         zet_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
-        ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                        ///< scheduler mode.
+        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnSchedulerSetTimesliceMode = dditable->zet.Sysman.pfnSchedulerSetTimesliceMode;
-        if( nullptr == pfnSchedulerSetTimesliceMode )
+        auto dditable = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->dditable;
+        auto pfnSetTimesliceMode = dditable->zet.SysmanScheduler.pfnSetTimesliceMode;
+        if( nullptr == pfnSetTimesliceMode )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hScheduler = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->handle;
 
         // forward to device-driver
-        result = pfnSchedulerSetTimesliceMode( hSysman, pProperties, pNeedReboot );
+        result = pfnSetTimesliceMode( hScheduler, pProperties, pNeedReload );
 
         return result;
     }
@@ -1244,24 +1281,24 @@ namespace loader
     /// @brief Intercept function for zetSysmanSchedulerSetExclusiveMode
     ze_result_t __zecall
     zetSysmanSchedulerSetExclusiveMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                        ///< scheduler mode.
+        zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
+        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnSchedulerSetExclusiveMode = dditable->zet.Sysman.pfnSchedulerSetExclusiveMode;
-        if( nullptr == pfnSchedulerSetExclusiveMode )
+        auto dditable = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->dditable;
+        auto pfnSetExclusiveMode = dditable->zet.SysmanScheduler.pfnSetExclusiveMode;
+        if( nullptr == pfnSetExclusiveMode )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hScheduler = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->handle;
 
         // forward to device-driver
-        result = pfnSchedulerSetExclusiveMode( hSysman, pNeedReboot );
+        result = pfnSetExclusiveMode( hScheduler, pNeedReload );
 
         return result;
     }
@@ -1270,24 +1307,24 @@ namespace loader
     /// @brief Intercept function for zetSysmanSchedulerSetComputeUnitDebugMode
     ze_result_t __zecall
     zetSysmanSchedulerSetComputeUnitDebugMode(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        ze_bool_t* pNeedReboot                          ///< [in] Will be set to TRUE if a system reboot is needed to apply the new
-                                                        ///< scheduler mode.
+        zet_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
+        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnSchedulerSetComputeUnitDebugMode = dditable->zet.Sysman.pfnSchedulerSetComputeUnitDebugMode;
-        if( nullptr == pfnSchedulerSetComputeUnitDebugMode )
+        auto dditable = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->dditable;
+        auto pfnSetComputeUnitDebugMode = dditable->zet.SysmanScheduler.pfnSetComputeUnitDebugMode;
+        if( nullptr == pfnSetComputeUnitDebugMode )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hScheduler = reinterpret_cast<zet_sysman_sched_object_t*>( hScheduler )->handle;
 
         // forward to device-driver
-        result = pfnSchedulerSetComputeUnitDebugMode( hSysman, pNeedReboot );
+        result = pfnSetComputeUnitDebugMode( hScheduler, pNeedReload );
 
         return result;
     }
@@ -4626,14 +4663,7 @@ zetGetSysmanProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = loader::zetSysmanGet;
             pDdiTable->pfnDeviceGetProperties                      = loader::zetSysmanDeviceGetProperties;
-            pDdiTable->pfnSchedulerGetSupportedModes               = loader::zetSysmanSchedulerGetSupportedModes;
-            pDdiTable->pfnSchedulerGetCurrentMode                  = loader::zetSysmanSchedulerGetCurrentMode;
-            pDdiTable->pfnSchedulerGetTimeoutModeProperties        = loader::zetSysmanSchedulerGetTimeoutModeProperties;
-            pDdiTable->pfnSchedulerGetTimesliceModeProperties      = loader::zetSysmanSchedulerGetTimesliceModeProperties;
-            pDdiTable->pfnSchedulerSetTimeoutMode                  = loader::zetSysmanSchedulerSetTimeoutMode;
-            pDdiTable->pfnSchedulerSetTimesliceMode                = loader::zetSysmanSchedulerSetTimesliceMode;
-            pDdiTable->pfnSchedulerSetExclusiveMode                = loader::zetSysmanSchedulerSetExclusiveMode;
-            pDdiTable->pfnSchedulerSetComputeUnitDebugMode         = loader::zetSysmanSchedulerSetComputeUnitDebugMode;
+            pDdiTable->pfnSchedulerGet                             = loader::zetSysmanSchedulerGet;
             pDdiTable->pfnPerformanceProfileGetSupported           = loader::zetSysmanPerformanceProfileGetSupported;
             pDdiTable->pfnPerformanceProfileGet                    = loader::zetSysmanPerformanceProfileGet;
             pDdiTable->pfnPerformanceProfileSet                    = loader::zetSysmanPerformanceProfileSet;
@@ -4671,6 +4701,75 @@ zetGetSysmanProcAddrTable(
     {
         auto getTable = reinterpret_cast<zet_pfnGetSysmanProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanScheduler table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+__zedllexport ze_result_t __zecall
+zetGetSysmanSchedulerProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_sysman_scheduler_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return ZE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+    if( loader::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( ZE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<zet_pfnGetSysmanSchedulerProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "zetGetSysmanSchedulerProcAddrTable") );
+            result = getTable( version, &drv.dditable.zet.SysmanScheduler );
+        }
+    }
+
+    if( ZE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGetProperties                            = loader::zetSysmanSchedulerGetProperties;
+            pDdiTable->pfnGetCurrentMode                           = loader::zetSysmanSchedulerGetCurrentMode;
+            pDdiTable->pfnGetTimeoutModeProperties                 = loader::zetSysmanSchedulerGetTimeoutModeProperties;
+            pDdiTable->pfnGetTimesliceModeProperties               = loader::zetSysmanSchedulerGetTimesliceModeProperties;
+            pDdiTable->pfnSetTimeoutMode                           = loader::zetSysmanSchedulerSetTimeoutMode;
+            pDdiTable->pfnSetTimesliceMode                         = loader::zetSysmanSchedulerSetTimesliceMode;
+            pDdiTable->pfnSetExclusiveMode                         = loader::zetSysmanSchedulerSetExclusiveMode;
+            pDdiTable->pfnSetComputeUnitDebugMode                  = loader::zetSysmanSchedulerSetComputeUnitDebugMode;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.zet.SysmanScheduler;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        auto getTable = reinterpret_cast<zet_pfnGetSysmanSchedulerProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanSchedulerProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

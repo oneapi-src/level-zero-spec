@@ -78,6 +78,11 @@ class zet_sysman_handle_t(c_void_p):
     pass
 
 ###############################################################################
+## @brief Handle for a Sysman device scheduler queue
+class zet_sysman_sched_handle_t(c_void_p):
+    pass
+
+###############################################################################
 ## @brief Handle for a Sysman device power domain
 class zet_sysman_pwr_handle_t(c_void_p):
     pass
@@ -630,6 +635,21 @@ class zet_sched_mode_t(c_int):
 
 
 ###############################################################################
+## @brief Properties related to scheduler component
+class zet_sched_properties_t(Structure):
+    _fields_ = [
+        ("onSubdevice", ze_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling Sysman handle
+        ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
+        ("canControl", ze_bool_t),                                      ## [out] Software can change the scheduler component configuration
+                                                                        ## assuming the user has permissions.
+        ("engines", c_ulonglong),                                       ## [out] Bitfield of accelerator engines that are controlled by this
+                                                                        ## scheduler component (bitfield of 1<<::zet_engine_type_t).
+        ("supportedModes", c_ulong)                                     ## [out] Bitfield of scheduler modes that can be configured for this
+                                                                        ## scheduler component (bitfield of 1<<::zet_sched_mode_t).
+    ]
+
+###############################################################################
 ## @brief Disable forward progress guard timeout.
 ZET_SCHED_WATCHDOG_DISABLE = (~(0ULL))
 
@@ -686,7 +706,7 @@ class zet_process_state_t(Structure):
         ("processId", c_ulong),                                         ## [out] Host OS process ID.
         ("memSize", c_int64_t),                                         ## [out] Device memory size in bytes allocated by this process (may not
                                                                         ## necessarily be resident on the device at the time of reading).
-        ("engines", c_int64_t)                                          ## [out] Bitfield of accelerator engines being used by this process (or
+        ("engines", c_ulonglong)                                        ## [out] Bitfield of accelerator engines being used by this process (or
                                                                         ## 1<<::zet_engine_type_t together).
     ]
 
@@ -2102,60 +2122,11 @@ else:
     _zetSysmanDeviceGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sysman_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerGetSupportedModes
+## @brief Function-pointer for zetSysmanSchedulerGet
 if __use_win_types:
-    _zetSysmanSchedulerGetSupportedModes_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sched_mode_t) )
+    _zetSysmanSchedulerGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_sched_handle_t) )
 else:
-    _zetSysmanSchedulerGetSupportedModes_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sched_mode_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerGetCurrentMode
-if __use_win_types:
-    _zetSysmanSchedulerGetCurrentMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sched_mode_t) )
-else:
-    _zetSysmanSchedulerGetCurrentMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sched_mode_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerGetTimeoutModeProperties
-if __use_win_types:
-    _zetSysmanSchedulerGetTimeoutModeProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, ze_bool_t, POINTER(zet_sched_timeout_properties_t) )
-else:
-    _zetSysmanSchedulerGetTimeoutModeProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, ze_bool_t, POINTER(zet_sched_timeout_properties_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerGetTimesliceModeProperties
-if __use_win_types:
-    _zetSysmanSchedulerGetTimesliceModeProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, ze_bool_t, POINTER(zet_sched_timeslice_properties_t) )
-else:
-    _zetSysmanSchedulerGetTimesliceModeProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, ze_bool_t, POINTER(zet_sched_timeslice_properties_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerSetTimeoutMode
-if __use_win_types:
-    _zetSysmanSchedulerSetTimeoutMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sched_timeout_properties_t), POINTER(ze_bool_t) )
-else:
-    _zetSysmanSchedulerSetTimeoutMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sched_timeout_properties_t), POINTER(ze_bool_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerSetTimesliceMode
-if __use_win_types:
-    _zetSysmanSchedulerSetTimesliceMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sched_timeslice_properties_t), POINTER(ze_bool_t) )
-else:
-    _zetSysmanSchedulerSetTimesliceMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sched_timeslice_properties_t), POINTER(ze_bool_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerSetExclusiveMode
-if __use_win_types:
-    _zetSysmanSchedulerSetExclusiveMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
-else:
-    _zetSysmanSchedulerSetExclusiveMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanSchedulerSetComputeUnitDebugMode
-if __use_win_types:
-    _zetSysmanSchedulerSetComputeUnitDebugMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
-else:
-    _zetSysmanSchedulerSetComputeUnitDebugMode_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(ze_bool_t) )
+    _zetSysmanSchedulerGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_sched_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanPerformanceProfileGetSupported
@@ -2332,14 +2303,7 @@ class _zet_sysman_dditable_t(Structure):
     _fields_ = [
         ("pfnGet", c_void_p),                                           ## _zetSysmanGet_t
         ("pfnDeviceGetProperties", c_void_p),                           ## _zetSysmanDeviceGetProperties_t
-        ("pfnSchedulerGetSupportedModes", c_void_p),                    ## _zetSysmanSchedulerGetSupportedModes_t
-        ("pfnSchedulerGetCurrentMode", c_void_p),                       ## _zetSysmanSchedulerGetCurrentMode_t
-        ("pfnSchedulerGetTimeoutModeProperties", c_void_p),             ## _zetSysmanSchedulerGetTimeoutModeProperties_t
-        ("pfnSchedulerGetTimesliceModeProperties", c_void_p),           ## _zetSysmanSchedulerGetTimesliceModeProperties_t
-        ("pfnSchedulerSetTimeoutMode", c_void_p),                       ## _zetSysmanSchedulerSetTimeoutMode_t
-        ("pfnSchedulerSetTimesliceMode", c_void_p),                     ## _zetSysmanSchedulerSetTimesliceMode_t
-        ("pfnSchedulerSetExclusiveMode", c_void_p),                     ## _zetSysmanSchedulerSetExclusiveMode_t
-        ("pfnSchedulerSetComputeUnitDebugMode", c_void_p),              ## _zetSysmanSchedulerSetComputeUnitDebugMode_t
+        ("pfnSchedulerGet", c_void_p),                                  ## _zetSysmanSchedulerGet_t
         ("pfnPerformanceProfileGetSupported", c_void_p),                ## _zetSysmanPerformanceProfileGetSupported_t
         ("pfnPerformanceProfileGet", c_void_p),                         ## _zetSysmanPerformanceProfileGet_t
         ("pfnPerformanceProfileSet", c_void_p),                         ## _zetSysmanPerformanceProfileSet_t
@@ -2364,6 +2328,77 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnRasGet", c_void_p),                                        ## _zetSysmanRasGet_t
         ("pfnEventGet", c_void_p),                                      ## _zetSysmanEventGet_t
         ("pfnDiagnosticsGet", c_void_p)                                 ## _zetSysmanDiagnosticsGet_t
+    ]
+
+###############################################################################
+## @brief Function-pointer for zetSysmanSchedulerGetProperties
+if __use_win_types:
+    _zetSysmanSchedulerGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(zet_sched_properties_t) )
+else:
+    _zetSysmanSchedulerGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(zet_sched_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanSchedulerGetCurrentMode
+if __use_win_types:
+    _zetSysmanSchedulerGetCurrentMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(zet_sched_mode_t) )
+else:
+    _zetSysmanSchedulerGetCurrentMode_t = CFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(zet_sched_mode_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanSchedulerGetTimeoutModeProperties
+if __use_win_types:
+    _zetSysmanSchedulerGetTimeoutModeProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, ze_bool_t, POINTER(zet_sched_timeout_properties_t) )
+else:
+    _zetSysmanSchedulerGetTimeoutModeProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, ze_bool_t, POINTER(zet_sched_timeout_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanSchedulerGetTimesliceModeProperties
+if __use_win_types:
+    _zetSysmanSchedulerGetTimesliceModeProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, ze_bool_t, POINTER(zet_sched_timeslice_properties_t) )
+else:
+    _zetSysmanSchedulerGetTimesliceModeProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, ze_bool_t, POINTER(zet_sched_timeslice_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanSchedulerSetTimeoutMode
+if __use_win_types:
+    _zetSysmanSchedulerSetTimeoutMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(zet_sched_timeout_properties_t), POINTER(ze_bool_t) )
+else:
+    _zetSysmanSchedulerSetTimeoutMode_t = CFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(zet_sched_timeout_properties_t), POINTER(ze_bool_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanSchedulerSetTimesliceMode
+if __use_win_types:
+    _zetSysmanSchedulerSetTimesliceMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(zet_sched_timeslice_properties_t), POINTER(ze_bool_t) )
+else:
+    _zetSysmanSchedulerSetTimesliceMode_t = CFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(zet_sched_timeslice_properties_t), POINTER(ze_bool_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanSchedulerSetExclusiveMode
+if __use_win_types:
+    _zetSysmanSchedulerSetExclusiveMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(ze_bool_t) )
+else:
+    _zetSysmanSchedulerSetExclusiveMode_t = CFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(ze_bool_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanSchedulerSetComputeUnitDebugMode
+if __use_win_types:
+    _zetSysmanSchedulerSetComputeUnitDebugMode_t = WINFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(ze_bool_t) )
+else:
+    _zetSysmanSchedulerSetComputeUnitDebugMode_t = CFUNCTYPE( ze_result_t, zet_sysman_sched_handle_t, POINTER(ze_bool_t) )
+
+
+###############################################################################
+## @brief Table of SysmanScheduler functions pointers
+class _zet_sysman_scheduler_dditable_t(Structure):
+    _fields_ = [
+        ("pfnGetProperties", c_void_p),                                 ## _zetSysmanSchedulerGetProperties_t
+        ("pfnGetCurrentMode", c_void_p),                                ## _zetSysmanSchedulerGetCurrentMode_t
+        ("pfnGetTimeoutModeProperties", c_void_p),                      ## _zetSysmanSchedulerGetTimeoutModeProperties_t
+        ("pfnGetTimesliceModeProperties", c_void_p),                    ## _zetSysmanSchedulerGetTimesliceModeProperties_t
+        ("pfnSetTimeoutMode", c_void_p),                                ## _zetSysmanSchedulerSetTimeoutMode_t
+        ("pfnSetTimesliceMode", c_void_p),                              ## _zetSysmanSchedulerSetTimesliceMode_t
+        ("pfnSetExclusiveMode", c_void_p),                              ## _zetSysmanSchedulerSetExclusiveMode_t
+        ("pfnSetComputeUnitDebugMode", c_void_p)                        ## _zetSysmanSchedulerSetComputeUnitDebugMode_t
     ]
 
 ###############################################################################
@@ -3046,6 +3081,7 @@ class _zet_dditable_t(Structure):
         ("MetricQuery", _zet_metric_query_dditable_t),
         ("Tracer", _zet_tracer_dditable_t),
         ("Sysman", _zet_sysman_dditable_t),
+        ("SysmanScheduler", _zet_sysman_scheduler_dditable_t),
         ("SysmanPower", _zet_sysman_power_dditable_t),
         ("SysmanFrequency", _zet_sysman_frequency_dditable_t),
         ("SysmanEngine", _zet_sysman_engine_dditable_t),
@@ -3212,14 +3248,7 @@ class ZET_DDI:
         # attach function interface to function address
         self.zetSysmanGet = _zetSysmanGet_t(self.__dditable.Sysman.pfnGet)
         self.zetSysmanDeviceGetProperties = _zetSysmanDeviceGetProperties_t(self.__dditable.Sysman.pfnDeviceGetProperties)
-        self.zetSysmanSchedulerGetSupportedModes = _zetSysmanSchedulerGetSupportedModes_t(self.__dditable.Sysman.pfnSchedulerGetSupportedModes)
-        self.zetSysmanSchedulerGetCurrentMode = _zetSysmanSchedulerGetCurrentMode_t(self.__dditable.Sysman.pfnSchedulerGetCurrentMode)
-        self.zetSysmanSchedulerGetTimeoutModeProperties = _zetSysmanSchedulerGetTimeoutModeProperties_t(self.__dditable.Sysman.pfnSchedulerGetTimeoutModeProperties)
-        self.zetSysmanSchedulerGetTimesliceModeProperties = _zetSysmanSchedulerGetTimesliceModeProperties_t(self.__dditable.Sysman.pfnSchedulerGetTimesliceModeProperties)
-        self.zetSysmanSchedulerSetTimeoutMode = _zetSysmanSchedulerSetTimeoutMode_t(self.__dditable.Sysman.pfnSchedulerSetTimeoutMode)
-        self.zetSysmanSchedulerSetTimesliceMode = _zetSysmanSchedulerSetTimesliceMode_t(self.__dditable.Sysman.pfnSchedulerSetTimesliceMode)
-        self.zetSysmanSchedulerSetExclusiveMode = _zetSysmanSchedulerSetExclusiveMode_t(self.__dditable.Sysman.pfnSchedulerSetExclusiveMode)
-        self.zetSysmanSchedulerSetComputeUnitDebugMode = _zetSysmanSchedulerSetComputeUnitDebugMode_t(self.__dditable.Sysman.pfnSchedulerSetComputeUnitDebugMode)
+        self.zetSysmanSchedulerGet = _zetSysmanSchedulerGet_t(self.__dditable.Sysman.pfnSchedulerGet)
         self.zetSysmanPerformanceProfileGetSupported = _zetSysmanPerformanceProfileGetSupported_t(self.__dditable.Sysman.pfnPerformanceProfileGetSupported)
         self.zetSysmanPerformanceProfileGet = _zetSysmanPerformanceProfileGet_t(self.__dditable.Sysman.pfnPerformanceProfileGet)
         self.zetSysmanPerformanceProfileSet = _zetSysmanPerformanceProfileSet_t(self.__dditable.Sysman.pfnPerformanceProfileSet)
@@ -3244,6 +3273,23 @@ class ZET_DDI:
         self.zetSysmanRasGet = _zetSysmanRasGet_t(self.__dditable.Sysman.pfnRasGet)
         self.zetSysmanEventGet = _zetSysmanEventGet_t(self.__dditable.Sysman.pfnEventGet)
         self.zetSysmanDiagnosticsGet = _zetSysmanDiagnosticsGet_t(self.__dditable.Sysman.pfnDiagnosticsGet)
+
+        # call driver to get function pointers
+        _SysmanScheduler = _zet_sysman_scheduler_dditable_t()
+        r = ze_result_v(self.__dll.zetGetSysmanSchedulerProcAddrTable(version, byref(_SysmanScheduler)))
+        if r != ze_result_v.SUCCESS:
+            raise Exception(r)
+        self.__dditable.SysmanScheduler = _SysmanScheduler
+
+        # attach function interface to function address
+        self.zetSysmanSchedulerGetProperties = _zetSysmanSchedulerGetProperties_t(self.__dditable.SysmanScheduler.pfnGetProperties)
+        self.zetSysmanSchedulerGetCurrentMode = _zetSysmanSchedulerGetCurrentMode_t(self.__dditable.SysmanScheduler.pfnGetCurrentMode)
+        self.zetSysmanSchedulerGetTimeoutModeProperties = _zetSysmanSchedulerGetTimeoutModeProperties_t(self.__dditable.SysmanScheduler.pfnGetTimeoutModeProperties)
+        self.zetSysmanSchedulerGetTimesliceModeProperties = _zetSysmanSchedulerGetTimesliceModeProperties_t(self.__dditable.SysmanScheduler.pfnGetTimesliceModeProperties)
+        self.zetSysmanSchedulerSetTimeoutMode = _zetSysmanSchedulerSetTimeoutMode_t(self.__dditable.SysmanScheduler.pfnSetTimeoutMode)
+        self.zetSysmanSchedulerSetTimesliceMode = _zetSysmanSchedulerSetTimesliceMode_t(self.__dditable.SysmanScheduler.pfnSetTimesliceMode)
+        self.zetSysmanSchedulerSetExclusiveMode = _zetSysmanSchedulerSetExclusiveMode_t(self.__dditable.SysmanScheduler.pfnSetExclusiveMode)
+        self.zetSysmanSchedulerSetComputeUnitDebugMode = _zetSysmanSchedulerSetComputeUnitDebugMode_t(self.__dditable.SysmanScheduler.pfnSetComputeUnitDebugMode)
 
         # call driver to get function pointers
         _SysmanPower = _zet_sysman_power_dditable_t()

@@ -111,6 +111,13 @@ namespace zet_lib
 
         if( ZE_RESULT_SUCCESS == result )
         {
+            auto getTable = reinterpret_cast<zet_pfnGetSysmanSchedulerProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zetGetSysmanSchedulerProcAddrTable") );
+            result = getTable( ZE_API_VERSION_1_0, &ddiTable.SysmanScheduler );
+        }
+
+        if( ZE_RESULT_SUCCESS == result )
+        {
             auto getTable = reinterpret_cast<zet_pfnGetSysmanPowerProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "zetGetSysmanPowerProcAddrTable") );
             result = getTable( ZE_API_VERSION_1_0, &ddiTable.SysmanPower );

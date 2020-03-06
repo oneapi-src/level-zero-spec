@@ -76,6 +76,11 @@ class: $tSysman
 name: "$t_sysman_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle for a Sysman device scheduler queue"
+class: $tSysmanScheduler
+name: "$t_sysman_sched_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle for a Sysman device power domain"
 class: $tSysmanPower
 name: "$t_sysman_pwr_handle_t"

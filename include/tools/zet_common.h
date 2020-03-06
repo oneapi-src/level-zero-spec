@@ -72,6 +72,10 @@ typedef struct _zet_tracer_handle_t *zet_tracer_handle_t;
 typedef struct _zet_sysman_handle_t *zet_sysman_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device scheduler queue
+typedef struct _zet_sysman_sched_handle_t *zet_sysman_sched_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device power domain
 typedef struct _zet_sysman_pwr_handle_t *zet_sysman_pwr_handle_t;
 
@@ -190,6 +194,10 @@ typedef struct _zet_profile_register_sequence_t zet_profile_register_sequence_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_sysman_properties_t
 typedef struct _zet_sysman_properties_t zet_sysman_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_sched_properties_t
+typedef struct _zet_sched_properties_t zet_sched_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_sched_timeout_properties_t

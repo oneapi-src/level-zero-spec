@@ -571,64 +571,11 @@ typedef ze_result_t (__zecall *zet_pfnSysmanDeviceGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerGetSupportedModes 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetSupportedModes_t)(
+/// @brief Function-pointer for zetSysmanSchedulerGet 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGet_t)(
     zet_sysman_handle_t,
     uint32_t*,
-    zet_sched_mode_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerGetCurrentMode 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetCurrentMode_t)(
-    zet_sysman_handle_t,
-    zet_sched_mode_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerGetTimeoutModeProperties 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetTimeoutModeProperties_t)(
-    zet_sysman_handle_t,
-    ze_bool_t,
-    zet_sched_timeout_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerGetTimesliceModeProperties 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetTimesliceModeProperties_t)(
-    zet_sysman_handle_t,
-    ze_bool_t,
-    zet_sched_timeslice_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerSetTimeoutMode 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetTimeoutMode_t)(
-    zet_sysman_handle_t,
-    zet_sched_timeout_properties_t*,
-    ze_bool_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerSetTimesliceMode 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetTimesliceMode_t)(
-    zet_sysman_handle_t,
-    zet_sched_timeslice_properties_t*,
-    ze_bool_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerSetExclusiveMode 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetExclusiveMode_t)(
-    zet_sysman_handle_t,
-    ze_bool_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanSchedulerSetComputeUnitDebugMode 
-typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetComputeUnitDebugMode_t)(
-    zet_sysman_handle_t,
-    ze_bool_t*
+    zet_sysman_sched_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -819,14 +766,7 @@ typedef struct _zet_sysman_dditable_t
 {
     zet_pfnSysmanGet_t                                          pfnGet;
     zet_pfnSysmanDeviceGetProperties_t                          pfnDeviceGetProperties;
-    zet_pfnSysmanSchedulerGetSupportedModes_t                   pfnSchedulerGetSupportedModes;
-    zet_pfnSysmanSchedulerGetCurrentMode_t                      pfnSchedulerGetCurrentMode;
-    zet_pfnSysmanSchedulerGetTimeoutModeProperties_t            pfnSchedulerGetTimeoutModeProperties;
-    zet_pfnSysmanSchedulerGetTimesliceModeProperties_t          pfnSchedulerGetTimesliceModeProperties;
-    zet_pfnSysmanSchedulerSetTimeoutMode_t                      pfnSchedulerSetTimeoutMode;
-    zet_pfnSysmanSchedulerSetTimesliceMode_t                    pfnSchedulerSetTimesliceMode;
-    zet_pfnSysmanSchedulerSetExclusiveMode_t                    pfnSchedulerSetExclusiveMode;
-    zet_pfnSysmanSchedulerSetComputeUnitDebugMode_t             pfnSchedulerSetComputeUnitDebugMode;
+    zet_pfnSysmanSchedulerGet_t                                 pfnSchedulerGet;
     zet_pfnSysmanPerformanceProfileGetSupported_t               pfnPerformanceProfileGetSupported;
     zet_pfnSysmanPerformanceProfileGet_t                        pfnPerformanceProfileGet;
     zet_pfnSysmanPerformanceProfileSet_t                        pfnPerformanceProfileSet;
@@ -873,6 +813,102 @@ zetGetSysmanProcAddrTable(
 typedef ze_result_t (__zecall *zet_pfnGetSysmanProcAddrTable_t)(
     ze_api_version_t,
     zet_sysman_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanSchedulerGetProperties 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetProperties_t)(
+    zet_sysman_sched_handle_t,
+    zet_sched_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanSchedulerGetCurrentMode 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetCurrentMode_t)(
+    zet_sysman_sched_handle_t,
+    zet_sched_mode_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanSchedulerGetTimeoutModeProperties 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetTimeoutModeProperties_t)(
+    zet_sysman_sched_handle_t,
+    ze_bool_t,
+    zet_sched_timeout_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanSchedulerGetTimesliceModeProperties 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGetTimesliceModeProperties_t)(
+    zet_sysman_sched_handle_t,
+    ze_bool_t,
+    zet_sched_timeslice_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanSchedulerSetTimeoutMode 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetTimeoutMode_t)(
+    zet_sysman_sched_handle_t,
+    zet_sched_timeout_properties_t*,
+    ze_bool_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanSchedulerSetTimesliceMode 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetTimesliceMode_t)(
+    zet_sysman_sched_handle_t,
+    zet_sched_timeslice_properties_t*,
+    ze_bool_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanSchedulerSetExclusiveMode 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetExclusiveMode_t)(
+    zet_sysman_sched_handle_t,
+    ze_bool_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanSchedulerSetComputeUnitDebugMode 
+typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerSetComputeUnitDebugMode_t)(
+    zet_sysman_sched_handle_t,
+    ze_bool_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of SysmanScheduler functions pointers
+typedef struct _zet_sysman_scheduler_dditable_t
+{
+    zet_pfnSysmanSchedulerGetProperties_t                       pfnGetProperties;
+    zet_pfnSysmanSchedulerGetCurrentMode_t                      pfnGetCurrentMode;
+    zet_pfnSysmanSchedulerGetTimeoutModeProperties_t            pfnGetTimeoutModeProperties;
+    zet_pfnSysmanSchedulerGetTimesliceModeProperties_t          pfnGetTimesliceModeProperties;
+    zet_pfnSysmanSchedulerSetTimeoutMode_t                      pfnSetTimeoutMode;
+    zet_pfnSysmanSchedulerSetTimesliceMode_t                    pfnSetTimesliceMode;
+    zet_pfnSysmanSchedulerSetExclusiveMode_t                    pfnSetExclusiveMode;
+    zet_pfnSysmanSchedulerSetComputeUnitDebugMode_t             pfnSetComputeUnitDebugMode;
+} zet_sysman_scheduler_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanScheduler table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+__zedllexport ze_result_t __zecall
+zetGetSysmanSchedulerProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_sysman_scheduler_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetGetSysmanSchedulerProcAddrTable
+typedef ze_result_t (__zecall *zet_pfnGetSysmanSchedulerProcAddrTable_t)(
+    ze_api_version_t,
+    zet_sysman_scheduler_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1905,6 +1941,7 @@ typedef struct _zet_dditable_t
     zet_metric_query_dditable_t         MetricQuery;
     zet_tracer_dditable_t               Tracer;
     zet_sysman_dditable_t               Sysman;
+    zet_sysman_scheduler_dditable_t     SysmanScheduler;
     zet_sysman_power_dditable_t         SysmanPower;
     zet_sysman_frequency_dditable_t     SysmanFrequency;
     zet_sysman_engine_dditable_t        SysmanEngine;
