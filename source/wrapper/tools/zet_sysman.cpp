@@ -245,6 +245,44 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get information about the state of the device - if a reset is
+    ///        required, reasons for the reset and if the device has been repaired
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    Sysman::DeviceGetState(
+        state_t* pState                                 ///< [in,out] Structure that will contain information about the device.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanDeviceGetState(
+            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<zet_sysman_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::DeviceGetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Reset device
+    /// 
+    /// @throws result_t
+    void __zecall
+    Sysman::DeviceReset(
+        void
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanDeviceReset(
+            reinterpret_cast<zet_sysman_handle_t>( getHandle() ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::DeviceReset" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get handle to a scheduler component
     /// 
     /// @details
@@ -600,40 +638,6 @@ namespace zet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::ProcessesGetState" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Reset device
-    /// 
-    /// @throws result_t
-    void __zecall
-    Sysman::DeviceReset(
-        void
-        )
-    {
-        auto result = static_cast<result_t>( ::zetSysmanDeviceReset(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ) ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::DeviceReset" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Find out if the device has been repaired (either by the manufacturer
-    ///        or by running diagnostics)
-    /// 
-    /// @throws result_t
-    void __zecall
-    Sysman::DeviceGetRepairStatus(
-        repair_status_t* pRepairStatus                  ///< [in,out] Will indicate if the device was repaired
-        )
-    {
-        auto result = static_cast<result_t>( ::zetSysmanDeviceGetRepairStatus(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
-            reinterpret_cast<zet_repair_status_t*>( pRepairStatus ) ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::DeviceGetRepairStatus" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2943,6 +2947,56 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::repair_status_t to std::string
+    std::string to_string( const Sysman::repair_status_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::repair_status_t::UNSUPPORTED:
+            str = "Sysman::repair_status_t::UNSUPPORTED";
+            break;
+
+        case Sysman::repair_status_t::NOT_PERFORMED:
+            str = "Sysman::repair_status_t::NOT_PERFORMED";
+            break;
+
+        case Sysman::repair_status_t::PERFORMED:
+            str = "Sysman::repair_status_t::PERFORMED";
+            break;
+
+        default:
+            str = "Sysman::repair_status_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::reset_reasons_t to std::string
+    std::string to_string( const Sysman::reset_reasons_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "NONE   ";
+        
+        if( static_cast<uint32_t>(Sysman::reset_reasons_t::WEDGED) & bits )
+            str += "WEDGED | ";
+        
+        if( static_cast<uint32_t>(Sysman::reset_reasons_t::REPAIR) & bits )
+            str += "REPAIR | ";
+
+        return ( str.size() > 3 ) 
+            ? "Sysman::reset_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Sysman::reset_reasons_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::sched_mode_t to std::string
     std::string to_string( const Sysman::sched_mode_t val )
     {
@@ -2996,34 +3050,6 @@ namespace zet
 
         default:
             str = "Sysman::perf_profile_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::repair_status_t to std::string
-    std::string to_string( const Sysman::repair_status_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Sysman::repair_status_t::UNSUPPORTED:
-            str = "Sysman::repair_status_t::UNSUPPORTED";
-            break;
-
-        case Sysman::repair_status_t::NOT_PERFORMED:
-            str = "Sysman::repair_status_t::NOT_PERFORMED";
-            break;
-
-        case Sysman::repair_status_t::PERFORMED:
-            str = "Sysman::repair_status_t::PERFORMED";
-            break;
-
-        default:
-            str = "Sysman::repair_status_t::?";
             break;
         };
 
@@ -3201,12 +3227,35 @@ namespace zet
         if( static_cast<uint32_t>(Sysman::event_type_t::RAS_UNCORRECTABLE_ERRORS) & bits )
             str += "RAS_UNCORRECTABLE_ERRORS | ";
         
+        if( static_cast<uint32_t>(Sysman::event_type_t::DEVICE_WEDGED) & bits )
+            str += "DEVICE_WEDGED | ";
+        
+        if( static_cast<uint32_t>(Sysman::event_type_t::DEVICE_RESET_REQUIRED) & bits )
+            str += "DEVICE_RESET_REQUIRED | ";
+        
         if( static_cast<uint32_t>(Sysman::event_type_t::ALL) & bits )
             str += "ALL | ";
 
         return ( str.size() > 3 ) 
             ? "Sysman::event_type_t::{ " + str.substr(0, str.size() - 3) + " }"
             : "Sysman::event_type_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::state_t to std::string
+    std::string to_string( const Sysman::state_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::state_t::reset : ";
+        str += std::to_string(val.reset);
+        str += "\n";
+        
+        str += "Sysman::state_t::repaired : ";
+        str += to_string(val.repaired);
+        str += "\n";
+
+        return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////

@@ -696,7 +696,7 @@ void ShowEnergyThreshold(zet_sysman_pwr_handle_t hPower)
 void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
 {
     zet_sysman_properties_t devProps;
-    zet_repair_status_t repaired;
+    zet_sysman_state_t devState;
     if (zetSysmanDeviceGetProperties(hSysmanDevice, &devProps) == ZE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    UUID:           %s\n", devProps.core.uuid.id);
@@ -705,9 +705,21 @@ void ShowDeviceInfo(zet_sysman_handle_t hSysmanDevice)
         fprintf(stdout, "    model:          %s\n", devProps.modelName);
         fprintf(stdout, "    driver timeout: disabled\n");
     }
-    if (zetSysmanDeviceGetRepairStatus(hSysmanDevice, &repaired) == ZE_RESULT_SUCCESS)
+    if (zetSysmanDeviceGetState(hSysmanDevice, &devState) == ZE_RESULT_SUCCESS)
     {
-        fprintf(stdout, "    Was repaired:   %s\n", (repaired == ZET_REPAIR_STATUS_PERFORMED) ? "yes" : "no");
+        fprintf(stdout, "    Was repaired:   %s\n", (devState.repaired == ZET_REPAIR_STATUS_PERFORMED) ? "yes" : "no");
+        if (devState.reset != ZET_RESET_REASONS_NONE)
+        {
+            fprintf(stdout, "DEVICE RESET REQUIRED:\n");
+            if (devState.reset & ZET_RESET_REASONS_WEDGED)
+            {
+                fprintf(stdout, "- Hardware is wedged\n");
+            }
+            if (devState.reset & ZET_RESET_REASONS_REPAIR)
+            {
+                fprintf(stdout, "- Hardware needs to complete repairs\n");
+            }
+        }
     }
 }
 

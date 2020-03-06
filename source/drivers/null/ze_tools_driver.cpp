@@ -919,6 +919,53 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanDeviceGetState
+    ze_result_t __zecall
+    zetSysmanDeviceGetState(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sysman_state_t* pState                      ///< [in,out] Structure that will contain information about the device.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnDeviceGetState = context.zetDdiTable.Sysman.pfnDeviceGetState;
+        if( nullptr != pfnDeviceGetState )
+        {
+            result = pfnDeviceGetState( hSysman, pState );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanDeviceReset
+    ze_result_t __zecall
+    zetSysmanDeviceReset(
+        zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnDeviceReset = context.zetDdiTable.Sysman.pfnDeviceReset;
+        if( nullptr != pfnDeviceReset )
+        {
+            result = pfnDeviceReset( hSysman );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGet
     ze_result_t __zecall
     zetSysmanSchedulerGet(
@@ -1252,53 +1299,6 @@ namespace driver
         if( nullptr != pfnProcessesGetState )
         {
             result = pfnProcessesGetState( hSysman, pCount, pProcesses );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceReset
-    ze_result_t __zecall
-    zetSysmanDeviceReset(
-        zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceReset = context.zetDdiTable.Sysman.pfnDeviceReset;
-        if( nullptr != pfnDeviceReset )
-        {
-            result = pfnDeviceReset( hSysman );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceGetRepairStatus
-    ze_result_t __zecall
-    zetSysmanDeviceGetRepairStatus(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-        zet_repair_status_t* pRepairStatus              ///< [in,out] Will indicate if the device was repaired
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceGetRepairStatus = context.zetDdiTable.Sysman.pfnDeviceGetRepairStatus;
-        if( nullptr != pfnDeviceGetRepairStatus )
-        {
-            result = pfnDeviceGetRepairStatus( hSysman, pRepairStatus );
         }
         else
         {
@@ -3872,6 +3872,10 @@ zetGetSysmanProcAddrTable(
 
     pDdiTable->pfnDeviceGetProperties                    = driver::zetSysmanDeviceGetProperties;
 
+    pDdiTable->pfnDeviceGetState                         = driver::zetSysmanDeviceGetState;
+
+    pDdiTable->pfnDeviceReset                            = driver::zetSysmanDeviceReset;
+
     pDdiTable->pfnSchedulerGet                           = driver::zetSysmanSchedulerGet;
 
     pDdiTable->pfnPerformanceProfileGetSupported         = driver::zetSysmanPerformanceProfileGetSupported;
@@ -3881,10 +3885,6 @@ zetGetSysmanProcAddrTable(
     pDdiTable->pfnPerformanceProfileSet                  = driver::zetSysmanPerformanceProfileSet;
 
     pDdiTable->pfnProcessesGetState                      = driver::zetSysmanProcessesGetState;
-
-    pDdiTable->pfnDeviceReset                            = driver::zetSysmanDeviceReset;
-
-    pDdiTable->pfnDeviceGetRepairStatus                  = driver::zetSysmanDeviceGetRepairStatus;
 
     pDdiTable->pfnPciGetProperties                       = driver::zetSysmanPciGetProperties;
 

@@ -84,6 +84,7 @@ information and control aspects of the entire device:
 -  Get/set scheduler mode and properties
 -  Reset device
 -  Query if the device has been repaired
+-  Query if the device needs to be reset and for what reasons (wedged, initiate repair)
 -  PCI information:
 
    -  Get configured bars
@@ -396,10 +397,10 @@ device:
 |                                   | device UUID, sub-device ID,       |
 |                                   | device brand/model/vendor strings |
 +-----------------------------------+-----------------------------------+
-| ::${t}SysmanDeviceGetRepairStatus()| Determine if the device has       |
-|                                   | undergone repairs, either through |
-|                                   | the running of diagnostics or by  |
-|                                   | manufacturing.                    |
+| ::${t}SysmanDeviceGetState()       | Determine device state: was the   |
+|                                   | device repaired, does the device  |
+|                                   | need to be reset and for what     |
+|                                   | reasons (wedged, initiate repair) |
 +-----------------------------------+-----------------------------------+
 
 The pseudo code below shows how to display general information about a
@@ -409,14 +410,23 @@ device:
 
   function ShowDeviceInfo(${t}_sysman_handle_t hSysmanDevice)
       ${t}_sysman_properties_t devProps
-      ${t}_repair_status_t repaired
+      ${t}_sysman_state_t devState
       if (${t}SysmanDeviceGetProperties(hSysmanDevice, &devProps) == ${X}_RESULT_SUCCESS)
           output("    UUID:           %s", devProps.core.uuid.id)
           output("    #subdevices:    %u", devProps.numSubdevices)
           output("    brand:          %s", devProps.brandName)
           output("    model:          %s", devProps.modelName)
-      if (${t}SysmanDeviceGetRepairStatus(hSysmanDevice, &repaired) == ${X}_RESULT_SUCCESS)
-          output("    Was repaired:   %s", (repaired == ${T}_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
+      if (${t}SysmanDeviceGetState(hSysmanDevice, &devState) == ${X}_RESULT_SUCCESS)
+          output("    Was repaired:   %s", (devState.repaired == ${T}_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
+          if (devState.reset != ${T}_RESET_REASONS_NONE)
+        {
+            output("DEVICE RESET REQUIRED:")
+            if (devState.reset & ${T}_RESET_REASONS_WEDGED)
+                output("- Hardware is wedged")
+            if (devState.reset & ${T}_RESET_REASONS_REPAIR)
+                output("- Hardware needs to complete repairs")
+        }
+    }
 
 Host processes
 ~~~~~~~~~~~~~~
@@ -522,7 +532,7 @@ the scheduler mode for each scheduler component:
 | ::${t}SysmanSchedulerGet()                        | Get handles to each scheduler     |
 |                                                  | component.                        |
 +--------------------------------------------------+-----------------------------------+
-| ::${t}SysmanSchedulerGetProperties()             | Get properties of a scheduler      |
+| ::${t}SysmanSchedulerGetProperties()              | Get properties of a scheduler     |
 |                                                  | component (sub-device, engines    |
 |                                                  | linked to this scheduler,         |
 |                                                  | supported scheduler modes.        |
@@ -1775,7 +1785,7 @@ function, software can use the diagnostics return code
    repair and requires a reboot after which time workloads can resume
    submission.
 
-The function ::${t}SysmanDeviceGetRepairStatus() can be used to determine if
+The function ::${t}SysmanDeviceGetState() can be used to determine if
 the device has been repaired.
 
 There are multiple diagnostic test suites that can be run and these are
@@ -1895,63 +1905,52 @@ automatically; where a configuration function is shown, it must be
 called to enable the event and/or provide threshold conditions.
 
 ## --validate=off
-+-----------------+-----------------+-----------------+-----------------+
-| Event           | Trigger         | Configuration   | State function  |
-|                 |                 | function        |                 |
-+=================+=================+=================+=================+
-| ::${T}_SYSMAN_EV | Device is about |                 |                 |
-| ENT_TYPE_DEVICE | to be reset by  |                 |                 |
-| _RESET          | the driver      |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | Device is about |                 |                 |
-| ENT_TYPE_DEVICE | to enter a deep |                 |                 |
-| _SLEEP_STATE_EN | sleep state     |                 |                 |
-| TER             |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | Device is       |                 |                 |
-| ENT_TYPE_DEVICE | exiting a deep  |                 |                 |
-| _SLEEP_STATE_EX | sleep state     |                 |                 |
-| IT              |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | Frequency       |                 | ::${t}SysmanFreq |
-| ENT_TYPE_FREQ_T | starts being    |                 | uencyGetState() |
-| HROTTLED        | throttled       |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | Energy          | ::${t}SysmanPowe |                 |
-| ENT_TYPE_ENERGY | consumption     | rSetEnergyThres |                 |
-| _THRESHOLD_CROS | threshold is    | hold()          |                 |
-| SED             | reached         |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | Critical        | ::${t}SysmanTemp | ::${t}SysmanTemp |
-| ENT_TYPE_TEMP_C | temperature is  | eratureSetConfi | eratureGetState |
-| RITICAL         | reached         | g()             | ()              |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | Temperature     | ::${t}SysmanTemp | ::${t}SysmanTemp |
-| ENT_TYPE_TEMP_T | crosses         | eratureSetConfi | eratureGetState |
-| HRESHOLD1       | threshold 1     | g()             | ()              |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | Temperature     | ::${t}SysmanTemp | ::${t}SysmanTemp |
-| ENT_TYPE_TEMP_T | crosses         | eratureSetConfi | eratureGetState |
-| HRESHOLD2       | threshold 2     | g()             | ()              |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | Health of       |                 | ::${t}SysmanMemo |
-| ENT_TYPE_MEM_HE | device memory   |                 | ryGetState()    |
-| ALTH            | changes         |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | Health of       |                 | ::${t}SysmanFabr |
-| ENT_TYPE_FABRIC | fabric ports    |                 | icPortGetState( |
-| _PORT_HEALTH    | change          |                 | )               |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | RAS correctable | ::${t}SysmanRasS | ::${t}SysmanRasG |
-| ENT_TYPE_RAS_CO | errors cross    | etConfig()      | etState()       |
-| RRECTABLE_ERROR | thresholds      |                 |                 |
-| S               |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| ::${T}_SYSMAN_EV | RAS             | ::${t}SysmanRasS | ::${t}SysmanRasG |
-| ENT_TYPE_RAS_UN | uncorrectable   | etConfig()      | etState()       |
-| CORRECTABLE_ERR | errors cross    |                 |                 |
-| ORS             | thresholds      |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| Event                                             | Trigger                     | Configuration function                | State function                    |
++===================================================+=============================+=======================================+===================================+
+| ::${T}_SYSMAN_EVENT_TYPE_DEVICE_RESET              | Device is about to be reset |                                       |                                   |
+|                                                   | by the driver               |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER  | Device is about to enter a  |                                       |                                   |
+|                                                   | deep sleep state            |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT   | Device is exiting a deep    |                                       |                                   |
+|                                                   | sleep state                 |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_FREQ_THROTTLED            | Frequency starts being      |                                       | ::${t}SysmanFrequencyGetState()    |
+|                                                   | throttled                   |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED  | Energy consumption          | ::${t}SysmanPowerSetEnergyThreshold()  |                                   |
+|                                                   | threshold is reached        |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_TEMP_CRITICAL             | Critical temperature is     | ::${t}SysmanTemperatureSetConfig()     | ::${t}SysmanTemperatureGetState()  |
+|                                                   | reached                     |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1           | Temperature crosses         | ::${t}SysmanTemperatureSetConfig()     | ::${t}SysmanTemperatureGetState()  |
+|                                                   | threshold 1                 |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2           | Temperature crosses         | ::${t}SysmanTemperatureSetConfig()     | ::${t}SysmanTemperatureGetState()  |
+|                                                   | threshold 2                 |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_MEM_HEALTH                | Health of device memory     |                                       | ::${t}SysmanMemoryGetState()       |
+|                                                   | changes                     |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH        | Health of fabric ports      |                                       | ::${t}SysmanFabricPortGetState()   |
+|                                                   | change                      |                                       | )                                 |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS    | RAS correctable errors      | ::${t}SysmanRasSetConfig()             | ::${t}SysmanRasGetState()          |
+|                                                   | cross thresholds            |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS  | RAS uncorrectable errors    | ::${t}SysmanRasSetConfig()             | ::${t}SysmanRasGetState()          |
+|                                                   | cross thresholds            |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_DEVICE_WEDGED                  | Driver has detected that    |                                       | ::${t}SysmanDeviceGetState()       |
+|                                                   | the hardware is wedged      |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+| ::${T}_SYSMAN_EVENT_DEVICE_RESET_REQUIRED          | Driver has determined that  |                                       | ::${t}SysmanDeviceGetState()       |
+|                                                   | an immediate reset is       |                                       |                                   |
+|                                                   | required                    |                                       |                                   |
++---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
 ## --validate=on
 
 The call to ::${t}SysmanEventListen() requires the driver handle. The

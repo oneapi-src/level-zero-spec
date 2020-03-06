@@ -1075,6 +1075,55 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanDeviceGetState
+    ze_result_t __zecall
+    zetSysmanDeviceGetState(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sysman_state_t* pState                      ///< [in,out] Structure that will contain information about the device.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnDeviceGetState = dditable->zet.Sysman.pfnDeviceGetState;
+        if( nullptr == pfnDeviceGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnDeviceGetState( hSysman, pState );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanDeviceReset
+    ze_result_t __zecall
+    zetSysmanDeviceReset(
+        zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnDeviceReset = dditable->zet.Sysman.pfnDeviceReset;
+        if( nullptr == pfnDeviceReset )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnDeviceReset( hSysman );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGet
     ze_result_t __zecall
     zetSysmanSchedulerGet(
@@ -1435,55 +1484,6 @@ namespace loader
 
         // forward to device-driver
         result = pfnProcessesGetState( hSysman, pCount, pProcesses );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceReset
-    ze_result_t __zecall
-    zetSysmanDeviceReset(
-        zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceReset = dditable->zet.Sysman.pfnDeviceReset;
-        if( nullptr == pfnDeviceReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
-
-        // forward to device-driver
-        result = pfnDeviceReset( hSysman );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceGetRepairStatus
-    ze_result_t __zecall
-    zetSysmanDeviceGetRepairStatus(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-        zet_repair_status_t* pRepairStatus              ///< [in,out] Will indicate if the device was repaired
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceGetRepairStatus = dditable->zet.Sysman.pfnDeviceGetRepairStatus;
-        if( nullptr == pfnDeviceGetRepairStatus )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
-
-        // forward to device-driver
-        result = pfnDeviceGetRepairStatus( hSysman, pRepairStatus );
 
         return result;
     }
@@ -4663,13 +4663,13 @@ zetGetSysmanProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = loader::zetSysmanGet;
             pDdiTable->pfnDeviceGetProperties                      = loader::zetSysmanDeviceGetProperties;
+            pDdiTable->pfnDeviceGetState                           = loader::zetSysmanDeviceGetState;
+            pDdiTable->pfnDeviceReset                              = loader::zetSysmanDeviceReset;
             pDdiTable->pfnSchedulerGet                             = loader::zetSysmanSchedulerGet;
             pDdiTable->pfnPerformanceProfileGetSupported           = loader::zetSysmanPerformanceProfileGetSupported;
             pDdiTable->pfnPerformanceProfileGet                    = loader::zetSysmanPerformanceProfileGet;
             pDdiTable->pfnPerformanceProfileSet                    = loader::zetSysmanPerformanceProfileSet;
             pDdiTable->pfnProcessesGetState                        = loader::zetSysmanProcessesGetState;
-            pDdiTable->pfnDeviceReset                              = loader::zetSysmanDeviceReset;
-            pDdiTable->pfnDeviceGetRepairStatus                    = loader::zetSysmanDeviceGetRepairStatus;
             pDdiTable->pfnPciGetProperties                         = loader::zetSysmanPciGetProperties;
             pDdiTable->pfnPciGetState                              = loader::zetSysmanPciGetState;
             pDdiTable->pfnPciGetBars                               = loader::zetSysmanPciGetBars;

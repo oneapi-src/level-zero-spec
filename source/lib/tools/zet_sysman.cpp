@@ -79,6 +79,58 @@ zetSysmanDeviceGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get information about the state of the device - if a reset is
+///        required, reasons for the reset and if the device has been repaired
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
+ze_result_t __zecall
+zetSysmanDeviceGetState(
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_state_t* pState                      ///< [in,out] Structure that will contain information about the device.
+    )
+{
+    auto pfnDeviceGetState = zet_lib::context.ddiTable.Sysman.pfnDeviceGetState;
+    if( nullptr == pfnDeviceGetState )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    return pfnDeviceGetState( hSysman, pState );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset device
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to perform this operation.
+ze_result_t __zecall
+zetSysmanDeviceReset(
+    zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
+    )
+{
+    auto pfnDeviceReset = zet_lib::context.ddiTable.Sysman.pfnDeviceReset;
+    if( nullptr == pfnDeviceReset )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    return pfnDeviceReset( hSysman );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get handle to a scheduler component
 /// 
 /// @details
@@ -527,56 +579,6 @@ zetSysmanProcessesGetState(
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
     return pfnProcessesGetState( hSysman, pCount, pProcesses );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset device
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to perform this operation.
-ze_result_t __zecall
-zetSysmanDeviceReset(
-    zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
-    )
-{
-    auto pfnDeviceReset = zet_lib::context.ddiTable.Sysman.pfnDeviceReset;
-    if( nullptr == pfnDeviceReset )
-        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-    return pfnDeviceReset( hSysman );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Find out if the device has been repaired (either by the manufacturer
-///        or by running diagnostics)
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pRepairStatus`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to query this property.
-ze_result_t __zecall
-zetSysmanDeviceGetRepairStatus(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-    zet_repair_status_t* pRepairStatus              ///< [in,out] Will indicate if the device was repaired
-    )
-{
-    auto pfnDeviceGetRepairStatus = zet_lib::context.ddiTable.Sysman.pfnDeviceGetRepairStatus;
-    if( nullptr == pfnDeviceGetRepairStatus )
-        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-    return pfnDeviceGetRepairStatus( hSysman, pRepairStatus );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

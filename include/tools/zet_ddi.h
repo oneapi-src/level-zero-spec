@@ -571,6 +571,19 @@ typedef ze_result_t (__zecall *zet_pfnSysmanDeviceGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanDeviceGetState 
+typedef ze_result_t (__zecall *zet_pfnSysmanDeviceGetState_t)(
+    zet_sysman_handle_t,
+    zet_sysman_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanDeviceReset 
+typedef ze_result_t (__zecall *zet_pfnSysmanDeviceReset_t)(
+    zet_sysman_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanSchedulerGet 
 typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGet_t)(
     zet_sysman_handle_t,
@@ -605,19 +618,6 @@ typedef ze_result_t (__zecall *zet_pfnSysmanProcessesGetState_t)(
     zet_sysman_handle_t,
     uint32_t*,
     zet_process_state_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanDeviceReset 
-typedef ze_result_t (__zecall *zet_pfnSysmanDeviceReset_t)(
-    zet_sysman_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanDeviceGetRepairStatus 
-typedef ze_result_t (__zecall *zet_pfnSysmanDeviceGetRepairStatus_t)(
-    zet_sysman_handle_t,
-    zet_repair_status_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -766,13 +766,13 @@ typedef struct _zet_sysman_dditable_t
 {
     zet_pfnSysmanGet_t                                          pfnGet;
     zet_pfnSysmanDeviceGetProperties_t                          pfnDeviceGetProperties;
+    zet_pfnSysmanDeviceGetState_t                               pfnDeviceGetState;
+    zet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
     zet_pfnSysmanSchedulerGet_t                                 pfnSchedulerGet;
     zet_pfnSysmanPerformanceProfileGetSupported_t               pfnPerformanceProfileGetSupported;
     zet_pfnSysmanPerformanceProfileGet_t                        pfnPerformanceProfileGet;
     zet_pfnSysmanPerformanceProfileSet_t                        pfnPerformanceProfileSet;
     zet_pfnSysmanProcessesGetState_t                            pfnProcessesGetState;
-    zet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
-    zet_pfnSysmanDeviceGetRepairStatus_t                        pfnDeviceGetRepairStatus;
     zet_pfnSysmanPciGetProperties_t                             pfnPciGetProperties;
     zet_pfnSysmanPciGetState_t                                  pfnPciGetState;
     zet_pfnSysmanPciGetBars_t                                   pfnPciGetBars;

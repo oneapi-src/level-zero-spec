@@ -76,6 +76,37 @@ typedef enum _zet_engine_type_t
 } zet_engine_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Device repair status
+typedef enum _zet_repair_status_t
+{
+    ZET_REPAIR_STATUS_UNSUPPORTED = 0,              ///< The device does not support in-field repairs.
+    ZET_REPAIR_STATUS_NOT_PERFORMED,                ///< The device has never been repaired.
+    ZET_REPAIR_STATUS_PERFORMED,                    ///< The device has been repaired.
+
+} zet_repair_status_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device reset reasons
+typedef enum _zet_reset_reasons_t
+{
+    ZET_RESET_REASONS_NONE = 0,                     ///< The device does not need to be reset
+    ZET_RESET_REASONS_WEDGED = ZE_BIT( 0 ),         ///< The device needs to be reset because one or more parts of the hardware
+                                                    ///< is wedged
+    ZET_RESET_REASONS_REPAIR = ZE_BIT( 1 ),         ///< The device needs to be reset in order to complete in-field repairs
+
+} zet_reset_reasons_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device state
+typedef struct _zet_sysman_state_t
+{
+    uint32_t reset;                                 ///< [out] Indicates if the device needs to be reset and for what reasons
+                                                    ///< (bitfield of ::zet_reset_reasons_t)
+    zet_repair_status_t repaired;                   ///< [out] Indicates if the device has been repaired
+
+} zet_sysman_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Device properties
 typedef struct _zet_sysman_properties_t
 {
@@ -109,6 +140,44 @@ __ze_api_export ze_result_t __zecall
 zetSysmanDeviceGetProperties(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
     zet_sysman_properties_t* pProperties            ///< [in,out] Structure that will contain information about the device.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get information about the state of the device - if a reset is
+///        required, reasons for the reset and if the device has been repaired
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
+__ze_api_export ze_result_t __zecall
+zetSysmanDeviceGetState(
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zet_sysman_state_t* pState                      ///< [in,out] Structure that will contain information about the device.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset device
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hSysman`
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to perform this operation.
+__ze_api_export ze_result_t __zecall
+zetSysmanDeviceReset(
+    zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -569,52 +638,6 @@ zetSysmanProcessesGetState(
                                                     ///< update the value with the correct number of processes that are returned.
     zet_process_state_t* pProcesses                 ///< [in,out][optional][range(0, *pCount)] array of process information,
                                                     ///< one for each process currently using the device
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset device
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to perform this operation.
-__ze_api_export ze_result_t __zecall
-zetSysmanDeviceReset(
-    zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Device repair status
-typedef enum _zet_repair_status_t
-{
-    ZET_REPAIR_STATUS_UNSUPPORTED = 0,              ///< The device does not support in-field repairs.
-    ZET_REPAIR_STATUS_NOT_PERFORMED,                ///< The device has never been repaired.
-    ZET_REPAIR_STATUS_PERFORMED,                    ///< The device has been repaired.
-
-} zet_repair_status_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Find out if the device has been repaired (either by the manufacturer
-///        or by running diagnostics)
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pRepairStatus`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to query this property.
-__ze_api_export ze_result_t __zecall
-zetSysmanDeviceGetRepairStatus(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-    zet_repair_status_t* pRepairStatus              ///< [in,out] Will indicate if the device was repaired
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3343,6 +3366,9 @@ typedef enum _zet_sysman_event_type_t
     ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),  ///< Event is triggered when accelerator RAS uncorrectable errors cross
                                                     ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
                                                     ///< default).
+    ZET_SYSMAN_EVENT_TYPE_DEVICE_WEDGED = ZE_BIT( 13 ), ///< Event is triggered when one or more parts of the hardware is wedged.
+    ZET_SYSMAN_EVENT_TYPE_DEVICE_RESET_REQUIRED = ZE_BIT( 14 ), ///< Event is triggered when the device needs to be reset (use
+                                                    ///< $SysmanDeviceGetState() to determine the reasons for the reset.
     ZET_SYSMAN_EVENT_TYPE_ALL = 0x0FFF,             ///< Specifies all events
 
 } zet_sysman_event_type_t;

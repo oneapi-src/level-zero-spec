@@ -106,6 +106,27 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device repair status
+        enum class repair_status_t
+        {
+            UNSUPPORTED = 0,                                ///< The device does not support in-field repairs.
+            NOT_PERFORMED,                                  ///< The device has never been repaired.
+            PERFORMED,                                      ///< The device has been repaired.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device reset reasons
+        enum class reset_reasons_t
+        {
+            NONE = 0,                                       ///< The device does not need to be reset
+            WEDGED = ZE_BIT( 0 ),                           ///< The device needs to be reset because one or more parts of the hardware
+                                                            ///< is wedged
+            REPAIR = ZE_BIT( 1 ),                           ///< The device needs to be reset in order to complete in-field repairs
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Scheduler mode
         enum class sched_mode_t
         {
@@ -135,16 +156,6 @@ namespace zet
             COMPUTE_BOUNDED,                                ///< The hardware is configured to prioritize performance of the compute
                                                             ///< units.
             MEMORY_BOUNDED,                                 ///< The hardware is configured to prioritize memory throughput.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device repair status
-        enum class repair_status_t
-        {
-            UNSUPPORTED = 0,                                ///< The device does not support in-field repairs.
-            NOT_PERFORMED,                                  ///< The device has never been repaired.
-            PERFORMED,                                      ///< The device has been repaired.
 
         };
 
@@ -225,7 +236,20 @@ namespace zet
             RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),        ///< Event is triggered when accelerator RAS uncorrectable errors cross
                                                             ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
                                                             ///< default).
+            DEVICE_WEDGED = ZE_BIT( 13 ),                   ///< Event is triggered when one or more parts of the hardware is wedged.
+            DEVICE_RESET_REQUIRED = ZE_BIT( 14 ),           ///< Event is triggered when the device needs to be reset (use
+                                                            ///< $SysmanDeviceGetState() to determine the reasons for the reset.
             ALL = 0x0FFF,                                   ///< Specifies all events
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device state
+        struct state_t
+        {
+            uint32_t reset;                                 ///< [out] Indicates if the device needs to be reset and for what reasons
+                                                            ///< (bitfield of ::zet_reset_reasons_t)
+            repair_status_t repaired;                       ///< [out] Indicates if the device has been repaired
 
         };
 
@@ -429,6 +453,27 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get information about the state of the device - if a reset is
+        ///        required, reasons for the reset and if the device has been repaired
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        DeviceGetState(
+            state_t* pState                                 ///< [in,out] Structure that will contain information about the device.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Reset device
+        /// @throws result_t
+        void __zecall
+        DeviceReset(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get handle to a scheduler component
         /// 
         /// @details
@@ -516,23 +561,6 @@ namespace zet
                                                             ///< update the value with the correct number of processes that are returned.
             process_state_t* pProcesses = nullptr           ///< [in,out][optional][range(0, *pCount)] array of process information,
                                                             ///< one for each process currently using the device
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Reset device
-        /// @throws result_t
-        void __zecall
-        DeviceReset(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Find out if the device has been repaired (either by the manufacturer
-        ///        or by running diagnostics)
-        /// @throws result_t
-        void __zecall
-        DeviceGetRepairStatus(
-            repair_status_t* pRepairStatus                  ///< [in,out] Will indicate if the device was repaired
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -3242,6 +3270,18 @@ namespace zet
     std::string to_string( const Sysman::engine_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::repair_status_t to std::string
+    std::string to_string( const Sysman::repair_status_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::reset_reasons_t to std::string
+    std::string to_string( const Sysman::reset_reasons_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::state_t to std::string
+    std::string to_string( const Sysman::state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::properties_t to std::string
     std::string to_string( const Sysman::properties_t val );
 
@@ -3264,10 +3304,6 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::process_state_t to std::string
     std::string to_string( const Sysman::process_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::repair_status_t to std::string
-    std::string to_string( const Sysman::repair_status_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_address_t to std::string

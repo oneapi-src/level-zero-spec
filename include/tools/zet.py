@@ -599,6 +599,40 @@ class zet_engine_type_t(c_int):
 
 
 ###############################################################################
+## @brief Device repair status
+class zet_repair_status_v(IntEnum):
+    UNSUPPORTED = 0                                 ## The device does not support in-field repairs.
+    NOT_PERFORMED = auto()                          ## The device has never been repaired.
+    PERFORMED = auto()                              ## The device has been repaired.
+
+class zet_repair_status_t(c_int):
+    def __str__(self):
+        return str(zet_repair_status_v(value))
+
+
+###############################################################################
+## @brief Device reset reasons
+class zet_reset_reasons_v(IntEnum):
+    NONE = 0                                        ## The device does not need to be reset
+    WEDGED = ZE_BIT( 0 )                            ## The device needs to be reset because one or more parts of the hardware
+                                                    ## is wedged
+    REPAIR = ZE_BIT( 1 )                            ## The device needs to be reset in order to complete in-field repairs
+
+class zet_reset_reasons_t(c_int):
+    def __str__(self):
+        return str(zet_reset_reasons_v(value))
+
+
+###############################################################################
+## @brief Device state
+class zet_sysman_state_t(Structure):
+    _fields_ = [
+        ("reset", c_ulong),                                             ## [out] Indicates if the device needs to be reset and for what reasons
+                                                                        ## (bitfield of ::zet_reset_reasons_t)
+        ("repaired", zet_repair_status_t)                               ## [out] Indicates if the device has been repaired
+    ]
+
+###############################################################################
 ## @brief Device properties
 class zet_sysman_properties_t(Structure):
     _fields_ = [
@@ -709,18 +743,6 @@ class zet_process_state_t(Structure):
         ("engines", c_ulonglong)                                        ## [out] Bitfield of accelerator engines being used by this process (or
                                                                         ## 1<<::zet_engine_type_t together).
     ]
-
-###############################################################################
-## @brief Device repair status
-class zet_repair_status_v(IntEnum):
-    UNSUPPORTED = 0                                 ## The device does not support in-field repairs.
-    NOT_PERFORMED = auto()                          ## The device has never been repaired.
-    PERFORMED = auto()                              ## The device has been repaired.
-
-class zet_repair_status_t(c_int):
-    def __str__(self):
-        return str(zet_repair_status_v(value))
-
 
 ###############################################################################
 ## @brief PCI address
@@ -1693,6 +1715,9 @@ class zet_sysman_event_type_v(IntEnum):
     RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 )         ## Event is triggered when accelerator RAS uncorrectable errors cross
                                                     ## thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
                                                     ## default).
+    DEVICE_WEDGED = ZE_BIT( 13 )                    ## Event is triggered when one or more parts of the hardware is wedged.
+    DEVICE_RESET_REQUIRED = ZE_BIT( 14 )            ## Event is triggered when the device needs to be reset (use
+                                                    ## $SysmanDeviceGetState() to determine the reasons for the reset.
     ALL = 0x0FFF                                    ## Specifies all events
 
 class zet_sysman_event_type_t(c_int):
@@ -2122,6 +2147,20 @@ else:
     _zetSysmanDeviceGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sysman_properties_t) )
 
 ###############################################################################
+## @brief Function-pointer for zetSysmanDeviceGetState
+if __use_win_types:
+    _zetSysmanDeviceGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sysman_state_t) )
+else:
+    _zetSysmanDeviceGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_sysman_state_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanDeviceReset
+if __use_win_types:
+    _zetSysmanDeviceReset_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t )
+else:
+    _zetSysmanDeviceReset_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t )
+
+###############################################################################
 ## @brief Function-pointer for zetSysmanSchedulerGet
 if __use_win_types:
     _zetSysmanSchedulerGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_sched_handle_t) )
@@ -2155,20 +2194,6 @@ if __use_win_types:
     _zetSysmanProcessesGetState_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_process_state_t) )
 else:
     _zetSysmanProcessesGetState_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_process_state_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanDeviceReset
-if __use_win_types:
-    _zetSysmanDeviceReset_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t )
-else:
-    _zetSysmanDeviceReset_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanDeviceGetRepairStatus
-if __use_win_types:
-    _zetSysmanDeviceGetRepairStatus_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_repair_status_t) )
-else:
-    _zetSysmanDeviceGetRepairStatus_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_repair_status_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanPciGetProperties
@@ -2303,13 +2328,13 @@ class _zet_sysman_dditable_t(Structure):
     _fields_ = [
         ("pfnGet", c_void_p),                                           ## _zetSysmanGet_t
         ("pfnDeviceGetProperties", c_void_p),                           ## _zetSysmanDeviceGetProperties_t
+        ("pfnDeviceGetState", c_void_p),                                ## _zetSysmanDeviceGetState_t
+        ("pfnDeviceReset", c_void_p),                                   ## _zetSysmanDeviceReset_t
         ("pfnSchedulerGet", c_void_p),                                  ## _zetSysmanSchedulerGet_t
         ("pfnPerformanceProfileGetSupported", c_void_p),                ## _zetSysmanPerformanceProfileGetSupported_t
         ("pfnPerformanceProfileGet", c_void_p),                         ## _zetSysmanPerformanceProfileGet_t
         ("pfnPerformanceProfileSet", c_void_p),                         ## _zetSysmanPerformanceProfileSet_t
         ("pfnProcessesGetState", c_void_p),                             ## _zetSysmanProcessesGetState_t
-        ("pfnDeviceReset", c_void_p),                                   ## _zetSysmanDeviceReset_t
-        ("pfnDeviceGetRepairStatus", c_void_p),                         ## _zetSysmanDeviceGetRepairStatus_t
         ("pfnPciGetProperties", c_void_p),                              ## _zetSysmanPciGetProperties_t
         ("pfnPciGetState", c_void_p),                                   ## _zetSysmanPciGetState_t
         ("pfnPciGetBars", c_void_p),                                    ## _zetSysmanPciGetBars_t
@@ -3248,13 +3273,13 @@ class ZET_DDI:
         # attach function interface to function address
         self.zetSysmanGet = _zetSysmanGet_t(self.__dditable.Sysman.pfnGet)
         self.zetSysmanDeviceGetProperties = _zetSysmanDeviceGetProperties_t(self.__dditable.Sysman.pfnDeviceGetProperties)
+        self.zetSysmanDeviceGetState = _zetSysmanDeviceGetState_t(self.__dditable.Sysman.pfnDeviceGetState)
+        self.zetSysmanDeviceReset = _zetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
         self.zetSysmanSchedulerGet = _zetSysmanSchedulerGet_t(self.__dditable.Sysman.pfnSchedulerGet)
         self.zetSysmanPerformanceProfileGetSupported = _zetSysmanPerformanceProfileGetSupported_t(self.__dditable.Sysman.pfnPerformanceProfileGetSupported)
         self.zetSysmanPerformanceProfileGet = _zetSysmanPerformanceProfileGet_t(self.__dditable.Sysman.pfnPerformanceProfileGet)
         self.zetSysmanPerformanceProfileSet = _zetSysmanPerformanceProfileSet_t(self.__dditable.Sysman.pfnPerformanceProfileSet)
         self.zetSysmanProcessesGetState = _zetSysmanProcessesGetState_t(self.__dditable.Sysman.pfnProcessesGetState)
-        self.zetSysmanDeviceReset = _zetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
-        self.zetSysmanDeviceGetRepairStatus = _zetSysmanDeviceGetRepairStatus_t(self.__dditable.Sysman.pfnDeviceGetRepairStatus)
         self.zetSysmanPciGetProperties = _zetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)
         self.zetSysmanPciGetState = _zetSysmanPciGetState_t(self.__dditable.Sysman.pfnPciGetState)
         self.zetSysmanPciGetBars = _zetSysmanPciGetBars_t(self.__dditable.Sysman.pfnPciGetBars)

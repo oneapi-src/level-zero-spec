@@ -970,6 +970,54 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanDeviceGetState
+    ze_result_t __zecall
+    zetSysmanDeviceGetState(
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+        zet_sysman_state_t* pState                      ///< [in,out] Structure that will contain information about the device.
+        )
+    {
+        auto pfnDeviceGetState = context.zetDdiTable.Sysman.pfnDeviceGetState;
+
+        if( nullptr == pfnDeviceGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pState )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnDeviceGetState( hSysman, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanDeviceReset
+    ze_result_t __zecall
+    zetSysmanDeviceReset(
+        zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
+        )
+    {
+        auto pfnDeviceReset = context.zetDdiTable.Sysman.pfnDeviceReset;
+
+        if( nullptr == pfnDeviceReset )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+        }
+
+        return pfnDeviceReset( hSysman );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetSysmanSchedulerGet
     ze_result_t __zecall
     zetSysmanSchedulerGet(
@@ -1339,54 +1387,6 @@ namespace layer
         }
 
         return pfnProcessesGetState( hSysman, pCount, pProcesses );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceReset
-    ze_result_t __zecall
-    zetSysmanDeviceReset(
-        zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
-        )
-    {
-        auto pfnDeviceReset = context.zetDdiTable.Sysman.pfnDeviceReset;
-
-        if( nullptr == pfnDeviceReset )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-        }
-
-        return pfnDeviceReset( hSysman );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanDeviceGetRepairStatus
-    ze_result_t __zecall
-    zetSysmanDeviceGetRepairStatus(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-        zet_repair_status_t* pRepairStatus              ///< [in,out] Will indicate if the device was repaired
-        )
-    {
-        auto pfnDeviceGetRepairStatus = context.zetDdiTable.Sysman.pfnDeviceGetRepairStatus;
-
-        if( nullptr == pfnDeviceGetRepairStatus )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pRepairStatus )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnDeviceGetRepairStatus( hSysman, pRepairStatus );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -4125,6 +4125,12 @@ zetGetSysmanProcAddrTable(
     dditable.pfnDeviceGetProperties                      = pDdiTable->pfnDeviceGetProperties;
     pDdiTable->pfnDeviceGetProperties                    = layer::zetSysmanDeviceGetProperties;
 
+    dditable.pfnDeviceGetState                           = pDdiTable->pfnDeviceGetState;
+    pDdiTable->pfnDeviceGetState                         = layer::zetSysmanDeviceGetState;
+
+    dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
+    pDdiTable->pfnDeviceReset                            = layer::zetSysmanDeviceReset;
+
     dditable.pfnSchedulerGet                             = pDdiTable->pfnSchedulerGet;
     pDdiTable->pfnSchedulerGet                           = layer::zetSysmanSchedulerGet;
 
@@ -4139,12 +4145,6 @@ zetGetSysmanProcAddrTable(
 
     dditable.pfnProcessesGetState                        = pDdiTable->pfnProcessesGetState;
     pDdiTable->pfnProcessesGetState                      = layer::zetSysmanProcessesGetState;
-
-    dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
-    pDdiTable->pfnDeviceReset                            = layer::zetSysmanDeviceReset;
-
-    dditable.pfnDeviceGetRepairStatus                    = pDdiTable->pfnDeviceGetRepairStatus;
-    pDdiTable->pfnDeviceGetRepairStatus                  = layer::zetSysmanDeviceGetRepairStatus;
 
     dditable.pfnPciGetProperties                         = pDdiTable->pfnPciGetProperties;
     pDdiTable->pfnPciGetProperties                       = layer::zetSysmanPciGetProperties;

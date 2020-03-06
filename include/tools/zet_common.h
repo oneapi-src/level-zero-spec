@@ -192,6 +192,10 @@ typedef struct _zet_profile_free_register_token_t zet_profile_free_register_toke
 typedef struct _zet_profile_register_sequence_t zet_profile_register_sequence_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_sysman_state_t
+typedef struct _zet_sysman_state_t zet_sysman_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_sysman_properties_t
 typedef struct _zet_sysman_properties_t zet_sysman_properties_t;
 
