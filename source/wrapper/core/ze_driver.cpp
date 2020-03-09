@@ -268,8 +268,8 @@ namespace ze
 
         switch( val )
         {
-        case Driver::api_version_t::_1_0:
-            str = "Driver::api_version_t::_1_0";
+        case Driver::api_version_t::_0_91:
+            str = "Driver::api_version_t::_0_91";
             break;
 
         default:

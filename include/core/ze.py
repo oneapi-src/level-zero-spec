@@ -203,7 +203,7 @@ class ze_init_flag_t(c_int):
 ##     - API versions contain major and minor attributes, use
 ##       ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION
 class ze_api_version_v(IntEnum):
-    _1_0 = ZE_MAKE_VERSION( 0, 91 )                 ## 0.91
+    _0_91 = ZE_MAKE_VERSION( 0, 91 )                ## 0.91
 
 class ze_api_version_t(c_int):
     def __str__(self):

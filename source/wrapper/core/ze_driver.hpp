@@ -72,7 +72,7 @@ namespace ze
         ///       ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION
         enum class api_version_t
         {
-            _1_0 = ZE_MAKE_VERSION( 0, 91 ),                ///< 0.91
+            _0_91 = ZE_MAKE_VERSION( 0, 91 ),               ///< 0.91
 
         };
 

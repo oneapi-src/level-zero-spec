@@ -95,7 +95,7 @@ zeDriverGet(
 ///       ::ZE_MAJOR_VERSION and ::ZE_MINOR_VERSION
 typedef enum _ze_api_version_t
 {
-    ZE_API_VERSION_1_0 = ZE_MAKE_VERSION( 0, 91 ),  ///< 0.91
+    ZE_API_VERSION_0_91 = ZE_MAKE_VERSION( 0, 91 ), ///< 0.91
 
 } ze_api_version_t;
 

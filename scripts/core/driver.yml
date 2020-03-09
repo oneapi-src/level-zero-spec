@@ -71,7 +71,7 @@ name: $x_api_version_t
 details:
     - "API versions contain major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION"
 etors:
-    - name: $X_API_VERSION_1_0
+    - name: $X_API_VERSION_0_91
       value: "$X_MAKE_VERSION( 0, 91 )"
       desc: "0.91"
 --- #--------------------------------------------------------------------------

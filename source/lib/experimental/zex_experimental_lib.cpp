@@ -29,21 +29,21 @@ namespace zex_lib
         {
             auto getTable = reinterpret_cast<zex_pfnGetGlobalProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "zexGetGlobalProcAddrTable") );
-            result = getTable( ZE_API_VERSION_1_0, &ddiTable.Global );
+            result = getTable( ZE_API_VERSION_0_91, &ddiTable.Global );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<zex_pfnGetCommandListProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "zexGetCommandListProcAddrTable") );
-            result = getTable( ZE_API_VERSION_1_0, &ddiTable.CommandList );
+            result = getTable( ZE_API_VERSION_0_91, &ddiTable.CommandList );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<zex_pfnGetCommandGraphProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "zexGetCommandGraphProcAddrTable") );
-            result = getTable( ZE_API_VERSION_1_0, &ddiTable.CommandGraph );
+            result = getTable( ZE_API_VERSION_0_91, &ddiTable.CommandGraph );
         }
 
         return result;
