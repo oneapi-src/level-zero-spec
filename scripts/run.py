@@ -75,6 +75,8 @@ def main():
     srcpath = os.path.join("../source/")
     docpath = os.path.join("../docs/")
 
+    generate_docs.prepare(docpath, args['rst'], args['html'], args['ver'])
+
     # generate code
     for idx, section in enumerate(configParser.sections()):
         namespace = configParser.get(section,'namespace')

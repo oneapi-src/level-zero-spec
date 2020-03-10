@@ -137,7 +137,7 @@ def generate_ref(dstpath, ref):
 
 """
 Entry-point:
-    generate HTML files using reStructuredText and Doxygen template
+    generate HTML files using reStructuredText (rst) and Doxygen template
 """
 def generate_html(dstpath, ver):
     htmlpath = os.path.join(dstpath, "html")
@@ -155,7 +155,13 @@ def generate_html(dstpath, ver):
         "./templates/conf.py.mako",
         os.path.join(sourcepath, "conf.py"),
         ver=float(ver))
+        
+    loc += util.makoWrite(
+        "./templates/index.rst.mako",
+        os.path.join(sourcepath, "index.rst"),
+        ver=float(ver))
 
+    # Doxygen generates XML files needed by sphinx breathe plugin for API documentation.
     print("Generating doxygen...")
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
@@ -175,3 +181,24 @@ def generate_pdf(dstpath):
     print("Generating PDF..")
     cmdline = "%s"%os.path.join(latexpath, "make.bat")
     os.system(cmdline)
+
+"""
+Entry-point:
+    prepare doc folder for documentation.
+"""
+def prepare(docpath, gen_rst, gen_html, ver):
+    if gen_html:
+        htmlpath = os.path.join(docpath, "html")
+        if util.exists(htmlpath):
+            util.removePath(htmlpath)
+    
+    # if generating rst then assume everything in docs is invalid and clean it.
+    if gen_rst:
+        if util.exists(docpath):
+            util.removePath(docpath)
+
+    docsourcepath = os.path.join(docpath, "source")
+    shutil.copytree("./assets/html/_static",    os.path.join(docsourcepath, "_static"))
+    shutil.copytree("./assets/html/_templates", os.path.join(docsourcepath, "_templates"))
+    shutil.copytree("./assets/images",          os.path.join(docsourcepath, "images"))
+    
