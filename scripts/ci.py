@@ -33,10 +33,6 @@ def publish_gitlab_html():
     print("Copying html files from '%s' to '%s'" % (src_html_dir, tmp_dir))
     dir_util.copy_tree(src_html_dir, tmp_dir)
 
-    # Copy over images to new folder
-    print("Copying images from '%s' to '%s'..." % (src_img_dir, tmp_img_dir))
-    dir_util.copy_tree(src_img_dir, tmp_img_dir)
-
     # Fixes html files by converting paths relative to root html folder instead of repo
     print("Fixing paths in html files in '%s' to be relative to root..." % (tmp_dir))
     regex_pattern = re.compile(r'\.\.[\/|\\]images')
