@@ -113,157 +113,159 @@ an example list of components that would be enumerated for a device with
 two sub-devices. The table shows the operations (queries) that will be
 provided for all components in each class.
 
-+-----------------------+-----------------------+-----------------------+
-| Class                 | Components            | Operations            |
-+=======================+=======================+=======================+
-| Power_                | Package:              | Get energy            |
-|                       | powerSub-device 0:    | consumption           |
-|                       | Total powerSub-device |                       |
-|                       | 1: Total power        |                       |
-+-----------------------+-----------------------+-----------------------+
-| Frequency_            | Sub-device 0: GPU     | List available        |
-|                       | frequencySub-device   | frequenciesSet        |
-|                       | 0: Memory             | frequency rangeGet    |
-|                       | frequencySub-device   | frequenciesGet        |
-|                       | 1: GPU                | throttle reasonsGet   |
-|                       | frequencySub-device   | throttle time         |
-|                       | 1: Memory frequency   |                       |
-+-----------------------+-----------------------+-----------------------+
-| Engines_              | Sub-device 0: All     | Get busy time         |
-|                       | enginesSub-device 0:  |                       |
-|                       | Compute               |                       |
-|                       | enginesSub-device 0:  |                       |
-|                       | Media                 |                       |
-|                       | enginesSub-device 1:  |                       |
-|                       | All enginesSub-device |                       |
-|                       | 1: Compute            |                       |
-|                       | enginesSub-device 1:  |                       |
-|                       | Media engines         |                       |
-+-----------------------+-----------------------+-----------------------+
-| Firmware_             | Sub-device 0:         | Get firmware name and |
-|                       | Enumerates each       | versionVerify         |
-|                       | firmwareSub-device 1: | firmware checksum     |
-|                       | Enumerates each       |                       |
-|                       | firmware              |                       |
-+-----------------------+-----------------------+-----------------------+
-| Memory_               | Sub-device 0: Memory  | Get maximum supported |
-|                       | module Sub-device 1:  | bandwidthGet current  |
-|                       | Memory module         | allocation sizeGet    |
-|                       |                       | current bandwidth     |
-+-----------------------+-----------------------+-----------------------+
-| Fabric-Port_          | Enumerates each       | configuration         |
-|                       | portSub-device 1:     | (UP/DOWN)Get physical |
-|                       | Enumerates each port  | link detailsGet port  |
-|                       |                       | health                |
-|                       |                       | (green/yellow/red/bla |
-|                       |                       | ck)Get                |
-|                       |                       | remote port UUIDGet   |
-|                       |                       | port max rx/tx        |
-|                       |                       | speedGet port current |
-|                       |                       | rx/tx bandwidth       |
-+-----------------------+-----------------------+-----------------------+
-| Temperature_          | Package:              | Get current           |
-|                       | temperatureSub-device | temperature sensor    |
-|                       | 0: GPU                | reading               |
-|                       | temperatureSub-device |                       |
-|                       | 0: Memory             |                       |
-|                       | temperatureSub-device |                       |
-|                       | 1: GPU                |                       |
-|                       | temperatureSub-device |                       |
-|                       | 1: Memory temperature |                       |
-+-----------------------+-----------------------+-----------------------+
-| PSU_                  | Package: Power        | Get details about the |
-|                       | supplies              | power supplyQuery     |
-|                       |                       | current state         |
-|                       |                       | (temperature,current, |
-|                       |                       | fan)                  |
-+-----------------------+-----------------------+-----------------------+
-| Fan_                  | Package: Fans         | Get details (max fan  |
-|                       |                       | speed)Get config      |
-|                       |                       | (fixed fan speed,     |
-|                       |                       | temperature-speed     |
-|                       |                       | table)Query current   |
-|                       |                       | fan speed             |
-+-----------------------+-----------------------+-----------------------+
-| LED_                  | Package: LEDs         | Get details (supports |
-|                       |                       | RGB                   |
-|                       |                       | configuration)Query   |
-|                       |                       | current state         |
-|                       |                       | (on,color)            |
-+-----------------------+-----------------------+-----------------------+
-| RAS_                  | Sub-device 0: One set | Read RAS total        |
-|                       | of RAS error          | correctable and       |
-|                       | countersSub-device 1: | uncorrectable error   |
-|                       | One set of RAS error  | counter.Read          |
-|                       | counters              | breakdown of errors   |
-|                       |                       | by category:- no.     |
-|                       |                       | resets- no.           |
-|                       |                       | programming errors-   |
-|                       |                       | no. driver errors-    |
-|                       |                       | no. compute errors-   |
-|                       |                       | no. cache errors- no. |
-|                       |                       | memory errors- no.    |
-|                       |                       | PCI errors- no.       |
-|                       |                       | fabric port errors-   |
-|                       |                       | no. display errors-   |
-|                       |                       | no. non-compute       |
-|                       |                       | errors                |
-+-----------------------+-----------------------+-----------------------+
-| Diagnostics_          | Package: SCAN test    | Get list of all       |
-|                       | suitePackage: ARRAY   | diagnostics tests in  |
-|                       | test suite            | the test suite        |
-+-----------------------+-----------------------+-----------------------+
++-----------------------+---------------------------------+-------------------------------------------+
+| Class                 | Components                      | Operations                                |
++=======================+=================================+===========================================+
+| Power_                | Package:                        | Get energy consumption                    |
+|                       | power                           |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 0: total             |                                           |
+|                       | power                           |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 1: total             |                                           |
+|                       | power                           |                                           |
++-----------------------+---------------------------------+-------------------------------------------+
+| Frequency_            | Sub-device 0: GPU frequency     | List available frequencies                |
+|                       |                                 |                                           |
+|                       | Sub-device 0: Memory frequency  | Set frequency range                       |
+|                       |                                 |                                           |
+|                       | Sub-device 1: GPU frequency     | Get frequencies                           |
+|                       |                                 |                                           |
+|                       | Sub-device 1: Memory frequency  | Get throttle reasons                      |
+|                       |                                 |                                           |
+|                       |                                 | Get throttle time                         |
++-----------------------+---------------------------------+-------------------------------------------+
+| Engines_              | Sub-device 0: All engines       | Get busy time                             |
+|                       |                                 |                                           |
+|                       | Sub-device 0: Compute engines   |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 0: Media engines     |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 0: Copy engines      |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 1: All engines       |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 1: Compute engines   |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 1: Media engines     |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 1: Copy engines      |                                           |
++-----------------------+---------------------------------+-------------------------------------------+
+| Firmware_             | Sub-device 0: Enumerates each   | Get firmware name and version             |
+|                       | firware                         |                                           |
+|                       |                                 | Verify firmware checksum                  |
+|                       | Sub-device 1: Enumerates each   |                                           |
+|                       | firmware                        |                                           |
++-----------------------+---------------------------------+-------------------------------------------+
+| Memory_               | Sub-device 0: Memory module     | Get maximum supported bandwidth           |
+|                       |                                 |                                           |
+|                       | Sub-device 1: Memory module     | Get free memory                           |
+|                       |                                 |                                           |
+|                       |                                 | Get current bandwidth                     |
++-----------------------+---------------------------------+-------------------------------------------+
+| Fabric-Port_          | Sub-device 0: Enumerates each   | Get port configuration (UP/DOWN)          |
+|                       | port                            |                                           |
+|                       |                                 | Get physical link details                 |
+|                       | Sub-device 1: Enumerates each   |                                           |
+|                       | port                            | Get port health (green/yellow/red/black)  |
+|                       |                                 |                                           |
+|                       |                                 | Get remote port                           |
+|                       |                                 |                                           |
+|                       |                                 | Get port rx/tx speed                      |
+|                       |                                 |                                           |
+|                       |                                 | Get port rx/tx bandwidth                  |
++-----------------------+---------------------------------+-------------------------------------------+
+| Temperature_          | Package: temperature            | Get current temperature sensor reading    |
+|                       |                                 |                                           |
+|                       | Sub-device 0: GPU temperature   |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 0: Memory            |                                           |
+|                       | temperature                     |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 1: GPU temperature   |                                           |
+|                       |                                 |                                           |
+|                       | Sub-device 1: Memory            |                                           |
+|                       | temperature                     |                                           |
++-----------------------+---------------------------------+-------------------------------------------+
+| PSU_                  | Package: Power supplies         | Get details about the power supply        |
+|                       |                                 |                                           |
+|                       |                                 | Query current state (temperature,         |
+|                       |                                 | current, fan)                             |
++-----------------------+---------------------------------+-------------------------------------------+
+| Fan_                  | Package: Fans                   | Get details (max fan speed)               |
+|                       |                                 |                                           |
+|                       |                                 | Get config (fixed fan speed,              |
+|                       |                                 | temperature-speed table)                  |
+|                       |                                 |                                           |
+|                       |                                 | Query current fan speed                   |
++-----------------------+---------------------------------+-------------------------------------------+
+| LED_                  | Package: LEDs                   | Get details (RGB capable)                 |
+|                       |                                 |                                           |
+|                       |                                 | Query current state (on, color)           |
++-----------------------+---------------------------------+-------------------------------------------+
+| RAS_                  | Sub-device 0: One set of RAS    | Read RAS total correctable and            |
+|                       | error counters                  | uncorrectable error counters              |
+|                       |                                 |                                           |
+|                       | Sub-device 1: One set of RAS    | Read breakdown of errors by category      |
+|                       | error counters                  | (no. resets, no. programming errors,      |
+|                       |                                 | no. programming errors, no. driver        |
+|                       |                                 | errors, no. compute errors, no. cache     |
+|                       |                                 | errors, no. memory errors, no. PCI        |
+|                       |                                 | errors, no. display errors, no.           |
+|                       |                                 | non-compute errors)                       |
++-----------------------+---------------------------------+-------------------------------------------+
+| Diagnostics_          | Package: SCAN test suite        | Get list of all diagnostics tests         |
+|                       |                                 |                                           |
+|                       | Package: ARRAY test suite       |                                           |
++-----------------------+---------------------------------+-------------------------------------------+
 
 The table below summarizes the classes that provide device controls and
 an example list of components that would be enumerated for a device with
 two sub-devices. The table shows the operations (controls) that will be
 provided for all components in each class.
 
-+-----------------------+-----------------------+-----------------------+
-| Class                 | Components            | Operations            |
-+=======================+=======================+=======================+
-| `Power <#pwr>`__      | Package: power        | Set sustained power   |
-|                       |                       | limitSet burst power  |
-|                       |                       | limitSet peak power   |
-|                       |                       | limit                 |
-+-----------------------+-----------------------+-----------------------+
-| `Frequency <#frq>`__  | Sub-device 0: GPU     | Set frequency range   |
-|                       | frequencySub-device   |                       |
-|                       | 0: Memory             |                       |
-|                       | frequencySub-device   |                       |
-|                       | 1: GPU                |                       |
-|                       | frequencySub-device   |                       |
-|                       | 1: Memory frequency   |                       |
-+-----------------------+-----------------------+-----------------------+
-| `Standby <#sby>`__    | Sub-device 0: Control | Disable opportunistic |
-|                       | entire                | standby               |
-|                       | sub-deviceSub-device  |                       |
-|                       | 1: Control entire     |                       |
-|                       | sub-device            |                       |
-+-----------------------+-----------------------+-----------------------+
-| `Firmware <#fmw>`__   | Sub-device 0:         | Flash new firmware    |
-|                       | Enumerates each       |                       |
-|                       | firmwareSub-device 1: |                       |
-|                       | Enumerates each       |                       |
-|                       | firmware              |                       |
-+-----------------------+-----------------------+-----------------------+
-| `Fabric               | Sub-device 0: Control | Configure port        |
-| port <#con>`__        | each portSub-device   | UP/DOWNTurn beaconing |
-|                       | 1: Control each port  | ON/OFF                |
-+-----------------------+-----------------------+-----------------------+
-| `Fan <#fan>`__        | Package: Fans         | Set config (fixed     |
-|                       |                       | speed,                |
-|                       |                       | temperature-speed     |
-|                       |                       | table)                |
-+-----------------------+-----------------------+-----------------------+
-| `LED <#led>`__        | Package: LEDs         | Turn LED on/off and   |
-|                       |                       | set color where       |
-|                       |                       | applicable            |
-+-----------------------+-----------------------+-----------------------+
-| `Diagnostics <#con>`__| SCAN test suiteARRAY  | Run all or a subset   |
-|                       | test suite            | of diagnostic tests   |
-|                       |                       | in the test suite     |
-+-----------------------+-----------------------+-----------------------+
++------------------------+---------------------------------+-------------------------------------------+
+| Class                  | Components                      | Operations                                |
++========================+=================================+===========================================+
+| `Power <#pwr>`__       | Package: power                  | Set sustained power limit                 |
+|                        |                                 |                                           |
+|                        |                                 | Set burst power limit                     |
+|                        |                                 |                                           |
+|                        |                                 | Set peak power limit                      |
++------------------------+---------------------------------+-------------------------------------------+
+| `Frequency <#frq>`__   | Sub-device 0: GPU frequency     | Set frequency range                       |
+|                        |                                 |                                           |
+|                        | Sub-device 0: Memory frequency  |                                           |
+|                        |                                 |                                           |
+|                        | Sub-device 1: GPU frequency     |                                           |
+|                        |                                 |                                           |
+|                        | Sub-device 1: Memory frequency  |                                           |
++------------------------+---------------------------------+-------------------------------------------+
+| `Standby <#sby>`__     | Sub-device 0: Control           | Disable opportunistic standby             |
+|                        | entire sub-device               | standby                                   |
+|                        |                                 |                                           |
+|                        | Sub-device 1: Control entire    |                                           |
+|                        | sub-device                      |                                           |
++------------------------+---------------------------------+-------------------------------------------+
+| `Firmware <#fmw>`__    | Sub-device 0: Enumerates each   | Flash new firmware                        |
+|                        | firmware                        |                                           |
+|                        |                                 |                                           |
+|                        | Sub-device 1: Enumerates each   |                                           |
+|                        | firmware                        |                                           |
++------------------------+---------------------------------+-------------------------------------------+
+| `Fabric port <#con>`__ | Sub-device 0: Control each port | Configure port UP/DOWN                    |
+|                        |                                 |                                           |
+|                        | Sub-device 1: Control each port | Turn beaconing ON/OFF                     |
++------------------------+---------------------------------+-------------------------------------------+
+| `Fan <#fan>`__         | Package: Fans                   | Set config (fixed speed, temperature-     |
+|                        |                                 | speed table)                              |
++------------------------+---------------------------------+-------------------------------------------+
+| `LED <#led>`__         | Package: LEDs                   | Turn LED on/off and set color             |
++------------------------+---------------------------------+-------------------------------------------+
+| `Diagnostics <#con>`__ | SCAN test suite                 | Run all or a subset                       |
+|                        |                                 | of diagnostic tests                       |
+|                        | ARRAY test suite                | in the test suite                         |
++------------------------+---------------------------------+-------------------------------------------+
 
 Device component enumeration
 ----------------------------
@@ -1161,10 +1163,20 @@ hops in the fabric (device A and C).
 .. image:: ../../../images/tools_sysman_fabric.png
 
 The API permits enumerating all the ports available on a device. Each
-port has a universal unique identifier (UUID). If the port is connected
-to another port, the API will provide the remote port's UUID. By
-enumerating all ports on all devices that are connected to the fabric,
-an application can build a topology map of connectivity.
+port is uniquely identified within a system by the following information:
+
+- Fabric ID: Unique identifier for the fabric end-point
+- Attach ID: Unique identifier for the device attachment point
+- Port Number: The logical port number (this is typically marked somewhere on the physical device)
+
+The API provides this information in the struct ::{t}_fabric_port_id_t.
+The identifiers are not universal - uniqueness is only guaranteed
+within a given system and provided the system configuration does not change.
+
+When a fabric port is connected, the API provides the unique identifier
+for the remote fabric port. By enumerating all ports in a system and
+matching up the remote port identifies, an application can can build up
+a topology map of connectivity.
 
 For each port, the API permits querying its configuration (UP/DOWN) and
 its health which can take one of the following values:
@@ -1193,11 +1205,10 @@ information about the causes of the instability.
 When a port's health state changes, the event
 ::${T}_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH is triggered.
 
-The API permits measuring the receive and transmit bandwidth flowing
-through each port. It also provides the maximum receive and transmit
-speed (frequency/number of lanes) of each port and the current speeds
-which can be lower if operating in a degraded state. Note that a port's
-receive and transmit speeds are not necessarily the same.
+The API provides the current transmit and receive bitrate of each port.
+It also permits measuring the receive and transmit bandwidth flowing
+through each port - these metrics include the protocal overhead in addition
+to traffic generated by the devices.
 
 Since ports can pass data directly through to another port, the measured
 bandwidth at a port can be higher than the actual bandwidth generated by
@@ -1215,7 +1226,7 @@ The following functions can be used to manage Fabric ports:
 |                                      | device.                           |
 +--------------------------------------+-----------------------------------+
 | ::${t}SysmanFabricPortGetProperties() | Get static properties about the   |
-|                                      | port (model, UUID, max            |
+|                                      | port (model, pord Id, max         |
 |                                      | receive/transmit speed).          |
 +--------------------------------------+-----------------------------------+
 | ::${t}SysmanFabricPortGetLinkType()   | Get details about the physical    |
@@ -1230,9 +1241,9 @@ The following functions can be used to manage Fabric ports:
 +--------------------------------------+-----------------------------------+
 | ::${t}SysmanFabricPortGetState()      | Determine the health of the port  |
 |                                      | connection, reasons for link      |
-|                                      | degradation or connection issues  |
-|                                      | and the current receive/transmit  |
-|                                      | speed.                            |
+|                                      | degradation or connection issues, |
+|                                      | current receive/transmit and port |
+|                                      | Id of the remote end-point.       |
 +--------------------------------------+-----------------------------------+
 | ::${t}SysmanFabricPortGetThroughput() | Get port receive/transmit         |
 |                                      | counters along with current       |
@@ -1294,12 +1305,12 @@ the device and sub-devices:
                            output("        Link type:             %s", link.desc)
                            output(
                                "        Max speed (rx/tx):     %llu/%llu bytes/sec",
-                               props.maxRxSpeed.maxBandwidth,
-                               props.maxTxSpeed.maxBandwidth)
+                               props.maxRxSpeed.bitRate * props.maxRxSpeed.width / 8,
+                               props.maxTxSpeed.bitRate * props.maxTxSpeed.width / 8)
                            output(
                                "        Current speed (rx/tx): %llu/%llu bytes/sec",
-                               state.rxSpeed.maxBandwidth,
-                               state.txSpeed.maxBandwidth)
+                               state.rxSpeed.bitRate * state.rxSpeed.width / 8,
+                               state.txSpeed.bitRate * state.txSpeed.width / 8)
                        else
                            output("        Config:                DOWN")
 

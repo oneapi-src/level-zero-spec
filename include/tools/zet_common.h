@@ -316,8 +316,8 @@ typedef struct _zet_mem_state_t zet_mem_state_t;
 typedef struct _zet_mem_bandwidth_t zet_mem_bandwidth_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zet_fabric_port_uuid_t
-typedef struct _zet_fabric_port_uuid_t zet_fabric_port_uuid_t;
+/// @brief Forward-declare zet_fabric_port_id_t
+typedef struct _zet_fabric_port_id_t zet_fabric_port_id_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_fabric_port_speed_t

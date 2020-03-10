@@ -292,12 +292,12 @@ void ShowFabricPortInfo(zet_sysman_fabric_port_handle_t hPort)
                             "        Link type:             %s\n", link.desc);
                         fprintf(stdout,
                             "        Max speed (rx/tx):     %llu/%llu bytes/sec\n",
-                            (long long unsigned int)props.maxRxSpeed.maxBandwidth,
-                            (long long unsigned int)props.maxTxSpeed.maxBandwidth);
+                            ((long long unsigned int)props.maxRxSpeed.bitRate) * props.maxRxSpeed.width / 8,
+                            ((long long unsigned int)props.maxTxSpeed.bitRate) * props.maxTxSpeed.width / 8);
                         fprintf(stdout,
                             "        Current speed (rx/tx): %llu/%llu bytes/sec\n",
-                            (long long unsigned int)state.rxSpeed.maxBandwidth,
-                            (long long unsigned int)state.txSpeed.maxBandwidth);
+                            ((long long unsigned int)state.rxSpeed.bitRate) * state.rxSpeed.width / 8,
+                            ((long long unsigned int)state.txSpeed.bitRate) * state.txSpeed.width / 8);
                     }
                     else
                     {

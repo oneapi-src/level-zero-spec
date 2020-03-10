@@ -36,12 +36,6 @@
 #endif // ZET_MAX_FABRIC_PORT_MODEL_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_MAX_FABRIC_PORT_UUID_SIZE
-/// @brief Maximum fabric port uuid size in bytes
-#define ZET_MAX_FABRIC_PORT_UUID_SIZE  72
-#endif // ZET_MAX_FABRIC_PORT_UUID_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
 #ifndef ZET_MAX_FABRIC_LINK_TYPE_SIZE
 /// @brief Maximum size of the buffer that will return information about link
 ///        types
@@ -2121,7 +2115,7 @@ namespace zet
         enum class fabric_port_status_t
         {
             GREEN = 0,                                      ///< The port is up and operating as expected
-            YELLOW,                                         ///< The port is up but has quality and/or bandwidth degradation
+            YELLOW,                                         ///< The port is up but has quality and/or speed degradation
             RED,                                            ///< Port connection instabilities are preventing workloads making forward
                                                             ///< progress
             BLACK,                                          ///< The port is configured down
@@ -2133,9 +2127,8 @@ namespace zet
         enum class fabric_port_qual_issues_t
         {
             NONE = 0,                                       ///< There are no quality issues with the link at this time
-            FEC = ZE_BIT( 0 ),                              ///< Excessive FEC (forward error correction) are occurring
-            LTP_CRC = ZE_BIT( 1 ),                          ///< Excessive LTP CRC failure induced replays are occurring
-            SPEED = ZE_BIT( 2 ),                            ///< There is a degradation in the maximum bandwidth of the port
+            FABRIC_PORT_QUAL_LINK_ERRORS = ZE_BIT( 0 ),     ///< Excessive link errors are occurring
+            SPEED = ZE_BIT( 1 ),                            ///< There is a degradation in the bitrate and/or width of the link
 
         };
 
@@ -2144,17 +2137,37 @@ namespace zet
         enum class fabric_port_stab_issues_t
         {
             NONE = 0,                                       ///< There are no connection stability issues at this time
-            TOO_MANY_REPLAYS = ZE_BIT( 0 ),                 ///< Sequential replay failure is inducing link retraining
-            NO_CONNECT = ZE_BIT( 1 ),                       ///< A connection was never able to be established through the link
-            FLAPPING = ZE_BIT( 2 ),                         ///< The port is flapping
+            FAILED = ZE_BIT( 0 ),                           ///< A previously operating link has failed. Hardware will automatically
+                                                            ///< retrain this port. This state will persist until either the physical
+                                                            ///< connection is removed or the link trains successfully.
+            TRAINING_TIMEOUT = ZE_BIT( 1 ),                 ///< A connection has not been established within an expected time.
+                                                            ///< Hardware will continue to attempt port training. This status will
+                                                            ///< persist until either the physical connection is removed or the link
+                                                            ///< successfully trains.
+            FLAPPING = ZE_BIT( 2 ),                         ///< Port has excessively trained and then transitioned down for some
+                                                            ///< period of time. Driver will allow port to continue to train, but will
+                                                            ///< not enable the port for use until the port has been disabled and
+                                                            ///< subsequently re-enabled using ::zetSysmanFabricPortSetConfig().
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port universal unique id (UUID)
-        struct fabric_port_uuid_t
+        /// @brief Unique identifier for a fabric port
+        /// 
+        /// @details
+        ///     - This not a universal identifier. The identified is garanteed to be
+        ///       unique for the current hardware configuration of the system. Changes
+        ///       in the hardware may result in a different identifier for a given port.
+        ///     - The main purpose of this identifier to build up an instantaneous
+        ///       topology map of system connectivity. An application should enumerate
+        ///       all fabric ports and match ::zet_fabric_port_state_t.remotePortId to
+        ///       ::zet_fabric_port_properties_t.portId.
+        struct fabric_port_id_t
         {
-            uint8_t id[ZET_MAX_FABRIC_PORT_UUID_SIZE];      ///< [out] Frabric port universal unique id
+            uint32_t fabricId;                              ///< [out] Unique identifier for the fabric end-point
+            uint32_t attachId;                              ///< [out] Unique identifier for the device attachment point
+            uint8_t portNumber;                             ///< [out] The logical port number (this is typically marked somewhere on
+                                                            ///< the physical device)
 
         };
 
@@ -2164,7 +2177,6 @@ namespace zet
         {
             uint64_t bitRate;                               ///< [out] Bits/sec that the link is operating at
             uint32_t width;                                 ///< [out] The number of lanes
-            uint64_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
 
         };
 
@@ -2176,9 +2188,9 @@ namespace zet
             ze::bool_t onSubdevice;                         ///< [out] True if the port is located on a sub-device; false means that
                                                             ///< the port is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            fabric_port_uuid_t portUuid;                    ///< [out] The port universal unique id
-            fabric_port_speed_t maxRxSpeed;                 ///< [out] Maximum bandwidth supported by the receive side of the port
-            fabric_port_speed_t maxTxSpeed;                 ///< [out] Maximum bandwidth supported by the transmit side of the port
+            fabric_port_id_t portId;                        ///< [out] The unique port identifier
+            fabric_port_speed_t maxRxSpeed;                 ///< [out] Maximum speed supported by the receive side of the port
+            fabric_port_speed_t maxTxSpeed;                 ///< [out] Maximum speed supported by the transmit side of the port
 
         };
 
@@ -2186,19 +2198,8 @@ namespace zet
         /// @brief Provides information about the fabric link attached to a port
         struct fabric_link_type_t
         {
-            int8_t desc[ZET_MAX_FABRIC_LINK_TYPE_SIZE];     ///< [out] This provides a textural description of a link attached to a
-                                                            ///< port. It contains the following information:
-                                                            ///< - Link material
-                                                            ///< - Link technology
-                                                            ///< - Cable manufacturer
-                                                            ///< - Temperature
-                                                            ///< - Power
-                                                            ///< - Attachment type:
-                                                            ///<    - Disconnected
-                                                            ///<    - Hardwired/fixed/etched connector
-                                                            ///<    - Active copper
-                                                            ///<    - QSOP
-                                                            ///<    - AOC
+            int8_t desc[ZET_MAX_FABRIC_LINK_TYPE_SIZE];     ///< [out] This provides a static textural description of the physic
+                                                            ///< attachment type
 
         };
 
@@ -2220,21 +2221,14 @@ namespace zet
                                                             ///< bitfield of quality issues that have been detected
             fabric_port_stab_issues_t stabilityIssues;      ///< [out] If status is ::ZET_FABRIC_PORT_STATUS_RED, this gives a bitfield
                                                             ///< of reasons for the connection instability
+            fabric_port_id_t remotePortId;                  ///< [out] The unique port identifier for the remote connection point
             fabric_port_speed_t rxSpeed;                    ///< [out] Current maximum receive speed
             fabric_port_speed_t txSpeed;                    ///< [out] Current maximum transmit speed
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port throughput
-        /// 
-        /// @details
-        ///     - Percent throughput is calculated by taking two snapshots (s1, s2) and
-        ///       using the equation:
-        ///     -     %rx_bandwidth = 10^6 * (s2.rxCounter - s1.rxCounter) /
-        ///       (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))
-        ///     -     %tx_bandwidth = 10^6 * (s2.txCounter - s1.txCounter) /
-        ///       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
+        /// @brief Fabric port throughput.
         struct fabric_port_throughput_t
         {
             uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
@@ -2244,11 +2238,10 @@ namespace zet
                                                             ///< of the same structure.
                                                             ///< Never take the delta of this timestamp with the timestamp from a
                                                             ///< different structure.
-            uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
-            uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted
-            uint64_t rxMaxBandwidth;                        ///< [out] The current maximum bandwidth in bytes/sec for receiving packats
-            uint64_t txMaxBandwidth;                        ///< [out] The current maximum bandwidth in bytes/sec for transmitting
-                                                            ///< packets
+            uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received. This
+                                                            ///< includes all protocol overhead, not only the GPU traffic.
+            uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted. This
+                                                            ///< includes all protocol overhead, not only the GPU traffic.
 
         };
 
@@ -2350,8 +2343,7 @@ namespace zet
         /// @throws result_t
         void __zecall
         GetThroughput(
-            fabric_port_throughput_t* pThroughput           ///< [in,out] Will contain the Fabric port throughput counters and maximum
-                                                            ///< bandwidth.
+            fabric_port_throughput_t* pThroughput           ///< [in,out] Will contain the Fabric port throughput counters.
             );
 
     };
@@ -3474,8 +3466,8 @@ namespace zet
     std::string to_string( const SysmanFabricPort::fabric_port_stab_issues_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_uuid_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_uuid_t val );
+    /// @brief Converts SysmanFabricPort::fabric_port_id_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_id_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanFabricPort::fabric_port_speed_t to std::string

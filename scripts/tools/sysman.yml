@@ -1970,11 +1970,6 @@ name: $T_MAX_FABRIC_PORT_MODEL_SIZE
 value: "256"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Maximum fabric port uuid size in bytes"
-name: $T_MAX_FABRIC_PORT_UUID_SIZE
-value: "72"
---- #--------------------------------------------------------------------------
-type: macro
 desc: "Maximum size of the buffer that will return information about link types"
 name: $T_MAX_FABRIC_LINK_TYPE_SIZE
 value: "256"
@@ -1988,7 +1983,7 @@ etors:
       value: "0"
       desc: "The port is up and operating as expected"
     - name: $T_FABRIC_PORT_STATUS_YELLOW
-      desc: "The port is up but has quality and/or bandwidth degradation"
+      desc: "The port is up but has quality and/or speed degradation"
     - name: $T_FABRIC_PORT_STATUS_RED
       desc: "Port connection instabilities are preventing workloads making forward progress"
     - name: $T_FABRIC_PORT_STATUS_BLACK
@@ -2002,15 +1997,12 @@ etors:
     - name: $T_FABRIC_PORT_QUAL_ISSUES_NONE
       value: "0"
       desc: "There are no quality issues with the link at this time"
-    - name: $T_FABRIC_PORT_QUAL_ISSUES_FEC
+    - name: $T_FABRIC_PORT_QUAL_LINK_ERRORS
       value: "$X_BIT( 0 )"
-      desc: "Excessive FEC (forward error correction) are occurring"
-    - name: $T_FABRIC_PORT_QUAL_ISSUES_LTP_CRC
-      value: "$X_BIT( 1 )"
-      desc: "Excessive LTP CRC failure induced replays are occurring"
+      desc: "Excessive link errors are occurring"
     - name: $T_FABRIC_PORT_QUAL_ISSUES_SPEED
-      value: "$X_BIT( 2 )"
-      desc: "There is a degradation in the maximum bandwidth of the port"
+      value: "$X_BIT( 1 )"
+      desc: "There is a degradation in the bitrate and/or width of the link"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fabric port stability issues"
@@ -2020,24 +2012,33 @@ etors:
     - name: $T_FABRIC_PORT_STAB_ISSUES_NONE
       value: "0"
       desc: "There are no connection stability issues at this time"
-    - name: $T_FABRIC_PORT_STAB_ISSUES_TOO_MANY_REPLAYS
+    - name: $T_FABRIC_PORT_STAB_ISSUES_FAILED
       value: "$X_BIT( 0 )"
-      desc: "Sequential replay failure is inducing link retraining"
-    - name: $T_FABRIC_PORT_STAB_ISSUES_NO_CONNECT
+      desc: "A previously operating link has failed. Hardware will automatically retrain this port. This state will persist until either the physical connection is removed or the link trains successfully."
+    - name: $T_FABRIC_PORT_STAB_ISSUES_TRAINING_TIMEOUT
       value: "$X_BIT( 1 )"
-      desc: "A connection was never able to be established through the link"
+      desc: "A connection has not been established within an expected time. Hardware will continue to attempt port training. This status will persist until either the physical connection is removed or the link successfully trains."
     - name: $T_FABRIC_PORT_STAB_ISSUES_FLAPPING
       value: "$X_BIT( 2 )"
-      desc: "The port is flapping"
+      desc: "Port has excessively trained and then transitioned down for some period of time. Driver will allow port to continue to train, but will not enable the port for use until the port has been disabled and subsequently re-enabled using $tSysmanFabricPortSetConfig()."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Fabric port universal unique id (UUID)"
+desc: "Unique identifier for a fabric port"
 class: $tSysmanFabricPort
-name: $t_fabric_port_uuid_t
+name: $t_fabric_port_id_t
+details:
+    - "This not a universal identifier. The identified is garanteed to be unique for the current hardware configuration of the system. Changes in the hardware may result in a different identifier for a given port."
+    - "The main purpose of this identifier to build up an instantaneous topology map of system connectivity. An application should enumerate all fabric ports and match $t_fabric_port_state_t.remotePortId to $t_fabric_port_properties_t.portId."
 members:
+    - type: uint32_t
+      name: "fabricId"
+      desc: "[out] Unique identifier for the fabric end-point"
+    - type: uint32_t
+      name: "attachId"
+      desc: "[out] Unique identifier for the device attachment point"
     - type: uint8_t
-      name: "id[$T_MAX_FABRIC_PORT_UUID_SIZE]"
-      desc: "[out] Frabric port universal unique id"
+      name: "portNumber"
+      desc: "[out] The logical port number (this is typically marked somewhere on the physical device)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port speed in one direction"
@@ -2050,9 +2051,6 @@ members:
     - type: uint32_t
       name: "width"
       desc: "[out] The number of lanes"
-    - type: uint64_t
-      name: "maxBandwidth"
-      desc: "[out] The maximum bandwidth in bytes/sec"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port properties"
@@ -2068,15 +2066,15 @@ members:
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
-    - type: $t_fabric_port_uuid_t
-      name: "portUuid"
-      desc: "[out] The port universal unique id"
+    - type: $t_fabric_port_id_t
+      name: "portId"
+      desc: "[out] The unique port identifier"
     - type: $t_fabric_port_speed_t
       name: "maxRxSpeed"
-      desc: "[out] Maximum bandwidth supported by the receive side of the port"
+      desc: "[out] Maximum speed supported by the receive side of the port"
     - type: $t_fabric_port_speed_t
       name: "maxTxSpeed"
-      desc: "[out] Maximum bandwidth supported by the transmit side of the port"
+      desc: "[out] Maximum speed supported by the transmit side of the port"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Provides information about the fabric link attached to a port"
@@ -2085,19 +2083,7 @@ name: $t_fabric_link_type_t
 members:
     - type: int8_t
       name: "desc[$T_MAX_FABRIC_LINK_TYPE_SIZE]"
-      desc: |
-            [out] This provides a textural description of a link attached to a port. It contains the following information:
-            - Link material
-            - Link technology
-            - Cable manufacturer
-            - Temperature
-            - Power
-            - Attachment type:
-                - Disconnected
-                - Hardwired/fixed/etched connector
-                - Active copper
-                - QSOP
-                - AOC
+      desc: "[out] This provides a static textural description of the physic attachment type"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port configuration"
@@ -2125,6 +2111,9 @@ members:
     - type: $t_fabric_port_stab_issues_t
       name: "stabilityIssues"
       desc: "[out] If status is $T_FABRIC_PORT_STATUS_RED, this gives a bitfield of reasons for the connection instability"
+    - type: $t_fabric_port_id_t
+      name: "remotePortId"
+      desc: "[out] The unique port identifier for the remote connection point"
     - type: $t_fabric_port_speed_t
       name: "rxSpeed"
       desc: "[out] Current maximum receive speed"
@@ -2133,13 +2122,9 @@ members:
       desc: "[out] Current maximum transmit speed"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Fabric port throughput"
+desc: "Fabric port throughput."
 class: $tSysmanFabricPort
 name: $t_fabric_port_throughput_t
-details:
-    - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation:"
-    - "    %rx_bandwidth = 10^6 * (s2.rxCounter - s1.rxCounter) / (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))"
-    - "    %tx_bandwidth = 10^6 * (s2.txCounter - s1.txCounter) / (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))"
 members:
     - type: uint64_t
       name: "timestamp"
@@ -2150,16 +2135,10 @@ members:
             Never take the delta of this timestamp with the timestamp from a different structure.
     - type: uint64_t
       name: "rxCounter"
-      desc: "[out] Monotonic counter for the number of bytes received"
+      desc: "[out] Monotonic counter for the number of bytes received. This includes all protocol overhead, not only the GPU traffic."
     - type: uint64_t
       name: "txCounter"
-      desc: "[out] Monotonic counter for the number of bytes transmitted"
-    - type: uint64_t
-      name: "rxMaxBandwidth"
-      desc: "[out] The current maximum bandwidth in bytes/sec for receiving packats"
-    - type: uint64_t
-      name: "txMaxBandwidth"
-      desc: "[out] The current maximum bandwidth in bytes/sec for transmitting packets"
+      desc: "[out] Monotonic counter for the number of bytes transmitted. This includes all protocol overhead, not only the GPU traffic."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of Fabric ports in a device"
@@ -2277,7 +2256,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $t_fabric_port_throughput_t*
       name: pThroughput
-      desc: "[in,out] Will contain the Fabric port throughput counters and maximum bandwidth."
+      desc: "[in,out] Will contain the Fabric port throughput counters."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."

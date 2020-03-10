@@ -1307,10 +1307,6 @@ class zet_mem_bandwidth_t(Structure):
 ZET_MAX_FABRIC_PORT_MODEL_SIZE = 256
 
 ###############################################################################
-## @brief Maximum fabric port uuid size in bytes
-ZET_MAX_FABRIC_PORT_UUID_SIZE = 72
-
-###############################################################################
 ## @brief Maximum size of the buffer that will return information about link
 ##        types
 ZET_MAX_FABRIC_LINK_TYPE_SIZE = 256
@@ -1319,7 +1315,7 @@ ZET_MAX_FABRIC_LINK_TYPE_SIZE = 256
 ## @brief Fabric port status
 class zet_fabric_port_status_v(IntEnum):
     GREEN = 0                                       ## The port is up and operating as expected
-    YELLOW = auto()                                 ## The port is up but has quality and/or bandwidth degradation
+    YELLOW = auto()                                 ## The port is up but has quality and/or speed degradation
     RED = auto()                                    ## Port connection instabilities are preventing workloads making forward
                                                     ## progress
     BLACK = auto()                                  ## The port is configured down
@@ -1333,9 +1329,8 @@ class zet_fabric_port_status_t(c_int):
 ## @brief Fabric port quality degradation reasons
 class zet_fabric_port_qual_issues_v(IntEnum):
     NONE = 0                                        ## There are no quality issues with the link at this time
-    FEC = ZE_BIT( 0 )                               ## Excessive FEC (forward error correction) are occurring
-    LTP_CRC = ZE_BIT( 1 )                           ## Excessive LTP CRC failure induced replays are occurring
-    SPEED = ZE_BIT( 2 )                             ## There is a degradation in the maximum bandwidth of the port
+    FABRIC_PORT_QUAL_LINK_ERRORS = ZE_BIT( 0 )      ## Excessive link errors are occurring
+    SPEED = ZE_BIT( 1 )                             ## There is a degradation in the bitrate and/or width of the link
 
 class zet_fabric_port_qual_issues_t(c_int):
     def __str__(self):
@@ -1346,9 +1341,17 @@ class zet_fabric_port_qual_issues_t(c_int):
 ## @brief Fabric port stability issues
 class zet_fabric_port_stab_issues_v(IntEnum):
     NONE = 0                                        ## There are no connection stability issues at this time
-    TOO_MANY_REPLAYS = ZE_BIT( 0 )                  ## Sequential replay failure is inducing link retraining
-    NO_CONNECT = ZE_BIT( 1 )                        ## A connection was never able to be established through the link
-    FLAPPING = ZE_BIT( 2 )                          ## The port is flapping
+    FAILED = ZE_BIT( 0 )                            ## A previously operating link has failed. Hardware will automatically
+                                                    ## retrain this port. This state will persist until either the physical
+                                                    ## connection is removed or the link trains successfully.
+    TRAINING_TIMEOUT = ZE_BIT( 1 )                  ## A connection has not been established within an expected time.
+                                                    ## Hardware will continue to attempt port training. This status will
+                                                    ## persist until either the physical connection is removed or the link
+                                                    ## successfully trains.
+    FLAPPING = ZE_BIT( 2 )                          ## Port has excessively trained and then transitioned down for some
+                                                    ## period of time. Driver will allow port to continue to train, but will
+                                                    ## not enable the port for use until the port has been disabled and
+                                                    ## subsequently re-enabled using ::zetSysmanFabricPortSetConfig().
 
 class zet_fabric_port_stab_issues_t(c_int):
     def __str__(self):
@@ -1356,10 +1359,22 @@ class zet_fabric_port_stab_issues_t(c_int):
 
 
 ###############################################################################
-## @brief Fabric port universal unique id (UUID)
-class zet_fabric_port_uuid_t(Structure):
+## @brief Unique identifier for a fabric port
+## 
+## @details
+##     - This not a universal identifier. The identified is garanteed to be
+##       unique for the current hardware configuration of the system. Changes
+##       in the hardware may result in a different identifier for a given port.
+##     - The main purpose of this identifier to build up an instantaneous
+##       topology map of system connectivity. An application should enumerate
+##       all fabric ports and match ::zet_fabric_port_state_t.remotePortId to
+##       ::zet_fabric_port_properties_t.portId.
+class zet_fabric_port_id_t(Structure):
     _fields_ = [
-        ("id", c_ubyte * ZET_MAX_FABRIC_PORT_UUID_SIZE)                 ## [out] Frabric port universal unique id
+        ("fabricId", c_ulong),                                          ## [out] Unique identifier for the fabric end-point
+        ("attachId", c_ulong),                                          ## [out] Unique identifier for the device attachment point
+        ("portNumber", c_ubyte)                                         ## [out] The logical port number (this is typically marked somewhere on
+                                                                        ## the physical device)
     ]
 
 ###############################################################################
@@ -1367,8 +1382,7 @@ class zet_fabric_port_uuid_t(Structure):
 class zet_fabric_port_speed_t(Structure):
     _fields_ = [
         ("bitRate", c_ulonglong),                                       ## [out] Bits/sec that the link is operating at
-        ("width", c_ulong),                                             ## [out] The number of lanes
-        ("maxBandwidth", c_ulonglong)                                   ## [out] The maximum bandwidth in bytes/sec
+        ("width", c_ulong)                                              ## [out] The number of lanes
     ]
 
 ###############################################################################
@@ -1379,28 +1393,17 @@ class zet_fabric_port_properties_t(Structure):
         ("onSubdevice", ze_bool_t),                                     ## [out] True if the port is located on a sub-device; false means that
                                                                         ## the port is on the device of the calling Sysman handle
         ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
-        ("portUuid", zet_fabric_port_uuid_t),                           ## [out] The port universal unique id
-        ("maxRxSpeed", zet_fabric_port_speed_t),                        ## [out] Maximum bandwidth supported by the receive side of the port
-        ("maxTxSpeed", zet_fabric_port_speed_t)                         ## [out] Maximum bandwidth supported by the transmit side of the port
+        ("portId", zet_fabric_port_id_t),                               ## [out] The unique port identifier
+        ("maxRxSpeed", zet_fabric_port_speed_t),                        ## [out] Maximum speed supported by the receive side of the port
+        ("maxTxSpeed", zet_fabric_port_speed_t)                         ## [out] Maximum speed supported by the transmit side of the port
     ]
 
 ###############################################################################
 ## @brief Provides information about the fabric link attached to a port
 class zet_fabric_link_type_t(Structure):
     _fields_ = [
-        ("desc", c_int8_t * ZET_MAX_FABRIC_LINK_TYPE_SIZE)              ## [out] This provides a textural description of a link attached to a
-                                                                        ## port. It contains the following information:
-                                                                        ## - Link material
-                                                                        ## - Link technology
-                                                                        ## - Cable manufacturer
-                                                                        ## - Temperature
-                                                                        ## - Power
-                                                                        ## - Attachment type:
-                                                                        ##    - Disconnected
-                                                                        ##    - Hardwired/fixed/etched connector
-                                                                        ##    - Active copper
-                                                                        ##    - QSOP
-                                                                        ##    - AOC
+        ("desc", c_int8_t * ZET_MAX_FABRIC_LINK_TYPE_SIZE)              ## [out] This provides a static textural description of the physic
+                                                                        ## attachment type
     ]
 
 ###############################################################################
@@ -1420,20 +1423,13 @@ class zet_fabric_port_state_t(Structure):
                                                                         ## bitfield of quality issues that have been detected
         ("stabilityIssues", zet_fabric_port_stab_issues_t),             ## [out] If status is ::ZET_FABRIC_PORT_STATUS_RED, this gives a bitfield
                                                                         ## of reasons for the connection instability
+        ("remotePortId", zet_fabric_port_id_t),                         ## [out] The unique port identifier for the remote connection point
         ("rxSpeed", zet_fabric_port_speed_t),                           ## [out] Current maximum receive speed
         ("txSpeed", zet_fabric_port_speed_t)                            ## [out] Current maximum transmit speed
     ]
 
 ###############################################################################
-## @brief Fabric port throughput
-## 
-## @details
-##     - Percent throughput is calculated by taking two snapshots (s1, s2) and
-##       using the equation:
-##     -     %rx_bandwidth = 10^6 * (s2.rxCounter - s1.rxCounter) /
-##       (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))
-##     -     %tx_bandwidth = 10^6 * (s2.txCounter - s1.txCounter) /
-##       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
+## @brief Fabric port throughput.
 class zet_fabric_port_throughput_t(Structure):
     _fields_ = [
         ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
@@ -1443,11 +1439,10 @@ class zet_fabric_port_throughput_t(Structure):
                                                                         ## of the same structure.
                                                                         ## Never take the delta of this timestamp with the timestamp from a
                                                                         ## different structure.
-        ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
-        ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted
-        ("rxMaxBandwidth", c_ulonglong),                                ## [out] The current maximum bandwidth in bytes/sec for receiving packats
-        ("txMaxBandwidth", c_ulonglong)                                 ## [out] The current maximum bandwidth in bytes/sec for transmitting
-                                                                        ## packets
+        ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received. This
+                                                                        ## includes all protocol overhead, not only the GPU traffic.
+        ("txCounter", c_ulonglong)                                      ## [out] Monotonic counter for the number of bytes transmitted. This
+                                                                        ## includes all protocol overhead, not only the GPU traffic.
     ]
 
 ###############################################################################

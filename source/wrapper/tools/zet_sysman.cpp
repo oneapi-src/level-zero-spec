@@ -1901,8 +1901,7 @@ namespace zet
     /// @throws result_t
     void __zecall
     SysmanFabricPort::GetThroughput(
-        fabric_port_throughput_t* pThroughput           ///< [in,out] Will contain the Fabric port throughput counters and maximum
-                                                        ///< bandwidth.
+        fabric_port_throughput_t* pThroughput           ///< [in,out] Will contain the Fabric port throughput counters.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanFabricPortGetThroughput(
@@ -4320,11 +4319,8 @@ namespace zet
         if( 0 == bits )
             str += "NONE   ";
         
-        if( static_cast<uint32_t>(SysmanFabricPort::fabric_port_qual_issues_t::FEC) & bits )
-            str += "FEC | ";
-        
-        if( static_cast<uint32_t>(SysmanFabricPort::fabric_port_qual_issues_t::LTP_CRC) & bits )
-            str += "LTP_CRC | ";
+        if( static_cast<uint32_t>(SysmanFabricPort::fabric_port_qual_issues_t::FABRIC_PORT_QUAL_LINK_ERRORS) & bits )
+            str += "FABRIC_PORT_QUAL_LINK_ERRORS | ";
         
         if( static_cast<uint32_t>(SysmanFabricPort::fabric_port_qual_issues_t::SPEED) & bits )
             str += "SPEED | ";
@@ -4345,11 +4341,11 @@ namespace zet
         if( 0 == bits )
             str += "NONE   ";
         
-        if( static_cast<uint32_t>(SysmanFabricPort::fabric_port_stab_issues_t::TOO_MANY_REPLAYS) & bits )
-            str += "TOO_MANY_REPLAYS | ";
+        if( static_cast<uint32_t>(SysmanFabricPort::fabric_port_stab_issues_t::FAILED) & bits )
+            str += "FAILED | ";
         
-        if( static_cast<uint32_t>(SysmanFabricPort::fabric_port_stab_issues_t::NO_CONNECT) & bits )
-            str += "NO_CONNECT | ";
+        if( static_cast<uint32_t>(SysmanFabricPort::fabric_port_stab_issues_t::TRAINING_TIMEOUT) & bits )
+            str += "TRAINING_TIMEOUT | ";
         
         if( static_cast<uint32_t>(SysmanFabricPort::fabric_port_stab_issues_t::FLAPPING) & bits )
             str += "FLAPPING | ";
@@ -4360,21 +4356,21 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_uuid_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_uuid_t val )
+    /// @brief Converts SysmanFabricPort::fabric_port_id_t to std::string
+    std::string to_string( const SysmanFabricPort::fabric_port_id_t val )
     {
         std::string str;
         
-        str += "SysmanFabricPort::fabric_port_uuid_t::id : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.id )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
+        str += "SysmanFabricPort::fabric_port_id_t::fabricId : ";
+        str += std::to_string(val.fabricId);
+        str += "\n";
+        
+        str += "SysmanFabricPort::fabric_port_id_t::attachId : ";
+        str += std::to_string(val.attachId);
+        str += "\n";
+        
+        str += "SysmanFabricPort::fabric_port_id_t::portNumber : ";
+        str += std::to_string(val.portNumber);
         str += "\n";
 
         return str;
@@ -4392,10 +4388,6 @@ namespace zet
         
         str += "SysmanFabricPort::fabric_port_speed_t::width : ";
         str += std::to_string(val.width);
-        str += "\n";
-        
-        str += "SysmanFabricPort::fabric_port_speed_t::maxBandwidth : ";
-        str += std::to_string(val.maxBandwidth);
         str += "\n";
 
         return str;
@@ -4427,8 +4419,8 @@ namespace zet
         str += std::to_string(val.subdeviceId);
         str += "\n";
         
-        str += "SysmanFabricPort::fabric_port_properties_t::portUuid : ";
-        str += to_string(val.portUuid);
+        str += "SysmanFabricPort::fabric_port_properties_t::portId : ";
+        str += to_string(val.portId);
         str += "\n";
         
         str += "SysmanFabricPort::fabric_port_properties_t::maxRxSpeed : ";
@@ -4498,6 +4490,10 @@ namespace zet
         str += to_string(val.stabilityIssues);
         str += "\n";
         
+        str += "SysmanFabricPort::fabric_port_state_t::remotePortId : ";
+        str += to_string(val.remotePortId);
+        str += "\n";
+        
         str += "SysmanFabricPort::fabric_port_state_t::rxSpeed : ";
         str += to_string(val.rxSpeed);
         str += "\n";
@@ -4525,14 +4521,6 @@ namespace zet
         
         str += "SysmanFabricPort::fabric_port_throughput_t::txCounter : ";
         str += std::to_string(val.txCounter);
-        str += "\n";
-        
-        str += "SysmanFabricPort::fabric_port_throughput_t::rxMaxBandwidth : ";
-        str += std::to_string(val.rxMaxBandwidth);
-        str += "\n";
-        
-        str += "SysmanFabricPort::fabric_port_throughput_t::txMaxBandwidth : ";
-        str += std::to_string(val.txMaxBandwidth);
         str += "\n";
 
         return str;

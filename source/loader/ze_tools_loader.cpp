@@ -2816,8 +2816,7 @@ namespace loader
     ze_result_t __zecall
     zetSysmanFabricPortGetThroughput(
         zet_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zet_fabric_port_throughput_t* pThroughput       ///< [in,out] Will contain the Fabric port throughput counters and maximum
-                                                        ///< bandwidth.
+        zet_fabric_port_throughput_t* pThroughput       ///< [in,out] Will contain the Fabric port throughput counters.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
