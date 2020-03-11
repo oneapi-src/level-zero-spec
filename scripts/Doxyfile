@@ -51,7 +51,7 @@ PROJECT_BRIEF          =
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = ../images/intel-logo.png
+PROJECT_LOGO           = ../docs/source/images/intel-logo.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
@@ -1782,13 +1782,27 @@ LATEX_EXTRA_STYLESHEET = templates/lstylesheet.tex
 # markers available.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_EXTRA_FILES      = ../images/core_event.png \
-                         ../images/core_fence.png \
-                         ../images/core_queue.png \
-                         ../images/core_subdevice.png \
-                         ../images/intel-logo.png \
-                         ../images/intro_driver.png \
-                         ../images/intro_tools.png
+LATEX_EXTRA_FILES      = ../docs/source/images/core_device.png \
+                         ../docs/source/images/core_event.png \
+                         ../docs/source/images/core_fence.png \
+                         ../docs/source/images/core_module.png \
+                         ../docs/source/images/core_queue.png \
+                         ../docs/source/images/core_subdevice.png \
+                         ../docs/source/images/core_sync.png \
+                         ../docs/source/images/intel-logo.png \
+                         ../docs/source/images/intro_driver.png \
+                         ../docs/source/images/intro_loader.png \
+                         ../docs/source/images/intro_tools.png \
+                         ../docs/source/images/tools_metric_hierarchy.png \
+                         ../docs/source/images/tools_metric_query.png \
+                         ../docs/source/images/tools_metric_tracer.png \
+                         ../docs/source/images/tools_sysman_fabric.png \
+                         ../docs/source/images/tools_sysman_fan_flow.png \
+                         ../docs/source/images/tools_sysman_freq_flow.png \
+                         ../docs/source/images/tools_sysman_freq_subdevices.png \
+                         ../docs/source/images/tools_sysman_object_hierarchy.png \
+                         ../docs/source/images/tools_sysman_oc.png \
+                         ../docs/source/images/tools_sysman_resprops.png
 
 # If the PDF_HYPERLINKS tag is set to YES, the LaTeX that is generated is
 # prepared for conversion to PDF (using ps2pdf or pdflatex). The PDF file will

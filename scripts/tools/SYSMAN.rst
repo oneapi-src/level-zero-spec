@@ -25,7 +25,7 @@ accelerator devices in the system and select those of interest.
 For each selected device handle, applications use the function ::${t}SysmanGet()
 to get an **Sysman handle** to manage system resources of the device.
 
-.. image:: ../../../images/tools_sysman_object_hierarchy.png
+.. image:: ../images/tools_sysman_object_hierarchy.png
 
 There is a unique handle for each device. Multiple threads can use the
 handle. If concurrent accesses are made to the same device property
@@ -279,7 +279,7 @@ enumerator will provide two handles, one to control the GPU frequency
 and one to enumerate the device memory frequency. This is illustrated in
 the figure below:
 
-.. image:: ../../../images/tools_sysman_freq_flow.png
+.. image:: ../images/tools_sysman_freq_flow.png
 
 In the C API, each class is associated with a unique handle type
 (e.g. ::${t}_sysman_freq_handle_t refers to a frequency component). In
@@ -326,7 +326,7 @@ sub-device ID (see ::${x}_device_properties_t.subdeviceId).
 The figure below shows the frequency components that will be enumerated on a device with two sub-devices where each sub-device has a GPU and
 device memory frequency control:
 
-.. image:: ../../../images/tools_sysman_freq_subdevices.png
+.. image:: ../images/tools_sysman_freq_subdevices.png
 
 The pseudo code below shows how to fix the GPU frequency on a specific
 sub-device (notice the additional sub-device check):
@@ -1159,7 +1159,7 @@ device B and D goes down, the routing rules can be modified such that
 device B and D can still access each other's memory by going through two
 hops in the fabric (device A and C).
 
-.. image:: ../../../images/tools_sysman_fabric.png
+.. image:: ../images/tools_sysman_fabric.png
 
 The API permits enumerating all the ports available on a device. Each
 port is uniquely identified within a system by the following information:

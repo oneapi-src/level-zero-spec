@@ -155,7 +155,7 @@ access to these device metrics.
 | The following diagram illustrates the relationship between the metric
   objects described in this document.
 
-.. image:: ../../../images/tools_metric_hierarchy.png
+.. image:: ../images/tools_metric_hierarchy.png
 
 Most of the detailed metrics require the device to be properly
 programmed before use. It is important to understand that the device
@@ -320,7 +320,7 @@ Time-based collection uses a simple Open, Wait, Read, Close scheme:
 - ::${t}MetricTracerReadData reads the data to be later processed by ::${t}MetricGroupCalculateMetricValues.
 - ::${t}MetricTracerClose closes the tracer.
 
-.. image:: ../../../images/tools_metric_tracer.png
+.. image:: ../images/tools_metric_tracer.png
 
 The following pseudo-code demonstrates a basic sequence for tracer-based collection:
 
@@ -401,7 +401,7 @@ Typically, multiple queries are used and recycled to characterize a workload. A 
 - ::${t}MetricQueryCreate obtains a handle to a unique location in the pool.
 - ::${t}MetricQueryReset allows for low-cost recycling of a location in the pool.
 
-.. image:: ../../../images/tools_metric_query.png
+.. image:: ../images/tools_metric_query.png
 
 The following pseudo-code demonstrates a basic sequence for query-based collection:
 

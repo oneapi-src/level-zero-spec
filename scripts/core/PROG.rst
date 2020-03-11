@@ -28,7 +28,7 @@ A device represents a physical device in the system that support Level-Zero.
 
 The following diagram illustrates the relationship between the driver, device and other objects described in this document.
 
-.. image:: ../../../images/core_device.png
+.. image:: ../images/core_device.png
 
 Initialization and Discovery
 ----------------------------
@@ -285,7 +285,7 @@ The following are the motivations for separating a command queue from a command 
 
 The following diagram illustrates the hierarchy of command lists and command queues to the device:
 
-.. image:: ../../../images/core_queue.png
+.. image:: ../images/core_queue.png
 
 Command Queues
 --------------
@@ -479,7 +479,7 @@ There are two types of synchronization primitives:
 
 The following diagram illustrates the relationship of capabilities of these types of synchronization primitives:
 
-.. image:: ../../../images/core_sync.png
+.. image:: ../images/core_sync.png
 
 The following are the motivations for separating the different types of synchronization primitives:
 
@@ -538,7 +538,7 @@ The primary usage model(s) for fences are to notify the Host when a command list
 
 The following diagram illustrates fences signaled after command lists on execution:
 
-.. image:: ../../../images/core_fence.png
+.. image:: ../images/core_fence.png
 
 .. _Events:
 
@@ -603,7 +603,7 @@ The following pseudo-code demonstrates a sequence for creation and submission of
 
 The following diagram illustrates an event being signaled between kernels within a command list:
 
-.. image:: ../../../images/core_event.png
+.. image:: ../images/core_event.png
 
 Barriers
 ========
@@ -711,7 +711,7 @@ There are multiple levels of constructs needed for executing kernels on the devi
 The following diagram provides a high-level overview of the major parts
 of the system.
 
-.. image:: ../../../images/core_module.png
+.. image:: ../images/core_module.png
 
 .. _Modules:
 

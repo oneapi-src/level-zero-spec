@@ -15,7 +15,7 @@ It can be adapted to support broader set of languages features, such as
 function pointers, virtual functions, unified memory, and I/O
 capabilities.
 
-.. image:: ../../../images/one_api_sw_stack.png
+.. image:: ../images/one_api_sw_stack.png
 
 The Level-Zero API provides the lowest-level, fine-grain and most explicit control over:
 
@@ -268,7 +268,7 @@ Driver Architecture
 
 The following section provides high-level driver architecture.
 
-.. image:: ../../../images/intro_driver.png
+.. image:: ../images/intro_driver.png
 
 Library
 -------
@@ -309,7 +309,7 @@ entirely bypassed.
 
 The following diagram illustrates the expected loading sequence:
 
-.. image:: ../../../images/intro_loader.png
+.. image:: ../images/intro_loader.png
 
 Thus, the loader's internal function pointer table entries may point to:
 
@@ -462,7 +462,7 @@ tools. The "Tools" APIs are still available for direct application use.
 
 The following diagram illustrates how 3rd-party tools may utilize the instrumentation layer:
 
-.. image:: ../../../images/intro_tools.png
+.. image:: ../images/intro_tools.png
 
 The "Tools" APIs provide the following capabilities for 3rd-party tools:
 
