@@ -607,10 +607,9 @@ The device can be reset using the following function:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${t}SysmanDeviceReset()          | Requests that the driver reset    |
-|                                   | the device. If the hardware is    |
-|                                   | hung, this will perform an PCI    |
-|                                   | bus reset.                        |
+| ::${t}SysmanDeviceReset()          | Requests that the driver          |
+|                                   | perform a PCI bus reset of the    |
+|                                   | device.                           |
 +-----------------------------------+-----------------------------------+
 
 PCI link operations
@@ -1954,9 +1953,6 @@ called to enable the event and/or provide threshold conditions.
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
 | ::${T}_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS  | RAS uncorrectable errors    | ::${t}SysmanRasSetConfig()             | ::${t}SysmanRasGetState()          |
 |                                                   | cross thresholds            |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${T}_SYSMAN_EVENT_DEVICE_WEDGED                  | Driver has detected that    |                                       | ::${t}SysmanDeviceGetState()       |
-|                                                   | the hardware is wedged      |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
 | ::${T}_SYSMAN_EVENT_DEVICE_RESET_REQUIRED          | Driver has determined that  |                                       | ::${t}SysmanDeviceGetState()       |
 |                                                   | an immediate reset is       |                                       |                                   |

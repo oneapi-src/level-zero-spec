@@ -999,7 +999,9 @@ namespace layer
     /// @brief Intercept function for zetSysmanDeviceReset
     ze_result_t __zecall
     zetSysmanDeviceReset(
-        zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
+        ze_bool_t force                                 ///< [in] If set to true, all applications that are currently using the
+                                                        ///< device will be forcibly killed.
         )
     {
         auto pfnDeviceReset = context.zetDdiTable.Sysman.pfnDeviceReset;
@@ -1014,7 +1016,7 @@ namespace layer
 
         }
 
-        return pfnDeviceReset( hSysman );
+        return pfnDeviceReset( hSysman, force );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

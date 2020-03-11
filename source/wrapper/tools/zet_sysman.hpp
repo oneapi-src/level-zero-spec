@@ -230,9 +230,8 @@ namespace zet
             RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),        ///< Event is triggered when accelerator RAS uncorrectable errors cross
                                                             ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
                                                             ///< default).
-            DEVICE_WEDGED = ZE_BIT( 13 ),                   ///< Event is triggered when one or more parts of the hardware is wedged.
             DEVICE_RESET_REQUIRED = ZE_BIT( 14 ),           ///< Event is triggered when the device needs to be reset (use
-                                                            ///< $SysmanDeviceGetState() to determine the reasons for the reset.
+                                                            ///< $SysmanDeviceGetState() to determine the reasons for the reset).
             ALL = 0x0FFF,                                   ///< Specifies all events
 
         };
@@ -461,10 +460,21 @@ namespace zet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Reset device
+        /// 
+        /// @details
+        ///     - Performs a PCI bus reset of the device. This will result in all
+        ///       current device state being lost.
+        ///     - All applications using the device should be stopped before calling
+        ///       this function.
+        ///     - If the force argument is specified, all applications using the device
+        ///       will be forcibly killed.
+        ///     - The function will block until the device has restarted or a timeout
+        ///       occurred waiting for the reset to complete.
         /// @throws result_t
         void __zecall
         DeviceReset(
-            void
+            ze::bool_t force                                ///< [in] If set to true, all applications that are currently using the
+                                                            ///< device will be forcibly killed.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

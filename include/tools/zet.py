@@ -1710,9 +1710,8 @@ class zet_sysman_event_type_v(IntEnum):
     RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 )         ## Event is triggered when accelerator RAS uncorrectable errors cross
                                                     ## thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
                                                     ## default).
-    DEVICE_WEDGED = ZE_BIT( 13 )                    ## Event is triggered when one or more parts of the hardware is wedged.
     DEVICE_RESET_REQUIRED = ZE_BIT( 14 )            ## Event is triggered when the device needs to be reset (use
-                                                    ## $SysmanDeviceGetState() to determine the reasons for the reset.
+                                                    ## $SysmanDeviceGetState() to determine the reasons for the reset).
     ALL = 0x0FFF                                    ## Specifies all events
 
 class zet_sysman_event_type_t(c_int):
@@ -2151,9 +2150,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for zetSysmanDeviceReset
 if __use_win_types:
-    _zetSysmanDeviceReset_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t )
+    _zetSysmanDeviceReset_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, ze_bool_t )
 else:
-    _zetSysmanDeviceReset_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t )
+    _zetSysmanDeviceReset_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, ze_bool_t )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanSchedulerGet

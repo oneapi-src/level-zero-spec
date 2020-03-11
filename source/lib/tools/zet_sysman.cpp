@@ -110,6 +110,16 @@ zetSysmanDeviceGetState(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset device
 /// 
+/// @details
+///     - Performs a PCI bus reset of the device. This will result in all
+///       current device state being lost.
+///     - All applications using the device should be stopped before calling
+///       this function.
+///     - If the force argument is specified, all applications using the device
+///       will be forcibly killed.
+///     - The function will block until the device has restarted or a timeout
+///       occurred waiting for the reset to complete.
+/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -118,16 +128,20 @@ zetSysmanDeviceGetState(
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE - "Reset cannot be performed because applications are using this device."
+///     - ::ZE_RESULT_ERROR_UNKNOWN - "There were problems unloading the device driver, performing a bus reset or reloading the device driver."
 ze_result_t __zecall
 zetSysmanDeviceReset(
-    zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
+    ze_bool_t force                                 ///< [in] If set to true, all applications that are currently using the
+                                                    ///< device will be forcibly killed.
     )
 {
     auto pfnDeviceReset = zet_lib::context.ddiTable.Sysman.pfnDeviceReset;
     if( nullptr == pfnDeviceReset )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
-    return pfnDeviceReset( hSysman );
+    return pfnDeviceReset( hSysman, force );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

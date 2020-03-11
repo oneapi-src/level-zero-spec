@@ -163,13 +163,25 @@ type: function
 desc: "Reset device"
 class: $tSysman
 name: DeviceReset
+details:
+    - "Performs a PCI bus reset of the device. This will result in all current device state being lost."
+    - "All applications using the device should be stopped before calling this function."
+    - "If the force argument is specified, all applications using the device will be forcibly killed."
+    - "The function will block until the device has restarted or a timeout occurred waiting for the reset to complete."
 params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle for the device"
+    - type: $x_bool_t
+      name: force
+      desc: "[in] If set to true, all applications that are currently using the device will be forcibly killed."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+        - "Reset cannot be performed because applications are using this device."
+    - $X_RESULT_ERROR_UNKNOWN
+        - "There were problems unloading the device driver, performing a bus reset or reloading the device driver."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Scheduler mode"
@@ -3043,12 +3055,9 @@ etors:
     - name: $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS
       value: "$X_BIT( 12 )"
       desc: "Event is triggered when accelerator RAS uncorrectable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
-    - name: $T_SYSMAN_EVENT_TYPE_DEVICE_WEDGED
-      value: "$X_BIT( 13 )"
-      desc: "Event is triggered when one or more parts of the hardware is wedged."
     - name: $T_SYSMAN_EVENT_TYPE_DEVICE_RESET_REQUIRED
       value: "$X_BIT( 14 )"
-      desc: "Event is triggered when the device needs to be reset (use $SysmanDeviceGetState() to determine the reasons for the reset."
+      desc: "Event is triggered when the device needs to be reset (use $SysmanDeviceGetState() to determine the reasons for the reset)."
     - name: $T_SYSMAN_EVENT_TYPE_ALL
       value: "0x0FFF"
       desc: "Specifies all events"

@@ -167,6 +167,16 @@ zetSysmanDeviceGetState(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset device
 /// 
+/// @details
+///     - Performs a PCI bus reset of the device. This will result in all
+///       current device state being lost.
+///     - All applications using the device should be stopped before calling
+///       this function.
+///     - If the force argument is specified, all applications using the device
+///       will be forcibly killed.
+///     - The function will block until the device has restarted or a timeout
+///       occurred waiting for the reset to complete.
+/// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
@@ -175,9 +185,13 @@ zetSysmanDeviceGetState(
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
+///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE - "Reset cannot be performed because applications are using this device."
+///     - ::ZE_RESULT_ERROR_UNKNOWN - "There were problems unloading the device driver, performing a bus reset or reloading the device driver."
 __ze_api_export ze_result_t __zecall
 zetSysmanDeviceReset(
-    zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
+    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
+    ze_bool_t force                                 ///< [in] If set to true, all applications that are currently using the
+                                                    ///< device will be forcibly killed.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3358,9 +3372,8 @@ typedef enum _zet_sysman_event_type_t
     ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),  ///< Event is triggered when accelerator RAS uncorrectable errors cross
                                                     ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
                                                     ///< default).
-    ZET_SYSMAN_EVENT_TYPE_DEVICE_WEDGED = ZE_BIT( 13 ), ///< Event is triggered when one or more parts of the hardware is wedged.
     ZET_SYSMAN_EVENT_TYPE_DEVICE_RESET_REQUIRED = ZE_BIT( 14 ), ///< Event is triggered when the device needs to be reset (use
-                                                    ///< $SysmanDeviceGetState() to determine the reasons for the reset.
+                                                    ///< $SysmanDeviceGetState() to determine the reasons for the reset).
     ZET_SYSMAN_EVENT_TYPE_ALL = 0x0FFF,             ///< Specifies all events
 
 } zet_sysman_event_type_t;

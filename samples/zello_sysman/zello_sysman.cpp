@@ -232,13 +232,24 @@ void WaitForExcessTemperatureEvent(zet_driver_handle_t hDriver, double tempLimit
 
 void ResetDevice(zet_sysman_handle_t hSysmanDevice)
 {
-    if (zetSysmanDeviceReset(hSysmanDevice))
+    ze_result_t status = zetSysmanDeviceReset(hSysmanDevice, false);
+    switch (status)
     {
-        fprintf(stdout, "Device reset initiated.\n");
-    }
-    else
-    {
-        fprintf(stderr, "ERROR: Problem resetting the device.\n");
+        case ZE_RESULT_SUCCESS:
+            fprintf(stdout, "Device reset completed successfully.\n");
+            break;
+        case ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+            fprintf(stdout, "Device reset completed successfully.\n");
+            break;
+        case ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
+            fprintf(stdout, "Device cannot be reset because applications are using it.\n");
+            break;
+        case ZE_RESULT_ERROR_UNKNOWN:
+            fprintf(stdout, "Device reset was initiated but did not complete successfully.\n");
+            break;
+        default:
+            fprintf(stdout, "Other errors occurred that prevent initiating a device reset.\n");
+            break;
     }
 }
 

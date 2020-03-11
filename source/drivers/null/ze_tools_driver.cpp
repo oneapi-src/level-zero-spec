@@ -946,7 +946,9 @@ namespace driver
     /// @brief Intercept function for zetSysmanDeviceReset
     ze_result_t __zecall
     zetSysmanDeviceReset(
-        zet_sysman_handle_t hSysman                     ///< [in] Sysman handle for the device
+        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
+        ze_bool_t force                                 ///< [in] If set to true, all applications that are currently using the
+                                                        ///< device will be forcibly killed.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -955,7 +957,7 @@ namespace driver
         auto pfnDeviceReset = context.zetDdiTable.Sysman.pfnDeviceReset;
         if( nullptr != pfnDeviceReset )
         {
-            result = pfnDeviceReset( hSysman );
+            result = pfnDeviceReset( hSysman, force );
         }
         else
         {

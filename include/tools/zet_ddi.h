@@ -580,7 +580,8 @@ typedef ze_result_t (__zecall *zet_pfnSysmanDeviceGetState_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetSysmanDeviceReset 
 typedef ze_result_t (__zecall *zet_pfnSysmanDeviceReset_t)(
-    zet_sysman_handle_t
+    zet_sysman_handle_t,
+    ze_bool_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////

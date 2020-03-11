@@ -269,14 +269,26 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Reset device
     /// 
+    /// @details
+    ///     - Performs a PCI bus reset of the device. This will result in all
+    ///       current device state being lost.
+    ///     - All applications using the device should be stopped before calling
+    ///       this function.
+    ///     - If the force argument is specified, all applications using the device
+    ///       will be forcibly killed.
+    ///     - The function will block until the device has restarted or a timeout
+    ///       occurred waiting for the reset to complete.
+    /// 
     /// @throws result_t
     void __zecall
     Sysman::DeviceReset(
-        void
+        ze::bool_t force                                ///< [in] If set to true, all applications that are currently using the
+                                                        ///< device will be forcibly killed.
         )
     {
         auto result = static_cast<result_t>( ::zetSysmanDeviceReset(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ) ) );
+            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
+            static_cast<ze_bool_t>( force ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::DeviceReset" );
@@ -3225,9 +3237,6 @@ namespace zet
         
         if( static_cast<uint32_t>(Sysman::event_type_t::RAS_UNCORRECTABLE_ERRORS) & bits )
             str += "RAS_UNCORRECTABLE_ERRORS | ";
-        
-        if( static_cast<uint32_t>(Sysman::event_type_t::DEVICE_WEDGED) & bits )
-            str += "DEVICE_WEDGED | ";
         
         if( static_cast<uint32_t>(Sysman::event_type_t::DEVICE_RESET_REQUIRED) & bits )
             str += "DEVICE_RESET_REQUIRED | ";
