@@ -211,6 +211,7 @@ namespace ze
     /// @details
     ///     - The memory pointed to by dstptr must be accessible by the device on
     ///       which the command list is created.
+    ///     - Media formats are not supported for this function.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -245,6 +246,7 @@ namespace ze
     /// @details
     ///     - The memory pointed to by srcptr must be accessible by the device on
     ///       which the command list is created.
+    ///     - Media formats are not supported for this function.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same command list handle.
     ///     - The implementation of this function should be lock-free.
