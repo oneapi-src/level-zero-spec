@@ -160,6 +160,8 @@ zeCommandListAppendMemoryCopyRegion(
 /// @brief Copies a image.
 /// 
 /// @details
+///     - Images format descriptors for both source and destination images must
+///       be the same.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
@@ -206,6 +208,8 @@ typedef struct _ze_image_region_t
 ///     - The region width and height for both src and dst must be same. The
 ///       origins can be different.
 ///     - The src and dst regions cannot be overlapping.
+///     - Images format descriptors for both source and destination images must
+///       be the same.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same command list handle.
 ///     - The implementation of this function should be lock-free.
