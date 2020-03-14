@@ -141,19 +141,6 @@ namespace zet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Workload performance profiles
-        enum class perf_profile_t
-        {
-            BALANCED = 0,                                   ///< The hardware is configured to strike a balance between compute and
-                                                            ///< memory resources. This is the default profile when the device
-                                                            ///< boots/resets.
-            COMPUTE_BOUNDED,                                ///< The hardware is configured to prioritize performance of the compute
-                                                            ///< units.
-            MEMORY_BOUNDED,                                 ///< The hardware is configured to prioritize memory throughput.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief PCI link status
         enum class pci_link_status_t
         {
@@ -498,47 +485,25 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get a list of supported performance profiles that can be loaded for
-        ///        this device
+        /// @brief Get handles to accelerator domains whose performance can be optimized
+        ///        via a Performance Factor
         /// 
         /// @details
-        ///     - The balanced profile ::ZET_PERF_PROFILE_BALANCED is always returned in
-        ///       the array.
+        ///     - A Performance Factor should be tuned for each workload.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        PerformanceProfileGetSupported(
-            uint32_t* pSupported                            ///< [in,out] A bit field of (1<<::zet_perf_profile_t) profiles that are
-                                                            ///< supported.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current pre-configured performance profile being used by the
-        ///        hardware
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        PerformanceProfileGet(
-            perf_profile_t* pProfile                        ///< [in,out] The performance profile currently loaded.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Load a pre-configured performance profile
-        /// 
-        /// @details
-        ///     - Performance profiles are not persistent settings. If the device is
-        ///       reset, the device will default back to the balanced profile
-        ///       ::ZET_PERF_PROFILE_BALANCED.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        PerformanceProfileSet(
-            perf_profile_t profile                          ///< [in] The performance profile to load.
+        PerformanceFactorGet(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            SysmanPerformanceFactor** ppPerf = nullptr      ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1076,6 +1041,94 @@ namespace zet
         SetComputeUnitDebugMode(
             ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
                                                             ///< apply the new scheduler mode.
+            );
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device performance factor
+    class SysmanPerformanceFactor
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Static information about a Performance Factor domain
+        struct perf_properties_t
+        {
+            ze::bool_t onSubdevice;                         ///< [out] True if this Performance Factor affects accelerators located on
+                                                            ///< a sub-device
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are affected by this
+                                                            ///< Performance Factor (bitfield of 1<<::zet_engine_type_t).
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        sysman_perf_handle_t m_handle = nullptr;        ///< [in] handle of Sysman object
+        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        SysmanPerformanceFactor( void ) = delete;
+        SysmanPerformanceFactor( 
+            sysman_perf_handle_t handle,                    ///< [in] handle of Sysman object
+            Sysman* pSysman                                 ///< [in] pointer to owner object
+            );
+
+        ~SysmanPerformanceFactor( void ) = default;
+
+        SysmanPerformanceFactor( SysmanPerformanceFactor const& other ) = delete;
+        void operator=( SysmanPerformanceFactor const& other ) = delete;
+
+        SysmanPerformanceFactor( SysmanPerformanceFactor&& other ) = delete;
+        void operator=( SysmanPerformanceFactor&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getSysman( void ) const { return m_pSysman; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get properties about a Performance Factor domain
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetProperties(
+            perf_properties_t* pProperties                  ///< [in,out] Will contain information about the specified Performance
+                                                            ///< Factor domain.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get current Performance Factor for a given domain
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetConfig(
+            double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
+                                                            ///< hardware (may not be the same as the requested Performance Factor).
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change the performance factor for a domain
+        /// 
+        /// @details
+        ///     - The Performance Factor is a number between 0 and 100.
+        ///     - A Performance Factor is a hint to the hardware. Depending on the
+        ///       hardware, the request may not be granted. Follow up this function with
+        ///       a call to ::zetSysmanPerformanceFactorGetConfig() to determine the
+        ///       actual factor being used by the hardware.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetConfig(
+            double factor                                   ///< [in] The new Performance Factor.
             );
 
     };
@@ -3300,10 +3353,6 @@ namespace zet
     std::string to_string( const Sysman::sched_timeslice_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::perf_profile_t to std::string
-    std::string to_string( const Sysman::perf_profile_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::process_state_t to std::string
     std::string to_string( const Sysman::process_state_t val );
 
@@ -3358,6 +3407,10 @@ namespace zet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanScheduler::sched_properties_t to std::string
     std::string to_string( const SysmanScheduler::sched_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanPerformanceFactor::perf_properties_t to std::string
+    std::string to_string( const SysmanPerformanceFactor::perf_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanPower::power_properties_t to std::string

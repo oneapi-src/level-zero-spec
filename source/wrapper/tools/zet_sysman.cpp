@@ -38,6 +38,16 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    SysmanPerformanceFactor::SysmanPerformanceFactor( 
+        sysman_perf_handle_t handle,                    ///< [in] handle of Sysman object
+        Sysman* pSysman                                 ///< [in] pointer to owner object
+        ) :
+        m_handle( handle ),
+        m_pSysman( pSysman )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     SysmanPower::SysmanPower( 
         sysman_pwr_handle_t handle,                     ///< [in] handle of Sysman object
         Sysman* pSysman                                 ///< [in] pointer to owner object
@@ -546,33 +556,61 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get a list of supported performance profiles that can be loaded for
-    ///        this device
+    /// @brief Get handles to accelerator domains whose performance can be optimized
+    ///        via a Performance Factor
     /// 
     /// @details
-    ///     - The balanced profile ::ZET_PERF_PROFILE_BALANCED is always returned in
-    ///       the array.
+    ///     - A Performance Factor should be tuned for each workload.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::PerformanceProfileGetSupported(
-        uint32_t* pSupported                            ///< [in,out] A bit field of (1<<::zet_perf_profile_t) profiles that are
-                                                        ///< supported.
+    Sysman::PerformanceFactorGet(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        SysmanPerformanceFactor** ppPerf                ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                        ///< of this type
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanPerformanceProfileGetSupported(
+        thread_local std::vector<zet_sysman_perf_handle_t> hPerf;
+        hPerf.resize( ( ppPerf ) ? *pCount : 0 );
+
+        auto result = static_cast<result_t>( ::zetSysmanPerformanceFactorGet(
             reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
-            pSupported ) );
+            pCount,
+            hPerf.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::PerformanceProfileGetSupported" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::PerformanceFactorGet" );
+
+        for( uint32_t i = 0; ( ppPerf ) && ( i < *pCount ); ++i )
+            ppPerf[ i ] = nullptr;
+
+        try
+        {
+            for( uint32_t i = 0; ( ppPerf ) && ( i < *pCount ); ++i )
+                ppPerf[ i ] = new SysmanPerformanceFactor( reinterpret_cast<sysman_perf_handle_t>( hPerf[ i ] ), this );
+        }
+        catch( std::bad_alloc& )
+        {
+            for( uint32_t i = 0; ( ppPerf ) && ( i < *pCount ); ++i )
+            {
+                delete ppPerf[ i ];
+                ppPerf[ i ] = nullptr;
+            }
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "zet::Sysman::PerformanceFactorGet" );
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get current pre-configured performance profile being used by the
-    ///        hardware
+    /// @brief Get properties about a Performance Factor domain
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -580,40 +618,65 @@ namespace zet
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::PerformanceProfileGet(
-        perf_profile_t* pProfile                        ///< [in,out] The performance profile currently loaded.
+    SysmanPerformanceFactor::GetProperties(
+        perf_properties_t* pProperties                  ///< [in,out] Will contain information about the specified Performance
+                                                        ///< Factor domain.
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanPerformanceProfileGet(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
-            reinterpret_cast<zet_perf_profile_t*>( pProfile ) ) );
+        auto result = static_cast<result_t>( ::zetSysmanPerformanceFactorGetProperties(
+            reinterpret_cast<zet_sysman_perf_handle_t>( getHandle() ),
+            reinterpret_cast<zet_perf_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::PerformanceProfileGet" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPerformanceFactor::GetProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Load a pre-configured performance profile
+    /// @brief Get current Performance Factor for a given domain
     /// 
     /// @details
-    ///     - Performance profiles are not persistent settings. If the device is
-    ///       reset, the device will default back to the balanced profile
-    ///       ::ZET_PERF_PROFILE_BALANCED.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __zecall
-    Sysman::PerformanceProfileSet(
-        perf_profile_t profile                          ///< [in] The performance profile to load.
+    SysmanPerformanceFactor::GetConfig(
+        double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
+                                                        ///< hardware (may not be the same as the requested Performance Factor).
         )
     {
-        auto result = static_cast<result_t>( ::zetSysmanPerformanceProfileSet(
-            reinterpret_cast<zet_sysman_handle_t>( getHandle() ),
-            static_cast<zet_perf_profile_t>( profile ) ) );
+        auto result = static_cast<result_t>( ::zetSysmanPerformanceFactorGetConfig(
+            reinterpret_cast<zet_sysman_perf_handle_t>( getHandle() ),
+            pFactor ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::Sysman::PerformanceProfileSet" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPerformanceFactor::GetConfig" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Change the performance factor for a domain
+    /// 
+    /// @details
+    ///     - The Performance Factor is a number between 0 and 100.
+    ///     - A Performance Factor is a hint to the hardware. Depending on the
+    ///       hardware, the request may not be granted. Follow up this function with
+    ///       a call to ::zetSysmanPerformanceFactorGetConfig() to determine the
+    ///       actual factor being used by the hardware.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __zecall
+    SysmanPerformanceFactor::SetConfig(
+        double factor                                   ///< [in] The new Performance Factor.
+        )
+    {
+        auto result = static_cast<result_t>( ::zetSysmanPerformanceFactorSetConfig(
+            reinterpret_cast<zet_sysman_perf_handle_t>( getHandle() ),
+            factor ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "zet::SysmanPerformanceFactor::SetConfig" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3040,34 +3103,6 @@ namespace zet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::perf_profile_t to std::string
-    std::string to_string( const Sysman::perf_profile_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Sysman::perf_profile_t::BALANCED:
-            str = "Sysman::perf_profile_t::BALANCED";
-            break;
-
-        case Sysman::perf_profile_t::COMPUTE_BOUNDED:
-            str = "Sysman::perf_profile_t::COMPUTE_BOUNDED";
-            break;
-
-        case Sysman::perf_profile_t::MEMORY_BOUNDED:
-            str = "Sysman::perf_profile_t::MEMORY_BOUNDED";
-            break;
-
-        default:
-            str = "Sysman::perf_profile_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_link_status_t to std::string
     std::string to_string( const Sysman::pci_link_status_t val )
     {
@@ -3576,6 +3611,27 @@ namespace zet
         
         str += "SysmanScheduler::sched_properties_t::supportedModes : ";
         str += std::to_string(val.supportedModes);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanPerformanceFactor::perf_properties_t to std::string
+    std::string to_string( const SysmanPerformanceFactor::perf_properties_t val )
+    {
+        std::string str;
+        
+        str += "SysmanPerformanceFactor::perf_properties_t::onSubdevice : ";
+        str += std::to_string(val.onSubdevice);
+        str += "\n";
+        
+        str += "SysmanPerformanceFactor::perf_properties_t::subdeviceId : ";
+        str += std::to_string(val.subdeviceId);
+        str += "\n";
+        
+        str += "SysmanPerformanceFactor::perf_properties_t::engines : ";
+        str += std::to_string(val.engines);
         str += "\n";
 
         return str;

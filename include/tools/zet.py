@@ -83,6 +83,11 @@ class zet_sysman_sched_handle_t(c_void_p):
     pass
 
 ###############################################################################
+## @brief Handle for a Sysman device performance factors
+class zet_sysman_perf_handle_t(c_void_p):
+    pass
+
+###############################################################################
 ## @brief Handle for a Sysman device power domain
 class zet_sysman_pwr_handle_t(c_void_p):
     pass
@@ -714,19 +719,15 @@ class zet_sched_timeslice_properties_t(Structure):
     ]
 
 ###############################################################################
-## @brief Workload performance profiles
-class zet_perf_profile_v(IntEnum):
-    BALANCED = 0                                    ## The hardware is configured to strike a balance between compute and
-                                                    ## memory resources. This is the default profile when the device
-                                                    ## boots/resets.
-    COMPUTE_BOUNDED = auto()                        ## The hardware is configured to prioritize performance of the compute
-                                                    ## units.
-    MEMORY_BOUNDED = auto()                         ## The hardware is configured to prioritize memory throughput.
-
-class zet_perf_profile_t(c_int):
-    def __str__(self):
-        return str(zet_perf_profile_v(value))
-
+## @brief Static information about a Performance Factor domain
+class zet_perf_properties_t(Structure):
+    _fields_ = [
+        ("onSubdevice", ze_bool_t),                                     ## [out] True if this Performance Factor affects accelerators located on
+                                                                        ## a sub-device
+        ("subdeviceId", c_ulong),                                       ## [out] If onSubdevice is true, this gives the ID of the sub-device
+        ("engines", c_ulonglong)                                        ## [out] Bitfield of accelerator engines that are affected by this
+                                                                        ## Performance Factor (bitfield of 1<<::zet_engine_type_t).
+    ]
 
 ###############################################################################
 ## @brief Contains information about a process that has an open connection with
@@ -2162,25 +2163,11 @@ else:
     _zetSysmanSchedulerGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_sched_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for zetSysmanPerformanceProfileGetSupported
+## @brief Function-pointer for zetSysmanPerformanceFactorGet
 if __use_win_types:
-    _zetSysmanPerformanceProfileGetSupported_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong) )
+    _zetSysmanPerformanceFactorGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_perf_handle_t) )
 else:
-    _zetSysmanPerformanceProfileGetSupported_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanPerformanceProfileGet
-if __use_win_types:
-    _zetSysmanPerformanceProfileGet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_perf_profile_t) )
-else:
-    _zetSysmanPerformanceProfileGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(zet_perf_profile_t) )
-
-###############################################################################
-## @brief Function-pointer for zetSysmanPerformanceProfileSet
-if __use_win_types:
-    _zetSysmanPerformanceProfileSet_t = WINFUNCTYPE( ze_result_t, zet_sysman_handle_t, zet_perf_profile_t )
-else:
-    _zetSysmanPerformanceProfileSet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, zet_perf_profile_t )
+    _zetSysmanPerformanceFactorGet_t = CFUNCTYPE( ze_result_t, zet_sysman_handle_t, POINTER(c_ulong), POINTER(zet_sysman_perf_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for zetSysmanProcessesGetState
@@ -2325,9 +2312,7 @@ class _zet_sysman_dditable_t(Structure):
         ("pfnDeviceGetState", c_void_p),                                ## _zetSysmanDeviceGetState_t
         ("pfnDeviceReset", c_void_p),                                   ## _zetSysmanDeviceReset_t
         ("pfnSchedulerGet", c_void_p),                                  ## _zetSysmanSchedulerGet_t
-        ("pfnPerformanceProfileGetSupported", c_void_p),                ## _zetSysmanPerformanceProfileGetSupported_t
-        ("pfnPerformanceProfileGet", c_void_p),                         ## _zetSysmanPerformanceProfileGet_t
-        ("pfnPerformanceProfileSet", c_void_p),                         ## _zetSysmanPerformanceProfileSet_t
+        ("pfnPerformanceFactorGet", c_void_p),                          ## _zetSysmanPerformanceFactorGet_t
         ("pfnProcessesGetState", c_void_p),                             ## _zetSysmanProcessesGetState_t
         ("pfnPciGetProperties", c_void_p),                              ## _zetSysmanPciGetProperties_t
         ("pfnPciGetState", c_void_p),                                   ## _zetSysmanPciGetState_t
@@ -2418,6 +2403,37 @@ class _zet_sysman_scheduler_dditable_t(Structure):
         ("pfnSetTimesliceMode", c_void_p),                              ## _zetSysmanSchedulerSetTimesliceMode_t
         ("pfnSetExclusiveMode", c_void_p),                              ## _zetSysmanSchedulerSetExclusiveMode_t
         ("pfnSetComputeUnitDebugMode", c_void_p)                        ## _zetSysmanSchedulerSetComputeUnitDebugMode_t
+    ]
+
+###############################################################################
+## @brief Function-pointer for zetSysmanPerformanceFactorGetProperties
+if __use_win_types:
+    _zetSysmanPerformanceFactorGetProperties_t = WINFUNCTYPE( ze_result_t, zet_sysman_perf_handle_t, POINTER(zet_perf_properties_t) )
+else:
+    _zetSysmanPerformanceFactorGetProperties_t = CFUNCTYPE( ze_result_t, zet_sysman_perf_handle_t, POINTER(zet_perf_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanPerformanceFactorGetConfig
+if __use_win_types:
+    _zetSysmanPerformanceFactorGetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_perf_handle_t, POINTER(c_double) )
+else:
+    _zetSysmanPerformanceFactorGetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_perf_handle_t, POINTER(c_double) )
+
+###############################################################################
+## @brief Function-pointer for zetSysmanPerformanceFactorSetConfig
+if __use_win_types:
+    _zetSysmanPerformanceFactorSetConfig_t = WINFUNCTYPE( ze_result_t, zet_sysman_perf_handle_t, c_double )
+else:
+    _zetSysmanPerformanceFactorSetConfig_t = CFUNCTYPE( ze_result_t, zet_sysman_perf_handle_t, c_double )
+
+
+###############################################################################
+## @brief Table of SysmanPerformanceFactor functions pointers
+class _zet_sysman_performance_factor_dditable_t(Structure):
+    _fields_ = [
+        ("pfnGetProperties", c_void_p),                                 ## _zetSysmanPerformanceFactorGetProperties_t
+        ("pfnGetConfig", c_void_p),                                     ## _zetSysmanPerformanceFactorGetConfig_t
+        ("pfnSetConfig", c_void_p)                                      ## _zetSysmanPerformanceFactorSetConfig_t
     ]
 
 ###############################################################################
@@ -3101,6 +3117,7 @@ class _zet_dditable_t(Structure):
         ("Tracer", _zet_tracer_dditable_t),
         ("Sysman", _zet_sysman_dditable_t),
         ("SysmanScheduler", _zet_sysman_scheduler_dditable_t),
+        ("SysmanPerformanceFactor", _zet_sysman_performance_factor_dditable_t),
         ("SysmanPower", _zet_sysman_power_dditable_t),
         ("SysmanFrequency", _zet_sysman_frequency_dditable_t),
         ("SysmanEngine", _zet_sysman_engine_dditable_t),
@@ -3270,9 +3287,7 @@ class ZET_DDI:
         self.zetSysmanDeviceGetState = _zetSysmanDeviceGetState_t(self.__dditable.Sysman.pfnDeviceGetState)
         self.zetSysmanDeviceReset = _zetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
         self.zetSysmanSchedulerGet = _zetSysmanSchedulerGet_t(self.__dditable.Sysman.pfnSchedulerGet)
-        self.zetSysmanPerformanceProfileGetSupported = _zetSysmanPerformanceProfileGetSupported_t(self.__dditable.Sysman.pfnPerformanceProfileGetSupported)
-        self.zetSysmanPerformanceProfileGet = _zetSysmanPerformanceProfileGet_t(self.__dditable.Sysman.pfnPerformanceProfileGet)
-        self.zetSysmanPerformanceProfileSet = _zetSysmanPerformanceProfileSet_t(self.__dditable.Sysman.pfnPerformanceProfileSet)
+        self.zetSysmanPerformanceFactorGet = _zetSysmanPerformanceFactorGet_t(self.__dditable.Sysman.pfnPerformanceFactorGet)
         self.zetSysmanProcessesGetState = _zetSysmanProcessesGetState_t(self.__dditable.Sysman.pfnProcessesGetState)
         self.zetSysmanPciGetProperties = _zetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)
         self.zetSysmanPciGetState = _zetSysmanPciGetState_t(self.__dditable.Sysman.pfnPciGetState)
@@ -3309,6 +3324,18 @@ class ZET_DDI:
         self.zetSysmanSchedulerSetTimesliceMode = _zetSysmanSchedulerSetTimesliceMode_t(self.__dditable.SysmanScheduler.pfnSetTimesliceMode)
         self.zetSysmanSchedulerSetExclusiveMode = _zetSysmanSchedulerSetExclusiveMode_t(self.__dditable.SysmanScheduler.pfnSetExclusiveMode)
         self.zetSysmanSchedulerSetComputeUnitDebugMode = _zetSysmanSchedulerSetComputeUnitDebugMode_t(self.__dditable.SysmanScheduler.pfnSetComputeUnitDebugMode)
+
+        # call driver to get function pointers
+        _SysmanPerformanceFactor = _zet_sysman_performance_factor_dditable_t()
+        r = ze_result_v(self.__dll.zetGetSysmanPerformanceFactorProcAddrTable(version, byref(_SysmanPerformanceFactor)))
+        if r != ze_result_v.SUCCESS:
+            raise Exception(r)
+        self.__dditable.SysmanPerformanceFactor = _SysmanPerformanceFactor
+
+        # attach function interface to function address
+        self.zetSysmanPerformanceFactorGetProperties = _zetSysmanPerformanceFactorGetProperties_t(self.__dditable.SysmanPerformanceFactor.pfnGetProperties)
+        self.zetSysmanPerformanceFactorGetConfig = _zetSysmanPerformanceFactorGetConfig_t(self.__dditable.SysmanPerformanceFactor.pfnGetConfig)
+        self.zetSysmanPerformanceFactorSetConfig = _zetSysmanPerformanceFactorSetConfig_t(self.__dditable.SysmanPerformanceFactor.pfnSetConfig)
 
         # call driver to get function pointers
         _SysmanPower = _zet_sysman_power_dditable_t()

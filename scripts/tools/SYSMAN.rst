@@ -227,13 +227,13 @@ provided for all components in each class.
 +------------------------+---------------------------------+-------------------------------------------+
 | Class                  | Components                      | Operations                                |
 +========================+=================================+===========================================+
-| `Power <#pwr>`__       | Package: power                  | Set sustained power limit                 |
+| Power_                 | Package: power                  | Set sustained power limit                 |
 |                        |                                 |                                           |
 |                        |                                 | Set burst power limit                     |
 |                        |                                 |                                           |
 |                        |                                 | Set peak power limit                      |
 +------------------------+---------------------------------+-------------------------------------------+
-| `Frequency <#frq>`__   | Sub-device 0: GPU frequency     | Set frequency range                       |
+| Frequency_             | Sub-device 0: GPU frequency     | Set frequency range                       |
 |                        |                                 |                                           |
 |                        | Sub-device 0: Memory frequency  |                                           |
 |                        |                                 |                                           |
@@ -241,28 +241,36 @@ provided for all components in each class.
 |                        |                                 |                                           |
 |                        | Sub-device 1: Memory frequency  |                                           |
 +------------------------+---------------------------------+-------------------------------------------+
-| `Standby <#sby>`__     | Sub-device 0: Control           | Disable opportunistic standby             |
+| Performance-Factor_    | Sub-device 0: Compute           | Tune workload performance                 |
+|                        |                                 |                                           |
+|                        | Sub-device 0: Media             |                                           |
+|                        |                                 |                                           |
+|                        | Sub-device 1: Compute           |                                           |
+|                        |                                 |                                           |
+|                        | Sub-device 1: Media             |                                           |
++------------------------+---------------------------------+-------------------------------------------+
+| Standby_               | Sub-device 0: Control           | Disable opportunistic standby             |
 |                        | entire sub-device               | standby                                   |
 |                        |                                 |                                           |
 |                        | Sub-device 1: Control entire    |                                           |
 |                        | sub-device                      |                                           |
 +------------------------+---------------------------------+-------------------------------------------+
-| `Firmware <#fmw>`__    | Sub-device 0: Enumerates each   | Flash new firmware                        |
+| Firmware_              | Sub-device 0: Enumerates each   | Flash new firmware                        |
 |                        | firmware                        |                                           |
 |                        |                                 |                                           |
 |                        | Sub-device 1: Enumerates each   |                                           |
 |                        | firmware                        |                                           |
 +------------------------+---------------------------------+-------------------------------------------+
-| `Fabric port <#con>`__ | Sub-device 0: Control each port | Configure port UP/DOWN                    |
+| Fabric-Port_           | Sub-device 0: Control each port | Configure port UP/DOWN                    |
 |                        |                                 |                                           |
 |                        | Sub-device 1: Control each port | Turn beaconing ON/OFF                     |
 +------------------------+---------------------------------+-------------------------------------------+
-| `Fan <#fan>`__         | Package: Fans                   | Set config (fixed speed, temperature-     |
+| Fan_                   | Package: Fans                   | Set config (fixed speed, temperature-     |
 |                        |                                 | speed table)                              |
 +------------------------+---------------------------------+-------------------------------------------+
-| `LED <#led>`__         | Package: LEDs                   | Turn LED on/off and set color             |
+| LED_                   | Package: LEDs                   | Turn LED on/off and set color             |
 +------------------------+---------------------------------+-------------------------------------------+
-| `Diagnostics <#con>`__ | SCAN test suite                 | Run all or a subset                       |
+| Diagnostics_           | SCAN test suite                 | Run all or a subset                       |
 |                        |                                 | of diagnostic tests                       |
 |                        | ARRAY test suite                | in the test suite                         |
 +------------------------+---------------------------------+-------------------------------------------+
@@ -993,6 +1001,62 @@ Overclocking can be turned off by calling
 ::${t}SysmanFrequencyOcSetConfig() with mode ::${T}_OC_MODE_OFF and by
 calling ${t}SysmanFrequencyOcGetIccMax() and ::${t}SysmanFrequencyOcSetTjMax() with values of 0.0.
 
+.. _Performance-Factor:
+
+Tuning workload performance
+---------------------------
+
+While hardware attempts to balance system resources effectively, there are
+workloads that can benefit from external performance hints. For hardware
+where this is possible, the API exposes *Performance Factors* domains that
+can be used to provide these hints.
+
+A Performance Factor is defined as a number between 0 and 100 that expresses
+a trade-off between the energy provided to the accelerator units and the
+energy provided to the supporting units. As an example, a compute heavy
+workload benefits from a higher distribution of energy at the computational
+units rather than for the memory controller. Alternatively, a memory bounded
+workload can benefit by trading off performance of the computational units
+for higher throughput in the memory controller. Generally the hardware
+will get this balance right, but the Performance Factor can be used to
+make the balance more aggressive. In the examples given, a Performance
+Factor of 100 would indicate that the workload is completely compute
+bounded and requires very little support from the memory controller.
+Alternatively, a Performance Factor of 0 would indicate that the workload
+is completely memory bounded and the performance of the memory
+controller needs to be increased.
+
+Tuning for a workload can involve running the application repeatedly with
+different values of the Performance Factor from 0 to 100 and choosing
+the value that gives the best performance. The default value is 50.
+Alternatively, a more dynamic approach would involve monitoring the
+various utilization metrics of the accelerator to determine memory
+and compute bounded and moving the Performance Factor up and down
+in order to remove the bottleneck.
+
+The API provides a way to enumerate the domains that can be controlled
+by a Performance Factor. A domain contains one or more accelerators
+whose performance will be affected by this setting. The API provides
+functions to change the Performance Factor for a domain.
+
+Here is a summary of the available functions:
+
++----------------------------------------------+--------------------------------------------------------------------+
+| Function                                     | Description                                                        |
++==============================================+====================================================================+
+| ::${t}SysmanPerformanceFactorGet()            | Enumerate the Performance Factor domains available on the          |
+|                                              | hardware.                                                          |
++----------------------------------------------+--------------------------------------------------------------------+
+| ::${t}SysmanPerformanceFactorGetProperties()  | Find out if the Performance Factor domain is located on a          |
+|                                              | sub-device and which accelerators are affected by it.              |
++----------------------------------------------+--------------------------------------------------------------------+
+| ::${t}SysmanPerformanceFactorGetConfig()      | Read the current performance factor being used by the hardware     |
+|                                              | for a domain.                                                      |
++----------------------------------------------+--------------------------------------------------------------------+
+| ::${t}SysmanPerformanceFactorSetConfig()      | Change the Performance Factor of the hardware for a domain.        |
++----------------------------------------------+--------------------------------------------------------------------+
+
+
 .. _Engines:
 
 Operations on engine groups
@@ -1026,6 +1090,8 @@ The following functions are provided:
 | ::${t}SysmanEngineGetActivity()    | Returns the activity counters for |
 |                                   | an engine group.                  |
 +-----------------------------------+-----------------------------------+
+
+.. _Standby:
 
 Operations on standby domains
 -----------------------------

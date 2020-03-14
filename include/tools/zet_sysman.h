@@ -513,25 +513,23 @@ zetSysmanSchedulerSetComputeUnitDebugMode(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Workload performance profiles
-typedef enum _zet_perf_profile_t
+/// @brief Static information about a Performance Factor domain
+typedef struct _zet_perf_properties_t
 {
-    ZET_PERF_PROFILE_BALANCED = 0,                  ///< The hardware is configured to strike a balance between compute and
-                                                    ///< memory resources. This is the default profile when the device
-                                                    ///< boots/resets.
-    ZET_PERF_PROFILE_COMPUTE_BOUNDED,               ///< The hardware is configured to prioritize performance of the compute
-                                                    ///< units.
-    ZET_PERF_PROFILE_MEMORY_BOUNDED,                ///< The hardware is configured to prioritize memory throughput.
+    ze_bool_t onSubdevice;                          ///< [out] True if this Performance Factor affects accelerators located on
+                                                    ///< a sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are affected by this
+                                                    ///< Performance Factor (bitfield of 1<<::zet_engine_type_t).
 
-} zet_perf_profile_t;
+} zet_perf_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get a list of supported performance profiles that can be loaded for
-///        this device
+/// @brief Get handles to accelerator domains whose performance can be optimized
+///        via a Performance Factor
 /// 
 /// @details
-///     - The balanced profile ::ZET_PERF_PROFILE_BALANCED is always returned in
-///       the array.
+///     - A Performance Factor should be tuned for each workload.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -542,17 +540,23 @@ typedef enum _zet_perf_profile_t
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
 ///         + `nullptr == hSysman`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pSupported`
+///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zetSysmanPerformanceProfileGetSupported(
+zetSysmanPerformanceFactorGet(
     zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pSupported                            ///< [in,out] A bit field of (1<<::zet_perf_profile_t) profiles that are
-                                                    ///< supported.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zet_sysman_perf_handle_t* phPerf                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current pre-configured performance profile being used by the
-///        hardware
+/// @brief Get properties about a Performance Factor domain
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -563,22 +567,20 @@ zetSysmanPerformanceProfileGetSupported(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hPerf`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProfile`
+///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zetSysmanPerformanceProfileGet(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    zet_perf_profile_t* pProfile                    ///< [in,out] The performance profile currently loaded.
+zetSysmanPerformanceFactorGetProperties(
+    zet_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
+    zet_perf_properties_t* pProperties              ///< [in,out] Will contain information about the specified Performance
+                                                    ///< Factor domain.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Load a pre-configured performance profile
+/// @brief Get current Performance Factor for a given domain
 /// 
 /// @details
-///     - Performance profiles are not persistent settings. If the device is
-///       reset, the device will default back to the balanced profile
-///       ::ZET_PERF_PROFILE_BALANCED.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -587,17 +589,38 @@ zetSysmanPerformanceProfileGet(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
-///         + profile
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + The specified profile is not valid or not supported on this device (use ::zetSysmanPerformanceProfileGetSupported() to get a list of supported profiles).
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to change the performance profile of the hardware.
+///         + `nullptr == hPerf`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pFactor`
 __ze_api_export ze_result_t __zecall
-zetSysmanPerformanceProfileSet(
-    zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    zet_perf_profile_t profile                      ///< [in] The performance profile to load.
+zetSysmanPerformanceFactorGetConfig(
+    zet_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
+    double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
+                                                    ///< hardware (may not be the same as the requested Performance Factor).
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change the performance factor for a domain
+/// 
+/// @details
+///     - The Performance Factor is a number between 0 and 100.
+///     - A Performance Factor is a hint to the hardware. Depending on the
+///       hardware, the request may not be granted. Follow up this function with
+///       a call to ::zetSysmanPerformanceFactorGetConfig() to determine the
+///       actual factor being used by the hardware.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPerf`
+__ze_api_export ze_result_t __zecall
+zetSysmanPerformanceFactorSetConfig(
+    zet_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
+    double factor                                   ///< [in] The new Performance Factor.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

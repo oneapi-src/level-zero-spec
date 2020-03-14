@@ -98,6 +98,12 @@ namespace zet
     using sysman_sched_handle_t = _sysman_sched_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a Sysman device performance factors
+    class SysmanPerformanceFactor;
+    struct _sysman_perf_handle_t;
+    using sysman_perf_handle_t = _sysman_perf_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device power domain
     class SysmanPower;
     struct _sysman_pwr_handle_t;

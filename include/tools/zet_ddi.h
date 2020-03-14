@@ -593,24 +593,11 @@ typedef ze_result_t (__zecall *zet_pfnSysmanSchedulerGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanPerformanceProfileGetSupported 
-typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceProfileGetSupported_t)(
+/// @brief Function-pointer for zetSysmanPerformanceFactorGet 
+typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceFactorGet_t)(
     zet_sysman_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanPerformanceProfileGet 
-typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceProfileGet_t)(
-    zet_sysman_handle_t,
-    zet_perf_profile_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetSysmanPerformanceProfileSet 
-typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceProfileSet_t)(
-    zet_sysman_handle_t,
-    zet_perf_profile_t
+    uint32_t*,
+    zet_sysman_perf_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -770,9 +757,7 @@ typedef struct _zet_sysman_dditable_t
     zet_pfnSysmanDeviceGetState_t                               pfnDeviceGetState;
     zet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
     zet_pfnSysmanSchedulerGet_t                                 pfnSchedulerGet;
-    zet_pfnSysmanPerformanceProfileGetSupported_t               pfnPerformanceProfileGetSupported;
-    zet_pfnSysmanPerformanceProfileGet_t                        pfnPerformanceProfileGet;
-    zet_pfnSysmanPerformanceProfileSet_t                        pfnPerformanceProfileSet;
+    zet_pfnSysmanPerformanceFactorGet_t                         pfnPerformanceFactorGet;
     zet_pfnSysmanProcessesGetState_t                            pfnProcessesGetState;
     zet_pfnSysmanPciGetProperties_t                             pfnPciGetProperties;
     zet_pfnSysmanPciGetState_t                                  pfnPciGetState;
@@ -910,6 +895,58 @@ zetGetSysmanSchedulerProcAddrTable(
 typedef ze_result_t (__zecall *zet_pfnGetSysmanSchedulerProcAddrTable_t)(
     ze_api_version_t,
     zet_sysman_scheduler_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPerformanceFactorGetProperties 
+typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceFactorGetProperties_t)(
+    zet_sysman_perf_handle_t,
+    zet_perf_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPerformanceFactorGetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceFactorGetConfig_t)(
+    zet_sysman_perf_handle_t,
+    double*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetSysmanPerformanceFactorSetConfig 
+typedef ze_result_t (__zecall *zet_pfnSysmanPerformanceFactorSetConfig_t)(
+    zet_sysman_perf_handle_t,
+    double
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of SysmanPerformanceFactor functions pointers
+typedef struct _zet_sysman_performance_factor_dditable_t
+{
+    zet_pfnSysmanPerformanceFactorGetProperties_t               pfnGetProperties;
+    zet_pfnSysmanPerformanceFactorGetConfig_t                   pfnGetConfig;
+    zet_pfnSysmanPerformanceFactorSetConfig_t                   pfnSetConfig;
+} zet_sysman_performance_factor_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanPerformanceFactor table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+__zedllexport ze_result_t __zecall
+zetGetSysmanPerformanceFactorProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_sysman_performance_factor_dditable_t* pDdiTable ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zetGetSysmanPerformanceFactorProcAddrTable
+typedef ze_result_t (__zecall *zet_pfnGetSysmanPerformanceFactorProcAddrTable_t)(
+    ze_api_version_t,
+    zet_sysman_performance_factor_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1943,6 +1980,7 @@ typedef struct _zet_dditable_t
     zet_tracer_dditable_t               Tracer;
     zet_sysman_dditable_t               Sysman;
     zet_sysman_scheduler_dditable_t     SysmanScheduler;
+    zet_sysman_performance_factor_dditable_t    SysmanPerformanceFactor;
     zet_sysman_power_dditable_t         SysmanPower;
     zet_sysman_frequency_dditable_t     SysmanFrequency;
     zet_sysman_engine_dditable_t        SysmanEngine;

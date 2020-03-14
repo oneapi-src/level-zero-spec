@@ -118,6 +118,13 @@ namespace zet_lib
 
         if( ZE_RESULT_SUCCESS == result )
         {
+            auto getTable = reinterpret_cast<zet_pfnGetSysmanPerformanceFactorProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zetGetSysmanPerformanceFactorProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &ddiTable.SysmanPerformanceFactor );
+        }
+
+        if( ZE_RESULT_SUCCESS == result )
+        {
             auto getTable = reinterpret_cast<zet_pfnGetSysmanPowerProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "zetGetSysmanPowerProcAddrTable") );
             result = getTable( ZE_API_VERSION_0_91, &ddiTable.SysmanPower );

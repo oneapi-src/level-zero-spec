@@ -76,6 +76,10 @@ typedef struct _zet_sysman_handle_t *zet_sysman_handle_t;
 typedef struct _zet_sysman_sched_handle_t *zet_sysman_sched_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device performance factors
+typedef struct _zet_sysman_perf_handle_t *zet_sysman_perf_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device power domain
 typedef struct _zet_sysman_pwr_handle_t *zet_sysman_pwr_handle_t;
 
@@ -210,6 +214,10 @@ typedef struct _zet_sched_timeout_properties_t zet_sched_timeout_properties_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_sched_timeslice_properties_t
 typedef struct _zet_sched_timeslice_properties_t zet_sched_timeslice_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zet_perf_properties_t
+typedef struct _zet_perf_properties_t zet_perf_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zet_process_state_t

@@ -1278,17 +1278,24 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPerformanceProfileGetSupported
+    /// @brief Intercept function for zetSysmanPerformanceFactorGet
     ze_result_t __zecall
-    zetSysmanPerformanceProfileGetSupported(
+    zetSysmanPerformanceFactorGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pSupported                            ///< [in,out] A bit field of (1<<::zet_perf_profile_t) profiles that are
-                                                        ///< supported.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zet_sysman_perf_handle_t* phPerf                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
-        auto pfnPerformanceProfileGetSupported = context.zetDdiTable.Sysman.pfnPerformanceProfileGetSupported;
+        auto pfnPerformanceFactorGet = context.zetDdiTable.Sysman.pfnPerformanceFactorGet;
 
-        if( nullptr == pfnPerformanceProfileGetSupported )
+        if( nullptr == pfnPerformanceFactorGet )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
@@ -1296,64 +1303,89 @@ namespace layer
             if( nullptr == hSysman )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
-            if( nullptr == pSupported )
+            if( nullptr == pCount )
                 return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
-        return pfnPerformanceProfileGetSupported( hSysman, pSupported );
+        return pfnPerformanceFactorGet( hSysman, pCount, phPerf );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPerformanceProfileGet
+    /// @brief Intercept function for zetSysmanPerformanceFactorGetProperties
     ze_result_t __zecall
-    zetSysmanPerformanceProfileGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_perf_profile_t* pProfile                    ///< [in,out] The performance profile currently loaded.
+    zetSysmanPerformanceFactorGetProperties(
+        zet_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
+        zet_perf_properties_t* pProperties              ///< [in,out] Will contain information about the specified Performance
+                                                        ///< Factor domain.
         )
     {
-        auto pfnPerformanceProfileGet = context.zetDdiTable.Sysman.pfnPerformanceProfileGet;
+        auto pfnGetProperties = context.zetDdiTable.SysmanPerformanceFactor.pfnGetProperties;
 
-        if( nullptr == pfnPerformanceProfileGet )
+        if( nullptr == pfnGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hPerf )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
-            if( nullptr == pProfile )
+            if( nullptr == pProperties )
                 return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
-        return pfnPerformanceProfileGet( hSysman, pProfile );
+        return pfnGetProperties( hPerf, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPerformanceProfileSet
+    /// @brief Intercept function for zetSysmanPerformanceFactorGetConfig
     ze_result_t __zecall
-    zetSysmanPerformanceProfileSet(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_perf_profile_t profile                      ///< [in] The performance profile to load.
+    zetSysmanPerformanceFactorGetConfig(
+        zet_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
+        double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
+                                                        ///< hardware (may not be the same as the requested Performance Factor).
         )
     {
-        auto pfnPerformanceProfileSet = context.zetDdiTable.Sysman.pfnPerformanceProfileSet;
+        auto pfnGetConfig = context.zetDdiTable.SysmanPerformanceFactor.pfnGetConfig;
 
-        if( nullptr == pfnPerformanceProfileSet )
+        if( nullptr == pfnGetConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hPerf )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
-            if( 2 <= profile )
-                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+            if( nullptr == pFactor )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
-        return pfnPerformanceProfileSet( hSysman, profile );
+        return pfnGetConfig( hPerf, pFactor );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPerformanceFactorSetConfig
+    ze_result_t __zecall
+    zetSysmanPerformanceFactorSetConfig(
+        zet_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
+        double factor                                   ///< [in] The new Performance Factor.
+        )
+    {
+        auto pfnSetConfig = context.zetDdiTable.SysmanPerformanceFactor.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPerf )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+        }
+
+        return pfnSetConfig( hPerf, factor );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -4135,14 +4167,8 @@ zetGetSysmanProcAddrTable(
     dditable.pfnSchedulerGet                             = pDdiTable->pfnSchedulerGet;
     pDdiTable->pfnSchedulerGet                           = layer::zetSysmanSchedulerGet;
 
-    dditable.pfnPerformanceProfileGetSupported           = pDdiTable->pfnPerformanceProfileGetSupported;
-    pDdiTable->pfnPerformanceProfileGetSupported         = layer::zetSysmanPerformanceProfileGetSupported;
-
-    dditable.pfnPerformanceProfileGet                    = pDdiTable->pfnPerformanceProfileGet;
-    pDdiTable->pfnPerformanceProfileGet                  = layer::zetSysmanPerformanceProfileGet;
-
-    dditable.pfnPerformanceProfileSet                    = pDdiTable->pfnPerformanceProfileSet;
-    pDdiTable->pfnPerformanceProfileSet                  = layer::zetSysmanPerformanceProfileSet;
+    dditable.pfnPerformanceFactorGet                     = pDdiTable->pfnPerformanceFactorGet;
+    pDdiTable->pfnPerformanceFactorGet                   = layer::zetSysmanPerformanceFactorGet;
 
     dditable.pfnProcessesGetState                        = pDdiTable->pfnProcessesGetState;
     pDdiTable->pfnProcessesGetState                      = layer::zetSysmanProcessesGetState;
@@ -4251,6 +4277,42 @@ zetGetSysmanSchedulerProcAddrTable(
 
     dditable.pfnSetComputeUnitDebugMode                  = pDdiTable->pfnSetComputeUnitDebugMode;
     pDdiTable->pfnSetComputeUnitDebugMode                = layer::zetSysmanSchedulerSetComputeUnitDebugMode;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanPerformanceFactor table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+__zedllexport ze_result_t __zecall
+zetGetSysmanPerformanceFactorProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_sysman_performance_factor_dditable_t* pDdiTable ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.zetDdiTable.SysmanPerformanceFactor;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+    if( layer::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zetSysmanPerformanceFactorGetProperties;
+
+    dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zetSysmanPerformanceFactorGetConfig;
+
+    dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zetSysmanPerformanceFactorSetConfig;
 
     return result;
 }

@@ -29,6 +29,7 @@ namespace loader
     zet_tracer_factory_t                zet_tracer_factory;
     zet_sysman_factory_t                zet_sysman_factory;
     zet_sysman_sched_factory_t          zet_sysman_sched_factory;
+    zet_sysman_perf_factory_t           zet_sysman_perf_factory;
     zet_sysman_pwr_factory_t            zet_sysman_pwr_factory;
     zet_sysman_freq_factory_t           zet_sysman_freq_factory;
     zet_sysman_engine_factory_t         zet_sysman_engine_factory;
@@ -1381,77 +1382,123 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPerformanceProfileGetSupported
+    /// @brief Intercept function for zetSysmanPerformanceFactorGet
     ze_result_t __zecall
-    zetSysmanPerformanceProfileGetSupported(
+    zetSysmanPerformanceFactorGet(
         zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pSupported                            ///< [in,out] A bit field of (1<<::zet_perf_profile_t) profiles that are
-                                                        ///< supported.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zet_sysman_perf_handle_t* phPerf                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnPerformanceProfileGetSupported = dditable->zet.Sysman.pfnPerformanceProfileGetSupported;
-        if( nullptr == pfnPerformanceProfileGetSupported )
+        auto pfnPerformanceFactorGet = dditable->zet.Sysman.pfnPerformanceFactorGet;
+        if( nullptr == pfnPerformanceFactorGet )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnPerformanceProfileGetSupported( hSysman, pSupported );
+        result = pfnPerformanceFactorGet( hSysman, pCount, phPerf );
+
+        try
+        {
+            // convert driver handles to loader handles
+            for( size_t i = 0; ( nullptr != phPerf ) && ( i < *pCount ); ++i )
+                phPerf[ i ] = reinterpret_cast<zet_sysman_perf_handle_t>(
+                    zet_sysman_perf_factory.getInstance( phPerf[ i ], dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPerformanceProfileGet
+    /// @brief Intercept function for zetSysmanPerformanceFactorGetProperties
     ze_result_t __zecall
-    zetSysmanPerformanceProfileGet(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_perf_profile_t* pProfile                    ///< [in,out] The performance profile currently loaded.
+    zetSysmanPerformanceFactorGetProperties(
+        zet_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
+        zet_perf_properties_t* pProperties              ///< [in,out] Will contain information about the specified Performance
+                                                        ///< Factor domain.
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnPerformanceProfileGet = dditable->zet.Sysman.pfnPerformanceProfileGet;
-        if( nullptr == pfnPerformanceProfileGet )
+        auto dditable = reinterpret_cast<zet_sysman_perf_object_t*>( hPerf )->dditable;
+        auto pfnGetProperties = dditable->zet.SysmanPerformanceFactor.pfnGetProperties;
+        if( nullptr == pfnGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hPerf = reinterpret_cast<zet_sysman_perf_object_t*>( hPerf )->handle;
 
         // forward to device-driver
-        result = pfnPerformanceProfileGet( hSysman, pProfile );
+        result = pfnGetProperties( hPerf, pProperties );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetSysmanPerformanceProfileSet
+    /// @brief Intercept function for zetSysmanPerformanceFactorGetConfig
     ze_result_t __zecall
-    zetSysmanPerformanceProfileSet(
-        zet_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zet_perf_profile_t profile                      ///< [in] The performance profile to load.
+    zetSysmanPerformanceFactorGetConfig(
+        zet_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
+        double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
+                                                        ///< hardware (may not be the same as the requested Performance Factor).
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<zet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnPerformanceProfileSet = dditable->zet.Sysman.pfnPerformanceProfileSet;
-        if( nullptr == pfnPerformanceProfileSet )
+        auto dditable = reinterpret_cast<zet_sysman_perf_object_t*>( hPerf )->dditable;
+        auto pfnGetConfig = dditable->zet.SysmanPerformanceFactor.pfnGetConfig;
+        if( nullptr == pfnGetConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         // convert loader handle to driver handle
-        hSysman = reinterpret_cast<zet_sysman_object_t*>( hSysman )->handle;
+        hPerf = reinterpret_cast<zet_sysman_perf_object_t*>( hPerf )->handle;
 
         // forward to device-driver
-        result = pfnPerformanceProfileSet( hSysman, profile );
+        result = pfnGetConfig( hPerf, pFactor );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zetSysmanPerformanceFactorSetConfig
+    ze_result_t __zecall
+    zetSysmanPerformanceFactorSetConfig(
+        zet_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
+        double factor                                   ///< [in] The new Performance Factor.
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<zet_sysman_perf_object_t*>( hPerf )->dditable;
+        auto pfnSetConfig = dditable->zet.SysmanPerformanceFactor.pfnSetConfig;
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hPerf = reinterpret_cast<zet_sysman_perf_object_t*>( hPerf )->handle;
+
+        // forward to device-driver
+        result = pfnSetConfig( hPerf, factor );
 
         return result;
     }
@@ -4667,9 +4714,7 @@ zetGetSysmanProcAddrTable(
             pDdiTable->pfnDeviceGetState                           = loader::zetSysmanDeviceGetState;
             pDdiTable->pfnDeviceReset                              = loader::zetSysmanDeviceReset;
             pDdiTable->pfnSchedulerGet                             = loader::zetSysmanSchedulerGet;
-            pDdiTable->pfnPerformanceProfileGetSupported           = loader::zetSysmanPerformanceProfileGetSupported;
-            pDdiTable->pfnPerformanceProfileGet                    = loader::zetSysmanPerformanceProfileGet;
-            pDdiTable->pfnPerformanceProfileSet                    = loader::zetSysmanPerformanceProfileSet;
+            pDdiTable->pfnPerformanceFactorGet                     = loader::zetSysmanPerformanceFactorGet;
             pDdiTable->pfnProcessesGetState                        = loader::zetSysmanProcessesGetState;
             pDdiTable->pfnPciGetProperties                         = loader::zetSysmanPciGetProperties;
             pDdiTable->pfnPciGetState                              = loader::zetSysmanPciGetState;
@@ -4771,6 +4816,70 @@ zetGetSysmanSchedulerProcAddrTable(
     {
         auto getTable = reinterpret_cast<zet_pfnGetSysmanSchedulerProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanSchedulerProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's SysmanPerformanceFactor table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+__zedllexport ze_result_t __zecall
+zetGetSysmanPerformanceFactorProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    zet_sysman_performance_factor_dditable_t* pDdiTable ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return ZE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+    if( loader::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( ZE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<zet_pfnGetSysmanPerformanceFactorProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "zetGetSysmanPerformanceFactorProcAddrTable") );
+            result = getTable( version, &drv.dditable.zet.SysmanPerformanceFactor );
+        }
+    }
+
+    if( ZE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGetProperties                            = loader::zetSysmanPerformanceFactorGetProperties;
+            pDdiTable->pfnGetConfig                                = loader::zetSysmanPerformanceFactorGetConfig;
+            pDdiTable->pfnSetConfig                                = loader::zetSysmanPerformanceFactorSetConfig;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.zet.SysmanPerformanceFactor;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        auto getTable = reinterpret_cast<zet_pfnGetSysmanPerformanceFactorProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "zetGetSysmanPerformanceFactorProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
