@@ -123,7 +123,7 @@ def jsonWrite(path, data):
 def yamlRead(path):
     try:
         with open(path, 'r') as fin:
-            return yaml.load_all(fin.read(), Loader = yaml.CLoader)
+            return yaml.load_all(fin.read(), Loader = yaml.Loader)
     except:
         print("error: unable to read %s"%path)
         return None
