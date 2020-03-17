@@ -1037,11 +1037,6 @@ there is a ::${x}CommandListAppendLaunchCooperativeKernel that allows launching 
 Finally, there is a ::${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that
 the device supports.
 
-In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
-a command list. The most basic version of these is ::${x}CommandListAppendLaunchKernel which takes a
-command list, function, launch arguments, and an optional synchronization event used to signal completion.
-The launch arguments contain thread group dimensions.
-
 Sampler
 -------
 
