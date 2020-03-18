@@ -13,6 +13,10 @@ import json
 import yaml
 from mako.template import Template
 from mako.exceptions import RichTraceback
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 """
     safely checks if path/file exists
@@ -123,7 +127,7 @@ def jsonWrite(path, data):
 def yamlRead(path):
     try:
         with open(path, 'r') as fin:
-            return yaml.load_all(fin.read(), Loader = yaml.Loader)
+            return yaml.load_all(fin.read(), Loader = Loader)
     except:
         print("error: unable to read %s"%path)
         return None
