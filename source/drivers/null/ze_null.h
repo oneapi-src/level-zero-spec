@@ -17,7 +17,7 @@
 namespace driver
 {
     ///////////////////////////////////////////////////////////////////////////////
-    class context_t
+    class __zedlllocal context_t
     {
     public:
         ze_api_version_t version = ZE_API_VERSION_0_91;
@@ -52,7 +52,7 @@ namespace instrumented
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    class context_t
+    class __zedlllocal context_t
     {
     public:
         ze_bool_t enableTracing = false;

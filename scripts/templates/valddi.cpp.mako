@@ -30,7 +30,7 @@ namespace layer
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    ${x}_result_t __${x}call
+    __${x}dlllocal ${x}_result_t __${x}call
     ${th.make_func_name(n, tags, obj)}(
         %for line in th.make_param_lines(n, tags, obj):
         ${line}

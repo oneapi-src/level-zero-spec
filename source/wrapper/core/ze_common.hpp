@@ -60,9 +60,17 @@
 #if defined(_WIN32)
 /// @brief Microsoft-specific dllexport storage-class attribute
 #define __zedllexport  __declspec(dllexport)
+#endif // defined(_WIN32)
+#endif // __zedllexport
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef __zedllexport
+#if __GNUC__ >= 4
+/// @brief GCC-specific dllexport storage-class attribute
+#define __zedllexport  __attribute__ ((visibility ("default")))
 #else
 #define __zedllexport  
-#endif // defined(_WIN32)
+#endif // __GNUC__ >= 4
 #endif // __zedllexport
 
 ///////////////////////////////////////////////////////////////////////////////
