@@ -444,30 +444,17 @@ class ze_command_queue_group_properties_version_t(c_int):
 
 
 ###############################################################################
-## @brief Supported command queue group flags
-class ze_command_queue_group_flag_v(IntEnum):
-    NONE = 0                                        ## default behavior
-    COMPUTE_ONLY = ZE_BIT(0)                        ## command queue group only supports enqueing compute commands.
-    COPY_ONLY = ZE_BIT(1)                           ## command queue group only supports enqueing copy commands.
-    SINGLE_SLICE_ONLY = ZE_BIT(2)                   ## command queue group reserves and cannot comsume more than a single
-                                                    ## slice. 'slice' size is device-specific.  cannot be combined with
-                                                    ## ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY.
-    SUPPORTS_COOPERATIVE_KERNELS = ZE_BIT(3)        ## command queue group supports command list with cooperative kernels.
-                                                    ## See ::zeCommandListAppendLaunchCooperativeKernel for more details.
-                                                    ## cannot be combined with ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY.
-
-class ze_command_queue_group_flag_t(c_int):
-    def __str__(self):
-        return str(ze_command_queue_group_flag_v(value))
-
-
-###############################################################################
 ## @brief Command queue group properties queried using
 ##        ::zeDeviceGetCommandQueueGroupProperties
 class ze_command_queue_group_properties_t(Structure):
     _fields_ = [
         ("version", ze_command_queue_group_properties_version_t),       ## [in] ::ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT
-        ("flags", ze_command_queue_group_flag_t)                        ## [out] capability flags of the command queue group.
+        ("computeSupported", ze_bool_t),                                ## [out] command queue group supports enqueing compute commands.
+        ("copySupported", ze_bool_t),                                   ## [out] command queue group supports enqueing copy commands.
+        ("singleSliceSupported", ze_bool_t),                            ## [out] command queue group supports reserving a single slice. 'slice'
+                                                                        ## size is reported by ::ze_device_properties_t.
+        ("cooperativeKernelsSupported", ze_bool_t)                      ## [out] command queue group supports cooperative kernels. See
+                                                                        ## ::zeCommandListAppendLaunchCooperativeKernel for more details.
     ]
 
 ###############################################################################
@@ -631,6 +618,17 @@ class ze_command_queue_desc_version_t(c_int):
 
 
 ###############################################################################
+## @brief Supported command queue flags
+class ze_command_queue_flag_v(IntEnum):
+    NONE = 0                                        ## default behavior
+    SINGLE_SLICE_ONLY = ZE_BIT(0)                   ## command queue reserves and cannot comsume more than a single slice.
+
+class ze_command_queue_flag_t(c_int):
+    def __str__(self):
+        return str(ze_command_queue_flag_v(value))
+
+
+###############################################################################
 ## @brief Supported command queue modes
 class ze_command_queue_mode_v(IntEnum):
     DEFAULT = 0                                     ## implicit default behavior; uses driver-based heuristics
@@ -662,6 +660,7 @@ class ze_command_queue_desc_t(Structure):
     _fields_ = [
         ("version", ze_command_queue_desc_version_t),                   ## [in] ::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT
         ("ordinal", c_ulong),                                           ## [in] command queue group ordinal
+        ("flags", ze_command_queue_flag_t),                             ## [in] usage flags
         ("mode", ze_command_queue_mode_t),                              ## [in] operation mode
         ("priority", ze_command_queue_priority_t)                       ## [in] priority
     ]

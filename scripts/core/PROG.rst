@@ -315,28 +315,30 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 .. code:: c
 
     // Discover all command queue types
-    uint32_t queueGroupCount = 0;_
-    zeDeviceGetCommandQueueGroupProperties(hDevice, &queueGroupCount, nullptr);
+    uint32_t cmdqueueGroupCount = 0;_
+    zeDeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, nullptr);
 
-    ze_command_queue_group_properties_t* allQueueGroups = (ze_command_queue_group_properties_t*)
-        malloc(queueGroupCount * sizeof(ze_command_queue_group_properties_t));
-    zeDeviceGetCommandQueueGroupProperties(hDevice, &queueGroupCount, allQueues);
+    ze_command_queue_group_properties_t* cmdqueueGroupProperties = (ze_command_queue_group_properties_t*)
+        malloc(cmdqueueGroupCount * sizeof(ze_command_queue_group_properties_t));
+    zeDeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, allQueues);
+
 
     // Find a proper command queue
-    uint32_t command_queue_group_ordinal = queueGroupCount;
-    for(uint32_t i = 0; i < queueGroupCount; ++i) {
-        if(0 == (ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY & allQueueGroups[i].flags)) {
+    for(uint32_t i = 0; i < cmdqueueGroupCount; ++i) {
+        if( cmdqueueGroupProperties.computeSupported ) {
             command_queue_ordinal = i;
             break;
         }
     }
-    if(command_queue_group_ordinal == queueGroupCount)
+
+    if(computeQueueGroupOrdinal == cmdqueueGroupCount)
         return; // no compute queues found
 
     // Create a command queue
     ze_command_queue_desc_t commandQueueDesc = {
         ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT,
-        command_queue_group_ordinal,
+        computeQueueGroupOrdinal,
+        ZE_COMMAND_QUEUE_FLAG_NONE,
         ZE_COMMAND_QUEUE_MODE_DEFAULT,
         ZE_COMMAND_QUEUE_PRIORITY_NORMAL,
         0
@@ -408,7 +410,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
        // Create a command list
        ${x}_command_list_desc_t commandListDesc = {
            ${X}_COMMAND_LIST_DESC_VERSION_CURRENT,
-           command_queue_group_ordinal,
+           computeQueueGroupOrdinal,
            ${X}_COMMAND_LIST_FLAG_NONE
        };
        ${x}_command_list_handle_t hCommandList;
@@ -477,7 +479,8 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
        // Create an immediate command list
        ${x}_command_queue_desc_t commandQueueDesc = {
            ${X}_COMMAND_QUEUE_DESC_VERSION_CURRENT,
-           command_queue_group_ordinal,
+           computeQueueGroupOrdinal,
+           ZE_COMMAND_QUEUE_FLAG_NONE,
            ${X}_COMMAND_QUEUE_MODE_DEFAULT,
            ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
            0
