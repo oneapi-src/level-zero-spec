@@ -32,22 +32,6 @@ typedef enum _ze_command_queue_desc_version_t
 } ze_command_queue_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported command queue flags
-typedef enum _ze_command_queue_flag_t
-{
-    ZE_COMMAND_QUEUE_FLAG_NONE = 0,                 ///< default behavior
-    ZE_COMMAND_QUEUE_FLAG_COPY_ONLY = ZE_BIT(0),    ///< command queue only supports enqueuing copy-only command lists
-    ZE_COMMAND_QUEUE_FLAG_LOGICAL_ONLY = ZE_BIT(1), ///< command queue is not tied to a physical command queue; driver may
-                                                    ///< dynamically assign based on usage
-    ZE_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY = ZE_BIT(2),///< command queue reserves and cannot consume more than a single slice.
-                                                    ///< 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
-    ZE_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_KERNELS = ZE_BIT(3), ///< command queue supports command list with cooperative kernels. See
-                                                    ///< ::zeCommandListAppendLaunchCooperativeKernel for more details. cannot
-                                                    ///< be combined with COPY_ONLY.
-
-} ze_command_queue_flag_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Supported command queue modes
 typedef enum _ze_command_queue_mode_t
 {
@@ -74,16 +58,9 @@ typedef enum _ze_command_queue_priority_t
 typedef struct _ze_command_queue_desc_t
 {
     ze_command_queue_desc_version_t version;        ///< [in] ::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT
-    ze_command_queue_flag_t flags;                  ///< [in] creation flags
+    uint32_t ordinal;                               ///< [in] command queue group ordinal
     ze_command_queue_mode_t mode;                   ///< [in] operation mode
     ze_command_queue_priority_t priority;           ///< [in] priority
-    uint32_t ordinal;                               ///< [in] if logical-only flag is set, then will be ignored;
-                                                    ///< if supports-cooperative-kernels is set, then may be ignored;
-                                                    ///< else-if copy-only flag is set, then must be less than ::ze_device_properties_t.numAsyncCopyEngines;
-                                                    ///< otherwise must be less than
-                                                    ///< ::ze_device_properties_t.numAsyncComputeEngines. When using sub-devices
-                                                    ///< the ::ze_device_properties_t.numAsyncComputeEngines must be queried
-                                                    ///< from the sub-device being used.
 
 } ze_command_queue_desc_t;
 
@@ -112,7 +89,6 @@ typedef struct _ze_command_queue_desc_t
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 ///         + `::ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version`
 ///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
-///         + desc->flags
 ///         + desc->mode
 ///         + desc->priority
 ///     - ::ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY

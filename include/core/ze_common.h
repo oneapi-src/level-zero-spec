@@ -255,6 +255,10 @@ typedef struct _ze_native_kernel_uuid_t ze_native_kernel_uuid_t;
 typedef struct _ze_device_kernel_properties_t ze_device_kernel_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare ze_command_queue_group_properties_t
+typedef struct _ze_command_queue_group_properties_t ze_command_queue_group_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare ze_device_memory_properties_t
 typedef struct _ze_device_memory_properties_t ze_device_memory_properties_t;
 

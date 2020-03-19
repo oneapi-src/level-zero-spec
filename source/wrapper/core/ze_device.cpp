@@ -196,6 +196,43 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves command queue group properties of the device.
+    /// 
+    /// @details
+    ///     - Properties are reported for each physical command queue type supported
+    ///       by the device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **vkGetPhysicalDeviceQueueFamilyProperties**
+    /// 
+    /// @throws result_t
+    void __zecall
+    Device::GetCommandQueueGroupProperties(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of command queue group properties.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of command queue group properties available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< command queue group properties.
+                                                        ///< if count is larger than the number of command queue group properties
+                                                        ///< available, then the driver will update the value with the correct
+                                                        ///< number of command queue group properties available.
+        command_queue_group_properties_t* pCommandQueueGroupProperties  ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                        ///< command queue group properties
+        )
+    {
+        auto result = static_cast<result_t>( ::zeDeviceGetCommandQueueGroupProperties(
+            reinterpret_cast<ze_device_handle_t>( getHandle() ),
+            pCount,
+            reinterpret_cast<ze_command_queue_group_properties_t*>( pCommandQueueGroupProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "ze::Device::GetCommandQueueGroupProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Retrieves local memory properties of the device.
     /// 
     /// @details
@@ -542,6 +579,54 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::command_queue_group_properties_version_t to std::string
+    std::string to_string( const Device::command_queue_group_properties_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Device::command_queue_group_properties_version_t::CURRENT:
+            str = "Device::command_queue_group_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Device::command_queue_group_properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::command_queue_group_flag_t to std::string
+    std::string to_string( const Device::command_queue_group_flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "NONE   ";
+        
+        if( static_cast<uint32_t>(Device::command_queue_group_flag_t::COMPUTE_ONLY) & bits )
+            str += "COMPUTE_ONLY | ";
+        
+        if( static_cast<uint32_t>(Device::command_queue_group_flag_t::COPY_ONLY) & bits )
+            str += "COPY_ONLY | ";
+        
+        if( static_cast<uint32_t>(Device::command_queue_group_flag_t::SINGLE_SLICE_ONLY) & bits )
+            str += "SINGLE_SLICE_ONLY | ";
+        
+        if( static_cast<uint32_t>(Device::command_queue_group_flag_t::SUPPORTS_COOPERATIVE_KERNELS) & bits )
+            str += "SUPPORTS_COOPERATIVE_KERNELS | ";
+
+        return ( str.size() > 3 ) 
+            ? "Device::command_queue_group_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Device::command_queue_group_flag_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::memory_properties_version_t to std::string
     std::string to_string( const Device::memory_properties_version_t val )
     {
@@ -741,16 +826,8 @@ namespace ze
         str += std::to_string(val.onDemandPageFaultsSupported);
         str += "\n";
         
-        str += "Device::properties_t::maxCommandQueues : ";
-        str += std::to_string(val.maxCommandQueues);
-        str += "\n";
-        
-        str += "Device::properties_t::numAsyncComputeEngines : ";
-        str += std::to_string(val.numAsyncComputeEngines);
-        str += "\n";
-        
-        str += "Device::properties_t::numAsyncCopyEngines : ";
-        str += std::to_string(val.numAsyncCopyEngines);
+        str += "Device::properties_t::maxHardwareContexts : ";
+        str += std::to_string(val.maxHardwareContexts);
         str += "\n";
         
         str += "Device::properties_t::maxCommandQueuePriority : ";
@@ -922,6 +999,23 @@ namespace ze
         
         str += "Device::kernel_properties_t::printfBufferSize : ";
         str += std::to_string(val.printfBufferSize);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::command_queue_group_properties_t to std::string
+    std::string to_string( const Device::command_queue_group_properties_t val )
+    {
+        std::string str;
+        
+        str += "Device::command_queue_group_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Device::command_queue_group_properties_t::flags : ";
+        str += to_string(val.flags);
         str += "\n";
 
         return str;

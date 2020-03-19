@@ -133,9 +133,7 @@ typedef struct _ze_device_properties_t
     ze_bool_t unifiedMemorySupported;               ///< [out] Supports unified physical memory between Host and device.
     ze_bool_t eccMemorySupported;                   ///< [out] Supports error correction memory access.
     ze_bool_t onDemandPageFaultsSupported;          ///< [out] Supports on-demand page-faulting.
-    uint32_t maxCommandQueues;                      ///< [out] Maximum number of logical command queues.
-    uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
-    uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
+    uint32_t maxHardwareContexts;                   ///< [out] Maximum number of logical hardware contexts.
     uint32_t maxCommandQueuePriority;               ///< [out] Maximum priority for command queues. Higher value is higher
                                                     ///< priority.
     uint32_t numThreadsPerEU;                       ///< [out] Number of threads per EU.
@@ -321,6 +319,76 @@ __ze_api_export ze_result_t __zecall
 zeDeviceGetKernelProperties(
     ze_device_handle_t hDevice,                     ///< [in] handle of the device
     ze_device_kernel_properties_t* pKernelProperties///< [in,out] query result for kernel properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::ze_command_queue_group_properties_t
+typedef enum _ze_command_queue_group_properties_version_t
+{
+    ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} ze_command_queue_group_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported command queue group flags
+typedef enum _ze_command_queue_group_flag_t
+{
+    ZE_COMMAND_QUEUE_GROUP_FLAG_NONE = 0,           ///< default behavior
+    ZE_COMMAND_QUEUE_GROUP_FLAG_COMPUTE_ONLY = ZE_BIT(0),   ///< command queue group only supports enqueing compute commands.
+    ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY = ZE_BIT(1),  ///< command queue group only supports enqueing copy commands.
+    ZE_COMMAND_QUEUE_GROUP_FLAG_SINGLE_SLICE_ONLY = ZE_BIT(2),  ///< command queue group reserves and cannot comsume more than a single
+                                                    ///< slice. 'slice' size is device-specific.  cannot be combined with
+                                                    ///< ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY.
+    ZE_COMMAND_QUEUE_GROUP_FLAG_SUPPORTS_COOPERATIVE_KERNELS = ZE_BIT(3),   ///< command queue group supports command list with cooperative kernels.
+                                                    ///< See ::zeCommandListAppendLaunchCooperativeKernel for more details.
+                                                    ///< cannot be combined with ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY.
+
+} ze_command_queue_group_flag_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Command queue group properties queried using
+///        ::zeDeviceGetCommandQueueGroupProperties
+typedef struct _ze_command_queue_group_properties_t
+{
+    ze_command_queue_group_properties_version_t version;///< [in] ::ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT
+    ze_command_queue_group_flag_t flags;            ///< [out] capability flags of the command queue group.
+
+} ze_command_queue_group_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves command queue group properties of the device.
+/// 
+/// @details
+///     - Properties are reported for each physical command queue type supported
+///       by the device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkGetPhysicalDeviceQueueFamilyProperties**
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
+__ze_api_export ze_result_t __zecall
+zeDeviceGetCommandQueueGroupProperties(
+    ze_device_handle_t hDevice,                     ///< [in] handle of the device
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of command queue group properties.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of command queue group properties available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< command queue group properties.
+                                                    ///< if count is larger than the number of command queue group properties
+                                                    ///< available, then the driver will update the value with the correct
+                                                    ///< number of command queue group properties available.
+    ze_command_queue_group_properties_t* pCommandQueueGroupProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                    ///< command queue group properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////

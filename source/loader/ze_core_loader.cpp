@@ -366,6 +366,40 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zeDeviceGetCommandQueueGroupProperties
+    __zedlllocal ze_result_t __zecall
+    zeDeviceGetCommandQueueGroupProperties(
+        ze_device_handle_t hDevice,                     ///< [in] handle of the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of command queue group properties.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of command queue group properties available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< command queue group properties.
+                                                        ///< if count is larger than the number of command queue group properties
+                                                        ///< available, then the driver will update the value with the correct
+                                                        ///< number of command queue group properties available.
+        ze_command_queue_group_properties_t* pCommandQueueGroupProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                        ///< command queue group properties
+        )
+    {
+        ze_result_t result = ZE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<ze_device_object_t*>( hDevice )->dditable;
+        auto pfnGetCommandQueueGroupProperties = dditable->ze.Device.pfnGetCommandQueueGroupProperties;
+        if( nullptr == pfnGetCommandQueueGroupProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<ze_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        result = pfnGetCommandQueueGroupProperties( hDevice, pCount, pCommandQueueGroupProperties );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zeDeviceGetMemoryProperties
     __zedlllocal ze_result_t __zecall
     zeDeviceGetMemoryProperties(
@@ -3331,6 +3365,7 @@ zeGetDeviceProcAddrTable(
             pDdiTable->pfnGetProperties                            = loader::zeDeviceGetProperties;
             pDdiTable->pfnGetComputeProperties                     = loader::zeDeviceGetComputeProperties;
             pDdiTable->pfnGetKernelProperties                      = loader::zeDeviceGetKernelProperties;
+            pDdiTable->pfnGetCommandQueueGroupProperties           = loader::zeDeviceGetCommandQueueGroupProperties;
             pDdiTable->pfnGetMemoryProperties                      = loader::zeDeviceGetMemoryProperties;
             pDdiTable->pfnGetMemoryAccessProperties                = loader::zeDeviceGetMemoryAccessProperties;
             pDdiTable->pfnGetCacheProperties                       = loader::zeDeviceGetCacheProperties;

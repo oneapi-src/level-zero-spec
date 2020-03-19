@@ -252,6 +252,14 @@ typedef ze_result_t (__zecall *ze_pfnDeviceGetKernelProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeDeviceGetCommandQueueGroupProperties 
+typedef ze_result_t (__zecall *ze_pfnDeviceGetCommandQueueGroupProperties_t)(
+    ze_device_handle_t,
+    uint32_t*,
+    ze_command_queue_group_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeDeviceGetMemoryProperties 
 typedef ze_result_t (__zecall *ze_pfnDeviceGetMemoryProperties_t)(
     ze_device_handle_t,
@@ -381,6 +389,7 @@ typedef struct _ze_device_dditable_t
     ze_pfnDeviceGetProperties_t                                 pfnGetProperties;
     ze_pfnDeviceGetComputeProperties_t                          pfnGetComputeProperties;
     ze_pfnDeviceGetKernelProperties_t                           pfnGetKernelProperties;
+    ze_pfnDeviceGetCommandQueueGroupProperties_t                pfnGetCommandQueueGroupProperties;
     ze_pfnDeviceGetMemoryProperties_t                           pfnGetMemoryProperties;
     ze_pfnDeviceGetMemoryAccessProperties_t                     pfnGetMemoryAccessProperties;
     ze_pfnDeviceGetCacheProperties_t                            pfnGetCacheProperties;

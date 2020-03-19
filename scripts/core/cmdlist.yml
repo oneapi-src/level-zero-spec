@@ -27,25 +27,20 @@ etors:
     - name: $X_COMMAND_LIST_FLAG_NONE
       value: "0"
       desc: "default behavior"
-    - name: $X_COMMAND_LIST_FLAG_COPY_ONLY
-      value: "$X_BIT(0)"
-      desc: |
-            command list **only** contains copy operations (and synchronization primitives).
-            this command list may **only** be submitted to a command queue created with $X_COMMAND_QUEUE_FLAG_COPY_ONLY.
     - name: $X_COMMAND_LIST_FLAG_RELAXED_ORDERING
-      value: "$X_BIT(1)"
+      value: "$X_BIT(0)"
       desc: |
             driver may reorder programs and copys between barriers and synchronization primitives.
             using this flag may increase Host overhead of $xCommandListClose.
             therefore, this flag should **not** be set for low-latency usage-models.
     - name: $X_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT
-      value: "$X_BIT(2)"
+      value: "$X_BIT(1)"
       desc: |
             driver may perform additional optimizations that increase dexecution throughput. 
             using this flag may increase Host overhead of $xCommandListClose and $xCommandQueueExecuteCommandLists.
             therefore, this flag should **not** be set for low-latency usage-models.
     - name: $X_COMMAND_LIST_FLAG_EXPLICIT_ONLY
-      value: "$X_BIT(3)"
+      value: "$X_BIT(2)"
       desc: |
             command list should be optimized for submission to a single command queue and device engine.
             driver **must** disable any implicit optimizations for distributing work across multiple engines.
@@ -60,6 +55,9 @@ members:
       name: version
       desc: "[in] $X_COMMAND_LIST_DESC_VERSION_CURRENT"
       init: $X_COMMAND_LIST_DESC_VERSION_CURRENT
+    - type: uint32_t
+      name: commandQueueGroupOrdinal
+      desc: "[in] command queue group ordinal to which this command list will be submitted"
     - type: $x_command_list_flag_t
       name: flags
       desc: "[in] creation flags"

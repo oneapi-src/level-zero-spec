@@ -20,27 +20,6 @@ etors:
       desc: "version 0.91"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported command queue flags"
-class: $xCommandQueue
-name: $x_command_queue_flag_t
-etors:
-    - name: $X_COMMAND_QUEUE_FLAG_NONE
-      value: "0"
-      desc: "default behavior"
-    - name: $X_COMMAND_QUEUE_FLAG_COPY_ONLY
-      value: "$X_BIT(0)"
-      desc: "command queue only supports enqueuing copy-only command lists"
-    - name: $X_COMMAND_QUEUE_FLAG_LOGICAL_ONLY
-      value: "$X_BIT(1)"
-      desc: "command queue is not tied to a physical command queue; driver may dynamically assign based on usage"
-    - name: $X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY
-      value: "$X_BIT(2)"
-      desc: "command queue reserves and cannot consume more than a single slice. 'slice' size is device-specific.  cannot be combined with COPY_ONLY."
-    - name: $X_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_KERNELS
-      value: "$X_BIT(3)"
-      desc: "command queue supports command list with cooperative kernels. See $xCommandListAppendLaunchCooperativeKernel for more details. cannot be combined with COPY_ONLY."      
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported command queue modes"
 class: $xCommandQueue
 name: $x_command_queue_mode_t
@@ -79,10 +58,9 @@ members:
       name: version
       desc: "[in] $X_COMMAND_QUEUE_DESC_VERSION_CURRENT"
       init: $X_COMMAND_QUEUE_DESC_VERSION_CURRENT
-    - type: $x_command_queue_flag_t
-      name: flags
-      desc: "[in] creation flags"
-      init: $X_COMMAND_QUEUE_FLAG_NONE
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] command queue group ordinal"
     - type: $x_command_queue_mode_t
       name: mode
       desc: "[in] operation mode"
@@ -91,15 +69,6 @@ members:
       name: priority
       desc: "[in] priority"
       init: $X_COMMAND_QUEUE_PRIORITY_NORMAL
-    - type: uint32_t
-      name: ordinal
-      desc: |
-        [in] if logical-only flag is set, then will be ignored;
-        if supports-cooperative-kernels is set, then may be ignored;
-        else-if copy-only flag is set, then must be less than $x_device_properties_t.numAsyncCopyEngines;
-        otherwise must be less than $x_device_properties_t.numAsyncComputeEngines. When using sub-devices
-        the $x_device_properties_t.numAsyncComputeEngines must be queried from the sub-device being used.
-      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command queue on the device."
