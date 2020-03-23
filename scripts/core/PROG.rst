@@ -4,6 +4,10 @@
     x=tags['$x']
     X=x.upper()
 %>
+========================
+ Core Programming Guide
+========================
+
 Drivers and Devices
 ===================
 

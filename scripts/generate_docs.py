@@ -151,15 +151,11 @@ def generate_html(dstpath, ver):
 
     # Generate sphinx configuration file with version.
     loc = 0
-    loc += util.makoWrite(
-        "./templates/conf.py.mako",
-        os.path.join(sourcepath, "conf.py"),
-        ver=float(ver))
-        
-    loc += util.makoWrite(
-        "./templates/index.rst.mako",
-        os.path.join(sourcepath, "index.rst"),
-        ver=float(ver))
+    for fn in ["conf.py", "index.rst", "api.rst"]:
+        loc += util.makoWrite(
+            "./templates/%s.mako" % fn,
+            os.path.join(sourcepath, fn),
+            ver=float(ver))
 
     # Doxygen generates XML files needed by sphinx breathe plugin for API documentation.
     print("Generating doxygen...")
