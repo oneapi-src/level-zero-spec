@@ -32,6 +32,18 @@ def clean():
     util.makePath("../build")
 
 """
+    
+"""
+def update_spec(target):
+    inc = "%s/source/elements/l0/include" % target
+    src = "%s/source/elements/l0/source" % target
+    util.copyTree("../include", inc)
+    util.copyTree("../docs/source", src)
+    util.removePath("%s/experimental" % inc)
+    util.removePath("%s/experimental" % src)
+
+
+"""
     command lines for running cmake windows build
 """
 def build():
@@ -62,6 +74,7 @@ def main():
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
     add_argument(parser, "rst", "generation of reStructuredText files.", True)
+    parser.add_argument("--update_spec", type=str, help="root of integrated spec directory to update")
     parser.add_argument("--ver", type=str, default="0.91", required=False, help="specification version to generate.")
     args = vars(parser.parse_args())
 
@@ -135,6 +148,9 @@ def main():
 
     if args['pdf']:
         generate_docs.generate_pdf(docpath)
+
+    if args['update_spec']:
+        update_spec(args['update_spec'])
 
     print("\nCompleted in %.1f seconds!"%(time.time() - start))
 

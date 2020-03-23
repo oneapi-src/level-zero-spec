@@ -37,6 +37,14 @@ def makePath(path):
     except:
         print("warning: failed to make %s"%path)
 
+    
+"""
+    copy tree
+"""
+def copyTree(src, dst):
+    print("Copytree src:%s dst:%s" % (src,dst))
+    shutil.copytree(src, dst)
+
 """
     remove directory and all contents
 """
