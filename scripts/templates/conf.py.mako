@@ -208,5 +208,10 @@ primary_domain = 'cpp'
 # Tell sphinx what the pygments highlight language should be.
 highlight_language = 'cpp'
 
+rst_prolog = """
+.. |l0_full_name| replace:: oneAPI Level Zero
+.. |l0_spec_version| replace:: ${ver}
+"""
+
 def setup(app):
     app.add_css_file('custom.css')
