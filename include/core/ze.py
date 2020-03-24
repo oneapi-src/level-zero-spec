@@ -1265,9 +1265,18 @@ class ze_kernel_properties_t(Structure):
         ("version", ze_kernel_properties_version_t),                    ## [in] ::ZE_KERNEL_PROPERTIES_VERSION_CURRENT
         ("name", c_char * ZE_MAX_KERNEL_NAME),                          ## [out] Kernel name
         ("numKernelArgs", c_ulong),                                     ## [out] number of kernel arguments.
-        ("requiredGroupSizeX", c_ulong),                                ## [out] required group size in the X dimension
-        ("requiredGroupSizeY", c_ulong),                                ## [out] required group size in the Y dimension
-        ("requiredGroupSizeZ", c_ulong)                                 ## [out] required group size in the Z dimension
+        ("requiredGroupSizeX", c_ulong),                                ## [out] required group size in the X dimension,
+                                                                        ## or zero if there is no required group size
+        ("requiredGroupSizeY", c_ulong),                                ## [out] required group size in the Y dimension,
+                                                                        ## or zero if there is no required group size
+        ("requiredGroupSizeZ", c_ulong),                                ## [out] required group size in the Z dimension,
+                                                                        ## or zero if there is no required group size
+        ("requiredNumSubGroups", c_ulong),                              ## [out] required number of subgroups per thread group,
+                                                                        ## or zero if there is no required number of subgroups
+        ("requiredSubgroupSize", c_ulong),                              ## [out] required subgroup size,
+                                                                        ## or zero if there is no required subgroup size
+        ("maxSubgroupSize", c_ulong),                                   ## [out] maximum subgroup size
+        ("maxNumSubgroups", c_ulong)                                    ## [out] maximum number of subgroups per work group
     ]
 
 ###############################################################################

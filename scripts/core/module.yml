@@ -547,13 +547,35 @@ members:
       desc: "[out] number of kernel arguments."
     - type: "uint32_t"
       name: requiredGroupSizeX
-      desc: "[out] required group size in the X dimension"
+      desc: |
+            [out] required group size in the X dimension,
+            or zero if there is no required group size
     - type: "uint32_t"
       name: requiredGroupSizeY
-      desc: "[out] required group size in the Y dimension"
+      desc: |
+            [out] required group size in the Y dimension,
+            or zero if there is no required group size
     - type: "uint32_t"
       name: requiredGroupSizeZ
-      desc: "[out] required group size in the Z dimension"
+      desc: |
+            [out] required group size in the Z dimension,
+            or zero if there is no required group size
+    - type: "uint32_t"
+      name: requiredNumSubGroups
+      desc: |
+            [out] required number of subgroups per thread group,
+            or zero if there is no required number of subgroups
+    - type: "uint32_t"
+      name: requiredSubgroupSize
+      desc: |
+            [out] required subgroup size,
+            or zero if there is no required subgroup size
+    - type: "uint32_t"
+      name: maxSubgroupSize
+      desc: "[out] maximum subgroup size"
+    - type: "uint32_t"
+      name: maxNumSubgroups
+      desc: "[out] maximum number of subgroups per work group"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve kernel properties."
