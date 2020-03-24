@@ -1083,6 +1083,22 @@ namespace ze
         str += "Kernel::properties_t::requiredGroupSizeZ : ";
         str += std::to_string(val.requiredGroupSizeZ);
         str += "\n";
+        
+        str += "Kernel::properties_t::requiredNumSubGroups : ";
+        str += std::to_string(val.requiredNumSubGroups);
+        str += "\n";
+        
+        str += "Kernel::properties_t::requiredSubgroupSize : ";
+        str += std::to_string(val.requiredSubgroupSize);
+        str += "\n";
+        
+        str += "Kernel::properties_t::maxSubgroupSize : ";
+        str += std::to_string(val.maxSubgroupSize);
+        str += "\n";
+        
+        str += "Kernel::properties_t::maxNumSubgroups : ";
+        str += std::to_string(val.maxNumSubgroups);
+        str += "\n";
 
         return str;
     }
