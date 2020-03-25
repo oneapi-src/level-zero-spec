@@ -370,6 +370,8 @@ namespace ze
                                                             ///< or zero if there is no required subgroup size
             uint32_t maxSubgroupSize;                       ///< [out] maximum subgroup size
             uint32_t maxNumSubgroups;                       ///< [out] maximum number of subgroups per work group
+            uint32_t localMemSize;                          ///< [out] local memory size used by each thread.
+            uint32_t privateMemSize;                        ///< [out] private memory size allocated by compiler used by each thread.
 
         };
 

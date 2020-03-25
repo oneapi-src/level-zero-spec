@@ -1099,6 +1099,14 @@ namespace ze
         str += "Kernel::properties_t::maxNumSubgroups : ";
         str += std::to_string(val.maxNumSubgroups);
         str += "\n";
+        
+        str += "Kernel::properties_t::localMemSize : ";
+        str += std::to_string(val.localMemSize);
+        str += "\n";
+        
+        str += "Kernel::properties_t::privateMemSize : ";
+        str += std::to_string(val.privateMemSize);
+        str += "\n";
 
         return str;
     }

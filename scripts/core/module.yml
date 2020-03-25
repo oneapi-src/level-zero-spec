@@ -576,6 +576,12 @@ members:
     - type: "uint32_t"
       name: maxNumSubgroups
       desc: "[out] maximum number of subgroups per work group"
+    - type: "uint32_t"
+      name: localMemSize
+      desc: "[out] local memory size used by each thread."
+    - type: "uint32_t"
+      name: privateMemSize
+      desc: "[out] private memory size allocated by compiler used by each thread."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve kernel properties."

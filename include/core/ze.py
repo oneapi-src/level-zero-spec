@@ -1276,7 +1276,9 @@ class ze_kernel_properties_t(Structure):
         ("requiredSubgroupSize", c_ulong),                              ## [out] required subgroup size,
                                                                         ## or zero if there is no required subgroup size
         ("maxSubgroupSize", c_ulong),                                   ## [out] maximum subgroup size
-        ("maxNumSubgroups", c_ulong)                                    ## [out] maximum number of subgroups per work group
+        ("maxNumSubgroups", c_ulong),                                   ## [out] maximum number of subgroups per work group
+        ("localMemSize", c_ulong),                                      ## [out] local memory size used by each thread.
+        ("privateMemSize", c_ulong)                                     ## [out] private memory size allocated by compiler used by each thread.
     ]
 
 ###############################################################################
