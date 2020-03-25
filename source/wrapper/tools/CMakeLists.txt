@@ -3,7 +3,6 @@ set(TARGET_NAME zet_api_cpp)
 add_library(${TARGET_NAME}
     STATIC
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_common.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/zet_driver.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_device.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_cmdlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zet_debug.cpp
@@ -25,6 +24,6 @@ target_compile_definitions(${TARGET_NAME}
 )
 
 target_link_libraries(${TARGET_NAME}
-    ze_api zet_api
+    ze_api
     ${CMAKE_DL_LIBS}
 )

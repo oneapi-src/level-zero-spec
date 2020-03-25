@@ -42,8 +42,7 @@ system and create Sysman handles for them:
 .. code:: c
 
    function main( ... )
-       if ( (${x}Init(${X}_INIT_FLAG_NONE) != ${X}_RESULT_SUCCESS) or
-            (${t}Init(${X}_INIT_FLAG_NONE) != ${X}_RESULT_SUCCESS) )
+       if (${x}Init(${X}_INIT_FLAG_NONE) != ${X}_RESULT_SUCCESS)
            output("Can't initialize the API")
        else
            # Discover all the drivers

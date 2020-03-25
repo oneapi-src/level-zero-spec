@@ -3,7 +3,6 @@ set(TARGET_NAME zex_api_cpp)
 add_library(${TARGET_NAME}
     STATIC
         ${CMAKE_CURRENT_SOURCE_DIR}/zex_common.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/zex_driver.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zex_cmdlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zex_cmdgraph.cpp
 )
@@ -19,6 +18,6 @@ target_compile_definitions(${TARGET_NAME}
 )
 
 target_link_libraries(${TARGET_NAME}
-    ze_api zex_api
+    ze_api
     ${CMAKE_DL_LIBS}
 )

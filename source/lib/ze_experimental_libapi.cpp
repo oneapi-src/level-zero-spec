@@ -4,18 +4,48 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file zex_cmdgraph.cpp
+ * @file ze_experimental_libapi.cpp
  *
- * @brief C++ static library for Intel 'One API' Level-Zero Experimental APIs for CommandGraph
- *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/experimental/cmdgraph.yml
- * @endcond
+ * @brief C++ static library for zex
  *
  */
-#include "zex_lib.h"
+#include "ze_lib.h"
 
 extern "C" {
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reserve a section of contiguous command buffer space within the
+///        command list.
+/// 
+/// @details
+///     - The pointer returned is valid for both Host and device access.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hCommandList`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == ptr`
+///     - ::ZE_RESULT_ERROR_INVALID_SIZE
+///         + `0 == size`
+ze_result_t __zecall
+zexCommandListReserveSpace(
+    zex_command_list_handle_t hCommandList,         ///< [in] handle of the command list
+    size_t size,                                    ///< [in] size (in bytes) to reserve
+    void** ptr                                      ///< [out] pointer to command buffer space reserved
+    )
+{
+    auto pfnReserveSpace = ze_lib::context.zexDdiTable.CommandList.pfnReserveSpace;
+    if( nullptr == pfnReserveSpace )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    return pfnReserveSpace( hCommandList, size, ptr );
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command graph on the device for submitting commands to any
@@ -47,7 +77,7 @@ zexCommandGraphCreate(
     zex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    auto pfnCreate = zex_lib::context.ddiTable.CommandGraph.pfnCreate;
+    auto pfnCreate = ze_lib::context.zexDdiTable.CommandGraph.pfnCreate;
     if( nullptr == pfnCreate )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
@@ -76,7 +106,7 @@ zexCommandGraphDestroy(
     zex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
     )
 {
-    auto pfnDestroy = zex_lib::context.ddiTable.CommandGraph.pfnDestroy;
+    auto pfnDestroy = ze_lib::context.zexDdiTable.CommandGraph.pfnDestroy;
     if( nullptr == pfnDestroy )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
@@ -105,7 +135,7 @@ zexCommandGraphClose(
     zex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    auto pfnClose = zex_lib::context.ddiTable.CommandGraph.pfnClose;
+    auto pfnClose = ze_lib::context.zexDdiTable.CommandGraph.pfnClose;
     if( nullptr == pfnClose )
         return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 

@@ -10,6 +10,9 @@
 #pragma once
 #include "ze_ddi.h"
 #include "zet_ddi.h"
+#ifdef ZE_EXPERIMENTAL
+#include "zex_ddi.h"
+#endif
 #include "ze_util.h"
 
 namespace layer
@@ -27,6 +30,9 @@ namespace layer
 
         ze_dditable_t   zeDdiTable = {};
         zet_dditable_t  zetDdiTable = {};
+#ifdef ZE_EXPERIMENTAL
+        zex_dditable_t   zexDdiTable = {};
+#endif
 
         context_t();
         ~context_t();

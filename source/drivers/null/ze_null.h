@@ -12,6 +12,9 @@
 #include <vector>
 #include "ze_ddi.h"
 #include "zet_ddi.h"
+#ifdef ZE_EXPERIMENTAL
+#include "zex_ddi.h"
+#endif
 #include "ze_util.h"
 
 namespace driver
@@ -24,7 +27,9 @@ namespace driver
 
         ze_dditable_t   zeDdiTable = {};
         zet_dditable_t  zetDdiTable = {};
-
+#ifdef ZE_EXPERIMENTAL
+        zex_dditable_t  zexDdiTable = {};
+#endif
         context_t();
         ~context_t() = default;
 
@@ -49,6 +54,11 @@ namespace instrumented
 
         ze_callbacks_t zePrologueCbs = {};
         ze_callbacks_t zeEpilogueCbs = {};
+
+#ifdef ZE_EXPERIMENTAL
+        zex_callbacks_t zexPrologueCbs = {};
+        zex_callbacks_t zexEpilogueCbs = {};
+#endif
     };
 
     ///////////////////////////////////////////////////////////////////////////////

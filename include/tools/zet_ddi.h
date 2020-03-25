@@ -19,41 +19,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetInit 
-typedef ze_result_t (__zecall *zet_pfnInit_t)(
-    ze_init_flag_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Global functions pointers
-typedef struct _zet_global_dditable_t
-{
-    zet_pfnInit_t                                               pfnInit;
-} zet_global_dditable_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
-__zedllexport ze_result_t __zecall
-zetGetGlobalProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zet_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zetGetGlobalProcAddrTable
-typedef ze_result_t (__zecall *zet_pfnGetGlobalProcAddrTable_t)(
-    ze_api_version_t,
-    zet_global_dditable_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zetDeviceActivateMetricGroups 
 typedef ze_result_t (__zecall *zet_pfnDeviceActivateMetricGroups_t)(
     zet_device_handle_t,
@@ -1967,7 +1932,6 @@ typedef ze_result_t (__zecall *zet_pfnGetDebugProcAddrTable_t)(
 /// @brief Container for all DDI tables
 typedef struct _zet_dditable_t
 {
-    zet_global_dditable_t               Global;
     zet_device_dditable_t               Device;
     zet_command_list_dditable_t         CommandList;
     zet_module_dditable_t               Module;

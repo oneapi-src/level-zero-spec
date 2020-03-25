@@ -43,43 +43,6 @@ inline bool init_ze( void )
     }
     return true;
 }
-
-//////////////////////////////////////////////////////////////////////////
-inline bool init_zex( void )
-{
-    try
-    {
-        // Initialize the driver
-        zex::Init( ze::init_flag_t::NONE );
-        std::cout << "Experimental Driver initialized.\n";
-    }
-    catch( const ze::exception_t& e )
-    {
-        std::cout << "Experimental Driver not initialized!\n";
-        std::cout << e.what();
-        return false;
-    }
-    return true;
-}
-
-//////////////////////////////////////////////////////////////////////////
-inline bool init_zet( void )
-{
-    try
-    {
-        // Initialize the driver
-        zet::Init( ze::init_flag_t::NONE );
-        std::cout << "Tools initialized.\n";
-    }
-    catch( const ze::exception_t& e )
-    {
-        std::cout << "Tools not initialized!\n";
-        std::cout << e.what();
-        return false;
-    }
-    return true;
-}
-
 //////////////////////////////////////////////////////////////////////////
 inline ze::Device* findDevice(
     ze::Driver* pDriver,

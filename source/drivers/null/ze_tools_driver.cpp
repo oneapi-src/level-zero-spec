@@ -16,29 +16,6 @@
 namespace driver
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zetInit
-    __zedlllocal ze_result_t __zecall
-    zetInit(
-        ze_init_flag_t flags                            ///< [in] initialization flags
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnInit = context.zetDdiTable.Global.pfnInit;
-        if( nullptr != pfnInit )
-        {
-            result = pfnInit( flags );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zetDebugAttach
     __zedlllocal ze_result_t __zecall
     zetDebugAttach(
@@ -3553,33 +3530,6 @@ namespace driver
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
-__zedllexport ze_result_t __zecall
-zetGetGlobalProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zet_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-    if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    pDdiTable->pfnInit                                   = driver::zetInit;
-
-    return result;
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Device table

@@ -20,26 +20,6 @@ namespace loader
     zex_command_graph_factory_t         zex_command_graph_factory;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zexInit
-    __zedlllocal ze_result_t __zecall
-    zexInit(
-        ze_init_flag_t flags                            ///< [in] initialization flags
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        for( auto& drv : context.drivers )
-        {
-            if( ZE_RESULT_SUCCESS == result )
-            {
-                result = drv.dditable.zex.Global.pfnInit( flags );
-            }
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandListReserveSpace
     __zedlllocal ze_result_t __zecall
     zexCommandListReserveSpace(
@@ -158,68 +138,6 @@ namespace loader
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
-__zedllexport ze_result_t __zecall
-zexGetGlobalProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zex_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( loader::context.drivers.size() < 1 )
-        return ZE_RESULT_ERROR_UNINITIALIZED;
-
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-    if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    // Load the device-driver DDI tables
-    for( auto& drv : loader::context.drivers )
-    {
-        if( ZE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<zex_pfnGetGlobalProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "zexGetGlobalProcAddrTable") );
-            result = getTable( version, &drv.dditable.zex.Global );
-        }
-    }
-
-    if( ZE_RESULT_SUCCESS == result )
-    {
-        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
-        {
-            // return pointers to loader's DDIs
-            pDdiTable->pfnInit                                     = loader::zexInit;
-        }
-        else
-        {
-            // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.zex.Global;
-        }
-    }
-
-    // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
-    {
-        auto getTable = reinterpret_cast<zex_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "zexGetGlobalProcAddrTable") );
-        result = getTable( version, pDdiTable );
-    }
-
-    return result;
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's CommandList table

@@ -1835,21 +1835,6 @@ class cl_command_queue(c_void_p):
 __use_win_types = "Windows" == platform.uname()[0]
 
 ###############################################################################
-## @brief Function-pointer for zetInit
-if __use_win_types:
-    _zetInit_t = WINFUNCTYPE( ze_result_t, ze_init_flag_t )
-else:
-    _zetInit_t = CFUNCTYPE( ze_result_t, ze_init_flag_t )
-
-
-###############################################################################
-## @brief Table of Global functions pointers
-class _zet_global_dditable_t(Structure):
-    _fields_ = [
-        ("pfnInit", c_void_p)                                           ## _zetInit_t
-    ]
-
-###############################################################################
 ## @brief Function-pointer for zetDeviceActivateMetricGroups
 if __use_win_types:
     _zetDeviceActivateMetricGroups_t = WINFUNCTYPE( ze_result_t, zet_device_handle_t, c_ulong, POINTER(zet_metric_group_handle_t) )
@@ -3104,7 +3089,6 @@ class _zet_debug_dditable_t(Structure):
 ###############################################################################
 class _zet_dditable_t(Structure):
     _fields_ = [
-        ("Global", _zet_global_dditable_t),
         ("Device", _zet_device_dditable_t),
         ("CommandList", _zet_command_list_dditable_t),
         ("Module", _zet_module_dditable_t),
@@ -3147,16 +3131,6 @@ class ZET_DDI:
 
         # fill the ddi tables
         self.__dditable = _zet_dditable_t()
-
-        # call driver to get function pointers
-        _Global = _zet_global_dditable_t()
-        r = ze_result_v(self.__dll.zetGetGlobalProcAddrTable(version, byref(_Global)))
-        if r != ze_result_v.SUCCESS:
-            raise Exception(r)
-        self.__dditable.Global = _Global
-
-        # attach function interface to function address
-        self.zetInit = _zetInit_t(self.__dditable.Global.pfnInit)
 
         # call driver to get function pointers
         _Device = _zet_device_dditable_t()

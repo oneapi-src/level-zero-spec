@@ -19,35 +19,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zexInit 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _zex_init_params_t
-{
-    ze_init_flag_t* pflags;
-} zex_init_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zexInit 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *zex_pfnInitCb_t)(
-    zex_init_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Global callback functions pointers
-typedef struct _zex_global_callbacks_t
-{
-    zex_pfnInitCb_t                                                 pfnInitCb;
-} zex_global_callbacks_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zexCommandListReserveSpace 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -159,7 +130,6 @@ typedef struct _zex_command_graph_callbacks_t
 /// @brief Container for all callbacks
 typedef struct _zex_callbacks_t
 {
-    zex_global_callbacks_t              Global;
     zex_command_list_callbacks_t        CommandList;
     zex_command_graph_callbacks_t       CommandGraph;
 } zex_callbacks_t;

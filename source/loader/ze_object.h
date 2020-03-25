@@ -15,6 +15,9 @@ struct dditable_t
 {
     ze_dditable_t   ze;
     zet_dditable_t  zet;
+#ifdef ZE_EXPERIMENTAL
+    zex_dditable_t  zex;
+#endif
 };
 
 //////////////////////////////////////////////////////////////////////////

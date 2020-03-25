@@ -74,21 +74,6 @@ class cl_command_queue(c_void_p):
 __use_win_types = "Windows" == platform.uname()[0]
 
 ###############################################################################
-## @brief Function-pointer for zexInit
-if __use_win_types:
-    _zexInit_t = WINFUNCTYPE( ze_result_t, ze_init_flag_t )
-else:
-    _zexInit_t = CFUNCTYPE( ze_result_t, ze_init_flag_t )
-
-
-###############################################################################
-## @brief Table of Global functions pointers
-class _zex_global_dditable_t(Structure):
-    _fields_ = [
-        ("pfnInit", c_void_p)                                           ## _zexInit_t
-    ]
-
-###############################################################################
 ## @brief Function-pointer for zexCommandListReserveSpace
 if __use_win_types:
     _zexCommandListReserveSpace_t = WINFUNCTYPE( ze_result_t, zex_command_list_handle_t, c_size_t, POINTER(c_void_p) )
@@ -137,7 +122,6 @@ class _zex_command_graph_dditable_t(Structure):
 ###############################################################################
 class _zex_dditable_t(Structure):
     _fields_ = [
-        ("Global", _zex_global_dditable_t),
         ("CommandList", _zex_command_list_dditable_t),
         ("CommandGraph", _zex_command_graph_dditable_t)
     ]
@@ -154,16 +138,6 @@ class ZEX_DDI:
 
         # fill the ddi tables
         self.__dditable = _zex_dditable_t()
-
-        # call driver to get function pointers
-        _Global = _zex_global_dditable_t()
-        r = ze_result_v(self.__dll.zexGetGlobalProcAddrTable(version, byref(_Global)))
-        if r != ze_result_v.SUCCESS:
-            raise Exception(r)
-        self.__dditable.Global = _Global
-
-        # attach function interface to function address
-        self.zexInit = _zexInit_t(self.__dditable.Global.pfnInit)
 
         # call driver to get function pointers
         _CommandList = _zex_command_list_dditable_t()

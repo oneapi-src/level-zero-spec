@@ -117,35 +117,30 @@ def _mako_callbacks_cpp(path, namespace, tags, specs, meta):
 """
     generates c/c++ files from the specification documents
 """
-def _mako_lib_cpp(path, namespace, tags, specs, meta):
+def _mako_lib_cpp(path, section, namespace, tags, specs, meta):
     loc = 0
-    template = "libspec.cpp.mako"
+    template = "libapi.cpp.mako"
     fin = os.path.join("templates", template)
 
-    files = []
-    for s in specs:
-        filename = "%s_%s.cpp"%(namespace, s['name'])
-        files.append(filename)
-        fout = os.path.join(path, filename)
+    name = "%s_%s_libapi"%(tags['$x'], section)
+    filename = "%s.cpp"%(name)
+    fout = os.path.join(path, filename)
 
-        print("Generating %s..."%fout)
-        loc += util.makoWrite(
-            fin, fout,
-            name = s['name'],
-            header = s['header'],
-            objects = s['objects'],
-            section=os.path.basename(path),
-            namespace=namespace,
-            tags=tags,
-            specs=specs,
-            meta = meta)
+    print("Generating %s..."%fout)
+    loc += util.makoWrite(
+        fin, fout,
+        name = name,
+        section=os.path.basename(path),
+        namespace=namespace,
+        tags=tags,
+        specs=specs,
+        meta = meta)
 
     template = "libddi.cpp.mako"
     fin = os.path.join("templates", template)
 
-    name = "%s_%s_lib"%(namespace, os.path.basename(path))
+    name = "%s_%s_libddi"%(tags['$x'], section)
     filename = "%s.cpp"%(name)
-    files.append(filename)
     fout = os.path.join(path, filename)
 
     print("Generating %s..."%fout)
@@ -156,7 +151,7 @@ def _mako_lib_cpp(path, namespace, tags, specs, meta):
         tags=tags,
         specs=specs,
         meta=meta)
-    return loc, files
+    return loc
 
 """
     generates c/c++ files from the specification documents
@@ -184,23 +179,6 @@ def _mako_wrapper_cpp(path, namespace, tags, specs, meta):
             specs=specs,
             meta = meta)
     return loc, files
-
-"""
-    generates CMakeLists.txt file from the specification documents
-"""
-def _mako_lib_cmake(path, namespace, tags, files):
-    template = "lib.cmake.mako"
-    fin = os.path.join("templates", template)
-
-    filename = "CMakeLists.txt"
-    fout = os.path.join(path, filename)
-
-    print("Generating %s..."%fout)
-    return util.makoWrite(
-        fin, fout,
-        n=namespace,
-        tags=tags,
-        files=files)
 
 """
     generates CMakeLists.txt file for wrapper
@@ -332,19 +310,6 @@ def _generate_api_cpp(path, namespace, tags, specs, meta):
     return loc
 
 """
-    generates c/c++ files from the specification documents
-"""
-def _generate_lib_cpp(path, namespace, tags, specs, meta):
-    util.makePath(path)
-
-    loc, files = _mako_lib_cpp(path, namespace, tags, specs, meta)
-
-    files.extend(["%s_lib.h"%namespace, "%s_lib.cpp"%namespace])
-    _mako_lib_cmake(path, namespace, tags, files)
-
-    return loc
-
-"""
     generates python files from the specification documents
 """
 def _generate_api_py(path, namespace, tags, specs, meta):
@@ -369,11 +334,11 @@ Entry-point:
     generates lib code
 """
 def generate_lib(path, section, namespace, tags, specs, meta):
-    dstpath = os.path.join(path, "lib", section)
+    dstpath = os.path.join(path, "lib")
     util.makePath(dstpath)
 
     loc = 0
-    loc += _generate_lib_cpp(dstpath, namespace, tags, specs, meta)
+    loc += _mako_lib_cpp(dstpath, section, namespace, tags, specs, meta)
     print("Generated %s lines of code.\n"%loc)
 
 """

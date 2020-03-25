@@ -16,29 +16,6 @@
 namespace driver
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zexInit
-    __zedlllocal ze_result_t __zecall
-    zexInit(
-        ze_init_flag_t flags                            ///< [in] initialization flags
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnInit = context.zexDdiTable.Global.pfnInit;
-        if( nullptr != pfnInit )
-        {
-            result = pfnInit( flags );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandListReserveSpace
     __zedlllocal ze_result_t __zecall
     zexCommandListReserveSpace(
@@ -141,56 +118,6 @@ namespace driver
 
 namespace instrumented
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zexInit
-    __zedlllocal ze_result_t __zecall
-    zexInit(
-        ze_init_flag_t flags                            ///< [in] initialization flags
-        )
-    {
-        ze_result_t result = ZE_RESULT_SUCCESS;
-
-        // capture parameters
-        zex_init_params_t in_params = {
-            &flags
-        };
-
-        // create storage locations for callbacks
-        std::vector<void*> instanceUserData;
-        instanceUserData.resize( context.tracerData.size() );
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zexPrologueCbs.Global;
-                if( nullptr != table.pfnInitCb )
-                    table.pfnInitCb( &in_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        result = driver::zexInit( flags );
-
-        // capture parameters
-        zex_init_params_t out_params = {
-            &flags
-        };
-
-        // call each callback registered
-        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-            if( context.tracerData[ i ].enabled )
-            {
-                auto& table = context.tracerData[ i ].zexEpilogueCbs.Global;
-                if( nullptr != table.pfnInitCb )
-                    table.pfnInitCb( &out_params, result,
-                        context.tracerData[ i ].userData,
-                        &instanceUserData[ i ] );
-            }
-
-        return result;
-    }
-
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandListReserveSpace
     __zedlllocal ze_result_t __zecall
@@ -408,36 +335,6 @@ namespace instrumented
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
-__zedllexport ze_result_t __zecall
-zexGetGlobalProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zex_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-    if( driver::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnInit                                   = instrumented::zexInit;
-    else
-        pDdiTable->pfnInit                                   = driver::zexInit;
-
-    return result;
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's CommandList table

@@ -1,11 +1,20 @@
 set(TARGET_NAME ze_null)
 
+set(null_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_driver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_driver.cpp
+)
+if(ZE_EXPERIMENTAL)
+    set(null_SOURCES ${null_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_driver.cpp
+    )
+endif()
+
 add_library(${TARGET_NAME}
     SHARED
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_driver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_driver.cpp
+        ${null_SOURCES}
 )
 
 target_include_directories(${TARGET_NAME}

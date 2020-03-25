@@ -22,7 +22,7 @@ int main( int argc, char *argv[] )
 
     zet::Driver* pDriver = nullptr;
     zet::Device* pDevice = nullptr;
-    if( init_ze() && init_zet() )
+    if( init_ze() )
     {
         uint32_t driverCount = 0;
         ze::Driver::Get( &driverCount );

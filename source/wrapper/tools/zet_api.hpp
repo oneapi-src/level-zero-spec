@@ -20,7 +20,6 @@
 
 // 'tools' API headers
 #include "zet_common.hpp"
-#include "zet_driver.hpp"
 #include "zet_device.hpp"
 #include "zet_cmdlist.hpp"
 #include "zet_debug.hpp"

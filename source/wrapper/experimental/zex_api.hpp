@@ -20,7 +20,6 @@
 
 // 'experimental' API headers
 #include "zex_common.hpp"
-#include "zex_driver.hpp"
 #include "zex_cmdlist.hpp"
 #include "zex_cmdgraph.hpp"
 

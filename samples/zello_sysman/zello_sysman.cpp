@@ -833,8 +833,7 @@ int ListDevice(ze_device_handle_t hDevice)
 int main( int argc, char *argv[] )
 {
     int ret = -1;
-    if ( (zeInit(ZE_INIT_FLAG_NONE) != ZE_RESULT_SUCCESS) ||
-         (zetInit(ZE_INIT_FLAG_NONE) != ZE_RESULT_SUCCESS) )
+    if ( zeInit(ZE_INIT_FLAG_NONE) != ZE_RESULT_SUCCESS )
     {
         fprintf(stderr, "Can't initialize the API.\n");
         ret = 1;

@@ -12,11 +12,18 @@
 
 #include "ze_ddi.h"
 #include "zet_ddi.h"
-#include "ze_util.h"
+#ifdef ZE_EXPERIMENTAL
+#include "zex_ddi.h"
+#endif
 
+#include "ze_util.h"
 #include "ze_object.h"
+
 #include "ze_core_loader.h"
 #include "ze_tools_loader.h"
+#ifdef ZE_EXPERIMENTAL
+#include "ze_experimental_loader.h"
+#endif
 
 namespace loader
 {

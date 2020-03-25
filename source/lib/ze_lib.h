@@ -10,6 +10,12 @@
 #pragma once
 #include "ze_api.h"
 #include "ze_ddi.h"
+#include "zet_api.h"
+#include "zet_ddi.h"
+#ifdef ZE_EXPERIMENTAL
+#include "zex_api.h"
+#include "zex_ddi.h"
+#endif
 #include "ze_util.h"
 #include <vector>
 
@@ -26,7 +32,16 @@ namespace ze_lib
 
         ze_result_t Init();
 
-        ze_dditable_t   ddiTable = {};
+        ze_result_t zeInit();
+        ze_dditable_t   zeDdiTable = {};
+
+        ze_result_t zetInit();
+        zet_dditable_t  zetDdiTable = {};
+
+#ifdef ZE_EXPERIMENTAL
+        ze_result_t zexInit();
+        zex_dditable_t  zexDdiTable = {};
+#endif
     };
 
     extern context_t context;

@@ -1,11 +1,20 @@
 set(TARGET_NAME ze_validation_layer)
 
+set(layer_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_layer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_layer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_layer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_layer.cpp
+)
+if(ZE_EXPERIMENTAL)
+    set(layer_SOURCES ${layer_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_layer.cpp
+    )
+endif()
+
 add_library(${TARGET_NAME}
     SHARED
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_layer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_layer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_layer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_layer.cpp
+        ${layer_SOURCES}
 )
 
 target_include_directories(${TARGET_NAME}

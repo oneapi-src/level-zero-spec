@@ -21,21 +21,18 @@ def define_dbg(obj, tags):
  *
  * SPDX-License-Identifier: MIT
  *
- * @file ${n}_${name}.cpp
+ * @file ${name}.cpp
  *
- * @brief C++ static library for ${th.subt(n, tags, header['desc'])}
- *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/${section}/${name}.yml
- * @endcond
+ * @brief C++ static library for ${n}
  *
  */
-#include "${n}_lib.h"
+#include "${x}_lib.h"
 
 extern "C" {
 
+%for s in specs:
 ## FUNCTION ###################################################################
-%for obj in th.filter_items(objects, 'type', 'function'):
+%for obj in th.filter_items(s['objects'], 'type', 'function'):
 ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
@@ -58,12 +55,12 @@ ${th.make_func_name(n, tags, obj)}(
     )
 {
 %if re.match("Init", obj['name']):
-    auto result = ${n}_lib::context.Init();
+    auto result = ${x}_lib::context.Init();
     if( ${X}_RESULT_SUCCESS != result )
         return result;
 
 %endif
-    auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::context.ddiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+    auto ${th.make_pfn_name(n, tags, obj)} = ${x}_lib::context.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
     if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
         return ${X}_RESULT_ERROR_UNSUPPORTED_VERSION;
 
@@ -73,5 +70,6 @@ ${th.make_func_name(n, tags, obj)}(
 #endif // ${th.subt(n, tags, obj['condition'])}
 %endif
 
+%endfor
 %endfor
 } // extern "C"

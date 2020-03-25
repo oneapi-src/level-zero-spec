@@ -26,6 +26,6 @@ target_compile_definitions(${TARGET_NAME}
 )
 
 target_link_libraries(${TARGET_NAME}
-    ${x}_api ${n}_api
+    ${x}_api
     ${CMAKE_DL_LIBS}
 )

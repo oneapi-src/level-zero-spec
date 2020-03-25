@@ -16,28 +16,6 @@
 namespace layer
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zexInit
-    __zedlllocal ze_result_t __zecall
-    zexInit(
-        ze_init_flag_t flags                            ///< [in] initialization flags
-        )
-    {
-        auto pfnInit = context.zexDdiTable.Global.pfnInit;
-
-        if( nullptr == pfnInit )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( 1 <= flags )
-                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
-
-        }
-
-        return pfnInit( flags );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for zexCommandListReserveSpace
     __zedlllocal ze_result_t __zecall
     zexCommandListReserveSpace(
@@ -152,36 +130,6 @@ namespace layer
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
-__zedllexport ze_result_t __zecall
-zexGetGlobalProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zex_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    auto& dditable = layer::context.zexDdiTable.Global;
-
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-    if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    dditable.pfnInit                                     = pDdiTable->pfnInit;
-    pDdiTable->pfnInit                                   = layer::zexInit;
-
-    return result;
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's CommandList table

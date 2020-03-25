@@ -19,41 +19,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zexInit 
-typedef ze_result_t (__zecall *zex_pfnInit_t)(
-    ze_init_flag_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Global functions pointers
-typedef struct _zex_global_dditable_t
-{
-    zex_pfnInit_t                                               pfnInit;
-} zex_global_dditable_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
-__zedllexport ze_result_t __zecall
-zexGetGlobalProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    zex_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zexGetGlobalProcAddrTable
-typedef ze_result_t (__zecall *zex_pfnGetGlobalProcAddrTable_t)(
-    ze_api_version_t,
-    zex_global_dditable_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zexCommandListReserveSpace 
 typedef ze_result_t (__zecall *zex_pfnCommandListReserveSpace_t)(
     zex_command_list_handle_t,
@@ -145,7 +110,6 @@ typedef ze_result_t (__zecall *zex_pfnGetCommandGraphProcAddrTable_t)(
 /// @brief Container for all DDI tables
 typedef struct _zex_dditable_t
 {
-    zex_global_dditable_t               Global;
     zex_command_list_dditable_t         CommandList;
     zex_command_graph_dditable_t        CommandGraph;
 } zex_dditable_t;

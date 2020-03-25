@@ -1,12 +1,21 @@
 set(TARGET_NAME ze_loader)
 
+set(loader_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_object.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_loader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_loader.cpp
+)
+if(ZE_EXPERIMENTAL)
+    set(loader_SOURCES ${loader_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_loader.cpp
+    )
+endif()
+
 add_library(${TARGET_NAME}
     SHARED
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_object.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_loader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_loader.cpp
+        ${loader_SOURCES}
 )
 
 target_include_directories(${TARGET_NAME}

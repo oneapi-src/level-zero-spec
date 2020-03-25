@@ -18,7 +18,6 @@
 
 // 'experimental' API headers
 #include "zex_common.h"
-#include "zex_driver.h"
 #include "zex_cmdlist.h"
 #include "zex_cmdgraph.h"
 

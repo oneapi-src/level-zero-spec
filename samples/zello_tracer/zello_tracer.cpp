@@ -33,14 +33,13 @@ int main( int argc, char *argv[] )
         putenv( const_cast<char *>( "ZE_ENABLE_NULL_DRIVER=1" ) );
     }
 
-    putenv( const_cast<char *>( "ZE_ENABLE_INSTRUMENTATION_LAYER=1" ) );
     putenv( const_cast<char *>( "ZE_ENABLE_API_TRACING=1" ) );
 
     const ze::Device::type_t type = ze::Device::type_t::GPU;
 
     zet::Driver* pDriver = nullptr;
     zet::Device* pDevice = nullptr;
-    if( init_ze() && init_zet() )
+    if( init_ze() )
     {
         uint32_t driverCount = 0;
         ze::Driver::Get( &driverCount );

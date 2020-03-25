@@ -15,23 +15,14 @@ from templates import helper as th
  *
  * @file ${name}.cpp
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/templates/libddi.cpp.mako
- * @endcond
- *
  */
-#include "${n}_lib.h"
+#include "${x}_lib.h"
 
-namespace ${n}_lib
+namespace ${x}_lib
 {
     ///////////////////////////////////////////////////////////////////////////////
-    __${x}dlllocal ${x}_result_t context_t::Init()
+    __zedlllocal ${x}_result_t context_t::${n}Init()
     {
-        loader = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "${x}_loader" ) );
-
-        if( NULL == loader )
-            return ${X}_RESULT_ERROR_UNINITIALIZED;
-
         ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
     %for tbl in th.get_pfntables(specs, meta, n, tags):
@@ -39,10 +30,10 @@ namespace ${n}_lib
         {
             auto getTable = reinterpret_cast<${tbl['pfn']}>(
                 GET_FUNCTION_PTR(loader, "${tbl['export']['name']}") );
-            result = getTable( ${X}_API_VERSION_0_91, &ddiTable.${tbl['name']} );
+            result = getTable( ${X}_API_VERSION_0_91, &${n}DdiTable.${tbl['name']} );
         }
 
     %endfor
         return result;
     }
-} // namespace ${n}_lib
+} // namespace ${x}_lib

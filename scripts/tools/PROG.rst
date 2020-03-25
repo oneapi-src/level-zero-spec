@@ -14,9 +14,9 @@
 Initialization
 ==============
 
-The driver must be initialized by calling ::${t}Init after calling ::${x}Init
+The driver must be initialized by calling ::${x}Init
 and before calling any other experimental function. Simultaneous calls
-to ::${t}Init are thread-safe.
+to ::${x}Init are thread-safe.
 
 .. _API-Tracing:
 
