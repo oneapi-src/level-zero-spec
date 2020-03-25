@@ -27,16 +27,16 @@ namespace ze_lib
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<ze_pfnGetDriverProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zeGetDriverProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &ddiTable.Driver );
+            auto getTable = reinterpret_cast<ze_pfnGetGlobalProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zeGetGlobalProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &ddiTable.Global );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<ze_pfnGetGlobalProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zeGetGlobalProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &ddiTable.Global );
+            auto getTable = reinterpret_cast<ze_pfnGetDriverProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zeGetDriverProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &ddiTable.Driver );
         }
 
         if( ZE_RESULT_SUCCESS == result )

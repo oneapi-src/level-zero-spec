@@ -8,7 +8,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Device"
-ordinal: "1"
+ordinal: "2"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for driver instance"

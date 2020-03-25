@@ -3182,6 +3182,68 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+__zedllexport ze_result_t __zecall
+zeGetGlobalProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    ze_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return ZE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+    if( loader::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( ZE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<ze_pfnGetGlobalProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "zeGetGlobalProcAddrTable") );
+            result = getTable( version, &drv.dditable.ze.Global );
+        }
+    }
+
+    if( ZE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnInit                                     = loader::zeInit;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.ze.Global;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        auto getTable = reinterpret_cast<ze_pfnGetGlobalProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "zeGetGlobalProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Driver table
 ///        with current process' addresses
 ///
@@ -3250,68 +3312,6 @@ zeGetDriverProcAddrTable(
     {
         auto getTable = reinterpret_cast<ze_pfnGetDriverProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "zeGetDriverProcAddrTable") );
-        result = getTable( version, pDdiTable );
-    }
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
-__zedllexport ze_result_t __zecall
-zeGetGlobalProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    ze_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( loader::context.drivers.size() < 1 )
-        return ZE_RESULT_ERROR_UNINITIALIZED;
-
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-    if( loader::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    // Load the device-driver DDI tables
-    for( auto& drv : loader::context.drivers )
-    {
-        if( ZE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<ze_pfnGetGlobalProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "zeGetGlobalProcAddrTable") );
-            result = getTable( version, &drv.dditable.ze.Global );
-        }
-    }
-
-    if( ZE_RESULT_SUCCESS == result )
-    {
-        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
-        {
-            // return pointers to loader's DDIs
-            pDdiTable->pfnInit                                     = loader::zeInit;
-        }
-        else
-        {
-            // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.ze.Global;
-        }
-    }
-
-    // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( ZE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
-    {
-        auto getTable = reinterpret_cast<ze_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "zeGetGlobalProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

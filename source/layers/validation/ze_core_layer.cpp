@@ -3081,6 +3081,36 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+__zedllexport ze_result_t __zecall
+zeGetGlobalProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    ze_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.zeDdiTable.Global;
+
+    if( nullptr == pDdiTable )
+        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+    if( layer::context.version < version )
+        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+    ze_result_t result = ZE_RESULT_SUCCESS;
+
+    dditable.pfnInit                                     = pDdiTable->pfnInit;
+    pDdiTable->pfnInit                                   = layer::zeInit;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Driver table
 ///        with current process' addresses
 ///
@@ -3145,36 +3175,6 @@ zeGetDriverProcAddrTable(
 
     dditable.pfnCloseMemIpcHandle                        = pDdiTable->pfnCloseMemIpcHandle;
     pDdiTable->pfnCloseMemIpcHandle                      = layer::zeDriverCloseMemIpcHandle;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
-__zedllexport ze_result_t __zecall
-zeGetGlobalProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    ze_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    auto& dditable = layer::context.zeDdiTable.Global;
-
-    if( nullptr == pDdiTable )
-        return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-    if( layer::context.version < version )
-        return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-    ze_result_t result = ZE_RESULT_SUCCESS;
-
-    dditable.pfnInit                                     = pDdiTable->pfnInit;
-    pDdiTable->pfnInit                                   = layer::zeInit;
 
     return result;
 }

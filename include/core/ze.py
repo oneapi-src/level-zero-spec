@@ -1357,6 +1357,21 @@ class cl_command_queue(c_void_p):
 __use_win_types = "Windows" == platform.uname()[0]
 
 ###############################################################################
+## @brief Function-pointer for zeInit
+if __use_win_types:
+    _zeInit_t = WINFUNCTYPE( ze_result_t, ze_init_flag_t )
+else:
+    _zeInit_t = CFUNCTYPE( ze_result_t, ze_init_flag_t )
+
+
+###############################################################################
+## @brief Table of Global functions pointers
+class _ze_global_dditable_t(Structure):
+    _fields_ = [
+        ("pfnInit", c_void_p)                                           ## _zeInit_t
+    ]
+
+###############################################################################
 ## @brief Function-pointer for zeDriverGet
 if __use_win_types:
     _zeDriverGet_t = WINFUNCTYPE( ze_result_t, POINTER(c_ulong), POINTER(ze_driver_handle_t) )
@@ -1473,21 +1488,6 @@ class _ze_driver_dditable_t(Structure):
         ("pfnGetMemIpcHandle", c_void_p),                               ## _zeDriverGetMemIpcHandle_t
         ("pfnOpenMemIpcHandle", c_void_p),                              ## _zeDriverOpenMemIpcHandle_t
         ("pfnCloseMemIpcHandle", c_void_p)                              ## _zeDriverCloseMemIpcHandle_t
-    ]
-
-###############################################################################
-## @brief Function-pointer for zeInit
-if __use_win_types:
-    _zeInit_t = WINFUNCTYPE( ze_result_t, ze_init_flag_t )
-else:
-    _zeInit_t = CFUNCTYPE( ze_result_t, ze_init_flag_t )
-
-
-###############################################################################
-## @brief Table of Global functions pointers
-class _ze_global_dditable_t(Structure):
-    _fields_ = [
-        ("pfnInit", c_void_p)                                           ## _zeInit_t
     ]
 
 ###############################################################################
@@ -2259,8 +2259,8 @@ class _ze_sampler_dditable_t(Structure):
 ###############################################################################
 class _ze_dditable_t(Structure):
     _fields_ = [
-        ("Driver", _ze_driver_dditable_t),
         ("Global", _ze_global_dditable_t),
+        ("Driver", _ze_driver_dditable_t),
         ("Device", _ze_device_dditable_t),
         ("CommandQueue", _ze_command_queue_dditable_t),
         ("CommandList", _ze_command_list_dditable_t),
@@ -2288,6 +2288,16 @@ class ZE_DDI:
         self.__dditable = _ze_dditable_t()
 
         # call driver to get function pointers
+        _Global = _ze_global_dditable_t()
+        r = ze_result_v(self.__dll.zeGetGlobalProcAddrTable(version, byref(_Global)))
+        if r != ze_result_v.SUCCESS:
+            raise Exception(r)
+        self.__dditable.Global = _Global
+
+        # attach function interface to function address
+        self.zeInit = _zeInit_t(self.__dditable.Global.pfnInit)
+
+        # call driver to get function pointers
         _Driver = _ze_driver_dditable_t()
         r = ze_result_v(self.__dll.zeGetDriverProcAddrTable(version, byref(_Driver)))
         if r != ze_result_v.SUCCESS:
@@ -2309,16 +2319,6 @@ class ZE_DDI:
         self.zeDriverGetMemIpcHandle = _zeDriverGetMemIpcHandle_t(self.__dditable.Driver.pfnGetMemIpcHandle)
         self.zeDriverOpenMemIpcHandle = _zeDriverOpenMemIpcHandle_t(self.__dditable.Driver.pfnOpenMemIpcHandle)
         self.zeDriverCloseMemIpcHandle = _zeDriverCloseMemIpcHandle_t(self.__dditable.Driver.pfnCloseMemIpcHandle)
-
-        # call driver to get function pointers
-        _Global = _ze_global_dditable_t()
-        r = ze_result_v(self.__dll.zeGetGlobalProcAddrTable(version, byref(_Global)))
-        if r != ze_result_v.SUCCESS:
-            raise Exception(r)
-        self.__dditable.Global = _Global
-
-        # attach function interface to function address
-        self.zeInit = _zeInit_t(self.__dditable.Global.pfnInit)
 
         # call driver to get function pointers
         _Device = _ze_device_dditable_t()

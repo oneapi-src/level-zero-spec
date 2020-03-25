@@ -19,6 +19,35 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for zeInit 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _ze_init_params_t
+{
+    ze_init_flag_t* pflags;
+} ze_init_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for zeInit 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__zecall *ze_pfnInitCb_t)(
+    ze_init_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Global callback functions pointers
+typedef struct _ze_global_callbacks_t
+{
+    ze_pfnInitCb_t                                                  pfnInitCb;
+} ze_global_callbacks_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeDriverGet 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -380,35 +409,6 @@ typedef struct _ze_driver_callbacks_t
     ze_pfnDriverOpenMemIpcHandleCb_t                                pfnOpenMemIpcHandleCb;
     ze_pfnDriverCloseMemIpcHandleCb_t                               pfnCloseMemIpcHandleCb;
 } ze_driver_callbacks_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for zeInit 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _ze_init_params_t
-{
-    ze_init_flag_t* pflags;
-} ze_init_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for zeInit 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__zecall *ze_pfnInitCb_t)(
-    ze_init_params_t* params,
-    ze_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Global callback functions pointers
-typedef struct _ze_global_callbacks_t
-{
-    ze_pfnInitCb_t                                                  pfnInitCb;
-} ze_global_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for zeDeviceGet 
@@ -2704,8 +2704,8 @@ typedef struct _ze_sampler_callbacks_t
 /// @brief Container for all callbacks
 typedef struct _ze_callbacks_t
 {
-    ze_driver_callbacks_t               Driver;
     ze_global_callbacks_t               Global;
+    ze_driver_callbacks_t               Driver;
     ze_device_callbacks_t               Device;
     ze_command_queue_callbacks_t        CommandQueue;
     ze_command_list_callbacks_t         CommandList;

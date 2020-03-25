@@ -19,6 +19,41 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeInit 
+typedef ze_result_t (__zecall *ze_pfnInit_t)(
+    ze_init_flag_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Global functions pointers
+typedef struct _ze_global_dditable_t
+{
+    ze_pfnInit_t                                                pfnInit;
+} ze_global_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
+__zedllexport ze_result_t __zecall
+zeGetGlobalProcAddrTable(
+    ze_api_version_t version,                       ///< [in] API version requested
+    ze_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for zeGetGlobalProcAddrTable
+typedef ze_result_t (__zecall *ze_pfnGetGlobalProcAddrTable_t)(
+    ze_api_version_t,
+    ze_global_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for zeDriverGet 
 typedef ze_result_t (__zecall *ze_pfnDriverGet_t)(
     uint32_t*,
@@ -177,41 +212,6 @@ zeGetDriverProcAddrTable(
 typedef ze_result_t (__zecall *ze_pfnGetDriverProcAddrTable_t)(
     ze_api_version_t,
     ze_driver_dditable_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeInit 
-typedef ze_result_t (__zecall *ze_pfnInit_t)(
-    ze_init_flag_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Global functions pointers
-typedef struct _ze_global_dditable_t
-{
-    ze_pfnInit_t                                                pfnInit;
-} ze_global_dditable_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
-__zedllexport ze_result_t __zecall
-zeGetGlobalProcAddrTable(
-    ze_api_version_t version,                       ///< [in] API version requested
-    ze_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for zeGetGlobalProcAddrTable
-typedef ze_result_t (__zecall *ze_pfnGetGlobalProcAddrTable_t)(
-    ze_api_version_t,
-    ze_global_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1336,8 +1336,8 @@ typedef ze_result_t (__zecall *ze_pfnGetSamplerProcAddrTable_t)(
 /// @brief Container for all DDI tables
 typedef struct _ze_dditable_t
 {
-    ze_driver_dditable_t                Driver;
     ze_global_dditable_t                Global;
+    ze_driver_dditable_t                Driver;
     ze_device_dditable_t                Device;
     ze_command_queue_dditable_t         CommandQueue;
     ze_command_list_dditable_t          CommandList;

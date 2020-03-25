@@ -8,7 +8,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Experimental APIs for Command List"
-ordinal: "1"
+ordinal: "2"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reserve a section of contiguous command buffer space within the command list."
