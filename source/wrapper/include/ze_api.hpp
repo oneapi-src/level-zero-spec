@@ -24,7 +24,7 @@
 #include <string>
 #include <sstream>
 
-// 'core' API headers
+// 'include' API headers
 #include "ze_common.hpp"
 #include "ze_driver.hpp"
 #include "ze_device.hpp"

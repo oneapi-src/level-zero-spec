@@ -13,6 +13,6 @@ if(MSVC)
 endif()
 
 target_link_libraries(${TARGET_NAME}
-    ze_api_cpp zet_api_cpp
+    ze_api_cpp
     ${CMAKE_DL_LIBS}
 )

@@ -21,21 +21,41 @@ def define_dbg(obj, tags):
  *
  * SPDX-License-Identifier: MIT
  *
- * @file ${n}_${name}.cpp
+ * @file ${name}.cpp
  *
- * @brief C++ wrapper of ${th.subt(n, tags, header['desc'])}
+ * @brief C++ wrapper of ${n}
  *
  */
 #include "${n}_api.hpp"
 #include "${x}_singleton.h"
 
-#define _STRING(s) #s
-#define STRING(s) _STRING(s)
+#define _${X}_STRING(s) #s
+#define ${X}_STRING(s) _${X}_STRING(s)
 
 namespace ${n}
 {
+%for s in specs:
+## EXCEPTION ##############################################################
+%if re.match(r"common", s['name']) and (n == x):
+    ///////////////////////////////////////////////////////////////////////////////
+    std::string exception_t::formatted(
+        const result_t result,
+        const char* file,
+        const char* line,
+        const char* func )
+    {
+    #ifdef _DEBUG
+        std::stringstream msg;
+        msg << file << "(" << line << ") : exception : " << func << "(" << ${x}::to_string(result) << ")";
+        return msg.str();
+    #else
+        return ${x}::to_string(result);
+    #endif
+    }
+
+%endif
 ## CLASS ################################################################
-%for obj in th.filter_items(objects, 'type', 'class'):
+%for obj in th.filter_items(s['objects'], 'type', 'class'):
     %if 'base' not in obj:
     ///////////////////////////////////////////////////////////////////////////////
     ${th.make_class_name(n, tags, obj)}::${th.make_class_name(n, tags, obj)}( 
@@ -52,7 +72,7 @@ namespace ${n}
     %endif
 %endfor
 ## FUNCTION ###################################################################
-%for obj in th.filter_items(objects, 'type', 'function'):
+%for obj in th.filter_items(s['objects'], 'type', 'function'):
     ///////////////////////////////////////////////////////////////////////////////
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
@@ -114,7 +134,7 @@ namespace ${n}
             return 0; // false
         %endif
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
+            throw exception_t( result, __FILE__, ${X}_STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
         %for item in wparams:
         %if 'class' in item:
 
@@ -208,7 +228,7 @@ namespace ${n}
             %endfor
 
             %endif
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, ${X}_STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
         }
         %endif
         %endif
@@ -225,12 +245,14 @@ namespace ${n}
 %endif
 
 %endfor
+%endfor
 } // namespace ${n}
 
 ## DEBUG ######################################################################
 namespace ${n}
 {
-    %for obj in objects:
+    %for s in specs:
+    %for obj in s['objects']:
     %if define_dbg(obj, tags):
     %if re.match(r"enum", obj['type']) or re.match(r"struct|union", obj['type']):
     <%
@@ -442,27 +464,6 @@ namespace ${n}
     %endfor ## struct
     %endif  ## class
     %endif  ## define_dbg
-    %endfor ## obj in objects
+    %endfor ## obj in s['objects']
+    %endfor ## s in specs
 } // namespace ${n}
-## EXCEPTION ##############################################################
-%if re.match(r"common", name) and (n == x):
-
-namespace ${n}
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    std::string exception_t::formatted(
-        const result_t result,
-        const char* file,
-        const char* line,
-        const char* func )
-    {
-    #ifdef _DEBUG
-        std::stringstream msg;
-        msg << file << "(" << line << ") : exception : " << func << "(" << ${x}::to_string(result) << ")";
-        return msg.str();
-    #else
-        return ${x}::to_string(result);
-    #endif
-    }
-} // namespace ${n}
-%endif

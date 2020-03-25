@@ -61,9 +61,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/core)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/experimental)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/tools)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/source/wrapper/core)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/source/wrapper/experimental)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/source/wrapper/tools)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/source/wrapper/include)
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 

@@ -4,19 +4,51 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file zex_cmdgraph.cpp
+ * @file zex_wprapi.cpp
  *
- * @brief C++ wrapper of Intel 'One API' Level-Zero Experimental APIs for CommandGraph
+ * @brief C++ wrapper of zex
  *
  */
 #include "zex_api.hpp"
 #include "ze_singleton.h"
 
-#define _STRING(s) #s
-#define STRING(s) _STRING(s)
+#define _ZE_STRING(s) #s
+#define ZE_STRING(s) _ZE_STRING(s)
 
 namespace zex
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Reserve a section of contiguous command buffer space within the
+    ///        command list.
+    /// 
+    /// @details
+    ///     - The pointer returned is valid for both Host and device access.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - void*: pointer to command buffer space reserved
+    /// 
+    /// @throws result_t
+    void* __zecall
+    CommandList::ReserveSpace(
+        size_t size                                     ///< [in] size (in bytes) to reserve
+        )
+    {
+        void* ptr;
+
+        auto result = static_cast<result_t>( ::zexCommandListReserveSpace(
+            reinterpret_cast<zex_command_list_handle_t>( getHandle() ),
+            size,
+            &ptr ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, ZE_STRING(__LINE__), "zex::CommandList::ReserveSpace" );
+
+        return ptr;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     CommandGraph::CommandGraph( 
         ze::Device* pDevice,                            ///< [in] pointer to owner object
@@ -53,7 +85,7 @@ namespace zex
             &hCommandGraph ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zex::CommandGraph::Create" );
+            throw exception_t( result, __FILE__, ZE_STRING(__LINE__), "zex::CommandGraph::Create" );
 
         CommandGraph* pCommandGraph = nullptr;
 
@@ -66,7 +98,7 @@ namespace zex
             delete pCommandGraph;
             pCommandGraph = nullptr;
 
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "zex::CommandGraph::Create" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, ZE_STRING(__LINE__), "zex::CommandGraph::Create" );
         }
 
         return pCommandGraph;
@@ -92,7 +124,7 @@ namespace zex
             reinterpret_cast<zex_command_graph_handle_t>( pCommandGraph->getHandle() ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zex::CommandGraph::Destroy" );
+            throw exception_t( result, __FILE__, ZE_STRING(__LINE__), "zex::CommandGraph::Destroy" );
 
         delete pCommandGraph;
     }
@@ -118,7 +150,7 @@ namespace zex
             reinterpret_cast<zex_command_graph_handle_t>( getHandle() ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "zex::CommandGraph::Close" );
+            throw exception_t( result, __FILE__, ZE_STRING(__LINE__), "zex::CommandGraph::Close" );
     }
 
 } // namespace zex

@@ -18,7 +18,7 @@
 // 'core' C++ API headers
 #include "ze_api.hpp"
 
-// 'tools' API headers
+// 'include' API headers
 #include "zet_common.hpp"
 #include "zet_device.hpp"
 #include "zet_cmdlist.hpp"

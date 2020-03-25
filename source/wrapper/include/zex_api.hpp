@@ -18,7 +18,7 @@
 // 'core' C++ API headers
 #include "ze_api.hpp"
 
-// 'experimental' API headers
+// 'include' API headers
 #include "zex_common.hpp"
 #include "zex_cmdlist.hpp"
 #include "zex_cmdgraph.hpp"
