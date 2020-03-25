@@ -5,11 +5,7 @@
 
  @file ze.py
 
- @cond DEV
- DO NOT EDIT: generated from /scripts/templates/libddi.py.mako
- @endcond
-
-"""
+ """
 import platform
 from ctypes import *
 from enum import *

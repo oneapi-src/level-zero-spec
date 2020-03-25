@@ -4,11 +4,7 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file ze_tools_loader.cpp
- *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/templates/ldrddi.cpp.mako
- * @endcond
+ * @file zet_ldrddi.cpp
  *
  */
 #include "ze_loader.h"

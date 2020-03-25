@@ -3,12 +3,12 @@ set(TARGET_NAME ze_validation_layer)
 set(layer_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_layer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_layer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_layer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_layer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_valddi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/zet_valddi.cpp
 )
 if(ZE_EXPERIMENTAL)
     set(layer_SOURCES ${layer_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_layer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zex_valddi.cpp
     )
 endif()
 

@@ -4,12 +4,12 @@ set(loader_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_object.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_loader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_loader.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_ldrddi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/zet_ldrddi.cpp
 )
 if(ZE_EXPERIMENTAL)
     set(loader_SOURCES ${loader_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zex_ldrddi.cpp
     )
 endif()
 

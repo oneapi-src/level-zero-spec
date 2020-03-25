@@ -19,10 +19,10 @@
 #include "ze_util.h"
 #include "ze_object.h"
 
-#include "ze_core_loader.h"
-#include "ze_tools_loader.h"
+#include "ze_ldrddi.h"
+#include "zet_ldrddi.h"
 #ifdef ZE_EXPERIMENTAL
-#include "ze_experimental_loader.h"
+#include "zex_ldrddi.h"
 #endif
 
 namespace loader

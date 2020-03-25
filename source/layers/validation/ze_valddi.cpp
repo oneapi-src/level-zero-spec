@@ -4,11 +4,7 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file ze_core_layer.cpp
- *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/templates/valddi.cpp.mako
- * @endcond
+ * @file ze_valddi.cpp
  *
  */
 #include "ze_layer.h"

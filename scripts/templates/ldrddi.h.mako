@@ -15,10 +15,6 @@ from templates import helper as th
  *
  * @file ${name}.h
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/templates/ldrddi.h.mako
- * @endcond
- *
  */
 #pragma once
 

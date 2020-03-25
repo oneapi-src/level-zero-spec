@@ -4,7 +4,7 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file ze_core_libapi.cpp
+ * @file ze_libapi.cpp
  *
  * @brief C++ static library for ze
  *

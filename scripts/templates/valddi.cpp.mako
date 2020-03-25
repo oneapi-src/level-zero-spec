@@ -15,10 +15,6 @@ from templates import helper as th
  *
  * @file ${name}.cpp
  *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/templates/valddi.cpp.mako
- * @endcond
- *
  */
 #include "${x}_layer.h"
 

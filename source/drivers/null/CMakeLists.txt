@@ -3,12 +3,12 @@ set(TARGET_NAME ze_null)
 set(null_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_null.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_driver.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_driver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_nullddi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/zet_nullddi.cpp
 )
 if(ZE_EXPERIMENTAL)
     set(null_SOURCES ${null_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_driver.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zex_nullddi.cpp
     )
 endif()
 

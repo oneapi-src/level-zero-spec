@@ -1,17 +1,17 @@
 set(TARGET_NAME ze_api)
 
 set(lib_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_libapi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_core_libddi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_libapi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_tools_libddi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_libapi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ze_libddi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/zet_libapi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/zet_libddi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_lib.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_lib.cpp
 )
 if(ZE_EXPERIMENTAL)
     set(lib_SOURCES ${lib_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_libapi.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ze_experimental_libddi.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zex_libapi.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zex_libddi.cpp
     )
 endif()
 

@@ -4,7 +4,7 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file ze_core_libddi.cpp
+ * @file ze_libddi.cpp
  *
  */
 #include "ze_lib.h"

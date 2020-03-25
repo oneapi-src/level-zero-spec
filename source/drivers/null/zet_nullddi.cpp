@@ -4,11 +4,7 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file ze_tools_driver.cpp
- *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/templates/nullddi.cpp.mako
- * @endcond
+ * @file zet_nullddi.cpp
  *
  */
 #include "ze_null.h"

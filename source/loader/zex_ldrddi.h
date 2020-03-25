@@ -4,11 +4,7 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file ze_experimental_loader.h
- *
- * @cond DEV
- * DO NOT EDIT: generated from /scripts/templates/ldrddi.h.mako
- * @endcond
+ * @file zex_ldrddi.h
  *
  */
 #pragma once
