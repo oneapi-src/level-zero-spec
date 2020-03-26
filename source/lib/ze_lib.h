@@ -12,6 +12,8 @@
 #include "ze_ddi.h"
 #include "zet_api.h"
 #include "zet_ddi.h"
+#include "zes_api.h"
+#include "zes_ddi.h"
 #ifdef ZE_EXPERIMENTAL
 #include "zex_api.h"
 #include "zex_ddi.h"
@@ -37,6 +39,9 @@ namespace ze_lib
 
         ze_result_t zetInit();
         zet_dditable_t  zetDdiTable = {};
+
+        ze_result_t zesInit();
+        zes_dditable_t  zesDdiTable = {};
 
 #ifdef ZE_EXPERIMENTAL
         ze_result_t zexInit();

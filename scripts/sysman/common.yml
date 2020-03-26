@@ -1,0 +1,108 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Sysman API common types"
+ordinal: "0"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle to a driver instance"
+class: $sDriver
+name: "$s_driver_handle_t"
+alias: "$x_driver_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of device object"
+class: $sDevice
+name: "$s_device_handle_t"
+alias: "$x_device_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for accessing System Resource Management features of a device"
+class: $sSysman
+name: "$s_sysman_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device scheduler queue"
+class: $sSysmanScheduler
+name: "$s_sysman_sched_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device performance factors"
+class: $sSysmanPerformanceFactor
+name: "$s_sysman_perf_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device power domain"
+class: $sSysmanPower
+name: "$s_sysman_pwr_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device frequency domain"
+class: $sSysmanFrequency
+name: "$s_sysman_freq_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device engine group"
+class: $sSysmanEngine
+name: "$s_sysman_engine_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device standby control"
+class: $sSysmanStandby
+name: "$s_sysman_standby_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device firmware"
+class: $sSysmanFirmware
+name: "$s_sysman_firmware_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device memory module"
+class: $sSysmanMemory
+name: "$s_sysman_mem_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman fabric port"
+class: $sSysmanFabricPort
+name: "$s_sysman_fabric_port_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device temperature sensor"
+class: $sSysmanTemperature
+name: "$s_sysman_temp_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device power supply"
+class: $sSysmanPsu
+name: "$s_sysman_psu_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device fan"
+class: $sSysmanFan
+name: "$s_sysman_fan_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device LED"
+class: $sSysmanLed
+name: "$s_sysman_led_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device RAS error set"
+class: $sSysmanRas
+name: "$s_sysman_ras_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device diagnostics test suite"
+class: $sSysmanDiagnostics
+name: "$s_sysman_diag_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device event"
+class: $sSysmanEvent
+name: "$s_sysman_event_handle_t"

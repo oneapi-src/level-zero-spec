@@ -11,98 +11,98 @@ desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of Sysman"
-class: $tSysman
-name: $t_sysman_version_t
+class: $sSysman
+name: $s_sysman_version_t
 etors:
-    - name: $T_SYSMAN_VERSION_CURRENT
+    - name: $S_SYSMAN_VERSION_CURRENT
       value: "$X_MAKE_VERSION( 0, 91 )"
       desc: "version 0.91"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the handle to access Sysman features for a device"
-class: $tSysman
+class: $sSysman
 name: Get
 decl: static
 details:
     - "The returned handle is unique."
-    - "$t_device_handle_t returned by $xDeviceGetSubDevices() are not support. Only use handles returned by $xDeviceGet(). All resources on sub-devices can be enumerated through the primary device."
+    - "$s_device_handle_t returned by $xDeviceGetSubDevices() are not support. Only use handles returned by $xDeviceGet(). All resources on sub-devices can be enumerated through the primary device."
 params:
-    - type: "$t_device_handle_t"
+    - type: "$s_device_handle_t"
       name: hDevice
       desc: "[in] Handle of the device"
-    - type: "$t_sysman_version_t"
+    - type: "$s_sysman_version_t"
       name: version
       desc: "[in] Sysman version that application was built with"
-    - type: "$t_sysman_handle_t*"
+    - type: "$s_sysman_handle_t*"
       name: phSysman
       desc: "[out] Handle for accessing Sysman features"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum number of characters in string properties."
-name: $T_STRING_PROPERTY_SIZE
+name: $S_STRING_PROPERTY_SIZE
 value: "64"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Types of accelerator engines"
-class: $tSysman
-name: $t_engine_type_t
+class: $sSysman
+name: $s_engine_type_t
 etors:
-    - name: $T_ENGINE_TYPE_OTHER
+    - name: $S_ENGINE_TYPE_OTHER
       value: "0"
       desc: "Undefined types of accelerators."
-    - name: $T_ENGINE_TYPE_COMPUTE
+    - name: $S_ENGINE_TYPE_COMPUTE
       desc: "Engines that process compute kernels."
-    - name: $T_ENGINE_TYPE_3D
+    - name: $S_ENGINE_TYPE_3D
       desc: "Engines that process 3D content"
-    - name: $T_ENGINE_TYPE_MEDIA
+    - name: $S_ENGINE_TYPE_MEDIA
       desc: "Engines that process media workloads"
-    - name: $T_ENGINE_TYPE_DMA
+    - name: $S_ENGINE_TYPE_DMA
       desc: "Engines that copy blocks of data"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Device repair status"
-class: $tSysman
-name: $t_repair_status_t
+class: $sSysman
+name: $s_repair_status_t
 etors:
-    - name: $T_REPAIR_STATUS_UNSUPPORTED
+    - name: $S_REPAIR_STATUS_UNSUPPORTED
       value: "0"
       desc: "The device does not support in-field repairs."
-    - name: $T_REPAIR_STATUS_NOT_PERFORMED
+    - name: $S_REPAIR_STATUS_NOT_PERFORMED
       desc: "The device has never been repaired."
-    - name: $T_REPAIR_STATUS_PERFORMED
+    - name: $S_REPAIR_STATUS_PERFORMED
       desc: "The device has been repaired."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Device reset reasons"
-class: $tSysman
-name: $t_reset_reasons_t
+class: $sSysman
+name: $s_reset_reasons_t
 etors:
-    - name: $T_RESET_REASONS_NONE
+    - name: $S_RESET_REASONS_NONE
       value: "0"
       desc: "The device does not need to be reset"
-    - name: $T_RESET_REASONS_WEDGED
+    - name: $S_RESET_REASONS_WEDGED
       value: "$X_BIT( 0 )"
       desc: "The device needs to be reset because one or more parts of the hardware is wedged"
-    - name: $T_RESET_REASONS_REPAIR
+    - name: $S_RESET_REASONS_REPAIR
       value: "$X_BIT( 1 )"
       desc: "The device needs to be reset in order to complete in-field repairs"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device state"
-class: $tSysman
-name: $t_sysman_state_t
+class: $sSysman
+name: $s_sysman_state_t
 members:
     - type: uint32_t
       name: reset
-      desc: "[out] Indicates if the device needs to be reset and for what reasons (bitfield of $t_reset_reasons_t)"
-    - type: $t_repair_status_t
+      desc: "[out] Indicates if the device needs to be reset and for what reasons (bitfield of $s_reset_reasons_t)"
+    - type: $s_repair_status_t
       name: repaired
       desc: "[out] Indicates if the device has been repaired"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties"
-class: $tSysman
-name: $t_sysman_properties_t
+class: $sSysman
+name: $s_sysman_properties_t
 members:
     - type: $x_device_properties_t
       name: core
@@ -111,57 +111,57 @@ members:
       name: "numSubdevices"
       desc: "[out] Number of sub-devices"
     - type: int8_t
-      name: "serialNumber[$T_STRING_PROPERTY_SIZE]"
+      name: "serialNumber[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Manufacturing serial number (NULL terminated string value)"
     - type: int8_t
-      name: "boardNumber[$T_STRING_PROPERTY_SIZE]"
+      name: "boardNumber[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Manufacturing board number (NULL terminated string value)"
     - type: int8_t
-      name: "brandName[$T_STRING_PROPERTY_SIZE]"
+      name: "brandName[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Brand name of the device (NULL terminated string value)"
     - type: int8_t
-      name: "modelName[$T_STRING_PROPERTY_SIZE]"
+      name: "modelName[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Model name of the device (NULL terminated string value)"
     - type: int8_t
-      name: "vendorName[$T_STRING_PROPERTY_SIZE]"
+      name: "vendorName[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Vendor name of the device (NULL terminated string value)"
     - type: int8_t
-      name: "driverVersion[$T_STRING_PROPERTY_SIZE]"
+      name: "driverVersion[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Installed driver version (NULL terminated string value)"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties about the device"
-class: $tSysman
+class: $sSysman
 name: DeviceGetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
-    - type: $t_sysman_properties_t*
+    - type: $s_sysman_properties_t*
       name: pProperties
       desc: "[in,out] Structure that will contain information about the device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get information about the state of the device - if a reset is required, reasons for the reset and if the device has been repaired"
-class: $tSysman
+class: $sSysman
 name: DeviceGetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
-    - type: $t_sysman_state_t*
+    - type: $s_sysman_state_t*
       name: pState
       desc: "[in,out] Structure that will contain information about the device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset device"
-class: $tSysman
+class: $sSysman
 name: DeviceReset
 details:
     - "Performs a PCI bus reset of the device. This will result in all current device state being lost."
@@ -169,7 +169,7 @@ details:
     - "If the force argument is specified, all applications using the device will be forcibly killed."
     - "The function will block until the device has restarted or a timeout occurred waiting for the reset to complete."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle for the device"
     - type: $x_bool_t
@@ -185,23 +185,23 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Scheduler mode"
-class: $tSysman
-name: $t_sched_mode_t
+class: $sSysman
+name: $s_sched_mode_t
 etors:
-    - name: $T_SCHED_MODE_TIMEOUT
+    - name: $S_SCHED_MODE_TIMEOUT
       value: "0"
       desc: "Multiple applications or contexts are submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work."
-    - name: $T_SCHED_MODE_TIMESLICE
+    - name: $S_SCHED_MODE_TIMESLICE
       desc: "The scheduler attempts to fairly timeslice hardware execution time between multiple contexts submitting work to the hardware concurrently."
-    - name: $T_SCHED_MODE_EXCLUSIVE
+    - name: $S_SCHED_MODE_EXCLUSIVE
       desc: "Any application or context can run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
-    - name: $T_SCHED_MODE_COMPUTE_UNIT_DEBUG
+    - name: $S_SCHED_MODE_COMPUTE_UNIT_DEBUG
       desc: "Scheduler ensures that submission of workloads to the hardware is optimized for compute unit debugging."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Properties related to scheduler component"
-class: $tSysmanScheduler
-name: $t_sched_properties_t
+class: $sSysmanScheduler
+name: $s_sched_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
@@ -214,20 +214,20 @@ members:
       desc: "[out] Software can change the scheduler component configuration assuming the user has permissions."
     - type: uint64_t
       name: "engines"
-      desc: "[out] Bitfield of accelerator engines that are controlled by this scheduler component (bitfield of 1<<$t_engine_type_t)."
+      desc: "[out] Bitfield of accelerator engines that are controlled by this scheduler component (bitfield of 1<<$s_engine_type_t)."
     - type: uint32_t
       name: "supportedModes"
-      desc: "[out] Bitfield of scheduler modes that can be configured for this scheduler component (bitfield of 1<<$t_sched_mode_t)."
+      desc: "[out] Bitfield of scheduler modes that can be configured for this scheduler component (bitfield of 1<<$s_sched_mode_t)."
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Disable forward progress guard timeout."
-name: $T_SCHED_WATCHDOG_DISABLE
+name: $S_SCHED_WATCHDOG_DISABLE
 value: "(~(0ULL))"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Configuration for timeout scheduler mode ($T_SCHED_MODE_TIMEOUT)"
-class: $tSysman
-name: $t_sched_timeout_properties_t
+desc: "Configuration for timeout scheduler mode ($S_SCHED_MODE_TIMEOUT)"
+class: $sSysman
+name: $s_sched_timeout_properties_t
 members:
     - type: uint64_t
       name: "watchdogTimeout"
@@ -235,12 +235,12 @@ members:
       desc: |
             [in,out] The maximum time in microseconds that the scheduler will wait for a batch of work submitted to a hardware engine to complete or to be preempted so as to run another context.
             If this time is exceeded, the hardware engine is reset and the context terminated.
-            If set to $T_SCHED_WATCHDOG_DISABLE, a running workload can run as long as it wants without being terminated, but preemption attempts to run other contexts are permitted but not enforced.
+            If set to $S_SCHED_WATCHDOG_DISABLE, a running workload can run as long as it wants without being terminated, but preemption attempts to run other contexts are permitted but not enforced.
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Configuration for timeslice scheduler mode ($T_SCHED_MODE_TIMESLICE)"
-class: $tSysman
-name: $t_sched_timeslice_properties_t
+desc: "Configuration for timeslice scheduler mode ($S_SCHED_MODE_TIMESLICE)"
+class: $sSysman
+name: $s_sched_timeslice_properties_t
 members:
     - type: uint64_t
       name: "interval"
@@ -251,13 +251,13 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle to a scheduler component"
-class: $tSysman
+class: $sSysman
 name: SchedulerGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -267,37 +267,37 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_sched_handle_t*"
+    - type: "$s_sysman_sched_handle_t*"
       name: phScheduler
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties related to a scheduler component"
-class: $tSysmanScheduler
+class: $sSysmanScheduler
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_sched_handle_t
+    - type: $s_sysman_sched_handle_t
       name: hScheduler
       desc: "[in] Handle for the component."
-    - type: $t_sched_properties_t*
+    - type: $s_sched_properties_t*
       name: pProperties
       desc: "[in,out] Structure that will contain property data."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current scheduling mode in effect on a scheduler component."
-class: $tSysmanScheduler
+class: $sSysmanScheduler
 name: GetCurrentMode
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_sched_handle_t
+    - type: $s_sysman_sched_handle_t
       name: hScheduler
       desc: "[in] Sysman handle for the component."
-    - type: $t_sched_mode_t*
+    - type: $s_sched_mode_t*
       name: pMode
       desc: "[in,out] Will contain the current scheduler mode."
 returns:
@@ -305,20 +305,20 @@ returns:
         - "This scheduler component does not support scheduler modes."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get scheduler config for mode $T_SCHED_MODE_TIMEOUT"
-class: $tSysmanScheduler
+desc: "Get scheduler config for mode $S_SCHED_MODE_TIMEOUT"
+class: $sSysmanScheduler
 name: GetTimeoutModeProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_sched_handle_t
+    - type: $s_sysman_sched_handle_t
       name: hScheduler
       desc: "[in] Sysman handle for the component."
     - type: $x_bool_t
       name: getDefaults
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
-    - type: $t_sched_timeout_properties_t*
+    - type: $s_sched_timeout_properties_t*
       name: pConfig
       desc: "[in,out] Will contain the current parameters for this mode."
 returns:
@@ -326,20 +326,20 @@ returns:
         - "This scheduler component does not support scheduler modes."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get scheduler config for mode $T_SCHED_MODE_TIMESLICE"
-class: $tSysmanScheduler
+desc: "Get scheduler config for mode $S_SCHED_MODE_TIMESLICE"
+class: $sSysmanScheduler
 name: GetTimesliceModeProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_sched_handle_t
+    - type: $s_sysman_sched_handle_t
       name: hScheduler
       desc: "[in] Sysman handle for the component."
     - type: $x_bool_t
       name: getDefaults
       desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
-    - type: $t_sched_timeslice_properties_t*
+    - type: $s_sched_timeslice_properties_t*
       name: pConfig
       desc: "[in,out] Will contain the current parameters for this mode."
 returns:
@@ -347,18 +347,18 @@ returns:
         - "This scheduler component does not support scheduler modes."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Change scheduler mode to $T_SCHED_MODE_TIMEOUT or update scheduler mode parameters if already running in this mode."
-class: $tSysmanScheduler
+desc: "Change scheduler mode to $S_SCHED_MODE_TIMEOUT or update scheduler mode parameters if already running in this mode."
+class: $sSysmanScheduler
 name: SetTimeoutMode
 details:
     - "This mode is optimized for multiple applications or contexts submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_sched_handle_t
+    - type: $s_sysman_sched_handle_t
       name: hScheduler
       desc: "[in] Sysman handle for the component."
-    - type: $t_sched_timeout_properties_t*
+    - type: $s_sched_timeout_properties_t*
       name: pProperties
       desc: "[in] The properties to use when configurating this mode."
     - type: $x_bool_t*
@@ -371,18 +371,18 @@ returns:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Change scheduler mode to $T_SCHED_MODE_TIMESLICE or update scheduler mode parameters if already running in this mode."
-class: $tSysmanScheduler
+desc: "Change scheduler mode to $S_SCHED_MODE_TIMESLICE or update scheduler mode parameters if already running in this mode."
+class: $sSysmanScheduler
 name: SetTimesliceMode
 details:
     - "This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_sched_handle_t
+    - type: $s_sysman_sched_handle_t
       name: hScheduler
       desc: "[in] Sysman handle for the component."
-    - type: $t_sched_timeslice_properties_t*
+    - type: $s_sched_timeslice_properties_t*
       name: pProperties
       desc: "[in] The properties to use when configurating this mode."
     - type: $x_bool_t*
@@ -395,15 +395,15 @@ returns:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Change scheduler mode to $T_SCHED_MODE_EXCLUSIVE"
-class: $tSysmanScheduler
+desc: "Change scheduler mode to $S_SCHED_MODE_EXCLUSIVE"
+class: $sSysmanScheduler
 name: SetExclusiveMode
 details:
     - "This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_sched_handle_t
+    - type: $s_sysman_sched_handle_t
       name: hScheduler
       desc: "[in] Sysman handle for the component."
     - type: $x_bool_t*
@@ -416,15 +416,15 @@ returns:
         - "User does not have permissions to make this modification."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Change scheduler mode to $T_SCHED_MODE_COMPUTE_UNIT_DEBUG"
-class: $tSysmanScheduler
+desc: "Change scheduler mode to $S_SCHED_MODE_COMPUTE_UNIT_DEBUG"
+class: $sSysmanScheduler
 name: SetComputeUnitDebugMode
 details:
     - "This mode is optimized for application debug. It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_sched_handle_t
+    - type: $s_sysman_sched_handle_t
       name: hScheduler
       desc: "[in] Sysman handle for the component."
     - type: $x_bool_t*
@@ -439,8 +439,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Static information about a Performance Factor domain"
-class: $tSysmanPerformanceFactor
-name: $t_perf_properties_t
+class: $sSysmanPerformanceFactor
+name: $s_perf_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
@@ -450,18 +450,18 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: uint64_t
       name: "engines"
-      desc: "[out] Bitfield of accelerator engines that are affected by this Performance Factor (bitfield of 1<<$t_engine_type_t)."
+      desc: "[out] Bitfield of accelerator engines that are affected by this Performance Factor (bitfield of 1<<$s_engine_type_t)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handles to accelerator domains whose performance can be optimized via a Performance Factor"
-class: $tSysman
+class: $sSysman
 name: PerformanceFactorGet
 details:
     - "A Performance Factor should be tuned for each workload."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -471,34 +471,34 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_perf_handle_t*"
+    - type: "$s_sysman_perf_handle_t*"
       name: phPerf
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties about a Performance Factor domain"
-class: $tSysmanPerformanceFactor
+class: $sSysmanPerformanceFactor
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_perf_handle_t
+    - type: $s_sysman_perf_handle_t
       name: hPerf
       desc: "[in] Handle for the Performance Factor domain."
-    - type: $t_perf_properties_t*
+    - type: $s_perf_properties_t*
       name: pProperties
       desc: "[in,out] Will contain information about the specified Performance Factor domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current Performance Factor for a given domain"
-class: $tSysmanPerformanceFactor
+class: $sSysmanPerformanceFactor
 name: GetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_perf_handle_t
+    - type: $s_sysman_perf_handle_t
       name: hPerf
       desc: "[in] Handle for the Performance Factor domain."
     - type: double*
@@ -507,15 +507,15 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change the performance factor for a domain"
-class: $tSysmanPerformanceFactor
+class: $sSysmanPerformanceFactor
 name: SetConfig
 details:
     - "The Performance Factor is a number between 0 and 100."
-    - "A Performance Factor is a hint to the hardware. Depending on the hardware, the request may not be granted. Follow up this function with a call to $tSysmanPerformanceFactorGetConfig() to determine the actual factor being used by the hardware."
+    - "A Performance Factor is a hint to the hardware. Depending on the hardware, the request may not be granted. Follow up this function with a call to $sSysmanPerformanceFactorGetConfig() to determine the actual factor being used by the hardware."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_perf_handle_t
+    - type: $s_sysman_perf_handle_t
       name: hPerf
       desc: "[in] Handle for the Performance Factor domain."
     - type: double
@@ -525,8 +525,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Contains information about a process that has an open connection with this device"
-class: $tSysman
-name: $t_process_state_t
+class: $sSysman
+name: $s_process_state_t
 details:
     - "The application can use the process ID to query the OS for the owner and the path to the executable."
 members:
@@ -538,18 +538,18 @@ members:
       desc: "[out] Device memory size in bytes allocated by this process (may not necessarily be resident on the device at the time of reading)."
     - type: uint64_t
       name: "engines"
-      desc: "[out] Bitfield of accelerator engines being used by this process (or 1<<$t_engine_type_t together)."
+      desc: "[out] Bitfield of accelerator engines being used by this process (or 1<<$s_engine_type_t together)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get information about host processes using the device"
-class: $tSysman
+class: $sSysman
 name: ProcessesGetState
 details:
     - "The number of processes connected to the device is dynamic. This means that between a call to determine the correct value of pCount and the subsequent call, the number of processes may have increased. It is recommended that a large array be passed in so as to avoid receiving the error $X_RESULT_ERROR_INVALID_SIZE."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle for the device"
     - type: "uint32_t*"
@@ -559,7 +559,7 @@ params:
             if count is zero, then the driver will update the value with the total number of processes currently using the device.
             if count is non-zero but less than the number of processes, the driver will set to the number of processes currently using the device and return the error $X_RESULT_ERROR_INVALID_SIZE.
             if count is larger than the number of processes, then the driver will update the value with the correct number of processes that are returned.
-    - type: "$t_process_state_t*"
+    - type: "$s_process_state_t*"
       name: pProcesses
       desc: "[in,out][optional][range(0, *pCount)] array of process information, one for each process currently using the device"
 returns:
@@ -568,8 +568,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "PCI address"
-class: $tSysman
-name: $t_pci_address_t
+class: $sSysman
+name: $s_pci_address_t
 members:
     - type: uint32_t
       name: "domain"
@@ -586,8 +586,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "PCI speed"
-class: $tSysman
-name: $t_pci_speed_t
+class: $sSysman
+name: $s_pci_speed_t
 members:
     - type: uint32_t
       name: "gen"
@@ -601,93 +601,93 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Static PCI properties"
-class: $tSysman
-name: $t_pci_properties_t
+class: $sSysman
+name: $s_pci_properties_t
 members:
-    - type: $t_pci_address_t
+    - type: $s_pci_address_t
       name: "address"
       desc: "[out] The BDF address"
-    - type: $t_pci_speed_t
+    - type: $s_pci_speed_t
       name: "maxSpeed"
       desc: "[out] Fastest port configuration supported by the device."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI link status"
-class: $tSysman
-name: $t_pci_link_status_t
+class: $sSysman
+name: $s_pci_link_status_t
 etors:
-    - name: $T_PCI_LINK_STATUS_GREEN
+    - name: $S_PCI_LINK_STATUS_GREEN
       value: "0"
       desc: "The link is up and operating as expected"
-    - name: $T_PCI_LINK_STATUS_YELLOW
+    - name: $S_PCI_LINK_STATUS_YELLOW
       desc: "The link is up but has quality and/or bandwidth degradation"
-    - name: $T_PCI_LINK_STATUS_RED
+    - name: $S_PCI_LINK_STATUS_RED
       desc: "The link has stability issues and preventing workloads making forward progress"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI link quality degradation reasons"
-class: $tSysman
-name: $t_pci_link_qual_issues_t
+class: $sSysman
+name: $s_pci_link_qual_issues_t
 etors:
-    - name: $T_PCI_LINK_QUAL_ISSUES_NONE
+    - name: $S_PCI_LINK_QUAL_ISSUES_NONE
       value: "0"
       desc: "There are no quality issues with the link at this time"
-    - name: $T_PCI_LINK_QUAL_ISSUES_REPLAYS
+    - name: $S_PCI_LINK_QUAL_ISSUES_REPLAYS
       value: "$X_BIT( 0 )"
       desc: "An significant number of replays are occurring"
-    - name: $T_PCI_LINK_QUAL_ISSUES_SPEED
+    - name: $S_PCI_LINK_QUAL_ISSUES_SPEED
       value: "$X_BIT( 1 )"
       desc: "There is a degradation in the maximum bandwidth of the link"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI link stability issues"
-class: $tSysman
-name: $t_pci_link_stab_issues_t
+class: $sSysman
+name: $s_pci_link_stab_issues_t
 etors:
-    - name: $T_PCI_LINK_STAB_ISSUES_NONE
+    - name: $S_PCI_LINK_STAB_ISSUES_NONE
       value: "0"
       desc: "There are no connection stability issues at this time"
-    - name: $T_PCI_LINK_STAB_ISSUES_RETRAINING
+    - name: $S_PCI_LINK_STAB_ISSUES_RETRAINING
       value: "$X_BIT( 0 )"
       desc: "Link retraining has occurred to deal with quality issues"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Dynamic PCI state"
-class: $tSysman
-name: $t_pci_state_t
+class: $sSysman
+name: $s_pci_state_t
 members:
-    - type: $t_pci_link_status_t
+    - type: $s_pci_link_status_t
       name: "status"
       desc: "[out] The current status of the port"
-    - type: $t_pci_link_qual_issues_t
+    - type: $s_pci_link_qual_issues_t
       name: "qualityIssues"
-      desc: "[out] If status is $T_PCI_LINK_STATUS_YELLOW, this gives a bitfield of quality issues that have been detected"
-    - type: $t_pci_link_stab_issues_t
+      desc: "[out] If status is $S_PCI_LINK_STATUS_YELLOW, this gives a bitfield of quality issues that have been detected"
+    - type: $s_pci_link_stab_issues_t
       name: "stabilityIssues"
-      desc: "[out] If status is $T_PCI_LINK_STATUS_RED, this gives a bitfield of reasons for the connection instability"
-    - type: $t_pci_speed_t
+      desc: "[out] If status is $S_PCI_LINK_STATUS_RED, this gives a bitfield of reasons for the connection instability"
+    - type: $s_pci_speed_t
       name: "speed"
       desc: "[out] The current port configure speed"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI bar types"
-class: $tSysman
-name: $t_pci_bar_type_t
+class: $sSysman
+name: $s_pci_bar_type_t
 etors:
-    - name: $T_PCI_BAR_TYPE_MMIO
+    - name: $S_PCI_BAR_TYPE_MMIO
       value: "0"
       desc: "MMIO registers"
-    - name: $T_PCI_BAR_TYPE_ROM
+    - name: $S_PCI_BAR_TYPE_ROM
       desc: "ROM aperture"
-    - name: $T_PCI_BAR_TYPE_MEM
+    - name: $S_PCI_BAR_TYPE_MEM
       desc: "Device memory"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Properties of a pci bar"
-class: $tSysman
-name: $t_pci_bar_properties_t
+class: $sSysman
+name: $s_pci_bar_properties_t
 members:
-    - type: $t_pci_bar_type_t
+    - type: $s_pci_bar_type_t
       name: "type"
       desc: "[out] The type of bar"
     - type: uint32_t
@@ -702,8 +702,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "PCI stats counters"
-class: $tSysman
-name: $t_pci_stats_t
+class: $sSysman
+name: $s_pci_stats_t
 details:
     - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) + (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
     - "Percent replays is calculated by taking two snapshots (s1, s2) and using the equation: %replay = 10^6 * (s2.replayCounter - s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
@@ -727,49 +727,49 @@ members:
     - type: uint64_t
       name: "txCounter"
       desc: "[out] Monotonic counter for the number of bytes transmitted (including replays)"
-    - type: $t_pci_speed_t
+    - type: $s_pci_speed_t
       name: "speed"
       desc: "[out] The current speed of the link"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get PCI properties - address, max speed"
-class: $tSysman
+class: $sSysman
 name: PciGetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
-    - type: $t_pci_properties_t*
+    - type: $s_pci_properties_t*
       name: pProperties
       desc: "[in,out] Will contain the PCI properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current PCI state - current speed"
-class: $tSysman
+class: $sSysman
 name: PciGetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
-    - type: $t_pci_state_t*
+    - type: $s_pci_state_t*
       name: pState
       desc: "[in,out] Will contain the PCI properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get information about each configured bar"
-class: $tSysman
+class: $sSysman
 name: PciGetBars
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -779,22 +779,22 @@ params:
             if count is zero, then the driver will update the value with the total number of bars.
             if count is non-zero, then driver will only retrieve that number of bars.
             if count is larger than the number of bar, then the driver will update the value with the correct number of bars that are returned.
-    - type: "$t_pci_bar_properties_t*"
+    - type: "$s_pci_bar_properties_t*"
       name: pProperties
       desc: "[in,out][optional][range(0, *pCount)] array of bar properties"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get PCI stats - bandwidth, number of packets, number of replays"
-class: $tSysman
+class: $sSysman
 name: PciGetStats
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
-    - type: $t_pci_stats_t*
+    - type: $s_pci_stats_t*
       name: pStats
       desc: "[in,out] Will contain a snapshot of the latest stats."
 returns:
@@ -803,8 +803,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Properties related to device power settings"
-class: $tSysmanPower
-name: $t_power_properties_t
+class: $sSysmanPower
+name: $s_power_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
@@ -817,7 +817,7 @@ members:
       desc: "[out] Software can change the power limits of this domain assuming the user has permissions."
     - type: $x_bool_t
       name: "isEnergyThresholdSupported"
-      desc: "[out] Indicates if this power domain supports the energy threshold event ($T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED)."
+      desc: "[out] Indicates if this power domain supports the energy threshold event ($S_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED)."
     - type: uint32_t
       name: "defaultLimit"
       desc: "[out] The factory default TDP power limit of the part in milliwatts."  
@@ -830,8 +830,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Energy counter snapshot"
-class: $tSysmanPower
-name: $t_power_energy_counter_t
+class: $sSysmanPower
+name: $s_power_energy_counter_t
 details:
     - "Average power is calculated by taking two snapshots (s1, s2) and using the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp - s1.timestamp)"
 members:
@@ -848,8 +848,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Sustained power limits"
-class: $tSysmanPower
-name: $t_power_sustained_limit_t
+class: $sSysmanPower
+name: $s_power_sustained_limit_t
 details:
     - "The power controller (Punit) will throttle the operating frequency if the power averaged over a window (typically seconds) exceeds this limit."
 members:
@@ -865,8 +865,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Burst power limit"
-class: $tSysmanPower
-name: $t_power_burst_limit_t
+class: $sSysmanPower
+name: $s_power_burst_limit_t
 details:
     - "The power controller (Punit) will throttle the operating frequency of the device if the power averaged over a few milliseconds exceeds a limit known as PL2. Typically PL2 > PL1 so that it permits the frequency to burst higher for short periods than would be otherwise permitted by PL1."
 members:
@@ -879,8 +879,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Peak power limit"
-class: $tSysmanPower
-name: $t_power_peak_limit_t
+class: $sSysmanPower
+name: $s_power_peak_limit_t
 details:
     - "The power controller (Punit) will preemptively throttle the operating frequency of the device when the instantaneous power exceeds this limit. The limit is known as PL4. It expresses the maximum power that can be drawn from the power supply."
     - "If this power limit is removed or set too high, the power supply will generate an interrupt when it detects an overcurrent condition and the power controller will throttle the device frequencies down to min. It is thus better to tune the PL4 value in order to avoid such excursions."
@@ -894,8 +894,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Energy threshold"
-class: $tSysmanPower
-name: $t_energy_threshold_t
+class: $sSysmanPower
+name: $s_energy_threshold_t
 details:
     - "."
 members:
@@ -911,13 +911,13 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of power domains"
-class: $tSysman
+class: $sSysman
 name: PowerGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -927,79 +927,79 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_pwr_handle_t*"
+    - type: "$s_sysman_pwr_handle_t*"
       name: phPower
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties related to a power domain"
-class: $tSysmanPower
+class: $sSysmanPower
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_pwr_handle_t
+    - type: $s_sysman_pwr_handle_t
       name: hPower
       desc: "[in] Handle for the component."
-    - type: $t_power_properties_t*
+    - type: $s_power_properties_t*
       name: pProperties
       desc: "[in,out] Structure that will contain property data."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get energy counter"
-class: $tSysmanPower
+class: $sSysmanPower
 name: GetEnergyCounter
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_pwr_handle_t
+    - type: $s_sysman_pwr_handle_t
       name: hPower
       desc: "[in] Handle for the component."
-    - type: $t_power_energy_counter_t*
+    - type: $s_power_energy_counter_t*
       name: pEnergy
       desc: "[in,out] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get power limits"
-class: $tSysmanPower
+class: $sSysmanPower
 name: GetLimits
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_pwr_handle_t
+    - type: $s_sysman_pwr_handle_t
       name: hPower
       desc: "[in] Handle for the component."
-    - type: $t_power_sustained_limit_t*
+    - type: $s_power_sustained_limit_t*
       name: pSustained
       desc: "[in,out][optional] The sustained power limit."
-    - type: $t_power_burst_limit_t*
+    - type: $s_power_burst_limit_t*
       name: pBurst
       desc: "[in,out][optional] The burst power limit."
-    - type: $t_power_peak_limit_t*
+    - type: $s_power_peak_limit_t*
       name: pPeak
       desc: "[in,out][optional] The peak power limit."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set power limits"
-class: $tSysmanPower
+class: $sSysmanPower
 name: SetLimits
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_pwr_handle_t
+    - type: $s_sysman_pwr_handle_t
       name: hPower
       desc: "[in] Handle for the component."
-    - type: const $t_power_sustained_limit_t*
+    - type: const $s_power_sustained_limit_t*
       name: pSustained
       desc: "[in][optional] The sustained power limit."
-    - type: const $t_power_burst_limit_t*
+    - type: const $s_power_burst_limit_t*
       name: pBurst
       desc: "[in][optional] The burst power limit."
-    - type: const $t_power_peak_limit_t*
+    - type: const $s_power_peak_limit_t*
       name: pPeak
       desc: "[in][optional] The peak power limit."
 returns:
@@ -1010,37 +1010,37 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get energy threshold"
-class: $tSysmanPower
+class: $sSysmanPower
 name: GetEnergyThreshold
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_pwr_handle_t
+    - type: $s_sysman_pwr_handle_t
       name: hPower
       desc: "[in] Handle for the component."
-    - type: $t_energy_threshold_t*
+    - type: $s_energy_threshold_t*
       name: pThreshold
       desc: "[in,out] Returns information about the energy threshold setting - enabled/energy threshold/process ID."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Energy threshold not supported on this power domain (check $t_power_properties_t.isEnergyThresholdSupported)."
+        - "Energy threshold not supported on this power domain (check $s_power_properties_t.isEnergyThresholdSupported)."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set energy threshold"
-class: $tSysmanPower
+class: $sSysmanPower
 name: SetEnergyThreshold
 details:
-    - "An event $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function $tSysmanEventSetConfig() to start receiving the event."
-    - "Only one running process can control the energy threshold at a given time. If another process attempts to change the energy threshold, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $tSysmanPowerGetEnergyThreshold() to determine the process ID currently controlling this setting."
+    - "An event $S_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function $sSysmanEventSetConfig() to start receiving the event."
+    - "Only one running process can control the energy threshold at a given time. If another process attempts to change the energy threshold, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $sSysmanPowerGetEnergyThreshold() to determine the process ID currently controlling this setting."
     - "Calling this function will remove any pending energy thresholds and start counting from the time of this call."
     - "Once the energy threshold has been reached and the event generated, the threshold is automatically removed. It is up to the application to request a new threshold."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_pwr_handle_t
+    - type: $s_sysman_pwr_handle_t
       name: hPower
       desc: "[in] Handle for the component."
     - type: double
@@ -1048,7 +1048,7 @@ params:
       desc: "[in] The energy threshold to be set in joules."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Energy threshold not supported on this power domain (check $t_power_properties_t.isEnergyThresholdSupported)."
+        - "Energy threshold not supported on this power domain (check $s_power_properties_t.isEnergyThresholdSupported)."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
@@ -1056,25 +1056,25 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency domains."
-class: $tSysman
-name: $t_freq_domain_t
+class: $sSysman
+name: $s_freq_domain_t
 etors:
-    - name: $T_FREQ_DOMAIN_GPU
+    - name: $S_FREQ_DOMAIN_GPU
       value: "0"
       desc: "GPU Core Domain."
-    - name: $T_FREQ_DOMAIN_MEMORY
+    - name: $S_FREQ_DOMAIN_MEMORY
       desc: "Local Memory Domain."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency properties"
-class: $tSysmanFrequency
-name: $t_freq_properties_t
+class: $sSysmanFrequency
+name: $s_freq_properties_t
 details:
-    - "Indicates if this frequency domain can be overclocked (if true, functions such as $tSysmanFrequencyOcSetConfig() are supported)."
-    - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $tSysmanFrequencyOcGetConfig() to determine the maximum frequency that can be requested."
-    - "If step is non-zero, the available frequencies are (min, min + step, min + 2xstep, ..., max). Otherwise, call $tSysmanFrequencyGetAvailableClocks() to get the list of frequencies that can be requested."
+    - "Indicates if this frequency domain can be overclocked (if true, functions such as $sSysmanFrequencyOcSetConfig() are supported)."
+    - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $sSysmanFrequencyOcGetConfig() to determine the maximum frequency that can be requested."
+    - "If step is non-zero, the available frequencies are (min, min + step, min + 2xstep, ..., max). Otherwise, call $sSysmanFrequencyGetAvailableClocks() to get the list of frequencies that can be requested."
 members:
-    - type: $t_freq_domain_t
+    - type: $s_freq_domain_t
       name: "type"
       desc: "[out] The hardware block that this frequency domain controls (GPU, memory, ...)"
     - type: $x_bool_t
@@ -1088,7 +1088,7 @@ members:
       desc: "[out] Indicates if software can control the frequency of this domain assuming the user has permissions"
     - type: $x_bool_t
       name: isThrottleEventSupported
-      desc: "[out] Indicates if software can register to receive event $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED"
+      desc: "[out] Indicates if software can register to receive event $S_SYSMAN_EVENT_TYPE_FREQ_THROTTLED"
     - type: double
       name: min
       desc: "[out] The minimum hardware clock frequency in units of MHz"
@@ -1101,8 +1101,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency range between which the hardware can operate."
-class: $tSysmanFrequency
-name: $t_freq_range_t
+class: $sSysmanFrequency
+name: $s_freq_range_t
 members:
     - type: double
       name: "min"
@@ -1113,38 +1113,38 @@ members:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency throttle reasons"
-class: $tSysmanFrequency
-name: $t_freq_throttle_reasons_t
+class: $sSysmanFrequency
+name: $s_freq_throttle_reasons_t
 etors:
-    - name: $T_FREQ_THROTTLE_REASONS_NONE
+    - name: $S_FREQ_THROTTLE_REASONS_NONE
       value: "0"
       desc: "frequency not throttled"
-    - name: $T_FREQ_THROTTLE_REASONS_AVE_PWR_CAP
+    - name: $S_FREQ_THROTTLE_REASONS_AVE_PWR_CAP
       value: "$X_BIT( 0 )"
       desc: "frequency throttled due to average power excursion (PL1)"
-    - name: $T_FREQ_THROTTLE_REASONS_BURST_PWR_CAP
+    - name: $S_FREQ_THROTTLE_REASONS_BURST_PWR_CAP
       value: "$X_BIT( 1 )"
       desc: "frequency throttled due to burst power excursion (PL2)"
-    - name: $T_FREQ_THROTTLE_REASONS_CURRENT_LIMIT
+    - name: $S_FREQ_THROTTLE_REASONS_CURRENT_LIMIT
       value: "$X_BIT( 2 )"
       desc: "frequency throttled due to current excursion (PL4)"
-    - name: $T_FREQ_THROTTLE_REASONS_THERMAL_LIMIT
+    - name: $S_FREQ_THROTTLE_REASONS_THERMAL_LIMIT
       value: "$X_BIT( 3 )"
       desc: "frequency throttled due to thermal excursion (T > TjMax)"
-    - name: $T_FREQ_THROTTLE_REASONS_PSU_ALERT
+    - name: $S_FREQ_THROTTLE_REASONS_PSU_ALERT
       value: "$X_BIT( 4 )"
       desc: "frequency throttled due to power supply assertion"
-    - name: $T_FREQ_THROTTLE_REASONS_SW_RANGE
+    - name: $S_FREQ_THROTTLE_REASONS_SW_RANGE
       value: "$X_BIT( 5 )"
       desc: "frequency throttled due to software supplied frequency range"
-    - name: $T_FREQ_THROTTLE_REASONS_HW_RANGE
+    - name: $S_FREQ_THROTTLE_REASONS_HW_RANGE
       value: "$X_BIT( 6 )"
       desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency state"
-class: $tSysmanFrequency
-name: $t_freq_state_t
+class: $sSysmanFrequency
+name: $s_freq_state_t
 members:
     - type: double
       name: "request"
@@ -1160,12 +1160,12 @@ members:
       desc: "[out] The resolved frequency in MHz"
     - type: uint32_t
       name: "throttleReasons"
-      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of $t_freq_throttle_reasons_t)."
+      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of $s_freq_throttle_reasons_t)."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency throttle time snapshot"
-class: $tSysmanFrequency
-name: $t_freq_throttle_time_t
+class: $sSysmanFrequency
+name: $s_freq_throttle_time_t
 details:
     - "Percent time throttled is calculated by taking two snapshots (s1, s2) and using the equation: %throttled = (s2.throttleTime - s1.throttleTime) / (s2.timestamp - s1.timestamp)"
 members:
@@ -1182,21 +1182,21 @@ members:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Overclocking modes"
-class: $tSysmanFrequency
-name: $t_oc_mode_t
+class: $sSysmanFrequency
+name: $s_oc_mode_t
 etors:
-    - name: $T_OC_MODE_OFF
+    - name: $S_OC_MODE_OFF
       value: "0"
       desc: "Overclocking if off - hardware is running using factory default voltages/frequencies."
-    - name: $T_OC_MODE_OVERRIDE
+    - name: $S_OC_MODE_OVERRIDE
       desc: "Overclock override mode - In this mode, a fixed user-supplied voltage is applied independent of the frequency request. The maximum permitted frequency can also be increased."
-    - name: $T_OC_MODE_INTERPOLATIVE
+    - name: $S_OC_MODE_INTERPOLATIVE
       desc: "Overclock interpolative mode - In this mode, the voltage/frequency curve can be extended with a new voltage/frequency point that will be interpolated. The existing voltage/frequency points can also be offset (up or down) by a fixed voltage."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Overclocking properties"
-class: $tSysmanFrequency
-name: $t_oc_capabilities_t
+class: $sSysmanFrequency
+name: $s_oc_capabilities_t
 details:
     - "Provides all the overclocking capabilities and properties supported by the device for the frequency domain."
 members:
@@ -1236,33 +1236,33 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Overclocking configuration"
-class: $tSysmanFrequency
-name: $t_oc_config_t
+class: $sSysmanFrequency
+name: $s_oc_config_t
 details:
     - "Overclock settings"
 members:
-    - type: $t_oc_mode_t
+    - type: $s_oc_mode_t
       name: mode
-      desc: "[in,out] Overclock Mode $t_oc_mode_t."
+      desc: "[in,out] Overclock Mode $s_oc_mode_t."
     - type: double
       name: frequency
-      desc: "[in,out] Overclocking Frequency in MHz. This cannot be greater than $t_oc_capabilities_t.maxOcFrequency."
+      desc: "[in,out] Overclocking Frequency in MHz. This cannot be greater than $s_oc_capabilities_t.maxOcFrequency."
     - type: double
       name: voltageTarget
-      desc: "[in,out] Overclock voltage in Volts. This cannot be greater than $t_oc_capabilities_t.maxOcVoltage."
+      desc: "[in,out] Overclock voltage in Volts. This cannot be greater than $s_oc_capabilities_t.maxOcVoltage."
     - type: double
       name: voltageOffset
-      desc: "[in,out] This voltage offset is applied to all points on the voltage/frequency curve, include the new overclock voltageTarget. It can be in the range ($t_oc_capabilities_t.minOcVoltageOffset, $t_oc_capabilities_t.maxOcVoltageOffset)."
+      desc: "[in,out] This voltage offset is applied to all points on the voltage/frequency curve, include the new overclock voltageTarget. It can be in the range ($s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of frequency domains"
-class: $tSysman
+class: $sSysman
 name: FrequencyGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -1272,35 +1272,35 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_freq_handle_t*"
+    - type: "$s_sysman_freq_handle_t*"
       name: phFrequency
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get frequency properties - available frequencies"
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_freq_properties_t*
+    - type: $s_freq_properties_t*
       name: pProperties
       desc: "[in,out] The frequency properties for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get available non-overclocked hardware clock frequencies for the frequency domain"
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: GetAvailableClocks
 details:
     - "The list of available frequencies is returned in order of slowest to fastest."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -1316,31 +1316,31 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current frequency limits"
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: GetRange
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_freq_range_t*
+    - type: $s_freq_range_t*
       name: pLimits
       desc: "[in,out] The range between which the hardware can operate for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set frequency range between which the hardware can operate."
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: SetRange
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: const $t_freq_range_t*
+    - type: const $s_freq_range_t*
       name: pLimits
       desc: "[in] The limits between which the hardware can operate for the specified domain."
 returns:
@@ -1349,90 +1349,90 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current frequency state - frequency request, actual frequency, TDP limits"
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_freq_state_t*
+    - type: $s_freq_state_t*
       name: pState
       desc: "[in,out] Frequency state for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get frequency throttle time"
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: GetThrottleTime
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_freq_throttle_time_t*
+    - type: $s_freq_throttle_time_t*
       name: pThrottleTime
       desc: "[in,out] Will contain a snapshot of the throttle time counters for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the overclocking capabilities."
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: OcGetCapabilities
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_capabilities_t*
+    - type: $s_oc_capabilities_t*
       name: pOcCapabilities
-      desc: "[in,out] Pointer to the capabilities structure $t_oc_capabilities_t."
+      desc: "[in,out] Pointer to the capabilities structure $s_oc_capabilities_t."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the current overclocking configuration."
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: OcGetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_config_t*
+    - type: $s_oc_config_t*
       name: pOcConfiguration
-      desc: "[in,out] Pointer to the configuration structure $t_oc_config_t."
+      desc: "[in,out] Pointer to the configuration structure $s_oc_config_t."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change the overclocking configuration."
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: OcSetConfig
 details:
-    - "If $t_oc_config_t.mode is set to $T_OC_MODE_OFF, overclocking will be turned off and the hardware returned to run with factory voltages/frequencies. Call $tSysmanFrequencyOcSetIccMax() and $tSysmanFrequencyOcSetTjMax() separately with 0.0 to return those settings to factory defaults."
+    - "If $s_oc_config_t.mode is set to $S_OC_MODE_OFF, overclocking will be turned off and the hardware returned to run with factory voltages/frequencies. Call $sSysmanFrequencyOcSetIccMax() and $sSysmanFrequencyOcSetTjMax() separately with 0.0 to return those settings to factory defaults."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $t_oc_config_t*
+    - type: $s_oc_config_t*
       name: pOcConfiguration
-      desc: "[in] Pointer to the configuration structure $t_oc_config_t."
+      desc: "[in] Pointer to the configuration structure $s_oc_config_t."
     - type: $x_bool_t*
       name: pDeviceRestart
       desc: "[in,out] This will be set to true if the device needs to be restarted in order to enable the new overclock settings."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
-        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $t_oc_capabilities_t.maxOcFrequency, $t_oc_capabilities_t.maxOcVoltage, $t_oc_capabilities_t.minOcVoltageOffset, $t_oc_capabilities_t.maxOcVoltageOffset)."
-        - "Requested voltage overclock is very high but $t_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Overclocking feature is locked on this frequency domain"
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
@@ -1440,13 +1440,13 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the maximum current limit setting."
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: OcGetIccMax
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
     - type: double*
@@ -1454,19 +1454,19 @@ params:
       desc: "[in,out] Will contain the maximum current limit in Amperes on successful return."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
-        - "Capability $t_oc_capabilities_t.isIccMaxSupported is false for this frequency domain"
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "Capability $s_oc_capabilities_t.isIccMaxSupported is false for this frequency domain"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change the maximum current limit setting."
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: OcSetIccMax
 details:
     - "Setting ocIccMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
     - type: double
@@ -1474,8 +1474,8 @@ params:
       desc: "[in] The new maximum current limit in Amperes."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
-        - "Capability $t_oc_capabilities_t.isIccMaxSupported is false for this frequency domain"
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "Capability $s_oc_capabilities_t.isIccMaxSupported is false for this frequency domain"
     - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Overclocking feature is locked on this frequency domain"
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
@@ -1485,13 +1485,13 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the maximum temperature limit setting."
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: OcGetTjMax
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
     - type: double*
@@ -1499,18 +1499,18 @@ params:
       desc: "[in,out] Will contain the maximum temperature limit in degrees Celsius on successful return."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change the maximum temperature limit setting."
-class: $tSysmanFrequency
+class: $sSysmanFrequency
 name: OcSetTjMax
 details:
     - "Setting ocTjMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
     - type: double
@@ -1518,8 +1518,8 @@ params:
       desc: "[in] The new maximum temperature limit in degrees Celsius."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($t_oc_capabilities_t.isOcSupported)"
-        - "Capability $t_oc_capabilities_t.isTjMaxSupported is false for this frequency domain"
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "Capability $s_oc_capabilities_t.isTjMaxSupported is false for this frequency domain"
     - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Overclocking feature is locked on this frequency domain"
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
@@ -1530,25 +1530,25 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Accelerator engine groups"
-class: $tSysmanEngine
-name: $t_engine_group_t
+class: $sSysmanEngine
+name: $s_engine_group_t
 etors:
-    - name: $T_ENGINE_GROUP_ALL
+    - name: $S_ENGINE_GROUP_ALL
       value: "0"
       desc: "Access information about all engines combined."
-    - name: $T_ENGINE_GROUP_COMPUTE_ALL
+    - name: $S_ENGINE_GROUP_COMPUTE_ALL
       desc: "Access information about all compute engines combined."
-    - name: $T_ENGINE_GROUP_MEDIA_ALL
+    - name: $S_ENGINE_GROUP_MEDIA_ALL
       desc: "Access information about all media engines combined."
-    - name: $T_ENGINE_GROUP_COPY_ALL
+    - name: $S_ENGINE_GROUP_COPY_ALL
       desc: "Access information about all copy (blitter) engines combined."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Engine group properties"
-class: $tSysmanEngine
-name: $t_engine_properties_t
+class: $sSysmanEngine
+name: $s_engine_properties_t
 members:
-    - type: $t_engine_group_t
+    - type: $s_engine_group_t
       name: "type"
       desc: "[out] The engine group"
     - type: $x_bool_t
@@ -1562,8 +1562,8 @@ type: struct
 desc: "Engine activity counters"
 details:
     - "Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: %util = (s2.activeTime - s1.activeTime) / (s2.timestamp - s1.timestamp)"
-class: $tSysmanEngine
-name: $t_engine_stats_t
+class: $sSysmanEngine
+name: $s_engine_stats_t
 members:
     - type: uint64_t
       name: "activeTime"
@@ -1578,13 +1578,13 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of engine groups"
-class: $tSysman
+class: $sSysman
 name: EngineGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -1594,56 +1594,56 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_engine_handle_t*"
+    - type: "$s_sysman_engine_handle_t*"
       name: phEngine
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get engine group properties"
-class: $tSysmanEngine
+class: $sSysmanEngine
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_engine_handle_t
+    - type: $s_sysman_engine_handle_t
       name: hEngine
       desc: "[in] Handle for the component."
-    - type: $t_engine_properties_t*
+    - type: $s_engine_properties_t*
       name: pProperties
       desc: "[in,out] The properties for the specified engine group."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the activity stats for an engine group"
-class: $tSysmanEngine
+class: $sSysmanEngine
 name: GetActivity
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_engine_handle_t
+    - type: $s_sysman_engine_handle_t
       name: hEngine
       desc: "[in] Handle for the component."
-    - type: $t_engine_stats_t*
+    - type: $s_engine_stats_t*
       name: pStats
       desc: "[in,out] Will contain a snapshot of the engine group activity counters."
 
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Standby hardware components"
-class: $tSysmanStandby
-name: $t_standby_type_t
+class: $sSysmanStandby
+name: $s_standby_type_t
 etors:
-    - name: $T_STANDBY_TYPE_GLOBAL
+    - name: $S_STANDBY_TYPE_GLOBAL
       value: "0"
       desc: "Control the overall standby policy of the device/sub-device"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Standby hardware component properties"
-class: $tSysmanStandby
-name: $t_standby_properties_t
+class: $sSysmanStandby
+name: $s_standby_properties_t
 members:
-    - type: $t_standby_type_t
+    - type: $s_standby_type_t
       name: "type"
       desc: "[out] Which standby hardware component this controls"
     - type: $x_bool_t
@@ -1655,24 +1655,24 @@ members:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Standby promotion modes"
-class: $tSysmanStandby
-name: $t_standby_promo_mode_t
+class: $sSysmanStandby
+name: $s_standby_promo_mode_t
 etors:
-    - name: $T_STANDBY_PROMO_MODE_DEFAULT
+    - name: $S_STANDBY_PROMO_MODE_DEFAULT
       value: "0"
       desc: "Best compromise between performance and energy savings."
-    - name: $T_STANDBY_PROMO_MODE_NEVER
+    - name: $S_STANDBY_PROMO_MODE_NEVER
       desc: "The device/component will never shutdown. This can improve performance but uses more energy."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of standby controls"
-class: $tSysman
+class: $sSysman
 name: StandbyGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -1682,52 +1682,52 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_standby_handle_t*"
+    - type: "$s_sysman_standby_handle_t*"
       name: phStandby
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get standby hardware component properties"
-class: $tSysmanStandby
+class: $sSysmanStandby
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_standby_handle_t
+    - type: $s_sysman_standby_handle_t
       name: hStandby
       desc: "[in] Handle for the component."
-    - type: $t_standby_properties_t*
+    - type: $s_standby_properties_t*
       name: pProperties
       desc: "[in,out] Will contain the standby hardware properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the current standby promotion mode"
-class: $tSysmanStandby
+class: $sSysmanStandby
 name: GetMode
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_standby_handle_t
+    - type: $s_sysman_standby_handle_t
       name: hStandby
       desc: "[in] Handle for the component."
-    - type: $t_standby_promo_mode_t*
+    - type: $s_standby_promo_mode_t*
       name: pMode
       desc: "[in,out] Will contain the current standby mode."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set standby promotion mode"
-class: $tSysmanStandby
+class: $sSysmanStandby
 name: SetMode
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_standby_handle_t
+    - type: $s_sysman_standby_handle_t
       name: hStandby
       desc: "[in] Handle for the component."
-    - type: $t_standby_promo_mode_t
+    - type: $s_standby_promo_mode_t
       name: mode
       desc: "[in] New standby mode."
 returns:
@@ -1736,8 +1736,8 @@ returns:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Firmware properties"
-class: $tSysmanFirmware
-name: $t_firmware_properties_t
+class: $sSysmanFirmware
+name: $s_firmware_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
@@ -1749,21 +1749,21 @@ members:
       name: "canControl"
       desc: "[out] Indicates if software can flash the firmware assuming the user has permissions"
     - type: int8_t
-      name: "name[$T_STRING_PROPERTY_SIZE]"
+      name: "name[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
     - type: int8_t
-      name: "version[$T_STRING_PROPERTY_SIZE]"
+      name: "version[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of firmwares"
-class: $tSysman
+class: $sSysman
 name: FirmwareGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -1773,34 +1773,34 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_firmware_handle_t*"
+    - type: "$s_sysman_firmware_handle_t*"
       name: phFirmware
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get firmware properties"
-class: $tSysmanFirmware
+class: $sSysmanFirmware
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_firmware_handle_t
+    - type: $s_sysman_firmware_handle_t
       name: hFirmware
       desc: "[in] Handle for the component."
-    - type: $t_firmware_properties_t*
+    - type: $s_firmware_properties_t*
       name: pProperties
       desc: "[in,out] Pointer to an array that will hold the properties of the firmware"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get firmware checksum"
-class: $tSysmanFirmware
+class: $sSysmanFirmware
 name: GetChecksum
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_firmware_handle_t
+    - type: $s_sysman_firmware_handle_t
       name: hFirmware
       desc: "[in] Handle for the component."
     - type: uint32_t*
@@ -1812,13 +1812,13 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Flash a new firmware image"
-class: $tSysmanFirmware
+class: $sSysmanFirmware
 name: Flash
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_firmware_handle_t
+    - type: $s_sysman_firmware_handle_t
       name: hFirmware
       desc: "[in] Handle for the component."
     - type: void*
@@ -1833,46 +1833,46 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory module types"
-class: $tSysmanMemory
-name: $t_mem_type_t
+class: $sSysmanMemory
+name: $s_mem_type_t
 etors:
-    - name: $T_MEM_TYPE_HBM
+    - name: $S_MEM_TYPE_HBM
       value: "0"
       desc: "HBM memory"
-    - name: $T_MEM_TYPE_DDR
+    - name: $S_MEM_TYPE_DDR
       desc: "DDR memory"
-    - name: $T_MEM_TYPE_SRAM
+    - name: $S_MEM_TYPE_SRAM
       desc: "SRAM memory"
-    - name: $T_MEM_TYPE_L1
+    - name: $S_MEM_TYPE_L1
       desc: "L1 cache"
-    - name: $T_MEM_TYPE_L3
+    - name: $S_MEM_TYPE_L3
       desc: "L3 cache"
-    - name: $T_MEM_TYPE_GRF
+    - name: $S_MEM_TYPE_GRF
       desc: "Execution unit register file"
-    - name: $T_MEM_TYPE_SLM
+    - name: $S_MEM_TYPE_SLM
       desc: "Execution unit shared local memory"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory health"
-class: $tSysmanMemory
-name: $t_mem_health_t
+class: $sSysmanMemory
+name: $s_mem_health_t
 etors:
-    - name: $T_MEM_HEALTH_OK
+    - name: $S_MEM_HEALTH_OK
       value: "0"
       desc: "All memory channels are healthy"
-    - name: $T_MEM_HEALTH_DEGRADED
+    - name: $S_MEM_HEALTH_DEGRADED
       desc: "Excessive correctable errors have been detected on one or more channels. Device should be reset."
-    - name: $T_MEM_HEALTH_CRITICAL
+    - name: $S_MEM_HEALTH_CRITICAL
       desc: "Operating with reduced memory to cover banks with too many uncorrectable errors."
-    - name: $T_MEM_HEALTH_REPLACE
+    - name: $S_MEM_HEALTH_REPLACE
       desc: "Device should be replaced due to excessive uncorrectable errors."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory properties"
-class: $tSysmanMemory
-name: $t_mem_properties_t
+class: $sSysmanMemory
+name: $s_mem_properties_t
 members:
-    - type: $t_mem_type_t
+    - type: $s_mem_type_t
       name: type
       desc: "[out] The memory type"
     - type: $x_bool_t
@@ -1887,13 +1887,13 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory state - health, allocated"
-class: $tSysmanMemory
-name: $t_mem_state_t
+class: $sSysmanMemory
+name: $s_mem_state_t
 details:
     - "Percent allocation is given by 100 * allocatedSize / maxSize."
     - "Percent free is given by 100 * (maxSize - allocatedSize) / maxSize."
 members:
-    - type: $t_mem_health_t
+    - type: $s_mem_health_t
       name: health
       desc: "[out] Indicates the health of the memory"
     - type: uint64_t
@@ -1901,12 +1901,12 @@ members:
       desc: "[out] The free memory in bytes"
     - type: uint64_t
       name: size
-      desc: "[out] The total allocatable memory in bytes (can be less than $t_mem_properties_t.physicalSize)"
+      desc: "[out] The total allocatable memory in bytes (can be less than $s_mem_properties_t.physicalSize)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory bandwidth"
-class: $tSysmanMemory
-name: $t_mem_bandwidth_t
+class: $sSysmanMemory
+name: $s_mem_bandwidth_t
 details:
     - "Percent bandwidth is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.readCounter - s1.readCounter) + (s2.writeCounter - s1.writeCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
 members:
@@ -1929,13 +1929,13 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of memory modules"
-class: $tSysman
+class: $sSysman
 name: MemoryGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -1945,52 +1945,52 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_mem_handle_t*"
+    - type: "$s_sysman_mem_handle_t*"
       name: phMemory
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory properties"
-class: $tSysmanMemory
+class: $sSysmanMemory
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_mem_handle_t
+    - type: $s_sysman_mem_handle_t
       name: hMemory
       desc: "[in] Handle for the component."
-    - type: $t_mem_properties_t*
+    - type: $s_mem_properties_t*
       name: pProperties
       desc: "[in,out] Will contain memory properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory state - health, allocated"
-class: $tSysmanMemory
+class: $sSysmanMemory
 name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_mem_handle_t
+    - type: $s_sysman_mem_handle_t
       name: hMemory
       desc: "[in] Handle for the component."
-    - type: $t_mem_state_t*
+    - type: $s_mem_state_t*
       name: pState
       desc: "[in,out] Will contain the current health and allocated memory."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory bandwidth"
-class: $tSysmanMemory
+class: $sSysmanMemory
 name: GetBandwidth
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_mem_handle_t
+    - type: $s_sysman_mem_handle_t
       name: hMemory
       desc: "[in] Handle for the component."
-    - type: $t_mem_bandwidth_t*
+    - type: $s_mem_bandwidth_t*
       name: pBandwidth
       desc: "[in,out] Will contain the current health, free memory, total memory size."
 returns:
@@ -1999,69 +1999,69 @@ returns:
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum Fabric port model string size"
-name: $T_MAX_FABRIC_PORT_MODEL_SIZE
+name: $S_MAX_FABRIC_PORT_MODEL_SIZE
 value: "256"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum size of the buffer that will return information about link types"
-name: $T_MAX_FABRIC_LINK_TYPE_SIZE
+name: $S_MAX_FABRIC_LINK_TYPE_SIZE
 value: "256"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fabric port status"
-class: $tSysmanFabricPort
-name: $t_fabric_port_status_t
+class: $sSysmanFabricPort
+name: $s_fabric_port_status_t
 etors:
-    - name: $T_FABRIC_PORT_STATUS_GREEN
+    - name: $S_FABRIC_PORT_STATUS_GREEN
       value: "0"
       desc: "The port is up and operating as expected"
-    - name: $T_FABRIC_PORT_STATUS_YELLOW
+    - name: $S_FABRIC_PORT_STATUS_YELLOW
       desc: "The port is up but has quality and/or speed degradation"
-    - name: $T_FABRIC_PORT_STATUS_RED
+    - name: $S_FABRIC_PORT_STATUS_RED
       desc: "Port connection instabilities are preventing workloads making forward progress"
-    - name: $T_FABRIC_PORT_STATUS_BLACK
+    - name: $S_FABRIC_PORT_STATUS_BLACK
       desc: "The port is configured down"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fabric port quality degradation reasons"
-class: $tSysmanFabricPort
-name: $t_fabric_port_qual_issues_t
+class: $sSysmanFabricPort
+name: $s_fabric_port_qual_issues_t
 etors:
-    - name: $T_FABRIC_PORT_QUAL_ISSUES_NONE
+    - name: $S_FABRIC_PORT_QUAL_ISSUES_NONE
       value: "0"
       desc: "There are no quality issues with the link at this time"
-    - name: $T_FABRIC_PORT_QUAL_LINK_ERRORS
+    - name: $S_FABRIC_PORT_QUAL_LINK_ERRORS
       value: "$X_BIT( 0 )"
       desc: "Excessive link errors are occurring"
-    - name: $T_FABRIC_PORT_QUAL_ISSUES_SPEED
+    - name: $S_FABRIC_PORT_QUAL_ISSUES_SPEED
       value: "$X_BIT( 1 )"
       desc: "There is a degradation in the bitrate and/or width of the link"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fabric port stability issues"
-class: $tSysmanFabricPort
-name: $t_fabric_port_stab_issues_t
+class: $sSysmanFabricPort
+name: $s_fabric_port_stab_issues_t
 etors:
-    - name: $T_FABRIC_PORT_STAB_ISSUES_NONE
+    - name: $S_FABRIC_PORT_STAB_ISSUES_NONE
       value: "0"
       desc: "There are no connection stability issues at this time"
-    - name: $T_FABRIC_PORT_STAB_ISSUES_FAILED
+    - name: $S_FABRIC_PORT_STAB_ISSUES_FAILED
       value: "$X_BIT( 0 )"
       desc: "A previously operating link has failed. Hardware will automatically retrain this port. This state will persist until either the physical connection is removed or the link trains successfully."
-    - name: $T_FABRIC_PORT_STAB_ISSUES_TRAINING_TIMEOUT
+    - name: $S_FABRIC_PORT_STAB_ISSUES_TRAINING_TIMEOUT
       value: "$X_BIT( 1 )"
       desc: "A connection has not been established within an expected time. Hardware will continue to attempt port training. This status will persist until either the physical connection is removed or the link successfully trains."
-    - name: $T_FABRIC_PORT_STAB_ISSUES_FLAPPING
+    - name: $S_FABRIC_PORT_STAB_ISSUES_FLAPPING
       value: "$X_BIT( 2 )"
-      desc: "Port has excessively trained and then transitioned down for some period of time. Driver will allow port to continue to train, but will not enable the port for use until the port has been disabled and subsequently re-enabled using $tSysmanFabricPortSetConfig()."
+      desc: "Port has excessively trained and then transitioned down for some period of time. Driver will allow port to continue to train, but will not enable the port for use until the port has been disabled and subsequently re-enabled using $sSysmanFabricPortSetConfig()."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Unique identifier for a fabric port"
-class: $tSysmanFabricPort
-name: $t_fabric_port_id_t
+class: $sSysmanFabricPort
+name: $s_fabric_port_id_t
 details:
     - "This not a universal identifier. The identified is garanteed to be unique for the current hardware configuration of the system. Changes in the hardware may result in a different identifier for a given port."
-    - "The main purpose of this identifier to build up an instantaneous topology map of system connectivity. An application should enumerate all fabric ports and match $t_fabric_port_state_t.remotePortId to $t_fabric_port_properties_t.portId."
+    - "The main purpose of this identifier to build up an instantaneous topology map of system connectivity. An application should enumerate all fabric ports and match $s_fabric_port_state_t.remotePortId to $s_fabric_port_properties_t.portId."
 members:
     - type: uint32_t
       name: "fabricId"
@@ -2075,8 +2075,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port speed in one direction"
-class: $tSysmanFabricPort
-name: $t_fabric_port_speed_t
+class: $sSysmanFabricPort
+name: $s_fabric_port_speed_t
 members:
     - type: uint64_t
       name: "bitRate"
@@ -2087,11 +2087,11 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port properties"
-class: $tSysmanFabricPort
-name: $t_fabric_port_properties_t
+class: $sSysmanFabricPort
+name: $s_fabric_port_properties_t
 members:
     - type: int8_t
-      name: "model[$T_MAX_FABRIC_PORT_MODEL_SIZE]"
+      name: "model[$S_MAX_FABRIC_PORT_MODEL_SIZE]"
       desc: "[out] Description of port technology"
     - type: $x_bool_t
       name: "onSubdevice"
@@ -2099,29 +2099,29 @@ members:
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
-    - type: $t_fabric_port_id_t
+    - type: $s_fabric_port_id_t
       name: "portId"
       desc: "[out] The unique port identifier"
-    - type: $t_fabric_port_speed_t
+    - type: $s_fabric_port_speed_t
       name: "maxRxSpeed"
       desc: "[out] Maximum speed supported by the receive side of the port"
-    - type: $t_fabric_port_speed_t
+    - type: $s_fabric_port_speed_t
       name: "maxTxSpeed"
       desc: "[out] Maximum speed supported by the transmit side of the port"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Provides information about the fabric link attached to a port"
-class: $tSysmanFabricPort
-name: $t_fabric_link_type_t
+class: $sSysmanFabricPort
+name: $s_fabric_link_type_t
 members:
     - type: int8_t
-      name: "desc[$T_MAX_FABRIC_LINK_TYPE_SIZE]"
+      name: "desc[$S_MAX_FABRIC_LINK_TYPE_SIZE]"
       desc: "[out] This provides a static textural description of the physic attachment type"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port configuration"
-class: $tSysmanFabricPort
-name: $t_fabric_port_config_t
+class: $sSysmanFabricPort
+name: $s_fabric_port_config_t
 members:
     - type: $x_bool_t
       name: "enabled"
@@ -2132,32 +2132,32 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port state"
-class: $tSysmanFabricPort
-name: $t_fabric_port_state_t
+class: $sSysmanFabricPort
+name: $s_fabric_port_state_t
 members:
-    - type: $t_fabric_port_status_t
+    - type: $s_fabric_port_status_t
       name: "status"
       desc: "[out] The current status of the port"
-    - type: $t_fabric_port_qual_issues_t
+    - type: $s_fabric_port_qual_issues_t
       name: "qualityIssues"
-      desc: "[out] If status is $T_FABRIC_PORT_STATUS_YELLOW, this gives a bitfield of quality issues that have been detected"
-    - type: $t_fabric_port_stab_issues_t
+      desc: "[out] If status is $S_FABRIC_PORT_STATUS_YELLOW, this gives a bitfield of quality issues that have been detected"
+    - type: $s_fabric_port_stab_issues_t
       name: "stabilityIssues"
-      desc: "[out] If status is $T_FABRIC_PORT_STATUS_RED, this gives a bitfield of reasons for the connection instability"
-    - type: $t_fabric_port_id_t
+      desc: "[out] If status is $S_FABRIC_PORT_STATUS_RED, this gives a bitfield of reasons for the connection instability"
+    - type: $s_fabric_port_id_t
       name: "remotePortId"
       desc: "[out] The unique port identifier for the remote connection point"
-    - type: $t_fabric_port_speed_t
+    - type: $s_fabric_port_speed_t
       name: "rxSpeed"
       desc: "[out] Current maximum receive speed"
-    - type: $t_fabric_port_speed_t
+    - type: $s_fabric_port_speed_t
       name: "txSpeed"
       desc: "[out] Current maximum transmit speed"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port throughput."
-class: $tSysmanFabricPort
-name: $t_fabric_port_throughput_t
+class: $sSysmanFabricPort
+name: $s_fabric_port_throughput_t
 members:
     - type: uint64_t
       name: "timestamp"
@@ -2175,13 +2175,13 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of Fabric ports in a device"
-class: $tSysman
+class: $sSysman
 name: FabricPortGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -2191,70 +2191,70 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_fabric_port_handle_t*"
+    - type: "$s_sysman_fabric_port_handle_t*"
       name: phPort
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get Fabric port properties"
-class: $tSysmanFabricPort
+class: $sSysmanFabricPort
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fabric_port_handle_t
+    - type: $s_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: $t_fabric_port_properties_t*
+    - type: $s_fabric_port_properties_t*
       name: pProperties
       desc: "[in,out] Will contain properties of the Fabric Port."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get Fabric port link type"
-class: $tSysmanFabricPort
+class: $sSysmanFabricPort
 name: GetLinkType
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fabric_port_handle_t
+    - type: $s_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
     - type: $x_bool_t
       name: verbose
       desc: "[in] Set to true to get a more detailed report."
-    - type: $t_fabric_link_type_t*
+    - type: $s_fabric_link_type_t*
       name: pLinkType
       desc: "[in,out] Will contain details about the link attached to the Fabric port."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get Fabric port configuration"
-class: $tSysmanFabricPort
+class: $sSysmanFabricPort
 name: GetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fabric_port_handle_t
+    - type: $s_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: $t_fabric_port_config_t*
+    - type: $s_fabric_port_config_t*
       name: pConfig
       desc: "[in,out] Will contain configuration of the Fabric Port."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set Fabric port configuration"
-class: $tSysmanFabricPort
+class: $sSysmanFabricPort
 name: SetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fabric_port_handle_t
+    - type: $s_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: const $t_fabric_port_config_t*
+    - type: const $s_fabric_port_config_t*
       name: pConfig
       desc: "[in] Contains new configuration of the Fabric Port."
 returns:
@@ -2263,31 +2263,31 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get Fabric port state - status (green/yellow/red/black), reasons for link degradation or instability, current rx/tx speed"
-class: $tSysmanFabricPort
+class: $sSysmanFabricPort
 name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fabric_port_handle_t
+    - type: $s_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: $t_fabric_port_state_t*
+    - type: $s_fabric_port_state_t*
       name: pState
       desc: "[in,out] Will contain the current state of the Fabric Port"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get Fabric port throughput"
-class: $tSysmanFabricPort
+class: $sSysmanFabricPort
 name: GetThroughput
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fabric_port_handle_t
+    - type: $s_sysman_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: $t_fabric_port_throughput_t*
+    - type: $s_fabric_port_throughput_t*
       name: pThroughput
       desc: "[in,out] Will contain the Fabric port throughput counters."
 returns:
@@ -2296,23 +2296,23 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Temperature sensors"
-class: $tSysmanTemperature
-name: $t_temp_sensors_t
+class: $sSysmanTemperature
+name: $s_temp_sensors_t
 etors:
-    - name: $T_TEMP_SENSORS_GLOBAL
+    - name: $S_TEMP_SENSORS_GLOBAL
       value: "0"
       desc: "The maximum temperature across all device sensors"
-    - name: $T_TEMP_SENSORS_GPU
+    - name: $S_TEMP_SENSORS_GPU
       desc: "The maximum temperature across all sensors in the GPU"
-    - name: $T_TEMP_SENSORS_MEMORY
+    - name: $S_TEMP_SENSORS_MEMORY
       desc: "The maximum temperature across all sensors in the local memory"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor properties"
-class: $tSysmanTemperature
-name: $t_temp_properties_t
+class: $sSysmanTemperature
+name: $s_temp_properties_t
 members:
-    - type: $t_temp_sensors_t
+    - type: $s_temp_sensors_t
       name: "type"
       desc: "[out] Which part of the device the temperature sensor measures"
     - type: $x_bool_t
@@ -2323,18 +2323,18 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "isCriticalTempSupported"
-      desc: "[out] Indicates if the critical temperature event $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported"
+      desc: "[out] Indicates if the critical temperature event $S_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported"
     - type: $x_bool_t
       name: "isThreshold1Supported"
-      desc: "[out] Indicates if the temperature threshold 1 event $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported"
+      desc: "[out] Indicates if the temperature threshold 1 event $S_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported"
     - type: $x_bool_t
       name: "isThreshold2Supported"
-      desc: "[out] Indicates if the temperature threshold 2 event $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 is supported"
+      desc: "[out] Indicates if the temperature threshold 2 event $S_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 is supported"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor threshold"
-class: $tSysmanTemperature
-name: $t_temp_threshold_t
+class: $sSysmanTemperature
+name: $s_temp_threshold_t
 members:
     - type: $x_bool_t
       name: "enableLowToHigh"
@@ -2348,31 +2348,31 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature configuration - which events should be triggered and the trigger conditions."
-class: $tSysmanTemperature
-name: $t_temp_config_t
+class: $sSysmanTemperature
+name: $s_temp_config_t
 members:
     - type: $x_bool_t
       name: "enableCritical"
-      desc: "[in,out] Indicates if event $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL should be triggered by the driver."
-    - type: $t_temp_threshold_t
+      desc: "[in,out] Indicates if event $S_SYSMAN_EVENT_TYPE_TEMP_CRITICAL should be triggered by the driver."
+    - type: $s_temp_threshold_t
       name: "threshold1"
-      desc: "[in,out] Configuration controlling if and when event $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the driver."
-    - type: $t_temp_threshold_t
+      desc: "[in,out] Configuration controlling if and when event $S_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the driver."
+    - type: $s_temp_threshold_t
       name: "threshold2"
-      desc: "[in,out] Configuration controlling if and when event $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the driver."
+      desc: "[in,out] Configuration controlling if and when event $S_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the driver."
     - type: uint32_t
       name: "processId"
       desc: "[out] Host processId that set this configuration (ignored when setting the configuration)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of temperature sensors"
-class: $tSysman
+class: $sSysman
 name: TemperatureGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -2382,84 +2382,84 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_temp_handle_t*"
+    - type: "$s_sysman_temp_handle_t*"
       name: phTemperature
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get temperature sensor properties"
-class: $tSysmanTemperature
+class: $sSysmanTemperature
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_temp_handle_t
+    - type: $s_sysman_temp_handle_t
       name: hTemperature
       desc: "[in] Handle for the component."
-    - type: $t_temp_properties_t*
+    - type: $s_temp_properties_t*
       name: pProperties
       desc: "[in,out] Will contain the temperature sensor properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get temperature configuration for this sensor - which events are triggered and the trigger conditions"
-class: $tSysmanTemperature
+class: $sSysmanTemperature
 name: GetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_temp_handle_t
+    - type: $s_sysman_temp_handle_t
       name: hTemperature
       desc: "[in] Handle for the component."
-    - type: $t_temp_config_t*
+    - type: $s_temp_config_t*
       name: pConfig
       desc: "[in,out] Returns current configuration."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
-        - "One or both of the thresholds is not supported - check $t_temp_properties_t.isThreshold1Supported and $t_temp_properties_t.isThreshold2Supported"
+        - "Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor $S_TEMP_SENSORS_GLOBAL"
+        - "One or both of the thresholds is not supported - check $s_temp_properties_t.isThreshold1Supported and $s_temp_properties_t.isThreshold2Supported"
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set temperature configuration for this sensor - indicates which events are triggered and the trigger conditions"
-class: $tSysmanTemperature
+class: $sSysmanTemperature
 name: SetConfig
 details:
-    - "Events $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL will be triggered when temperature reaches the critical range. Use the function $tSysmanEventSetConfig() to start receiving this event."
-    - "Events $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $tSysmanEventSetConfig() to start receiving these events."
-    - "Only one running process can set the temperature configuration at a time. If another process attempts to change the configuration, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $tSysmanTemperatureGetConfig() will return the process ID currently controlling these settings."
+    - "Events $S_SYSMAN_EVENT_TYPE_TEMP_CRITICAL will be triggered when temperature reaches the critical range. Use the function $sSysmanEventSetConfig() to start receiving this event."
+    - "Events $S_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and $S_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $sSysmanEventSetConfig() to start receiving these events."
+    - "Only one running process can set the temperature configuration at a time. If another process attempts to change the configuration, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $sSysmanTemperatureGetConfig() will return the process ID currently controlling these settings."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_temp_handle_t
+    - type: $s_sysman_temp_handle_t
       name: hTemperature
       desc: "[in] Handle for the component."
-    - type: "const $t_temp_config_t*"
+    - type: "const $s_temp_config_t*"
       name: pConfig
       desc: "[in] New configuration."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor $T_TEMP_SENSORS_GLOBAL"
-        - "Enabling the critical temperature event is not supported - check $t_temp_properties_t.isCriticalTempSupported"
-        - "One or both of the thresholds is not supported - check $t_temp_properties_t.isThreshold1Supported and $t_temp_properties_t.isThreshold2Supported"
+        - "Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor $S_TEMP_SENSORS_GLOBAL"
+        - "Enabling the critical temperature event is not supported - check $s_temp_properties_t.isCriticalTempSupported"
+        - "One or both of the thresholds is not supported - check $s_temp_properties_t.isThreshold1Supported and $s_temp_properties_t.isThreshold2Supported"
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Another running process is controlling these settings."
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "One or both the thresholds is above TjMax (see $tSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value."
+        - "One or both the thresholds is above TjMax (see $sSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the temperature from a specified sensor"
-class: $tSysmanTemperature
+class: $sSysmanTemperature
 name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_temp_handle_t
+    - type: $s_sysman_temp_handle_t
       name: hTemperature
       desc: "[in] Handle for the component."
     - type: double*
@@ -2468,21 +2468,21 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PSU voltage status"
-class: $tSysmanPsu
-name: $t_psu_voltage_status_t
+class: $sSysmanPsu
+name: $s_psu_voltage_status_t
 etors:
-    - name: $T_PSU_VOLTAGE_STATUS_NORMAL
+    - name: $S_PSU_VOLTAGE_STATUS_NORMAL
       value: "0"
       desc: "No unusual voltages have been detected"
-    - name: $T_PSU_VOLTAGE_STATUS_OVER
+    - name: $S_PSU_VOLTAGE_STATUS_OVER
       desc: "Over-voltage has occurred"
-    - name: $T_PSU_VOLTAGE_STATUS_UNDER
+    - name: $S_PSU_VOLTAGE_STATUS_UNDER
       desc: "Under-voltage has occurred"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Static properties of the power supply"
-class: $tSysmanPsu
-name: $t_psu_properties_t
+class: $sSysmanPsu
+name: $s_psu_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
@@ -2499,10 +2499,10 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Dynamic state of the power supply"
-class: $tSysmanPsu
-name: $t_psu_state_t
+class: $sSysmanPsu
+name: $s_psu_state_t
 members:
-    - type: $t_psu_voltage_status_t
+    - type: $s_psu_voltage_status_t
       name: "voltStatus"
       desc: "[out] The current PSU voltage status"
     - type: $x_bool_t
@@ -2517,13 +2517,13 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of power supplies"
-class: $tSysman
+class: $sSysman
 name: PsuGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -2533,69 +2533,69 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_psu_handle_t*"
+    - type: "$s_sysman_psu_handle_t*"
       name: phPsu
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get power supply properties"
-class: $tSysmanPsu
+class: $sSysmanPsu
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_psu_handle_t
+    - type: $s_sysman_psu_handle_t
       name: hPsu
       desc: "[in] Handle for the component."
-    - type: $t_psu_properties_t*
+    - type: $s_psu_properties_t*
       name: pProperties
       desc: "[in,out] Will contain the properties of the power supply."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current power supply state"
-class: $tSysmanPsu
+class: $sSysmanPsu
 name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_psu_handle_t
+    - type: $s_sysman_psu_handle_t
       name: hPsu
       desc: "[in] Handle for the component."
-    - type: $t_psu_state_t*
+    - type: $s_psu_state_t*
       name: pState
       desc: "[in,out] Will contain the current state of the power supply."
 
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fan resource speed mode"
-class: $tSysmanFan
-name: $t_fan_speed_mode_t
+class: $sSysmanFan
+name: $s_fan_speed_mode_t
 etors:
-    - name: $T_FAN_SPEED_MODE_DEFAULT
+    - name: $S_FAN_SPEED_MODE_DEFAULT
       value: "0"
       desc: "The fan speed is operating using the hardware default settings"
-    - name: $T_FAN_SPEED_MODE_FIXED
+    - name: $S_FAN_SPEED_MODE_FIXED
       desc: "The fan speed is currently set to a fixed value"
-    - name: $T_FAN_SPEED_MODE_TABLE
+    - name: $S_FAN_SPEED_MODE_TABLE
       desc: "The fan speed is currently controlled dynamically by hardware based on a temp/speed table"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fan speed units"
-class: $tSysmanFan
-name: $t_fan_speed_units_t
+class: $sSysmanFan
+name: $s_fan_speed_units_t
 etors:
-    - name: $T_FAN_SPEED_UNITS_RPM
+    - name: $S_FAN_SPEED_UNITS_RPM
       value: "0"
       desc: "The fan speed is in units of revolutions per minute (rpm)"
-    - name: $T_FAN_SPEED_UNITS_PERCENT
+    - name: $S_FAN_SPEED_UNITS_PERCENT
       desc: "The fan speed is a percentage of the maximum speed of the fan"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan temperature/speed pair"
-class: $tSysmanFan
-name: $t_fan_temp_speed_t
+class: $sSysmanFan
+name: $s_fan_temp_speed_t
 members:
     - type: uint32_t
       name: "temperature"
@@ -2603,19 +2603,19 @@ members:
     - type: uint32_t
       name: "speed"
       desc: "[in,out] The speed of the fan"
-    - type: $t_fan_speed_units_t
+    - type: $s_fan_speed_units_t
       name: "units"
       desc: "[in,out] The units of the member speed"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum number of fan temperature/speed pairs in the fan speed table."
-name: $T_FAN_TEMP_SPEED_PAIR_COUNT
+name: $S_FAN_TEMP_SPEED_PAIR_COUNT
 value: "32"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan properties"
-class: $tSysmanFan
-name: $t_fan_properties_t
+class: $sSysmanFan
+name: $s_fan_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
@@ -2635,34 +2635,34 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fan configuration"
-class: $tSysmanFan
-name: $t_fan_config_t
+class: $sSysmanFan
+name: $s_fan_config_t
 members:
-    - type: $t_fan_speed_mode_t
+    - type: $s_fan_speed_mode_t
       name: "mode"
       desc: "[in,out] The fan speed mode (fixed, temp-speed table)"
     - type: uint32_t
       name: "speed"
       desc: "[in,out] The fixed fan speed setting"
-    - type: $t_fan_speed_units_t
+    - type: $s_fan_speed_units_t
       name: "speedUnits"
       desc: "[in,out] The units of the fixed fan speed setting"
     - type: uint32_t
       name: "numPoints"
       desc: "[in,out] The number of valid points in the fan speed table"
-    - type: $t_fan_temp_speed_t
-      name: "table[$T_FAN_TEMP_SPEED_PAIR_COUNT]"
+    - type: $s_fan_temp_speed_t
+      name: "table[$S_FAN_TEMP_SPEED_PAIR_COUNT]"
       desc: "[in,out] Array of temperature/fan speed pairs"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of fans"
-class: $tSysman
+class: $sSysman
 name: FanGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -2672,52 +2672,52 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_fan_handle_t*"
+    - type: "$s_sysman_fan_handle_t*"
       name: phFan
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get fan properties"
-class: $tSysmanFan
+class: $sSysmanFan
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fan_handle_t
+    - type: $s_sysman_fan_handle_t
       name: hFan
       desc: "[in] Handle for the component."
-    - type: $t_fan_properties_t*
+    - type: $s_fan_properties_t*
       name: pProperties
       desc: "[in,out] Will contain the properties of the fan."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current fan configuration"
-class: $tSysmanFan
+class: $sSysmanFan
 name: GetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fan_handle_t
+    - type: $s_sysman_fan_handle_t
       name: hFan
       desc: "[in] Handle for the component."
-    - type: $t_fan_config_t*
+    - type: $s_fan_config_t*
       name: pConfig
       desc: "[in,out] Will contain the current configuration of the fan."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set fan configuration"
-class: $tSysmanFan
+class: $sSysmanFan
 name: SetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fan_handle_t
+    - type: $s_sysman_fan_handle_t
       name: hFan
       desc: "[in] Handle for the component."
-    - type: const $t_fan_config_t*
+    - type: const $s_fan_config_t*
       name: pConfig
       desc: "[in] New fan configuration."
 returns:
@@ -2726,16 +2726,16 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current state of a fan - current mode and speed"
-class: $tSysmanFan
+class: $sSysmanFan
 name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_fan_handle_t
+    - type: $s_sysman_fan_handle_t
       name: hFan
       desc: "[in] Handle for the component."
-    - type: $t_fan_speed_units_t
+    - type: $s_fan_speed_units_t
       name: units
       desc: "[in] The units in which the fan speed should be returned."
     - type: uint32_t*
@@ -2745,8 +2745,8 @@ params:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "LED properties"
-class: $tSysmanLed
-name: $t_led_properties_t
+class: $sSysmanLed
+name: $s_led_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
@@ -2763,8 +2763,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "LED state"
-class: $tSysmanLed
-name: $t_led_state_t
+class: $sSysmanLed
+name: $s_led_state_t
 members:
     - type: $x_bool_t
       name: isOn
@@ -2781,13 +2781,13 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of LEDs"
-class: $tSysman
+class: $sSysman
 name: LedGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -2797,52 +2797,52 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_led_handle_t*"
+    - type: "$s_sysman_led_handle_t*"
       name: phLed
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get LED properties"
-class: $tSysmanLed
+class: $sSysmanLed
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_led_handle_t
+    - type: $s_sysman_led_handle_t
       name: hLed
       desc: "[in] Handle for the component."
-    - type: $t_led_properties_t*
+    - type: $s_led_properties_t*
       name: pProperties
       desc: "[in,out] Will contain the properties of the LED."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current state of a LED - on/off, color"
-class: $tSysmanLed
+class: $sSysmanLed
 name: GetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_led_handle_t
+    - type: $s_sysman_led_handle_t
       name: hLed
       desc: "[in] Handle for the component."
-    - type: $t_led_state_t*
+    - type: $s_led_state_t*
       name: pState
       desc: "[in,out] Will contain the current state of the LED."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set state of a LED - on/off, color"
-class: $tSysmanLed
+class: $sSysmanLed
 name: SetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_led_handle_t
+    - type: $s_sysman_led_handle_t
       name: hLed
       desc: "[in] Handle for the component."
-    - type: const $t_led_state_t*
+    - type: const $s_led_state_t*
       name: pState
       desc: "[in] New state of the LED."
 returns:
@@ -2851,21 +2851,21 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "RAS error type"
-class: $tSysmanRas
-name: $t_ras_error_type_t
+class: $sSysmanRas
+name: $s_ras_error_type_t
 etors:
-    - name: $T_RAS_ERROR_TYPE_CORRECTABLE
+    - name: $S_RAS_ERROR_TYPE_CORRECTABLE
       value: "0"
       desc: "Errors were corrected by hardware"
-    - name: $T_RAS_ERROR_TYPE_UNCORRECTABLE
+    - name: $S_RAS_ERROR_TYPE_UNCORRECTABLE
       desc: "Error were not corrected"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "RAS properties"
-class: $tSysmanRas
-name: $t_ras_properties_t
+class: $sSysmanRas
+name: $s_ras_properties_t
 members:
-    - type: $t_ras_error_type_t
+    - type: $s_ras_error_type_t
       name: "type"
       desc: "[out] The type of RAS error"
     - type: $x_bool_t
@@ -2877,8 +2877,8 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "RAS error details"
-class: $tSysmanRas
-name: $t_ras_details_t
+class: $sSysmanRas
+name: $s_ras_details_t
 members:
     - type: uint64_t
       name: "numResets"
@@ -2903,17 +2903,17 @@ members:
       desc: "[out] The number of errors that have occurred in the display"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "RAS error configuration - thresholds used for triggering RAS events ($T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS, $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)"
-class: $tSysmanRas
-name: $t_ras_config_t
+desc: "RAS error configuration - thresholds used for triggering RAS events ($S_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS, $S_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)"
+class: $sSysmanRas
+name: $s_ras_config_t
 details:
     - "The driver maintains a total counter which is updated every time a hardware block covered by the corresponding RAS error set notifies that an error has occurred. When this total count goes above the totalThreshold specified below, a RAS event is triggered."
-    - "The driver also maintains a counter for each category of RAS error (see $t_ras_details_t for a breakdown). Each time a hardware block of that category notifies that an error has occurred, that corresponding category counter is updated. When it goes above the threshold specified in detailedThresholds, a RAS event is triggered."
+    - "The driver also maintains a counter for each category of RAS error (see $s_ras_details_t for a breakdown). Each time a hardware block of that category notifies that an error has occurred, that corresponding category counter is updated. When it goes above the threshold specified in detailedThresholds, a RAS event is triggered."
 members:
     - type: uint64_t
       name: "totalThreshold"
       desc: "[in,out] If the total RAS errors exceeds this threshold, the event will be triggered. A value of 0ULL disables triggering the event based on the total counter."
-    - type: $t_ras_details_t
+    - type: $s_ras_details_t
       name: detailedThresholds
       desc: "[in,out] If the RAS errors for each category exceed the threshold for that category, the event will be triggered. A value of 0ULL will disable an event being triggered for that category."
     - type: uint32_t
@@ -2922,7 +2922,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of all RAS error sets on a device"
-class: $tSysman
+class: $sSysman
 name: RasGet
 details:
     - "A RAS error set is a collection of RAS error counters of a given type (correctable/uncorrectable) from hardware blocks contained within a sub-device or within the device."
@@ -2932,7 +2932,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -2942,59 +2942,59 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_ras_handle_t*"
+    - type: "$s_sysman_ras_handle_t*"
       name: phRas
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get RAS properties of a given RAS error set - this enables discovery of the type of RAS error set (correctable/uncorrectable) and if located on a sub-device"
-class: $tSysmanRas
+class: $sSysmanRas
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_ras_handle_t
+    - type: $s_sysman_ras_handle_t
       name: hRas
       desc: "[in] Handle for the component."
-    - type: $t_ras_properties_t*
+    - type: $s_ras_properties_t*
       name: pProperties
       desc: "[in,out] Structure describing RAS properties"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get RAS error thresholds that control when RAS events are generated"
-class: $tSysmanRas
+class: $sSysmanRas
 name: GetConfig
 details:
     - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
-    - "When a particular RAS correctable error counter exceeds the configured threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be triggered."
-    - "When a particular RAS uncorrectable error counter exceeds the configured threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered."
+    - "When a particular RAS correctable error counter exceeds the configured threshold, the event $S_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be triggered."
+    - "When a particular RAS uncorrectable error counter exceeds the configured threshold, the event $S_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_ras_handle_t
+    - type: $s_sysman_ras_handle_t
       name: hRas
       desc: "[in] Handle for the component."
-    - type: "$t_ras_config_t*"
+    - type: "$s_ras_config_t*"
       name: pConfig
       desc: "[in,out] Will be populed with the current RAS configuration - thresholds used to trigger events"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set RAS error thresholds that control when RAS events are generated"
-class: $tSysmanRas
+class: $sSysmanRas
 name: SetConfig
 details:
     - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
-    - "When a particular RAS correctable error counter exceeds the specified threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be generated."
-    - "When a particular RAS uncorrectable error counter exceeds the specified threshold, the event $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated."
-    - "Call $tSysmanRasGetState() and set the clear flag to true to restart event generation once counters have exceeded thresholds."
+    - "When a particular RAS correctable error counter exceeds the specified threshold, the event $S_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be generated."
+    - "When a particular RAS uncorrectable error counter exceeds the specified threshold, the event $S_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated."
+    - "Call $sSysmanRasGetState() and set the clear flag to true to restart event generation once counters have exceeded thresholds."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_ras_handle_t
+    - type: $s_sysman_ras_handle_t
       name: hRas
       desc: "[in] Handle for the component."
-    - type: "const $t_ras_config_t*"
+    - type: "const $s_ras_config_t*"
       name: pConfig
       desc: "[in] Change the RAS configuration - thresholds used to trigger events"
 returns:
@@ -3005,7 +3005,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the current value of RAS error counters for a particular error set"
-class: $tSysmanRas
+class: $sSysmanRas
 name: GetState
 details:
     - "Clearing errors will affect other threads/applications - the counter values will start from zero."
@@ -3013,7 +3013,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_ras_handle_t
+    - type: $s_sysman_ras_handle_t
       name: hRas
       desc: "[in] Handle for the component."
     - type: $x_bool_t
@@ -3022,7 +3022,7 @@ params:
     - type: uint64_t*
       name: pTotalErrors
       desc: "[in,out] The number total number of errors that have occurred"
-    - type: $t_ras_details_t*
+    - type: $s_ras_details_t*
       name: pDetails
       desc: "[in,out][optional] Breakdown of where errors have occurred"
 returns:
@@ -3031,122 +3031,122 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Event types"
-class: $tSysman
-name: $t_sysman_event_type_t
+class: $sSysman
+name: $s_sysman_event_type_t
 etors:
-    - name: $T_SYSMAN_EVENT_TYPE_NONE
+    - name: $S_SYSMAN_EVENT_TYPE_NONE
       value: "0"
       desc: "Specifies no events"
-    - name: $T_SYSMAN_EVENT_TYPE_DEVICE_RESET
+    - name: $S_SYSMAN_EVENT_TYPE_DEVICE_RESET
       value: "$X_BIT( 0 )"
       desc: "Event is triggered when the driver is going to reset the device"
-    - name: $T_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER
+    - name: $S_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER
       value: "$X_BIT( 1 )"
       desc: "Event is triggered when the driver is about to put the device into a deep sleep state"
-    - name: $T_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT
+    - name: $S_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT
       value: "$X_BIT( 2 )"
       desc: "Event is triggered when the driver is waking the device up from a deep sleep state"
-    - name: $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
+    - name: $S_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
       value: "$X_BIT( 3 )"
       desc: "Event is triggered when the frequency starts being throttled"
-    - name: $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED
+    - name: $S_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED
       value: "$X_BIT( 4 )"
-      desc: "Event is triggered when the energy consumption threshold is reached (use $tSysmanPowerSetEnergyThreshold() to configure)."
-    - name: $T_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
+      desc: "Event is triggered when the energy consumption threshold is reached (use $sSysmanPowerSetEnergyThreshold() to configure)."
+    - name: $S_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
       value: "$X_BIT( 5 )"
-      desc: "Event is triggered when the critical temperature is reached (use $tSysmanTemperatureSetConfig() to configure - disabled by default)."
-    - name: $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1
+      desc: "Event is triggered when the critical temperature is reached (use $sSysmanTemperatureSetConfig() to configure - disabled by default)."
+    - name: $S_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1
       value: "$X_BIT( 6 )"
-      desc: "Event is triggered when the temperature crosses threshold 1 (use $tSysmanTemperatureSetConfig() to configure - disabled by default)."
-    - name: $T_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2
+      desc: "Event is triggered when the temperature crosses threshold 1 (use $sSysmanTemperatureSetConfig() to configure - disabled by default)."
+    - name: $S_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2
       value: "$X_BIT( 7 )"
-      desc: "Event is triggered when the temperature crosses threshold 2 (use $tSysmanTemperatureSetConfig() to configure - disabled by default)."
-    - name: $T_SYSMAN_EVENT_TYPE_MEM_HEALTH
+      desc: "Event is triggered when the temperature crosses threshold 2 (use $sSysmanTemperatureSetConfig() to configure - disabled by default)."
+    - name: $S_SYSMAN_EVENT_TYPE_MEM_HEALTH
       value: "$X_BIT( 8 )"
       desc: "Event is triggered when the health of device memory changes."
-    - name: $T_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH
+    - name: $S_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH
       value: "$X_BIT( 9 )"
       desc: "Event is triggered when the health of fabric ports change."
-    - name: $T_SYSMAN_EVENT_TYPE_PCI_LINK_HEALTH
+    - name: $S_SYSMAN_EVENT_TYPE_PCI_LINK_HEALTH
       value: "$X_BIT( 10 )"
       desc: "Event is triggered when the health of the PCI link changes."
-    - name: $T_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
+    - name: $S_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
       value: "$X_BIT( 11 )"
-      desc: "Event is triggered when accelerator RAS correctable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
-    - name: $T_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS
+      desc: "Event is triggered when accelerator RAS correctable errors cross thresholds (use $sSysmanRasSetConfig() to configure - disabled by default)."
+    - name: $S_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS
       value: "$X_BIT( 12 )"
-      desc: "Event is triggered when accelerator RAS uncorrectable errors cross thresholds (use $tSysmanRasSetConfig() to configure - disabled by default)."
-    - name: $T_SYSMAN_EVENT_TYPE_DEVICE_RESET_REQUIRED
+      desc: "Event is triggered when accelerator RAS uncorrectable errors cross thresholds (use $sSysmanRasSetConfig() to configure - disabled by default)."
+    - name: $S_SYSMAN_EVENT_TYPE_DEVICE_RESET_REQUIRED
       value: "$X_BIT( 14 )"
       desc: "Event is triggered when the device needs to be reset (use $SysmanDeviceGetState() to determine the reasons for the reset)."
-    - name: $T_SYSMAN_EVENT_TYPE_ALL
+    - name: $S_SYSMAN_EVENT_TYPE_ALL
       value: "0x0FFF"
       desc: "Specifies all events"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event configuration for a device"
-class: $tSysmanEvent
-name: $t_event_config_t
+class: $sSysmanEvent
+name: $s_event_config_t
 members:
     - type: uint32_t
       name: "registered"
-      desc: "[in,out] List of registered events (Bitfield of events $t_sysman_event_type_t). $T_SYSMAN_EVENT_TYPE_NONE indicates there are no registered events. $T_SYSMAN_EVENT_TYPE_ALL indicates that all events are registered."
+      desc: "[in,out] List of registered events (Bitfield of events $s_sysman_event_type_t). $S_SYSMAN_EVENT_TYPE_NONE indicates there are no registered events. $S_SYSMAN_EVENT_TYPE_ALL indicates that all events are registered."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the event handle for the specified device"
-class: $tSysman
+class: $sSysman
 name: EventGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle for the device"
-    - type: "$t_sysman_event_handle_t*"
+    - type: "$s_sysman_event_handle_t*"
       name: phEvent
       desc: "[out] The event handle for the specified device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which events are currently registered on the specified device event handler"
-class: $tSysmanEvent
+class: $sSysmanEvent
 name: GetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_event_handle_t
+    - type: $s_sysman_event_handle_t
       name: hEvent
       desc: "[in] The event handle for the device"
-    - type: "$t_event_config_t*"
+    - type: "$s_event_config_t*"
       name: pConfig
       desc: "[in,out] Will contain the current event configuration (list of registered events)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set a new event configuration (list of registered events) on the specified device event handler"
-class: $tSysmanEvent
+class: $sSysmanEvent
 name: SetConfig
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_event_handle_t
+    - type: $s_sysman_event_handle_t
       name: hEvent
       desc: "[in] The event handle for the device"
-    - type: "const $t_event_config_t*"
+    - type: "const $s_event_config_t*"
       name: pConfig
       desc: "[in] New event configuration (list of registered events)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get events that have been triggered for a specific device"
-class: $tSysmanEvent
+class: $sSysmanEvent
 name: GetState
 details:
     - "If events have occurred on the specified device event handle, they are returned and the corresponding event status is cleared if the argument clear = true."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_event_handle_t
+    - type: $s_sysman_event_handle_t
       name: hEvent
       desc: "[in] The event handle for the device."
     - type: $x_bool_t
@@ -3154,25 +3154,25 @@ params:
       desc: "[in] Indicates if the event list for this device should be cleared."
     - type: "uint32_t*"
       name: pEvents
-      desc: "[in,out] Bitfield of events $t_sysman_event_type_t that have been triggered by this device."
+      desc: "[in,out] Bitfield of events $s_sysman_event_type_t that have been triggered by this device."
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Don't wait - just check if there are any new events"
-name: $T_EVENT_WAIT_NONE
+name: $S_EVENT_WAIT_NONE
 value: "0x0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Wait infinitely for events to arrive."
-name: $T_EVENT_WAIT_INFINITE
+name: $S_EVENT_WAIT_INFINITE
 value: "0xFFFFFFFF"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Wait for the specified list of event handles to receive any registered events"
-class: $tSysmanEvent
+class: $sSysmanEvent
 decl: static
 name: Listen
 details:
-    - "If previous events arrived and were not cleared using $tSysmanEventGetState(), this call will return immediately."
+    - "If previous events arrived and were not cleared using $sSysmanEventGetState(), this call will return immediately."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -3181,16 +3181,16 @@ params:
       desc: "[in] handle of the driver instance"
     - type: uint32_t
       name: timeout
-      desc: "[in] How long to wait in milliseconds for events to arrive. Set to $T_EVENT_WAIT_NONE will check status and return immediately. Set to $T_EVENT_WAIT_INFINITE to block until events arrive."
+      desc: "[in] How long to wait in milliseconds for events to arrive. Set to $S_EVENT_WAIT_NONE will check status and return immediately. Set to $S_EVENT_WAIT_INFINITE to block until events arrive."
     - type: uint32_t
       name: count
       desc: "[in] Number of handles in phEvents"
-    - type: "$t_sysman_event_handle_t*"
+    - type: "$s_sysman_event_handle_t*"
       name: phEvents
       desc: "[in][range(0, count)] Handle of events that should be listened to"
     - type: "uint32_t*"
       name: pEvents
-      desc: "[in,out] Bitfield of events $t_sysman_event_type_t that have been triggered by any of the supplied event handles. If timeout is not $T_EVENT_WAIT_INFINITE and this value is $T_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred."
+      desc: "[in,out] Bitfield of events $s_sysman_event_type_t that have been triggered by any of the supplied event handles. If timeout is not $S_EVENT_WAIT_INFINITE and this value is $S_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to listen to events."
@@ -3199,58 +3199,58 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Diagnostic test suite type"
-class: $tSysmanDiagnostics
-name: $t_diag_type_t
+class: $sSysmanDiagnostics
+name: $s_diag_type_t
 etors:
-    - name: $T_DIAG_TYPE_SCAN
+    - name: $S_DIAG_TYPE_SCAN
       value: "0"
       desc: "Run SCAN diagnostics"
-    - name: $T_DIAG_TYPE_ARRAY
+    - name: $S_DIAG_TYPE_ARRAY
       desc: "Run Array diagnostics"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Diagnostic results"
-class: $tSysmanDiagnostics
-name: $t_diag_result_t
+class: $sSysmanDiagnostics
+name: $s_diag_result_t
 etors:
-    - name: $T_DIAG_RESULT_NO_ERRORS
+    - name: $S_DIAG_RESULT_NO_ERRORS
       value: "0"
       desc: "Diagnostic completed without finding errors to repair"
-    - name: $T_DIAG_RESULT_ABORT
+    - name: $S_DIAG_RESULT_ABORT
       desc: "Diagnostic had problems running tests"
-    - name: $T_DIAG_RESULT_FAIL_CANT_REPAIR
+    - name: $S_DIAG_RESULT_FAIL_CANT_REPAIR
       desc: "Diagnostic had problems setting up repairs"
-    - name: $T_DIAG_RESULT_REBOOT_FOR_REPAIR
+    - name: $S_DIAG_RESULT_REBOOT_FOR_REPAIR
       desc: "Diagnostics found errors, setup for repair and reboot is required to complete the process"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Diagnostic test index to use for the very first test."
-name: $T_DIAG_FIRST_TEST_INDEX
+name: $S_DIAG_FIRST_TEST_INDEX
 value: "0x0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Diagnostic test index to use for the very last test."
-name: $T_DIAG_LAST_TEST_INDEX
+name: $S_DIAG_LAST_TEST_INDEX
 value: "0xFFFFFFFF"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Diagnostic test"
-class: $tSysmanDiagnostics
-name: $t_diag_test_t
+class: $sSysmanDiagnostics
+name: $s_diag_test_t
 members:
     - type: uint32_t
       name: "index"
       desc: "[out] Index of the test"
     - type: char
-      name: "name[$T_STRING_PROPERTY_SIZE]"
+      name: "name[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Name of the test"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Diagnostics test suite properties"
-class: $tSysmanDiagnostics
-name: $t_diag_properties_t
+class: $sSysmanDiagnostics
+name: $s_diag_properties_t
 members:
-    - type: $t_diag_type_t
+    - type: $s_diag_type_t
       name: "type"
       desc: "[out] The type of diagnostics test suite"
     - type: $x_bool_t
@@ -3260,7 +3260,7 @@ members:
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: char
-      name: "name[$T_STRING_PROPERTY_SIZE]"
+      name: "name[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Name of the diagnostics test suite"
     - type: $x_bool_t
       name: "haveTests"
@@ -3268,13 +3268,13 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of diagnostics test suites"
-class: $tSysman
+class: $sSysman
 name: DiagnosticsGet
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: hSysman
       desc: "[in] Sysman handle of the device."
     - type: "uint32_t*"
@@ -3284,35 +3284,35 @@ params:
             if count is zero, then the driver will update the value with the total number of components of this type.
             if count is non-zero, then driver will only retrieve that number of components.
             if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
-    - type: "$t_sysman_diag_handle_t*"
+    - type: "$s_sysman_diag_handle_t*"
       name: phDiagnostics
       desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties of a diagnostics test suite"
-class: $tSysmanDiagnostics
+class: $sSysmanDiagnostics
 name: GetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_diag_handle_t
+    - type: $s_sysman_diag_handle_t
       name: hDiagnostics
       desc: "[in] Handle for the component."
-    - type: $t_diag_properties_t*
+    - type: $s_diag_properties_t*
       name: pProperties
       desc: "[in,out] Structure describing the properties of a diagnostics test suite"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get individual tests that can be run separately. Not all test suites permit running individual tests - check $t_diag_properties_t.haveTests"
-class: $tSysmanDiagnostics
+desc: "Get individual tests that can be run separately. Not all test suites permit running individual tests - check $s_diag_properties_t.haveTests"
+class: $sSysmanDiagnostics
 name: GetTests
 details:
-    - "The list of available tests is returned in order of increasing test index $t_diag_test_t.index."
+    - "The list of available tests is returned in order of increasing test index $s_diag_test_t.index."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_sysman_diag_handle_t
+    - type: $s_sysman_diag_handle_t
       name: hDiagnostics
       desc: "[in] Handle for the component."
     - type: "uint32_t*"
@@ -3322,30 +3322,30 @@ params:
             If count is zero, then the driver will update the value with the total number of tests available.
             If count is non-zero, then driver will only retrieve that number of tests.
             If count is larger than the number of tests available, then the driver will update the value with the correct number of tests available.
-    - type: "$t_diag_test_t*"
+    - type: "$s_diag_test_t*"
       name: pTests
-      desc: "[in,out][optional][range(0, *pCount)] Array of tests sorted by increasing value of $t_diag_test_t.index"
+      desc: "[in,out][optional][range(0, *pCount)] Array of tests sorted by increasing value of $s_diag_test_t.index"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Run a diagnostics test suite, either all tests or a subset of tests."
-class: $tSysmanDiagnostics
+class: $sSysmanDiagnostics
 name: RunTests
 details:
     - "WARNING: Performancing diagnostics may destroy current device state information. Gracefully close any running workloads before initiating."
-    - "To run all tests in a test suite, set start = $T_DIAG_FIRST_TEST_INDEX and end = $T_DIAG_LAST_TEST_INDEX."
-    - "If the test suite permits running individual tests, $t_diag_properties_t.haveTests will be true. In this case, the function $tSysmanDiagnosticsGetTests() can be called to get the list of tests and corresponding indices that can be supplied to the arguments start and end in this function."
+    - "To run all tests in a test suite, set start = $S_DIAG_FIRST_TEST_INDEX and end = $S_DIAG_LAST_TEST_INDEX."
+    - "If the test suite permits running individual tests, $s_diag_properties_t.haveTests will be true. In this case, the function $sSysmanDiagnosticsGetTests() can be called to get the list of tests and corresponding indices that can be supplied to the arguments start and end in this function."
     - "This function will block until the diagnostics have completed."
 params:
-    - type: $t_sysman_diag_handle_t
+    - type: $s_sysman_diag_handle_t
       name: hDiagnostics
       desc: "[in] Handle for the component."
     - type: uint32_t
       name: start
-      desc: "[in] The index of the first test to run. Set to $T_DIAG_FIRST_TEST_INDEX to start from the beginning."
+      desc: "[in] The index of the first test to run. Set to $S_DIAG_FIRST_TEST_INDEX to start from the beginning."
     - type: uint32_t
       name: end
-      desc: "[in] The index of the last test to run. Set to $T_DIAG_LAST_TEST_INDEX to complete all tests after the start test."
-    - type: $t_diag_result_t*
+      desc: "[in] The index of the last test to run. Set to $S_DIAG_LAST_TEST_INDEX to complete all tests after the start test."
+    - type: $s_diag_result_t*
       name: pResult
       desc: "[in,out] The result of the diagnostics"
 returns:
@@ -3354,221 +3354,221 @@ returns:
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device"
-name: $tSysman
-owner: $tDevice
+name: $sSysman
+owner: $sDevice
 members:
-    - type: $t_sysman_handle_t
+    - type: $s_sysman_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tDevice*
+    - type: $sDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device scheduler queue"
-name: $tSysmanScheduler
-owner: $tSysman
+name: $sSysmanScheduler
+owner: $sSysman
 members:
-    - type: $t_sysman_sched_handle_t
+    - type: $s_sysman_sched_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device performance factor"
-name: $tSysmanPerformanceFactor
-owner: $tSysman
+name: $sSysmanPerformanceFactor
+owner: $sSysman
 members:
-    - type: $t_sysman_perf_handle_t
+    - type: $s_sysman_perf_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device power domain"
-name: $tSysmanPower
-owner: $tSysman
+name: $sSysmanPower
+owner: $sSysman
 members:
-    - type: $t_sysman_pwr_handle_t
+    - type: $s_sysman_pwr_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device frequency domain"
-name: $tSysmanFrequency
-owner: $tSysman
+name: $sSysmanFrequency
+owner: $sSysman
 members:
-    - type: $t_sysman_freq_handle_t
+    - type: $s_sysman_freq_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device engine group"
-name: $tSysmanEngine
-owner: $tSysman
+name: $sSysmanEngine
+owner: $sSysman
 members:
-    - type: $t_sysman_engine_handle_t
+    - type: $s_sysman_engine_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman standby control"
-name: $tSysmanStandby
-owner: $tSysman
+name: $sSysmanStandby
+owner: $sSysman
 members:
-    - type: $t_sysman_standby_handle_t
+    - type: $s_sysman_standby_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device firmware"
-name: $tSysmanFirmware
-owner: $tSysman
+name: $sSysmanFirmware
+owner: $sSysman
 members:
-    - type: $t_sysman_firmware_handle_t
+    - type: $s_sysman_firmware_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device memory module"
-name: $tSysmanMemory
-owner: $tSysman
+name: $sSysmanMemory
+owner: $sSysman
 members:
-    - type: $t_sysman_mem_handle_t
+    - type: $s_sysman_mem_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device Fabric port"
-name: $tSysmanFabricPort
-owner: $tSysman
+name: $sSysmanFabricPort
+owner: $sSysman
 members:
-    - type: $t_sysman_fabric_port_handle_t
+    - type: $s_sysman_fabric_port_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device temperature sensor"
-name: $tSysmanTemperature
-owner: $tSysman
+name: $sSysmanTemperature
+owner: $sSysman
 members:
-    - type: $t_sysman_temp_handle_t
+    - type: $s_sysman_temp_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device power supply"
-name: $tSysmanPsu
-owner: $tSysman
+name: $sSysmanPsu
+owner: $sSysman
 members:
-    - type: $t_sysman_psu_handle_t
+    - type: $s_sysman_psu_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device fan"
-name: $tSysmanFan
-owner: $tSysman
+name: $sSysmanFan
+owner: $sSysman
 members:
-    - type: $t_sysman_fan_handle_t
+    - type: $s_sysman_fan_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device LED"
-name: $tSysmanLed
-owner: $tSysman
+name: $sSysmanLed
+owner: $sSysman
 members:
-    - type: $t_sysman_led_handle_t
+    - type: $s_sysman_led_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device RAS error set"
-name: $tSysmanRas
-owner: $tSysman
+name: $sSysmanRas
+owner: $sSysman
 members:
-    - type: $t_sysman_ras_handle_t
+    - type: $s_sysman_ras_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device diagnostic test suite"
-name: $tSysmanDiagnostics
-owner: $tSysman
+name: $sSysmanDiagnostics
+owner: $sSysman
 members:
-    - type: $t_sysman_diag_handle_t
+    - type: $s_sysman_diag_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device event"
-name: $tSysmanEvent
-owner: $tSysman
+name: $sSysmanEvent
+owner: $sSysman
 members:
-    - type: $t_sysman_event_handle_t
+    - type: $s_sysman_event_handle_t
       name: handle
       desc: "[in] handle of Sysman object" 
       init: nullptr
-    - type: $tSysman*
+    - type: $sSysman*
       name: pSysman
       desc: "[in] pointer to owner object"

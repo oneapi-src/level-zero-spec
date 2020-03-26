@@ -4,75 +4,75 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file zet_sysman.hpp
+ * @file zes_sysman.hpp
  *
  * @brief C++ wrapper of Intel 'One API' Level-Zero Tool APIs for System Resource Management (Sysman)
  *
  */
-#ifndef _ZET_SYSMAN_HPP
-#define _ZET_SYSMAN_HPP
+#ifndef _ZES_SYSMAN_HPP
+#define _ZES_SYSMAN_HPP
 #if defined(__cplusplus)
 #pragma once
-#if !defined(_ZET_API_HPP)
+#if !defined(_ZES_API_HPP)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_STRING_PROPERTY_SIZE
+#ifndef ZES_STRING_PROPERTY_SIZE
 /// @brief Maximum number of characters in string properties.
-#define ZET_STRING_PROPERTY_SIZE  64
-#endif // ZET_STRING_PROPERTY_SIZE
+#define ZES_STRING_PROPERTY_SIZE  64
+#endif // ZES_STRING_PROPERTY_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_SCHED_WATCHDOG_DISABLE
+#ifndef ZES_SCHED_WATCHDOG_DISABLE
 /// @brief Disable forward progress guard timeout.
-#define ZET_SCHED_WATCHDOG_DISABLE  (~(0ULL))
-#endif // ZET_SCHED_WATCHDOG_DISABLE
+#define ZES_SCHED_WATCHDOG_DISABLE  (~(0ULL))
+#endif // ZES_SCHED_WATCHDOG_DISABLE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_MAX_FABRIC_PORT_MODEL_SIZE
+#ifndef ZES_MAX_FABRIC_PORT_MODEL_SIZE
 /// @brief Maximum Fabric port model string size
-#define ZET_MAX_FABRIC_PORT_MODEL_SIZE  256
-#endif // ZET_MAX_FABRIC_PORT_MODEL_SIZE
+#define ZES_MAX_FABRIC_PORT_MODEL_SIZE  256
+#endif // ZES_MAX_FABRIC_PORT_MODEL_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_MAX_FABRIC_LINK_TYPE_SIZE
+#ifndef ZES_MAX_FABRIC_LINK_TYPE_SIZE
 /// @brief Maximum size of the buffer that will return information about link
 ///        types
-#define ZET_MAX_FABRIC_LINK_TYPE_SIZE  256
-#endif // ZET_MAX_FABRIC_LINK_TYPE_SIZE
+#define ZES_MAX_FABRIC_LINK_TYPE_SIZE  256
+#endif // ZES_MAX_FABRIC_LINK_TYPE_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_FAN_TEMP_SPEED_PAIR_COUNT
+#ifndef ZES_FAN_TEMP_SPEED_PAIR_COUNT
 /// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
-#define ZET_FAN_TEMP_SPEED_PAIR_COUNT  32
-#endif // ZET_FAN_TEMP_SPEED_PAIR_COUNT
+#define ZES_FAN_TEMP_SPEED_PAIR_COUNT  32
+#endif // ZES_FAN_TEMP_SPEED_PAIR_COUNT
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_EVENT_WAIT_NONE
+#ifndef ZES_EVENT_WAIT_NONE
 /// @brief Don't wait - just check if there are any new events
-#define ZET_EVENT_WAIT_NONE  0x0
-#endif // ZET_EVENT_WAIT_NONE
+#define ZES_EVENT_WAIT_NONE  0x0
+#endif // ZES_EVENT_WAIT_NONE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_EVENT_WAIT_INFINITE
+#ifndef ZES_EVENT_WAIT_INFINITE
 /// @brief Wait infinitely for events to arrive.
-#define ZET_EVENT_WAIT_INFINITE  0xFFFFFFFF
-#endif // ZET_EVENT_WAIT_INFINITE
+#define ZES_EVENT_WAIT_INFINITE  0xFFFFFFFF
+#endif // ZES_EVENT_WAIT_INFINITE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_DIAG_FIRST_TEST_INDEX
+#ifndef ZES_DIAG_FIRST_TEST_INDEX
 /// @brief Diagnostic test index to use for the very first test.
-#define ZET_DIAG_FIRST_TEST_INDEX  0x0
-#endif // ZET_DIAG_FIRST_TEST_INDEX
+#define ZES_DIAG_FIRST_TEST_INDEX  0x0
+#endif // ZES_DIAG_FIRST_TEST_INDEX
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZET_DIAG_LAST_TEST_INDEX
+#ifndef ZES_DIAG_LAST_TEST_INDEX
 /// @brief Diagnostic test index to use for the very last test.
-#define ZET_DIAG_LAST_TEST_INDEX  0xFFFFFFFF
-#endif // ZET_DIAG_LAST_TEST_INDEX
+#define ZES_DIAG_LAST_TEST_INDEX  0xFFFFFFFF
+#endif // ZES_DIAG_LAST_TEST_INDEX
 
-namespace zet
+namespace zes
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for a Sysman device
@@ -201,24 +201,24 @@ namespace zet
                                                             ///< sleep state
             FREQ_THROTTLED = ZE_BIT( 3 ),                   ///< Event is triggered when the frequency starts being throttled
             ENERGY_THRESHOLD_CROSSED = ZE_BIT( 4 ),         ///< Event is triggered when the energy consumption threshold is reached
-                                                            ///< (use ::zetSysmanPowerSetEnergyThreshold() to configure).
+                                                            ///< (use ::zesSysmanPowerSetEnergyThreshold() to configure).
             TEMP_CRITICAL = ZE_BIT( 5 ),                    ///< Event is triggered when the critical temperature is reached (use
-                                                            ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
+                                                            ///< ::zesSysmanTemperatureSetConfig() to configure - disabled by default).
             TEMP_THRESHOLD1 = ZE_BIT( 6 ),                  ///< Event is triggered when the temperature crosses threshold 1 (use
-                                                            ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
+                                                            ///< ::zesSysmanTemperatureSetConfig() to configure - disabled by default).
             TEMP_THRESHOLD2 = ZE_BIT( 7 ),                  ///< Event is triggered when the temperature crosses threshold 2 (use
-                                                            ///< ::zetSysmanTemperatureSetConfig() to configure - disabled by default).
+                                                            ///< ::zesSysmanTemperatureSetConfig() to configure - disabled by default).
             MEM_HEALTH = ZE_BIT( 8 ),                       ///< Event is triggered when the health of device memory changes.
             FABRIC_PORT_HEALTH = ZE_BIT( 9 ),               ///< Event is triggered when the health of fabric ports change.
             PCI_LINK_HEALTH = ZE_BIT( 10 ),                 ///< Event is triggered when the health of the PCI link changes.
             RAS_CORRECTABLE_ERRORS = ZE_BIT( 11 ),          ///< Event is triggered when accelerator RAS correctable errors cross
-                                                            ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
+                                                            ///< thresholds (use ::zesSysmanRasSetConfig() to configure - disabled by
                                                             ///< default).
             RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),        ///< Event is triggered when accelerator RAS uncorrectable errors cross
-                                                            ///< thresholds (use ::zetSysmanRasSetConfig() to configure - disabled by
+                                                            ///< thresholds (use ::zesSysmanRasSetConfig() to configure - disabled by
                                                             ///< default).
             DEVICE_RESET_REQUIRED = ZE_BIT( 14 ),           ///< Event is triggered when the device needs to be reset (use
-                                                            ///< $SysmanDeviceGetState() to determine the reasons for the reset).
+                                                            ///< ::ZESysmanDeviceGetState() to determine the reasons for the reset).
             ALL = 0x0FFF,                                   ///< Specifies all events
 
         };
@@ -228,7 +228,7 @@ namespace zet
         struct state_t
         {
             uint32_t reset;                                 ///< [out] Indicates if the device needs to be reset and for what reasons
-                                                            ///< (bitfield of ::zet_reset_reasons_t)
+                                                            ///< (bitfield of ::zes_reset_reasons_t)
             repair_status_t repaired;                       ///< [out] Indicates if the device has been repaired
 
         };
@@ -239,24 +239,24 @@ namespace zet
         {
             ze::Device::properties_t core;                  ///< [out] Core device properties
             uint32_t numSubdevices;                         ///< [out] Number of sub-devices
-            int8_t serialNumber[ZET_STRING_PROPERTY_SIZE];  ///< [out] Manufacturing serial number (NULL terminated string value)
-            int8_t boardNumber[ZET_STRING_PROPERTY_SIZE];   ///< [out] Manufacturing board number (NULL terminated string value)
-            int8_t brandName[ZET_STRING_PROPERTY_SIZE];     ///< [out] Brand name of the device (NULL terminated string value)
-            int8_t modelName[ZET_STRING_PROPERTY_SIZE];     ///< [out] Model name of the device (NULL terminated string value)
-            int8_t vendorName[ZET_STRING_PROPERTY_SIZE];    ///< [out] Vendor name of the device (NULL terminated string value)
-            int8_t driverVersion[ZET_STRING_PROPERTY_SIZE]; ///< [out] Installed driver version (NULL terminated string value)
+            int8_t serialNumber[ZES_STRING_PROPERTY_SIZE];  ///< [out] Manufacturing serial number (NULL terminated string value)
+            int8_t boardNumber[ZES_STRING_PROPERTY_SIZE];   ///< [out] Manufacturing board number (NULL terminated string value)
+            int8_t brandName[ZES_STRING_PROPERTY_SIZE];     ///< [out] Brand name of the device (NULL terminated string value)
+            int8_t modelName[ZES_STRING_PROPERTY_SIZE];     ///< [out] Model name of the device (NULL terminated string value)
+            int8_t vendorName[ZES_STRING_PROPERTY_SIZE];    ///< [out] Vendor name of the device (NULL terminated string value)
+            int8_t driverVersion[ZES_STRING_PROPERTY_SIZE]; ///< [out] Installed driver version (NULL terminated string value)
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Configuration for timeout scheduler mode (::ZET_SCHED_MODE_TIMEOUT)
+        /// @brief Configuration for timeout scheduler mode (::ZES_SCHED_MODE_TIMEOUT)
         struct sched_timeout_properties_t
         {
             uint64_t watchdogTimeout;                       ///< [in,out] The maximum time in microseconds that the scheduler will wait
                                                             ///< for a batch of work submitted to a hardware engine to complete or to
                                                             ///< be preempted so as to run another context.
                                                             ///< If this time is exceeded, the hardware engine is reset and the context terminated.
-                                                            ///< If set to ::ZET_SCHED_WATCHDOG_DISABLE, a running workload can run as
+                                                            ///< If set to ::ZES_SCHED_WATCHDOG_DISABLE, a running workload can run as
                                                             ///< long as it wants without being terminated, but preemption attempts to
                                                             ///< run other contexts are permitted but not enforced.
 
@@ -264,7 +264,7 @@ namespace zet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Configuration for timeslice scheduler mode
-        ///        (::ZET_SCHED_MODE_TIMESLICE)
+        ///        (::ZES_SCHED_MODE_TIMESLICE)
         struct sched_timeslice_properties_t
         {
             uint64_t interval;                              ///< [in,out] The average interval in microseconds that a submission for a
@@ -289,7 +289,7 @@ namespace zet
             int64_t memSize;                                ///< [out] Device memory size in bytes allocated by this process (may not
                                                             ///< necessarily be resident on the device at the time of reading).
             uint64_t engines;                               ///< [out] Bitfield of accelerator engines being used by this process (or
-                                                            ///< 1<<::zet_engine_type_t together).
+                                                            ///< 1<<::zes_engine_type_t together).
 
         };
 
@@ -328,9 +328,9 @@ namespace zet
         struct pci_state_t
         {
             pci_link_status_t status;                       ///< [out] The current status of the port
-            pci_link_qual_issues_t qualityIssues;           ///< [out] If status is ::ZET_PCI_LINK_STATUS_YELLOW, this gives a bitfield
+            pci_link_qual_issues_t qualityIssues;           ///< [out] If status is ::ZES_PCI_LINK_STATUS_YELLOW, this gives a bitfield
                                                             ///< of quality issues that have been detected
-            pci_link_stab_issues_t stabilityIssues;         ///< [out] If status is ::ZET_PCI_LINK_STATUS_RED, this gives a bitfield of
+            pci_link_stab_issues_t stabilityIssues;         ///< [out] If status is ::ZES_PCI_LINK_STATUS_RED, this gives a bitfield of
                                                             ///< reasons for the connection instability
             pci_speed_t speed;                              ///< [out] The current port configure speed
 
@@ -407,7 +407,7 @@ namespace zet
         /// 
         /// @details
         ///     - The returned handle is unique.
-        ///     - ::zet_device_handle_t returned by ::zeDeviceGetSubDevices() are not
+        ///     - ::zes_device_handle_t returned by ::zeDeviceGetSubDevices() are not
         ///       support. Only use handles returned by ::zeDeviceGet(). All resources
         ///       on sub-devices can be enumerated through the primary device.
         /// @returns
@@ -888,9 +888,9 @@ namespace zet
             ze::bool_t canControl;                          ///< [out] Software can change the scheduler component configuration
                                                             ///< assuming the user has permissions.
             uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are controlled by this
-                                                            ///< scheduler component (bitfield of 1<<::zet_engine_type_t).
+                                                            ///< scheduler component (bitfield of 1<<::zes_engine_type_t).
             uint32_t supportedModes;                        ///< [out] Bitfield of scheduler modes that can be configured for this
-                                                            ///< scheduler component (bitfield of 1<<::zet_sched_mode_t).
+                                                            ///< scheduler component (bitfield of 1<<::zes_sched_mode_t).
 
         };
 
@@ -945,7 +945,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get scheduler config for mode ::ZET_SCHED_MODE_TIMEOUT
+        /// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMEOUT
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -959,7 +959,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get scheduler config for mode ::ZET_SCHED_MODE_TIMESLICE
+        /// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMESLICE
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -973,7 +973,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_TIMEOUT or update scheduler
+        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMEOUT or update scheduler
         ///        mode parameters if already running in this mode.
         /// 
         /// @details
@@ -992,7 +992,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_TIMESLICE or update
+        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMESLICE or update
         ///        scheduler mode parameters if already running in this mode.
         /// 
         /// @details
@@ -1010,7 +1010,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_EXCLUSIVE
+        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_EXCLUSIVE
         /// 
         /// @details
         ///     - This mode is optimized for single application/context use-cases. It
@@ -1027,7 +1027,7 @@ namespace zet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG
+        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_COMPUTE_UNIT_DEBUG
         /// 
         /// @details
         ///     - This mode is optimized for application debug. It ensures that only one
@@ -1058,7 +1058,7 @@ namespace zet
                                                             ///< a sub-device
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are affected by this
-                                                            ///< Performance Factor (bitfield of 1<<::zet_engine_type_t).
+                                                            ///< Performance Factor (bitfield of 1<<::zes_engine_type_t).
 
         };
 
@@ -1121,7 +1121,7 @@ namespace zet
         ///     - The Performance Factor is a number between 0 and 100.
         ///     - A Performance Factor is a hint to the hardware. Depending on the
         ///       hardware, the request may not be granted. Follow up this function with
-        ///       a call to ::zetSysmanPerformanceFactorGetConfig() to determine the
+        ///       a call to ::zesSysmanPerformanceFactorGetConfig() to determine the
         ///       actual factor being used by the hardware.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
@@ -1148,7 +1148,7 @@ namespace zet
             ze::bool_t canControl;                          ///< [out] Software can change the power limits of this domain assuming the
                                                             ///< user has permissions.
             ze::bool_t isEnergyThresholdSupported;          ///< [out] Indicates if this power domain supports the energy threshold
-                                                            ///< event (::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
+                                                            ///< event (::ZES_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
             uint32_t defaultLimit;                          ///< [out] The factory default TDP power limit of the part in milliwatts.
             uint32_t minLimit;                              ///< [out] The minimum power limit in milliwatts that can be requested.
             uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
@@ -1337,14 +1337,14 @@ namespace zet
         /// @brief Set energy threshold
         /// 
         /// @details
-        ///     - An event ::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be
+        ///     - An event ::ZES_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be
         ///       generated when the delta energy consumed starting from this call
         ///       exceeds the specified threshold. Use the function
-        ///       ::zetSysmanEventSetConfig() to start receiving the event.
+        ///       ::zesSysmanEventSetConfig() to start receiving the event.
         ///     - Only one running process can control the energy threshold at a given
         ///       time. If another process attempts to change the energy threshold, the
         ///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
-        ///       ::zetSysmanPowerGetEnergyThreshold() to determine the process ID
+        ///       ::zesSysmanPowerGetEnergyThreshold() to determine the process ID
         ///       currently controlling this setting.
         ///     - Calling this function will remove any pending energy thresholds and
         ///       start counting from the time of this call.
@@ -1403,14 +1403,14 @@ namespace zet
         /// 
         /// @details
         ///     - Indicates if this frequency domain can be overclocked (if true,
-        ///       functions such as ::zetSysmanFrequencyOcSetConfig() are supported).
+        ///       functions such as ::zesSysmanFrequencyOcSetConfig() are supported).
         ///     - The min/max hardware frequencies are specified for non-overclock
         ///       configurations. For overclock configurations, use
-        ///       ::zetSysmanFrequencyOcGetConfig() to determine the maximum frequency
+        ///       ::zesSysmanFrequencyOcGetConfig() to determine the maximum frequency
         ///       that can be requested.
         ///     - If step is non-zero, the available frequencies are (min, min + step,
         ///       min + 2xstep, ..., max). Otherwise, call
-        ///       ::zetSysmanFrequencyGetAvailableClocks() to get the list of
+        ///       ::zesSysmanFrequencyGetAvailableClocks() to get the list of
         ///       frequencies that can be requested.
         struct freq_properties_t
         {
@@ -1422,7 +1422,7 @@ namespace zet
             ze::bool_t canControl;                          ///< [out] Indicates if software can control the frequency of this domain
                                                             ///< assuming the user has permissions
             ze::bool_t isThrottleEventSupported;            ///< [out] Indicates if software can register to receive event
-                                                            ///< ::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
+                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
             double min;                                     ///< [out] The minimum hardware clock frequency in units of MHz
             double max;                                     ///< [out] The maximum non-overclock hardware clock frequency in units of
                                                             ///< MHz.
@@ -1455,7 +1455,7 @@ namespace zet
             double efficient;                               ///< [out] The efficient minimum frequency in MHz
             double actual;                                  ///< [out] The resolved frequency in MHz
             uint32_t throttleReasons;                       ///< [out] The reasons that the frequency is being limited by the hardware
-                                                            ///< (Bitfield of ::zet_freq_throttle_reasons_t).
+                                                            ///< (Bitfield of ::zes_freq_throttle_reasons_t).
 
         };
 
@@ -1516,15 +1516,15 @@ namespace zet
         ///     - Overclock settings
         struct oc_config_t
         {
-            oc_mode_t mode;                                 ///< [in,out] Overclock Mode ::zet_oc_mode_t.
+            oc_mode_t mode;                                 ///< [in,out] Overclock Mode ::zes_oc_mode_t.
             double frequency;                               ///< [in,out] Overclocking Frequency in MHz. This cannot be greater than
-                                                            ///< ::zet_oc_capabilities_t.maxOcFrequency.
+                                                            ///< ::zes_oc_capabilities_t.maxOcFrequency.
             double voltageTarget;                           ///< [in,out] Overclock voltage in Volts. This cannot be greater than
-                                                            ///< ::zet_oc_capabilities_t.maxOcVoltage.
+                                                            ///< ::zes_oc_capabilities_t.maxOcVoltage.
             double voltageOffset;                           ///< [in,out] This voltage offset is applied to all points on the
                                                             ///< voltage/frequency curve, include the new overclock voltageTarget. It
-                                                            ///< can be in the range (::zet_oc_capabilities_t.minOcVoltageOffset,
-                                                            ///< ::zet_oc_capabilities_t.maxOcVoltageOffset).
+                                                            ///< can be in the range (::zes_oc_capabilities_t.minOcVoltageOffset,
+                                                            ///< ::zes_oc_capabilities_t.maxOcVoltageOffset).
 
         };
 
@@ -1650,7 +1650,7 @@ namespace zet
         void __zecall
         OcGetCapabilities(
             oc_capabilities_t* pOcCapabilities              ///< [in,out] Pointer to the capabilities structure
-                                                            ///< ::zet_oc_capabilities_t.
+                                                            ///< ::zes_oc_capabilities_t.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1662,24 +1662,24 @@ namespace zet
         /// @throws result_t
         void __zecall
         OcGetConfig(
-            oc_config_t* pOcConfiguration                   ///< [in,out] Pointer to the configuration structure ::zet_oc_config_t.
+            oc_config_t* pOcConfiguration                   ///< [in,out] Pointer to the configuration structure ::zes_oc_config_t.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Change the overclocking configuration.
         /// 
         /// @details
-        ///     - If ::zet_oc_config_t.mode is set to ::ZET_OC_MODE_OFF, overclocking
+        ///     - If ::zes_oc_config_t.mode is set to ::ZES_OC_MODE_OFF, overclocking
         ///       will be turned off and the hardware returned to run with factory
-        ///       voltages/frequencies. Call ::zetSysmanFrequencyOcSetIccMax() and
-        ///       ::zetSysmanFrequencyOcSetTjMax() separately with 0.0 to return those
+        ///       voltages/frequencies. Call ::zesSysmanFrequencyOcSetIccMax() and
+        ///       ::zesSysmanFrequencyOcSetTjMax() separately with 0.0 to return those
         ///       settings to factory defaults.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
         OcSetConfig(
-            oc_config_t* pOcConfiguration,                  ///< [in] Pointer to the configuration structure ::zet_oc_config_t.
+            oc_config_t* pOcConfiguration,                  ///< [in] Pointer to the configuration structure ::zes_oc_config_t.
             ze::bool_t* pDeviceRestart                      ///< [in,out] This will be set to true if the device needs to be restarted
                                                             ///< in order to enable the new overclock settings.
             );
@@ -1951,8 +1951,8 @@ namespace zet
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t canControl;                          ///< [out] Indicates if software can flash the firmware assuming the user
                                                             ///< has permissions
-            int8_t name[ZET_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
-            int8_t version[ZET_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
+            int8_t name[ZES_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
+            int8_t version[ZES_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
 
         };
 
@@ -2077,7 +2077,7 @@ namespace zet
             mem_health_t health;                            ///< [out] Indicates the health of the memory
             uint64_t free;                                  ///< [out] The free memory in bytes
             uint64_t size;                                  ///< [out] The total allocatable memory in bytes (can be less than
-                                                            ///< ::zet_mem_properties_t.physicalSize)
+                                                            ///< ::zes_mem_properties_t.physicalSize)
 
         };
 
@@ -2210,7 +2210,7 @@ namespace zet
             FLAPPING = ZE_BIT( 2 ),                         ///< Port has excessively trained and then transitioned down for some
                                                             ///< period of time. Driver will allow port to continue to train, but will
                                                             ///< not enable the port for use until the port has been disabled and
-                                                            ///< subsequently re-enabled using ::zetSysmanFabricPortSetConfig().
+                                                            ///< subsequently re-enabled using ::zesSysmanFabricPortSetConfig().
 
         };
 
@@ -2223,8 +2223,8 @@ namespace zet
         ///       in the hardware may result in a different identifier for a given port.
         ///     - The main purpose of this identifier to build up an instantaneous
         ///       topology map of system connectivity. An application should enumerate
-        ///       all fabric ports and match ::zet_fabric_port_state_t.remotePortId to
-        ///       ::zet_fabric_port_properties_t.portId.
+        ///       all fabric ports and match ::zes_fabric_port_state_t.remotePortId to
+        ///       ::zes_fabric_port_properties_t.portId.
         struct fabric_port_id_t
         {
             uint32_t fabricId;                              ///< [out] Unique identifier for the fabric end-point
@@ -2247,7 +2247,7 @@ namespace zet
         /// @brief Fabric port properties
         struct fabric_port_properties_t
         {
-            int8_t model[ZET_MAX_FABRIC_PORT_MODEL_SIZE];   ///< [out] Description of port technology
+            int8_t model[ZES_MAX_FABRIC_PORT_MODEL_SIZE];   ///< [out] Description of port technology
             ze::bool_t onSubdevice;                         ///< [out] True if the port is located on a sub-device; false means that
                                                             ///< the port is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
@@ -2261,7 +2261,7 @@ namespace zet
         /// @brief Provides information about the fabric link attached to a port
         struct fabric_link_type_t
         {
-            int8_t desc[ZET_MAX_FABRIC_LINK_TYPE_SIZE];     ///< [out] This provides a static textural description of the physic
+            int8_t desc[ZES_MAX_FABRIC_LINK_TYPE_SIZE];     ///< [out] This provides a static textural description of the physic
                                                             ///< attachment type
 
         };
@@ -2280,9 +2280,9 @@ namespace zet
         struct fabric_port_state_t
         {
             fabric_port_status_t status;                    ///< [out] The current status of the port
-            fabric_port_qual_issues_t qualityIssues;        ///< [out] If status is ::ZET_FABRIC_PORT_STATUS_YELLOW, this gives a
+            fabric_port_qual_issues_t qualityIssues;        ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_YELLOW, this gives a
                                                             ///< bitfield of quality issues that have been detected
-            fabric_port_stab_issues_t stabilityIssues;      ///< [out] If status is ::ZET_FABRIC_PORT_STATUS_RED, this gives a bitfield
+            fabric_port_stab_issues_t stabilityIssues;      ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_RED, this gives a bitfield
                                                             ///< of reasons for the connection instability
             fabric_port_id_t remotePortId;                  ///< [out] The unique port identifier for the remote connection point
             fabric_port_speed_t rxSpeed;                    ///< [out] Current maximum receive speed
@@ -2435,11 +2435,11 @@ namespace zet
                                                             ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t isCriticalTempSupported;             ///< [out] Indicates if the critical temperature event
-                                                            ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
+                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
             ze::bool_t isThreshold1Supported;               ///< [out] Indicates if the temperature threshold 1 event
-                                                            ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported
+                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported
             ze::bool_t isThreshold2Supported;               ///< [out] Indicates if the temperature threshold 2 event
-                                                            ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 is supported
+                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 is supported
 
         };
 
@@ -2460,13 +2460,13 @@ namespace zet
         ///        trigger conditions.
         struct temp_config_t
         {
-            ze::bool_t enableCritical;                      ///< [in,out] Indicates if event ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
+            ze::bool_t enableCritical;                      ///< [in,out] Indicates if event ::ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
                                                             ///< should be triggered by the driver.
             temp_threshold_t threshold1;                    ///< [in,out] Configuration controlling if and when event
-                                                            ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the
+                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the
                                                             ///< driver.
             temp_threshold_t threshold2;                    ///< [in,out] Configuration controlling if and when event
-                                                            ///< ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the
+                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the
                                                             ///< driver.
             uint32_t processId;                             ///< [out] Host processId that set this configuration (ignored when setting
                                                             ///< the configuration).
@@ -2529,17 +2529,17 @@ namespace zet
         ///        are triggered and the trigger conditions
         /// 
         /// @details
-        ///     - Events ::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL will be triggered when
+        ///     - Events ::ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL will be triggered when
         ///       temperature reaches the critical range. Use the function
-        ///       ::zetSysmanEventSetConfig() to start receiving this event.
-        ///     - Events ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and
-        ///       ::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when
+        ///       ::zesSysmanEventSetConfig() to start receiving this event.
+        ///     - Events ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and
+        ///       ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when
         ///       temperature cross the thresholds set using this function. Use the
-        ///       function ::zetSysmanEventSetConfig() to start receiving these events.
+        ///       function ::zesSysmanEventSetConfig() to start receiving these events.
         ///     - Only one running process can set the temperature configuration at a
         ///       time. If another process attempts to change the configuration, the
         ///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
-        ///       ::zetSysmanTemperatureGetConfig() will return the process ID currently
+        ///       ::zesSysmanTemperatureGetConfig() will return the process ID currently
         ///       controlling these settings.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
@@ -2711,7 +2711,7 @@ namespace zet
             uint32_t speed;                                 ///< [in,out] The fixed fan speed setting
             fan_speed_units_t speedUnits;                   ///< [in,out] The units of the fixed fan speed setting
             uint32_t numPoints;                             ///< [in,out] The number of valid points in the fan speed table
-            fan_temp_speed_t table[ZET_FAN_TEMP_SPEED_PAIR_COUNT];  ///< [in,out] Array of temperature/fan speed pairs
+            fan_temp_speed_t table[ZES_FAN_TEMP_SPEED_PAIR_COUNT];  ///< [in,out] Array of temperature/fan speed pairs
 
         };
 
@@ -2932,8 +2932,8 @@ namespace zet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief RAS error configuration - thresholds used for triggering RAS events
-        ///        (::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
-        ///        ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
+        ///        (::ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
+        ///        ::ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
         /// 
         /// @details
         ///     - The driver maintains a total counter which is updated every time a
@@ -2941,7 +2941,7 @@ namespace zet
         ///       that an error has occurred. When this total count goes above the
         ///       totalThreshold specified below, a RAS event is triggered.
         ///     - The driver also maintains a counter for each category of RAS error
-        ///       (see ::zet_ras_details_t for a breakdown). Each time a hardware block
+        ///       (see ::zes_ras_details_t for a breakdown). Each time a hardware block
         ///       of that category notifies that an error has occurred, that
         ///       corresponding category counter is updated. When it goes above the
         ///       threshold specified in detailedThresholds, a RAS event is triggered.
@@ -3006,11 +3006,11 @@ namespace zet
         ///       categories. Events are generated when errors occur. The configuration
         ///       enables setting thresholds to limit when events are sent.
         ///     - When a particular RAS correctable error counter exceeds the configured
-        ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
+        ///       threshold, the event ::ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
         ///       will be triggered.
         ///     - When a particular RAS uncorrectable error counter exceeds the
         ///       configured threshold, the event
-        ///       ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered.
+        ///       ::ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
@@ -3028,12 +3028,12 @@ namespace zet
         ///       categories. Events are generated when errors occur. The configuration
         ///       enables setting thresholds to limit when events are sent.
         ///     - When a particular RAS correctable error counter exceeds the specified
-        ///       threshold, the event ::ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
+        ///       threshold, the event ::ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
         ///       will be generated.
         ///     - When a particular RAS uncorrectable error counter exceeds the
         ///       specified threshold, the event
-        ///       ::ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated.
-        ///     - Call ::zetSysmanRasGetState() and set the clear flag to true to
+        ///       ::ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated.
+        ///     - Call ::zesSysmanRasGetState() and set the clear flag to true to
         ///       restart event generation once counters have exceeded thresholds.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
@@ -3093,7 +3093,7 @@ namespace zet
         struct diag_test_t
         {
             uint32_t index;                                 ///< [out] Index of the test
-            char name[ZET_STRING_PROPERTY_SIZE];            ///< [out] Name of the test
+            char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the test
 
         };
 
@@ -3105,10 +3105,10 @@ namespace zet
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            char name[ZET_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
+            char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
             ze::bool_t haveTests;                           ///< [out] Indicates if this test suite has individual tests which can be
-                                                            ///< run separately (use the function $SysmanDiagnosticsGetTests() to get
-                                                            ///< the list of these tests)
+                                                            ///< run separately (use the function ::ZESysmanDiagnosticsGetTests() to
+                                                            ///< get the list of these tests)
 
         };
 
@@ -3154,11 +3154,11 @@ namespace zet
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get individual tests that can be run separately. Not all test suites
         ///        permit running individual tests - check
-        ///        ::zet_diag_properties_t.haveTests
+        ///        ::zes_diag_properties_t.haveTests
         /// 
         /// @details
         ///     - The list of available tests is returned in order of increasing test
-        ///       index ::zet_diag_test_t.index.
+        ///       index ::zes_diag_test_t.index.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
@@ -3171,7 +3171,7 @@ namespace zet
                                                             ///< If count is larger than the number of tests available, then the driver
                                                             ///< will update the value with the correct number of tests available.
             diag_test_t* pTests = nullptr                   ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
-                                                            ///< increasing value of ::zet_diag_test_t.index
+                                                            ///< increasing value of ::zes_diag_test_t.index
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -3181,10 +3181,10 @@ namespace zet
         ///     - WARNING: Performancing diagnostics may destroy current device state
         ///       information. Gracefully close any running workloads before initiating.
         ///     - To run all tests in a test suite, set start =
-        ///       ::ZET_DIAG_FIRST_TEST_INDEX and end = ::ZET_DIAG_LAST_TEST_INDEX.
+        ///       ::ZES_DIAG_FIRST_TEST_INDEX and end = ::ZES_DIAG_LAST_TEST_INDEX.
         ///     - If the test suite permits running individual tests,
-        ///       ::zet_diag_properties_t.haveTests will be true. In this case, the
-        ///       function ::zetSysmanDiagnosticsGetTests() can be called to get the
+        ///       ::zes_diag_properties_t.haveTests will be true. In this case, the
+        ///       function ::zesSysmanDiagnosticsGetTests() can be called to get the
         ///       list of tests and corresponding indices that can be supplied to the
         ///       arguments start and end in this function.
         ///     - This function will block until the diagnostics have completed.
@@ -3192,9 +3192,9 @@ namespace zet
         void __zecall
         RunTests(
             uint32_t start,                                 ///< [in] The index of the first test to run. Set to
-                                                            ///< ::ZET_DIAG_FIRST_TEST_INDEX to start from the beginning.
+                                                            ///< ::ZES_DIAG_FIRST_TEST_INDEX to start from the beginning.
             uint32_t end,                                   ///< [in] The index of the last test to run. Set to
-                                                            ///< ::ZET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
+                                                            ///< ::ZES_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
             diag_result_t* pResult                          ///< [in,out] The result of the diagnostics
             );
 
@@ -3210,8 +3210,8 @@ namespace zet
         struct event_config_t
         {
             uint32_t registered;                            ///< [in,out] List of registered events (Bitfield of events
-                                                            ///< ::zet_sysman_event_type_t). ::ZET_SYSMAN_EVENT_TYPE_NONE indicates
-                                                            ///< there are no registered events. ::ZET_SYSMAN_EVENT_TYPE_ALL indicates
+                                                            ///< ::zes_sysman_event_type_t). ::ZES_SYSMAN_EVENT_TYPE_NONE indicates
+                                                            ///< there are no registered events. ::ZES_SYSMAN_EVENT_TYPE_ALL indicates
                                                             ///< that all events are registered.
 
         };
@@ -3282,7 +3282,7 @@ namespace zet
         void __zecall
         GetState(
             ze::bool_t clear,                               ///< [in] Indicates if the event list for this device should be cleared.
-            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zet_sysman_event_type_t that have been
+            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_sysman_event_type_t that have been
                                                             ///< triggered by this device.
             );
 
@@ -3292,7 +3292,7 @@ namespace zet
         /// 
         /// @details
         ///     - If previous events arrived and were not cleared using
-        ///       ::zetSysmanEventGetState(), this call will return immediately.
+        ///       ::zesSysmanEventGetState(), this call will return immediately.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
@@ -3300,21 +3300,21 @@ namespace zet
         Listen(
             ze::Driver* pDriver,                            ///< [in] pointer to the driver instance
             uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
-                                                            ///< ::ZET_EVENT_WAIT_NONE will check status and return immediately. Set to
-                                                            ///< ::ZET_EVENT_WAIT_INFINITE to block until events arrive.
+                                                            ///< ::ZES_EVENT_WAIT_NONE will check status and return immediately. Set to
+                                                            ///< ::ZES_EVENT_WAIT_INFINITE to block until events arrive.
             uint32_t count,                                 ///< [in] Number of handles in phEvents
             SysmanEvent** ppEvents,                         ///< [in][range(0, count)] Handle of events that should be listened to
-            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zet_sysman_event_type_t that have been
+            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_sysman_event_type_t that have been
                                                             ///< triggered by any of the supplied event handles. If timeout is not
-                                                            ///< ::ZET_EVENT_WAIT_INFINITE and this value is
-                                                            ///< ::ZET_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
+                                                            ///< ::ZES_EVENT_WAIT_INFINITE and this value is
+                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
             );
 
     };
 
-} // namespace zet
+} // namespace zes
 
-namespace zet
+namespace zes
 {
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::version_t to std::string
@@ -3648,6 +3648,6 @@ namespace zet
     /// @brief Converts SysmanEvent::event_config_t to std::string
     std::string to_string( const SysmanEvent::event_config_t val );
 
-} // namespace zet
+} // namespace zes
 #endif // defined(__cplusplus)
-#endif // _ZET_SYSMAN_HPP
+#endif // _ZES_SYSMAN_HPP

@@ -14,6 +14,6 @@
    core/INTRO.rst
    core/PROG.rst
    tools/PROG.rst
-   tools/SYSMAN.rst
+   sysman/PROG.rst
    core/SPIRV.rst
    api.rst

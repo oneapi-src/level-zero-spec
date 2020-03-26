@@ -5,6 +5,7 @@ set(layer_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_layer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ze_valddi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/zet_valddi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/zes_valddi.cpp
 )
 if(ZE_EXPERIMENTAL)
     set(layer_SOURCES ${layer_SOURCES}

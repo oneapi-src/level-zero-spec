@@ -12,6 +12,7 @@
 
 #include "ze_ddi.h"
 #include "zet_ddi.h"
+#include "zes_ddi.h"
 #ifdef ZE_EXPERIMENTAL
 #include "zex_ddi.h"
 #endif
@@ -21,6 +22,7 @@
 
 #include "ze_ldrddi.h"
 #include "zet_ldrddi.h"
+#include "zes_ldrddi.h"
 #ifdef ZE_EXPERIMENTAL
 #include "zex_ldrddi.h"
 #endif

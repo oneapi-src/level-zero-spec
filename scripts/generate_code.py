@@ -269,7 +269,7 @@ def _generate_api_c(path, namespace, tags, specs, meta):
     loc += _mako_api_cpp(path, namespace, tags, specs, meta, files, ".h")
     loc += _mako_ddi_cpp(path, namespace, tags, specs, meta)
 
-    if namespace != "zet": # todo: needs to be programmable
+    if namespace not in ["zet", "zes"]: # todo: needs to be programmable
         loc += _mako_callbacks_cpp(path, namespace, tags, specs, meta)
 
     return loc
