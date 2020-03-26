@@ -11,36 +11,7 @@ import util
 """
     generates c/c++ files from the specification documents
 """
-def _mako_spec_cpp(path, namespace, tags, specs, meta, ext):
-    loc = 0
-    template = "spec%s.mako"%ext
-    fin = os.path.join("templates", template)
-    groupname = os.path.basename(os.path.normpath(path)).capitalize()
-
-    files = []
-    for s in specs:
-        filename = "%s_%s%s"%(namespace, s['name'], ext)
-        files.append(filename)
-        fout = os.path.join(path, filename)
-
-        print("Generating %s..."%fout)
-        loc += util.makoWrite(
-            fin, fout,
-            name = s['name'],
-            header = s['header'],
-            objects = s['objects'],
-            section=os.path.basename(path),
-            namespace=namespace,
-            tags=tags,
-            specs=specs,
-            meta = meta,
-            groupname = groupname)
-    return loc, files
-
-"""
-    generates c/c++ files from the specification documents
-"""
-def _mako_api_cpp(path, namespace, tags, specs, meta, files, ext):
+def _mako_api_cpp(path, namespace, tags, specs, meta, ext):
     template = "api%s.mako"%ext
     fin = os.path.join("templates", template)
 
@@ -54,8 +25,7 @@ def _mako_api_cpp(path, namespace, tags, specs, meta, files, ext):
         namespace=namespace,
         tags=tags,
         specs=specs,
-        meta=meta,
-        files=files)
+        meta=meta)
 
 """
     generates c/c++ files from the specification documents
@@ -84,25 +54,6 @@ def _mako_ddi_cpp(path, namespace, tags, specs, meta):
     fin = os.path.join("templates", template)
 
     filename = "%s_ddi.h"%(namespace)
-    fout = os.path.join(path, filename)
-
-    print("Generating %s..."%fout)
-    return util.makoWrite(
-        fin, fout,
-        section=os.path.basename(path),
-        namespace=namespace,
-        tags=tags,
-        specs=specs,
-        meta=meta)
-
-"""
-    generates c/c++ files from the specification documents
-"""
-def _mako_callbacks_cpp(path, namespace, tags, specs, meta):
-    template = "callbacks.h.mako"
-    fin = os.path.join("templates", template)
-
-    filename = "%s_callbacks.h"%(namespace)
     fout = os.path.join(path, filename)
 
     print("Generating %s..."%fout)
@@ -263,14 +214,9 @@ def _mako_null_driver_cpp(path, namespace, tags, specs, meta):
 """
 def _generate_api_c(path, namespace, tags, specs, meta):
     util.makePath(path)
-    util.removeFiles(path, "*.h")
 
-    loc, files = _mako_spec_cpp(path, namespace, tags, specs, meta, ".h")
-    loc += _mako_api_cpp(path, namespace, tags, specs, meta, files, ".h")
+    loc = _mako_api_cpp(path, namespace, tags, specs, meta, ".h")
     loc += _mako_ddi_cpp(path, namespace, tags, specs, meta)
-
-    if namespace not in ["zet", "zes"]: # todo: needs to be programmable
-        loc += _mako_callbacks_cpp(path, namespace, tags, specs, meta)
 
     return loc
 
@@ -280,8 +226,7 @@ def _generate_api_c(path, namespace, tags, specs, meta):
 def _generate_api_cpp(path, namespace, tags, specs, meta):
     util.makePath(path)
 
-    loc, files = _mako_spec_cpp(path, namespace, tags, specs, meta, ".hpp")
-    loc += _mako_api_cpp(path, namespace, tags, specs, meta, files, ".hpp")
+    loc = _mako_api_cpp(path, namespace, tags, specs, meta, ".hpp")
 
     return loc
 
@@ -290,7 +235,6 @@ def _generate_api_cpp(path, namespace, tags, specs, meta):
 """
 def _generate_api_py(path, namespace, tags, specs, meta):
     util.makePath(path)
-    util.removeFiles(path, "*.py")
 
     loc = _mako_api_py(path, namespace, tags, specs, meta)
     return loc

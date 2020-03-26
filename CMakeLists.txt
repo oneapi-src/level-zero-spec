@@ -57,11 +57,7 @@ add_subdirectory(${THIRD_PARTY_DIR})
 #    POST_BUILD
 #)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/core)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/experimental)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/tools)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/sysman)
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/source/wrapper/include)
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")

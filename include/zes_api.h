@@ -4,25 +4,324 @@
  *
  * SPDX-License-Identifier: MIT
  *
- * @file zes_sysman.h
- *
- * @brief Intel 'One API' Level-Zero Tool APIs for System Resource Management (Sysman)
+ * @file zes_api.h
  *
  */
- 
-#ifndef _ZES_SYSMAN_H
-#define _ZES_SYSMAN_H
+#ifndef _ZES_API_H
+#define _ZES_API_H
 #if defined(__cplusplus)
 #pragma once
 #endif
-#if !defined(_ZES_API_H)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
+
+// 'core' API headers
+#include "ze_api.h"
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
+#pragma region common
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle to a driver instance
+typedef ze_driver_handle_t zes_driver_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of device object
+typedef ze_device_handle_t zes_device_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for accessing System Resource Management features of a device
+typedef struct _zes_sysman_handle_t *zes_sysman_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device scheduler queue
+typedef struct _zes_sysman_sched_handle_t *zes_sysman_sched_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device performance factors
+typedef struct _zes_sysman_perf_handle_t *zes_sysman_perf_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device power domain
+typedef struct _zes_sysman_pwr_handle_t *zes_sysman_pwr_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device frequency domain
+typedef struct _zes_sysman_freq_handle_t *zes_sysman_freq_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device engine group
+typedef struct _zes_sysman_engine_handle_t *zes_sysman_engine_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device standby control
+typedef struct _zes_sysman_standby_handle_t *zes_sysman_standby_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device firmware
+typedef struct _zes_sysman_firmware_handle_t *zes_sysman_firmware_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device memory module
+typedef struct _zes_sysman_mem_handle_t *zes_sysman_mem_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman fabric port
+typedef struct _zes_sysman_fabric_port_handle_t *zes_sysman_fabric_port_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device temperature sensor
+typedef struct _zes_sysman_temp_handle_t *zes_sysman_temp_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device power supply
+typedef struct _zes_sysman_psu_handle_t *zes_sysman_psu_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device fan
+typedef struct _zes_sysman_fan_handle_t *zes_sysman_fan_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device LED
+typedef struct _zes_sysman_led_handle_t *zes_sysman_led_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device RAS error set
+typedef struct _zes_sysman_ras_handle_t *zes_sysman_ras_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device diagnostics test suite
+typedef struct _zes_sysman_diag_handle_t *zes_sysman_diag_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle for a Sysman device event
+typedef struct _zes_sysman_event_handle_t *zes_sysman_event_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_sysman_state_t
+typedef struct _zes_sysman_state_t zes_sysman_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_sysman_properties_t
+typedef struct _zes_sysman_properties_t zes_sysman_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_sched_properties_t
+typedef struct _zes_sched_properties_t zes_sched_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_sched_timeout_properties_t
+typedef struct _zes_sched_timeout_properties_t zes_sched_timeout_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_sched_timeslice_properties_t
+typedef struct _zes_sched_timeslice_properties_t zes_sched_timeslice_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_perf_properties_t
+typedef struct _zes_perf_properties_t zes_perf_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_process_state_t
+typedef struct _zes_process_state_t zes_process_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_pci_address_t
+typedef struct _zes_pci_address_t zes_pci_address_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_pci_speed_t
+typedef struct _zes_pci_speed_t zes_pci_speed_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_pci_properties_t
+typedef struct _zes_pci_properties_t zes_pci_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_pci_state_t
+typedef struct _zes_pci_state_t zes_pci_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_pci_bar_properties_t
+typedef struct _zes_pci_bar_properties_t zes_pci_bar_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_pci_stats_t
+typedef struct _zes_pci_stats_t zes_pci_stats_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_properties_t
+typedef struct _zes_power_properties_t zes_power_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_energy_counter_t
+typedef struct _zes_power_energy_counter_t zes_power_energy_counter_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_sustained_limit_t
+typedef struct _zes_power_sustained_limit_t zes_power_sustained_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_burst_limit_t
+typedef struct _zes_power_burst_limit_t zes_power_burst_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_peak_limit_t
+typedef struct _zes_power_peak_limit_t zes_power_peak_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_energy_threshold_t
+typedef struct _zes_energy_threshold_t zes_energy_threshold_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_freq_properties_t
+typedef struct _zes_freq_properties_t zes_freq_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_freq_range_t
+typedef struct _zes_freq_range_t zes_freq_range_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_freq_state_t
+typedef struct _zes_freq_state_t zes_freq_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_freq_throttle_time_t
+typedef struct _zes_freq_throttle_time_t zes_freq_throttle_time_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_oc_capabilities_t
+typedef struct _zes_oc_capabilities_t zes_oc_capabilities_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_oc_config_t
+typedef struct _zes_oc_config_t zes_oc_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_engine_properties_t
+typedef struct _zes_engine_properties_t zes_engine_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_engine_stats_t
+typedef struct _zes_engine_stats_t zes_engine_stats_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_standby_properties_t
+typedef struct _zes_standby_properties_t zes_standby_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_firmware_properties_t
+typedef struct _zes_firmware_properties_t zes_firmware_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_mem_properties_t
+typedef struct _zes_mem_properties_t zes_mem_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_mem_state_t
+typedef struct _zes_mem_state_t zes_mem_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_mem_bandwidth_t
+typedef struct _zes_mem_bandwidth_t zes_mem_bandwidth_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fabric_port_id_t
+typedef struct _zes_fabric_port_id_t zes_fabric_port_id_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fabric_port_speed_t
+typedef struct _zes_fabric_port_speed_t zes_fabric_port_speed_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fabric_port_properties_t
+typedef struct _zes_fabric_port_properties_t zes_fabric_port_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fabric_link_type_t
+typedef struct _zes_fabric_link_type_t zes_fabric_link_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fabric_port_config_t
+typedef struct _zes_fabric_port_config_t zes_fabric_port_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fabric_port_state_t
+typedef struct _zes_fabric_port_state_t zes_fabric_port_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fabric_port_throughput_t
+typedef struct _zes_fabric_port_throughput_t zes_fabric_port_throughput_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_temp_properties_t
+typedef struct _zes_temp_properties_t zes_temp_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_temp_threshold_t
+typedef struct _zes_temp_threshold_t zes_temp_threshold_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_temp_config_t
+typedef struct _zes_temp_config_t zes_temp_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_psu_properties_t
+typedef struct _zes_psu_properties_t zes_psu_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_psu_state_t
+typedef struct _zes_psu_state_t zes_psu_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fan_temp_speed_t
+typedef struct _zes_fan_temp_speed_t zes_fan_temp_speed_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fan_properties_t
+typedef struct _zes_fan_properties_t zes_fan_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_fan_config_t
+typedef struct _zes_fan_config_t zes_fan_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_led_properties_t
+typedef struct _zes_led_properties_t zes_led_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_led_state_t
+typedef struct _zes_led_state_t zes_led_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_ras_properties_t
+typedef struct _zes_ras_properties_t zes_ras_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_ras_details_t
+typedef struct _zes_ras_details_t zes_ras_details_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_ras_config_t
+typedef struct _zes_ras_config_t zes_ras_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_event_config_t
+typedef struct _zes_event_config_t zes_event_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_diag_test_t
+typedef struct _zes_diag_test_t zes_diag_test_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_diag_properties_t
+typedef struct _zes_diag_properties_t zes_diag_properties_t;
+
+
+#pragma endregion
+#pragma region device
+#pragma endregion
+#pragma region sysman
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of Sysman
 typedef enum _zes_sysman_version_t
@@ -3728,8 +4027,10 @@ zesSysmanDiagnosticsRunTests(
     zes_diag_result_t* pResult                      ///< [in,out] The result of the diagnostics
     );
 
+#pragma endregion
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif
 
-#endif // _ZES_SYSMAN_H
+#endif // _ZES_API_H

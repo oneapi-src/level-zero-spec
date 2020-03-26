@@ -98,7 +98,7 @@ def main():
             tags['$'+key] = configParser.get(section,key)
 
         ymlpath = os.path.join("./", section)
-        incpath = os.path.join("../include/", section)
+        incpath = os.path.join("../include/")
         rstpath = os.path.join(docpath, "source", section)
 
         if args[section] and util.exists(ymlpath):
