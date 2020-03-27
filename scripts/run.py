@@ -144,7 +144,7 @@ def main():
 
     # generate documentation
     if args['html']:
-        generate_docs.generate_html(docpath, args['ver'])
+        generate_docs.generate_html(docpath, configParser.sections(), args['ver'])
 
     if args['pdf']:
         generate_docs.generate_pdf(docpath)

@@ -139,7 +139,7 @@ def generate_ref(dstpath, ref):
 Entry-point:
     generate HTML files using reStructuredText (rst) and Doxygen template
 """
-def generate_html(dstpath, ver):
+def generate_html(dstpath, sections, ver):
     htmlpath = os.path.join(dstpath, "html")
     latexpath = os.path.join(dstpath, "latex")
     xmlpath = os.path.join(dstpath, "xml")
@@ -155,7 +155,9 @@ def generate_html(dstpath, ver):
         loc += util.makoWrite(
             "./templates/%s.mako" % fn,
             os.path.join(sourcepath, fn),
-            ver=float(ver))
+            ver=float(ver),
+            sourcepath=sourcepath,
+            sections=sections)
 
     # Doxygen generates XML files needed by sphinx breathe plugin for API documentation.
     print("Generating doxygen...")

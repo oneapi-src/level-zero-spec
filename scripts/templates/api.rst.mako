@@ -1,8 +1,18 @@
+<%
+import os
+
+apidocs = []
+for section in sections:
+    apidocs.append(section + "/api.rst")
+%>
 ===================
  API Documentation
 ===================
 
 .. toctree::
 
-   core/api.rst
-   tools/api.rst
+%for apidoc in apidocs:
+%if os.path.exists(os.path.join(sourcepath, apidoc)):
+    ${apidoc}
+%endif
+%endfor
