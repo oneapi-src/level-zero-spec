@@ -2304,7 +2304,8 @@ typedef struct _ze_event_desc_t
 /// @details
 ///     - Multiple events cannot be created using the same location within the
 ///       same pool.
-///     - The application may call this function from simultaneous threads.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same event pool handle.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
