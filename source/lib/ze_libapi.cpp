@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file ze_libapi.cpp
+ * @version v0.91-271
  *
  * @brief C++ static library for ze
  *

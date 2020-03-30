@@ -9,8 +9,9 @@ import util
 import parse_specs
 import generate_code
 import generate_docs
-import os
+import os, sys
 import time
+import subprocess
 
 """
     helper for adding mutually-exclusive boolean arguments "--name" and "--!name"
@@ -22,7 +23,7 @@ def add_argument(parser, name, help, default=False):
     parser.set_defaults(**{name:default})
 
 """
-    
+    helper for cleaning previously generated files
 """
 def clean():
     util.removeFile(util.jsonRead("generated.json"))
@@ -32,7 +33,7 @@ def clean():
     util.makePath("../build")
 
 """
-    
+    help for updating spec documentation
 """
 def update_spec(target):
     inc = "%s/source/elements/l0/include" % target
@@ -44,11 +45,30 @@ def update_spec(target):
 
 
 """
-    command lines for running cmake windows build
+    helper for running cmake windows build
 """
 def build():
     os.system('cmake -B ../build/ -S .. -G "Visual Studio 15 2017 Win64"')
     os.system('cmake --build ../build --clean-first')
+
+"""
+    helper for getting revision number from git repository
+    revision is number of commits since tag 'v0'
+"""
+def revision():
+    result = subprocess.run(['git', 'describe', '--dirty'], cwd=os.path.dirname(os.path.abspath(__file__)), stdout=subprocess.PIPE)
+    if result.returncode:
+        print('ERROR: Could not get revision number from git', file=sys.stderr)
+        return 0
+
+    str = result.stdout.decode().strip()
+    revision = int(str.split('-')[1])
+
+    # Bump revision number if any local files are dirty.  
+    # Keeps the revision the same after doing a commit (assuming all dirty files are committed)
+    if 'dirty' in str:
+        revision += 1
+    return revision
 
 
 """
@@ -77,6 +97,7 @@ def main():
     parser.add_argument("--update_spec", type=str, help="root of integrated spec directory to update")
     parser.add_argument("--ver", type=str, default="0.91", required=False, help="specification version to generate.")
     args = vars(parser.parse_args())
+    args['rev'] = revision()
 
     start = time.time()
 
@@ -112,25 +133,25 @@ def main():
                     util.jsonWrite(os.path.join(ymlpath, "specs.json"), specs[0])
                     util.jsonWrite(os.path.join(ymlpath, "meta.json"), specs[1])
 
-                generate_code.generate_api(incpath, namespace, tags, specs[0], specs[1])
+                generate_code.generate_api(incpath, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
 
                 if args['lib']:
-                    generate_code.generate_lib(srcpath, section, namespace, tags, specs[0], specs[1])
+                    generate_code.generate_lib(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
 
                 if args['loader']:
-                    generate_code.generate_loader(srcpath, section, namespace, tags, specs[0], specs[1])
+                    generate_code.generate_loader(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
 
                 if args['layers']:
-                    generate_code.generate_layers(srcpath, section, namespace, tags, specs[0], specs[1])
+                    generate_code.generate_layers(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
 
                 if args['drivers']:
-                    generate_code.generate_drivers(srcpath, section, namespace, tags, specs[0], specs[1])
+                    generate_code.generate_drivers(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
 
                 if args['wrapper']:
-                    generate_code.generate_wrapper(srcpath, section, namespace, tags, specs[0], specs[1])
+                    generate_code.generate_wrapper(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
 
             if args['rst']:
-                generate_docs.generate_rst(ymlpath, rstpath, tags, args['ver'], specs[1], specs[0])
+                generate_docs.generate_rst(ymlpath, rstpath, tags, args['ver'], args['rev'], specs[1], specs[0])
 
     if args['debug']:
         util.makoFileListWrite("generated.json")
@@ -144,7 +165,7 @@ def main():
 
     # generate documentation
     if args['html']:
-        generate_docs.generate_html(docpath, configParser.sections(), args['ver'])
+        generate_docs.generate_html(docpath, configParser.sections(), args['ver'], args['rev'])
 
     if args['pdf']:
         generate_docs.generate_pdf(docpath)

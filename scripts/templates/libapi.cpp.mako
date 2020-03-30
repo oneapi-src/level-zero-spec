@@ -22,6 +22,7 @@ def define_dbg(obj, tags):
  * SPDX-License-Identifier: MIT
  *
  * @file ${name}.cpp
+ * @version v${ver}-${rev}
  *
  * @brief C++ static library for ${n}
  *

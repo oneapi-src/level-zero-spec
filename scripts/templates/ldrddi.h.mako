@@ -14,6 +14,7 @@ from templates import helper as th
  * SPDX-License-Identifier: MIT
  *
  * @file ${name}.h
+ * @version v${ver}-${rev}
  *
  */
 #pragma once

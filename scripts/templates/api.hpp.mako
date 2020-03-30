@@ -30,6 +30,7 @@ def declare_dbg(obj, tags):
  * SPDX-License-Identifier: MIT
  *
  * @file ${n}_api.hpp
+ * @version v${ver}-${rev}
  *
  */
 #ifndef _${N}_API_HPP

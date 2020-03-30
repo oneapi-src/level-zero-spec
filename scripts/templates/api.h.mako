@@ -13,6 +13,7 @@ from templates import helper as th
  * SPDX-License-Identifier: MIT
  *
  * @file ${n}_api.h
+ * @version v${ver}-${rev}
  *
  */
 #ifndef _${N}_API_H

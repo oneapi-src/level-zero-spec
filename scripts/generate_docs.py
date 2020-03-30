@@ -99,7 +99,7 @@ def _validate_rst(fpath, meta):
 Entry-point:
     generate restructuredtext documents from templates
 """
-def generate_rst(srcpath, dstpath, tags, ver, meta, specs):
+def generate_rst(srcpath, dstpath, tags, ver, rev, meta, specs):
     loc = 0
     util.makePath(dstpath)
     util.removeFiles(dstpath, "*.rst")
@@ -139,7 +139,7 @@ def generate_ref(dstpath, ref):
 Entry-point:
     generate HTML files using reStructuredText (rst) and Doxygen template
 """
-def generate_html(dstpath, sections, ver):
+def generate_html(dstpath, sections, ver, rev):
     htmlpath = os.path.join(dstpath, "html")
     latexpath = os.path.join(dstpath, "latex")
     xmlpath = os.path.join(dstpath, "xml")

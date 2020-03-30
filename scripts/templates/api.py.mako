@@ -13,6 +13,7 @@ from templates import helper as th
  SPDX-License-Identifier: MIT
 
  @file ${n}.py
+ @version v${ver}-${rev}
 
  """
 import platform
