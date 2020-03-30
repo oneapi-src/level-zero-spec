@@ -267,14 +267,7 @@ Applications should not rely on experimental APIs in production.
 
 An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED_FEATURE for any experimental API not supported by that driver.
 
-Driver Architecture
-===================
-
-The following section provides high-level driver architecture.
-
-.. image:: ../images/intro_driver.png
-
-Library
+Import Library
 -------
 
 A static import library shall be provided to allow applications
@@ -284,111 +277,6 @@ driver interfaces.
 ## --validate=off
 C/C++ applications may include "${x}_api.h" and link with "${x}_api.lib".
 ## --validate=on
-
-Loader
-------
-
-The loader initiates the loading of the driver(s) and layer(s). The
-loader exports all API functions to the static library via per-process
-API function pointer table(s). Each driver and layer must below the
-loader will also export its API/DDI functions via per-process function
-pointer table(s). The export function and table definitions are defined
-## --validate=off
-in "${x}_ddi.h".
-## --validate=on
-
-The loader is dynamically linked with the application using the
-## --validate=off
-"${x}_loader.dll" (windows) or "${x}_loader.so" (linux). The loader is
-## --validate=on
-vendor agnostic, but must be aware of the names of vendor-specific
-device driver names. (Note: these are currently hard-coded but a
-registration method will be adopted when multiple vendors are
-supported.)
-
-The loader dynamically loads each vendor's device driver(s) present in
-the system and queries each per-process function pointer table(s). If
-only one device driver needs to be loaded, then the loader layer may be
-entirely bypassed.
-
-The following diagram illustrates the expected loading sequence:
-
-.. image:: ../images/intro_loader.png
-
-Thus, the loader's internal function pointer table entries may point to:
-
-+ validation layer intercepts (if enabled),
-+ instrumentation layer intercepts (if enabled),
-+ device driver exports, + or any combination of the above
-
-Device Drivers
---------------
-
-The device driver(s) contain the device-specific implementations of the APIs.
-
-## --validate=off
-The device driver(s) are dynamically linked using a *${x}_vendor_type.dll*
-(windows) / *${x}_vendor_type.so* (linux); where *vendor* and *type* are
-names chosen by the device vendor. For example, Intel GPUs use the name:
-"${x}_intc_gpu".
-## --validate=on
-
-Validation Layer
-----------------
-
-The validation layer provides an optional capability for application
-developers to enable additional API validation while maintaining minimal
-driver implementation overhead.
-
-- works independent of driver implementation
-- works for production / release drivers
-- works independent of vendor or device type
-- checks for common application errors, such as parameter validation
-- provides common application debug tracking, such as object and memory lifetime
-
-The validation layer must be enabled via an environment variable. Each
-capability is enabled by additional environment variables.
-
-The validation layer supports the following capabilities:
-
-- Parameter Validation
-
-    + checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
-
-- Handle Lifetime
-
-    + tracks handle allocations, destruction and usage for leaks and invalid usage (e.g., destruction while still in-use by device)
-
-- Memory Tracker
-
-    + tracks memory allocations and free for leaks and invalid usage (e.g., non-visible to device)
-
-- Threading Validation
-
-    + checks multi-threading usage (e.g., functions are not called from simultaneous threads using the same handle)
-
-Instrumentation Layer
----------------------
-
-The instrumentation layer provides an optional capability for
-application developers to enable additional profiling API while
-maintaining minimal driver implementation overhead.
-
-- works independent of driver implementation
-- works for production / release drivers
-- implements Tools_ APIs
-
-The instrumentation layer must be enabled via an environment variable. Each capability is enabled by additional environment variables.
-
-The instrumentation layer supports the following capabilities:
-
-- **API Tracing**
-
-    + Enables API tracing and profiling APIs; more details in Tools programming guide
-
-- **Program Instrumentation**
-
-    + Enables instrumentation of programs for profiling; more details in Tools programming guide
 
 Environment Variables
 ---------------------
@@ -404,25 +292,7 @@ driver behavior.
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                  |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Validation      | ${X}_ENABLE_VALIDATION_LAYER          | {**0**, 1} | Enables validation layer for debugging                                            |
-|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PARAMETER_VALIDATION      | {**0**, 1} | Enables the validation level for parameters                                       |
-|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_HANDLE_LIFETIME           | {**0**, 1} | Enables the validation level for tracking handle lifetime                         |
-|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_MEMORY_TRACKER            | {**0**, 1} | Enables the validation level for tracking memory lifetime                         |
-|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_THREADING_VALIDATION      | {**0**, 1} | Enables the validation level for multithreading usage                             |
-+-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Instrumentation | ${X}_ENABLE_INSTRUMENTATION_LAYER     | {**0**, 1} | Enables validation layer for debugging                                            |
-|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_API_TRACING               | {**0**, 1} | Enables the instrumentation for API tracing                                       |
-|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_METRICS                   | {**0**, 1} | Enables the instrumentation for device metrics                                    |
-|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PROGRAM_INSTRUMENTATION   | {**0**, 1} | Enables the instrumentation for program instrumentation                           |
-|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PROGRAM_DEBUGGING         | {**0**, 1} | Enables the instrumentation for program debugging                                 |
+| Sysman          | ${X]_ENABLE_SYSMAN                    | {**0**, 1} | Enables system management initialization and dependencies                         |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 ## --validate=on
 
@@ -463,10 +333,6 @@ from "Core" into "Tools" APIs. The "Tools" APIs are designed to provided
 low-level access to device capabilities in order to support 3rd-party
 tools, but are not intended to replace or directly interface 3rd-party
 tools. The "Tools" APIs are still available for direct application use.
-
-The following diagram illustrates how 3rd-party tools may utilize the instrumentation layer:
-
-.. image:: ../images/intro_tools.png
 
 The "Tools" APIs provide the following capabilities for 3rd-party tools:
 
