@@ -1139,8 +1139,7 @@ typedef ze_result_t (__zecall *zes_pfnRasSetConfig_t)(
 typedef ze_result_t (__zecall *zes_pfnRasGetState_t)(
     zes_ras_handle_t,
     ze_bool_t,
-    uint64_t*,
-    zes_ras_details_t*
+    zes_ras_state_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1653,89 +1653,86 @@ occurred. If software intends to clear errors, it should be the only
 application doing so and it should store the counters in an appropriate
 database for historical analysis.
 
-When calling ::${s}RasGetState(), an optional pointer to a
-structure of type ::${s}_ras_details_t can be supplied. This will give a
-breakdown of the main device components where the errors occurred. The
-categories are defined in the structure ::${s}_ras_details_t. The meaning
-of each category depends on the error type (correctable, uncorrectable).
+::${s}RasGetState() returns a breakdown of errors by category
+in the structure ::${s}_ras_state_t. The table below describes the categories:
 
 ## --validate=off
-+-----------------------+----------------------------------+------------------------------------+
-| Error category        | ::${S}_RAS_ERROR_TYPE_CORRECTABLE | ::${S}_RAS_ERROR_TYPE_UNCORRECTABLE |
-|                       |                                  |                                    |
-+=======================+==================================+====================================+
-| ::${s}_ras_details_t.n | Always zero.                     | Number of device resets that have  |
-| umResets              |                                  | taken place.                       |
-+-----------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_details_t.n | Always zero.                     | Number of hardware                 |
-| umProgrammingErrors   |                                  | exceptions generated               |
-|                       |                                  | by the way workloads               |
-|                       |                                  | have programmed the                |
-|                       |                                  | hardware.                          |
-+-----------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_details_t.n | Always zero.                     | Number of low level                |
-| umDriverErrors        |                                  | driver communication               |
-|                       |                                  | errors have occurred.              |
-+-----------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_details_t.n | Number of errors that            | Number of errors that              |
-| umComputeErrors       | have occurred in the             | have occurred in the               |
-|                       | accelerator hardware             | accelerator hardware               |
-|                       | that were corrected.             | that were not                      |
-|                       |                                  | corrected. These                   |
-|                       |                                  | would have caused the              |
-|                       |                                  | hardware to hang and               |
-|                       |                                  | the driver to reset.               |
-+-----------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_details_t.n | Number of errors                 | Number of errors                   |
-| umNonComputeErrors    | occurring in                     | occurring in the                   |
-|                       | fixed-function                   | fixed-function                     |
-|                       | accelerator hardware             | accelerator hardware               |
-|                       | that were corrected.             | there could not be                 |
-|                       |                                  | corrected. Typically               |
-|                       |                                  | these will result in               |
-|                       |                                  | a PCI bus reset and                |
-|                       |                                  | driver reset.                      |
-+-----------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_details_t.n | Number of ECC                    | Number of ECC                      |
-| umCacheErrors         | correctable errors               | uncorrectable errors               |
-|                       | that have occurred in            | that have occurred in              |
-|                       | the on-chip caches               | the on-chip caches                 |
-|                       | (caches/register                 | (caches/register                   |
-|                       | file/shared local                | file/shared local                  |
-|                       | memory).                         | memory). These would               |
-|                       |                                  | have caused the                    |
-|                       |                                  | hardware to hang and               |
-|                       |                                  | the driver to reset.               |
-+-----------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_details_t.n | Number of times the              | Number of times the                |
-| umMemoryErrors        | device memory has                | device memory has                  |
-|                       | transitioned from a              | transitioned from a                |
-|                       | healthy state to a               | healthy/degraded                   |
-|                       | degraded state.                  | state to a                         |
-|                       | Degraded state occurs            | critical/replace                   |
-|                       | when the number of               | state.                             |
-|                       | correctable errors               |                                    |
-|                       | cross a threshold.               |                                    |
-+-----------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_details_t.n | controllerNumber of              | Number of PCI bus                  |
-| umPciErrors:          | PCI packet replays               | resets.                            |
-|                       | that have occurred.              |                                    |
-+-----------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_details_t.n | Number of times one              | Number of times one                |
-| umFabricErrors        | or more ports have               | or more ports have                 |
-|                       | transitioned from a              | transitioned from a                |
-|                       | green status to a                | green/yellow status                |
-|                       | yellow status. This              | to a red status. This              |
-|                       | indicates that links             | indicates that links               |
-|                       | are experiencing                 | are experiencing                   |
-|                       | quality degradation.             | connectivity                       |
-|                       |                                  | statibility issues.                |
-+-----------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_details_t.n | Number of ECC                    | Number of ECC                      |
-| umDisplayErrors       | correctable errors               | uncorrectable errors               |
-|                       | that have occurred in            | that have occurred in              |
-|                       | the display.                     | the display.                       |
-+-----------------------+----------------------------------+------------------------------------+
++------------------------------------------+----------------------------------+------------------------------------+
+| Error category                           | ::${S}_RAS_ERROR_TYPE_CORRECTABLE | ::${S}_RAS_ERROR_TYPE_UNCORRECTABLE |
+|                                          |                                  |                                    |
++==========================================+==================================+====================================+
+| ::${s}_ras_state_t.numResets              | Always zero.                     | Number of device resets that have  |
+|                                          |                                  | taken place.                       |
++------------------------------------------+----------------------------------+------------------------------------+
+| ::${s}_ras_state_t.numProgrammingErrors   | Always zero.                     | Number of hardware                 |
+|                                          |                                  | exceptions generated               |
+|                                          |                                  | by the way workloads               |
+|                                          |                                  | have programmed the                |
+|                                          |                                  | hardware.                          |
++------------------------------------------+----------------------------------+------------------------------------+
+| ::${s}_ras_state_t.numDriverErrors        | Always zero.                     | Number of low level                |
+|                                          |                                  | driver communication               |
+|                                          |                                  | errors have occurred.              |
++------------------------------------------+----------------------------------+------------------------------------+
+| ::${s}_ras_state_t.numComputeErrors       | Number of errors that            | Number of errors that              |
+|                                          | have occurred in the             | have occurred in the               |
+|                                          | accelerator hardware             | accelerator hardware               |
+|                                          | that were corrected.             | that were not                      |
+|                                          |                                  | corrected. These                   |
+|                                          |                                  | would have caused the              |
+|                                          |                                  | hardware to hang and               |
+|                                          |                                  | the driver to reset.               |
++------------------------------------------+----------------------------------+------------------------------------+
+| ::${s}_ras_state_t.numNonComputeErrors    | Number of errors                 | Number of errors                   |
+|                                          | occurring in                     | occurring in the                   |
+|                                          | fixed-function                   | fixed-function                     |
+|                                          | accelerator hardware             | accelerator hardware               |
+|                                          | that were corrected.             | there could not be                 |
+|                                          |                                  | corrected. Typically               |
+|                                          |                                  | these will result in               |
+|                                          |                                  | a PCI bus reset and                |
+|                                          |                                  | driver reset.                      |
++------------------------------------------+----------------------------------+------------------------------------+
+| ::${s}_ras_state_t.numCacheErrors         | Number of ECC                    | Number of ECC                      |
+|                                          | correctable errors               | uncorrectable errors               |
+|                                          | that have occurred in            | that have occurred in              |
+|                                          | the on-chip caches               | the on-chip caches                 |
+|                                          | (caches/register                 | (caches/register                   |
+|                                          | file/shared local                | file/shared local                  |
+|                                          | memory).                         | memory). These would               |
+|                                          |                                  | have caused the                    |
+|                                          |                                  | hardware to hang and               |
+|                                          |                                  | the driver to reset.               |
++------------------------------------------+----------------------------------+------------------------------------+
+| ::${s}_ras_state_t.numMemoryErrors        | Number of times the              | Number of times the                |
+|                                          | device memory has                | device memory has                  |
+|                                          | transitioned from a              | transitioned from a                |
+|                                          | healthy state to a               | healthy/degraded                   |
+|                                          | degraded state.                  | state to a                         |
+|                                          | Degraded state occurs            | critical/replace                   |
+|                                          | when the number of               | state.                             |
+|                                          | correctable errors               |                                    |
+|                                          | cross a threshold.               |                                    |
++------------------------------------------+----------------------------------+------------------------------------+
+| ::${s}_ras_state_t.numPciErrors           | controllerNumber of              | Number of PCI bus                  |
+|                                          | PCI packet replays               | resets.                            |
+|                                          | that have occurred.              |                                    |
++------------------------------------------+----------------------------------+------------------------------------+
+| ::${s}_ras_state_t.numFabricErrors        | Number of times one              | Number of times one                |
+|                                          | or more ports have               | or more ports have                 |
+|                                          | transitioned from a              | transitioned from a                |
+|                                          | green status to a                | green/yellow status                |
+|                                          | yellow status. This              | to a red status. This              |
+|                                          | indicates that links             | indicates that links               |
+|                                          | are experiencing                 | are experiencing                   |
+|                                          | quality degradation.             | connectivity                       |
+|                                          |                                  | statibility issues.                |
++------------------------------------------+----------------------------------+------------------------------------+
+| ::${s}_ras_state_t.numDisplayErrors       | Number of ECC                    | Number of ECC                      |
+|                                          | correctable errors               | uncorrectable errors               |
+|                                          | that have occurred in            | that have occurred in              |
+|                                          | the display.                     | the display.                       |
++------------------------------------------+----------------------------------+------------------------------------+
 ## --validate=on
 
 Each RAS error type can trigger events when the error counters exceed
@@ -1813,26 +1810,25 @@ current state of RAS errors:
                        output("    RAS supported: %s", props.supported ? "yes" : "no")
                        output("    RAS enabled: %s", props.enabled ? "yes" : "no")
                        if (props.supported and props.enabled)
-                           uint64_t newErrors
-                           ${s}_ras_details_t errorDetails
-                           if (${s}RasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                           ${s}_ras_state_t errorDetails
+                           if (${s}RasGetState(phRasErrorSets[rasIndex], 1, &errorDetails)
                                == ${X}_RESULT_SUCCESS)
-                                   output("    Number new errors: %llu\n", (long long unsigned int)newErrors)
-                                   if (newErrors)
-                                       call_function OutputRasDetails(&errorDetails)
+                                    uint64_t numErrors = 0
+                                    for (int i = 0; i < ZES_RAS_ERROR_CAT_MAX; i++)
+                                        numErrors += errorDetails.category[i];
+                                    output("    Number new errors: %llu\n", (long long unsigned int)numErrors);
+                                    if (numErrors)
+                                        call_function OutputRasDetails(&errorDetails)
        free_memory(...)
 
-   function OutputRasDetails(${s}_ras_details_t* pDetails)
-       output("        Number new resets:                %llu", pDetails->numResets)
-       output("        Number new programming errors:    %llu", pDetails->numProgrammingErrors)
-       output("        Number new driver errors:         %llu", pDetails->numDriverErrors)
-       output("        Number new compute errors:        %llu", pDetails->numComputeErrors)
-       output("        Number new non-compute errors:    %llu", pDetails->numNonComputeErrors)
-       output("        Number new cache errors:          %llu", pDetails->numCacheErrors)
-       output("        Number new memory errors:         %llu", pDetails->numMemoryErrors)
-       output("        Number new PCI errors:            %llu", pDetails->numPciErrors)
-       output("        Number new fabric errors:         %llu", pDetails->numFabricErrors)
-       output("        Number new display errors:        %llu", pDetails->numDisplayErrors)
+   function OutputRasDetails(${s}_ras_state_t* pDetails)
+       output("        Number new resets:                %llu", pDetails->category[ZES_RAS_ERROR_CAT_RESET])
+       output("        Number new programming errors:    %llu", pDetails->category[ZES_RAS_ERROR_CAT_PROGRAMMING_ERRORS])
+       output("        Number new driver errors:         %llu", pDetails->category[ZES_RAS_ERROR_CAT_DRIVER_ERRORS])
+       output("        Number new compute errors:        %llu", pDetails->category[ZES_RAS_ERROR_CAT_COMPUTE_ERRORS])
+       output("        Number new non-compute errors:    %llu", pDetails->category[ZES_RAS_ERROR_CAT_NON_COMPUTE_ERRORS])
+       output("        Number new cache errors:          %llu", pDetails->category[ZES_RAS_ERROR_CAT_CACHE_ERRORS])
+       output("        Number new display errors:        %llu", pDetails->category[ZES_RAS_ERROR_CAT_DISPLAY_ERRORS])
 
 .. _Diagnostics:
 

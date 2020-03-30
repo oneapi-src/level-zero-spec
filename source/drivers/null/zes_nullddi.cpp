@@ -2047,8 +2047,7 @@ namespace driver
     zesRasGetState(
         zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
         ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
-        uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
-        zes_ras_details_t* pDetails                     ///< [in,out][optional] Breakdown of where errors have occurred
+        zes_ras_state_t* pState                         ///< [in,out] Breakdown of where errors have occurred
         )
     {
         ze_result_t result = ZE_RESULT_SUCCESS;
@@ -2057,7 +2056,7 @@ namespace driver
         auto pfnGetState = context.zesDdiTable.Ras.pfnGetState;
         if( nullptr != pfnGetState )
         {
-            result = pfnGetState( hRas, clear, pTotalErrors, pDetails );
+            result = pfnGetState( hRas, clear, pState );
         }
         else
         {
