@@ -1,0 +1,197 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Firmware management"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fan resource speed mode"
+class: $sFan
+name: $s_fan_speed_mode_t
+etors:
+    - name: $S_FAN_SPEED_MODE_DEFAULT
+      value: "0"
+      desc: "The fan speed is operating using the hardware default settings"
+    - name: $S_FAN_SPEED_MODE_FIXED
+      desc: "The fan speed is currently set to a fixed value"
+    - name: $S_FAN_SPEED_MODE_TABLE
+      desc: "The fan speed is currently controlled dynamically by hardware based on a temp/speed table"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fan speed units"
+class: $sFan
+name: $s_fan_speed_units_t
+etors:
+    - name: $S_FAN_SPEED_UNITS_RPM
+      value: "0"
+      desc: "The fan speed is in units of revolutions per minute (rpm)"
+    - name: $S_FAN_SPEED_UNITS_PERCENT
+      desc: "The fan speed is a percentage of the maximum speed of the fan"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fan temperature/speed pair"
+class: $sFan
+name: $s_fan_temp_speed_t
+members:
+    - type: uint32_t
+      name: "temperature"
+      desc: "[in,out] Temperature in degrees Celsius."
+    - type: uint32_t
+      name: "speed"
+      desc: "[in,out] The speed of the fan"
+    - type: $s_fan_speed_units_t
+      name: "units"
+      desc: "[in,out] The units of the member speed"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum number of fan temperature/speed pairs in the fan speed table."
+name: $S_FAN_TEMP_SPEED_PAIR_COUNT
+value: "32"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fan properties"
+class: $sFan
+name: $s_fan_properties_t
+members:
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can control the fan speed assuming the user has permissions"
+    - type: uint32_t
+      name: "maxSpeed"
+      desc: "[out] The maximum RPM of the fan"
+    - type: uint32_t
+      name: "maxPoints"
+      desc: "[out] The maximum number of points in the fan temp/speed table"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fan configuration"
+class: $sFan
+name: $s_fan_config_t
+members:
+    - type: $s_fan_speed_mode_t
+      name: "mode"
+      desc: "[in,out] The fan speed mode (fixed, temp-speed table)"
+    - type: uint32_t
+      name: "speed"
+      desc: "[in,out] The fixed fan speed setting"
+    - type: $s_fan_speed_units_t
+      name: "speedUnits"
+      desc: "[in,out] The units of the fixed fan speed setting"
+    - type: uint32_t
+      name: "numPoints"
+      desc: "[in,out] The number of valid points in the fan speed table"
+    - type: $s_fan_temp_speed_t
+      name: "table[$S_FAN_TEMP_SPEED_PAIR_COUNT]"
+      desc: "[in,out] Array of temperature/fan speed pairs"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of fans"
+class: $sDevice
+name: EnumFans
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$s_fan_handle_t*"
+      name: phFan
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get fan properties"
+class: $sFan
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fan_handle_t
+      name: hFan
+      desc: "[in] Handle for the component."
+    - type: $s_fan_properties_t*
+      name: pProperties
+      desc: "[in,out] Will contain the properties of the fan."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current fan configuration"
+class: $sFan
+name: GetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fan_handle_t
+      name: hFan
+      desc: "[in] Handle for the component."
+    - type: $s_fan_config_t*
+      name: pConfig
+      desc: "[in,out] Will contain the current configuration of the fan."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set fan configuration"
+class: $sFan
+name: SetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fan_handle_t
+      name: hFan
+      desc: "[in] Handle for the component."
+    - type: const $s_fan_config_t*
+      name: pConfig
+      desc: "[in] New fan configuration."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current state of a fan - current mode and speed"
+class: $sFan
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fan_handle_t
+      name: hFan
+      desc: "[in] Handle for the component."
+    - type: $s_fan_speed_units_t
+      name: units
+      desc: "[in] The units in which the fan speed should be returned."
+    - type: uint32_t*
+      name: pSpeed
+      desc: "[in,out] Will contain the current speed of the fan in the units requested."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device fan"
+name: $sFan
+owner: $sDevice
+members:
+    - type: $s_fan_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

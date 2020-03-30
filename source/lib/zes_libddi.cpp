@@ -18,121 +18,121 @@ namespace ze_lib
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Sysman );
+            auto getTable = reinterpret_cast<zes_pfnGetDeviceProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetDeviceProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Device );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanSchedulerProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanSchedulerProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanScheduler );
+            auto getTable = reinterpret_cast<zes_pfnGetSchedulerProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetSchedulerProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Scheduler );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanPerformanceFactorProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanPerformanceFactorProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanPerformanceFactor );
+            auto getTable = reinterpret_cast<zes_pfnGetPerformanceFactorProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetPerformanceFactorProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.PerformanceFactor );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanPowerProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanPowerProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanPower );
+            auto getTable = reinterpret_cast<zes_pfnGetPowerProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetPowerProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Power );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanFrequencyProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanFrequencyProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanFrequency );
+            auto getTable = reinterpret_cast<zes_pfnGetFrequencyProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetFrequencyProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Frequency );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanEngineProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanEngineProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanEngine );
+            auto getTable = reinterpret_cast<zes_pfnGetEngineProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetEngineProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Engine );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanStandbyProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanStandbyProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanStandby );
+            auto getTable = reinterpret_cast<zes_pfnGetStandbyProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetStandbyProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Standby );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanFirmwareProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanFirmwareProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanFirmware );
+            auto getTable = reinterpret_cast<zes_pfnGetFirmwareProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetFirmwareProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Firmware );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanMemoryProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanMemoryProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanMemory );
+            auto getTable = reinterpret_cast<zes_pfnGetMemoryProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetMemoryProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Memory );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanFabricPortProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanFabricPortProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanFabricPort );
+            auto getTable = reinterpret_cast<zes_pfnGetFabricPortProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetFabricPortProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.FabricPort );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanTemperatureProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanTemperatureProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanTemperature );
+            auto getTable = reinterpret_cast<zes_pfnGetTemperatureProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetTemperatureProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Temperature );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanPsuProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanPsuProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanPsu );
+            auto getTable = reinterpret_cast<zes_pfnGetPsuProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetPsuProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Psu );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanFanProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanFanProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanFan );
+            auto getTable = reinterpret_cast<zes_pfnGetFanProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetFanProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Fan );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanLedProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanLedProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanLed );
+            auto getTable = reinterpret_cast<zes_pfnGetLedProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetLedProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Led );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanRasProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanRasProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanRas );
+            auto getTable = reinterpret_cast<zes_pfnGetRasProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetRasProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Ras );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanDiagnosticsProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanDiagnosticsProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanDiagnostics );
+            auto getTable = reinterpret_cast<zes_pfnGetDiagnosticsProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetDiagnosticsProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Diagnostics );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<zes_pfnGetSysmanEventProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "zesGetSysmanEventProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.SysmanEvent );
+            auto getTable = reinterpret_cast<zes_pfnGetEventProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "zesGetEventProcAddrTable") );
+            result = getTable( ZE_API_VERSION_0_91, &zesDdiTable.Event );
         }
 
         return result;

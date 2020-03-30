@@ -1,0 +1,178 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Firmware management"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Diagnostic test suite type"
+class: $sDiagnostics
+name: $s_diag_type_t
+etors:
+    - name: $S_DIAG_TYPE_SCAN
+      value: "0"
+      desc: "Run SCAN diagnostics"
+    - name: $S_DIAG_TYPE_ARRAY
+      desc: "Run Array diagnostics"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Diagnostic results"
+class: $sDiagnostics
+name: $s_diag_result_t
+etors:
+    - name: $S_DIAG_RESULT_NO_ERRORS
+      value: "0"
+      desc: "Diagnostic completed without finding errors to repair"
+    - name: $S_DIAG_RESULT_ABORT
+      desc: "Diagnostic had problems running tests"
+    - name: $S_DIAG_RESULT_FAIL_CANT_REPAIR
+      desc: "Diagnostic had problems setting up repairs"
+    - name: $S_DIAG_RESULT_REBOOT_FOR_REPAIR
+      desc: "Diagnostics found errors, setup for repair and reboot is required to complete the process"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Diagnostic test index to use for the very first test."
+name: $S_DIAG_FIRST_TEST_INDEX
+value: "0x0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Diagnostic test index to use for the very last test."
+name: $S_DIAG_LAST_TEST_INDEX
+value: "0xFFFFFFFF"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Diagnostic test"
+class: $sDiagnostics
+name: $s_diag_test_t
+members:
+    - type: uint32_t
+      name: "index"
+      desc: "[out] Index of the test"
+    - type: char
+      name: "name[$S_STRING_PROPERTY_SIZE]"
+      desc: "[out] Name of the test"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Diagnostics test suite properties"
+class: $sDiagnostics
+name: $s_diag_properties_t
+members:
+    - type: $s_diag_type_t
+      name: "type"
+      desc: "[out] The type of diagnostics test suite"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: char
+      name: "name[$S_STRING_PROPERTY_SIZE]"
+      desc: "[out] Name of the diagnostics test suite"
+    - type: $x_bool_t
+      name: "haveTests"
+      desc: "[out] Indicates if this test suite has individual tests which can be run separately (use the function $sDiagnosticsGetTests() to get the list of these tests)"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of diagnostics test suites"
+class: $sDevice
+name: EnumDiagnosticTestSuites
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$s_diag_handle_t*"
+      name: phDiagnostics
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get properties of a diagnostics test suite"
+class: $sDiagnostics
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_diag_handle_t
+      name: hDiagnostics
+      desc: "[in] Handle for the component."
+    - type: $s_diag_properties_t*
+      name: pProperties
+      desc: "[in,out] Structure describing the properties of a diagnostics test suite"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get individual tests that can be run separately. Not all test suites permit running individual tests - check $s_diag_properties_t.haveTests"
+class: $sDiagnostics
+name: GetTests
+details:
+    - "The list of available tests is returned in order of increasing test index $s_diag_test_t.index."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_diag_handle_t
+      name: hDiagnostics
+      desc: "[in] Handle for the component."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of tests.
+            If count is zero, then the driver will update the value with the total number of tests available.
+            If count is non-zero, then driver will only retrieve that number of tests.
+            If count is larger than the number of tests available, then the driver will update the value with the correct number of tests available.
+    - type: "$s_diag_test_t*"
+      name: pTests
+      desc: "[in,out][optional][range(0, *pCount)] Array of tests sorted by increasing value of $s_diag_test_t.index"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Run a diagnostics test suite, either all tests or a subset of tests."
+class: $sDiagnostics
+name: RunTests
+details:
+    - "WARNING: Performancing diagnostics may destroy current device state information. Gracefully close any running workloads before initiating."
+    - "To run all tests in a test suite, set start = $S_DIAG_FIRST_TEST_INDEX and end = $S_DIAG_LAST_TEST_INDEX."
+    - "If the test suite permits running individual tests, $s_diag_properties_t.haveTests will be true. In this case, the function $sDiagnosticsGetTests() can be called to get the list of tests and corresponding indices that can be supplied to the arguments start and end in this function."
+    - "This function will block until the diagnostics have completed."
+params:
+    - type: $s_diag_handle_t
+      name: hDiagnostics
+      desc: "[in] Handle for the component."
+    - type: uint32_t
+      name: start
+      desc: "[in] The index of the first test to run. Set to $S_DIAG_FIRST_TEST_INDEX to start from the beginning."
+    - type: uint32_t
+      name: end
+      desc: "[in] The index of the last test to run. Set to $S_DIAG_LAST_TEST_INDEX to complete all tests after the start test."
+    - type: $s_diag_result_t*
+      name: pResult
+      desc: "[in,out] The result of the diagnostics"
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to perform diagnostics."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device diagnostic test suite"
+name: $sDiagnostics
+owner: $sDevice
+members:
+    - type: $s_diag_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

@@ -1,0 +1,108 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Performance factor"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Static information about a Performance Factor domain"
+class: $sPerformanceFactor
+name: $s_perf_properties_t
+members:
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this Performance Factor affects accelerators located on a sub-device"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: uint64_t
+      name: "engines"
+      desc: "[out] Bitfield of accelerator engines that are affected by this Performance Factor (bitfield of 1<<$s_engine_type_t)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handles to accelerator domains whose performance can be optimized via a Performance Factor"
+class: $sDevice
+name: EnumPerformanceFactorDomains
+details:
+    - "A Performance Factor should be tuned for each workload."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$s_perf_handle_t*"
+      name: phPerf
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get properties about a Performance Factor domain"
+class: $sPerformanceFactor
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_perf_handle_t
+      name: hPerf
+      desc: "[in] Handle for the Performance Factor domain."
+    - type: $s_perf_properties_t*
+      name: pProperties
+      desc: "[in,out] Will contain information about the specified Performance Factor domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current Performance Factor for a given domain"
+class: $sPerformanceFactor
+name: GetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_perf_handle_t
+      name: hPerf
+      desc: "[in] Handle for the Performance Factor domain."
+    - type: double*
+      name: pFactor
+      desc: "[in,out] Will contain the actual Performance Factor being used by the hardware (may not be the same as the requested Performance Factor)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Change the performance factor for a domain"
+class: $sPerformanceFactor
+name: SetConfig
+details:
+    - "The Performance Factor is a number between 0 and 100."
+    - "A Performance Factor is a hint to the hardware. Depending on the hardware, the request may not be granted. Follow up this function with a call to $sPerformanceFactorGetConfig() to determine the actual factor being used by the hardware."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_perf_handle_t
+      name: hPerf
+      desc: "[in] Handle for the Performance Factor domain."
+    - type: double
+      name: factor
+      desc: "[in] The new Performance Factor."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device performance factor"
+name: $sPerformanceFactor
+owner: $sDevice
+members:
+    - type: $s_perf_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

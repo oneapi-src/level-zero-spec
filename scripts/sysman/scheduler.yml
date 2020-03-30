@@ -1,0 +1,276 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Scheduler management"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Scheduler mode"
+class: $sDevice
+name: $s_sched_mode_t
+etors:
+    - name: $S_SCHED_MODE_TIMEOUT
+      value: "0"
+      desc: "Multiple applications or contexts are submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work."
+    - name: $S_SCHED_MODE_TIMESLICE
+      desc: "The scheduler attempts to fairly timeslice hardware execution time between multiple contexts submitting work to the hardware concurrently."
+    - name: $S_SCHED_MODE_EXCLUSIVE
+      desc: "Any application or context can run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
+    - name: $S_SCHED_MODE_COMPUTE_UNIT_DEBUG
+      desc: "Scheduler ensures that submission of workloads to the hardware is optimized for compute unit debugging."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Properties related to scheduler component"
+class: $sScheduler
+name: $s_sched_properties_t
+members:
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Software can change the scheduler component configuration assuming the user has permissions."
+    - type: uint64_t
+      name: "engines"
+      desc: "[out] Bitfield of accelerator engines that are controlled by this scheduler component (bitfield of 1<<$s_engine_type_t)."
+    - type: uint32_t
+      name: "supportedModes"
+      desc: "[out] Bitfield of scheduler modes that can be configured for this scheduler component (bitfield of 1<<$s_sched_mode_t)."
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Disable forward progress guard timeout."
+name: $S_SCHED_WATCHDOG_DISABLE
+value: "(~(0ULL))"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Configuration for timeout scheduler mode ($S_SCHED_MODE_TIMEOUT)"
+class: $sDevice
+name: $s_sched_timeout_properties_t
+members:
+    - type: uint64_t
+      name: "watchdogTimeout"
+      desc: "[in,out] The maximum time in microseconds that the scheduler will wait for a batch of work submitted to a hardware engine to complete or to be preempted so as to run another context. "
+      desc: |
+            [in,out] The maximum time in microseconds that the scheduler will wait for a batch of work submitted to a hardware engine to complete or to be preempted so as to run another context.
+            If this time is exceeded, the hardware engine is reset and the context terminated.
+            If set to $S_SCHED_WATCHDOG_DISABLE, a running workload can run as long as it wants without being terminated, but preemption attempts to run other contexts are permitted but not enforced.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Configuration for timeslice scheduler mode ($S_SCHED_MODE_TIMESLICE)"
+class: $sDevice
+name: $s_sched_timeslice_properties_t
+members:
+    - type: uint64_t
+      name: "interval"
+      desc: "[in,out] The average interval in microseconds that a submission for a context will run on a hardware engine before being preempted out to run a pending submission for another context."
+    - type: uint64_t
+      name: "yieldTimeout"
+      desc: "[in,out] The maximum time in microseconds that the scheduler will wait to preempt a workload running on an engine before deciding to reset the hardware engine and terminating the associated context."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle to a scheduler component"
+class: $sDevice
+name: EnumSchedulers
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$s_sched_handle_t*"
+      name: phScheduler
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get properties related to a scheduler component"
+class: $sScheduler
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_sched_handle_t
+      name: hScheduler
+      desc: "[in] Handle for the component."
+    - type: $s_sched_properties_t*
+      name: pProperties
+      desc: "[in,out] Structure that will contain property data."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current scheduling mode in effect on a scheduler component."
+class: $sScheduler
+name: GetCurrentMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_sched_handle_t
+      name: hScheduler
+      desc: "[in] Sysman handle for the component."
+    - type: $s_sched_mode_t*
+      name: pMode
+      desc: "[in,out] Will contain the current scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "This scheduler component does not support scheduler modes."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get scheduler config for mode $S_SCHED_MODE_TIMEOUT"
+class: $sScheduler
+name: GetTimeoutModeProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_sched_handle_t
+      name: hScheduler
+      desc: "[in] Sysman handle for the component."
+    - type: $x_bool_t
+      name: getDefaults
+      desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
+    - type: $s_sched_timeout_properties_t*
+      name: pConfig
+      desc: "[in,out] Will contain the current parameters for this mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "This scheduler component does not support scheduler modes."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get scheduler config for mode $S_SCHED_MODE_TIMESLICE"
+class: $sScheduler
+name: GetTimesliceModeProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_sched_handle_t
+      name: hScheduler
+      desc: "[in] Sysman handle for the component."
+    - type: $x_bool_t
+      name: getDefaults
+      desc: "[in] If TRUE, the driver will return the system default properties for this mode, otherwise it will return the current properties."
+    - type: $s_sched_timeslice_properties_t*
+      name: pConfig
+      desc: "[in,out] Will contain the current parameters for this mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "This scheduler component does not support scheduler modes."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Change scheduler mode to $S_SCHED_MODE_TIMEOUT or update scheduler mode parameters if already running in this mode."
+class: $sScheduler
+name: SetTimeoutMode
+details:
+    - "This mode is optimized for multiple applications or contexts submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_sched_handle_t
+      name: hScheduler
+      desc: "[in] Sysman handle for the component."
+    - type: $s_sched_timeout_properties_t*
+      name: pProperties
+      desc: "[in] The properties to use when configurating this mode."
+    - type: $x_bool_t*
+      name: pNeedReload
+      desc: "[in,out] Will be set to TRUE if a device driver reload is needed to apply the new scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "This scheduler component does not support scheduler modes."
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make this modification."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Change scheduler mode to $S_SCHED_MODE_TIMESLICE or update scheduler mode parameters if already running in this mode."
+class: $sScheduler
+name: SetTimesliceMode
+details:
+    - "This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_sched_handle_t
+      name: hScheduler
+      desc: "[in] Sysman handle for the component."
+    - type: $s_sched_timeslice_properties_t*
+      name: pProperties
+      desc: "[in] The properties to use when configurating this mode."
+    - type: $x_bool_t*
+      name: pNeedReload
+      desc: "[in,out] Will be set to TRUE if a device driver reload is needed to apply the new scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "This scheduler component does not support scheduler modes."
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make this modification."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Change scheduler mode to $S_SCHED_MODE_EXCLUSIVE"
+class: $sScheduler
+name: SetExclusiveMode
+details:
+    - "This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_sched_handle_t
+      name: hScheduler
+      desc: "[in] Sysman handle for the component."
+    - type: $x_bool_t*
+      name: pNeedReload
+      desc: "[in,out] Will be set to TRUE if a device driver reload is needed to apply the new scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "This scheduler component does not support scheduler modes."
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make this modification."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Change scheduler mode to $S_SCHED_MODE_COMPUTE_UNIT_DEBUG"
+class: $sScheduler
+name: SetComputeUnitDebugMode
+details:
+    - "This mode is optimized for application debug. It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_sched_handle_t
+      name: hScheduler
+      desc: "[in] Sysman handle for the component."
+    - type: $x_bool_t*
+      name: pNeedReload
+      desc: "[in,out] Will be set to TRUE if a device driver reload is needed to apply the new scheduler mode."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "This scheduler component does not support scheduler modes."
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make this modification."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device scheduler queue"
+name: $sScheduler
+owner: $sDevice
+members:
+    - type: $s_sched_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

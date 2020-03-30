@@ -30,96 +30,76 @@ typedef ze_driver_handle_t zes_driver_handle_t;
 typedef ze_device_handle_t zes_device_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for accessing System Resource Management features of a device
-typedef struct _zes_sysman_handle_t *zes_sysman_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device scheduler queue
-typedef struct _zes_sysman_sched_handle_t *zes_sysman_sched_handle_t;
+typedef struct _zes_sched_handle_t *zes_sched_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device performance factors
-typedef struct _zes_sysman_perf_handle_t *zes_sysman_perf_handle_t;
+typedef struct _zes_perf_handle_t *zes_perf_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device power domain
-typedef struct _zes_sysman_pwr_handle_t *zes_sysman_pwr_handle_t;
+typedef struct _zes_pwr_handle_t *zes_pwr_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device frequency domain
-typedef struct _zes_sysman_freq_handle_t *zes_sysman_freq_handle_t;
+typedef struct _zes_freq_handle_t *zes_freq_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device engine group
-typedef struct _zes_sysman_engine_handle_t *zes_sysman_engine_handle_t;
+typedef struct _zes_engine_handle_t *zes_engine_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device standby control
-typedef struct _zes_sysman_standby_handle_t *zes_sysman_standby_handle_t;
+typedef struct _zes_standby_handle_t *zes_standby_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device firmware
-typedef struct _zes_sysman_firmware_handle_t *zes_sysman_firmware_handle_t;
+typedef struct _zes_firmware_handle_t *zes_firmware_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device memory module
-typedef struct _zes_sysman_mem_handle_t *zes_sysman_mem_handle_t;
+typedef struct _zes_mem_handle_t *zes_mem_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman fabric port
-typedef struct _zes_sysman_fabric_port_handle_t *zes_sysman_fabric_port_handle_t;
+typedef struct _zes_fabric_port_handle_t *zes_fabric_port_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device temperature sensor
-typedef struct _zes_sysman_temp_handle_t *zes_sysman_temp_handle_t;
+typedef struct _zes_temp_handle_t *zes_temp_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device power supply
-typedef struct _zes_sysman_psu_handle_t *zes_sysman_psu_handle_t;
+typedef struct _zes_psu_handle_t *zes_psu_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device fan
-typedef struct _zes_sysman_fan_handle_t *zes_sysman_fan_handle_t;
+typedef struct _zes_fan_handle_t *zes_fan_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device LED
-typedef struct _zes_sysman_led_handle_t *zes_sysman_led_handle_t;
+typedef struct _zes_led_handle_t *zes_led_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device RAS error set
-typedef struct _zes_sysman_ras_handle_t *zes_sysman_ras_handle_t;
+typedef struct _zes_ras_handle_t *zes_ras_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device diagnostics test suite
-typedef struct _zes_sysman_diag_handle_t *zes_sysman_diag_handle_t;
+typedef struct _zes_diag_handle_t *zes_diag_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle for a Sysman device event
-typedef struct _zes_sysman_event_handle_t *zes_sysman_event_handle_t;
+typedef struct _zes_event_handle_t *zes_event_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_sysman_state_t
-typedef struct _zes_sysman_state_t zes_sysman_state_t;
+/// @brief Forward-declare zes_device_state_t
+typedef struct _zes_device_state_t zes_device_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_sysman_properties_t
-typedef struct _zes_sysman_properties_t zes_sysman_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_sched_properties_t
-typedef struct _zes_sched_properties_t zes_sched_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_sched_timeout_properties_t
-typedef struct _zes_sched_timeout_properties_t zes_sched_timeout_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_sched_timeslice_properties_t
-typedef struct _zes_sched_timeslice_properties_t zes_sched_timeslice_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_perf_properties_t
-typedef struct _zes_perf_properties_t zes_perf_properties_t;
+/// @brief Forward-declare zes_device_properties_t
+typedef struct _zes_device_properties_t zes_device_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zes_process_state_t
@@ -150,52 +130,12 @@ typedef struct _zes_pci_bar_properties_t zes_pci_bar_properties_t;
 typedef struct _zes_pci_stats_t zes_pci_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_power_properties_t
-typedef struct _zes_power_properties_t zes_power_properties_t;
+/// @brief Forward-declare zes_diag_test_t
+typedef struct _zes_diag_test_t zes_diag_test_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_power_energy_counter_t
-typedef struct _zes_power_energy_counter_t zes_power_energy_counter_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_power_sustained_limit_t
-typedef struct _zes_power_sustained_limit_t zes_power_sustained_limit_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_power_burst_limit_t
-typedef struct _zes_power_burst_limit_t zes_power_burst_limit_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_power_peak_limit_t
-typedef struct _zes_power_peak_limit_t zes_power_peak_limit_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_energy_threshold_t
-typedef struct _zes_energy_threshold_t zes_energy_threshold_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_freq_properties_t
-typedef struct _zes_freq_properties_t zes_freq_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_freq_range_t
-typedef struct _zes_freq_range_t zes_freq_range_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_freq_state_t
-typedef struct _zes_freq_state_t zes_freq_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_freq_throttle_time_t
-typedef struct _zes_freq_throttle_time_t zes_freq_throttle_time_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_oc_capabilities_t
-typedef struct _zes_oc_capabilities_t zes_oc_capabilities_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_oc_config_t
-typedef struct _zes_oc_config_t zes_oc_config_t;
+/// @brief Forward-declare zes_diag_properties_t
+typedef struct _zes_diag_properties_t zes_diag_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zes_engine_properties_t
@@ -206,24 +146,8 @@ typedef struct _zes_engine_properties_t zes_engine_properties_t;
 typedef struct _zes_engine_stats_t zes_engine_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_standby_properties_t
-typedef struct _zes_standby_properties_t zes_standby_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_firmware_properties_t
-typedef struct _zes_firmware_properties_t zes_firmware_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_mem_properties_t
-typedef struct _zes_mem_properties_t zes_mem_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_mem_state_t
-typedef struct _zes_mem_state_t zes_mem_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_mem_bandwidth_t
-typedef struct _zes_mem_bandwidth_t zes_mem_bandwidth_t;
+/// @brief Forward-declare zes_event_config_t
+typedef struct _zes_event_config_t zes_event_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zes_fabric_port_id_t
@@ -254,26 +178,6 @@ typedef struct _zes_fabric_port_state_t zes_fabric_port_state_t;
 typedef struct _zes_fabric_port_throughput_t zes_fabric_port_throughput_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_temp_properties_t
-typedef struct _zes_temp_properties_t zes_temp_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_temp_threshold_t
-typedef struct _zes_temp_threshold_t zes_temp_threshold_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_temp_config_t
-typedef struct _zes_temp_config_t zes_temp_config_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_psu_properties_t
-typedef struct _zes_psu_properties_t zes_psu_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_psu_state_t
-typedef struct _zes_psu_state_t zes_psu_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zes_fan_temp_speed_t
 typedef struct _zes_fan_temp_speed_t zes_fan_temp_speed_t;
 
@@ -286,12 +190,88 @@ typedef struct _zes_fan_properties_t zes_fan_properties_t;
 typedef struct _zes_fan_config_t zes_fan_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_firmware_properties_t
+typedef struct _zes_firmware_properties_t zes_firmware_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_freq_properties_t
+typedef struct _zes_freq_properties_t zes_freq_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_freq_range_t
+typedef struct _zes_freq_range_t zes_freq_range_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_freq_state_t
+typedef struct _zes_freq_state_t zes_freq_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_freq_throttle_time_t
+typedef struct _zes_freq_throttle_time_t zes_freq_throttle_time_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_oc_capabilities_t
+typedef struct _zes_oc_capabilities_t zes_oc_capabilities_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_oc_config_t
+typedef struct _zes_oc_config_t zes_oc_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zes_led_properties_t
 typedef struct _zes_led_properties_t zes_led_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zes_led_state_t
 typedef struct _zes_led_state_t zes_led_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_mem_properties_t
+typedef struct _zes_mem_properties_t zes_mem_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_mem_state_t
+typedef struct _zes_mem_state_t zes_mem_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_mem_bandwidth_t
+typedef struct _zes_mem_bandwidth_t zes_mem_bandwidth_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_perf_properties_t
+typedef struct _zes_perf_properties_t zes_perf_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_properties_t
+typedef struct _zes_power_properties_t zes_power_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_energy_counter_t
+typedef struct _zes_power_energy_counter_t zes_power_energy_counter_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_sustained_limit_t
+typedef struct _zes_power_sustained_limit_t zes_power_sustained_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_burst_limit_t
+typedef struct _zes_power_burst_limit_t zes_power_burst_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_power_peak_limit_t
+typedef struct _zes_power_peak_limit_t zes_power_peak_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_energy_threshold_t
+typedef struct _zes_energy_threshold_t zes_energy_threshold_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_psu_properties_t
+typedef struct _zes_psu_properties_t zes_psu_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_psu_state_t
+typedef struct _zes_psu_state_t zes_psu_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare zes_ras_properties_t
@@ -306,55 +286,43 @@ typedef struct _zes_ras_details_t zes_ras_details_t;
 typedef struct _zes_ras_config_t zes_ras_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_event_config_t
-typedef struct _zes_event_config_t zes_event_config_t;
+/// @brief Forward-declare zes_sched_properties_t
+typedef struct _zes_sched_properties_t zes_sched_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_diag_test_t
-typedef struct _zes_diag_test_t zes_diag_test_t;
+/// @brief Forward-declare zes_sched_timeout_properties_t
+typedef struct _zes_sched_timeout_properties_t zes_sched_timeout_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare zes_diag_properties_t
-typedef struct _zes_diag_properties_t zes_diag_properties_t;
+/// @brief Forward-declare zes_sched_timeslice_properties_t
+typedef struct _zes_sched_timeslice_properties_t zes_sched_timeslice_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_standby_properties_t
+typedef struct _zes_standby_properties_t zes_standby_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_temp_properties_t
+typedef struct _zes_temp_properties_t zes_temp_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_temp_threshold_t
+typedef struct _zes_temp_threshold_t zes_temp_threshold_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare zes_temp_config_t
+typedef struct _zes_temp_config_t zes_temp_config_t;
 
 
 #pragma endregion
 #pragma region device
-#pragma endregion
-#pragma region sysman
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of Sysman
-typedef enum _zes_sysman_version_t
+typedef enum _zes_version_t
 {
-    ZES_SYSMAN_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ),  ///< version 0.91
+    ZES_VERSION_CURRENT = ZE_MAKE_VERSION( 0, 91 ), ///< version 0.91
 
-} zes_sysman_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the handle to access Sysman features for a device
-/// 
-/// @details
-///     - The returned handle is unique.
-///     - ::zes_device_handle_t returned by ::zeDeviceGetSubDevices() are not
-///       support. Only use handles returned by ::zeDeviceGet(). All resources
-///       on sub-devices can be enumerated through the primary device.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hDevice`
-///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
-///         + version
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == phSysman`
-__ze_api_export ze_result_t __zecall
-zesSysmanGet(
-    zes_device_handle_t hDevice,                    ///< [in] Handle of the device
-    zes_sysman_version_t version,                   ///< [in] Sysman version that application was built with
-    zes_sysman_handle_t* phSysman                   ///< [out] Handle for accessing Sysman features
-    );
+} zes_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef ZES_STRING_PROPERTY_SIZE
@@ -397,17 +365,17 @@ typedef enum _zes_reset_reasons_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device state
-typedef struct _zes_sysman_state_t
+typedef struct _zes_device_state_t
 {
     uint32_t reset;                                 ///< [out] Indicates if the device needs to be reset and for what reasons
                                                     ///< (bitfield of ::zes_reset_reasons_t)
     zes_repair_status_t repaired;                   ///< [out] Indicates if the device has been repaired
 
-} zes_sysman_state_t;
+} zes_device_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device properties
-typedef struct _zes_sysman_properties_t
+typedef struct _zes_device_properties_t
 {
     ze_device_properties_t core;                    ///< [out] Core device properties
     uint32_t numSubdevices;                         ///< [out] Number of sub-devices
@@ -418,7 +386,7 @@ typedef struct _zes_sysman_properties_t
     int8_t vendorName[ZES_STRING_PROPERTY_SIZE];    ///< [out] Vendor name of the device (NULL terminated string value)
     int8_t driverVersion[ZES_STRING_PROPERTY_SIZE]; ///< [out] Installed driver version (NULL terminated string value)
 
-} zes_sysman_properties_t;
+} zes_device_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Get properties about the device
@@ -432,13 +400,13 @@ typedef struct _zes_sysman_properties_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanDeviceGetProperties(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    zes_sysman_properties_t* pProperties            ///< [in,out] Structure that will contain information about the device.
+zesDeviceGetProperties(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+    zes_device_properties_t* pProperties            ///< [in,out] Structure that will contain information about the device.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -454,13 +422,13 @@ zesSysmanDeviceGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
 __ze_api_export ze_result_t __zecall
-zesSysmanDeviceGetState(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    zes_sysman_state_t* pState                      ///< [in,out] Structure that will contain information about the device.
+zesDeviceGetState(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+    zes_device_state_t* pState                      ///< [in,out] Structure that will contain information about the device.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -481,445 +449,16 @@ zesSysmanDeviceGetState(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to perform this operation.
 ///     - ::ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE - "Reset cannot be performed because applications are using this device."
 ///     - ::ZE_RESULT_ERROR_UNKNOWN - "There were problems unloading the device driver, performing a bus reset or reloading the device driver."
 __ze_api_export ze_result_t __zecall
-zesSysmanDeviceReset(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
+zesDeviceReset(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle for the device
     ze_bool_t force                                 ///< [in] If set to true, all applications that are currently using the
                                                     ///< device will be forcibly killed.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Scheduler mode
-typedef enum _zes_sched_mode_t
-{
-    ZES_SCHED_MODE_TIMEOUT = 0,                     ///< Multiple applications or contexts are submitting work to the hardware.
-                                                    ///< When higher priority work arrives, the scheduler attempts to pause the
-                                                    ///< current executing work within some timeout interval, then submits the
-                                                    ///< other work.
-    ZES_SCHED_MODE_TIMESLICE,                       ///< The scheduler attempts to fairly timeslice hardware execution time
-                                                    ///< between multiple contexts submitting work to the hardware
-                                                    ///< concurrently.
-    ZES_SCHED_MODE_EXCLUSIVE,                       ///< Any application or context can run indefinitely on the hardware
-                                                    ///< without being preempted or terminated. All pending work for other
-                                                    ///< contexts must wait until the running context completes with no further
-                                                    ///< submitted work.
-    ZES_SCHED_MODE_COMPUTE_UNIT_DEBUG,              ///< Scheduler ensures that submission of workloads to the hardware is
-                                                    ///< optimized for compute unit debugging.
-
-} zes_sched_mode_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Properties related to scheduler component
-typedef struct _zes_sched_properties_t
-{
-    ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling Sysman handle
-    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Software can change the scheduler component configuration
-                                                    ///< assuming the user has permissions.
-    uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are controlled by this
-                                                    ///< scheduler component (bitfield of 1<<::zes_engine_type_t).
-    uint32_t supportedModes;                        ///< [out] Bitfield of scheduler modes that can be configured for this
-                                                    ///< scheduler component (bitfield of 1<<::zes_sched_mode_t).
-
-} zes_sched_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_SCHED_WATCHDOG_DISABLE
-/// @brief Disable forward progress guard timeout.
-#define ZES_SCHED_WATCHDOG_DISABLE  (~(0ULL))
-#endif // ZES_SCHED_WATCHDOG_DISABLE
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Configuration for timeout scheduler mode (::ZES_SCHED_MODE_TIMEOUT)
-typedef struct _zes_sched_timeout_properties_t
-{
-    uint64_t watchdogTimeout;                       ///< [in,out] The maximum time in microseconds that the scheduler will wait
-                                                    ///< for a batch of work submitted to a hardware engine to complete or to
-                                                    ///< be preempted so as to run another context.
-                                                    ///< If this time is exceeded, the hardware engine is reset and the context terminated.
-                                                    ///< If set to ::ZES_SCHED_WATCHDOG_DISABLE, a running workload can run as
-                                                    ///< long as it wants without being terminated, but preemption attempts to
-                                                    ///< run other contexts are permitted but not enforced.
-
-} zes_sched_timeout_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Configuration for timeslice scheduler mode
-///        (::ZES_SCHED_MODE_TIMESLICE)
-typedef struct _zes_sched_timeslice_properties_t
-{
-    uint64_t interval;                              ///< [in,out] The average interval in microseconds that a submission for a
-                                                    ///< context will run on a hardware engine before being preempted out to
-                                                    ///< run a pending submission for another context.
-    uint64_t yieldTimeout;                          ///< [in,out] The maximum time in microseconds that the scheduler will wait
-                                                    ///< to preempt a workload running on an engine before deciding to reset
-                                                    ///< the hardware engine and terminating the associated context.
-
-} zes_sched_timeslice_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle to a scheduler component
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pCount`
-__ze_api_export ze_result_t __zecall
-zesSysmanSchedulerGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of components of this type.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                    ///< if count is larger than the number of components available, then the
-                                                    ///< driver will update the value with the correct number of components
-                                                    ///< that are returned.
-    zes_sysman_sched_handle_t* phScheduler          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                    ///< this type
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get properties related to a scheduler component
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hScheduler`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProperties`
-__ze_api_export ze_result_t __zecall
-zesSysmanSchedulerGetProperties(
-    zes_sysman_sched_handle_t hScheduler,           ///< [in] Handle for the component.
-    zes_sched_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current scheduling mode in effect on a scheduler component.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hScheduler`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pMode`
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler component does not support scheduler modes.
-__ze_api_export ze_result_t __zecall
-zesSysmanSchedulerGetCurrentMode(
-    zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-    zes_sched_mode_t* pMode                         ///< [in,out] Will contain the current scheduler mode.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMEOUT
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hScheduler`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler component does not support scheduler modes.
-__ze_api_export ze_result_t __zecall
-zesSysmanSchedulerGetTimeoutModeProperties(
-    zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-    ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
-                                                    ///< this mode, otherwise it will return the current properties.
-    zes_sched_timeout_properties_t* pConfig         ///< [in,out] Will contain the current parameters for this mode.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMESLICE
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hScheduler`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler component does not support scheduler modes.
-__ze_api_export ze_result_t __zecall
-zesSysmanSchedulerGetTimesliceModeProperties(
-    zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-    ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
-                                                    ///< this mode, otherwise it will return the current properties.
-    zes_sched_timeslice_properties_t* pConfig       ///< [in,out] Will contain the current parameters for this mode.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMEOUT or update scheduler
-///        mode parameters if already running in this mode.
-/// 
-/// @details
-///     - This mode is optimized for multiple applications or contexts
-///       submitting work to the hardware. When higher priority work arrives,
-///       the scheduler attempts to pause the current executing work within some
-///       timeout interval, then submits the other work.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hScheduler`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProperties`
-///         + `nullptr == pNeedReload`
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler component does not support scheduler modes.
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to make this modification.
-__ze_api_export ze_result_t __zecall
-zesSysmanSchedulerSetTimeoutMode(
-    zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-    zes_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
-    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                    ///< apply the new scheduler mode.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMESLICE or update
-///        scheduler mode parameters if already running in this mode.
-/// 
-/// @details
-///     - This mode is optimized to provide fair sharing of hardware execution
-///       time between multiple contexts submitting work to the hardware
-///       concurrently.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hScheduler`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProperties`
-///         + `nullptr == pNeedReload`
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler component does not support scheduler modes.
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to make this modification.
-__ze_api_export ze_result_t __zecall
-zesSysmanSchedulerSetTimesliceMode(
-    zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-    zes_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
-    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                    ///< apply the new scheduler mode.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Change scheduler mode to ::ZES_SCHED_MODE_EXCLUSIVE
-/// 
-/// @details
-///     - This mode is optimized for single application/context use-cases. It
-///       permits a context to run indefinitely on the hardware without being
-///       preempted or terminated. All pending work for other contexts must wait
-///       until the running context completes with no further submitted work.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hScheduler`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pNeedReload`
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler component does not support scheduler modes.
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to make this modification.
-__ze_api_export ze_result_t __zecall
-zesSysmanSchedulerSetExclusiveMode(
-    zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                    ///< apply the new scheduler mode.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Change scheduler mode to ::ZES_SCHED_MODE_COMPUTE_UNIT_DEBUG
-/// 
-/// @details
-///     - This mode is optimized for application debug. It ensures that only one
-///       command queue can execute work on the hardware at a given time. Work
-///       is permitted to run as long as needed without enforcing any scheduler
-///       fairness policies.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hScheduler`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pNeedReload`
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + This scheduler component does not support scheduler modes.
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to make this modification.
-__ze_api_export ze_result_t __zecall
-zesSysmanSchedulerSetComputeUnitDebugMode(
-    zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                    ///< apply the new scheduler mode.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Static information about a Performance Factor domain
-typedef struct _zes_perf_properties_t
-{
-    ze_bool_t onSubdevice;                          ///< [out] True if this Performance Factor affects accelerators located on
-                                                    ///< a sub-device
-    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are affected by this
-                                                    ///< Performance Factor (bitfield of 1<<::zes_engine_type_t).
-
-} zes_perf_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handles to accelerator domains whose performance can be optimized
-///        via a Performance Factor
-/// 
-/// @details
-///     - A Performance Factor should be tuned for each workload.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pCount`
-__ze_api_export ze_result_t __zecall
-zesSysmanPerformanceFactorGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of components of this type.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                    ///< if count is larger than the number of components available, then the
-                                                    ///< driver will update the value with the correct number of components
-                                                    ///< that are returned.
-    zes_sysman_perf_handle_t* phPerf                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                    ///< this type
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get properties about a Performance Factor domain
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPerf`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProperties`
-__ze_api_export ze_result_t __zecall
-zesSysmanPerformanceFactorGetProperties(
-    zes_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
-    zes_perf_properties_t* pProperties              ///< [in,out] Will contain information about the specified Performance
-                                                    ///< Factor domain.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current Performance Factor for a given domain
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPerf`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pFactor`
-__ze_api_export ze_result_t __zecall
-zesSysmanPerformanceFactorGetConfig(
-    zes_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
-    double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
-                                                    ///< hardware (may not be the same as the requested Performance Factor).
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Change the performance factor for a domain
-/// 
-/// @details
-///     - The Performance Factor is a number between 0 and 100.
-///     - A Performance Factor is a hint to the hardware. Depending on the
-///       hardware, the request may not be granted. Follow up this function with
-///       a call to ::zesSysmanPerformanceFactorGetConfig() to determine the
-///       actual factor being used by the hardware.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPerf`
-__ze_api_export ze_result_t __zecall
-zesSysmanPerformanceFactorSetConfig(
-    zes_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
-    double factor                                   ///< [in] The new Performance Factor.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -956,14 +495,14 @@ typedef struct _zes_process_state_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 ///     - ::ZE_RESULT_ERROR_INVALID_SIZE
 ///         + The provided value of pCount is not big enough to store information about all the processes currently attached to the device.
 __ze_api_export ze_result_t __zecall
-zesSysmanProcessesGetState(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
+zesDeviceProcessesGetState(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle for the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of processes currently using the device.
@@ -1111,12 +650,12 @@ typedef struct _zes_pci_stats_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanPciGetProperties(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDevicePciGetProperties(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     zes_pci_properties_t* pProperties               ///< [in,out] Will contain the PCI properties.
     );
 
@@ -1132,12 +671,12 @@ zesSysmanPciGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
 __ze_api_export ze_result_t __zecall
-zesSysmanPciGetState(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDevicePciGetState(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     zes_pci_state_t* pState                         ///< [in,out] Will contain the PCI properties.
     );
 
@@ -1153,12 +692,12 @@ zesSysmanPciGetState(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanPciGetBars(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDevicePciGetBars(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of PCI bars.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of bars.
@@ -1180,122 +719,78 @@ zesSysmanPciGetBars(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pStats`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
 __ze_api_export ze_result_t __zecall
-zesSysmanPciGetStats(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDevicePciGetStats(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     zes_pci_stats_t* pStats                         ///< [in,out] Will contain a snapshot of the latest stats.
     );
 
+#pragma endregion
+#pragma region diagnostics
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Properties related to device power settings
-typedef struct _zes_power_properties_t
+/// @brief Diagnostic test suite type
+typedef enum _zes_diag_type_t
 {
-    ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
+    ZES_DIAG_TYPE_SCAN = 0,                         ///< Run SCAN diagnostics
+    ZES_DIAG_TYPE_ARRAY,                            ///< Run Array diagnostics
+
+} zes_diag_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Diagnostic results
+typedef enum _zes_diag_result_t
+{
+    ZES_DIAG_RESULT_NO_ERRORS = 0,                  ///< Diagnostic completed without finding errors to repair
+    ZES_DIAG_RESULT_ABORT,                          ///< Diagnostic had problems running tests
+    ZES_DIAG_RESULT_FAIL_CANT_REPAIR,               ///< Diagnostic had problems setting up repairs
+    ZES_DIAG_RESULT_REBOOT_FOR_REPAIR,              ///< Diagnostics found errors, setup for repair and reboot is required to
+                                                    ///< complete the process
+
+} zes_diag_result_t;
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_DIAG_FIRST_TEST_INDEX
+/// @brief Diagnostic test index to use for the very first test.
+#define ZES_DIAG_FIRST_TEST_INDEX  0x0
+#endif // ZES_DIAG_FIRST_TEST_INDEX
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_DIAG_LAST_TEST_INDEX
+/// @brief Diagnostic test index to use for the very last test.
+#define ZES_DIAG_LAST_TEST_INDEX  0xFFFFFFFF
+#endif // ZES_DIAG_LAST_TEST_INDEX
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Diagnostic test
+typedef struct _zes_diag_test_t
+{
+    uint32_t index;                                 ///< [out] Index of the test
+    char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the test
+
+} zes_diag_test_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Diagnostics test suite properties
+typedef struct _zes_diag_properties_t
+{
+    zes_diag_type_t type;                           ///< [out] The type of diagnostics test suite
+    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Software can change the power limits of this domain assuming the
-                                                    ///< user has permissions.
-    ze_bool_t isEnergyThresholdSupported;           ///< [out] Indicates if this power domain supports the energy threshold
-                                                    ///< event (::ZES_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
-    uint32_t defaultLimit;                          ///< [out] The factory default TDP power limit of the part in milliwatts.
-    uint32_t minLimit;                              ///< [out] The minimum power limit in milliwatts that can be requested.
-    uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
+    char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
+    ze_bool_t haveTests;                            ///< [out] Indicates if this test suite has individual tests which can be
+                                                    ///< run separately (use the function ::zesDiagnosticsGetTests() to get the
+                                                    ///< list of these tests)
 
-} zes_power_properties_t;
+} zes_diag_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Energy counter snapshot
-/// 
-/// @details
-///     - Average power is calculated by taking two snapshots (s1, s2) and using
-///       the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp -
-///       s1.timestamp)
-typedef struct _zes_power_energy_counter_t
-{
-    uint64_t energy;                                ///< [out] The monotonic energy counter in microjoules.
-    uint64_t timestamp;                             ///< [out] Microsecond timestamp when energy was captured.
-                                                    ///< No assumption should be made about the absolute value of the timestamp.
-                                                    ///< It should only be used to calculate delta time between two snapshots
-                                                    ///< of the same structure.
-                                                    ///< Never take the delta of this timestamp with the timestamp from a
-                                                    ///< different structure.
-
-} zes_power_energy_counter_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Sustained power limits
-/// 
-/// @details
-///     - The power controller (Punit) will throttle the operating frequency if
-///       the power averaged over a window (typically seconds) exceeds this
-///       limit.
-typedef struct _zes_power_sustained_limit_t
-{
-    ze_bool_t enabled;                              ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
-    uint32_t power;                                 ///< [in,out] power limit in milliwatts
-    uint32_t interval;                              ///< [in,out] power averaging window (Tau) in milliseconds
-
-} zes_power_sustained_limit_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Burst power limit
-/// 
-/// @details
-///     - The power controller (Punit) will throttle the operating frequency of
-///       the device if the power averaged over a few milliseconds exceeds a
-///       limit known as PL2. Typically PL2 > PL1 so that it permits the
-///       frequency to burst higher for short periods than would be otherwise
-///       permitted by PL1.
-typedef struct _zes_power_burst_limit_t
-{
-    ze_bool_t enabled;                              ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
-    uint32_t power;                                 ///< [in,out] power limit in milliwatts
-
-} zes_power_burst_limit_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Peak power limit
-/// 
-/// @details
-///     - The power controller (Punit) will preemptively throttle the operating
-///       frequency of the device when the instantaneous power exceeds this
-///       limit. The limit is known as PL4. It expresses the maximum power that
-///       can be drawn from the power supply.
-///     - If this power limit is removed or set too high, the power supply will
-///       generate an interrupt when it detects an overcurrent condition and the
-///       power controller will throttle the device frequencies down to min. It
-///       is thus better to tune the PL4 value in order to avoid such
-///       excursions.
-typedef struct _zes_power_peak_limit_t
-{
-    uint32_t powerAC;                               ///< [in,out] power limit in milliwatts for the AC power source.
-    uint32_t powerDC;                               ///< [in,out] power limit in milliwatts for the DC power source. This is
-                                                    ///< ignored if the product does not have a battery.
-
-} zes_power_peak_limit_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Energy threshold
-/// 
-/// @details
-///     - .
-typedef struct _zes_energy_threshold_t
-{
-    ze_bool_t enable;                               ///< [in,out] Indicates if the energy threshold is enabled.
-    double threshold;                               ///< [in,out] The energy threshold in Joules. Will be 0.0 if no threshold
-                                                    ///< has been set.
-    uint32_t processId;                             ///< [in,out] The host process ID that set the energy threshold. Will be
-                                                    ///< 0xFFFFFFFF if no threshold has been set.
-
-} zes_energy_threshold_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of power domains
+/// @brief Get handle of diagnostics test suites
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1306,12 +801,12 @@ typedef struct _zes_energy_threshold_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanPowerGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDeviceEnumDiagnosticTestSuites(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1319,12 +814,12 @@ zesSysmanPowerGet(
                                                     ///< if count is larger than the number of components available, then the
                                                     ///< driver will update the value with the correct number of components
                                                     ///< that are returned.
-    zes_sysman_pwr_handle_t* phPower                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+    zes_diag_handle_t* phDiagnostics                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                     ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get properties related to a power domain
+/// @brief Get properties of a diagnostics test suite
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1335,19 +830,24 @@ zesSysmanPowerGet(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPower`
+///         + `nullptr == hDiagnostics`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanPowerGetProperties(
-    zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    zes_power_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
+zesDiagnosticsGetProperties(
+    zes_diag_handle_t hDiagnostics,                 ///< [in] Handle for the component.
+    zes_diag_properties_t* pProperties              ///< [in,out] Structure describing the properties of a diagnostics test
+                                                    ///< suite
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get energy counter
+/// @brief Get individual tests that can be run separately. Not all test suites
+///        permit running individual tests - check
+///        ::zes_diag_properties_t.haveTests
 /// 
 /// @details
+///     - The list of available tests is returned in order of increasing test
+///       index ::zes_diag_test_t.index.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -1356,18 +856,104 @@ zesSysmanPowerGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPower`
+///         + `nullptr == hDiagnostics`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pEnergy`
+///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanPowerGetEnergyCounter(
-    zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    zes_power_energy_counter_t* pEnergy             ///< [in,out] Will contain the latest snapshot of the energy counter and
-                                                    ///< timestamp when the last counter value was measured.
+zesDiagnosticsGetTests(
+    zes_diag_handle_t hDiagnostics,                 ///< [in] Handle for the component.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
+                                                    ///< If count is zero, then the driver will update the value with the total
+                                                    ///< number of tests available.
+                                                    ///< If count is non-zero, then driver will only retrieve that number of tests.
+                                                    ///< If count is larger than the number of tests available, then the driver
+                                                    ///< will update the value with the correct number of tests available.
+    zes_diag_test_t* pTests                         ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
+                                                    ///< increasing value of ::zes_diag_test_t.index
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get power limits
+/// @brief Run a diagnostics test suite, either all tests or a subset of tests.
+/// 
+/// @details
+///     - WARNING: Performancing diagnostics may destroy current device state
+///       information. Gracefully close any running workloads before initiating.
+///     - To run all tests in a test suite, set start =
+///       ::ZES_DIAG_FIRST_TEST_INDEX and end = ::ZES_DIAG_LAST_TEST_INDEX.
+///     - If the test suite permits running individual tests,
+///       ::zes_diag_properties_t.haveTests will be true. In this case, the
+///       function ::zesDiagnosticsGetTests() can be called to get the list of
+///       tests and corresponding indices that can be supplied to the arguments
+///       start and end in this function.
+///     - This function will block until the diagnostics have completed.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDiagnostics`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pResult`
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to perform diagnostics.
+__ze_api_export ze_result_t __zecall
+zesDiagnosticsRunTests(
+    zes_diag_handle_t hDiagnostics,                 ///< [in] Handle for the component.
+    uint32_t start,                                 ///< [in] The index of the first test to run. Set to
+                                                    ///< ::ZES_DIAG_FIRST_TEST_INDEX to start from the beginning.
+    uint32_t end,                                   ///< [in] The index of the last test to run. Set to
+                                                    ///< ::ZES_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
+    zes_diag_result_t* pResult                      ///< [in,out] The result of the diagnostics
+    );
+
+#pragma endregion
+#pragma region engine
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Accelerator engine groups
+typedef enum _zes_engine_group_t
+{
+    ZES_ENGINE_GROUP_ALL = 0,                       ///< Access information about all engines combined.
+    ZES_ENGINE_GROUP_COMPUTE_ALL,                   ///< Access information about all compute engines combined.
+    ZES_ENGINE_GROUP_MEDIA_ALL,                     ///< Access information about all media engines combined.
+    ZES_ENGINE_GROUP_COPY_ALL,                      ///< Access information about all copy (blitter) engines combined.
+
+} zes_engine_group_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Engine group properties
+typedef struct _zes_engine_properties_t
+{
+    zes_engine_group_t type;                        ///< [out] The engine group
+    ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling Sysman handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+
+} zes_engine_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Engine activity counters
+/// 
+/// @details
+///     - Percent utilization is calculated by taking two snapshots (s1, s2) and
+///       using the equation: %util = (s2.activeTime - s1.activeTime) /
+///       (s2.timestamp - s1.timestamp)
+typedef struct _zes_engine_stats_t
+{
+    uint64_t activeTime;                            ///< [out] Monotonic counter for time in microseconds that this resource is
+                                                    ///< actively running workloads.
+    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when activeTime
+                                                    ///< counter was sampled.
+                                                    ///< No assumption should be made about the absolute value of the timestamp.
+                                                    ///< It should only be used to calculate delta time between two snapshots
+                                                    ///< of the same structure.
+                                                    ///< Never take the delta of this timestamp with the timestamp from a
+                                                    ///< different structure.
+
+} zes_engine_stats_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of engine groups
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1378,17 +964,25 @@ zesSysmanPowerGetEnergyCounter(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPower`
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanPowerGetLimits(
-    zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    zes_power_sustained_limit_t* pSustained,        ///< [in,out][optional] The sustained power limit.
-    zes_power_burst_limit_t* pBurst,                ///< [in,out][optional] The burst power limit.
-    zes_power_peak_limit_t* pPeak                   ///< [in,out][optional] The peak power limit.
+zesDeviceEnumEngineGroups(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zes_engine_handle_t* phEngine                   ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set power limits
+/// @brief Get engine group properties
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1399,21 +993,495 @@ zesSysmanPowerGetLimits(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPower`
+///         + `nullptr == hEngine`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+__ze_api_export ze_result_t __zecall
+zesEngineGetProperties(
+    zes_engine_handle_t hEngine,                    ///< [in] Handle for the component.
+    zes_engine_properties_t* pProperties            ///< [in,out] The properties for the specified engine group.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the activity stats for an engine group
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEngine`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pStats`
+__ze_api_export ze_result_t __zecall
+zesEngineGetActivity(
+    zes_engine_handle_t hEngine,                    ///< [in] Handle for the component.
+    zes_engine_stats_t* pStats                      ///< [in,out] Will contain a snapshot of the engine group activity
+                                                    ///< counters.
+    );
+
+#pragma endregion
+#pragma region events
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Event types
+typedef enum _zes_event_type_t
+{
+    ZES_EVENT_TYPE_NONE = 0,                        ///< Specifies no events
+    ZES_EVENT_TYPE_DEVICE_RESET = ZE_BIT( 0 ),      ///< Event is triggered when the driver is going to reset the device
+    ZES_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER = ZE_BIT( 1 ),  ///< Event is triggered when the driver is about to put the device into a
+                                                    ///< deep sleep state
+    ZES_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT = ZE_BIT( 2 ),   ///< Event is triggered when the driver is waking the device up from a deep
+                                                    ///< sleep state
+    ZES_EVENT_TYPE_FREQ_THROTTLED = ZE_BIT( 3 ),    ///< Event is triggered when the frequency starts being throttled
+    ZES_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED = ZE_BIT( 4 ),  ///< Event is triggered when the energy consumption threshold is reached
+                                                    ///< (use ::zesPowerSetEnergyThreshold() to configure).
+    ZES_EVENT_TYPE_TEMP_CRITICAL = ZE_BIT( 5 ),     ///< Event is triggered when the critical temperature is reached (use
+                                                    ///< ::zesTemperatureSetConfig() to configure - disabled by default).
+    ZES_EVENT_TYPE_TEMP_THRESHOLD1 = ZE_BIT( 6 ),   ///< Event is triggered when the temperature crosses threshold 1 (use
+                                                    ///< ::zesTemperatureSetConfig() to configure - disabled by default).
+    ZES_EVENT_TYPE_TEMP_THRESHOLD2 = ZE_BIT( 7 ),   ///< Event is triggered when the temperature crosses threshold 2 (use
+                                                    ///< ::zesTemperatureSetConfig() to configure - disabled by default).
+    ZES_EVENT_TYPE_MEM_HEALTH = ZE_BIT( 8 ),        ///< Event is triggered when the health of device memory changes.
+    ZES_EVENT_TYPE_FABRIC_PORT_HEALTH = ZE_BIT( 9 ),///< Event is triggered when the health of fabric ports change.
+    ZES_EVENT_TYPE_PCI_LINK_HEALTH = ZE_BIT( 10 ),  ///< Event is triggered when the health of the PCI link changes.
+    ZES_EVENT_TYPE_RAS_CORRECTABLE_ERRORS = ZE_BIT( 11 ),   ///< Event is triggered when accelerator RAS correctable errors cross
+                                                    ///< thresholds (use ::zesRasSetConfig() to configure - disabled by
+                                                    ///< default).
+    ZES_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ), ///< Event is triggered when accelerator RAS uncorrectable errors cross
+                                                    ///< thresholds (use ::zesRasSetConfig() to configure - disabled by
+                                                    ///< default).
+    ZES_EVENT_TYPE_DEVICE_RESET_REQUIRED = ZE_BIT( 14 ),///< Event is triggered when the device needs to be reset (use
+                                                    ///< ::zesDeviceGetState() to determine the reasons for the reset).
+    ZES_EVENT_TYPE_ALL = 0x0FFF,                    ///< Specifies all events
+
+} zes_event_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Event configuration for a device
+typedef struct _zes_event_config_t
+{
+    uint32_t registered;                            ///< [in,out] List of registered events (Bitfield of events
+                                                    ///< ::zes_event_type_t). ::ZES_EVENT_TYPE_NONE indicates there are no
+                                                    ///< registered events. ::ZES_EVENT_TYPE_ALL indicates that all events are
+                                                    ///< registered.
+
+} zes_event_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the event handle for the specified device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phEvent`
+__ze_api_export ze_result_t __zecall
+zesDeviceCreateEvents(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle for the device
+    zes_event_handle_t* phEvent                     ///< [out] The event handle for the specified device.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which events are currently registered on the specified device
+///        event handler
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+__ze_api_export ze_result_t __zecall
+zesEventGetConfig(
+    zes_event_handle_t hEvent,                      ///< [in] The event handle for the device
+    zes_event_config_t* pConfig                     ///< [in,out] Will contain the current event configuration (list of
+                                                    ///< registered events).
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set a new event configuration (list of registered events) on the
+///        specified device event handler
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+__ze_api_export ze_result_t __zecall
+zesEventSetConfig(
+    zes_event_handle_t hEvent,                      ///< [in] The event handle for the device
+    const zes_event_config_t* pConfig               ///< [in] New event configuration (list of registered events).
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get events that have been triggered for a specific device
+/// 
+/// @details
+///     - If events have occurred on the specified device event handle, they are
+///       returned and the corresponding event status is cleared if the argument
+///       clear = true.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hEvent`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pEvents`
+__ze_api_export ze_result_t __zecall
+zesEventGetState(
+    zes_event_handle_t hEvent,                      ///< [in] The event handle for the device.
+    ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
+    uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_event_type_t that have been
+                                                    ///< triggered by this device.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_EVENT_WAIT_NONE
+/// @brief Don't wait - just check if there are any new events
+#define ZES_EVENT_WAIT_NONE  0x0
+#endif // ZES_EVENT_WAIT_NONE
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_EVENT_WAIT_INFINITE
+/// @brief Wait infinitely for events to arrive.
+#define ZES_EVENT_WAIT_INFINITE  0xFFFFFFFF
+#endif // ZES_EVENT_WAIT_INFINITE
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Wait for the specified list of event handles to receive any registered
+///        events
+/// 
+/// @details
+///     - If previous events arrived and were not cleared using
+///       ::zesEventGetState(), this call will return immediately.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDriver`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == phEvents`
+///         + `nullptr == pEvents`
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to listen to events.
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + One or more of the supplied event handles are for devices that belong to a different driver handle.
+__ze_api_export ze_result_t __zecall
+zesEventListen(
+    ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+    uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
+                                                    ///< ::ZES_EVENT_WAIT_NONE will check status and return immediately. Set to
+                                                    ///< ::ZES_EVENT_WAIT_INFINITE to block until events arrive.
+    uint32_t count,                                 ///< [in] Number of handles in phEvents
+    zes_event_handle_t* phEvents,                   ///< [in][range(0, count)] Handle of events that should be listened to
+    uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_event_type_t that have been
+                                                    ///< triggered by any of the supplied event handles. If timeout is not
+                                                    ///< ::ZES_EVENT_WAIT_INFINITE and this value is ::ZES_EVENT_TYPE_NONE,
+                                                    ///< then a timeout has occurred.
+    );
+
+#pragma endregion
+#pragma region fabric
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_MAX_FABRIC_PORT_MODEL_SIZE
+/// @brief Maximum Fabric port model string size
+#define ZES_MAX_FABRIC_PORT_MODEL_SIZE  256
+#endif // ZES_MAX_FABRIC_PORT_MODEL_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_MAX_FABRIC_LINK_TYPE_SIZE
+/// @brief Maximum size of the buffer that will return information about link
+///        types
+#define ZES_MAX_FABRIC_LINK_TYPE_SIZE  256
+#endif // ZES_MAX_FABRIC_LINK_TYPE_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fabric port status
+typedef enum _zes_fabric_port_status_t
+{
+    ZES_FABRIC_PORT_STATUS_GREEN = 0,               ///< The port is up and operating as expected
+    ZES_FABRIC_PORT_STATUS_YELLOW,                  ///< The port is up but has quality and/or speed degradation
+    ZES_FABRIC_PORT_STATUS_RED,                     ///< Port connection instabilities are preventing workloads making forward
+                                                    ///< progress
+    ZES_FABRIC_PORT_STATUS_BLACK,                   ///< The port is configured down
+
+} zes_fabric_port_status_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fabric port quality degradation reasons
+typedef enum _zes_fabric_port_qual_issues_t
+{
+    ZES_FABRIC_PORT_QUAL_ISSUES_NONE = 0,           ///< There are no quality issues with the link at this time
+    ZES_FABRIC_PORT_QUAL_LINK_ERRORS = ZE_BIT( 0 ), ///< Excessive link errors are occurring
+    ZES_FABRIC_PORT_QUAL_ISSUES_SPEED = ZE_BIT( 1 ),///< There is a degradation in the bitrate and/or width of the link
+
+} zes_fabric_port_qual_issues_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fabric port stability issues
+typedef enum _zes_fabric_port_stab_issues_t
+{
+    ZES_FABRIC_PORT_STAB_ISSUES_NONE = 0,           ///< There are no connection stability issues at this time
+    ZES_FABRIC_PORT_STAB_ISSUES_FAILED = ZE_BIT( 0 ),   ///< A previously operating link has failed. Hardware will automatically
+                                                    ///< retrain this port. This state will persist until either the physical
+                                                    ///< connection is removed or the link trains successfully.
+    ZES_FABRIC_PORT_STAB_ISSUES_TRAINING_TIMEOUT = ZE_BIT( 1 ), ///< A connection has not been established within an expected time.
+                                                    ///< Hardware will continue to attempt port training. This status will
+                                                    ///< persist until either the physical connection is removed or the link
+                                                    ///< successfully trains.
+    ZES_FABRIC_PORT_STAB_ISSUES_FLAPPING = ZE_BIT( 2 ), ///< Port has excessively trained and then transitioned down for some
+                                                    ///< period of time. Driver will allow port to continue to train, but will
+                                                    ///< not enable the port for use until the port has been disabled and
+                                                    ///< subsequently re-enabled using ::zesFabricPortSetConfig().
+
+} zes_fabric_port_stab_issues_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Unique identifier for a fabric port
+/// 
+/// @details
+///     - This not a universal identifier. The identified is garanteed to be
+///       unique for the current hardware configuration of the system. Changes
+///       in the hardware may result in a different identifier for a given port.
+///     - The main purpose of this identifier to build up an instantaneous
+///       topology map of system connectivity. An application should enumerate
+///       all fabric ports and match ::zes_fabric_port_state_t.remotePortId to
+///       ::zes_fabric_port_properties_t.portId.
+typedef struct _zes_fabric_port_id_t
+{
+    uint32_t fabricId;                              ///< [out] Unique identifier for the fabric end-point
+    uint32_t attachId;                              ///< [out] Unique identifier for the device attachment point
+    uint8_t portNumber;                             ///< [out] The logical port number (this is typically marked somewhere on
+                                                    ///< the physical device)
+
+} zes_fabric_port_id_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fabric port speed in one direction
+typedef struct _zes_fabric_port_speed_t
+{
+    uint64_t bitRate;                               ///< [out] Bits/sec that the link is operating at
+    uint32_t width;                                 ///< [out] The number of lanes
+
+} zes_fabric_port_speed_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fabric port properties
+typedef struct _zes_fabric_port_properties_t
+{
+    int8_t model[ZES_MAX_FABRIC_PORT_MODEL_SIZE];   ///< [out] Description of port technology
+    ze_bool_t onSubdevice;                          ///< [out] True if the port is located on a sub-device; false means that
+                                                    ///< the port is on the device of the calling Sysman handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    zes_fabric_port_id_t portId;                    ///< [out] The unique port identifier
+    zes_fabric_port_speed_t maxRxSpeed;             ///< [out] Maximum speed supported by the receive side of the port
+    zes_fabric_port_speed_t maxTxSpeed;             ///< [out] Maximum speed supported by the transmit side of the port
+
+} zes_fabric_port_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Provides information about the fabric link attached to a port
+typedef struct _zes_fabric_link_type_t
+{
+    int8_t desc[ZES_MAX_FABRIC_LINK_TYPE_SIZE];     ///< [out] This provides a static textural description of the physic
+                                                    ///< attachment type
+
+} zes_fabric_link_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fabric port configuration
+typedef struct _zes_fabric_port_config_t
+{
+    ze_bool_t enabled;                              ///< [in,out] Port is configured up/down
+    ze_bool_t beaconing;                            ///< [in,out] Beaconing is configured on/off
+
+} zes_fabric_port_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fabric port state
+typedef struct _zes_fabric_port_state_t
+{
+    zes_fabric_port_status_t status;                ///< [out] The current status of the port
+    zes_fabric_port_qual_issues_t qualityIssues;    ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_YELLOW, this gives a
+                                                    ///< bitfield of quality issues that have been detected
+    zes_fabric_port_stab_issues_t stabilityIssues;  ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_RED, this gives a bitfield
+                                                    ///< of reasons for the connection instability
+    zes_fabric_port_id_t remotePortId;              ///< [out] The unique port identifier for the remote connection point
+    zes_fabric_port_speed_t rxSpeed;                ///< [out] Current maximum receive speed
+    zes_fabric_port_speed_t txSpeed;                ///< [out] Current maximum transmit speed
+
+} zes_fabric_port_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fabric port throughput.
+typedef struct _zes_fabric_port_throughput_t
+{
+    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                    ///< was made.
+                                                    ///< No assumption should be made about the absolute value of the timestamp.
+                                                    ///< It should only be used to calculate delta time between two snapshots
+                                                    ///< of the same structure.
+                                                    ///< Never take the delta of this timestamp with the timestamp from a
+                                                    ///< different structure.
+    uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received. This
+                                                    ///< includes all protocol overhead, not only the GPU traffic.
+    uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted. This
+                                                    ///< includes all protocol overhead, not only the GPU traffic.
+
+} zes_fabric_port_throughput_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of Fabric ports in a device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
+__ze_api_export ze_result_t __zecall
+zesDeviceEnumFabricPorts(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zes_fabric_port_handle_t* phPort                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Fabric port properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+__ze_api_export ze_result_t __zecall
+zesFabricPortGetProperties(
+    zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+    zes_fabric_port_properties_t* pProperties       ///< [in,out] Will contain properties of the Fabric Port.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Fabric port link type
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pLinkType`
+__ze_api_export ze_result_t __zecall
+zesFabricPortGetLinkType(
+    zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+    ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
+    zes_fabric_link_type_t* pLinkType               ///< [in,out] Will contain details about the link attached to the Fabric
+                                                    ///< port.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Fabric port configuration
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+__ze_api_export ze_result_t __zecall
+zesFabricPortGetConfig(
+    zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+    zes_fabric_port_config_t* pConfig               ///< [in,out] Will contain configuration of the Fabric Port.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set Fabric port configuration
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
-///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
-///         + The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported.
 __ze_api_export ze_result_t __zecall
-zesSysmanPowerSetLimits(
-    zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    const zes_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
-    const zes_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
-    const zes_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
+zesFabricPortSetConfig(
+    zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+    const zes_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get energy threshold
+/// @brief Get Fabric port state - status (green/yellow/red/black), reasons for
+///        link degradation or instability, current rx/tx speed
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1424,38 +1492,19 @@ zesSysmanPowerSetLimits(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPower`
+///         + `nullptr == hPort`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pThreshold`
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + Energy threshold not supported on this power domain (check ::zes_power_properties_t.isEnergyThresholdSupported).
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to request this feature.
+///         + `nullptr == pState`
 __ze_api_export ze_result_t __zecall
-zesSysmanPowerGetEnergyThreshold(
-    zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    zes_energy_threshold_t* pThreshold              ///< [in,out] Returns information about the energy threshold setting -
-                                                    ///< enabled/energy threshold/process ID.
+zesFabricPortGetState(
+    zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+    zes_fabric_port_state_t* pState                 ///< [in,out] Will contain the current state of the Fabric Port
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set energy threshold
+/// @brief Get Fabric port throughput
 /// 
 /// @details
-///     - An event ::ZES_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be
-///       generated when the delta energy consumed starting from this call
-///       exceeds the specified threshold. Use the function
-///       ::zesSysmanEventSetConfig() to start receiving the event.
-///     - Only one running process can control the energy threshold at a given
-///       time. If another process attempts to change the energy threshold, the
-///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
-///       ::zesSysmanPowerGetEnergyThreshold() to determine the process ID
-///       currently controlling this setting.
-///     - Calling this function will remove any pending energy thresholds and
-///       start counting from the time of this call.
-///     - Once the energy threshold has been reached and the event generated,
-///       the threshold is automatically removed. It is up to the application to
-///       request a new threshold.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -1464,19 +1513,316 @@ zesSysmanPowerGetEnergyThreshold(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPower`
-///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + Energy threshold not supported on this power domain (check ::zes_power_properties_t.isEnergyThresholdSupported).
+///         + `nullptr == hPort`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pThroughput`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to request this feature.
-///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
-///         + Another running process has set the energy threshold.
+///         + User does not have permissions to query this telemetry.
 __ze_api_export ze_result_t __zecall
-zesSysmanPowerSetEnergyThreshold(
-    zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-    double threshold                                ///< [in] The energy threshold to be set in joules.
+zesFabricPortGetThroughput(
+    zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+    zes_fabric_port_throughput_t* pThroughput       ///< [in,out] Will contain the Fabric port throughput counters.
     );
 
+#pragma endregion
+#pragma region fan
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fan resource speed mode
+typedef enum _zes_fan_speed_mode_t
+{
+    ZES_FAN_SPEED_MODE_DEFAULT = 0,                 ///< The fan speed is operating using the hardware default settings
+    ZES_FAN_SPEED_MODE_FIXED,                       ///< The fan speed is currently set to a fixed value
+    ZES_FAN_SPEED_MODE_TABLE,                       ///< The fan speed is currently controlled dynamically by hardware based on
+                                                    ///< a temp/speed table
+
+} zes_fan_speed_mode_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fan speed units
+typedef enum _zes_fan_speed_units_t
+{
+    ZES_FAN_SPEED_UNITS_RPM = 0,                    ///< The fan speed is in units of revolutions per minute (rpm)
+    ZES_FAN_SPEED_UNITS_PERCENT,                    ///< The fan speed is a percentage of the maximum speed of the fan
+
+} zes_fan_speed_units_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fan temperature/speed pair
+typedef struct _zes_fan_temp_speed_t
+{
+    uint32_t temperature;                           ///< [in,out] Temperature in degrees Celsius.
+    uint32_t speed;                                 ///< [in,out] The speed of the fan
+    zes_fan_speed_units_t units;                    ///< [in,out] The units of the member speed
+
+} zes_fan_temp_speed_t;
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_FAN_TEMP_SPEED_PAIR_COUNT
+/// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
+#define ZES_FAN_TEMP_SPEED_PAIR_COUNT  32
+#endif // ZES_FAN_TEMP_SPEED_PAIR_COUNT
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fan properties
+typedef struct _zes_fan_properties_t
+{
+    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling Sysman handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    ze_bool_t canControl;                           ///< [out] Indicates if software can control the fan speed assuming the
+                                                    ///< user has permissions
+    uint32_t maxSpeed;                              ///< [out] The maximum RPM of the fan
+    uint32_t maxPoints;                             ///< [out] The maximum number of points in the fan temp/speed table
+
+} zes_fan_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Fan configuration
+typedef struct _zes_fan_config_t
+{
+    zes_fan_speed_mode_t mode;                      ///< [in,out] The fan speed mode (fixed, temp-speed table)
+    uint32_t speed;                                 ///< [in,out] The fixed fan speed setting
+    zes_fan_speed_units_t speedUnits;               ///< [in,out] The units of the fixed fan speed setting
+    uint32_t numPoints;                             ///< [in,out] The number of valid points in the fan speed table
+    zes_fan_temp_speed_t table[ZES_FAN_TEMP_SPEED_PAIR_COUNT];  ///< [in,out] Array of temperature/fan speed pairs
+
+} zes_fan_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of fans
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
+__ze_api_export ze_result_t __zecall
+zesDeviceEnumFans(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zes_fan_handle_t* phFan                         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get fan properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFan`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+__ze_api_export ze_result_t __zecall
+zesFanGetProperties(
+    zes_fan_handle_t hFan,                          ///< [in] Handle for the component.
+    zes_fan_properties_t* pProperties               ///< [in,out] Will contain the properties of the fan.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current fan configuration
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFan`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+__ze_api_export ze_result_t __zecall
+zesFanGetConfig(
+    zes_fan_handle_t hFan,                          ///< [in] Handle for the component.
+    zes_fan_config_t* pConfig                       ///< [in,out] Will contain the current configuration of the fan.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set fan configuration
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFan`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
+__ze_api_export ze_result_t __zecall
+zesFanSetConfig(
+    zes_fan_handle_t hFan,                          ///< [in] Handle for the component.
+    const zes_fan_config_t* pConfig                 ///< [in] New fan configuration.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current state of a fan - current mode and speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFan`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + units
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pSpeed`
+__ze_api_export ze_result_t __zecall
+zesFanGetState(
+    zes_fan_handle_t hFan,                          ///< [in] Handle for the component.
+    zes_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
+    uint32_t* pSpeed                                ///< [in,out] Will contain the current speed of the fan in the units
+                                                    ///< requested.
+    );
+
+#pragma endregion
+#pragma region firmware
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Firmware properties
+typedef struct _zes_firmware_properties_t
+{
+    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling Sysman handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    ze_bool_t canControl;                           ///< [out] Indicates if software can flash the firmware assuming the user
+                                                    ///< has permissions
+    int8_t name[ZES_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
+    int8_t version[ZES_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
+
+} zes_firmware_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of firmwares
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
+__ze_api_export ze_result_t __zecall
+zesDeviceEnumFirmwares(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zes_firmware_handle_t* phFirmware               ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get firmware properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFirmware`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+__ze_api_export ze_result_t __zecall
+zesFirmwareGetProperties(
+    zes_firmware_handle_t hFirmware,                ///< [in] Handle for the component.
+    zes_firmware_properties_t* pProperties          ///< [in,out] Pointer to an array that will hold the properties of the
+                                                    ///< firmware
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get firmware checksum
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFirmware`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pChecksum`
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to perform this operation.
+__ze_api_export ze_result_t __zecall
+zesFirmwareGetChecksum(
+    zes_firmware_handle_t hFirmware,                ///< [in] Handle for the component.
+    uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Flash a new firmware image
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hFirmware`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pImage`
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to perform this operation.
+__ze_api_export ze_result_t __zecall
+zesFirmwareFlash(
+    zes_firmware_handle_t hFirmware,                ///< [in] Handle for the component.
+    void* pImage,                                   ///< [in] Image of the new firmware to flash.
+    uint32_t size                                   ///< [in] Size of the flash image.
+    );
+
+#pragma endregion
+#pragma region frequency
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Frequency domains.
 typedef enum _zes_freq_domain_t
@@ -1491,15 +1837,15 @@ typedef enum _zes_freq_domain_t
 /// 
 /// @details
 ///     - Indicates if this frequency domain can be overclocked (if true,
-///       functions such as ::zesSysmanFrequencyOcSetConfig() are supported).
+///       functions such as ::zesFrequencyOcSetConfig() are supported).
 ///     - The min/max hardware frequencies are specified for non-overclock
 ///       configurations. For overclock configurations, use
-///       ::zesSysmanFrequencyOcGetConfig() to determine the maximum frequency
-///       that can be requested.
+///       ::zesFrequencyOcGetConfig() to determine the maximum frequency that
+///       can be requested.
 ///     - If step is non-zero, the available frequencies are (min, min + step,
 ///       min + 2xstep, ..., max). Otherwise, call
-///       ::zesSysmanFrequencyGetAvailableClocks() to get the list of
-///       frequencies that can be requested.
+///       ::zesFrequencyGetAvailableClocks() to get the list of frequencies that
+///       can be requested.
 typedef struct _zes_freq_properties_t
 {
     zes_freq_domain_t type;                         ///< [out] The hardware block that this frequency domain controls (GPU,
@@ -1510,7 +1856,7 @@ typedef struct _zes_freq_properties_t
     ze_bool_t canControl;                           ///< [out] Indicates if software can control the frequency of this domain
                                                     ///< assuming the user has permissions
     ze_bool_t isThrottleEventSupported;             ///< [out] Indicates if software can register to receive event
-                                                    ///< ::ZES_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
+                                                    ///< ::ZES_EVENT_TYPE_FREQ_THROTTLED
     double min;                                     ///< [out] The minimum hardware clock frequency in units of MHz
     double max;                                     ///< [out] The maximum non-overclock hardware clock frequency in units of
                                                     ///< MHz.
@@ -1660,12 +2006,12 @@ typedef struct _zes_oc_config_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDeviceEnumFrequencyDomains(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -1673,7 +2019,7 @@ zesSysmanFrequencyGet(
                                                     ///< if count is larger than the number of components available, then the
                                                     ///< driver will update the value with the correct number of components
                                                     ///< that are returned.
-    zes_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+    zes_freq_handle_t* phFrequency                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                     ///< this type
     );
 
@@ -1693,8 +2039,8 @@ zesSysmanFrequencyGet(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyGetProperties(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyGetProperties(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     zes_freq_properties_t* pProperties              ///< [in,out] The frequency properties for the specified domain.
     );
 
@@ -1717,8 +2063,8 @@ zesSysmanFrequencyGetProperties(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyGetAvailableClocks(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Sysman handle of the device.
+zesFrequencyGetAvailableClocks(
+    zes_freq_handle_t hFrequency,                   ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
                                                     ///< If count is zero, then the driver will update the value with the total
                                                     ///< number of frequencies available.
@@ -1745,8 +2091,8 @@ zesSysmanFrequencyGetAvailableClocks(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pLimits`
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyGetRange(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyGetRange(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     zes_freq_range_t* pLimits                       ///< [in,out] The range between which the hardware can operate for the
                                                     ///< specified domain.
     );
@@ -1769,8 +2115,8 @@ zesSysmanFrequencyGetRange(
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencySetRange(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencySetRange(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     const zes_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
                                                     ///< specified domain.
     );
@@ -1792,8 +2138,8 @@ zesSysmanFrequencySetRange(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyGetState(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyGetState(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     zes_freq_state_t* pState                        ///< [in,out] Frequency state for the specified domain.
     );
 
@@ -1813,8 +2159,8 @@ zesSysmanFrequencyGetState(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pThrottleTime`
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyGetThrottleTime(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyGetThrottleTime(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     zes_freq_throttle_time_t* pThrottleTime         ///< [in,out] Will contain a snapshot of the throttle time counters for the
                                                     ///< specified domain.
     );
@@ -1835,8 +2181,8 @@ zesSysmanFrequencyGetThrottleTime(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pOcCapabilities`
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyOcGetCapabilities(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyOcGetCapabilities(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     zes_oc_capabilities_t* pOcCapabilities          ///< [in,out] Pointer to the capabilities structure
                                                     ///< ::zes_oc_capabilities_t.
     );
@@ -1859,8 +2205,8 @@ zesSysmanFrequencyOcGetCapabilities(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zes_oc_capabilities_t.isOcSupported)
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyOcGetConfig(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyOcGetConfig(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     zes_oc_config_t* pOcConfiguration               ///< [in,out] Pointer to the configuration structure ::zes_oc_config_t.
     );
 
@@ -1870,8 +2216,8 @@ zesSysmanFrequencyOcGetConfig(
 /// @details
 ///     - If ::zes_oc_config_t.mode is set to ::ZES_OC_MODE_OFF, overclocking
 ///       will be turned off and the hardware returned to run with factory
-///       voltages/frequencies. Call ::zesSysmanFrequencyOcSetIccMax() and
-///       ::zesSysmanFrequencyOcSetTjMax() separately with 0.0 to return those
+///       voltages/frequencies. Call ::zesFrequencyOcSetIccMax() and
+///       ::zesFrequencyOcSetTjMax() separately with 0.0 to return those
 ///       settings to factory defaults.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -1894,8 +2240,8 @@ zesSysmanFrequencyOcGetConfig(
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyOcSetConfig(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyOcSetConfig(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     zes_oc_config_t* pOcConfiguration,              ///< [in] Pointer to the configuration structure ::zes_oc_config_t.
     ze_bool_t* pDeviceRestart                       ///< [in,out] This will be set to true if the device needs to be restarted
                                                     ///< in order to enable the new overclock settings.
@@ -1920,8 +2266,8 @@ zesSysmanFrequencyOcSetConfig(
 ///         + Overclocking is not supported on this frequency domain (::zes_oc_capabilities_t.isOcSupported)
 ///         + Capability ::zes_oc_capabilities_t.isIccMaxSupported is false for this frequency domain
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyOcGetIccMax(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyOcGetIccMax(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     double* pOcIccMax                               ///< [in,out] Will contain the maximum current limit in Amperes on
                                                     ///< successful return.
     );
@@ -1950,8 +2296,8 @@ zesSysmanFrequencyOcGetIccMax(
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyOcSetIccMax(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyOcSetIccMax(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
     );
 
@@ -1973,8 +2319,8 @@ zesSysmanFrequencyOcSetIccMax(
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
 ///         + Overclocking is not supported on this frequency domain (::zes_oc_capabilities_t.isOcSupported)
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyOcGetTjMax(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyOcGetTjMax(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     double* pOcTjMax                                ///< [in,out] Will contain the maximum temperature limit in degrees Celsius
                                                     ///< on successful return.
     );
@@ -2003,157 +2349,39 @@ zesSysmanFrequencyOcGetTjMax(
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 __ze_api_export ze_result_t __zecall
-zesSysmanFrequencyOcSetTjMax(
-    zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
+zesFrequencyOcSetTjMax(
+    zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
     double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
     );
 
+#pragma endregion
+#pragma region led
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Accelerator engine groups
-typedef enum _zes_engine_group_t
+/// @brief LED properties
+typedef struct _zes_led_properties_t
 {
-    ZES_ENGINE_GROUP_ALL = 0,                       ///< Access information about all engines combined.
-    ZES_ENGINE_GROUP_COMPUTE_ALL,                   ///< Access information about all compute engines combined.
-    ZES_ENGINE_GROUP_MEDIA_ALL,                     ///< Access information about all media engines combined.
-    ZES_ENGINE_GROUP_COPY_ALL,                      ///< Access information about all copy (blitter) engines combined.
-
-} zes_engine_group_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Engine group properties
-typedef struct _zes_engine_properties_t
-{
-    zes_engine_group_t type;                        ///< [out] The engine group
-    ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling Sysman handle
-    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-
-} zes_engine_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Engine activity counters
-/// 
-/// @details
-///     - Percent utilization is calculated by taking two snapshots (s1, s2) and
-///       using the equation: %util = (s2.activeTime - s1.activeTime) /
-///       (s2.timestamp - s1.timestamp)
-typedef struct _zes_engine_stats_t
-{
-    uint64_t activeTime;                            ///< [out] Monotonic counter for time in microseconds that this resource is
-                                                    ///< actively running workloads.
-    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when activeTime
-                                                    ///< counter was sampled.
-                                                    ///< No assumption should be made about the absolute value of the timestamp.
-                                                    ///< It should only be used to calculate delta time between two snapshots
-                                                    ///< of the same structure.
-                                                    ///< Never take the delta of this timestamp with the timestamp from a
-                                                    ///< different structure.
-
-} zes_engine_stats_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of engine groups
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pCount`
-__ze_api_export ze_result_t __zecall
-zesSysmanEngineGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of components of this type.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                    ///< if count is larger than the number of components available, then the
-                                                    ///< driver will update the value with the correct number of components
-                                                    ///< that are returned.
-    zes_sysman_engine_handle_t* phEngine            ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                    ///< this type
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get engine group properties
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hEngine`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProperties`
-__ze_api_export ze_result_t __zecall
-zesSysmanEngineGetProperties(
-    zes_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
-    zes_engine_properties_t* pProperties            ///< [in,out] The properties for the specified engine group.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the activity stats for an engine group
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hEngine`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pStats`
-__ze_api_export ze_result_t __zecall
-zesSysmanEngineGetActivity(
-    zes_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
-    zes_engine_stats_t* pStats                      ///< [in,out] Will contain a snapshot of the engine group activity
-                                                    ///< counters.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Standby hardware components
-typedef enum _zes_standby_type_t
-{
-    ZES_STANDBY_TYPE_GLOBAL = 0,                    ///< Control the overall standby policy of the device/sub-device
-
-} zes_standby_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Standby hardware component properties
-typedef struct _zes_standby_properties_t
-{
-    zes_standby_type_t type;                        ///< [out] Which standby hardware component this controls
     ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    ze_bool_t canControl;                           ///< [out] Indicates if software can control the LED assuming the user has
+                                                    ///< permissions
+    ze_bool_t haveRGB;                              ///< [out] Indicates if the LED is RGB capable
 
-} zes_standby_properties_t;
+} zes_led_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Standby promotion modes
-typedef enum _zes_standby_promo_mode_t
+/// @brief LED state
+typedef struct _zes_led_state_t
 {
-    ZES_STANDBY_PROMO_MODE_DEFAULT = 0,             ///< Best compromise between performance and energy savings.
-    ZES_STANDBY_PROMO_MODE_NEVER,                   ///< The device/component will never shutdown. This can improve performance
-                                                    ///< but uses more energy.
+    ze_bool_t isOn;                                 ///< [in,out] Indicates if the LED is on or off
+    uint8_t red;                                    ///< [in,out][range(0, 255)] The LED red value
+    uint8_t green;                                  ///< [in,out][range(0, 255)] The LED green value
+    uint8_t blue;                                   ///< [in,out][range(0, 255)] The LED blue value
 
-} zes_standby_promo_mode_t;
+} zes_led_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of standby controls
+/// @brief Get handle of LEDs
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2164,12 +2392,12 @@ typedef enum _zes_standby_promo_mode_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanStandbyGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDeviceEnumLeds(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2177,12 +2405,12 @@ zesSysmanStandbyGet(
                                                     ///< if count is larger than the number of components available, then the
                                                     ///< driver will update the value with the correct number of components
                                                     ///< that are returned.
-    zes_sysman_standby_handle_t* phStandby          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+    zes_led_handle_t* phLed                         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                     ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get standby hardware component properties
+/// @brief Get LED properties
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2193,17 +2421,17 @@ zesSysmanStandbyGet(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hStandby`
+///         + `nullptr == hLed`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanStandbyGetProperties(
-    zes_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
-    zes_standby_properties_t* pProperties           ///< [in,out] Will contain the standby hardware properties.
+zesLedGetProperties(
+    zes_led_handle_t hLed,                          ///< [in] Handle for the component.
+    zes_led_properties_t* pProperties               ///< [in,out] Will contain the properties of the LED.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the current standby promotion mode
+/// @brief Get current state of a LED - on/off, color
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2214,17 +2442,17 @@ zesSysmanStandbyGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hStandby`
+///         + `nullptr == hLed`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pMode`
+///         + `nullptr == pState`
 __ze_api_export ze_result_t __zecall
-zesSysmanStandbyGetMode(
-    zes_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
-    zes_standby_promo_mode_t* pMode                 ///< [in,out] Will contain the current standby mode.
+zesLedGetState(
+    zes_led_handle_t hLed,                          ///< [in] Handle for the component.
+    zes_led_state_t* pState                         ///< [in,out] Will contain the current state of the LED.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set standby promotion mode
+/// @brief Set state of a LED - on/off, color
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2235,129 +2463,19 @@ zesSysmanStandbyGetMode(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hStandby`
-///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
-///         + mode
+///         + `nullptr == hLed`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pState`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
 __ze_api_export ze_result_t __zecall
-zesSysmanStandbySetMode(
-    zes_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
-    zes_standby_promo_mode_t mode                   ///< [in] New standby mode.
+zesLedSetState(
+    zes_led_handle_t hLed,                          ///< [in] Handle for the component.
+    const zes_led_state_t* pState                   ///< [in] New state of the LED.
     );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Firmware properties
-typedef struct _zes_firmware_properties_t
-{
-    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling Sysman handle
-    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Indicates if software can flash the firmware assuming the user
-                                                    ///< has permissions
-    int8_t name[ZES_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
-    int8_t version[ZES_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
-
-} zes_firmware_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of firmwares
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pCount`
-__ze_api_export ze_result_t __zecall
-zesSysmanFirmwareGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of components of this type.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                    ///< if count is larger than the number of components available, then the
-                                                    ///< driver will update the value with the correct number of components
-                                                    ///< that are returned.
-    zes_sysman_firmware_handle_t* phFirmware        ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                    ///< this type
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get firmware properties
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hFirmware`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProperties`
-__ze_api_export ze_result_t __zecall
-zesSysmanFirmwareGetProperties(
-    zes_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
-    zes_firmware_properties_t* pProperties          ///< [in,out] Pointer to an array that will hold the properties of the
-                                                    ///< firmware
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get firmware checksum
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hFirmware`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pChecksum`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to perform this operation.
-__ze_api_export ze_result_t __zecall
-zesSysmanFirmwareGetChecksum(
-    zes_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
-    uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Flash a new firmware image
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hFirmware`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pImage`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to perform this operation.
-__ze_api_export ze_result_t __zecall
-zesSysmanFirmwareFlash(
-    zes_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
-    void* pImage,                                   ///< [in] Image of the new firmware to flash.
-    uint32_t size                                   ///< [in] Size of the flash image.
-    );
-
+#pragma endregion
+#pragma region memory
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Memory module types
 typedef enum _zes_mem_type_t
@@ -2446,12 +2564,12 @@ typedef struct _zes_mem_bandwidth_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanMemoryGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDeviceEnumMemoryModules(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2459,7 +2577,7 @@ zesSysmanMemoryGet(
                                                     ///< if count is larger than the number of components available, then the
                                                     ///< driver will update the value with the correct number of components
                                                     ///< that are returned.
-    zes_sysman_mem_handle_t* phMemory               ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+    zes_mem_handle_t* phMemory                      ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                     ///< this type
     );
 
@@ -2479,8 +2597,8 @@ zesSysmanMemoryGet(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanMemoryGetProperties(
-    zes_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+zesMemoryGetProperties(
+    zes_mem_handle_t hMemory,                       ///< [in] Handle for the component.
     zes_mem_properties_t* pProperties               ///< [in,out] Will contain memory properties.
     );
 
@@ -2500,8 +2618,8 @@ zesSysmanMemoryGetProperties(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
 __ze_api_export ze_result_t __zecall
-zesSysmanMemoryGetState(
-    zes_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+zesMemoryGetState(
+    zes_mem_handle_t hMemory,                       ///< [in] Handle for the component.
     zes_mem_state_t* pState                         ///< [in,out] Will contain the current health and allocated memory.
     );
 
@@ -2523,162 +2641,232 @@ zesSysmanMemoryGetState(
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to query this telemetry.
 __ze_api_export ze_result_t __zecall
-zesSysmanMemoryGetBandwidth(
-    zes_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
+zesMemoryGetBandwidth(
+    zes_mem_handle_t hMemory,                       ///< [in] Handle for the component.
     zes_mem_bandwidth_t* pBandwidth                 ///< [in,out] Will contain the current health, free memory, total memory
                                                     ///< size.
     );
 
+#pragma endregion
+#pragma region performance
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_MAX_FABRIC_PORT_MODEL_SIZE
-/// @brief Maximum Fabric port model string size
-#define ZES_MAX_FABRIC_PORT_MODEL_SIZE  256
-#endif // ZES_MAX_FABRIC_PORT_MODEL_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_MAX_FABRIC_LINK_TYPE_SIZE
-/// @brief Maximum size of the buffer that will return information about link
-///        types
-#define ZES_MAX_FABRIC_LINK_TYPE_SIZE  256
-#endif // ZES_MAX_FABRIC_LINK_TYPE_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Fabric port status
-typedef enum _zes_fabric_port_status_t
+/// @brief Static information about a Performance Factor domain
+typedef struct _zes_perf_properties_t
 {
-    ZES_FABRIC_PORT_STATUS_GREEN = 0,               ///< The port is up and operating as expected
-    ZES_FABRIC_PORT_STATUS_YELLOW,                  ///< The port is up but has quality and/or speed degradation
-    ZES_FABRIC_PORT_STATUS_RED,                     ///< Port connection instabilities are preventing workloads making forward
-                                                    ///< progress
-    ZES_FABRIC_PORT_STATUS_BLACK,                   ///< The port is configured down
+    ze_bool_t onSubdevice;                          ///< [out] True if this Performance Factor affects accelerators located on
+                                                    ///< a sub-device
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are affected by this
+                                                    ///< Performance Factor (bitfield of 1<<::zes_engine_type_t).
 
-} zes_fabric_port_status_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Fabric port quality degradation reasons
-typedef enum _zes_fabric_port_qual_issues_t
-{
-    ZES_FABRIC_PORT_QUAL_ISSUES_NONE = 0,           ///< There are no quality issues with the link at this time
-    ZES_FABRIC_PORT_QUAL_LINK_ERRORS = ZE_BIT( 0 ), ///< Excessive link errors are occurring
-    ZES_FABRIC_PORT_QUAL_ISSUES_SPEED = ZE_BIT( 1 ),///< There is a degradation in the bitrate and/or width of the link
-
-} zes_fabric_port_qual_issues_t;
+} zes_perf_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Fabric port stability issues
-typedef enum _zes_fabric_port_stab_issues_t
-{
-    ZES_FABRIC_PORT_STAB_ISSUES_NONE = 0,           ///< There are no connection stability issues at this time
-    ZES_FABRIC_PORT_STAB_ISSUES_FAILED = ZE_BIT( 0 ),   ///< A previously operating link has failed. Hardware will automatically
-                                                    ///< retrain this port. This state will persist until either the physical
-                                                    ///< connection is removed or the link trains successfully.
-    ZES_FABRIC_PORT_STAB_ISSUES_TRAINING_TIMEOUT = ZE_BIT( 1 ), ///< A connection has not been established within an expected time.
-                                                    ///< Hardware will continue to attempt port training. This status will
-                                                    ///< persist until either the physical connection is removed or the link
-                                                    ///< successfully trains.
-    ZES_FABRIC_PORT_STAB_ISSUES_FLAPPING = ZE_BIT( 2 ), ///< Port has excessively trained and then transitioned down for some
-                                                    ///< period of time. Driver will allow port to continue to train, but will
-                                                    ///< not enable the port for use until the port has been disabled and
-                                                    ///< subsequently re-enabled using ::zesSysmanFabricPortSetConfig().
-
-} zes_fabric_port_stab_issues_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Unique identifier for a fabric port
+/// @brief Get handles to accelerator domains whose performance can be optimized
+///        via a Performance Factor
 /// 
 /// @details
-///     - This not a universal identifier. The identified is garanteed to be
-///       unique for the current hardware configuration of the system. Changes
-///       in the hardware may result in a different identifier for a given port.
-///     - The main purpose of this identifier to build up an instantaneous
-///       topology map of system connectivity. An application should enumerate
-///       all fabric ports and match ::zes_fabric_port_state_t.remotePortId to
-///       ::zes_fabric_port_properties_t.portId.
-typedef struct _zes_fabric_port_id_t
-{
-    uint32_t fabricId;                              ///< [out] Unique identifier for the fabric end-point
-    uint32_t attachId;                              ///< [out] Unique identifier for the device attachment point
-    uint8_t portNumber;                             ///< [out] The logical port number (this is typically marked somewhere on
-                                                    ///< the physical device)
-
-} zes_fabric_port_id_t;
+///     - A Performance Factor should be tuned for each workload.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
+__ze_api_export ze_result_t __zecall
+zesDeviceEnumPerformanceFactorDomains(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zes_perf_handle_t* phPerf                       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Fabric port speed in one direction
-typedef struct _zes_fabric_port_speed_t
-{
-    uint64_t bitRate;                               ///< [out] Bits/sec that the link is operating at
-    uint32_t width;                                 ///< [out] The number of lanes
-
-} zes_fabric_port_speed_t;
+/// @brief Get properties about a Performance Factor domain
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPerf`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+__ze_api_export ze_result_t __zecall
+zesPerformanceFactorGetProperties(
+    zes_perf_handle_t hPerf,                        ///< [in] Handle for the Performance Factor domain.
+    zes_perf_properties_t* pProperties              ///< [in,out] Will contain information about the specified Performance
+                                                    ///< Factor domain.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Fabric port properties
-typedef struct _zes_fabric_port_properties_t
+/// @brief Get current Performance Factor for a given domain
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPerf`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pFactor`
+__ze_api_export ze_result_t __zecall
+zesPerformanceFactorGetConfig(
+    zes_perf_handle_t hPerf,                        ///< [in] Handle for the Performance Factor domain.
+    double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
+                                                    ///< hardware (may not be the same as the requested Performance Factor).
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change the performance factor for a domain
+/// 
+/// @details
+///     - The Performance Factor is a number between 0 and 100.
+///     - A Performance Factor is a hint to the hardware. Depending on the
+///       hardware, the request may not be granted. Follow up this function with
+///       a call to ::zesPerformanceFactorGetConfig() to determine the actual
+///       factor being used by the hardware.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hPerf`
+__ze_api_export ze_result_t __zecall
+zesPerformanceFactorSetConfig(
+    zes_perf_handle_t hPerf,                        ///< [in] Handle for the Performance Factor domain.
+    double factor                                   ///< [in] The new Performance Factor.
+    );
+
+#pragma endregion
+#pragma region power
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Properties related to device power settings
+typedef struct _zes_power_properties_t
 {
-    int8_t model[ZES_MAX_FABRIC_PORT_MODEL_SIZE];   ///< [out] Description of port technology
-    ze_bool_t onSubdevice;                          ///< [out] True if the port is located on a sub-device; false means that
-                                                    ///< the port is on the device of the calling Sysman handle
+    ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    zes_fabric_port_id_t portId;                    ///< [out] The unique port identifier
-    zes_fabric_port_speed_t maxRxSpeed;             ///< [out] Maximum speed supported by the receive side of the port
-    zes_fabric_port_speed_t maxTxSpeed;             ///< [out] Maximum speed supported by the transmit side of the port
+    ze_bool_t canControl;                           ///< [out] Software can change the power limits of this domain assuming the
+                                                    ///< user has permissions.
+    ze_bool_t isEnergyThresholdSupported;           ///< [out] Indicates if this power domain supports the energy threshold
+                                                    ///< event (::ZES_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
+    uint32_t defaultLimit;                          ///< [out] The factory default TDP power limit of the part in milliwatts.
+    uint32_t minLimit;                              ///< [out] The minimum power limit in milliwatts that can be requested.
+    uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
 
-} zes_fabric_port_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Provides information about the fabric link attached to a port
-typedef struct _zes_fabric_link_type_t
-{
-    int8_t desc[ZES_MAX_FABRIC_LINK_TYPE_SIZE];     ///< [out] This provides a static textural description of the physic
-                                                    ///< attachment type
-
-} zes_fabric_link_type_t;
+} zes_power_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Fabric port configuration
-typedef struct _zes_fabric_port_config_t
+/// @brief Energy counter snapshot
+/// 
+/// @details
+///     - Average power is calculated by taking two snapshots (s1, s2) and using
+///       the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp -
+///       s1.timestamp)
+typedef struct _zes_power_energy_counter_t
 {
-    ze_bool_t enabled;                              ///< [in,out] Port is configured up/down
-    ze_bool_t beaconing;                            ///< [in,out] Beaconing is configured on/off
-
-} zes_fabric_port_config_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Fabric port state
-typedef struct _zes_fabric_port_state_t
-{
-    zes_fabric_port_status_t status;                ///< [out] The current status of the port
-    zes_fabric_port_qual_issues_t qualityIssues;    ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_YELLOW, this gives a
-                                                    ///< bitfield of quality issues that have been detected
-    zes_fabric_port_stab_issues_t stabilityIssues;  ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_RED, this gives a bitfield
-                                                    ///< of reasons for the connection instability
-    zes_fabric_port_id_t remotePortId;              ///< [out] The unique port identifier for the remote connection point
-    zes_fabric_port_speed_t rxSpeed;                ///< [out] Current maximum receive speed
-    zes_fabric_port_speed_t txSpeed;                ///< [out] Current maximum transmit speed
-
-} zes_fabric_port_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Fabric port throughput.
-typedef struct _zes_fabric_port_throughput_t
-{
-    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
-                                                    ///< was made.
+    uint64_t energy;                                ///< [out] The monotonic energy counter in microjoules.
+    uint64_t timestamp;                             ///< [out] Microsecond timestamp when energy was captured.
                                                     ///< No assumption should be made about the absolute value of the timestamp.
                                                     ///< It should only be used to calculate delta time between two snapshots
                                                     ///< of the same structure.
                                                     ///< Never take the delta of this timestamp with the timestamp from a
                                                     ///< different structure.
-    uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received. This
-                                                    ///< includes all protocol overhead, not only the GPU traffic.
-    uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted. This
-                                                    ///< includes all protocol overhead, not only the GPU traffic.
 
-} zes_fabric_port_throughput_t;
+} zes_power_energy_counter_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of Fabric ports in a device
+/// @brief Sustained power limits
+/// 
+/// @details
+///     - The power controller (Punit) will throttle the operating frequency if
+///       the power averaged over a window (typically seconds) exceeds this
+///       limit.
+typedef struct _zes_power_sustained_limit_t
+{
+    ze_bool_t enabled;                              ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
+    uint32_t power;                                 ///< [in,out] power limit in milliwatts
+    uint32_t interval;                              ///< [in,out] power averaging window (Tau) in milliseconds
+
+} zes_power_sustained_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Burst power limit
+/// 
+/// @details
+///     - The power controller (Punit) will throttle the operating frequency of
+///       the device if the power averaged over a few milliseconds exceeds a
+///       limit known as PL2. Typically PL2 > PL1 so that it permits the
+///       frequency to burst higher for short periods than would be otherwise
+///       permitted by PL1.
+typedef struct _zes_power_burst_limit_t
+{
+    ze_bool_t enabled;                              ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
+    uint32_t power;                                 ///< [in,out] power limit in milliwatts
+
+} zes_power_burst_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Peak power limit
+/// 
+/// @details
+///     - The power controller (Punit) will preemptively throttle the operating
+///       frequency of the device when the instantaneous power exceeds this
+///       limit. The limit is known as PL4. It expresses the maximum power that
+///       can be drawn from the power supply.
+///     - If this power limit is removed or set too high, the power supply will
+///       generate an interrupt when it detects an overcurrent condition and the
+///       power controller will throttle the device frequencies down to min. It
+///       is thus better to tune the PL4 value in order to avoid such
+///       excursions.
+typedef struct _zes_power_peak_limit_t
+{
+    uint32_t powerAC;                               ///< [in,out] power limit in milliwatts for the AC power source.
+    uint32_t powerDC;                               ///< [in,out] power limit in milliwatts for the DC power source. This is
+                                                    ///< ignored if the product does not have a battery.
+
+} zes_power_peak_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Energy threshold
+/// 
+/// @details
+///     - .
+typedef struct _zes_energy_threshold_t
+{
+    ze_bool_t enable;                               ///< [in,out] Indicates if the energy threshold is enabled.
+    double threshold;                               ///< [in,out] The energy threshold in Joules. Will be 0.0 if no threshold
+                                                    ///< has been set.
+    uint32_t processId;                             ///< [in,out] The host process ID that set the energy threshold. Will be
+                                                    ///< 0xFFFFFFFF if no threshold has been set.
+
+} zes_energy_threshold_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of power domains
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2689,12 +2877,12 @@ typedef struct _zes_fabric_port_throughput_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanFabricPortGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDeviceEnumPowerDomains(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -2702,12 +2890,12 @@ zesSysmanFabricPortGet(
                                                     ///< if count is larger than the number of components available, then the
                                                     ///< driver will update the value with the correct number of components
                                                     ///< that are returned.
-    zes_sysman_fabric_port_handle_t* phPort         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+    zes_pwr_handle_t* phPower                       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                     ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Fabric port properties
+/// @brief Get properties related to a power domain
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2718,17 +2906,17 @@ zesSysmanFabricPortGet(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPort`
+///         + `nullptr == hPower`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanFabricPortGetProperties(
-    zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-    zes_fabric_port_properties_t* pProperties       ///< [in,out] Will contain properties of the Fabric Port.
+zesPowerGetProperties(
+    zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+    zes_power_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Fabric port link type
+/// @brief Get energy counter
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2739,19 +2927,18 @@ zesSysmanFabricPortGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPort`
+///         + `nullptr == hPower`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pLinkType`
+///         + `nullptr == pEnergy`
 __ze_api_export ze_result_t __zecall
-zesSysmanFabricPortGetLinkType(
-    zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-    ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
-    zes_fabric_link_type_t* pLinkType               ///< [in,out] Will contain details about the link attached to the Fabric
-                                                    ///< port.
+zesPowerGetEnergyCounter(
+    zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+    zes_power_energy_counter_t* pEnergy             ///< [in,out] Will contain the latest snapshot of the energy counter and
+                                                    ///< timestamp when the last counter value was measured.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Fabric port configuration
+/// @brief Get power limits
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2762,17 +2949,17 @@ zesSysmanFabricPortGetLinkType(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPort`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
+///         + `nullptr == hPower`
 __ze_api_export ze_result_t __zecall
-zesSysmanFabricPortGetConfig(
-    zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-    zes_fabric_port_config_t* pConfig               ///< [in,out] Will contain configuration of the Fabric Port.
+zesPowerGetLimits(
+    zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+    zes_power_sustained_limit_t* pSustained,        ///< [in,out][optional] The sustained power limit.
+    zes_power_burst_limit_t* pBurst,                ///< [in,out][optional] The burst power limit.
+    zes_power_peak_limit_t* pPeak                   ///< [in,out][optional] The peak power limit.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set Fabric port configuration
+/// @brief Set power limits
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2783,20 +2970,21 @@ zesSysmanFabricPortGetConfig(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPort`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
+///         + `nullptr == hPower`
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to make these modifications.
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
+///         + The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported.
 __ze_api_export ze_result_t __zecall
-zesSysmanFabricPortSetConfig(
-    zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-    const zes_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
+zesPowerSetLimits(
+    zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+    const zes_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
+    const zes_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
+    const zes_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Fabric port state - status (green/yellow/red/black), reasons for
-///        link degradation or instability, current rx/tx speed
+/// @brief Get energy threshold
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -2807,189 +2995,38 @@ zesSysmanFabricPortSetConfig(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPort`
+///         + `nullptr == hPower`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pState`
-__ze_api_export ze_result_t __zecall
-zesSysmanFabricPortGetState(
-    zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-    zes_fabric_port_state_t* pState                 ///< [in,out] Will contain the current state of the Fabric Port
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get Fabric port throughput
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hPort`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pThroughput`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to query this telemetry.
-__ze_api_export ze_result_t __zecall
-zesSysmanFabricPortGetThroughput(
-    zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-    zes_fabric_port_throughput_t* pThroughput       ///< [in,out] Will contain the Fabric port throughput counters.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Temperature sensors
-typedef enum _zes_temp_sensors_t
-{
-    ZES_TEMP_SENSORS_GLOBAL = 0,                    ///< The maximum temperature across all device sensors
-    ZES_TEMP_SENSORS_GPU,                           ///< The maximum temperature across all sensors in the GPU
-    ZES_TEMP_SENSORS_MEMORY,                        ///< The maximum temperature across all sensors in the local memory
-
-} zes_temp_sensors_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Temperature sensor properties
-typedef struct _zes_temp_properties_t
-{
-    zes_temp_sensors_t type;                        ///< [out] Which part of the device the temperature sensor measures
-    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling Sysman handle
-    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t isCriticalTempSupported;              ///< [out] Indicates if the critical temperature event
-                                                    ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
-    ze_bool_t isThreshold1Supported;                ///< [out] Indicates if the temperature threshold 1 event
-                                                    ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported
-    ze_bool_t isThreshold2Supported;                ///< [out] Indicates if the temperature threshold 2 event
-                                                    ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 is supported
-
-} zes_temp_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Temperature sensor threshold
-typedef struct _zes_temp_threshold_t
-{
-    ze_bool_t enableLowToHigh;                      ///< [in,out] Trigger an event when the temperature crosses from below the
-                                                    ///< threshold to above.
-    ze_bool_t enableHighToLow;                      ///< [in,out] Trigger an event when the temperature crosses from above the
-                                                    ///< threshold to below.
-    double threshold;                               ///< [in,out] The threshold in degrees Celsius.
-
-} zes_temp_threshold_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Temperature configuration - which events should be triggered and the
-///        trigger conditions.
-typedef struct _zes_temp_config_t
-{
-    ze_bool_t enableCritical;                       ///< [in,out] Indicates if event ::ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
-                                                    ///< should be triggered by the driver.
-    zes_temp_threshold_t threshold1;                ///< [in,out] Configuration controlling if and when event
-                                                    ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the
-                                                    ///< driver.
-    zes_temp_threshold_t threshold2;                ///< [in,out] Configuration controlling if and when event
-                                                    ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the
-                                                    ///< driver.
-    uint32_t processId;                             ///< [out] Host processId that set this configuration (ignored when setting
-                                                    ///< the configuration).
-
-} zes_temp_config_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of temperature sensors
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pCount`
-__ze_api_export ze_result_t __zecall
-zesSysmanTemperatureGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of components of this type.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                    ///< if count is larger than the number of components available, then the
-                                                    ///< driver will update the value with the correct number of components
-                                                    ///< that are returned.
-    zes_sysman_temp_handle_t* phTemperature         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                    ///< this type
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get temperature sensor properties
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hTemperature`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProperties`
-__ze_api_export ze_result_t __zecall
-zesSysmanTemperatureGetProperties(
-    zes_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-    zes_temp_properties_t* pProperties              ///< [in,out] Will contain the temperature sensor properties.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get temperature configuration for this sensor - which events are
-///        triggered and the trigger conditions
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hTemperature`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
+///         + `nullptr == pThreshold`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor ::ZES_TEMP_SENSORS_GLOBAL
-///         + One or both of the thresholds is not supported - check ::zes_temp_properties_t.isThreshold1Supported and ::zes_temp_properties_t.isThreshold2Supported
+///         + Energy threshold not supported on this power domain (check ::zes_power_properties_t.isEnergyThresholdSupported).
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
 __ze_api_export ze_result_t __zecall
-zesSysmanTemperatureGetConfig(
-    zes_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-    zes_temp_config_t* pConfig                      ///< [in,out] Returns current configuration.
+zesPowerGetEnergyThreshold(
+    zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+    zes_energy_threshold_t* pThreshold              ///< [in,out] Returns information about the energy threshold setting -
+                                                    ///< enabled/energy threshold/process ID.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set temperature configuration for this sensor - indicates which events
-///        are triggered and the trigger conditions
+/// @brief Set energy threshold
 /// 
 /// @details
-///     - Events ::ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL will be triggered when
-///       temperature reaches the critical range. Use the function
-///       ::zesSysmanEventSetConfig() to start receiving this event.
-///     - Events ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and
-///       ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when
-///       temperature cross the thresholds set using this function. Use the
-///       function ::zesSysmanEventSetConfig() to start receiving these events.
-///     - Only one running process can set the temperature configuration at a
-///       time. If another process attempts to change the configuration, the
+///     - An event ::ZES_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated
+///       when the delta energy consumed starting from this call exceeds the
+///       specified threshold. Use the function ::zesEventSetConfig() to start
+///       receiving the event.
+///     - Only one running process can control the energy threshold at a given
+///       time. If another process attempts to change the energy threshold, the
 ///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
-///       ::zesSysmanTemperatureGetConfig() will return the process ID currently
-///       controlling these settings.
+///       ::zesPowerGetEnergyThreshold() to determine the process ID currently
+///       controlling this setting.
+///     - Calling this function will remove any pending energy thresholds and
+///       start counting from the time of this call.
+///     - Once the energy threshold has been reached and the event generated,
+///       the threshold is automatically removed. It is up to the application to
+///       request a new threshold.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -2998,47 +3035,21 @@ zesSysmanTemperatureGetConfig(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hTemperature`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
+///         + `nullptr == hPower`
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
-///         + Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor ::ZES_TEMP_SENSORS_GLOBAL
-///         + Enabling the critical temperature event is not supported - check ::zes_temp_properties_t.isCriticalTempSupported
-///         + One or both of the thresholds is not supported - check ::zes_temp_properties_t.isThreshold1Supported and ::zes_temp_properties_t.isThreshold2Supported
+///         + Energy threshold not supported on this power domain (check ::zes_power_properties_t.isEnergyThresholdSupported).
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + User does not have permissions to request this feature.
 ///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
-///         + Another running process is controlling these settings.
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + One or both the thresholds is above TjMax (see ::zesSysmanFrequencyOcGetTjMax()). Temperature thresholds must be below this value.
+///         + Another running process has set the energy threshold.
 __ze_api_export ze_result_t __zecall
-zesSysmanTemperatureSetConfig(
-    zes_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-    const zes_temp_config_t* pConfig                ///< [in] New configuration.
+zesPowerSetEnergyThreshold(
+    zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+    double threshold                                ///< [in] The energy threshold to be set in joules.
     );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the temperature from a specified sensor
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hTemperature`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pTemperature`
-__ze_api_export ze_result_t __zecall
-zesSysmanTemperatureGetState(
-    zes_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-    double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
-                                                    ///< in degrees Celsius.
-    );
-
+#pragma endregion
+#pragma region psu
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief PSU voltage status
 typedef enum _zes_psu_voltage_status_t
@@ -3084,12 +3095,12 @@ typedef struct _zes_psu_state_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanPsuGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDeviceEnumPsus(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -3097,7 +3108,7 @@ zesSysmanPsuGet(
                                                     ///< if count is larger than the number of components available, then the
                                                     ///< driver will update the value with the correct number of components
                                                     ///< that are returned.
-    zes_sysman_psu_handle_t* phPsu                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+    zes_psu_handle_t* phPsu                         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                     ///< this type
     );
 
@@ -3117,8 +3128,8 @@ zesSysmanPsuGet(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanPsuGetProperties(
-    zes_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
+zesPsuGetProperties(
+    zes_psu_handle_t hPsu,                          ///< [in] Handle for the component.
     zes_psu_properties_t* pProperties               ///< [in,out] Will contain the properties of the power supply.
     );
 
@@ -3138,310 +3149,13 @@ zesSysmanPsuGetProperties(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pState`
 __ze_api_export ze_result_t __zecall
-zesSysmanPsuGetState(
-    zes_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
+zesPsuGetState(
+    zes_psu_handle_t hPsu,                          ///< [in] Handle for the component.
     zes_psu_state_t* pState                         ///< [in,out] Will contain the current state of the power supply.
     );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Fan resource speed mode
-typedef enum _zes_fan_speed_mode_t
-{
-    ZES_FAN_SPEED_MODE_DEFAULT = 0,                 ///< The fan speed is operating using the hardware default settings
-    ZES_FAN_SPEED_MODE_FIXED,                       ///< The fan speed is currently set to a fixed value
-    ZES_FAN_SPEED_MODE_TABLE,                       ///< The fan speed is currently controlled dynamically by hardware based on
-                                                    ///< a temp/speed table
-
-} zes_fan_speed_mode_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Fan speed units
-typedef enum _zes_fan_speed_units_t
-{
-    ZES_FAN_SPEED_UNITS_RPM = 0,                    ///< The fan speed is in units of revolutions per minute (rpm)
-    ZES_FAN_SPEED_UNITS_PERCENT,                    ///< The fan speed is a percentage of the maximum speed of the fan
-
-} zes_fan_speed_units_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Fan temperature/speed pair
-typedef struct _zes_fan_temp_speed_t
-{
-    uint32_t temperature;                           ///< [in,out] Temperature in degrees Celsius.
-    uint32_t speed;                                 ///< [in,out] The speed of the fan
-    zes_fan_speed_units_t units;                    ///< [in,out] The units of the member speed
-
-} zes_fan_temp_speed_t;
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_FAN_TEMP_SPEED_PAIR_COUNT
-/// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
-#define ZES_FAN_TEMP_SPEED_PAIR_COUNT  32
-#endif // ZES_FAN_TEMP_SPEED_PAIR_COUNT
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Fan properties
-typedef struct _zes_fan_properties_t
-{
-    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling Sysman handle
-    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Indicates if software can control the fan speed assuming the
-                                                    ///< user has permissions
-    uint32_t maxSpeed;                              ///< [out] The maximum RPM of the fan
-    uint32_t maxPoints;                             ///< [out] The maximum number of points in the fan temp/speed table
-
-} zes_fan_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Fan configuration
-typedef struct _zes_fan_config_t
-{
-    zes_fan_speed_mode_t mode;                      ///< [in,out] The fan speed mode (fixed, temp-speed table)
-    uint32_t speed;                                 ///< [in,out] The fixed fan speed setting
-    zes_fan_speed_units_t speedUnits;               ///< [in,out] The units of the fixed fan speed setting
-    uint32_t numPoints;                             ///< [in,out] The number of valid points in the fan speed table
-    zes_fan_temp_speed_t table[ZES_FAN_TEMP_SPEED_PAIR_COUNT];  ///< [in,out] Array of temperature/fan speed pairs
-
-} zes_fan_config_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of fans
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pCount`
-__ze_api_export ze_result_t __zecall
-zesSysmanFanGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of components of this type.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                    ///< if count is larger than the number of components available, then the
-                                                    ///< driver will update the value with the correct number of components
-                                                    ///< that are returned.
-    zes_sysman_fan_handle_t* phFan                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                    ///< this type
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get fan properties
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hFan`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProperties`
-__ze_api_export ze_result_t __zecall
-zesSysmanFanGetProperties(
-    zes_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-    zes_fan_properties_t* pProperties               ///< [in,out] Will contain the properties of the fan.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current fan configuration
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hFan`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
-__ze_api_export ze_result_t __zecall
-zesSysmanFanGetConfig(
-    zes_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-    zes_fan_config_t* pConfig                       ///< [in,out] Will contain the current configuration of the fan.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set fan configuration
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hFan`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to make these modifications.
-__ze_api_export ze_result_t __zecall
-zesSysmanFanSetConfig(
-    zes_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-    const zes_fan_config_t* pConfig                 ///< [in] New fan configuration.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current state of a fan - current mode and speed
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hFan`
-///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
-///         + units
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pSpeed`
-__ze_api_export ze_result_t __zecall
-zesSysmanFanGetState(
-    zes_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-    zes_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
-    uint32_t* pSpeed                                ///< [in,out] Will contain the current speed of the fan in the units
-                                                    ///< requested.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief LED properties
-typedef struct _zes_led_properties_t
-{
-    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
-                                                    ///< that the resource is on the device of the calling Sysman handle
-    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    ze_bool_t canControl;                           ///< [out] Indicates if software can control the LED assuming the user has
-                                                    ///< permissions
-    ze_bool_t haveRGB;                              ///< [out] Indicates if the LED is RGB capable
-
-} zes_led_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief LED state
-typedef struct _zes_led_state_t
-{
-    ze_bool_t isOn;                                 ///< [in,out] Indicates if the LED is on or off
-    uint8_t red;                                    ///< [in,out][range(0, 255)] The LED red value
-    uint8_t green;                                  ///< [in,out][range(0, 255)] The LED green value
-    uint8_t blue;                                   ///< [in,out][range(0, 255)] The LED blue value
-
-} zes_led_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of LEDs
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pCount`
-__ze_api_export ze_result_t __zecall
-zesSysmanLedGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of components of this type.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                    ///< if count is larger than the number of components available, then the
-                                                    ///< driver will update the value with the correct number of components
-                                                    ///< that are returned.
-    zes_sysman_led_handle_t* phLed                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                    ///< this type
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get LED properties
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hLed`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pProperties`
-__ze_api_export ze_result_t __zecall
-zesSysmanLedGetProperties(
-    zes_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
-    zes_led_properties_t* pProperties               ///< [in,out] Will contain the properties of the LED.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get current state of a LED - on/off, color
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hLed`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pState`
-__ze_api_export ze_result_t __zecall
-zesSysmanLedGetState(
-    zes_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
-    zes_led_state_t* pState                         ///< [in,out] Will contain the current state of the LED.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set state of a LED - on/off, color
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hLed`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pState`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to make these modifications.
-__ze_api_export ze_result_t __zecall
-zesSysmanLedSetState(
-    zes_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
-    const zes_led_state_t* pState                   ///< [in] New state of the LED.
-    );
-
+#pragma endregion
+#pragma region ras
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief RAS error type
 typedef enum _zes_ras_error_type_t
@@ -3483,8 +3197,8 @@ typedef struct _zes_ras_details_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief RAS error configuration - thresholds used for triggering RAS events
-///        (::ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
-///        ::ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
+///        (::ZES_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
+///        ::ZES_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
 /// 
 /// @details
 ///     - The driver maintains a total counter which is updated every time a
@@ -3531,12 +3245,12 @@ typedef struct _zes_ras_config_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanRasGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDeviceEnumRasErrorSets(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -3544,7 +3258,7 @@ zesSysmanRasGet(
                                                     ///< if count is larger than the number of components available, then the
                                                     ///< driver will update the value with the correct number of components
                                                     ///< that are returned.
-    zes_sysman_ras_handle_t* phRas                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+    zes_ras_handle_t* phRas                         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                     ///< this type
     );
 
@@ -3566,8 +3280,8 @@ zesSysmanRasGet(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanRasGetProperties(
-    zes_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+zesRasGetProperties(
+    zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
     zes_ras_properties_t* pProperties               ///< [in,out] Structure describing RAS properties
     );
 
@@ -3579,11 +3293,11 @@ zesSysmanRasGetProperties(
 ///       categories. Events are generated when errors occur. The configuration
 ///       enables setting thresholds to limit when events are sent.
 ///     - When a particular RAS correctable error counter exceeds the configured
-///       threshold, the event ::ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
-///       will be triggered.
+///       threshold, the event ::ZES_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be
+///       triggered.
 ///     - When a particular RAS uncorrectable error counter exceeds the
 ///       configured threshold, the event
-///       ::ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered.
+///       ::ZES_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -3596,8 +3310,8 @@ zesSysmanRasGetProperties(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pConfig`
 __ze_api_export ze_result_t __zecall
-zesSysmanRasGetConfig(
-    zes_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+zesRasGetConfig(
+    zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
     zes_ras_config_t* pConfig                       ///< [in,out] Will be populed with the current RAS configuration -
                                                     ///< thresholds used to trigger events
     );
@@ -3610,13 +3324,13 @@ zesSysmanRasGetConfig(
 ///       categories. Events are generated when errors occur. The configuration
 ///       enables setting thresholds to limit when events are sent.
 ///     - When a particular RAS correctable error counter exceeds the specified
-///       threshold, the event ::ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
-///       will be generated.
+///       threshold, the event ::ZES_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be
+///       generated.
 ///     - When a particular RAS uncorrectable error counter exceeds the
 ///       specified threshold, the event
-///       ::ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated.
-///     - Call ::zesSysmanRasGetState() and set the clear flag to true to
-///       restart event generation once counters have exceeded thresholds.
+///       ::ZES_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated.
+///     - Call ::zesRasGetState() and set the clear flag to true to restart
+///       event generation once counters have exceeded thresholds.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -3633,8 +3347,8 @@ zesSysmanRasGetConfig(
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + Don't have permissions to set thresholds.
 __ze_api_export ze_result_t __zecall
-zesSysmanRasSetConfig(
-    zes_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+zesRasSetConfig(
+    zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
     const zes_ras_config_t* pConfig                 ///< [in] Change the RAS configuration - thresholds used to trigger events
     );
 
@@ -3659,258 +3373,87 @@ zesSysmanRasSetConfig(
 ///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
 ///         + Don't have permissions to clear error counters.
 __ze_api_export ze_result_t __zecall
-zesSysmanRasGetState(
-    zes_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
+zesRasGetState(
+    zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
     ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
     uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
     zes_ras_details_t* pDetails                     ///< [in,out][optional] Breakdown of where errors have occurred
     );
 
+#pragma endregion
+#pragma region scheduler
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Event types
-typedef enum _zes_sysman_event_type_t
+/// @brief Scheduler mode
+typedef enum _zes_sched_mode_t
 {
-    ZES_SYSMAN_EVENT_TYPE_NONE = 0,                 ///< Specifies no events
-    ZES_SYSMAN_EVENT_TYPE_DEVICE_RESET = ZE_BIT( 0 ),   ///< Event is triggered when the driver is going to reset the device
-    ZES_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER = ZE_BIT( 1 ),   ///< Event is triggered when the driver is about to put the device into a
-                                                    ///< deep sleep state
-    ZES_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT = ZE_BIT( 2 ),///< Event is triggered when the driver is waking the device up from a deep
-                                                    ///< sleep state
-    ZES_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = ZE_BIT( 3 ), ///< Event is triggered when the frequency starts being throttled
-    ZES_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED = ZE_BIT( 4 ),   ///< Event is triggered when the energy consumption threshold is reached
-                                                    ///< (use ::zesSysmanPowerSetEnergyThreshold() to configure).
-    ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL = ZE_BIT( 5 ),  ///< Event is triggered when the critical temperature is reached (use
-                                                    ///< ::zesSysmanTemperatureSetConfig() to configure - disabled by default).
-    ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 = ZE_BIT( 6 ),///< Event is triggered when the temperature crosses threshold 1 (use
-                                                    ///< ::zesSysmanTemperatureSetConfig() to configure - disabled by default).
-    ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 = ZE_BIT( 7 ),///< Event is triggered when the temperature crosses threshold 2 (use
-                                                    ///< ::zesSysmanTemperatureSetConfig() to configure - disabled by default).
-    ZES_SYSMAN_EVENT_TYPE_MEM_HEALTH = ZE_BIT( 8 ), ///< Event is triggered when the health of device memory changes.
-    ZES_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH = ZE_BIT( 9 ), ///< Event is triggered when the health of fabric ports change.
-    ZES_SYSMAN_EVENT_TYPE_PCI_LINK_HEALTH = ZE_BIT( 10 ),   ///< Event is triggered when the health of the PCI link changes.
-    ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS = ZE_BIT( 11 ),///< Event is triggered when accelerator RAS correctable errors cross
-                                                    ///< thresholds (use ::zesSysmanRasSetConfig() to configure - disabled by
-                                                    ///< default).
-    ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),  ///< Event is triggered when accelerator RAS uncorrectable errors cross
-                                                    ///< thresholds (use ::zesSysmanRasSetConfig() to configure - disabled by
-                                                    ///< default).
-    ZES_SYSMAN_EVENT_TYPE_DEVICE_RESET_REQUIRED = ZE_BIT( 14 ), ///< Event is triggered when the device needs to be reset (use
-                                                    ///< ::ZESysmanDeviceGetState() to determine the reasons for the reset).
-    ZES_SYSMAN_EVENT_TYPE_ALL = 0x0FFF,             ///< Specifies all events
+    ZES_SCHED_MODE_TIMEOUT = 0,                     ///< Multiple applications or contexts are submitting work to the hardware.
+                                                    ///< When higher priority work arrives, the scheduler attempts to pause the
+                                                    ///< current executing work within some timeout interval, then submits the
+                                                    ///< other work.
+    ZES_SCHED_MODE_TIMESLICE,                       ///< The scheduler attempts to fairly timeslice hardware execution time
+                                                    ///< between multiple contexts submitting work to the hardware
+                                                    ///< concurrently.
+    ZES_SCHED_MODE_EXCLUSIVE,                       ///< Any application or context can run indefinitely on the hardware
+                                                    ///< without being preempted or terminated. All pending work for other
+                                                    ///< contexts must wait until the running context completes with no further
+                                                    ///< submitted work.
+    ZES_SCHED_MODE_COMPUTE_UNIT_DEBUG,              ///< Scheduler ensures that submission of workloads to the hardware is
+                                                    ///< optimized for compute unit debugging.
 
-} zes_sysman_event_type_t;
+} zes_sched_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Event configuration for a device
-typedef struct _zes_event_config_t
+/// @brief Properties related to scheduler component
+typedef struct _zes_sched_properties_t
 {
-    uint32_t registered;                            ///< [in,out] List of registered events (Bitfield of events
-                                                    ///< ::zes_sysman_event_type_t). ::ZES_SYSMAN_EVENT_TYPE_NONE indicates
-                                                    ///< there are no registered events. ::ZES_SYSMAN_EVENT_TYPE_ALL indicates
-                                                    ///< that all events are registered.
-
-} zes_event_config_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the event handle for the specified device
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == phEvent`
-__ze_api_export ze_result_t __zecall
-zesSysmanEventGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-    zes_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Find out which events are currently registered on the specified device
-///        event handler
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hEvent`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
-__ze_api_export ze_result_t __zecall
-zesSysmanEventGetConfig(
-    zes_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
-    zes_event_config_t* pConfig                     ///< [in,out] Will contain the current event configuration (list of
-                                                    ///< registered events).
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Set a new event configuration (list of registered events) on the
-///        specified device event handler
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hEvent`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pConfig`
-__ze_api_export ze_result_t __zecall
-zesSysmanEventSetConfig(
-    zes_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
-    const zes_event_config_t* pConfig               ///< [in] New event configuration (list of registered events).
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get events that have been triggered for a specific device
-/// 
-/// @details
-///     - If events have occurred on the specified device event handle, they are
-///       returned and the corresponding event status is cleared if the argument
-///       clear = true.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hEvent`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pEvents`
-__ze_api_export ze_result_t __zecall
-zesSysmanEventGetState(
-    zes_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
-    ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
-    uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_sysman_event_type_t that have been
-                                                    ///< triggered by this device.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_EVENT_WAIT_NONE
-/// @brief Don't wait - just check if there are any new events
-#define ZES_EVENT_WAIT_NONE  0x0
-#endif // ZES_EVENT_WAIT_NONE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_EVENT_WAIT_INFINITE
-/// @brief Wait infinitely for events to arrive.
-#define ZES_EVENT_WAIT_INFINITE  0xFFFFFFFF
-#endif // ZES_EVENT_WAIT_INFINITE
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Wait for the specified list of event handles to receive any registered
-///        events
-/// 
-/// @details
-///     - If previous events arrived and were not cleared using
-///       ::zesSysmanEventGetState(), this call will return immediately.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::ZE_RESULT_SUCCESS
-///     - ::ZE_RESULT_ERROR_UNINITIALIZED
-///     - ::ZE_RESULT_ERROR_DEVICE_LOST
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hDriver`
-///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == phEvents`
-///         + `nullptr == pEvents`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to listen to events.
-///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
-///         + One or more of the supplied event handles are for devices that belong to a different driver handle.
-__ze_api_export ze_result_t __zecall
-zesSysmanEventListen(
-    ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-    uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
-                                                    ///< ::ZES_EVENT_WAIT_NONE will check status and return immediately. Set to
-                                                    ///< ::ZES_EVENT_WAIT_INFINITE to block until events arrive.
-    uint32_t count,                                 ///< [in] Number of handles in phEvents
-    zes_sysman_event_handle_t* phEvents,            ///< [in][range(0, count)] Handle of events that should be listened to
-    uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_sysman_event_type_t that have been
-                                                    ///< triggered by any of the supplied event handles. If timeout is not
-                                                    ///< ::ZES_EVENT_WAIT_INFINITE and this value is
-                                                    ///< ::ZES_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Diagnostic test suite type
-typedef enum _zes_diag_type_t
-{
-    ZES_DIAG_TYPE_SCAN = 0,                         ///< Run SCAN diagnostics
-    ZES_DIAG_TYPE_ARRAY,                            ///< Run Array diagnostics
-
-} zes_diag_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Diagnostic results
-typedef enum _zes_diag_result_t
-{
-    ZES_DIAG_RESULT_NO_ERRORS = 0,                  ///< Diagnostic completed without finding errors to repair
-    ZES_DIAG_RESULT_ABORT,                          ///< Diagnostic had problems running tests
-    ZES_DIAG_RESULT_FAIL_CANT_REPAIR,               ///< Diagnostic had problems setting up repairs
-    ZES_DIAG_RESULT_REBOOT_FOR_REPAIR,              ///< Diagnostics found errors, setup for repair and reboot is required to
-                                                    ///< complete the process
-
-} zes_diag_result_t;
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_DIAG_FIRST_TEST_INDEX
-/// @brief Diagnostic test index to use for the very first test.
-#define ZES_DIAG_FIRST_TEST_INDEX  0x0
-#endif // ZES_DIAG_FIRST_TEST_INDEX
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_DIAG_LAST_TEST_INDEX
-/// @brief Diagnostic test index to use for the very last test.
-#define ZES_DIAG_LAST_TEST_INDEX  0xFFFFFFFF
-#endif // ZES_DIAG_LAST_TEST_INDEX
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Diagnostic test
-typedef struct _zes_diag_test_t
-{
-    uint32_t index;                                 ///< [out] Index of the test
-    char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the test
-
-} zes_diag_test_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Diagnostics test suite properties
-typedef struct _zes_diag_properties_t
-{
-    zes_diag_type_t type;                           ///< [out] The type of diagnostics test suite
-    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
+    ze_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling Sysman handle
     uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-    char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
-    ze_bool_t haveTests;                            ///< [out] Indicates if this test suite has individual tests which can be
-                                                    ///< run separately (use the function ::ZESysmanDiagnosticsGetTests() to
-                                                    ///< get the list of these tests)
+    ze_bool_t canControl;                           ///< [out] Software can change the scheduler component configuration
+                                                    ///< assuming the user has permissions.
+    uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are controlled by this
+                                                    ///< scheduler component (bitfield of 1<<::zes_engine_type_t).
+    uint32_t supportedModes;                        ///< [out] Bitfield of scheduler modes that can be configured for this
+                                                    ///< scheduler component (bitfield of 1<<::zes_sched_mode_t).
 
-} zes_diag_properties_t;
+} zes_sched_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get handle of diagnostics test suites
+#ifndef ZES_SCHED_WATCHDOG_DISABLE
+/// @brief Disable forward progress guard timeout.
+#define ZES_SCHED_WATCHDOG_DISABLE  (~(0ULL))
+#endif // ZES_SCHED_WATCHDOG_DISABLE
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Configuration for timeout scheduler mode (::ZES_SCHED_MODE_TIMEOUT)
+typedef struct _zes_sched_timeout_properties_t
+{
+    uint64_t watchdogTimeout;                       ///< [in,out] The maximum time in microseconds that the scheduler will wait
+                                                    ///< for a batch of work submitted to a hardware engine to complete or to
+                                                    ///< be preempted so as to run another context.
+                                                    ///< If this time is exceeded, the hardware engine is reset and the context terminated.
+                                                    ///< If set to ::ZES_SCHED_WATCHDOG_DISABLE, a running workload can run as
+                                                    ///< long as it wants without being terminated, but preemption attempts to
+                                                    ///< run other contexts are permitted but not enforced.
+
+} zes_sched_timeout_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Configuration for timeslice scheduler mode
+///        (::ZES_SCHED_MODE_TIMESLICE)
+typedef struct _zes_sched_timeslice_properties_t
+{
+    uint64_t interval;                              ///< [in,out] The average interval in microseconds that a submission for a
+                                                    ///< context will run on a hardware engine before being preempted out to
+                                                    ///< run a pending submission for another context.
+    uint64_t yieldTimeout;                          ///< [in,out] The maximum time in microseconds that the scheduler will wait
+                                                    ///< to preempt a workload running on an engine before deciding to reset
+                                                    ///< the hardware engine and terminating the associated context.
+
+} zes_sched_timeslice_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle to a scheduler component
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -3921,12 +3464,12 @@ typedef struct _zes_diag_properties_t
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hSysman`
+///         + `nullptr == hDevice`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pCount`
 __ze_api_export ze_result_t __zecall
-zesSysmanDiagnosticsGet(
-    zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+zesDeviceEnumSchedulers(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
     uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of components of this type.
@@ -3934,12 +3477,12 @@ zesSysmanDiagnosticsGet(
                                                     ///< if count is larger than the number of components available, then the
                                                     ///< driver will update the value with the correct number of components
                                                     ///< that are returned.
-    zes_sysman_diag_handle_t* phDiagnostics         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+    zes_sched_handle_t* phScheduler                 ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                     ///< this type
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get properties of a diagnostics test suite
+/// @brief Get properties related to a scheduler component
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -3950,24 +3493,19 @@ zesSysmanDiagnosticsGet(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hDiagnostics`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///         + `nullptr == pProperties`
 __ze_api_export ze_result_t __zecall
-zesSysmanDiagnosticsGetProperties(
-    zes_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
-    zes_diag_properties_t* pProperties              ///< [in,out] Structure describing the properties of a diagnostics test
-                                                    ///< suite
+zesSchedulerGetProperties(
+    zes_sched_handle_t hScheduler,                  ///< [in] Handle for the component.
+    zes_sched_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get individual tests that can be run separately. Not all test suites
-///        permit running individual tests - check
-///        ::zes_diag_properties_t.haveTests
+/// @brief Get current scheduling mode in effect on a scheduler component.
 /// 
 /// @details
-///     - The list of available tests is returned in order of increasing test
-///       index ::zes_diag_test_t.index.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -3976,55 +3514,515 @@ zesSysmanDiagnosticsGetProperties(
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hDiagnostics`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pCount`
+///         + `nullptr == pMode`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + This scheduler component does not support scheduler modes.
 __ze_api_export ze_result_t __zecall
-zesSysmanDiagnosticsGetTests(
-    zes_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
-                                                    ///< If count is zero, then the driver will update the value with the total
-                                                    ///< number of tests available.
-                                                    ///< If count is non-zero, then driver will only retrieve that number of tests.
-                                                    ///< If count is larger than the number of tests available, then the driver
-                                                    ///< will update the value with the correct number of tests available.
-    zes_diag_test_t* pTests                         ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
-                                                    ///< increasing value of ::zes_diag_test_t.index
+zesSchedulerGetCurrentMode(
+    zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+    zes_sched_mode_t* pMode                         ///< [in,out] Will contain the current scheduler mode.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Run a diagnostics test suite, either all tests or a subset of tests.
+/// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMEOUT
 /// 
 /// @details
-///     - WARNING: Performancing diagnostics may destroy current device state
-///       information. Gracefully close any running workloads before initiating.
-///     - To run all tests in a test suite, set start =
-///       ::ZES_DIAG_FIRST_TEST_INDEX and end = ::ZES_DIAG_LAST_TEST_INDEX.
-///     - If the test suite permits running individual tests,
-///       ::zes_diag_properties_t.haveTests will be true. In this case, the
-///       function ::zesSysmanDiagnosticsGetTests() can be called to get the
-///       list of tests and corresponding indices that can be supplied to the
-///       arguments start and end in this function.
-///     - This function will block until the diagnostics have completed.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::ZE_RESULT_SUCCESS
 ///     - ::ZE_RESULT_ERROR_UNINITIALIZED
 ///     - ::ZE_RESULT_ERROR_DEVICE_LOST
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
-///         + `nullptr == hDiagnostics`
+///         + `nullptr == hScheduler`
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
-///         + `nullptr == pResult`
-///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
-///         + User does not have permissions to perform diagnostics.
+///         + `nullptr == pConfig`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + This scheduler component does not support scheduler modes.
 __ze_api_export ze_result_t __zecall
-zesSysmanDiagnosticsRunTests(
-    zes_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
-    uint32_t start,                                 ///< [in] The index of the first test to run. Set to
-                                                    ///< ::ZES_DIAG_FIRST_TEST_INDEX to start from the beginning.
-    uint32_t end,                                   ///< [in] The index of the last test to run. Set to
-                                                    ///< ::ZES_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
-    zes_diag_result_t* pResult                      ///< [in,out] The result of the diagnostics
+zesSchedulerGetTimeoutModeProperties(
+    zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+    ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
+                                                    ///< this mode, otherwise it will return the current properties.
+    zes_sched_timeout_properties_t* pConfig         ///< [in,out] Will contain the current parameters for this mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMESLICE
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hScheduler`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + This scheduler component does not support scheduler modes.
+__ze_api_export ze_result_t __zecall
+zesSchedulerGetTimesliceModeProperties(
+    zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+    ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
+                                                    ///< this mode, otherwise it will return the current properties.
+    zes_sched_timeslice_properties_t* pConfig       ///< [in,out] Will contain the current parameters for this mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMEOUT or update scheduler
+///        mode parameters if already running in this mode.
+/// 
+/// @details
+///     - This mode is optimized for multiple applications or contexts
+///       submitting work to the hardware. When higher priority work arrives,
+///       the scheduler attempts to pause the current executing work within some
+///       timeout interval, then submits the other work.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hScheduler`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+///         + `nullptr == pNeedReload`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + This scheduler component does not support scheduler modes.
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to make this modification.
+__ze_api_export ze_result_t __zecall
+zesSchedulerSetTimeoutMode(
+    zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+    zes_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMESLICE or update
+///        scheduler mode parameters if already running in this mode.
+/// 
+/// @details
+///     - This mode is optimized to provide fair sharing of hardware execution
+///       time between multiple contexts submitting work to the hardware
+///       concurrently.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hScheduler`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+///         + `nullptr == pNeedReload`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + This scheduler component does not support scheduler modes.
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to make this modification.
+__ze_api_export ze_result_t __zecall
+zesSchedulerSetTimesliceMode(
+    zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+    zes_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change scheduler mode to ::ZES_SCHED_MODE_EXCLUSIVE
+/// 
+/// @details
+///     - This mode is optimized for single application/context use-cases. It
+///       permits a context to run indefinitely on the hardware without being
+///       preempted or terminated. All pending work for other contexts must wait
+///       until the running context completes with no further submitted work.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hScheduler`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pNeedReload`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + This scheduler component does not support scheduler modes.
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to make this modification.
+__ze_api_export ze_result_t __zecall
+zesSchedulerSetExclusiveMode(
+    zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Change scheduler mode to ::ZES_SCHED_MODE_COMPUTE_UNIT_DEBUG
+/// 
+/// @details
+///     - This mode is optimized for application debug. It ensures that only one
+///       command queue can execute work on the hardware at a given time. Work
+///       is permitted to run as long as needed without enforcing any scheduler
+///       fairness policies.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hScheduler`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pNeedReload`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + This scheduler component does not support scheduler modes.
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to make this modification.
+__ze_api_export ze_result_t __zecall
+zesSchedulerSetComputeUnitDebugMode(
+    zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+    ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                    ///< apply the new scheduler mode.
+    );
+
+#pragma endregion
+#pragma region standby
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Standby hardware components
+typedef enum _zes_standby_type_t
+{
+    ZES_STANDBY_TYPE_GLOBAL = 0,                    ///< Control the overall standby policy of the device/sub-device
+
+} zes_standby_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Standby hardware component properties
+typedef struct _zes_standby_properties_t
+{
+    zes_standby_type_t type;                        ///< [out] Which standby hardware component this controls
+    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling Sysman handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+
+} zes_standby_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Standby promotion modes
+typedef enum _zes_standby_promo_mode_t
+{
+    ZES_STANDBY_PROMO_MODE_DEFAULT = 0,             ///< Best compromise between performance and energy savings.
+    ZES_STANDBY_PROMO_MODE_NEVER,                   ///< The device/component will never shutdown. This can improve performance
+                                                    ///< but uses more energy.
+
+} zes_standby_promo_mode_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of standby controls
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
+__ze_api_export ze_result_t __zecall
+zesDeviceEnumStandbyDomains(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zes_standby_handle_t* phStandby                 ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get standby hardware component properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hStandby`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+__ze_api_export ze_result_t __zecall
+zesStandbyGetProperties(
+    zes_standby_handle_t hStandby,                  ///< [in] Handle for the component.
+    zes_standby_properties_t* pProperties           ///< [in,out] Will contain the standby hardware properties.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the current standby promotion mode
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hStandby`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pMode`
+__ze_api_export ze_result_t __zecall
+zesStandbyGetMode(
+    zes_standby_handle_t hStandby,                  ///< [in] Handle for the component.
+    zes_standby_promo_mode_t* pMode                 ///< [in,out] Will contain the current standby mode.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set standby promotion mode
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hStandby`
+///     - ::ZE_RESULT_ERROR_INVALID_ENUMERATION
+///         + mode
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to make these modifications.
+__ze_api_export ze_result_t __zecall
+zesStandbySetMode(
+    zes_standby_handle_t hStandby,                  ///< [in] Handle for the component.
+    zes_standby_promo_mode_t mode                   ///< [in] New standby mode.
+    );
+
+#pragma endregion
+#pragma region temperature
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Temperature sensors
+typedef enum _zes_temp_sensors_t
+{
+    ZES_TEMP_SENSORS_GLOBAL = 0,                    ///< The maximum temperature across all device sensors
+    ZES_TEMP_SENSORS_GPU,                           ///< The maximum temperature across all sensors in the GPU
+    ZES_TEMP_SENSORS_MEMORY,                        ///< The maximum temperature across all sensors in the local memory
+
+} zes_temp_sensors_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Temperature sensor properties
+typedef struct _zes_temp_properties_t
+{
+    zes_temp_sensors_t type;                        ///< [out] Which part of the device the temperature sensor measures
+    ze_bool_t onSubdevice;                          ///< [out] True if the resource is located on a sub-device; false means
+                                                    ///< that the resource is on the device of the calling Sysman handle
+    uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+    ze_bool_t isCriticalTempSupported;              ///< [out] Indicates if the critical temperature event
+                                                    ///< ::ZES_EVENT_TYPE_TEMP_CRITICAL is supported
+    ze_bool_t isThreshold1Supported;                ///< [out] Indicates if the temperature threshold 1 event
+                                                    ///< ::ZES_EVENT_TYPE_TEMP_THRESHOLD1 is supported
+    ze_bool_t isThreshold2Supported;                ///< [out] Indicates if the temperature threshold 2 event
+                                                    ///< ::ZES_EVENT_TYPE_TEMP_THRESHOLD2 is supported
+
+} zes_temp_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Temperature sensor threshold
+typedef struct _zes_temp_threshold_t
+{
+    ze_bool_t enableLowToHigh;                      ///< [in,out] Trigger an event when the temperature crosses from below the
+                                                    ///< threshold to above.
+    ze_bool_t enableHighToLow;                      ///< [in,out] Trigger an event when the temperature crosses from above the
+                                                    ///< threshold to below.
+    double threshold;                               ///< [in,out] The threshold in degrees Celsius.
+
+} zes_temp_threshold_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Temperature configuration - which events should be triggered and the
+///        trigger conditions.
+typedef struct _zes_temp_config_t
+{
+    ze_bool_t enableCritical;                       ///< [in,out] Indicates if event ::ZES_EVENT_TYPE_TEMP_CRITICAL should be
+                                                    ///< triggered by the driver.
+    zes_temp_threshold_t threshold1;                ///< [in,out] Configuration controlling if and when event
+                                                    ///< ::ZES_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the driver.
+    zes_temp_threshold_t threshold2;                ///< [in,out] Configuration controlling if and when event
+                                                    ///< ::ZES_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the driver.
+    uint32_t processId;                             ///< [out] Host processId that set this configuration (ignored when setting
+                                                    ///< the configuration).
+
+} zes_temp_config_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get handle of temperature sensors
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hDevice`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pCount`
+__ze_api_export ze_result_t __zecall
+zesDeviceEnumTemperatureSensors(
+    zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of components of this type.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                    ///< if count is larger than the number of components available, then the
+                                                    ///< driver will update the value with the correct number of components
+                                                    ///< that are returned.
+    zes_temp_handle_t* phTemperature                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                    ///< this type
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get temperature sensor properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTemperature`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pProperties`
+__ze_api_export ze_result_t __zecall
+zesTemperatureGetProperties(
+    zes_temp_handle_t hTemperature,                 ///< [in] Handle for the component.
+    zes_temp_properties_t* pProperties              ///< [in,out] Will contain the temperature sensor properties.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get temperature configuration for this sensor - which events are
+///        triggered and the trigger conditions
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTemperature`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor ::ZES_TEMP_SENSORS_GLOBAL
+///         + One or both of the thresholds is not supported - check ::zes_temp_properties_t.isThreshold1Supported and ::zes_temp_properties_t.isThreshold2Supported
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to request this feature.
+__ze_api_export ze_result_t __zecall
+zesTemperatureGetConfig(
+    zes_temp_handle_t hTemperature,                 ///< [in] Handle for the component.
+    zes_temp_config_t* pConfig                      ///< [in,out] Returns current configuration.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set temperature configuration for this sensor - indicates which events
+///        are triggered and the trigger conditions
+/// 
+/// @details
+///     - Events ::ZES_EVENT_TYPE_TEMP_CRITICAL will be triggered when
+///       temperature reaches the critical range. Use the function
+///       ::zesEventSetConfig() to start receiving this event.
+///     - Events ::ZES_EVENT_TYPE_TEMP_THRESHOLD1 and
+///       ::ZES_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when temperature
+///       cross the thresholds set using this function. Use the function
+///       ::zesEventSetConfig() to start receiving these events.
+///     - Only one running process can set the temperature configuration at a
+///       time. If another process attempts to change the configuration, the
+///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
+///       ::zesTemperatureGetConfig() will return the process ID currently
+///       controlling these settings.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTemperature`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pConfig`
+///     - ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE
+///         + Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor ::ZES_TEMP_SENSORS_GLOBAL
+///         + Enabling the critical temperature event is not supported - check ::zes_temp_properties_t.isCriticalTempSupported
+///         + One or both of the thresholds is not supported - check ::zes_temp_properties_t.isThreshold1Supported and ::zes_temp_properties_t.isThreshold2Supported
+///     - ::ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+///         + User does not have permissions to request this feature.
+///     - ::ZE_RESULT_ERROR_NOT_AVAILABLE
+///         + Another running process is controlling these settings.
+///     - ::ZE_RESULT_ERROR_INVALID_ARGUMENT
+///         + One or both the thresholds is above TjMax (see ::zesFrequencyOcGetTjMax()). Temperature thresholds must be below this value.
+__ze_api_export ze_result_t __zecall
+zesTemperatureSetConfig(
+    zes_temp_handle_t hTemperature,                 ///< [in] Handle for the component.
+    const zes_temp_config_t* pConfig                ///< [in] New configuration.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the temperature from a specified sensor
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::ZE_RESULT_SUCCESS
+///     - ::ZE_RESULT_ERROR_UNINITIALIZED
+///     - ::ZE_RESULT_ERROR_DEVICE_LOST
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_HANDLE
+///         + `nullptr == hTemperature`
+///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
+///         + `nullptr == pTemperature`
+__ze_api_export ze_result_t __zecall
+zesTemperatureGetState(
+    zes_temp_handle_t hTemperature,                 ///< [in] Handle for the component.
+    double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
+                                                    ///< in degrees Celsius.
     );
 
 #pragma endregion

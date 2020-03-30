@@ -1,0 +1,276 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Scheduler management"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Properties related to device power settings"
+class: $sPower
+name: $s_power_properties_t
+members:
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Software can change the power limits of this domain assuming the user has permissions."
+    - type: $x_bool_t
+      name: "isEnergyThresholdSupported"
+      desc: "[out] Indicates if this power domain supports the energy threshold event ($S_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED)."
+    - type: uint32_t
+      name: "defaultLimit"
+      desc: "[out] The factory default TDP power limit of the part in milliwatts."  
+    - type: uint32_t
+      name: "minLimit"
+      desc: "[out] The minimum power limit in milliwatts that can be requested."  
+    - type: uint32_t
+      name: "maxLimit"
+      desc: "[out] The maximum power limit in milliwatts that can be requested."  
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Energy counter snapshot"
+class: $sPower
+name: $s_power_energy_counter_t
+details:
+    - "Average power is calculated by taking two snapshots (s1, s2) and using the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp - s1.timestamp)"
+members:
+    - type: uint64_t
+      name: "energy"
+      desc: "[out] The monotonic energy counter in microjoules."
+    - type: uint64_t
+      name: "timestamp"
+      desc: |
+            [out] Microsecond timestamp when energy was captured.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Sustained power limits"
+class: $sPower
+name: $s_power_sustained_limit_t
+details:
+    - "The power controller (Punit) will throttle the operating frequency if the power averaged over a window (typically seconds) exceeds this limit."
+members:
+    - type: $x_bool_t
+      name: enabled
+      desc: "[in,out] indicates if the limit is enabled (true) or ignored (false)"
+    - type: uint32_t
+      name: power
+      desc: "[in,out] power limit in milliwatts"
+    - type: uint32_t
+      name: interval
+      desc: "[in,out] power averaging window (Tau) in milliseconds"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Burst power limit"
+class: $sPower
+name: $s_power_burst_limit_t
+details:
+    - "The power controller (Punit) will throttle the operating frequency of the device if the power averaged over a few milliseconds exceeds a limit known as PL2. Typically PL2 > PL1 so that it permits the frequency to burst higher for short periods than would be otherwise permitted by PL1."
+members:
+    - type: $x_bool_t
+      name: enabled
+      desc: "[in,out] indicates if the limit is enabled (true) or ignored (false)"
+    - type: uint32_t
+      name: power
+      desc: "[in,out] power limit in milliwatts"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Peak power limit"
+class: $sPower
+name: $s_power_peak_limit_t
+details:
+    - "The power controller (Punit) will preemptively throttle the operating frequency of the device when the instantaneous power exceeds this limit. The limit is known as PL4. It expresses the maximum power that can be drawn from the power supply."
+    - "If this power limit is removed or set too high, the power supply will generate an interrupt when it detects an overcurrent condition and the power controller will throttle the device frequencies down to min. It is thus better to tune the PL4 value in order to avoid such excursions."
+members:
+    - type: uint32_t
+      name: powerAC
+      desc: "[in,out] power limit in milliwatts for the AC power source."
+    - type: uint32_t
+      name: powerDC
+      desc: "[in,out] power limit in milliwatts for the DC power source. This is ignored if the product does not have a battery."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Energy threshold"
+class: $sPower
+name: $s_energy_threshold_t
+details:
+    - "."
+members:
+    - type: $x_bool_t
+      name: enable
+      desc: "[in,out] Indicates if the energy threshold is enabled."
+    - type: double
+      name: threshold
+      desc: "[in,out] The energy threshold in Joules. Will be 0.0 if no threshold has been set."
+    - type: uint32_t
+      name: processId
+      desc: "[in,out] The host process ID that set the energy threshold. Will be 0xFFFFFFFF if no threshold has been set."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of power domains"
+class: $sDevice
+name: EnumPowerDomains
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$s_pwr_handle_t*"
+      name: phPower
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get properties related to a power domain"
+class: $sPower
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $s_power_properties_t*
+      name: pProperties
+      desc: "[in,out] Structure that will contain property data."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get energy counter"
+class: $sPower
+name: GetEnergyCounter
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $s_power_energy_counter_t*
+      name: pEnergy
+      desc: "[in,out] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get power limits"
+class: $sPower
+name: GetLimits
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $s_power_sustained_limit_t*
+      name: pSustained
+      desc: "[in,out][optional] The sustained power limit."
+    - type: $s_power_burst_limit_t*
+      name: pBurst
+      desc: "[in,out][optional] The burst power limit."
+    - type: $s_power_peak_limit_t*
+      name: pPeak
+      desc: "[in,out][optional] The peak power limit."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set power limits"
+class: $sPower
+name: SetLimits
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: const $s_power_sustained_limit_t*
+      name: pSustained
+      desc: "[in][optional] The sustained power limit."
+    - type: const $s_power_burst_limit_t*
+      name: pBurst
+      desc: "[in][optional] The burst power limit."
+    - type: const $s_power_peak_limit_t*
+      name: pPeak
+      desc: "[in][optional] The peak power limit."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get energy threshold"
+class: $sPower
+name: GetEnergyThreshold
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: $s_energy_threshold_t*
+      name: pThreshold
+      desc: "[in,out] Returns information about the energy threshold setting - enabled/energy threshold/process ID."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "Energy threshold not supported on this power domain (check $s_power_properties_t.isEnergyThresholdSupported)."
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set energy threshold"
+class: $sPower
+name: SetEnergyThreshold
+details:
+    - "An event $S_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function $sEventSetConfig() to start receiving the event."
+    - "Only one running process can control the energy threshold at a given time. If another process attempts to change the energy threshold, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $sPowerGetEnergyThreshold() to determine the process ID currently controlling this setting."
+    - "Calling this function will remove any pending energy thresholds and start counting from the time of this call."
+    - "Once the energy threshold has been reached and the event generated, the threshold is automatically removed. It is up to the application to request a new threshold."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: double
+      name: threshold
+      desc: "[in] The energy threshold to be set in joules."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "Energy threshold not supported on this power domain (check $s_power_properties_t.isEnergyThresholdSupported)."
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "Another running process has set the energy threshold."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device power domain"
+name: $sPower
+owner: $sDevice
+members:
+    - type: $s_pwr_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

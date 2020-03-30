@@ -34,106 +34,100 @@ namespace zes
     using device_handle_t = _device_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for accessing System Resource Management features of a device
-    class Sysman;
-    struct _sysman_handle_t;
-    using sysman_handle_t = _sysman_handle_t*;
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device scheduler queue
-    class SysmanScheduler;
-    struct _sysman_sched_handle_t;
-    using sysman_sched_handle_t = _sysman_sched_handle_t*;
+    class Scheduler;
+    struct _sched_handle_t;
+    using sched_handle_t = _sched_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device performance factors
-    class SysmanPerformanceFactor;
-    struct _sysman_perf_handle_t;
-    using sysman_perf_handle_t = _sysman_perf_handle_t*;
+    class PerformanceFactor;
+    struct _perf_handle_t;
+    using perf_handle_t = _perf_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device power domain
-    class SysmanPower;
-    struct _sysman_pwr_handle_t;
-    using sysman_pwr_handle_t = _sysman_pwr_handle_t*;
+    class Power;
+    struct _pwr_handle_t;
+    using pwr_handle_t = _pwr_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device frequency domain
-    class SysmanFrequency;
-    struct _sysman_freq_handle_t;
-    using sysman_freq_handle_t = _sysman_freq_handle_t*;
+    class Frequency;
+    struct _freq_handle_t;
+    using freq_handle_t = _freq_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device engine group
-    class SysmanEngine;
-    struct _sysman_engine_handle_t;
-    using sysman_engine_handle_t = _sysman_engine_handle_t*;
+    class Engine;
+    struct _engine_handle_t;
+    using engine_handle_t = _engine_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device standby control
-    class SysmanStandby;
-    struct _sysman_standby_handle_t;
-    using sysman_standby_handle_t = _sysman_standby_handle_t*;
+    class Standby;
+    struct _standby_handle_t;
+    using standby_handle_t = _standby_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device firmware
-    class SysmanFirmware;
-    struct _sysman_firmware_handle_t;
-    using sysman_firmware_handle_t = _sysman_firmware_handle_t*;
+    class Firmware;
+    struct _firmware_handle_t;
+    using firmware_handle_t = _firmware_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device memory module
-    class SysmanMemory;
-    struct _sysman_mem_handle_t;
-    using sysman_mem_handle_t = _sysman_mem_handle_t*;
+    class Memory;
+    struct _mem_handle_t;
+    using mem_handle_t = _mem_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman fabric port
-    class SysmanFabricPort;
-    struct _sysman_fabric_port_handle_t;
-    using sysman_fabric_port_handle_t = _sysman_fabric_port_handle_t*;
+    class FabricPort;
+    struct _fabric_port_handle_t;
+    using fabric_port_handle_t = _fabric_port_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device temperature sensor
-    class SysmanTemperature;
-    struct _sysman_temp_handle_t;
-    using sysman_temp_handle_t = _sysman_temp_handle_t*;
+    class Temperature;
+    struct _temp_handle_t;
+    using temp_handle_t = _temp_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device power supply
-    class SysmanPsu;
-    struct _sysman_psu_handle_t;
-    using sysman_psu_handle_t = _sysman_psu_handle_t*;
+    class Psu;
+    struct _psu_handle_t;
+    using psu_handle_t = _psu_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device fan
-    class SysmanFan;
-    struct _sysman_fan_handle_t;
-    using sysman_fan_handle_t = _sysman_fan_handle_t*;
+    class Fan;
+    struct _fan_handle_t;
+    using fan_handle_t = _fan_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device LED
-    class SysmanLed;
-    struct _sysman_led_handle_t;
-    using sysman_led_handle_t = _sysman_led_handle_t*;
+    class Led;
+    struct _led_handle_t;
+    using led_handle_t = _led_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device RAS error set
-    class SysmanRas;
-    struct _sysman_ras_handle_t;
-    using sysman_ras_handle_t = _sysman_ras_handle_t*;
+    class Ras;
+    struct _ras_handle_t;
+    using ras_handle_t = _ras_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device diagnostics test suite
-    class SysmanDiagnostics;
-    struct _sysman_diag_handle_t;
-    using sysman_diag_handle_t = _sysman_diag_handle_t*;
+    class Diagnostics;
+    struct _diag_handle_t;
+    using diag_handle_t = _diag_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman device event
-    class SysmanEvent;
-    struct _sysman_event_handle_t;
-    using sysman_event_handle_t = _sysman_event_handle_t*;
+    class Event;
+    struct _event_handle_t;
+    using event_handle_t = _event_handle_t*;
 
 } // namespace zes
 
@@ -149,6 +143,12 @@ namespace zes
 } // namespace zes
 #pragma endregion
 #pragma region device
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_STRING_PROPERTY_SIZE
+/// @brief Maximum number of characters in string properties.
+#define ZES_STRING_PROPERTY_SIZE  64
+#endif // ZES_STRING_PROPERTY_SIZE
+
 namespace zes
 {
     ///////////////////////////////////////////////////////////////////////////////
@@ -179,95 +179,6 @@ namespace zes
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for device
     class Device : public ze::Device
-    {
-    public:
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        using ze::Device::Device;
-
-        ~Device( void ) = default;
-
-        Device( Device const& other ) = delete;
-        void operator=( Device const& other ) = delete;
-
-        Device( Device&& other ) = delete;
-        void operator=( Device&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-
-    };
-
-} // namespace zes
-
-namespace zes
-{
-} // namespace zes
-#pragma endregion
-#pragma region sysman
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_STRING_PROPERTY_SIZE
-/// @brief Maximum number of characters in string properties.
-#define ZES_STRING_PROPERTY_SIZE  64
-#endif // ZES_STRING_PROPERTY_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_SCHED_WATCHDOG_DISABLE
-/// @brief Disable forward progress guard timeout.
-#define ZES_SCHED_WATCHDOG_DISABLE  (~(0ULL))
-#endif // ZES_SCHED_WATCHDOG_DISABLE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_MAX_FABRIC_PORT_MODEL_SIZE
-/// @brief Maximum Fabric port model string size
-#define ZES_MAX_FABRIC_PORT_MODEL_SIZE  256
-#endif // ZES_MAX_FABRIC_PORT_MODEL_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_MAX_FABRIC_LINK_TYPE_SIZE
-/// @brief Maximum size of the buffer that will return information about link
-///        types
-#define ZES_MAX_FABRIC_LINK_TYPE_SIZE  256
-#endif // ZES_MAX_FABRIC_LINK_TYPE_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_FAN_TEMP_SPEED_PAIR_COUNT
-/// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
-#define ZES_FAN_TEMP_SPEED_PAIR_COUNT  32
-#endif // ZES_FAN_TEMP_SPEED_PAIR_COUNT
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_EVENT_WAIT_NONE
-/// @brief Don't wait - just check if there are any new events
-#define ZES_EVENT_WAIT_NONE  0x0
-#endif // ZES_EVENT_WAIT_NONE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_EVENT_WAIT_INFINITE
-/// @brief Wait infinitely for events to arrive.
-#define ZES_EVENT_WAIT_INFINITE  0xFFFFFFFF
-#endif // ZES_EVENT_WAIT_INFINITE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_DIAG_FIRST_TEST_INDEX
-/// @brief Diagnostic test index to use for the very first test.
-#define ZES_DIAG_FIRST_TEST_INDEX  0x0
-#endif // ZES_DIAG_FIRST_TEST_INDEX
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef ZES_DIAG_LAST_TEST_INDEX
-/// @brief Diagnostic test index to use for the very last test.
-#define ZES_DIAG_LAST_TEST_INDEX  0xFFFFFFFF
-#endif // ZES_DIAG_LAST_TEST_INDEX
-
-namespace zes
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device
-    class Sysman
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
@@ -312,26 +223,6 @@ namespace zes
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Scheduler mode
-        enum class sched_mode_t
-        {
-            TIMEOUT = 0,                                    ///< Multiple applications or contexts are submitting work to the hardware.
-                                                            ///< When higher priority work arrives, the scheduler attempts to pause the
-                                                            ///< current executing work within some timeout interval, then submits the
-                                                            ///< other work.
-            TIMESLICE,                                      ///< The scheduler attempts to fairly timeslice hardware execution time
-                                                            ///< between multiple contexts submitting work to the hardware
-                                                            ///< concurrently.
-            EXCLUSIVE,                                      ///< Any application or context can run indefinitely on the hardware
-                                                            ///< without being preempted or terminated. All pending work for other
-                                                            ///< contexts must wait until the running context completes with no further
-                                                            ///< submitted work.
-            COMPUTE_UNIT_DEBUG,                             ///< Scheduler ensures that submission of workloads to the hardware is
-                                                            ///< optimized for compute unit debugging.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief PCI link status
         enum class pci_link_status_t
         {
@@ -372,15 +263,6 @@ namespace zes
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Frequency domains.
-        enum class freq_domain_t
-        {
-            GPU = 0,                                        ///< GPU Core Domain.
-            MEMORY,                                         ///< Local Memory Domain.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Event types
         enum class event_type_t
         {
@@ -392,25 +274,54 @@ namespace zes
                                                             ///< sleep state
             FREQ_THROTTLED = ZE_BIT( 3 ),                   ///< Event is triggered when the frequency starts being throttled
             ENERGY_THRESHOLD_CROSSED = ZE_BIT( 4 ),         ///< Event is triggered when the energy consumption threshold is reached
-                                                            ///< (use ::zesSysmanPowerSetEnergyThreshold() to configure).
+                                                            ///< (use ::zesPowerSetEnergyThreshold() to configure).
             TEMP_CRITICAL = ZE_BIT( 5 ),                    ///< Event is triggered when the critical temperature is reached (use
-                                                            ///< ::zesSysmanTemperatureSetConfig() to configure - disabled by default).
+                                                            ///< ::zesTemperatureSetConfig() to configure - disabled by default).
             TEMP_THRESHOLD1 = ZE_BIT( 6 ),                  ///< Event is triggered when the temperature crosses threshold 1 (use
-                                                            ///< ::zesSysmanTemperatureSetConfig() to configure - disabled by default).
+                                                            ///< ::zesTemperatureSetConfig() to configure - disabled by default).
             TEMP_THRESHOLD2 = ZE_BIT( 7 ),                  ///< Event is triggered when the temperature crosses threshold 2 (use
-                                                            ///< ::zesSysmanTemperatureSetConfig() to configure - disabled by default).
+                                                            ///< ::zesTemperatureSetConfig() to configure - disabled by default).
             MEM_HEALTH = ZE_BIT( 8 ),                       ///< Event is triggered when the health of device memory changes.
             FABRIC_PORT_HEALTH = ZE_BIT( 9 ),               ///< Event is triggered when the health of fabric ports change.
             PCI_LINK_HEALTH = ZE_BIT( 10 ),                 ///< Event is triggered when the health of the PCI link changes.
             RAS_CORRECTABLE_ERRORS = ZE_BIT( 11 ),          ///< Event is triggered when accelerator RAS correctable errors cross
-                                                            ///< thresholds (use ::zesSysmanRasSetConfig() to configure - disabled by
+                                                            ///< thresholds (use ::zesRasSetConfig() to configure - disabled by
                                                             ///< default).
             RAS_UNCORRECTABLE_ERRORS = ZE_BIT( 12 ),        ///< Event is triggered when accelerator RAS uncorrectable errors cross
-                                                            ///< thresholds (use ::zesSysmanRasSetConfig() to configure - disabled by
+                                                            ///< thresholds (use ::zesRasSetConfig() to configure - disabled by
                                                             ///< default).
             DEVICE_RESET_REQUIRED = ZE_BIT( 14 ),           ///< Event is triggered when the device needs to be reset (use
-                                                            ///< ::ZESysmanDeviceGetState() to determine the reasons for the reset).
+                                                            ///< ::zesDeviceGetState() to determine the reasons for the reset).
             ALL = 0x0FFF,                                   ///< Specifies all events
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Frequency domains.
+        enum class freq_domain_t
+        {
+            GPU = 0,                                        ///< GPU Core Domain.
+            MEMORY,                                         ///< Local Memory Domain.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Scheduler mode
+        enum class sched_mode_t
+        {
+            TIMEOUT = 0,                                    ///< Multiple applications or contexts are submitting work to the hardware.
+                                                            ///< When higher priority work arrives, the scheduler attempts to pause the
+                                                            ///< current executing work within some timeout interval, then submits the
+                                                            ///< other work.
+            TIMESLICE,                                      ///< The scheduler attempts to fairly timeslice hardware execution time
+                                                            ///< between multiple contexts submitting work to the hardware
+                                                            ///< concurrently.
+            EXCLUSIVE,                                      ///< Any application or context can run indefinitely on the hardware
+                                                            ///< without being preempted or terminated. All pending work for other
+                                                            ///< contexts must wait until the running context completes with no further
+                                                            ///< submitted work.
+            COMPUTE_UNIT_DEBUG,                             ///< Scheduler ensures that submission of workloads to the hardware is
+                                                            ///< optimized for compute unit debugging.
 
         };
 
@@ -436,34 +347,6 @@ namespace zes
             int8_t modelName[ZES_STRING_PROPERTY_SIZE];     ///< [out] Model name of the device (NULL terminated string value)
             int8_t vendorName[ZES_STRING_PROPERTY_SIZE];    ///< [out] Vendor name of the device (NULL terminated string value)
             int8_t driverVersion[ZES_STRING_PROPERTY_SIZE]; ///< [out] Installed driver version (NULL terminated string value)
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Configuration for timeout scheduler mode (::ZES_SCHED_MODE_TIMEOUT)
-        struct sched_timeout_properties_t
-        {
-            uint64_t watchdogTimeout;                       ///< [in,out] The maximum time in microseconds that the scheduler will wait
-                                                            ///< for a batch of work submitted to a hardware engine to complete or to
-                                                            ///< be preempted so as to run another context.
-                                                            ///< If this time is exceeded, the hardware engine is reset and the context terminated.
-                                                            ///< If set to ::ZES_SCHED_WATCHDOG_DISABLE, a running workload can run as
-                                                            ///< long as it wants without being terminated, but preemption attempts to
-                                                            ///< run other contexts are permitted but not enforced.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Configuration for timeslice scheduler mode
-        ///        (::ZES_SCHED_MODE_TIMESLICE)
-        struct sched_timeslice_properties_t
-        {
-            uint64_t interval;                              ///< [in,out] The average interval in microseconds that a submission for a
-                                                            ///< context will run on a hardware engine before being preempted out to
-                                                            ///< run a pending submission for another context.
-            uint64_t yieldTimeout;                          ///< [in,out] The maximum time in microseconds that the scheduler will wait
-                                                            ///< to preempt a workload running on an engine before deciding to reset
-                                                            ///< the hardware engine and terminating the associated context.
 
         };
 
@@ -567,49 +450,51 @@ namespace zes
 
         };
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Configuration for timeout scheduler mode (::ZES_SCHED_MODE_TIMEOUT)
+        struct sched_timeout_properties_t
+        {
+            uint64_t watchdogTimeout;                       ///< [in,out] The maximum time in microseconds that the scheduler will wait
+                                                            ///< for a batch of work submitted to a hardware engine to complete or to
+                                                            ///< be preempted so as to run another context.
+                                                            ///< If this time is exceeded, the hardware engine is reset and the context terminated.
+                                                            ///< If set to ::ZES_SCHED_WATCHDOG_DISABLE, a running workload can run as
+                                                            ///< long as it wants without being terminated, but preemption attempts to
+                                                            ///< run other contexts are permitted but not enforced.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Configuration for timeslice scheduler mode
+        ///        (::ZES_SCHED_MODE_TIMESLICE)
+        struct sched_timeslice_properties_t
+        {
+            uint64_t interval;                              ///< [in,out] The average interval in microseconds that a submission for a
+                                                            ///< context will run on a hardware engine before being preempted out to
+                                                            ///< run a pending submission for another context.
+            uint64_t yieldTimeout;                          ///< [in,out] The maximum time in microseconds that the scheduler will wait
+                                                            ///< to preempt a workload running on an engine before deciding to reset
+                                                            ///< the hardware engine and terminating the associated context.
+
+        };
+
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_handle_t m_handle = nullptr;             ///< [in] handle of Sysman object
-        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        Sysman( void ) = delete;
-        Sysman( 
-            sysman_handle_t handle,                         ///< [in] handle of Sysman object
-            Device* pDevice                                 ///< [in] pointer to owner object
-            );
+        using ze::Device::Device;
 
-        ~Sysman( void ) = default;
+        ~Device( void ) = default;
 
-        Sysman( Sysman const& other ) = delete;
-        void operator=( Sysman const& other ) = delete;
+        Device( Device const& other ) = delete;
+        void operator=( Device const& other ) = delete;
 
-        Sysman( Sysman&& other ) = delete;
-        void operator=( Sysman&& other ) = delete;
+        Device( Device&& other ) = delete;
+        void operator=( Device&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getDevice( void ) const { return m_pDevice; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the handle to access Sysman features for a device
-        /// 
-        /// @details
-        ///     - The returned handle is unique.
-        ///     - ::zes_device_handle_t returned by ::zeDeviceGetSubDevices() are not
-        ///       support. Only use handles returned by ::zeDeviceGet(). All resources
-        ///       on sub-devices can be enumerated through the primary device.
-        /// @returns
-        ///     - Sysman*: Handle for accessing Sysman features
-        /// 
-        /// @throws result_t
-        static Sysman* __zecall
-        Get(
-            Device* pDevice,                                ///< [in] Handle of the device
-            version_t version                               ///< [in] Sysman version that application was built with
-            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get properties about the device
@@ -619,7 +504,7 @@ namespace zes
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        DeviceGetProperties(
+        GetProperties(
             properties_t* pProperties                       ///< [in,out] Structure that will contain information about the device.
             );
 
@@ -632,7 +517,7 @@ namespace zes
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        DeviceGetState(
+        GetState(
             state_t* pState                                 ///< [in,out] Structure that will contain information about the device.
             );
 
@@ -650,51 +535,9 @@ namespace zes
         ///       occurred waiting for the reset to complete.
         /// @throws result_t
         void __zecall
-        DeviceReset(
+        Reset(
             ze::bool_t force                                ///< [in] If set to true, all applications that are currently using the
                                                             ///< device will be forcibly killed.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle to a scheduler component
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SchedulerGet(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of components of this type.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                            ///< if count is larger than the number of components available, then the
-                                                            ///< driver will update the value with the correct number of components
-                                                            ///< that are returned.
-            SysmanScheduler** ppScheduler = nullptr         ///< [in,out][optional][range(0, *pCount)] array of pointer to components
-                                                            ///< of this type
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handles to accelerator domains whose performance can be optimized
-        ///        via a Performance Factor
-        /// 
-        /// @details
-        ///     - A Performance Factor should be tuned for each workload.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        PerformanceFactorGet(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of components of this type.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                            ///< if count is larger than the number of components available, then the
-                                                            ///< driver will update the value with the correct number of components
-                                                            ///< that are returned.
-            SysmanPerformanceFactor** ppPerf = nullptr      ///< [in,out][optional][range(0, *pCount)] array of pointer to components
-                                                            ///< of this type
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -778,14 +621,14 @@ namespace zes
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of power domains
+        /// @brief Get handle of diagnostics test suites
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        PowerGet(
+        EnumDiagnosticTestSuites(
             uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of components of this type.
@@ -793,27 +636,7 @@ namespace zes
                                                             ///< if count is larger than the number of components available, then the
                                                             ///< driver will update the value with the correct number of components
                                                             ///< that are returned.
-            SysmanPower** ppPower = nullptr                 ///< [in,out][optional][range(0, *pCount)] array of pointer to components
-                                                            ///< of this type
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of frequency domains
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        FrequencyGet(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of components of this type.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                            ///< if count is larger than the number of components available, then the
-                                                            ///< driver will update the value with the correct number of components
-                                                            ///< that are returned.
-            SysmanFrequency** ppFrequency = nullptr         ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+            Diagnostics** ppDiagnostics = nullptr           ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
             );
 
@@ -825,7 +648,7 @@ namespace zes
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        EngineGet(
+        EnumEngineGroups(
             uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of components of this type.
@@ -833,68 +656,23 @@ namespace zes
                                                             ///< if count is larger than the number of components available, then the
                                                             ///< driver will update the value with the correct number of components
                                                             ///< that are returned.
-            SysmanEngine** ppEngine = nullptr               ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+            Engine** ppEngine = nullptr                     ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of standby controls
+        /// @brief Get the event handle for the specified device
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        StandbyGet(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of components of this type.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                            ///< if count is larger than the number of components available, then the
-                                                            ///< driver will update the value with the correct number of components
-                                                            ///< that are returned.
-            SysmanStandby** ppStandby = nullptr             ///< [in,out][optional][range(0, *pCount)] array of pointer to components
-                                                            ///< of this type
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of firmwares
+        /// @returns
+        ///     - Event*: The event handle for the specified device.
         /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        void __zecall
-        FirmwareGet(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of components of this type.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                            ///< if count is larger than the number of components available, then the
-                                                            ///< driver will update the value with the correct number of components
-                                                            ///< that are returned.
-            SysmanFirmware** ppFirmware = nullptr           ///< [in,out][optional][range(0, *pCount)] array of pointer to components
-                                                            ///< of this type
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of memory modules
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        MemoryGet(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of components of this type.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                            ///< if count is larger than the number of components available, then the
-                                                            ///< driver will update the value with the correct number of components
-                                                            ///< that are returned.
-            SysmanMemory** ppMemory = nullptr               ///< [in,out][optional][range(0, *pCount)] array of pointer to components
-                                                            ///< of this type
+        Event* __zecall
+        CreateEvents(
+            void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -905,7 +683,7 @@ namespace zes
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        FabricPortGet(
+        EnumFabricPorts(
             uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of components of this type.
@@ -913,47 +691,7 @@ namespace zes
                                                             ///< if count is larger than the number of components available, then the
                                                             ///< driver will update the value with the correct number of components
                                                             ///< that are returned.
-            SysmanFabricPort** ppPort = nullptr             ///< [in,out][optional][range(0, *pCount)] array of pointer to components
-                                                            ///< of this type
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of temperature sensors
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        TemperatureGet(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of components of this type.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                            ///< if count is larger than the number of components available, then the
-                                                            ///< driver will update the value with the correct number of components
-                                                            ///< that are returned.
-            SysmanTemperature** ppTemperature = nullptr     ///< [in,out][optional][range(0, *pCount)] array of pointer to components
-                                                            ///< of this type
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of power supplies
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        PsuGet(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of components of this type.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                            ///< if count is larger than the number of components available, then the
-                                                            ///< driver will update the value with the correct number of components
-                                                            ///< that are returned.
-            SysmanPsu** ppPsu = nullptr                     ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+            FabricPort** ppPort = nullptr                   ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
             );
 
@@ -965,7 +703,7 @@ namespace zes
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        FanGet(
+        EnumFans(
             uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of components of this type.
@@ -973,7 +711,47 @@ namespace zes
                                                             ///< if count is larger than the number of components available, then the
                                                             ///< driver will update the value with the correct number of components
                                                             ///< that are returned.
-            SysmanFan** ppFan = nullptr                     ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+            Fan** ppFan = nullptr                           ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get handle of firmwares
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        EnumFirmwares(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            Firmware** ppFirmware = nullptr                 ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get handle of frequency domains
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        EnumFrequencyDomains(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            Frequency** ppFrequency = nullptr               ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
             );
 
@@ -985,7 +763,7 @@ namespace zes
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        LedGet(
+        EnumLeds(
             uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of components of this type.
@@ -993,7 +771,89 @@ namespace zes
                                                             ///< if count is larger than the number of components available, then the
                                                             ///< driver will update the value with the correct number of components
                                                             ///< that are returned.
-            SysmanLed** ppLed = nullptr                     ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+            Led** ppLed = nullptr                           ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get handle of memory modules
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        EnumMemoryModules(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            Memory** ppMemory = nullptr                     ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get handles to accelerator domains whose performance can be optimized
+        ///        via a Performance Factor
+        /// 
+        /// @details
+        ///     - A Performance Factor should be tuned for each workload.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        EnumPerformanceFactorDomains(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            PerformanceFactor** ppPerf = nullptr            ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get handle of power domains
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        EnumPowerDomains(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            Power** ppPower = nullptr                       ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get handle of power supplies
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        EnumPsus(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            Psu** ppPsu = nullptr                           ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
             );
 
@@ -1015,7 +875,7 @@ namespace zes
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        RasGet(
+        EnumRasErrorSets(
             uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of components of this type.
@@ -1023,34 +883,19 @@ namespace zes
                                                             ///< if count is larger than the number of components available, then the
                                                             ///< driver will update the value with the correct number of components
                                                             ///< that are returned.
-            SysmanRas** ppRas = nullptr                     ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+            Ras** ppRas = nullptr                           ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the event handle for the specified device
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanEvent*: The event handle for the specified device.
-        /// 
-        /// @throws result_t
-        SysmanEvent* __zecall
-        EventGet(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get handle of diagnostics test suites
+        /// @brief Get handle to a scheduler component
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        DiagnosticsGet(
+        EnumSchedulers(
             uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of components of this type.
@@ -1058,61 +903,239 @@ namespace zes
                                                             ///< if count is larger than the number of components available, then the
                                                             ///< driver will update the value with the correct number of components
                                                             ///< that are returned.
-            SysmanDiagnostics** ppDiagnostics = nullptr     ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+            Scheduler** ppScheduler = nullptr               ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get handle of standby controls
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        EnumStandbyDomains(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            Standby** ppStandby = nullptr                   ///< [in,out][optional][range(0, *pCount)] array of pointer to components
+                                                            ///< of this type
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get handle of temperature sensors
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        EnumTemperatureSensors(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of components of this type.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                            ///< if count is larger than the number of components available, then the
+                                                            ///< driver will update the value with the correct number of components
+                                                            ///< that are returned.
+            Temperature** ppTemperature = nullptr           ///< [in,out][optional][range(0, *pCount)] array of pointer to components
                                                             ///< of this type
             );
 
     };
 
+} // namespace zes
+
+namespace zes
+{
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device scheduler queue
-    class SysmanScheduler
+    /// @brief Converts Device::version_t to std::string
+    std::string to_string( const Device::version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::engine_type_t to std::string
+    std::string to_string( const Device::engine_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::repair_status_t to std::string
+    std::string to_string( const Device::repair_status_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::reset_reasons_t to std::string
+    std::string to_string( const Device::reset_reasons_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::state_t to std::string
+    std::string to_string( const Device::state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::properties_t to std::string
+    std::string to_string( const Device::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::process_state_t to std::string
+    std::string to_string( const Device::process_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_address_t to std::string
+    std::string to_string( const Device::pci_address_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_speed_t to std::string
+    std::string to_string( const Device::pci_speed_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_properties_t to std::string
+    std::string to_string( const Device::pci_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_link_status_t to std::string
+    std::string to_string( const Device::pci_link_status_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_link_qual_issues_t to std::string
+    std::string to_string( const Device::pci_link_qual_issues_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_link_stab_issues_t to std::string
+    std::string to_string( const Device::pci_link_stab_issues_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_state_t to std::string
+    std::string to_string( const Device::pci_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_bar_type_t to std::string
+    std::string to_string( const Device::pci_bar_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_bar_properties_t to std::string
+    std::string to_string( const Device::pci_bar_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::pci_stats_t to std::string
+    std::string to_string( const Device::pci_stats_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::event_type_t to std::string
+    std::string to_string( const Device::event_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::freq_domain_t to std::string
+    std::string to_string( const Device::freq_domain_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::sched_mode_t to std::string
+    std::string to_string( const Device::sched_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::sched_timeout_properties_t to std::string
+    std::string to_string( const Device::sched_timeout_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::sched_timeslice_properties_t to std::string
+    std::string to_string( const Device::sched_timeslice_properties_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region diagnostics
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_DIAG_FIRST_TEST_INDEX
+/// @brief Diagnostic test index to use for the very first test.
+#define ZES_DIAG_FIRST_TEST_INDEX  0x0
+#endif // ZES_DIAG_FIRST_TEST_INDEX
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_DIAG_LAST_TEST_INDEX
+/// @brief Diagnostic test index to use for the very last test.
+#define ZES_DIAG_LAST_TEST_INDEX  0xFFFFFFFF
+#endif // ZES_DIAG_LAST_TEST_INDEX
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device diagnostic test suite
+    class Diagnostics
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Properties related to scheduler component
-        struct sched_properties_t
+        /// @brief Diagnostic test suite type
+        enum class diag_type_t
         {
-            ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
+            SCAN = 0,                                       ///< Run SCAN diagnostics
+            ARRAY,                                          ///< Run Array diagnostics
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Diagnostic results
+        enum class diag_result_t
+        {
+            NO_ERRORS = 0,                                  ///< Diagnostic completed without finding errors to repair
+            ABORT,                                          ///< Diagnostic had problems running tests
+            FAIL_CANT_REPAIR,                               ///< Diagnostic had problems setting up repairs
+            REBOOT_FOR_REPAIR,                              ///< Diagnostics found errors, setup for repair and reboot is required to
+                                                            ///< complete the process
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Diagnostic test
+        struct diag_test_t
+        {
+            uint32_t index;                                 ///< [out] Index of the test
+            char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the test
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Diagnostics test suite properties
+        struct diag_properties_t
+        {
+            diag_type_t type;                               ///< [out] The type of diagnostics test suite
+            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            ze::bool_t canControl;                          ///< [out] Software can change the scheduler component configuration
-                                                            ///< assuming the user has permissions.
-            uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are controlled by this
-                                                            ///< scheduler component (bitfield of 1<<::zes_engine_type_t).
-            uint32_t supportedModes;                        ///< [out] Bitfield of scheduler modes that can be configured for this
-                                                            ///< scheduler component (bitfield of 1<<::zes_sched_mode_t).
+            char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
+            ze::bool_t haveTests;                           ///< [out] Indicates if this test suite has individual tests which can be
+                                                            ///< run separately (use the function ::zesDiagnosticsGetTests() to get the
+                                                            ///< list of these tests)
 
         };
 
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_sched_handle_t m_handle = nullptr;       ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+        diag_handle_t m_handle = nullptr;               ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        SysmanScheduler( void ) = delete;
-        SysmanScheduler( 
-            sysman_sched_handle_t handle,                   ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
+        Diagnostics( void ) = delete;
+        Diagnostics( 
+            diag_handle_t handle,                           ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
-        ~SysmanScheduler( void ) = default;
+        ~Diagnostics( void ) = default;
 
-        SysmanScheduler( SysmanScheduler const& other ) = delete;
-        void operator=( SysmanScheduler const& other ) = delete;
+        Diagnostics( Diagnostics const& other ) = delete;
+        void operator=( Diagnostics const& other ) = delete;
 
-        SysmanScheduler( SysmanScheduler&& other ) = delete;
-        void operator=( SysmanScheduler&& other ) = delete;
+        Diagnostics( Diagnostics&& other ) = delete;
+        void operator=( Diagnostics&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get properties related to a scheduler component
+        /// @brief Get properties of a diagnostics test suite
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1120,243 +1143,124 @@ namespace zes
         /// @throws result_t
         void __zecall
         GetProperties(
-            sched_properties_t* pProperties                 ///< [in,out] Structure that will contain property data.
+            diag_properties_t* pProperties                  ///< [in,out] Structure describing the properties of a diagnostics test
+                                                            ///< suite
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current scheduling mode in effect on a scheduler component.
+        /// @brief Get individual tests that can be run separately. Not all test suites
+        ///        permit running individual tests - check
+        ///        ::zes_diag_properties_t.haveTests
         /// 
         /// @details
+        ///     - The list of available tests is returned in order of increasing test
+        ///       index ::zes_diag_test_t.index.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetCurrentMode(
-            Sysman::sched_mode_t* pMode                     ///< [in,out] Will contain the current scheduler mode.
+        GetTests(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
+                                                            ///< If count is zero, then the driver will update the value with the total
+                                                            ///< number of tests available.
+                                                            ///< If count is non-zero, then driver will only retrieve that number of tests.
+                                                            ///< If count is larger than the number of tests available, then the driver
+                                                            ///< will update the value with the correct number of tests available.
+            diag_test_t* pTests = nullptr                   ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
+                                                            ///< increasing value of ::zes_diag_test_t.index
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMEOUT
+        /// @brief Run a diagnostics test suite, either all tests or a subset of tests.
         /// 
         /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
+        ///     - WARNING: Performancing diagnostics may destroy current device state
+        ///       information. Gracefully close any running workloads before initiating.
+        ///     - To run all tests in a test suite, set start =
+        ///       ::ZES_DIAG_FIRST_TEST_INDEX and end = ::ZES_DIAG_LAST_TEST_INDEX.
+        ///     - If the test suite permits running individual tests,
+        ///       ::zes_diag_properties_t.haveTests will be true. In this case, the
+        ///       function ::zesDiagnosticsGetTests() can be called to get the list of
+        ///       tests and corresponding indices that can be supplied to the arguments
+        ///       start and end in this function.
+        ///     - This function will block until the diagnostics have completed.
         /// @throws result_t
         void __zecall
-        GetTimeoutModeProperties(
-            ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
-                                                            ///< this mode, otherwise it will return the current properties.
-            Sysman::sched_timeout_properties_t* pConfig     ///< [in,out] Will contain the current parameters for this mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMESLICE
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetTimesliceModeProperties(
-            ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
-                                                            ///< this mode, otherwise it will return the current properties.
-            Sysman::sched_timeslice_properties_t* pConfig   ///< [in,out] Will contain the current parameters for this mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMEOUT or update scheduler
-        ///        mode parameters if already running in this mode.
-        /// 
-        /// @details
-        ///     - This mode is optimized for multiple applications or contexts
-        ///       submitting work to the hardware. When higher priority work arrives,
-        ///       the scheduler attempts to pause the current executing work within some
-        ///       timeout interval, then submits the other work.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetTimeoutMode(
-            Sysman::sched_timeout_properties_t* pProperties,///< [in] The properties to use when configurating this mode.
-            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                            ///< apply the new scheduler mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMESLICE or update
-        ///        scheduler mode parameters if already running in this mode.
-        /// 
-        /// @details
-        ///     - This mode is optimized to provide fair sharing of hardware execution
-        ///       time between multiple contexts submitting work to the hardware
-        ///       concurrently.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetTimesliceMode(
-            Sysman::sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
-            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                            ///< apply the new scheduler mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_EXCLUSIVE
-        /// 
-        /// @details
-        ///     - This mode is optimized for single application/context use-cases. It
-        ///       permits a context to run indefinitely on the hardware without being
-        ///       preempted or terminated. All pending work for other contexts must wait
-        ///       until the running context completes with no further submitted work.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetExclusiveMode(
-            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                            ///< apply the new scheduler mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_COMPUTE_UNIT_DEBUG
-        /// 
-        /// @details
-        ///     - This mode is optimized for application debug. It ensures that only one
-        ///       command queue can execute work on the hardware at a given time. Work
-        ///       is permitted to run as long as needed without enforcing any scheduler
-        ///       fairness policies.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetComputeUnitDebugMode(
-            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                            ///< apply the new scheduler mode.
+        RunTests(
+            uint32_t start,                                 ///< [in] The index of the first test to run. Set to
+                                                            ///< ::ZES_DIAG_FIRST_TEST_INDEX to start from the beginning.
+            uint32_t end,                                   ///< [in] The index of the last test to run. Set to
+                                                            ///< ::ZES_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
+            diag_result_t* pResult                          ///< [in,out] The result of the diagnostics
             );
 
     };
 
+} // namespace zes
+
+namespace zes
+{
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device performance factor
-    class SysmanPerformanceFactor
+    /// @brief Converts Diagnostics::diag_type_t to std::string
+    std::string to_string( const Diagnostics::diag_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Diagnostics::diag_result_t to std::string
+    std::string to_string( const Diagnostics::diag_result_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Diagnostics::diag_test_t to std::string
+    std::string to_string( const Diagnostics::diag_test_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Diagnostics::diag_properties_t to std::string
+    std::string to_string( const Diagnostics::diag_properties_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region engine
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device engine group
+    class Engine
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Static information about a Performance Factor domain
-        struct perf_properties_t
+        /// @brief Accelerator engine groups
+        enum class group_t
         {
-            ze::bool_t onSubdevice;                         ///< [out] True if this Performance Factor affects accelerators located on
-                                                            ///< a sub-device
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are affected by this
-                                                            ///< Performance Factor (bitfield of 1<<::zes_engine_type_t).
+            ALL = 0,                                        ///< Access information about all engines combined.
+            COMPUTE_ALL,                                    ///< Access information about all compute engines combined.
+            MEDIA_ALL,                                      ///< Access information about all media engines combined.
+            COPY_ALL,                                       ///< Access information about all copy (blitter) engines combined.
 
         };
 
-
-    protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_perf_handle_t m_handle = nullptr;        ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanPerformanceFactor( void ) = delete;
-        SysmanPerformanceFactor( 
-            sysman_perf_handle_t handle,                    ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanPerformanceFactor( void ) = default;
-
-        SysmanPerformanceFactor( SysmanPerformanceFactor const& other ) = delete;
-        void operator=( SysmanPerformanceFactor const& other ) = delete;
-
-        SysmanPerformanceFactor( SysmanPerformanceFactor&& other ) = delete;
-        void operator=( SysmanPerformanceFactor&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get properties about a Performance Factor domain
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            perf_properties_t* pProperties                  ///< [in,out] Will contain information about the specified Performance
-                                                            ///< Factor domain.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current Performance Factor for a given domain
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetConfig(
-            double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
-                                                            ///< hardware (may not be the same as the requested Performance Factor).
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Change the performance factor for a domain
-        /// 
-        /// @details
-        ///     - The Performance Factor is a number between 0 and 100.
-        ///     - A Performance Factor is a hint to the hardware. Depending on the
-        ///       hardware, the request may not be granted. Follow up this function with
-        ///       a call to ::zesSysmanPerformanceFactorGetConfig() to determine the
-        ///       actual factor being used by the hardware.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetConfig(
-            double factor                                   ///< [in] The new Performance Factor.
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device power domain
-    class SysmanPower
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Properties related to device power settings
-        struct power_properties_t
+        /// @brief Engine group properties
+        struct properties_t
         {
+            group_t type;                                   ///< [out] The engine group
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            ze::bool_t canControl;                          ///< [out] Software can change the power limits of this domain assuming the
-                                                            ///< user has permissions.
-            ze::bool_t isEnergyThresholdSupported;          ///< [out] Indicates if this power domain supports the energy threshold
-                                                            ///< event (::ZES_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
-            uint32_t defaultLimit;                          ///< [out] The factory default TDP power limit of the part in milliwatts.
-            uint32_t minLimit;                              ///< [out] The minimum power limit in milliwatts that can be requested.
-            uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Energy counter snapshot
+        /// @brief Engine activity counters
         /// 
         /// @details
-        ///     - Average power is calculated by taking two snapshots (s1, s2) and using
-        ///       the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp -
-        ///       s1.timestamp)
-        struct power_energy_counter_t
+        ///     - Percent utilization is calculated by taking two snapshots (s1, s2) and
+        ///       using the equation: %util = (s2.activeTime - s1.activeTime) /
+        ///       (s2.timestamp - s1.timestamp)
+        struct stats_t
         {
-            uint64_t energy;                                ///< [out] The monotonic energy counter in microjoules.
-            uint64_t timestamp;                             ///< [out] Microsecond timestamp when energy was captured.
+            uint64_t activeTime;                            ///< [out] Monotonic counter for time in microseconds that this resource is
+                                                            ///< actively running workloads.
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when activeTime
+                                                            ///< counter was sampled.
                                                             ///< No assumption should be made about the absolute value of the timestamp.
                                                             ///< It should only be used to calculate delta time between two snapshots
                                                             ///< of the same structure.
@@ -1365,101 +1269,34 @@ namespace zes
 
         };
 
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Sustained power limits
-        /// 
-        /// @details
-        ///     - The power controller (Punit) will throttle the operating frequency if
-        ///       the power averaged over a window (typically seconds) exceeds this
-        ///       limit.
-        struct power_sustained_limit_t
-        {
-            ze::bool_t enabled;                             ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
-            uint32_t power;                                 ///< [in,out] power limit in milliwatts
-            uint32_t interval;                              ///< [in,out] power averaging window (Tau) in milliseconds
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Burst power limit
-        /// 
-        /// @details
-        ///     - The power controller (Punit) will throttle the operating frequency of
-        ///       the device if the power averaged over a few milliseconds exceeds a
-        ///       limit known as PL2. Typically PL2 > PL1 so that it permits the
-        ///       frequency to burst higher for short periods than would be otherwise
-        ///       permitted by PL1.
-        struct power_burst_limit_t
-        {
-            ze::bool_t enabled;                             ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
-            uint32_t power;                                 ///< [in,out] power limit in milliwatts
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Peak power limit
-        /// 
-        /// @details
-        ///     - The power controller (Punit) will preemptively throttle the operating
-        ///       frequency of the device when the instantaneous power exceeds this
-        ///       limit. The limit is known as PL4. It expresses the maximum power that
-        ///       can be drawn from the power supply.
-        ///     - If this power limit is removed or set too high, the power supply will
-        ///       generate an interrupt when it detects an overcurrent condition and the
-        ///       power controller will throttle the device frequencies down to min. It
-        ///       is thus better to tune the PL4 value in order to avoid such
-        ///       excursions.
-        struct power_peak_limit_t
-        {
-            uint32_t powerAC;                               ///< [in,out] power limit in milliwatts for the AC power source.
-            uint32_t powerDC;                               ///< [in,out] power limit in milliwatts for the DC power source. This is
-                                                            ///< ignored if the product does not have a battery.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Energy threshold
-        /// 
-        /// @details
-        ///     - .
-        struct energy_threshold_t
-        {
-            ze::bool_t enable;                              ///< [in,out] Indicates if the energy threshold is enabled.
-            double threshold;                               ///< [in,out] The energy threshold in Joules. Will be 0.0 if no threshold
-                                                            ///< has been set.
-            uint32_t processId;                             ///< [in,out] The host process ID that set the energy threshold. Will be
-                                                            ///< 0xFFFFFFFF if no threshold has been set.
-
-        };
-
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_pwr_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+        engine_handle_t m_handle = nullptr;             ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        SysmanPower( void ) = delete;
-        SysmanPower( 
-            sysman_pwr_handle_t handle,                     ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
+        Engine( void ) = delete;
+        Engine( 
+            engine_handle_t handle,                         ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
-        ~SysmanPower( void ) = default;
+        ~Engine( void ) = default;
 
-        SysmanPower( SysmanPower const& other ) = delete;
-        void operator=( SysmanPower const& other ) = delete;
+        Engine( Engine const& other ) = delete;
+        void operator=( Engine const& other ) = delete;
 
-        SysmanPower( SysmanPower&& other ) = delete;
-        void operator=( SysmanPower&& other ) = delete;
+        Engine( Engine&& other ) = delete;
+        void operator=( Engine&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get properties related to a power domain
+        /// @brief Get engine group properties
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1467,94 +1304,762 @@ namespace zes
         /// @throws result_t
         void __zecall
         GetProperties(
-            power_properties_t* pProperties                 ///< [in,out] Structure that will contain property data.
+            properties_t* pProperties                       ///< [in,out] The properties for the specified engine group.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get energy counter
+        /// @brief Get the activity stats for an engine group
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetEnergyCounter(
-            power_energy_counter_t* pEnergy                 ///< [in,out] Will contain the latest snapshot of the energy counter and
-                                                            ///< timestamp when the last counter value was measured.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get power limits
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetLimits(
-            power_sustained_limit_t* pSustained = nullptr,  ///< [in,out][optional] The sustained power limit.
-            power_burst_limit_t* pBurst = nullptr,          ///< [in,out][optional] The burst power limit.
-            power_peak_limit_t* pPeak = nullptr             ///< [in,out][optional] The peak power limit.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set power limits
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetLimits(
-            const power_sustained_limit_t* pSustained = nullptr,///< [in][optional] The sustained power limit.
-            const power_burst_limit_t* pBurst = nullptr,    ///< [in][optional] The burst power limit.
-            const power_peak_limit_t* pPeak = nullptr       ///< [in][optional] The peak power limit.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get energy threshold
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetEnergyThreshold(
-            energy_threshold_t* pThreshold                  ///< [in,out] Returns information about the energy threshold setting -
-                                                            ///< enabled/energy threshold/process ID.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set energy threshold
-        /// 
-        /// @details
-        ///     - An event ::ZES_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be
-        ///       generated when the delta energy consumed starting from this call
-        ///       exceeds the specified threshold. Use the function
-        ///       ::zesSysmanEventSetConfig() to start receiving the event.
-        ///     - Only one running process can control the energy threshold at a given
-        ///       time. If another process attempts to change the energy threshold, the
-        ///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
-        ///       ::zesSysmanPowerGetEnergyThreshold() to determine the process ID
-        ///       currently controlling this setting.
-        ///     - Calling this function will remove any pending energy thresholds and
-        ///       start counting from the time of this call.
-        ///     - Once the energy threshold has been reached and the event generated,
-        ///       the threshold is automatically removed. It is up to the application to
-        ///       request a new threshold.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetEnergyThreshold(
-            double threshold                                ///< [in] The energy threshold to be set in joules.
+        GetActivity(
+            stats_t* pStats                                 ///< [in,out] Will contain a snapshot of the engine group activity
+                                                            ///< counters.
             );
 
     };
 
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Engine::group_t to std::string
+    std::string to_string( const Engine::group_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Engine::properties_t to std::string
+    std::string to_string( const Engine::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Engine::stats_t to std::string
+    std::string to_string( const Engine::stats_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region events
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_EVENT_WAIT_NONE
+/// @brief Don't wait - just check if there are any new events
+#define ZES_EVENT_WAIT_NONE  0x0
+#endif // ZES_EVENT_WAIT_NONE
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_EVENT_WAIT_INFINITE
+/// @brief Wait infinitely for events to arrive.
+#define ZES_EVENT_WAIT_INFINITE  0xFFFFFFFF
+#endif // ZES_EVENT_WAIT_INFINITE
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device event
+    class Event
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Event configuration for a device
+        struct config_t
+        {
+            uint32_t registered;                            ///< [in,out] List of registered events (Bitfield of events
+                                                            ///< ::zes_event_type_t). ::ZES_EVENT_TYPE_NONE indicates there are no
+                                                            ///< registered events. ::ZES_EVENT_TYPE_ALL indicates that all events are
+                                                            ///< registered.
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        event_handle_t m_handle = nullptr;              ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        Event( void ) = delete;
+        Event( 
+            event_handle_t handle,                          ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
+            );
+
+        ~Event( void ) = default;
+
+        Event( Event const& other ) = delete;
+        void operator=( Event const& other ) = delete;
+
+        Event( Event&& other ) = delete;
+        void operator=( Event&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which events are currently registered on the specified device
+        ///        event handler
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetConfig(
+            config_t* pConfig                               ///< [in,out] Will contain the current event configuration (list of
+                                                            ///< registered events).
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set a new event configuration (list of registered events) on the
+        ///        specified device event handler
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetConfig(
+            const config_t* pConfig                         ///< [in] New event configuration (list of registered events).
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get events that have been triggered for a specific device
+        /// 
+        /// @details
+        ///     - If events have occurred on the specified device event handle, they are
+        ///       returned and the corresponding event status is cleared if the argument
+        ///       clear = true.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetState(
+            ze::bool_t clear,                               ///< [in] Indicates if the event list for this device should be cleared.
+            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_event_type_t that have been
+                                                            ///< triggered by this device.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Wait for the specified list of event handles to receive any registered
+        ///        events
+        /// 
+        /// @details
+        ///     - If previous events arrived and were not cleared using
+        ///       ::zesEventGetState(), this call will return immediately.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        static void __zecall
+        Listen(
+            ze::Driver* pDriver,                            ///< [in] pointer to the driver instance
+            uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
+                                                            ///< ::ZES_EVENT_WAIT_NONE will check status and return immediately. Set to
+                                                            ///< ::ZES_EVENT_WAIT_INFINITE to block until events arrive.
+            uint32_t count,                                 ///< [in] Number of handles in phEvents
+            Event** ppEvents,                               ///< [in][range(0, count)] Handle of events that should be listened to
+            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_event_type_t that have been
+                                                            ///< triggered by any of the supplied event handles. If timeout is not
+                                                            ///< ::ZES_EVENT_WAIT_INFINITE and this value is ::ZES_EVENT_TYPE_NONE,
+                                                            ///< then a timeout has occurred.
+            );
+
+    };
+
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Event::config_t to std::string
+    std::string to_string( const Event::config_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region fabric
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_MAX_FABRIC_PORT_MODEL_SIZE
+/// @brief Maximum Fabric port model string size
+#define ZES_MAX_FABRIC_PORT_MODEL_SIZE  256
+#endif // ZES_MAX_FABRIC_PORT_MODEL_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_MAX_FABRIC_LINK_TYPE_SIZE
+/// @brief Maximum size of the buffer that will return information about link
+///        types
+#define ZES_MAX_FABRIC_LINK_TYPE_SIZE  256
+#endif // ZES_MAX_FABRIC_LINK_TYPE_SIZE
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device Fabric port
+    class FabricPort
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port status
+        enum class status_t
+        {
+            GREEN = 0,                                      ///< The port is up and operating as expected
+            YELLOW,                                         ///< The port is up but has quality and/or speed degradation
+            RED,                                            ///< Port connection instabilities are preventing workloads making forward
+                                                            ///< progress
+            BLACK,                                          ///< The port is configured down
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port quality degradation reasons
+        enum class qual_issues_t
+        {
+            NONE = 0,                                       ///< There are no quality issues with the link at this time
+            FABRIC_PORT_QUAL_LINK_ERRORS = ZE_BIT( 0 ),     ///< Excessive link errors are occurring
+            SPEED = ZE_BIT( 1 ),                            ///< There is a degradation in the bitrate and/or width of the link
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port stability issues
+        enum class stab_issues_t
+        {
+            NONE = 0,                                       ///< There are no connection stability issues at this time
+            FAILED = ZE_BIT( 0 ),                           ///< A previously operating link has failed. Hardware will automatically
+                                                            ///< retrain this port. This state will persist until either the physical
+                                                            ///< connection is removed or the link trains successfully.
+            TRAINING_TIMEOUT = ZE_BIT( 1 ),                 ///< A connection has not been established within an expected time.
+                                                            ///< Hardware will continue to attempt port training. This status will
+                                                            ///< persist until either the physical connection is removed or the link
+                                                            ///< successfully trains.
+            FLAPPING = ZE_BIT( 2 ),                         ///< Port has excessively trained and then transitioned down for some
+                                                            ///< period of time. Driver will allow port to continue to train, but will
+                                                            ///< not enable the port for use until the port has been disabled and
+                                                            ///< subsequently re-enabled using ::zesFabricPortSetConfig().
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Unique identifier for a fabric port
+        /// 
+        /// @details
+        ///     - This not a universal identifier. The identified is garanteed to be
+        ///       unique for the current hardware configuration of the system. Changes
+        ///       in the hardware may result in a different identifier for a given port.
+        ///     - The main purpose of this identifier to build up an instantaneous
+        ///       topology map of system connectivity. An application should enumerate
+        ///       all fabric ports and match ::zes_fabric_port_state_t.remotePortId to
+        ///       ::zes_fabric_port_properties_t.portId.
+        struct id_t
+        {
+            uint32_t fabricId;                              ///< [out] Unique identifier for the fabric end-point
+            uint32_t attachId;                              ///< [out] Unique identifier for the device attachment point
+            uint8_t portNumber;                             ///< [out] The logical port number (this is typically marked somewhere on
+                                                            ///< the physical device)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port speed in one direction
+        struct speed_t
+        {
+            uint64_t bitRate;                               ///< [out] Bits/sec that the link is operating at
+            uint32_t width;                                 ///< [out] The number of lanes
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port properties
+        struct properties_t
+        {
+            int8_t model[ZES_MAX_FABRIC_PORT_MODEL_SIZE];   ///< [out] Description of port technology
+            ze::bool_t onSubdevice;                         ///< [out] True if the port is located on a sub-device; false means that
+                                                            ///< the port is on the device of the calling Sysman handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            id_t portId;                                    ///< [out] The unique port identifier
+            speed_t maxRxSpeed;                             ///< [out] Maximum speed supported by the receive side of the port
+            speed_t maxTxSpeed;                             ///< [out] Maximum speed supported by the transmit side of the port
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Provides information about the fabric link attached to a port
+        struct fabric_link_type_t
+        {
+            int8_t desc[ZES_MAX_FABRIC_LINK_TYPE_SIZE];     ///< [out] This provides a static textural description of the physic
+                                                            ///< attachment type
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port configuration
+        struct config_t
+        {
+            ze::bool_t enabled;                             ///< [in,out] Port is configured up/down
+            ze::bool_t beaconing;                           ///< [in,out] Beaconing is configured on/off
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port state
+        struct state_t
+        {
+            status_t status;                                ///< [out] The current status of the port
+            qual_issues_t qualityIssues;                    ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_YELLOW, this gives a
+                                                            ///< bitfield of quality issues that have been detected
+            stab_issues_t stabilityIssues;                  ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_RED, this gives a bitfield
+                                                            ///< of reasons for the connection instability
+            id_t remotePortId;                              ///< [out] The unique port identifier for the remote connection point
+            speed_t rxSpeed;                                ///< [out] Current maximum receive speed
+            speed_t txSpeed;                                ///< [out] Current maximum transmit speed
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fabric port throughput.
+        struct throughput_t
+        {
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                            ///< was made.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
+            uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received. This
+                                                            ///< includes all protocol overhead, not only the GPU traffic.
+            uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted. This
+                                                            ///< includes all protocol overhead, not only the GPU traffic.
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        fabric_port_handle_t m_handle = nullptr;        ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        FabricPort( void ) = delete;
+        FabricPort( 
+            fabric_port_handle_t handle,                    ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
+            );
+
+        ~FabricPort( void ) = default;
+
+        FabricPort( FabricPort const& other ) = delete;
+        void operator=( FabricPort const& other ) = delete;
+
+        FabricPort( FabricPort&& other ) = delete;
+        void operator=( FabricPort&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get Fabric port properties
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetProperties(
+            properties_t* pProperties                       ///< [in,out] Will contain properties of the Fabric Port.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get Fabric port link type
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetLinkType(
+            ze::bool_t verbose,                             ///< [in] Set to true to get a more detailed report.
+            fabric_link_type_t* pLinkType                   ///< [in,out] Will contain details about the link attached to the Fabric
+                                                            ///< port.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get Fabric port configuration
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetConfig(
+            config_t* pConfig                               ///< [in,out] Will contain configuration of the Fabric Port.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set Fabric port configuration
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetConfig(
+            const config_t* pConfig                         ///< [in] Contains new configuration of the Fabric Port.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get Fabric port state - status (green/yellow/red/black), reasons for
+        ///        link degradation or instability, current rx/tx speed
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetState(
+            state_t* pState                                 ///< [in,out] Will contain the current state of the Fabric Port
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get Fabric port throughput
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetThroughput(
+            throughput_t* pThroughput                       ///< [in,out] Will contain the Fabric port throughput counters.
+            );
+
+    };
+
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::status_t to std::string
+    std::string to_string( const FabricPort::status_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::qual_issues_t to std::string
+    std::string to_string( const FabricPort::qual_issues_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::stab_issues_t to std::string
+    std::string to_string( const FabricPort::stab_issues_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::id_t to std::string
+    std::string to_string( const FabricPort::id_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::speed_t to std::string
+    std::string to_string( const FabricPort::speed_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::properties_t to std::string
+    std::string to_string( const FabricPort::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::fabric_link_type_t to std::string
+    std::string to_string( const FabricPort::fabric_link_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::config_t to std::string
+    std::string to_string( const FabricPort::config_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::state_t to std::string
+    std::string to_string( const FabricPort::state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts FabricPort::throughput_t to std::string
+    std::string to_string( const FabricPort::throughput_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region fan
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_FAN_TEMP_SPEED_PAIR_COUNT
+/// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
+#define ZES_FAN_TEMP_SPEED_PAIR_COUNT  32
+#endif // ZES_FAN_TEMP_SPEED_PAIR_COUNT
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device fan
+    class Fan
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fan resource speed mode
+        enum class speed_mode_t
+        {
+            DEFAULT = 0,                                    ///< The fan speed is operating using the hardware default settings
+            FIXED,                                          ///< The fan speed is currently set to a fixed value
+            TABLE,                                          ///< The fan speed is currently controlled dynamically by hardware based on
+                                                            ///< a temp/speed table
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fan speed units
+        enum class speed_units_t
+        {
+            RPM = 0,                                        ///< The fan speed is in units of revolutions per minute (rpm)
+            PERCENT,                                        ///< The fan speed is a percentage of the maximum speed of the fan
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fan temperature/speed pair
+        struct temp_speed_t
+        {
+            uint32_t temperature;                           ///< [in,out] Temperature in degrees Celsius.
+            uint32_t speed;                                 ///< [in,out] The speed of the fan
+            speed_units_t units;                            ///< [in,out] The units of the member speed
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fan properties
+        struct properties_t
+        {
+            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
+                                                            ///< that the resource is on the device of the calling Sysman handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            ze::bool_t canControl;                          ///< [out] Indicates if software can control the fan speed assuming the
+                                                            ///< user has permissions
+            uint32_t maxSpeed;                              ///< [out] The maximum RPM of the fan
+            uint32_t maxPoints;                             ///< [out] The maximum number of points in the fan temp/speed table
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Fan configuration
+        struct config_t
+        {
+            speed_mode_t mode;                              ///< [in,out] The fan speed mode (fixed, temp-speed table)
+            uint32_t speed;                                 ///< [in,out] The fixed fan speed setting
+            speed_units_t speedUnits;                       ///< [in,out] The units of the fixed fan speed setting
+            uint32_t numPoints;                             ///< [in,out] The number of valid points in the fan speed table
+            temp_speed_t table[ZES_FAN_TEMP_SPEED_PAIR_COUNT];  ///< [in,out] Array of temperature/fan speed pairs
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        fan_handle_t m_handle = nullptr;                ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        Fan( void ) = delete;
+        Fan( 
+            fan_handle_t handle,                            ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
+            );
+
+        ~Fan( void ) = default;
+
+        Fan( Fan const& other ) = delete;
+        void operator=( Fan const& other ) = delete;
+
+        Fan( Fan&& other ) = delete;
+        void operator=( Fan&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get fan properties
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetProperties(
+            properties_t* pProperties                       ///< [in,out] Will contain the properties of the fan.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get current fan configuration
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetConfig(
+            config_t* pConfig                               ///< [in,out] Will contain the current configuration of the fan.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set fan configuration
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetConfig(
+            const config_t* pConfig                         ///< [in] New fan configuration.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get current state of a fan - current mode and speed
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetState(
+            speed_units_t units,                            ///< [in] The units in which the fan speed should be returned.
+            uint32_t* pSpeed                                ///< [in,out] Will contain the current speed of the fan in the units
+                                                            ///< requested.
+            );
+
+    };
+
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Fan::speed_mode_t to std::string
+    std::string to_string( const Fan::speed_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Fan::speed_units_t to std::string
+    std::string to_string( const Fan::speed_units_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Fan::temp_speed_t to std::string
+    std::string to_string( const Fan::temp_speed_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Fan::properties_t to std::string
+    std::string to_string( const Fan::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Fan::config_t to std::string
+    std::string to_string( const Fan::config_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region firmware
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device firmware
+    class Firmware
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Firmware properties
+        struct properties_t
+        {
+            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
+                                                            ///< that the resource is on the device of the calling Sysman handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            ze::bool_t canControl;                          ///< [out] Indicates if software can flash the firmware assuming the user
+                                                            ///< has permissions
+            int8_t name[ZES_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
+            int8_t version[ZES_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        firmware_handle_t m_handle = nullptr;           ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        Firmware( void ) = delete;
+        Firmware( 
+            firmware_handle_t handle,                       ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
+            );
+
+        ~Firmware( void ) = default;
+
+        Firmware( Firmware const& other ) = delete;
+        void operator=( Firmware const& other ) = delete;
+
+        Firmware( Firmware&& other ) = delete;
+        void operator=( Firmware&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get firmware properties
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetProperties(
+            properties_t* pProperties                       ///< [in,out] Pointer to an array that will hold the properties of the
+                                                            ///< firmware
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get firmware checksum
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetChecksum(
+            uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Flash a new firmware image
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        Flash(
+            void* pImage,                                   ///< [in] Image of the new firmware to flash.
+            uint32_t size                                   ///< [in] Size of the flash image.
+            );
+
+    };
+
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Firmware::properties_t to std::string
+    std::string to_string( const Firmware::properties_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region frequency
+namespace zes
+{
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for a Sysman device frequency domain
-    class SysmanFrequency
+    class Frequency
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
@@ -1594,18 +2099,18 @@ namespace zes
         /// 
         /// @details
         ///     - Indicates if this frequency domain can be overclocked (if true,
-        ///       functions such as ::zesSysmanFrequencyOcSetConfig() are supported).
+        ///       functions such as ::zesFrequencyOcSetConfig() are supported).
         ///     - The min/max hardware frequencies are specified for non-overclock
         ///       configurations. For overclock configurations, use
-        ///       ::zesSysmanFrequencyOcGetConfig() to determine the maximum frequency
-        ///       that can be requested.
+        ///       ::zesFrequencyOcGetConfig() to determine the maximum frequency that
+        ///       can be requested.
         ///     - If step is non-zero, the available frequencies are (min, min + step,
         ///       min + 2xstep, ..., max). Otherwise, call
-        ///       ::zesSysmanFrequencyGetAvailableClocks() to get the list of
-        ///       frequencies that can be requested.
+        ///       ::zesFrequencyGetAvailableClocks() to get the list of frequencies that
+        ///       can be requested.
         struct freq_properties_t
         {
-            Sysman::freq_domain_t type;                     ///< [out] The hardware block that this frequency domain controls (GPU,
+            Device::freq_domain_t type;                     ///< [out] The hardware block that this frequency domain controls (GPU,
                                                             ///< memory, ...)
             ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling Sysman handle
@@ -1613,7 +2118,7 @@ namespace zes
             ze::bool_t canControl;                          ///< [out] Indicates if software can control the frequency of this domain
                                                             ///< assuming the user has permissions
             ze::bool_t isThrottleEventSupported;            ///< [out] Indicates if software can register to receive event
-                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
+                                                            ///< ::ZES_EVENT_TYPE_FREQ_THROTTLED
             double min;                                     ///< [out] The minimum hardware clock frequency in units of MHz
             double max;                                     ///< [out] The maximum non-overclock hardware clock frequency in units of
                                                             ///< MHz.
@@ -1722,28 +2227,28 @@ namespace zes
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_freq_handle_t m_handle = nullptr;        ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+        freq_handle_t m_handle = nullptr;               ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        SysmanFrequency( void ) = delete;
-        SysmanFrequency( 
-            sysman_freq_handle_t handle,                    ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
+        Frequency( void ) = delete;
+        Frequency( 
+            freq_handle_t handle,                           ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
-        ~SysmanFrequency( void ) = default;
+        ~Frequency( void ) = default;
 
-        SysmanFrequency( SysmanFrequency const& other ) = delete;
-        void operator=( SysmanFrequency const& other ) = delete;
+        Frequency( Frequency const& other ) = delete;
+        void operator=( Frequency const& other ) = delete;
 
-        SysmanFrequency( SysmanFrequency&& other ) = delete;
-        void operator=( SysmanFrequency&& other ) = delete;
+        Frequency( Frequency&& other ) = delete;
+        void operator=( Frequency&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get frequency properties - available frequencies
@@ -1862,8 +2367,8 @@ namespace zes
         /// @details
         ///     - If ::zes_oc_config_t.mode is set to ::ZES_OC_MODE_OFF, overclocking
         ///       will be turned off and the hardware returned to run with factory
-        ///       voltages/frequencies. Call ::zesSysmanFrequencyOcSetIccMax() and
-        ///       ::zesSysmanFrequencyOcSetTjMax() separately with 0.0 to return those
+        ///       voltages/frequencies. Call ::zesFrequencyOcSetIccMax() and
+        ///       ::zesFrequencyOcSetTjMax() separately with 0.0 to return those
         ///       settings to factory defaults.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
@@ -1929,252 +2434,104 @@ namespace zes
 
     };
 
+} // namespace zes
+
+namespace zes
+{
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device engine group
-    class SysmanEngine
+    /// @brief Converts Frequency::freq_properties_t to std::string
+    std::string to_string( const Frequency::freq_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Frequency::freq_range_t to std::string
+    std::string to_string( const Frequency::freq_range_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Frequency::freq_throttle_reasons_t to std::string
+    std::string to_string( const Frequency::freq_throttle_reasons_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Frequency::freq_state_t to std::string
+    std::string to_string( const Frequency::freq_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Frequency::freq_throttle_time_t to std::string
+    std::string to_string( const Frequency::freq_throttle_time_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Frequency::oc_mode_t to std::string
+    std::string to_string( const Frequency::oc_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Frequency::oc_capabilities_t to std::string
+    std::string to_string( const Frequency::oc_capabilities_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Frequency::oc_config_t to std::string
+    std::string to_string( const Frequency::oc_config_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region led
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device LED
+    class Led
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Accelerator engine groups
-        enum class engine_group_t
-        {
-            ALL = 0,                                        ///< Access information about all engines combined.
-            COMPUTE_ALL,                                    ///< Access information about all compute engines combined.
-            MEDIA_ALL,                                      ///< Access information about all media engines combined.
-            COPY_ALL,                                       ///< Access information about all copy (blitter) engines combined.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Engine group properties
-        struct engine_properties_t
-        {
-            engine_group_t type;                            ///< [out] The engine group
-            ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling Sysman handle
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Engine activity counters
-        /// 
-        /// @details
-        ///     - Percent utilization is calculated by taking two snapshots (s1, s2) and
-        ///       using the equation: %util = (s2.activeTime - s1.activeTime) /
-        ///       (s2.timestamp - s1.timestamp)
-        struct engine_stats_t
-        {
-            uint64_t activeTime;                            ///< [out] Monotonic counter for time in microseconds that this resource is
-                                                            ///< actively running workloads.
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when activeTime
-                                                            ///< counter was sampled.
-                                                            ///< No assumption should be made about the absolute value of the timestamp.
-                                                            ///< It should only be used to calculate delta time between two snapshots
-                                                            ///< of the same structure.
-                                                            ///< Never take the delta of this timestamp with the timestamp from a
-                                                            ///< different structure.
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_engine_handle_t m_handle = nullptr;      ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanEngine( void ) = delete;
-        SysmanEngine( 
-            sysman_engine_handle_t handle,                  ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanEngine( void ) = default;
-
-        SysmanEngine( SysmanEngine const& other ) = delete;
-        void operator=( SysmanEngine const& other ) = delete;
-
-        SysmanEngine( SysmanEngine&& other ) = delete;
-        void operator=( SysmanEngine&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get engine group properties
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            engine_properties_t* pProperties                ///< [in,out] The properties for the specified engine group.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the activity stats for an engine group
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetActivity(
-            engine_stats_t* pStats                          ///< [in,out] Will contain a snapshot of the engine group activity
-                                                            ///< counters.
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman standby control
-    class SysmanStandby
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Standby hardware components
-        enum class standby_type_t
-        {
-            GLOBAL = 0,                                     ///< Control the overall standby policy of the device/sub-device
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Standby promotion modes
-        enum class standby_promo_mode_t
-        {
-            DEFAULT = 0,                                    ///< Best compromise between performance and energy savings.
-            NEVER,                                          ///< The device/component will never shutdown. This can improve performance
-                                                            ///< but uses more energy.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Standby hardware component properties
-        struct standby_properties_t
-        {
-            standby_type_t type;                            ///< [out] Which standby hardware component this controls
-            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling Sysman handle
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_standby_handle_t m_handle = nullptr;     ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanStandby( void ) = delete;
-        SysmanStandby( 
-            sysman_standby_handle_t handle,                 ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanStandby( void ) = default;
-
-        SysmanStandby( SysmanStandby const& other ) = delete;
-        void operator=( SysmanStandby const& other ) = delete;
-
-        SysmanStandby( SysmanStandby&& other ) = delete;
-        void operator=( SysmanStandby&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get standby hardware component properties
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            standby_properties_t* pProperties               ///< [in,out] Will contain the standby hardware properties.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the current standby promotion mode
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetMode(
-            standby_promo_mode_t* pMode                     ///< [in,out] Will contain the current standby mode.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set standby promotion mode
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetMode(
-            standby_promo_mode_t mode                       ///< [in] New standby mode.
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device firmware
-    class SysmanFirmware
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Firmware properties
-        struct firmware_properties_t
+        /// @brief LED properties
+        struct properties_t
         {
             ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            ze::bool_t canControl;                          ///< [out] Indicates if software can flash the firmware assuming the user
-                                                            ///< has permissions
-            int8_t name[ZES_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
-            int8_t version[ZES_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
+            ze::bool_t canControl;                          ///< [out] Indicates if software can control the LED assuming the user has
+                                                            ///< permissions
+            ze::bool_t haveRGB;                             ///< [out] Indicates if the LED is RGB capable
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief LED state
+        struct state_t
+        {
+            ze::bool_t isOn;                                ///< [in,out] Indicates if the LED is on or off
+            uint8_t red;                                    ///< [in,out][range(0, 255)] The LED red value
+            uint8_t green;                                  ///< [in,out][range(0, 255)] The LED green value
+            uint8_t blue;                                   ///< [in,out][range(0, 255)] The LED blue value
 
         };
 
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_firmware_handle_t m_handle = nullptr;    ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+        led_handle_t m_handle = nullptr;                ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        SysmanFirmware( void ) = delete;
-        SysmanFirmware( 
-            sysman_firmware_handle_t handle,                ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
+        Led( void ) = delete;
+        Led( 
+            led_handle_t handle,                            ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
-        ~SysmanFirmware( void ) = default;
+        ~Led( void ) = default;
 
-        SysmanFirmware( SysmanFirmware const& other ) = delete;
-        void operator=( SysmanFirmware const& other ) = delete;
+        Led( Led const& other ) = delete;
+        void operator=( Led const& other ) = delete;
 
-        SysmanFirmware( SysmanFirmware&& other ) = delete;
-        void operator=( SysmanFirmware&& other ) = delete;
+        Led( Led&& other ) = delete;
+        void operator=( Led&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get firmware properties
+        /// @brief Get LED properties
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2182,40 +2539,55 @@ namespace zes
         /// @throws result_t
         void __zecall
         GetProperties(
-            firmware_properties_t* pProperties              ///< [in,out] Pointer to an array that will hold the properties of the
-                                                            ///< firmware
+            properties_t* pProperties                       ///< [in,out] Will contain the properties of the LED.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get firmware checksum
+        /// @brief Get current state of a LED - on/off, color
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetChecksum(
-            uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
+        GetState(
+            state_t* pState                                 ///< [in,out] Will contain the current state of the LED.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Flash a new firmware image
+        /// @brief Set state of a LED - on/off, color
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        Flash(
-            void* pImage,                                   ///< [in] Image of the new firmware to flash.
-            uint32_t size                                   ///< [in] Size of the flash image.
+        SetState(
+            const state_t* pState                           ///< [in] New state of the LED.
             );
 
     };
 
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Led::properties_t to std::string
+    std::string to_string( const Led::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Led::state_t to std::string
+    std::string to_string( const Led::state_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region memory
+namespace zes
+{
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for a Sysman device memory module
-    class SysmanMemory
+    class Memory
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
@@ -2297,28 +2669,28 @@ namespace zes
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_mem_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+        mem_handle_t m_handle = nullptr;                ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        SysmanMemory( void ) = delete;
-        SysmanMemory( 
-            sysman_mem_handle_t handle,                     ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
+        Memory( void ) = delete;
+        Memory( 
+            mem_handle_t handle,                            ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
-        ~SysmanMemory( void ) = default;
+        ~Memory( void ) = default;
 
-        SysmanMemory( SysmanMemory const& other ) = delete;
-        void operator=( SysmanMemory const& other ) = delete;
+        Memory( Memory const& other ) = delete;
+        void operator=( Memory const& other ) = delete;
 
-        SysmanMemory( SysmanMemory&& other ) = delete;
-        void operator=( SysmanMemory&& other ) = delete;
+        Memory( Memory&& other ) = delete;
+        void operator=( Memory&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get memory properties
@@ -2359,174 +2731,80 @@ namespace zes
 
     };
 
+} // namespace zes
+
+namespace zes
+{
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device Fabric port
-    class SysmanFabricPort
+    /// @brief Converts Memory::mem_type_t to std::string
+    std::string to_string( const Memory::mem_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Memory::mem_health_t to std::string
+    std::string to_string( const Memory::mem_health_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Memory::mem_properties_t to std::string
+    std::string to_string( const Memory::mem_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Memory::mem_state_t to std::string
+    std::string to_string( const Memory::mem_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Memory::mem_bandwidth_t to std::string
+    std::string to_string( const Memory::mem_bandwidth_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region performance
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device performance factor
+    class PerformanceFactor
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port status
-        enum class fabric_port_status_t
+        /// @brief Static information about a Performance Factor domain
+        struct perf_properties_t
         {
-            GREEN = 0,                                      ///< The port is up and operating as expected
-            YELLOW,                                         ///< The port is up but has quality and/or speed degradation
-            RED,                                            ///< Port connection instabilities are preventing workloads making forward
-                                                            ///< progress
-            BLACK,                                          ///< The port is configured down
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port quality degradation reasons
-        enum class fabric_port_qual_issues_t
-        {
-            NONE = 0,                                       ///< There are no quality issues with the link at this time
-            FABRIC_PORT_QUAL_LINK_ERRORS = ZE_BIT( 0 ),     ///< Excessive link errors are occurring
-            SPEED = ZE_BIT( 1 ),                            ///< There is a degradation in the bitrate and/or width of the link
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port stability issues
-        enum class fabric_port_stab_issues_t
-        {
-            NONE = 0,                                       ///< There are no connection stability issues at this time
-            FAILED = ZE_BIT( 0 ),                           ///< A previously operating link has failed. Hardware will automatically
-                                                            ///< retrain this port. This state will persist until either the physical
-                                                            ///< connection is removed or the link trains successfully.
-            TRAINING_TIMEOUT = ZE_BIT( 1 ),                 ///< A connection has not been established within an expected time.
-                                                            ///< Hardware will continue to attempt port training. This status will
-                                                            ///< persist until either the physical connection is removed or the link
-                                                            ///< successfully trains.
-            FLAPPING = ZE_BIT( 2 ),                         ///< Port has excessively trained and then transitioned down for some
-                                                            ///< period of time. Driver will allow port to continue to train, but will
-                                                            ///< not enable the port for use until the port has been disabled and
-                                                            ///< subsequently re-enabled using ::zesSysmanFabricPortSetConfig().
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Unique identifier for a fabric port
-        /// 
-        /// @details
-        ///     - This not a universal identifier. The identified is garanteed to be
-        ///       unique for the current hardware configuration of the system. Changes
-        ///       in the hardware may result in a different identifier for a given port.
-        ///     - The main purpose of this identifier to build up an instantaneous
-        ///       topology map of system connectivity. An application should enumerate
-        ///       all fabric ports and match ::zes_fabric_port_state_t.remotePortId to
-        ///       ::zes_fabric_port_properties_t.portId.
-        struct fabric_port_id_t
-        {
-            uint32_t fabricId;                              ///< [out] Unique identifier for the fabric end-point
-            uint32_t attachId;                              ///< [out] Unique identifier for the device attachment point
-            uint8_t portNumber;                             ///< [out] The logical port number (this is typically marked somewhere on
-                                                            ///< the physical device)
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port speed in one direction
-        struct fabric_port_speed_t
-        {
-            uint64_t bitRate;                               ///< [out] Bits/sec that the link is operating at
-            uint32_t width;                                 ///< [out] The number of lanes
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port properties
-        struct fabric_port_properties_t
-        {
-            int8_t model[ZES_MAX_FABRIC_PORT_MODEL_SIZE];   ///< [out] Description of port technology
-            ze::bool_t onSubdevice;                         ///< [out] True if the port is located on a sub-device; false means that
-                                                            ///< the port is on the device of the calling Sysman handle
+            ze::bool_t onSubdevice;                         ///< [out] True if this Performance Factor affects accelerators located on
+                                                            ///< a sub-device
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            fabric_port_id_t portId;                        ///< [out] The unique port identifier
-            fabric_port_speed_t maxRxSpeed;                 ///< [out] Maximum speed supported by the receive side of the port
-            fabric_port_speed_t maxTxSpeed;                 ///< [out] Maximum speed supported by the transmit side of the port
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Provides information about the fabric link attached to a port
-        struct fabric_link_type_t
-        {
-            int8_t desc[ZES_MAX_FABRIC_LINK_TYPE_SIZE];     ///< [out] This provides a static textural description of the physic
-                                                            ///< attachment type
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port configuration
-        struct fabric_port_config_t
-        {
-            ze::bool_t enabled;                             ///< [in,out] Port is configured up/down
-            ze::bool_t beaconing;                           ///< [in,out] Beaconing is configured on/off
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port state
-        struct fabric_port_state_t
-        {
-            fabric_port_status_t status;                    ///< [out] The current status of the port
-            fabric_port_qual_issues_t qualityIssues;        ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_YELLOW, this gives a
-                                                            ///< bitfield of quality issues that have been detected
-            fabric_port_stab_issues_t stabilityIssues;      ///< [out] If status is ::ZES_FABRIC_PORT_STATUS_RED, this gives a bitfield
-                                                            ///< of reasons for the connection instability
-            fabric_port_id_t remotePortId;                  ///< [out] The unique port identifier for the remote connection point
-            fabric_port_speed_t rxSpeed;                    ///< [out] Current maximum receive speed
-            fabric_port_speed_t txSpeed;                    ///< [out] Current maximum transmit speed
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fabric port throughput.
-        struct fabric_port_throughput_t
-        {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
-                                                            ///< was made.
-                                                            ///< No assumption should be made about the absolute value of the timestamp.
-                                                            ///< It should only be used to calculate delta time between two snapshots
-                                                            ///< of the same structure.
-                                                            ///< Never take the delta of this timestamp with the timestamp from a
-                                                            ///< different structure.
-            uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received. This
-                                                            ///< includes all protocol overhead, not only the GPU traffic.
-            uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted. This
-                                                            ///< includes all protocol overhead, not only the GPU traffic.
+            uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are affected by this
+                                                            ///< Performance Factor (bitfield of 1<<::zes_engine_type_t).
 
         };
 
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_fabric_port_handle_t m_handle = nullptr; ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+        perf_handle_t m_handle = nullptr;               ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        SysmanFabricPort( void ) = delete;
-        SysmanFabricPort( 
-            sysman_fabric_port_handle_t handle,             ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
+        PerformanceFactor( void ) = delete;
+        PerformanceFactor( 
+            perf_handle_t handle,                           ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
-        ~SysmanFabricPort( void ) = default;
+        ~PerformanceFactor( void ) = default;
 
-        SysmanFabricPort( SysmanFabricPort const& other ) = delete;
-        void operator=( SysmanFabricPort const& other ) = delete;
+        PerformanceFactor( PerformanceFactor const& other ) = delete;
+        void operator=( PerformanceFactor const& other ) = delete;
 
-        SysmanFabricPort( SysmanFabricPort&& other ) = delete;
-        void operator=( SysmanFabricPort&& other ) = delete;
+        PerformanceFactor( PerformanceFactor&& other ) = delete;
+        void operator=( PerformanceFactor&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get Fabric port properties
+        /// @brief Get properties about a Performance Factor domain
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2534,25 +2812,12 @@ namespace zes
         /// @throws result_t
         void __zecall
         GetProperties(
-            fabric_port_properties_t* pProperties           ///< [in,out] Will contain properties of the Fabric Port.
+            perf_properties_t* pProperties                  ///< [in,out] Will contain information about the specified Performance
+                                                            ///< Factor domain.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get Fabric port link type
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetLinkType(
-            ze::bool_t verbose,                             ///< [in] Set to true to get a more detailed report.
-            fabric_link_type_t* pLinkType                   ///< [in,out] Will contain details about the link attached to the Fabric
-                                                            ///< port.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get Fabric port configuration
+        /// @brief Get current Performance Factor for a given domain
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2560,24 +2825,381 @@ namespace zes
         /// @throws result_t
         void __zecall
         GetConfig(
-            fabric_port_config_t* pConfig                   ///< [in,out] Will contain configuration of the Fabric Port.
+            double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
+                                                            ///< hardware (may not be the same as the requested Performance Factor).
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set Fabric port configuration
+        /// @brief Change the performance factor for a domain
+        /// 
+        /// @details
+        ///     - The Performance Factor is a number between 0 and 100.
+        ///     - A Performance Factor is a hint to the hardware. Depending on the
+        ///       hardware, the request may not be granted. Follow up this function with
+        ///       a call to ::zesPerformanceFactorGetConfig() to determine the actual
+        ///       factor being used by the hardware.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetConfig(
+            double factor                                   ///< [in] The new Performance Factor.
+            );
+
+    };
+
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts PerformanceFactor::perf_properties_t to std::string
+    std::string to_string( const PerformanceFactor::perf_properties_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region power
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device power domain
+    class Power
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Properties related to device power settings
+        struct properties_t
+        {
+            ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
+                                                            ///< that the resource is on the device of the calling Sysman handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            ze::bool_t canControl;                          ///< [out] Software can change the power limits of this domain assuming the
+                                                            ///< user has permissions.
+            ze::bool_t isEnergyThresholdSupported;          ///< [out] Indicates if this power domain supports the energy threshold
+                                                            ///< event (::ZES_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED).
+            uint32_t defaultLimit;                          ///< [out] The factory default TDP power limit of the part in milliwatts.
+            uint32_t minLimit;                              ///< [out] The minimum power limit in milliwatts that can be requested.
+            uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Energy counter snapshot
+        /// 
+        /// @details
+        ///     - Average power is calculated by taking two snapshots (s1, s2) and using
+        ///       the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp -
+        ///       s1.timestamp)
+        struct energy_counter_t
+        {
+            uint64_t energy;                                ///< [out] The monotonic energy counter in microjoules.
+            uint64_t timestamp;                             ///< [out] Microsecond timestamp when energy was captured.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Sustained power limits
+        /// 
+        /// @details
+        ///     - The power controller (Punit) will throttle the operating frequency if
+        ///       the power averaged over a window (typically seconds) exceeds this
+        ///       limit.
+        struct sustained_limit_t
+        {
+            ze::bool_t enabled;                             ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
+            uint32_t power;                                 ///< [in,out] power limit in milliwatts
+            uint32_t interval;                              ///< [in,out] power averaging window (Tau) in milliseconds
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Burst power limit
+        /// 
+        /// @details
+        ///     - The power controller (Punit) will throttle the operating frequency of
+        ///       the device if the power averaged over a few milliseconds exceeds a
+        ///       limit known as PL2. Typically PL2 > PL1 so that it permits the
+        ///       frequency to burst higher for short periods than would be otherwise
+        ///       permitted by PL1.
+        struct burst_limit_t
+        {
+            ze::bool_t enabled;                             ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
+            uint32_t power;                                 ///< [in,out] power limit in milliwatts
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Peak power limit
+        /// 
+        /// @details
+        ///     - The power controller (Punit) will preemptively throttle the operating
+        ///       frequency of the device when the instantaneous power exceeds this
+        ///       limit. The limit is known as PL4. It expresses the maximum power that
+        ///       can be drawn from the power supply.
+        ///     - If this power limit is removed or set too high, the power supply will
+        ///       generate an interrupt when it detects an overcurrent condition and the
+        ///       power controller will throttle the device frequencies down to min. It
+        ///       is thus better to tune the PL4 value in order to avoid such
+        ///       excursions.
+        struct peak_limit_t
+        {
+            uint32_t powerAC;                               ///< [in,out] power limit in milliwatts for the AC power source.
+            uint32_t powerDC;                               ///< [in,out] power limit in milliwatts for the DC power source. This is
+                                                            ///< ignored if the product does not have a battery.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Energy threshold
+        /// 
+        /// @details
+        ///     - .
+        struct energy_threshold_t
+        {
+            ze::bool_t enable;                              ///< [in,out] Indicates if the energy threshold is enabled.
+            double threshold;                               ///< [in,out] The energy threshold in Joules. Will be 0.0 if no threshold
+                                                            ///< has been set.
+            uint32_t processId;                             ///< [in,out] The host process ID that set the energy threshold. Will be
+                                                            ///< 0xFFFFFFFF if no threshold has been set.
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        pwr_handle_t m_handle = nullptr;                ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        Power( void ) = delete;
+        Power( 
+            pwr_handle_t handle,                            ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
+            );
+
+        ~Power( void ) = default;
+
+        Power( Power const& other ) = delete;
+        void operator=( Power const& other ) = delete;
+
+        Power( Power&& other ) = delete;
+        void operator=( Power&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get properties related to a power domain
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        SetConfig(
-            const fabric_port_config_t* pConfig             ///< [in] Contains new configuration of the Fabric Port.
+        GetProperties(
+            properties_t* pProperties                       ///< [in,out] Structure that will contain property data.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get Fabric port state - status (green/yellow/red/black), reasons for
-        ///        link degradation or instability, current rx/tx speed
+        /// @brief Get energy counter
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetEnergyCounter(
+            energy_counter_t* pEnergy                       ///< [in,out] Will contain the latest snapshot of the energy counter and
+                                                            ///< timestamp when the last counter value was measured.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get power limits
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetLimits(
+            sustained_limit_t* pSustained = nullptr,        ///< [in,out][optional] The sustained power limit.
+            burst_limit_t* pBurst = nullptr,                ///< [in,out][optional] The burst power limit.
+            peak_limit_t* pPeak = nullptr                   ///< [in,out][optional] The peak power limit.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set power limits
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetLimits(
+            const sustained_limit_t* pSustained = nullptr,  ///< [in][optional] The sustained power limit.
+            const burst_limit_t* pBurst = nullptr,          ///< [in][optional] The burst power limit.
+            const peak_limit_t* pPeak = nullptr             ///< [in][optional] The peak power limit.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get energy threshold
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetEnergyThreshold(
+            energy_threshold_t* pThreshold                  ///< [in,out] Returns information about the energy threshold setting -
+                                                            ///< enabled/energy threshold/process ID.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set energy threshold
+        /// 
+        /// @details
+        ///     - An event ::ZES_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated
+        ///       when the delta energy consumed starting from this call exceeds the
+        ///       specified threshold. Use the function ::zesEventSetConfig() to start
+        ///       receiving the event.
+        ///     - Only one running process can control the energy threshold at a given
+        ///       time. If another process attempts to change the energy threshold, the
+        ///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
+        ///       ::zesPowerGetEnergyThreshold() to determine the process ID currently
+        ///       controlling this setting.
+        ///     - Calling this function will remove any pending energy thresholds and
+        ///       start counting from the time of this call.
+        ///     - Once the energy threshold has been reached and the event generated,
+        ///       the threshold is automatically removed. It is up to the application to
+        ///       request a new threshold.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetEnergyThreshold(
+            double threshold                                ///< [in] The energy threshold to be set in joules.
+            );
+
+    };
+
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Power::properties_t to std::string
+    std::string to_string( const Power::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Power::energy_counter_t to std::string
+    std::string to_string( const Power::energy_counter_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Power::sustained_limit_t to std::string
+    std::string to_string( const Power::sustained_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Power::burst_limit_t to std::string
+    std::string to_string( const Power::burst_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Power::peak_limit_t to std::string
+    std::string to_string( const Power::peak_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Power::energy_threshold_t to std::string
+    std::string to_string( const Power::energy_threshold_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region psu
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device power supply
+    class Psu
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief PSU voltage status
+        enum class voltage_status_t
+        {
+            NORMAL = 0,                                     ///< No unusual voltages have been detected
+            OVER,                                           ///< Over-voltage has occurred
+            UNDER,                                          ///< Under-voltage has occurred
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Static properties of the power supply
+        struct properties_t
+        {
+            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
+                                                            ///< that the resource is on the device of the calling Sysman handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            ze::bool_t haveFan;                             ///< [out] True if the power supply has a fan
+            uint32_t ampLimit;                              ///< [out] The maximum electrical current in amperes that can be drawn
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Dynamic state of the power supply
+        struct state_t
+        {
+            voltage_status_t voltStatus;                    ///< [out] The current PSU voltage status
+            ze::bool_t fanFailed;                           ///< [out] Indicates if the fan has failed
+            uint32_t temperature;                           ///< [out] Read the current heatsink temperature in degrees Celsius.
+            uint32_t current;                               ///< [out] The amps being drawn in amperes
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        psu_handle_t m_handle = nullptr;                ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        Psu( void ) = delete;
+        Psu( 
+            psu_handle_t handle,                            ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
+            );
+
+        ~Psu( void ) = default;
+
+        Psu( Psu const& other ) = delete;
+        void operator=( Psu const& other ) = delete;
+
+        Psu( Psu&& other ) = delete;
+        void operator=( Psu&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get power supply properties
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetProperties(
+            properties_t* pProperties                       ///< [in,out] Will contain the properties of the power supply.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get current power supply state
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2585,26 +3207,546 @@ namespace zes
         /// @throws result_t
         void __zecall
         GetState(
-            fabric_port_state_t* pState                     ///< [in,out] Will contain the current state of the Fabric Port
+            state_t* pState                                 ///< [in,out] Will contain the current state of the power supply.
             );
 
+    };
+
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Psu::voltage_status_t to std::string
+    std::string to_string( const Psu::voltage_status_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Psu::properties_t to std::string
+    std::string to_string( const Psu::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Psu::state_t to std::string
+    std::string to_string( const Psu::state_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region ras
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device RAS error set
+    class Ras
+    {
+    public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get Fabric port throughput
+        /// @brief RAS error type
+        enum class error_type_t
+        {
+            CORRECTABLE = 0,                                ///< Errors were corrected by hardware
+            UNCORRECTABLE,                                  ///< Error were not corrected
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief RAS properties
+        struct properties_t
+        {
+            error_type_t type;                              ///< [out] The type of RAS error
+            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
+                                                            ///< that the resource is on the device of the calling Sysman handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief RAS error details
+        struct details_t
+        {
+            uint64_t numResets;                             ///< [out] The number of device resets that have taken place
+            uint64_t numProgrammingErrors;                  ///< [out] The number of hardware exceptions generated by the way workloads
+                                                            ///< have programmed the hardware
+            uint64_t numDriverErrors;                       ///< [out] The number of low level driver communication errors have
+                                                            ///< occurred
+            uint64_t numComputeErrors;                      ///< [out] The number of errors that have occurred in the compute
+                                                            ///< accelerator hardware
+            uint64_t numNonComputeErrors;                   ///< [out] The number of errors that have occurred in the fixed-function
+                                                            ///< accelerator hardware
+            uint64_t numCacheErrors;                        ///< [out] The number of errors that have occurred in caches
+                                                            ///< (L1/L3/register file/shared local memory/sampler)
+            uint64_t numDisplayErrors;                      ///< [out] The number of errors that have occurred in the display
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief RAS error configuration - thresholds used for triggering RAS events
+        ///        (::ZES_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
+        ///        ::ZES_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
+        /// 
+        /// @details
+        ///     - The driver maintains a total counter which is updated every time a
+        ///       hardware block covered by the corresponding RAS error set notifies
+        ///       that an error has occurred. When this total count goes above the
+        ///       totalThreshold specified below, a RAS event is triggered.
+        ///     - The driver also maintains a counter for each category of RAS error
+        ///       (see ::zes_ras_details_t for a breakdown). Each time a hardware block
+        ///       of that category notifies that an error has occurred, that
+        ///       corresponding category counter is updated. When it goes above the
+        ///       threshold specified in detailedThresholds, a RAS event is triggered.
+        struct config_t
+        {
+            uint64_t totalThreshold;                        ///< [in,out] If the total RAS errors exceeds this threshold, the event
+                                                            ///< will be triggered. A value of 0ULL disables triggering the event based
+                                                            ///< on the total counter.
+            details_t detailedThresholds;                   ///< [in,out] If the RAS errors for each category exceed the threshold for
+                                                            ///< that category, the event will be triggered. A value of 0ULL will
+                                                            ///< disable an event being triggered for that category.
+            uint32_t processId;                             ///< [out] Host processId that set this configuration (ignored when setting
+                                                            ///< the configuration).
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        ras_handle_t m_handle = nullptr;                ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        Ras( void ) = delete;
+        Ras( 
+            ras_handle_t handle,                            ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
+            );
+
+        ~Ras( void ) = default;
+
+        Ras( Ras const& other ) = delete;
+        void operator=( Ras const& other ) = delete;
+
+        Ras( Ras&& other ) = delete;
+        void operator=( Ras&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get RAS properties of a given RAS error set - this enables discovery
+        ///        of the type of RAS error set (correctable/uncorrectable) and if
+        ///        located on a sub-device
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __zecall
-        GetThroughput(
-            fabric_port_throughput_t* pThroughput           ///< [in,out] Will contain the Fabric port throughput counters.
+        GetProperties(
+            properties_t* pProperties                       ///< [in,out] Structure describing RAS properties
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get RAS error thresholds that control when RAS events are generated
+        /// 
+        /// @details
+        ///     - The driver maintains counters for all RAS error sets and error
+        ///       categories. Events are generated when errors occur. The configuration
+        ///       enables setting thresholds to limit when events are sent.
+        ///     - When a particular RAS correctable error counter exceeds the configured
+        ///       threshold, the event ::ZES_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be
+        ///       triggered.
+        ///     - When a particular RAS uncorrectable error counter exceeds the
+        ///       configured threshold, the event
+        ///       ::ZES_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetConfig(
+            config_t* pConfig                               ///< [in,out] Will be populed with the current RAS configuration -
+                                                            ///< thresholds used to trigger events
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set RAS error thresholds that control when RAS events are generated
+        /// 
+        /// @details
+        ///     - The driver maintains counters for all RAS error sets and error
+        ///       categories. Events are generated when errors occur. The configuration
+        ///       enables setting thresholds to limit when events are sent.
+        ///     - When a particular RAS correctable error counter exceeds the specified
+        ///       threshold, the event ::ZES_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be
+        ///       generated.
+        ///     - When a particular RAS uncorrectable error counter exceeds the
+        ///       specified threshold, the event
+        ///       ::ZES_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated.
+        ///     - Call ::zesRasGetState() and set the clear flag to true to restart
+        ///       event generation once counters have exceeded thresholds.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetConfig(
+            const config_t* pConfig                         ///< [in] Change the RAS configuration - thresholds used to trigger events
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get the current value of RAS error counters for a particular error set
+        /// 
+        /// @details
+        ///     - Clearing errors will affect other threads/applications - the counter
+        ///       values will start from zero.
+        ///     - Clearing errors requires write permissions.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetState(
+            ze::bool_t clear,                               ///< [in] Set to 1 to clear the counters of this type
+            uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
+            details_t* pDetails = nullptr                   ///< [in,out][optional] Breakdown of where errors have occurred
             );
 
     };
 
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Ras::error_type_t to std::string
+    std::string to_string( const Ras::error_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Ras::properties_t to std::string
+    std::string to_string( const Ras::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Ras::details_t to std::string
+    std::string to_string( const Ras::details_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Ras::config_t to std::string
+    std::string to_string( const Ras::config_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region scheduler
+///////////////////////////////////////////////////////////////////////////////
+#ifndef ZES_SCHED_WATCHDOG_DISABLE
+/// @brief Disable forward progress guard timeout.
+#define ZES_SCHED_WATCHDOG_DISABLE  (~(0ULL))
+#endif // ZES_SCHED_WATCHDOG_DISABLE
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman device scheduler queue
+    class Scheduler
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Properties related to scheduler component
+        struct sched_properties_t
+        {
+            ze::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
+                                                            ///< that the resource is on the device of the calling Sysman handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+            ze::bool_t canControl;                          ///< [out] Software can change the scheduler component configuration
+                                                            ///< assuming the user has permissions.
+            uint64_t engines;                               ///< [out] Bitfield of accelerator engines that are controlled by this
+                                                            ///< scheduler component (bitfield of 1<<::zes_engine_type_t).
+            uint32_t supportedModes;                        ///< [out] Bitfield of scheduler modes that can be configured for this
+                                                            ///< scheduler component (bitfield of 1<<::zes_sched_mode_t).
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        sched_handle_t m_handle = nullptr;              ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        Scheduler( void ) = delete;
+        Scheduler( 
+            sched_handle_t handle,                          ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
+            );
+
+        ~Scheduler( void ) = default;
+
+        Scheduler( Scheduler const& other ) = delete;
+        void operator=( Scheduler const& other ) = delete;
+
+        Scheduler( Scheduler&& other ) = delete;
+        void operator=( Scheduler&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get properties related to a scheduler component
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetProperties(
+            sched_properties_t* pProperties                 ///< [in,out] Structure that will contain property data.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get current scheduling mode in effect on a scheduler component.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetCurrentMode(
+            Device::sched_mode_t* pMode                     ///< [in,out] Will contain the current scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMEOUT
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetTimeoutModeProperties(
+            ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
+                                                            ///< this mode, otherwise it will return the current properties.
+            Device::sched_timeout_properties_t* pConfig     ///< [in,out] Will contain the current parameters for this mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get scheduler config for mode ::ZES_SCHED_MODE_TIMESLICE
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetTimesliceModeProperties(
+            ze::bool_t getDefaults,                         ///< [in] If TRUE, the driver will return the system default properties for
+                                                            ///< this mode, otherwise it will return the current properties.
+            Device::sched_timeslice_properties_t* pConfig   ///< [in,out] Will contain the current parameters for this mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMEOUT or update scheduler
+        ///        mode parameters if already running in this mode.
+        /// 
+        /// @details
+        ///     - This mode is optimized for multiple applications or contexts
+        ///       submitting work to the hardware. When higher priority work arrives,
+        ///       the scheduler attempts to pause the current executing work within some
+        ///       timeout interval, then submits the other work.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetTimeoutMode(
+            Device::sched_timeout_properties_t* pProperties,///< [in] The properties to use when configurating this mode.
+            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                            ///< apply the new scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_TIMESLICE or update
+        ///        scheduler mode parameters if already running in this mode.
+        /// 
+        /// @details
+        ///     - This mode is optimized to provide fair sharing of hardware execution
+        ///       time between multiple contexts submitting work to the hardware
+        ///       concurrently.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetTimesliceMode(
+            Device::sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
+            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                            ///< apply the new scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_EXCLUSIVE
+        /// 
+        /// @details
+        ///     - This mode is optimized for single application/context use-cases. It
+        ///       permits a context to run indefinitely on the hardware without being
+        ///       preempted or terminated. All pending work for other contexts must wait
+        ///       until the running context completes with no further submitted work.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetExclusiveMode(
+            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                            ///< apply the new scheduler mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Change scheduler mode to ::ZES_SCHED_MODE_COMPUTE_UNIT_DEBUG
+        /// 
+        /// @details
+        ///     - This mode is optimized for application debug. It ensures that only one
+        ///       command queue can execute work on the hardware at a given time. Work
+        ///       is permitted to run as long as needed without enforcing any scheduler
+        ///       fairness policies.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetComputeUnitDebugMode(
+            ze::bool_t* pNeedReload                         ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                            ///< apply the new scheduler mode.
+            );
+
+    };
+
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Scheduler::sched_properties_t to std::string
+    std::string to_string( const Scheduler::sched_properties_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region standby
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for a Sysman standby control
+    class Standby
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Standby hardware components
+        enum class type_t
+        {
+            GLOBAL = 0,                                     ///< Control the overall standby policy of the device/sub-device
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Standby promotion modes
+        enum class promo_mode_t
+        {
+            DEFAULT = 0,                                    ///< Best compromise between performance and energy savings.
+            NEVER,                                          ///< The device/component will never shutdown. This can improve performance
+                                                            ///< but uses more energy.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Standby hardware component properties
+        struct properties_t
+        {
+            type_t type;                                    ///< [out] Which standby hardware component this controls
+            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
+                                                            ///< that the resource is on the device of the calling Sysman handle
+            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        standby_handle_t m_handle = nullptr;            ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        Standby( void ) = delete;
+        Standby( 
+            standby_handle_t handle,                        ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
+            );
+
+        ~Standby( void ) = default;
+
+        Standby( Standby const& other ) = delete;
+        void operator=( Standby const& other ) = delete;
+
+        Standby( Standby&& other ) = delete;
+        void operator=( Standby&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get standby hardware component properties
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetProperties(
+            properties_t* pProperties                       ///< [in,out] Will contain the standby hardware properties.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get the current standby promotion mode
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        GetMode(
+            promo_mode_t* pMode                             ///< [in,out] Will contain the current standby mode.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set standby promotion mode
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __zecall
+        SetMode(
+            promo_mode_t mode                               ///< [in] New standby mode.
+            );
+
+    };
+
+} // namespace zes
+
+namespace zes
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Standby::type_t to std::string
+    std::string to_string( const Standby::type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Standby::properties_t to std::string
+    std::string to_string( const Standby::properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Standby::promo_mode_t to std::string
+    std::string to_string( const Standby::promo_mode_t val );
+
+} // namespace zes
+#pragma endregion
+#pragma region temperature
+namespace zes
+{
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for a Sysman device temperature sensor
-    class SysmanTemperature
+    class Temperature
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
@@ -2626,11 +3768,11 @@ namespace zes
                                                             ///< that the resource is on the device of the calling Sysman handle
             uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
             ze::bool_t isCriticalTempSupported;             ///< [out] Indicates if the critical temperature event
-                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL is supported
+                                                            ///< ::ZES_EVENT_TYPE_TEMP_CRITICAL is supported
             ze::bool_t isThreshold1Supported;               ///< [out] Indicates if the temperature threshold 1 event
-                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 is supported
+                                                            ///< ::ZES_EVENT_TYPE_TEMP_THRESHOLD1 is supported
             ze::bool_t isThreshold2Supported;               ///< [out] Indicates if the temperature threshold 2 event
-                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 is supported
+                                                            ///< ::ZES_EVENT_TYPE_TEMP_THRESHOLD2 is supported
 
         };
 
@@ -2651,14 +3793,12 @@ namespace zes
         ///        trigger conditions.
         struct temp_config_t
         {
-            ze::bool_t enableCritical;                      ///< [in,out] Indicates if event ::ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL
-                                                            ///< should be triggered by the driver.
+            ze::bool_t enableCritical;                      ///< [in,out] Indicates if event ::ZES_EVENT_TYPE_TEMP_CRITICAL should be
+                                                            ///< triggered by the driver.
             temp_threshold_t threshold1;                    ///< [in,out] Configuration controlling if and when event
-                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the
-                                                            ///< driver.
+                                                            ///< ::ZES_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the driver.
             temp_threshold_t threshold2;                    ///< [in,out] Configuration controlling if and when event
-                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the
-                                                            ///< driver.
+                                                            ///< ::ZES_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the driver.
             uint32_t processId;                             ///< [out] Host processId that set this configuration (ignored when setting
                                                             ///< the configuration).
 
@@ -2667,28 +3807,28 @@ namespace zes
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sysman_temp_handle_t m_handle = nullptr;        ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+        temp_handle_t m_handle = nullptr;               ///< [in] handle of Sysman object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        SysmanTemperature( void ) = delete;
-        SysmanTemperature( 
-            sysman_temp_handle_t handle,                    ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
+        Temperature( void ) = delete;
+        Temperature( 
+            temp_handle_t handle,                           ///< [in] handle of Sysman object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
-        ~SysmanTemperature( void ) = default;
+        ~Temperature( void ) = default;
 
-        SysmanTemperature( SysmanTemperature const& other ) = delete;
-        void operator=( SysmanTemperature const& other ) = delete;
+        Temperature( Temperature const& other ) = delete;
+        void operator=( Temperature const& other ) = delete;
 
-        SysmanTemperature( SysmanTemperature&& other ) = delete;
-        void operator=( SysmanTemperature&& other ) = delete;
+        Temperature( Temperature&& other ) = delete;
+        void operator=( Temperature&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get temperature sensor properties
@@ -2720,17 +3860,17 @@ namespace zes
         ///        are triggered and the trigger conditions
         /// 
         /// @details
-        ///     - Events ::ZES_SYSMAN_EVENT_TYPE_TEMP_CRITICAL will be triggered when
+        ///     - Events ::ZES_EVENT_TYPE_TEMP_CRITICAL will be triggered when
         ///       temperature reaches the critical range. Use the function
-        ///       ::zesSysmanEventSetConfig() to start receiving this event.
-        ///     - Events ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 and
-        ///       ::ZES_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when
-        ///       temperature cross the thresholds set using this function. Use the
-        ///       function ::zesSysmanEventSetConfig() to start receiving these events.
+        ///       ::zesEventSetConfig() to start receiving this event.
+        ///     - Events ::ZES_EVENT_TYPE_TEMP_THRESHOLD1 and
+        ///       ::ZES_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when temperature
+        ///       cross the thresholds set using this function. Use the function
+        ///       ::zesEventSetConfig() to start receiving these events.
         ///     - Only one running process can set the temperature configuration at a
         ///       time. If another process attempts to change the configuration, the
         ///       error ::ZE_RESULT_ERROR_NOT_AVAILABLE will be returned. The function
-        ///       ::zesSysmanTemperatureGetConfig() will return the process ID currently
+        ///       ::zesTemperatureGetConfig() will return the process ID currently
         ///       controlling these settings.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
@@ -2755,1089 +3895,25 @@ namespace zes
 
     };
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device power supply
-    class SysmanPsu
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief PSU voltage status
-        enum class psu_voltage_status_t
-        {
-            NORMAL = 0,                                     ///< No unusual voltages have been detected
-            OVER,                                           ///< Over-voltage has occurred
-            UNDER,                                          ///< Under-voltage has occurred
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Static properties of the power supply
-        struct psu_properties_t
-        {
-            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling Sysman handle
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            ze::bool_t haveFan;                             ///< [out] True if the power supply has a fan
-            uint32_t ampLimit;                              ///< [out] The maximum electrical current in amperes that can be drawn
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Dynamic state of the power supply
-        struct psu_state_t
-        {
-            psu_voltage_status_t voltStatus;                ///< [out] The current PSU voltage status
-            ze::bool_t fanFailed;                           ///< [out] Indicates if the fan has failed
-            uint32_t temperature;                           ///< [out] Read the current heatsink temperature in degrees Celsius.
-            uint32_t current;                               ///< [out] The amps being drawn in amperes
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_psu_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanPsu( void ) = delete;
-        SysmanPsu( 
-            sysman_psu_handle_t handle,                     ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanPsu( void ) = default;
-
-        SysmanPsu( SysmanPsu const& other ) = delete;
-        void operator=( SysmanPsu const& other ) = delete;
-
-        SysmanPsu( SysmanPsu&& other ) = delete;
-        void operator=( SysmanPsu&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get power supply properties
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            psu_properties_t* pProperties                   ///< [in,out] Will contain the properties of the power supply.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current power supply state
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetState(
-            psu_state_t* pState                             ///< [in,out] Will contain the current state of the power supply.
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device fan
-    class SysmanFan
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fan resource speed mode
-        enum class fan_speed_mode_t
-        {
-            DEFAULT = 0,                                    ///< The fan speed is operating using the hardware default settings
-            FIXED,                                          ///< The fan speed is currently set to a fixed value
-            TABLE,                                          ///< The fan speed is currently controlled dynamically by hardware based on
-                                                            ///< a temp/speed table
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fan speed units
-        enum class fan_speed_units_t
-        {
-            RPM = 0,                                        ///< The fan speed is in units of revolutions per minute (rpm)
-            PERCENT,                                        ///< The fan speed is a percentage of the maximum speed of the fan
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fan temperature/speed pair
-        struct fan_temp_speed_t
-        {
-            uint32_t temperature;                           ///< [in,out] Temperature in degrees Celsius.
-            uint32_t speed;                                 ///< [in,out] The speed of the fan
-            fan_speed_units_t units;                        ///< [in,out] The units of the member speed
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fan properties
-        struct fan_properties_t
-        {
-            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling Sysman handle
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            ze::bool_t canControl;                          ///< [out] Indicates if software can control the fan speed assuming the
-                                                            ///< user has permissions
-            uint32_t maxSpeed;                              ///< [out] The maximum RPM of the fan
-            uint32_t maxPoints;                             ///< [out] The maximum number of points in the fan temp/speed table
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Fan configuration
-        struct fan_config_t
-        {
-            fan_speed_mode_t mode;                          ///< [in,out] The fan speed mode (fixed, temp-speed table)
-            uint32_t speed;                                 ///< [in,out] The fixed fan speed setting
-            fan_speed_units_t speedUnits;                   ///< [in,out] The units of the fixed fan speed setting
-            uint32_t numPoints;                             ///< [in,out] The number of valid points in the fan speed table
-            fan_temp_speed_t table[ZES_FAN_TEMP_SPEED_PAIR_COUNT];  ///< [in,out] Array of temperature/fan speed pairs
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_fan_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanFan( void ) = delete;
-        SysmanFan( 
-            sysman_fan_handle_t handle,                     ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanFan( void ) = default;
-
-        SysmanFan( SysmanFan const& other ) = delete;
-        void operator=( SysmanFan const& other ) = delete;
-
-        SysmanFan( SysmanFan&& other ) = delete;
-        void operator=( SysmanFan&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get fan properties
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            fan_properties_t* pProperties                   ///< [in,out] Will contain the properties of the fan.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current fan configuration
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetConfig(
-            fan_config_t* pConfig                           ///< [in,out] Will contain the current configuration of the fan.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set fan configuration
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetConfig(
-            const fan_config_t* pConfig                     ///< [in] New fan configuration.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current state of a fan - current mode and speed
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetState(
-            fan_speed_units_t units,                        ///< [in] The units in which the fan speed should be returned.
-            uint32_t* pSpeed                                ///< [in,out] Will contain the current speed of the fan in the units
-                                                            ///< requested.
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device LED
-    class SysmanLed
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief LED properties
-        struct led_properties_t
-        {
-            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling Sysman handle
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            ze::bool_t canControl;                          ///< [out] Indicates if software can control the LED assuming the user has
-                                                            ///< permissions
-            ze::bool_t haveRGB;                             ///< [out] Indicates if the LED is RGB capable
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief LED state
-        struct led_state_t
-        {
-            ze::bool_t isOn;                                ///< [in,out] Indicates if the LED is on or off
-            uint8_t red;                                    ///< [in,out][range(0, 255)] The LED red value
-            uint8_t green;                                  ///< [in,out][range(0, 255)] The LED green value
-            uint8_t blue;                                   ///< [in,out][range(0, 255)] The LED blue value
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_led_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanLed( void ) = delete;
-        SysmanLed( 
-            sysman_led_handle_t handle,                     ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanLed( void ) = default;
-
-        SysmanLed( SysmanLed const& other ) = delete;
-        void operator=( SysmanLed const& other ) = delete;
-
-        SysmanLed( SysmanLed&& other ) = delete;
-        void operator=( SysmanLed&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get LED properties
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            led_properties_t* pProperties                   ///< [in,out] Will contain the properties of the LED.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get current state of a LED - on/off, color
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetState(
-            led_state_t* pState                             ///< [in,out] Will contain the current state of the LED.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set state of a LED - on/off, color
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetState(
-            const led_state_t* pState                       ///< [in] New state of the LED.
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device RAS error set
-    class SysmanRas
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief RAS error type
-        enum class ras_error_type_t
-        {
-            CORRECTABLE = 0,                                ///< Errors were corrected by hardware
-            UNCORRECTABLE,                                  ///< Error were not corrected
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief RAS properties
-        struct ras_properties_t
-        {
-            ras_error_type_t type;                          ///< [out] The type of RAS error
-            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling Sysman handle
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief RAS error details
-        struct ras_details_t
-        {
-            uint64_t numResets;                             ///< [out] The number of device resets that have taken place
-            uint64_t numProgrammingErrors;                  ///< [out] The number of hardware exceptions generated by the way workloads
-                                                            ///< have programmed the hardware
-            uint64_t numDriverErrors;                       ///< [out] The number of low level driver communication errors have
-                                                            ///< occurred
-            uint64_t numComputeErrors;                      ///< [out] The number of errors that have occurred in the compute
-                                                            ///< accelerator hardware
-            uint64_t numNonComputeErrors;                   ///< [out] The number of errors that have occurred in the fixed-function
-                                                            ///< accelerator hardware
-            uint64_t numCacheErrors;                        ///< [out] The number of errors that have occurred in caches
-                                                            ///< (L1/L3/register file/shared local memory/sampler)
-            uint64_t numDisplayErrors;                      ///< [out] The number of errors that have occurred in the display
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief RAS error configuration - thresholds used for triggering RAS events
-        ///        (::ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS,
-        ///        ::ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)
-        /// 
-        /// @details
-        ///     - The driver maintains a total counter which is updated every time a
-        ///       hardware block covered by the corresponding RAS error set notifies
-        ///       that an error has occurred. When this total count goes above the
-        ///       totalThreshold specified below, a RAS event is triggered.
-        ///     - The driver also maintains a counter for each category of RAS error
-        ///       (see ::zes_ras_details_t for a breakdown). Each time a hardware block
-        ///       of that category notifies that an error has occurred, that
-        ///       corresponding category counter is updated. When it goes above the
-        ///       threshold specified in detailedThresholds, a RAS event is triggered.
-        struct ras_config_t
-        {
-            uint64_t totalThreshold;                        ///< [in,out] If the total RAS errors exceeds this threshold, the event
-                                                            ///< will be triggered. A value of 0ULL disables triggering the event based
-                                                            ///< on the total counter.
-            ras_details_t detailedThresholds;               ///< [in,out] If the RAS errors for each category exceed the threshold for
-                                                            ///< that category, the event will be triggered. A value of 0ULL will
-                                                            ///< disable an event being triggered for that category.
-            uint32_t processId;                             ///< [out] Host processId that set this configuration (ignored when setting
-                                                            ///< the configuration).
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_ras_handle_t m_handle = nullptr;         ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanRas( void ) = delete;
-        SysmanRas( 
-            sysman_ras_handle_t handle,                     ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanRas( void ) = default;
-
-        SysmanRas( SysmanRas const& other ) = delete;
-        void operator=( SysmanRas const& other ) = delete;
-
-        SysmanRas( SysmanRas&& other ) = delete;
-        void operator=( SysmanRas&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get RAS properties of a given RAS error set - this enables discovery
-        ///        of the type of RAS error set (correctable/uncorrectable) and if
-        ///        located on a sub-device
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            ras_properties_t* pProperties                   ///< [in,out] Structure describing RAS properties
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get RAS error thresholds that control when RAS events are generated
-        /// 
-        /// @details
-        ///     - The driver maintains counters for all RAS error sets and error
-        ///       categories. Events are generated when errors occur. The configuration
-        ///       enables setting thresholds to limit when events are sent.
-        ///     - When a particular RAS correctable error counter exceeds the configured
-        ///       threshold, the event ::ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
-        ///       will be triggered.
-        ///     - When a particular RAS uncorrectable error counter exceeds the
-        ///       configured threshold, the event
-        ///       ::ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetConfig(
-            ras_config_t* pConfig                           ///< [in,out] Will be populed with the current RAS configuration -
-                                                            ///< thresholds used to trigger events
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set RAS error thresholds that control when RAS events are generated
-        /// 
-        /// @details
-        ///     - The driver maintains counters for all RAS error sets and error
-        ///       categories. Events are generated when errors occur. The configuration
-        ///       enables setting thresholds to limit when events are sent.
-        ///     - When a particular RAS correctable error counter exceeds the specified
-        ///       threshold, the event ::ZES_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
-        ///       will be generated.
-        ///     - When a particular RAS uncorrectable error counter exceeds the
-        ///       specified threshold, the event
-        ///       ::ZES_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated.
-        ///     - Call ::zesSysmanRasGetState() and set the clear flag to true to
-        ///       restart event generation once counters have exceeded thresholds.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetConfig(
-            const ras_config_t* pConfig                     ///< [in] Change the RAS configuration - thresholds used to trigger events
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the current value of RAS error counters for a particular error set
-        /// 
-        /// @details
-        ///     - Clearing errors will affect other threads/applications - the counter
-        ///       values will start from zero.
-        ///     - Clearing errors requires write permissions.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetState(
-            ze::bool_t clear,                               ///< [in] Set to 1 to clear the counters of this type
-            uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
-            ras_details_t* pDetails = nullptr               ///< [in,out][optional] Breakdown of where errors have occurred
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device diagnostic test suite
-    class SysmanDiagnostics
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Diagnostic test suite type
-        enum class diag_type_t
-        {
-            SCAN = 0,                                       ///< Run SCAN diagnostics
-            ARRAY,                                          ///< Run Array diagnostics
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Diagnostic results
-        enum class diag_result_t
-        {
-            NO_ERRORS = 0,                                  ///< Diagnostic completed without finding errors to repair
-            ABORT,                                          ///< Diagnostic had problems running tests
-            FAIL_CANT_REPAIR,                               ///< Diagnostic had problems setting up repairs
-            REBOOT_FOR_REPAIR,                              ///< Diagnostics found errors, setup for repair and reboot is required to
-                                                            ///< complete the process
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Diagnostic test
-        struct diag_test_t
-        {
-            uint32_t index;                                 ///< [out] Index of the test
-            char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the test
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Diagnostics test suite properties
-        struct diag_properties_t
-        {
-            diag_type_t type;                               ///< [out] The type of diagnostics test suite
-            ze::bool_t onSubdevice;                         ///< [out] True if the resource is located on a sub-device; false means
-                                                            ///< that the resource is on the device of the calling Sysman handle
-            uint32_t subdeviceId;                           ///< [out] If onSubdevice is true, this gives the ID of the sub-device
-            char name[ZES_STRING_PROPERTY_SIZE];            ///< [out] Name of the diagnostics test suite
-            ze::bool_t haveTests;                           ///< [out] Indicates if this test suite has individual tests which can be
-                                                            ///< run separately (use the function ::ZESysmanDiagnosticsGetTests() to
-                                                            ///< get the list of these tests)
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_diag_handle_t m_handle = nullptr;        ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanDiagnostics( void ) = delete;
-        SysmanDiagnostics( 
-            sysman_diag_handle_t handle,                    ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanDiagnostics( void ) = default;
-
-        SysmanDiagnostics( SysmanDiagnostics const& other ) = delete;
-        void operator=( SysmanDiagnostics const& other ) = delete;
-
-        SysmanDiagnostics( SysmanDiagnostics&& other ) = delete;
-        void operator=( SysmanDiagnostics&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get properties of a diagnostics test suite
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetProperties(
-            diag_properties_t* pProperties                  ///< [in,out] Structure describing the properties of a diagnostics test
-                                                            ///< suite
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get individual tests that can be run separately. Not all test suites
-        ///        permit running individual tests - check
-        ///        ::zes_diag_properties_t.haveTests
-        /// 
-        /// @details
-        ///     - The list of available tests is returned in order of increasing test
-        ///       index ::zes_diag_test_t.index.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetTests(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
-                                                            ///< If count is zero, then the driver will update the value with the total
-                                                            ///< number of tests available.
-                                                            ///< If count is non-zero, then driver will only retrieve that number of tests.
-                                                            ///< If count is larger than the number of tests available, then the driver
-                                                            ///< will update the value with the correct number of tests available.
-            diag_test_t* pTests = nullptr                   ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
-                                                            ///< increasing value of ::zes_diag_test_t.index
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Run a diagnostics test suite, either all tests or a subset of tests.
-        /// 
-        /// @details
-        ///     - WARNING: Performancing diagnostics may destroy current device state
-        ///       information. Gracefully close any running workloads before initiating.
-        ///     - To run all tests in a test suite, set start =
-        ///       ::ZES_DIAG_FIRST_TEST_INDEX and end = ::ZES_DIAG_LAST_TEST_INDEX.
-        ///     - If the test suite permits running individual tests,
-        ///       ::zes_diag_properties_t.haveTests will be true. In this case, the
-        ///       function ::zesSysmanDiagnosticsGetTests() can be called to get the
-        ///       list of tests and corresponding indices that can be supplied to the
-        ///       arguments start and end in this function.
-        ///     - This function will block until the diagnostics have completed.
-        /// @throws result_t
-        void __zecall
-        RunTests(
-            uint32_t start,                                 ///< [in] The index of the first test to run. Set to
-                                                            ///< ::ZES_DIAG_FIRST_TEST_INDEX to start from the beginning.
-            uint32_t end,                                   ///< [in] The index of the last test to run. Set to
-                                                            ///< ::ZES_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
-            diag_result_t* pResult                          ///< [in,out] The result of the diagnostics
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for a Sysman device event
-    class SysmanEvent
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Event configuration for a device
-        struct event_config_t
-        {
-            uint32_t registered;                            ///< [in,out] List of registered events (Bitfield of events
-                                                            ///< ::zes_sysman_event_type_t). ::ZES_SYSMAN_EVENT_TYPE_NONE indicates
-                                                            ///< there are no registered events. ::ZES_SYSMAN_EVENT_TYPE_ALL indicates
-                                                            ///< that all events are registered.
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_event_handle_t m_handle = nullptr;       ///< [in] handle of Sysman object
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanEvent( void ) = delete;
-        SysmanEvent( 
-            sysman_event_handle_t handle,                   ///< [in] handle of Sysman object
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanEvent( void ) = default;
-
-        SysmanEvent( SysmanEvent const& other ) = delete;
-        void operator=( SysmanEvent const& other ) = delete;
-
-        SysmanEvent( SysmanEvent&& other ) = delete;
-        void operator=( SysmanEvent&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Find out which events are currently registered on the specified device
-        ///        event handler
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetConfig(
-            event_config_t* pConfig                         ///< [in,out] Will contain the current event configuration (list of
-                                                            ///< registered events).
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set a new event configuration (list of registered events) on the
-        ///        specified device event handler
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        SetConfig(
-            const event_config_t* pConfig                   ///< [in] New event configuration (list of registered events).
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get events that have been triggered for a specific device
-        /// 
-        /// @details
-        ///     - If events have occurred on the specified device event handle, they are
-        ///       returned and the corresponding event status is cleared if the argument
-        ///       clear = true.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __zecall
-        GetState(
-            ze::bool_t clear,                               ///< [in] Indicates if the event list for this device should be cleared.
-            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_sysman_event_type_t that have been
-                                                            ///< triggered by this device.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Wait for the specified list of event handles to receive any registered
-        ///        events
-        /// 
-        /// @details
-        ///     - If previous events arrived and were not cleared using
-        ///       ::zesSysmanEventGetState(), this call will return immediately.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        static void __zecall
-        Listen(
-            ze::Driver* pDriver,                            ///< [in] pointer to the driver instance
-            uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
-                                                            ///< ::ZES_EVENT_WAIT_NONE will check status and return immediately. Set to
-                                                            ///< ::ZES_EVENT_WAIT_INFINITE to block until events arrive.
-            uint32_t count,                                 ///< [in] Number of handles in phEvents
-            SysmanEvent** ppEvents,                         ///< [in][range(0, count)] Handle of events that should be listened to
-            uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_sysman_event_type_t that have been
-                                                            ///< triggered by any of the supplied event handles. If timeout is not
-                                                            ///< ::ZES_EVENT_WAIT_INFINITE and this value is
-                                                            ///< ::ZES_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
-            );
-
-    };
-
 } // namespace zes
 
 namespace zes
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::version_t to std::string
-    std::string to_string( const Sysman::version_t val );
+    /// @brief Converts Temperature::temp_sensors_t to std::string
+    std::string to_string( const Temperature::temp_sensors_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::engine_type_t to std::string
-    std::string to_string( const Sysman::engine_type_t val );
+    /// @brief Converts Temperature::temp_properties_t to std::string
+    std::string to_string( const Temperature::temp_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::repair_status_t to std::string
-    std::string to_string( const Sysman::repair_status_t val );
+    /// @brief Converts Temperature::temp_threshold_t to std::string
+    std::string to_string( const Temperature::temp_threshold_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::reset_reasons_t to std::string
-    std::string to_string( const Sysman::reset_reasons_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::state_t to std::string
-    std::string to_string( const Sysman::state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::properties_t to std::string
-    std::string to_string( const Sysman::properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::sched_mode_t to std::string
-    std::string to_string( const Sysman::sched_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::sched_timeout_properties_t to std::string
-    std::string to_string( const Sysman::sched_timeout_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::sched_timeslice_properties_t to std::string
-    std::string to_string( const Sysman::sched_timeslice_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::process_state_t to std::string
-    std::string to_string( const Sysman::process_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_address_t to std::string
-    std::string to_string( const Sysman::pci_address_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_speed_t to std::string
-    std::string to_string( const Sysman::pci_speed_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_properties_t to std::string
-    std::string to_string( const Sysman::pci_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_link_status_t to std::string
-    std::string to_string( const Sysman::pci_link_status_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_link_qual_issues_t to std::string
-    std::string to_string( const Sysman::pci_link_qual_issues_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_link_stab_issues_t to std::string
-    std::string to_string( const Sysman::pci_link_stab_issues_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_state_t to std::string
-    std::string to_string( const Sysman::pci_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_bar_type_t to std::string
-    std::string to_string( const Sysman::pci_bar_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_bar_properties_t to std::string
-    std::string to_string( const Sysman::pci_bar_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_stats_t to std::string
-    std::string to_string( const Sysman::pci_stats_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::freq_domain_t to std::string
-    std::string to_string( const Sysman::freq_domain_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::event_type_t to std::string
-    std::string to_string( const Sysman::event_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanScheduler::sched_properties_t to std::string
-    std::string to_string( const SysmanScheduler::sched_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPerformanceFactor::perf_properties_t to std::string
-    std::string to_string( const SysmanPerformanceFactor::perf_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPower::power_properties_t to std::string
-    std::string to_string( const SysmanPower::power_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPower::power_energy_counter_t to std::string
-    std::string to_string( const SysmanPower::power_energy_counter_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPower::power_sustained_limit_t to std::string
-    std::string to_string( const SysmanPower::power_sustained_limit_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPower::power_burst_limit_t to std::string
-    std::string to_string( const SysmanPower::power_burst_limit_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPower::power_peak_limit_t to std::string
-    std::string to_string( const SysmanPower::power_peak_limit_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPower::energy_threshold_t to std::string
-    std::string to_string( const SysmanPower::energy_threshold_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_properties_t to std::string
-    std::string to_string( const SysmanFrequency::freq_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_range_t to std::string
-    std::string to_string( const SysmanFrequency::freq_range_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_throttle_reasons_t to std::string
-    std::string to_string( const SysmanFrequency::freq_throttle_reasons_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_state_t to std::string
-    std::string to_string( const SysmanFrequency::freq_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::freq_throttle_time_t to std::string
-    std::string to_string( const SysmanFrequency::freq_throttle_time_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_mode_t to std::string
-    std::string to_string( const SysmanFrequency::oc_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_capabilities_t to std::string
-    std::string to_string( const SysmanFrequency::oc_capabilities_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFrequency::oc_config_t to std::string
-    std::string to_string( const SysmanFrequency::oc_config_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanEngine::engine_group_t to std::string
-    std::string to_string( const SysmanEngine::engine_group_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanEngine::engine_properties_t to std::string
-    std::string to_string( const SysmanEngine::engine_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanEngine::engine_stats_t to std::string
-    std::string to_string( const SysmanEngine::engine_stats_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanStandby::standby_type_t to std::string
-    std::string to_string( const SysmanStandby::standby_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanStandby::standby_properties_t to std::string
-    std::string to_string( const SysmanStandby::standby_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanStandby::standby_promo_mode_t to std::string
-    std::string to_string( const SysmanStandby::standby_promo_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFirmware::firmware_properties_t to std::string
-    std::string to_string( const SysmanFirmware::firmware_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanMemory::mem_type_t to std::string
-    std::string to_string( const SysmanMemory::mem_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanMemory::mem_health_t to std::string
-    std::string to_string( const SysmanMemory::mem_health_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanMemory::mem_properties_t to std::string
-    std::string to_string( const SysmanMemory::mem_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanMemory::mem_state_t to std::string
-    std::string to_string( const SysmanMemory::mem_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanMemory::mem_bandwidth_t to std::string
-    std::string to_string( const SysmanMemory::mem_bandwidth_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_status_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_status_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_qual_issues_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_qual_issues_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_stab_issues_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_stab_issues_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_id_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_id_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_speed_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_speed_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_properties_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_link_type_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_link_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_config_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_config_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_state_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFabricPort::fabric_port_throughput_t to std::string
-    std::string to_string( const SysmanFabricPort::fabric_port_throughput_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanTemperature::temp_sensors_t to std::string
-    std::string to_string( const SysmanTemperature::temp_sensors_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanTemperature::temp_properties_t to std::string
-    std::string to_string( const SysmanTemperature::temp_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanTemperature::temp_threshold_t to std::string
-    std::string to_string( const SysmanTemperature::temp_threshold_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanTemperature::temp_config_t to std::string
-    std::string to_string( const SysmanTemperature::temp_config_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPsu::psu_voltage_status_t to std::string
-    std::string to_string( const SysmanPsu::psu_voltage_status_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPsu::psu_properties_t to std::string
-    std::string to_string( const SysmanPsu::psu_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanPsu::psu_state_t to std::string
-    std::string to_string( const SysmanPsu::psu_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFan::fan_speed_mode_t to std::string
-    std::string to_string( const SysmanFan::fan_speed_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFan::fan_speed_units_t to std::string
-    std::string to_string( const SysmanFan::fan_speed_units_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFan::fan_temp_speed_t to std::string
-    std::string to_string( const SysmanFan::fan_temp_speed_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFan::fan_properties_t to std::string
-    std::string to_string( const SysmanFan::fan_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanFan::fan_config_t to std::string
-    std::string to_string( const SysmanFan::fan_config_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanLed::led_properties_t to std::string
-    std::string to_string( const SysmanLed::led_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanLed::led_state_t to std::string
-    std::string to_string( const SysmanLed::led_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanRas::ras_error_type_t to std::string
-    std::string to_string( const SysmanRas::ras_error_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanRas::ras_properties_t to std::string
-    std::string to_string( const SysmanRas::ras_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanRas::ras_details_t to std::string
-    std::string to_string( const SysmanRas::ras_details_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanRas::ras_config_t to std::string
-    std::string to_string( const SysmanRas::ras_config_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanDiagnostics::diag_type_t to std::string
-    std::string to_string( const SysmanDiagnostics::diag_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanDiagnostics::diag_result_t to std::string
-    std::string to_string( const SysmanDiagnostics::diag_result_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanDiagnostics::diag_test_t to std::string
-    std::string to_string( const SysmanDiagnostics::diag_test_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanDiagnostics::diag_properties_t to std::string
-    std::string to_string( const SysmanDiagnostics::diag_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanEvent::event_config_t to std::string
-    std::string to_string( const SysmanEvent::event_config_t val );
+    /// @brief Converts Temperature::temp_config_t to std::string
+    std::string to_string( const Temperature::temp_config_t val );
 
 } // namespace zes
 #pragma endregion

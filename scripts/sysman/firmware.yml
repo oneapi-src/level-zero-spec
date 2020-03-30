@@ -1,0 +1,120 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Firmware management"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Firmware properties"
+class: $sFirmware
+name: $s_firmware_properties_t
+members:
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can flash the firmware assuming the user has permissions"
+    - type: int8_t
+      name: "name[$S_STRING_PROPERTY_SIZE]"
+      desc: "[out] NULL terminated string value"
+    - type: int8_t
+      name: "version[$S_STRING_PROPERTY_SIZE]"
+      desc: "[out] NULL terminated string value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of firmwares"
+class: $sDevice
+name: EnumFirmwares
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$s_firmware_handle_t*"
+      name: phFirmware
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get firmware properties"
+class: $sFirmware
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_firmware_handle_t
+      name: hFirmware
+      desc: "[in] Handle for the component."
+    - type: $s_firmware_properties_t*
+      name: pProperties
+      desc: "[in,out] Pointer to an array that will hold the properties of the firmware"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get firmware checksum"
+class: $sFirmware
+name: GetChecksum
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_firmware_handle_t
+      name: hFirmware
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: pChecksum
+      desc: "[in,out] Calculated checksum of the installed firmware."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to perform this operation."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Flash a new firmware image"
+class: $sFirmware
+name: Flash
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_firmware_handle_t
+      name: hFirmware
+      desc: "[in] Handle for the component."
+    - type: void*
+      name: pImage
+      desc: "[in] Image of the new firmware to flash."
+    - type: uint32_t
+      name: size
+      desc: "[in] Size of the flash image."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to perform this operation."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device firmware"
+name: $sFirmware
+owner: $sDevice
+members:
+    - type: $s_firmware_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

@@ -27,8 +27,8 @@ An application wishing to manage power and performance for devices first
 needs to use the Level0 Core API to enumerate through available
 accelerator devices in the system and select those of interest.
 
-For each selected device handle, applications use the function ::${s}SysmanGet()
-to get an **Sysman handle** to manage system resources of the device.
+For each selected device handle, applications can cast it to a
+**Sysman device handle** to manage system resources of the device.
 
 .. image:: ../images/tools_sysman_object_hierarchy.png
 
@@ -66,13 +66,9 @@ system and create Sysman handles for them:
                    ${x}DeviceGetProperties(allDevices[devIndex], &device_properties)
                    if(${X}_DEVICE_TYPE_GPU != device_properties.type)
                        next
-                   # Create Sysman handle
-                   ${s}_sysman_handle_t hSysmanDevice
-                   ${x}_result_t res = ${s}SysmanGet(hDevice, ${S}_SYSMAN_VERSION_CURRENT, &hSysmanDevice)
-                   if (res == ${X}_RESULT_SUCCESS)
-                       # Start using hSysmanDevice to manage the device
-                   else
-                       output("ERROR: Can't initialize system resource management for this device")
+                   # Get the Sysman device handle
+                   ${s}_device_handle_t hSysmanDevice = (${s}_device_handle_t)allDevices[devIndex]
+                   # Start using hSysmanDevice to manage the device
 
        free_memory(...)
 
@@ -294,7 +290,7 @@ the figure below:
 .. image:: ../images/tools_sysman_freq_flow.png
 
 In the C API, each class is associated with a unique handle type
-(e.g. ::${s}_sysman_freq_handle_t refers to a frequency component). In
+(e.g. ::${s}_freq_handle_t refers to a frequency component). In
 the C++ API, each class is a C++ class (e.g. An instance of the class ::${s}::SysmanFrequency
 refers to a frequency component).
 
@@ -304,15 +300,15 @@ supported:
 
 .. code:: c
 
-   function FixGpuFrequency(${s}_sysman_handle_t hSysmanDevice, double FreqMHz)
+   function FixGpuFrequency(${s}_device_handle_t hSysmanDevice, double FreqMHz)
        uint32_t numFreqDomains
-       if ((${s}SysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == ${X}_RESULT_SUCCESS))
-           ${s}_sysman_freq_handle_t* pFreqHandles =
-               allocate_memory(numFreqDomains * sizeof(${s}_sysman_freq_handle_t))
-           if (${s}SysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
+       if ((${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, NULL) == ${X}_RESULT_SUCCESS))
+           ${s}_freq_handle_t* pFreqHandles =
+               allocate_memory(numFreqDomains * sizeof(${s}_freq_handle_t))
+           if (${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
                for (index = 0 .. numFreqDomains-1)
                    ${s}_freq_properties_t props
-                   if (${s}SysmanFrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
+                   if (${s}FrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
                        # Only change the frequency of the domain if:
                        # 1. The domain controls a GPU accelerator
                        # 2. The domain frequency can be changed
@@ -322,15 +318,16 @@ supported:
                                ${s}_freq_range_t range
                                range.min = FreqMHz
                                range.max = FreqMHz
-                               ${s}SysmanFrequencySetRange(pFreqHandles[index], &range)
+                               ${s}FrequencySetRange(pFreqHandles[index], &range)
        free_memory(...)
 
 Sub-device management
 ---------------------
 
-A Sysman handle cannot be created for a sub-device - ::${s}SysmanGet() will return error
-::${X}_RESULT_ERROR_INVALID_ARGUMENT if a device handle for a sub-device is passed to this function.
-Instead, the enumerator for device components will return a list of components that are located in each
+A Sysman device handle operates at the device level. If a sub-device device handle is passed to
+any of the Sysman functions, the result will be as if the device handle was used.
+
+The enumerator for device components will return a list of components that are located in each
 sub-device. Properties for each component will indicate in which sub-device it is located. If software
 wishing to manage components in only one sub-device should filter the enumerated components using the
 sub-device ID (see ::${x}_device_properties_t.subdeviceId).
@@ -345,15 +342,15 @@ sub-device (notice the additional sub-device check):
 
 .. code:: c
 
-   function FixSubdeviceGpuFrequency(${s}_sysman_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
+   function FixSubdeviceGpuFrequency(${s}_device_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
        uint32_t numFreqDomains
-       if ((${s}SysmanFrequencyGet(hSysmanDevice, &numFreqDomains, NULL) == ${X}_RESULT_SUCCESS))
-           ${s}_sysman_freq_handle_t* pFreqHandles =
-               allocate_memory(numFreqDomains * sizeof(${s}_sysman_freq_handle_t))
-           if (${s}SysmanFrequencyGet(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
+       if ((${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, NULL) == ${X}_RESULT_SUCCESS))
+           ${s}_freq_handle_t* pFreqHandles =
+               allocate_memory(numFreqDomains * sizeof(${s}_freq_handle_t))
+           if (${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
                for (index = 0 .. numFreqDomains-1)
                    ${s}_freq_properties_t props
-                   if (${s}SysmanFrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
+                   if (${s}FrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
                        # Only change the frequency of the domain if:
                        # 1. The domain controls a GPU accelerator
                        # 2. The domain frequency can be changed
@@ -365,7 +362,7 @@ sub-device (notice the additional sub-device check):
                                ${s}_freq_range_t range
                                range.min = FreqMHz
                                range.max = FreqMHz
-                               ${s}SysmanFrequencySetRange(pFreqHandles[index], &range)
+                               ${s}FrequencySetRange(pFreqHandles[index], &range)
        free_memory(...)
 
 Events
@@ -407,11 +404,11 @@ device:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanDeviceGetProperties()  | Get static device properties -    |
+| ::${s}DeviceGetProperties()        | Get static device properties -    |
 |                                   | device UUID, sub-device ID,       |
 |                                   | device brand/model/vendor strings |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanDeviceGetState()       | Determine device state: was the   |
+| ::${s}DeviceGetState()             | Determine device state: was the   |
 |                                   | device repaired, does the device  |
 |                                   | need to be reset and for what     |
 |                                   | reasons (wedged, initiate repair) |
@@ -422,15 +419,15 @@ device:
 
 .. code:: c
 
-  function ShowDeviceInfo(${s}_sysman_handle_t hSysmanDevice)
-      ${s}_sysman_properties_t devProps
-      ${s}_sysman_state_t devState
-      if (${s}SysmanDeviceGetProperties(hSysmanDevice, &devProps) == ${X}_RESULT_SUCCESS)
+  function ShowDeviceInfo(${s}_device_handle_t hSysmanDevice)
+      ${s}_device_properties_t devProps
+      ${s}_device_state_t devState
+      if (${s}DeviceGetProperties(hSysmanDevice, &devProps) == ${X}_RESULT_SUCCESS)
           output("    UUID:           %s", devProps.core.uuid.id)
           output("    #subdevices:    %u", devProps.numSubdevices)
           output("    brand:          %s", devProps.brandName)
           output("    model:          %s", devProps.modelName)
-      if (${s}SysmanDeviceGetState(hSysmanDevice, &devState) == ${X}_RESULT_SUCCESS)
+      if (${s}DeviceGetState(hSysmanDevice, &devState) == ${X}_RESULT_SUCCESS)
           output("    Was repaired:   %s", (devState.repaired == ${S}_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
           if (devState.reset != ${S}_RESET_REASONS_NONE)
         {
@@ -451,7 +448,7 @@ are using the device:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanProcessesGetState()    | Get information about all         |
+| ::${s}DeviceProcessesGetState()    | Get information about all         |
 |                                   | processes that are using this     |
 |                                   | device - process ID, device       |
 |                                   | memory allocation size,           |
@@ -543,34 +540,34 @@ the scheduler mode for each scheduler component:
 +--------------------------------------------------+-----------------------------------+
 | Function                                         | Description                       |
 +==================================================+===================================+
-| ::${s}SysmanSchedulerGet()                        | Get handles to each scheduler     |
+| ::${s}DeviceEnumSchedulers()                      | Get handles to each scheduler     |
 |                                                  | component.                        |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SysmanSchedulerGetProperties()              | Get properties of a scheduler     |
+| ::${s}SchedulerGetProperties()                    | Get properties of a scheduler     |
 |                                                  | component (sub-device, engines    |
 |                                                  | linked to this scheduler,         |
 |                                                  | supported scheduler modes.        |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SysmanSchedulerGetCurrentMode()             | Get the current scheduler mode    |
+| ::${s}SchedulerGetCurrentMode()                   | Get the current scheduler mode    |
 |                                                  | (timeout, timeslice, exclusive,   |
 |                                                  | single command queue)             |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SysmanSchedulerGetTimeoutModeProperties()   | Get the settings for the timeout  |
+| ::${s}SchedulerGetTimeoutModeProperties()         | Get the settings for the timeout  |
 |                                                  | scheduler mode                    |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SysmanSchedulerGetTimesliceModeProperties() | Get the settings for the          |
+| ::${s}SchedulerGetTimesliceModeProperties()       | Get the settings for the          |
 |                                                  | timeslice scheduler mode          |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SysmanSchedulerSetTimeoutMode()             | Change to timeout scheduler mode  |
+| ::${s}SchedulerSetTimeoutMode()                   | Change to timeout scheduler mode  |
 |                                                  | and/or change properties          |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SysmanSchedulerSetTimesliceMode()           | Change to timeslice scheduler     |
+| ::${s}SchedulerSetTimesliceMode()                 | Change to timeslice scheduler     |
 |                                                  | mode and/or change properties     |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SysmanSchedulerSetExclusiveMode()           | Change to exclusive scheduler     |
+| ::${s}SchedulerSetExclusiveMode()                 | Change to exclusive scheduler     |
 |                                                  | mode and/or change properties     |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SysmanSchedulerSetComputeUnitDebugMode()    | Change to compute unit debug      |
+| ::${s}SchedulerSetComputeUnitDebugMode()          | Change to compute unit debug      |
 |                                                  | scheduler mode and/or change      |
 |                                                  | properties                        |
 +--------------------------------------------------+-----------------------------------+
@@ -580,21 +577,21 @@ while permitting other work to attempt to run:
 
 .. code:: c
 
-   function DisableSchedulerWatchdog(${s}_sysman_handle_t hSysmanDevice)
+   function DisableSchedulerWatchdog(${s}_device_handle_t hSysmanDevice)
        uint32_t numSched
-       if ((${s}SysmanSchedulerGet(hSysmanDevice, &numSched, NULL) == ${X}_RESULT_SUCCESS))
-           ${s}_sysman_sched_handle_t* pSchedHandles =
-               allocate_memory(numSched * sizeof(${s}_sysman_sched_handle_t))
-           if (${s}SysmanSchedulerGet(hSysmanDevice, &numSched, pSchedHandles) == ${X}_RESULT_SUCCESS)
+       if ((${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, NULL) == ${X}_RESULT_SUCCESS))
+           ${s}_sched_handle_t* pSchedHandles =
+               allocate_memory(numSched * sizeof(${s}_sched_handle_t))
+           if (${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, pSchedHandles) == ${X}_RESULT_SUCCESS)
                for (index = 0 .. numSched-1)
                    ${x}_result_t res
                    ${s}_sched_mode_t currentMode
-                   res = ${s}SysmanSchedulerGetCurrentMode(pSchedHandles[index], &currentMode)
+                   res = ${s}SchedulerGetCurrentMode(pSchedHandles[index], &currentMode)
                    if (res == ${X}_RESULT_SUCCESS)
                        ${x}_bool_t requireReload
                        ${s}_sched_timeout_properties_t props
                        props.watchdogTimeout = ${S}_SCHED_WATCHDOG_DISABLE
-                       res = ${s}SysmanSchedulerSetTimeoutMode(pSchedHandles[index], &props, &requireReload)
+                       res = ${s}SchedulerSetTimeoutMode(pSchedHandles[index], &props, &requireReload)
                        if (res == ${X}_RESULT_SUCCESS)
                            if (requireReload)
                                output("WARNING: Reload the driver to complete desired configuration.")
@@ -619,7 +616,7 @@ The device can be reset using the following function:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanDeviceReset()          | Requests that the driver          |
+| ::${s}DeviceReset()                | Requests that the driver          |
 |                                   | perform a PCI bus reset of the    |
 |                                   | device.                           |
 +-----------------------------------+-----------------------------------+
@@ -632,17 +629,17 @@ The following functions permit getting data about the PCI endpoint for the devic
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanPciGetProperties()     | Get static properties for the PCI |
+| ::${s}DevicePciGetProperties()     | Get static properties for the PCI |
 |                                   | port - BDF address, number of     |
 |                                   | bars, maximum supported speed     |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanPciGetState()          | Get current PCI port speed        |
+| ::${s}DevicePciGetState()          | Get current PCI port speed        |
 |                                   | (number of lanes, generation)     |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanPciGetBars()           | Get information about each        |
+| ::${s}DevicePciGetBars()           | Get information about each        |
 |                                   | configured PCI bar                |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanPciGetStats()          | Get PCI statistics - throughput,  |
+| ::${s}DevicePciGetStats()          | Get PCI statistics - throughput,  |
 |                                   | total packets, number of packet   |
 |                                   | replays                           |
 +-----------------------------------+-----------------------------------+
@@ -651,9 +648,9 @@ The pseudo code below shows how to output the PCI BDF address:
 
 .. code:: c
 
-   function ShowPciInfo(${s}_sysman_handle_t hSysmanDevice)
+   function ShowPciInfo(${s}_device_handle_t hSysmanDevice)
        ${s}_pci_properties_t pciProps;
-       if (${s}SysmanPciGetProperties(hSysmanDevice, &pciProps) == ${X}_RESULT_SUCCESS)
+       if (${s}DevicePciGetProperties(hSysmanDevice, &pciProps) == ${X}_RESULT_SUCCESS)
            output("    PCI address:        %04u:%02u:%02u.%u",
                pciProps.address.domain,
                pciProps.address.bus,
@@ -745,12 +742,12 @@ running significant workloads:
    utilization of the device continues.
 
 Some power domains support requesting the event
-::${S}_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED be generated when the
+::${S}_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED be generated when the
 energy consumption exceeds some value. This can be a useful technique to
 suspend an application until the GPU becomes busy. The technique
-involves calling ::${s}SysmanPowerSetEnergyThreshold() with some delta
+involves calling ::${s}PowerSetEnergyThreshold() with some delta
 energy threshold, registering to receive the event using the function
-::${s}SysmanEventSetConfig() and then calling ::${s}SysmanEventListen() to
+::${s}EventSetConfig() and then calling ::${s}EventListen() to
 block until the event is triggered. When the energy consumed by the
 power domain from the time the call is made exceeds the specified delta,
 the event is triggered, and the application is woken up.
@@ -760,29 +757,29 @@ The following functions are provided to manage the power of the device:
 +--------------------------------------+--------------------------------------------------+
 | Function                             | Description                                      |
 +======================================+==================================================+
-| ::${s}SysmanPowerGet()                | Enumerate the power domains.                     |
+| ::${s}DeviceEnumPowerDomains()        | Enumerate the power domains.                     |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}SysmanPowerGetProperties()      | Get the minimum/maximum power limit that can be  |
+| ::${s}PowerGetProperties()            | Get the minimum/maximum power limit that can be  |
 |                                      | specified when changing the power limits of a    |
 |                                      | specific power domain. Also read the factory     |
 |                                      | default sustained power limit of the part.       |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}SysmanPowerGetEnergyCounter()   | Read the energy consumption of                   |
+| ::${s}PowerGetEnergyCounter()         | Read the energy consumption of                   |
 |                                      | the specific domain.                             |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}SysmanPowerGetLimits()          | Get the sustained/burst/peak                     |
+| ::${s}PowerGetLimits()                | Get the sustained/burst/peak                     |
 |                                      | power limits for the specific                    |
 |                                      | power domain.                                    |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}SysmanPowerSetLimits()          | Set the sustained/burst/peak                     |
+| ::${s}PowerSetLimits()                | Set the sustained/burst/peak                     |
 |                                      | power limits for the specific                    |
 |                                      | power domain.                                    |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}SysmanPowerGetEnergyThreshold() | Get the current energy threshold.                |
+| ::${s}PowerGetEnergyThreshold()       | Get the current energy threshold.                |
 |                                      |                                                  |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}SysmanPowerSetEnergyThreshold() | Set the energy threshold. Event                  |
-|                                      | ::${S}_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED |
+| ::${s}PowerSetEnergyThreshold()       | Set the energy threshold. Event                  |
+|                                      | ::${S}_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED        |
 |                                      |                                                  |
 |                                      | will be generated when the energy                |
 |                                      | consumed since calling this                      |
@@ -795,15 +792,15 @@ domain on a device:
 
 .. code:: c
 
-   function ShowPowerDomains(${s}_sysman_handle_t hSysmanDevice)
+   function ShowPowerDomains(${s}_device_handle_t hSysmanDevice)
        uint32_t numPowerDomains
-       if (${s}SysmanPowerGet(hSysmanDevice, &numPowerDomains, NULL) == ${X}_RESULT_SUCCESS)
-           ${s}_sysman_pwr_handle_t* phPower =
-               allocate_memory(numPowerDomains * sizeof(${s}_sysman_pwr_handle_t))
-           if (${s}SysmanPowerGet(hSysmanDevice, &numPowerDomains, phPower) == ${X}_RESULT_SUCCESS)
+       if (${s}DeviceEnumPowerDomains(hSysmanDevice, &numPowerDomains, NULL) == ${X}_RESULT_SUCCESS)
+           ${s}_pwr_handle_t* phPower =
+               allocate_memory(numPowerDomains * sizeof(${s}_pwr_handle_t))
+           if (${s}DeviceEnumPowerDomains(hSysmanDevice, &numPowerDomains, phPower) == ${X}_RESULT_SUCCESS)
                for (pwrIndex = 0 .. numPowerDomains-1)
                    ${s}_power_properties_t props
-                   if (${s}SysmanPowerGetProperties(phPower[pwrIndex], &props) == ${X}_RESULT_SUCCESS)
+                   if (${s}PowerGetProperties(phPower[pwrIndex], &props) == ${X}_RESULT_SUCCESS)
                        if (props.onSubdevice)
                            output("Sub-device %u power:\n", props.subdeviceId)
                            output("    Can control: %s", props.canControl ? "yes" : "no")
@@ -815,11 +812,11 @@ domain on a device:
        free_memory(...)
    }
 
-   function ShowPowerLimits(${s}_sysman_pwr_handle_t hPower)
+   function ShowPowerLimits(${s}_pwr_handle_t hPower)
        ${s}_power_sustained_limit_t sustainedLimits
        ${s}_power_burst_limit_t burstLimits
        ${s}_power_peak_limit_t peakLimits
-       if (${s}SysmanPowerGetLimits(hPower, &sustainedLimits, &burstLimits, &peakLimits) == ${X}_RESULT_SUCCESS)
+       if (${s}PowerGetLimits(hPower, &sustainedLimits, &burstLimits, &peakLimits) == ${X}_RESULT_SUCCESS)
            output("    Power limits\n")
            if (sustainedLimits.enabled)
                output("        Sustained: %.3f W %.3f sec",
@@ -838,9 +835,9 @@ the function is called regularly (say every 100ms).
 
 .. code:: c
 
-   function ShowAveragePower(${s}_sysman_pwr_handle_t hPower, ${s}_power_energy_counter_t* pPrevEnergyCounter)
+   function ShowAveragePower(${s}_pwr_handle_t hPower, ${s}_power_energy_counter_t* pPrevEnergyCounter)
        ${s}_power_energy_counter_t newEnergyCounter;
-       if (${s}SysmanPowerGetEnergyCounter(hPower, &newEnergyCounter) == ${X}_RESULT_SUCCESS)
+       if (${s}PowerGetEnergyCounter(hPower, &newEnergyCounter) == ${X}_RESULT_SUCCESS)
            uint64_t deltaTime = newEnergyCounter.timestamp - pPrevEnergyCounter->timestamp;
            if (deltaTime)
                output("    Average power: %.3f W",
@@ -862,33 +859,33 @@ the device:
 +------------------------------------------+-----------------------------------+
 | Function                                 | Description                       |
 +==========================================+===================================+
-| ::${s}SysmanFrequencyGet()                | Enumerate all the frequency       |
+| ::${s}DeviceEnumFrequencyDomains()        | Enumerate all the frequency       |
 |                                          | domains on the device and         |
 |                                          | sub-devices.                      |
 +------------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyGetProperties()      | Find out which domain             |
+| ::${s}FrequencyGetProperties()            | Find out which domain             |
 |                                          | ::${s}_freq_domain_t is controlled |
 |                                          | by this frequency and min/max     |
 |                                          | hardware frequencies.             |
 +------------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyGetAvailableClocks() | Get an array of all available     |
+| ::${s}FrequencyGetAvailableClocks()       | Get an array of all available     |
 |                                          | frequencies that can be requested |
 |                                          | on this domain.                   |
 +------------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyGetRange()           | Get the current min/max frequency |
+| ::${s}FrequencyGetRange()                 | Get the current min/max frequency |
 |                                          | between which the hardware can    |
 |                                          | operate for a frequency domain.   |
 +------------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencySetRange()           | Set the min/max frequency between |
+| ::${s}FrequencySetRange()                 | Set the min/max frequency between |
 |                                          | which the hardware can operate    |
 |                                          | for a frequency domain.           |
 +------------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyGetState()           | Get the current frequency         |
+| ::${s}FrequencyGetState()                 | Get the current frequency         |
 |                                          | request, actual frequency, TDP    |
 |                                          | frequency and throttle reasons    |
 |                                          | for a frequency domain.           |
 +------------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyGetThrottleTime()    | Gets the amount of time a         |
+| ::${s}FrequencyGetThrottleTime()          | Gets the amount of time a         |
 |                                          | frequency domain has been         |
 |                                          | throttled.                        |
 +------------------------------------------+-----------------------------------+
@@ -904,7 +901,7 @@ to excess power/heat.
 
 Based on the power/thermal conditions, the frequency requested by
 software or the hardware may not be respected. This situation can be
-determined using the function ::${s}SysmanFrequencyGetState() which will
+determined using the function ::${s}FrequencyGetState() which will
 indicate the current frequency request, the actual (resolved) frequency
 and other frequency information that depends on the current conditions.
 If the actual frequency is below the requested frequency,
@@ -912,7 +909,7 @@ If the actual frequency is below the requested frequency,
 frequency is being limited by the Punit.
 
 When a frequency domain starts being throttled, the event
-::${S}_SYSMAN_EVENT_TYPE_FREQ_THROTTLED is triggered if this is supported
+::${S}_EVENT_TYPE_FREQ_THROTTLED is triggered if this is supported
 (check ::${s}_freq_properties_t.isThrottleEventSupported).
 
 Frequency/Voltage overclocking
@@ -945,7 +942,7 @@ full circuitry of the device, the following modifications can be made:
 
 -  Decrease the voltage
 
-Frequency/voltage overclocking is accomplished by calling ::${s}SysmanFrequencyOcSetConfig()
+Frequency/voltage overclocking is accomplished by calling ::${s}FrequencyOcSetConfig()
 with a new overclock configuration ::${s}_oc_config_t. There are two modes that control the
 way voltage is handled when overclocking the frequency:
 
@@ -980,30 +977,30 @@ The following functions are provided to handle overclocking:
 +-----------------------------------------+-----------------------------------+
 | Function                                | Description                       |
 +=========================================+===================================+
-| ::${s}SysmanFrequencyOcGetCapabilities() | Determine the overclock           |
+| ::${s}FrequencyOcGetCapabilities()       | Determine the overclock           |
 |                                         | capabilities of the device.       |
 +-----------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyOcGetConfig()       | Get the overclock configuration   |
+| ::${s}FrequencyOcGetConfig()             | Get the overclock configuration   |
 |                                         | in effect.                        |
 +-----------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyOcSetConfig()       | Set a new overclock               |
+| ::${s}FrequencyOcSetConfig()             | Set a new overclock               |
 |                                         | configuration.                    |
 +-----------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyOcGetIccMax()       | Get the maximum current limit in  |
+| ::${s}FrequencyOcGetIccMax()             | Get the maximum current limit in  |
 |                                         | effect.                           |
 +-----------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyOcSetIccMax()       | Set a new maximum current limit.  |
+| ::${s}FrequencyOcSetIccMax()             | Set a new maximum current limit.  |
 +-----------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyOcGetTjMax()        | Get the maximum temperature limit |
+| ::${s}FrequencyOcGetTjMax()              | Get the maximum temperature limit |
 |                                         | in effect.                        |
 +-----------------------------------------+-----------------------------------+
-| ::${s}SysmanFrequencyOcSetTjMax()        | Set a new maximum temperature     |
+| ::${s}FrequencyOcSetTjMax()              | Set a new maximum temperature     |
 |                                         | limit.                            |
 +-----------------------------------------+-----------------------------------+
 
 Overclocking can be turned off by calling
-::${s}SysmanFrequencyOcSetConfig() with mode ::${S}_OC_MODE_OFF and by
-calling ${s}SysmanFrequencyOcGetIccMax() and ::${s}SysmanFrequencyOcSetTjMax() with values of 0.0.
+::${s}FrequencyOcSetConfig() with mode ::${S}_OC_MODE_OFF and by
+calling ${s}FrequencyOcGetIccMax() and ::${s}FrequencyOcSetTjMax() with values of 0.0.
 
 .. _Performance-Factor:
 
@@ -1048,16 +1045,16 @@ Here is a summary of the available functions:
 +----------------------------------------------+--------------------------------------------------------------------+
 | Function                                     | Description                                                        |
 +==============================================+====================================================================+
-| ::${s}SysmanPerformanceFactorGet()            | Enumerate the Performance Factor domains available on the          |
+| ::${s}DeviceEnumPerformanceFactorDomains()    | Enumerate the Performance Factor domains available on the          |
 |                                              | hardware.                                                          |
 +----------------------------------------------+--------------------------------------------------------------------+
-| ::${s}SysmanPerformanceFactorGetProperties()  | Find out if the Performance Factor domain is located on a          |
+| ::${s}PerformanceFactorGetProperties()        | Find out if the Performance Factor domain is located on a          |
 |                                              | sub-device and which accelerators are affected by it.              |
 +----------------------------------------------+--------------------------------------------------------------------+
-| ::${s}SysmanPerformanceFactorGetConfig()      | Read the current performance factor being used by the hardware     |
+| ::${s}PerformanceFactorGetConfig()            | Read the current performance factor being used by the hardware     |
 |                                              | for a domain.                                                      |
 +----------------------------------------------+--------------------------------------------------------------------+
-| ::${s}SysmanPerformanceFactorSetConfig()      | Change the Performance Factor of the hardware for a domain.        |
+| ::${s}PerformanceFactorSetConfig()            | Change the Performance Factor of the hardware for a domain.        |
 +----------------------------------------------+--------------------------------------------------------------------+
 
 
@@ -1081,17 +1078,17 @@ The following functions are provided:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanEngineGet()            | Enumerate the engine groups that  |
+| ::${s}DeviceEnumEngineGroups()     | Enumerate the engine groups that  |
 |                                   | can be queried.                   |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanEngineGetProperties()  | Get the properties of an engine   |
+| ::${s}EngineGetProperties()        | Get the properties of an engine   |
 |                                   | group. This will return the type  |
 |                                   | of engine group (one of           |
 |                                   | ::${s}_engine_group_t) and on      |
 |                                   | which sub-device the group is     |
 |                                   | making measurements.              |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanEngineGetActivity()    | Returns the activity counters for |
+| ::${s}EngineGetActivity()          | Returns the activity counters for |
 |                                   | an engine group.                  |
 +-----------------------------------+-----------------------------------+
 
@@ -1116,9 +1113,9 @@ to standby states:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanStandbyGet()           | Enumerate the standby domains.    |
+| ::${s}DeviceEnumStandbyDomains()   | Enumerate the standby domains.    |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanStandbyGetProperties() | Get the properties of a standby   |
+| ::${s}StandbyGetProperties()       | Get the properties of a standby   |
 |                                   | domain. This will return the      |
 |                                   | parts of the device that are      |
 |                                   | affected by this domain (one of   |
@@ -1126,12 +1123,12 @@ to standby states:
 |                                   | which sub-device the domain is    |
 |                                   | located.                          |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanStandbyGetMode()       | Get the current promotion mode    |
+| ::${s}StandbyGetMode()             | Get the current promotion mode    |
 |                                   | (one of                           |
 |                                   | ::${s}_standby_promo_mode_t) for a |
 |                                   | standby domain.                   |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanStandbySetMode()       | Set the promotion mode (one of    |
+| ::${s}StandbySetMode()             | Set the promotion mode (one of    |
 |                                   | ::${s}_standby_promo_mode_t) for a |
 |                                   | standby domain.                   |
 +-----------------------------------+-----------------------------------+
@@ -1146,16 +1143,16 @@ The following functions are provided to manage firmwares on the device:
 +------------------------------------+-----------------------------------+
 | Function                           | Description                       |
 +====================================+===================================+
-| ::${s}SysmanFirmwareGet()           | Enumerate all firmwares that can  |
+| ::${s}DeviceEnumFirmwares()         | Enumerate all firmwares that can  |
 |                                    | be managed on the device.         |
 +------------------------------------+-----------------------------------+
-| ::${s}SysmanFirmwareGetProperties() | Find out the name and version of  |
+| ::${s}FirmwareGetProperties()       | Find out the name and version of  |
 |                                    | a firmware.                       |
 +------------------------------------+-----------------------------------+
-| ::${s}SysmanFirmwareGetChecksum()   | Get the checksum for an installed |
+| ::${s}FirmwareGetChecksum()         | Get the checksum for an installed |
 |                                    | firmware.                         |
 +------------------------------------+-----------------------------------+
-| ::${s}SysmanFirmwareFlash()         | Flash a new firmware image.       |
+| ::${s}FirmwareFlash()               | Flash a new firmware image.       |
 +------------------------------------+-----------------------------------+
 
 .. _Memory:
@@ -1186,7 +1183,7 @@ also provides a health metric which can take one of the following values
 +-----------------------------------+-----------------------------------+
 
 When the health state of a memory module changes, the event
-::${S}_SYSMAN_EVENT_TYPE_MEM_HEALTH is triggered.
+::${S}_EVENT_TYPE_MEM_HEALTH is triggered.
 
 The following functions provide access to information about the device
 memory modules:
@@ -1194,16 +1191,16 @@ memory modules:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanMemoryGet()            | Enumerate the memory modules.     |
+| ::${s}DeviceEnumMemoryModules()    | Enumerate the memory modules.     |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanMemoryGetProperties()  | Find out the type of memory and   |
+| ::${s}MemoryGetProperties()        | Find out the type of memory and   |
 |                                   | maximum physical memory of a      |
 |                                   | module.                           |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanMemoryGetBandwidth()   | Returns memory bandwidth counters |
+| ::${s}MemoryGetBandwidth()         | Returns memory bandwidth counters |
 |                                   | for a module.                     |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanMemoryGetState()       | Returns the currently health free |
+| ::${s}MemoryGetState()             | Returns the currently health free |
 |                                   | memory and total physical memory  |
 |                                   | for a memory module.              |
 +-----------------------------------+-----------------------------------+
@@ -1272,7 +1269,7 @@ observed. If the port is in a red state, the API provides additional
 information about the causes of the instability.
 
 When a port's health state changes, the event
-::${S}_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH is triggered.
+::${S}_EVENT_TYPE_FABRIC_PORT_HEALTH is triggered.
 
 The API provides the current transmit and receive bitrate of each port.
 It also permits measuring the receive and transmit bandwidth flowing
@@ -1291,36 +1288,36 @@ The following functions can be used to manage Fabric ports:
 +--------------------------------------+-----------------------------------+
 | Function                             | Description                       |
 +======================================+===================================+
-| ::${s}SysmanFabricPortGet()           | Enumerate all fabric ports on the |
+| ::${s}DeviceEnumFabricPorts()         | Enumerate all fabric ports on the |
 |                                      | device.                           |
 +--------------------------------------+-----------------------------------+
-| ::${s}SysmanFabricPortGetProperties() | Get static properties about the   |
+| ::${s}FabricPortGetProperties()       | Get static properties about the   |
 |                                      | port (model, pord Id, max         |
 |                                      | receive/transmit speed).          |
 +--------------------------------------+-----------------------------------+
-| ::${s}SysmanFabricPortGetLinkType()   | Get details about the physical    |
+| ::${s}FabricPortGetLinkType()         | Get details about the physical    |
 |                                      | link connected to the port.       |
 +--------------------------------------+-----------------------------------+
-| ::${s}SysmanFabricPortGetConfig()     | Determine if the port is          |
+| ::${s}FabricPortGetConfig()           | Determine if the port is          |
 |                                      | configured UP and if beaconing is |
 |                                      | on or off.                        |
 +--------------------------------------+-----------------------------------+
-| ::${s}SysmanFabricPortSetConfig()     | Configure the port UP or DOWN and |
+| ::${s}FabricPortSetConfig()           | Configure the port UP or DOWN and |
 |                                      | turn beaconing on or off.         |
 +--------------------------------------+-----------------------------------+
-| ::${s}SysmanFabricPortGetState()      | Determine the health of the port  |
+| ::${s}FabricPortGetState()            | Determine the health of the port  |
 |                                      | connection, reasons for link      |
 |                                      | degradation or connection issues, |
 |                                      | current receive/transmit and port |
 |                                      | Id of the remote end-point.       |
 +--------------------------------------+-----------------------------------+
-| ::${s}SysmanFabricPortGetThroughput() | Get port receive/transmit         |
+| ::${s}FabricPortGetThroughput()       | Get port receive/transmit         |
 |                                      | counters along with current       |
 |                                      | receive/transmit port speed.      |
 +--------------------------------------+-----------------------------------+
 
 For devices with sub-devices, the fabric ports are usually located in
-the sub-device. Given a device handle, ::${s}SysmanFabricPortGet() will
+the sub-device. Given a device handle, ::${s}DeviceEnumFabricPorts() will
 include the ports on each sub-device. In this case,
 ::${s}_fabric_port_properties_t.onSubdevice will be set to true and
 ::${s}_fabric_port_properties_t.subdeviceId will give the subdevice ID
@@ -1331,27 +1328,27 @@ the device and sub-devices:
 
 .. code:: c
 
-   void ShowFabricPorts(${s}_sysman_handle_t hSysmanDevice)
+   void ShowFabricPorts(${s}_device_handle_t hSysmanDevice)
        uint32_t numPorts
-       if ((${s}SysmanFabricPortGet(hSysmanDevice, &numPorts, NULL) == ${X}_RESULT_SUCCESS))
-           ${s}_sysman_fabric_port_handle_t* phPorts =
-               allocate_memory(numPorts * sizeof(${s}_sysman_fabric_port_handle_t))
-           if (${s}SysmanFabricPortGet(hSysmanDevice, &numPorts, phPorts) == ${X}_RESULT_SUCCESS)
+       if ((${s}DeviceEnumFabricPorts(hSysmanDevice, &numPorts, NULL) == ${X}_RESULT_SUCCESS))
+           ${s}_fabric_port_handle_t* phPorts =
+               allocate_memory(numPorts * sizeof(${s}_fabric_port_handle_t))
+           if (${s}DeviceEnumFabricPorts(hSysmanDevice, &numPorts, phPorts) == ${X}_RESULT_SUCCESS)
                for (index = 0 .. numPorts-1)
                    # Show information about a particular port
                    output("    Port %u:\n", index)
                    call_function ShowFabricPortInfo(phPorts[index])
        free_memory(...)
 
-   function ShowFabricPortInfo(${s}_sysman_fabric_port_handle_t hPort)
+   function ShowFabricPortInfo(${s}_fabric_port_handle_t hPort)
        ${s}_fabric_port_properties_t props
-       if (${s}SysmanFabricPortGetProperties(hPort, &props) == ${X}_RESULT_SUCCESS)
+       if (${s}FabricPortGetProperties(hPort, &props) == ${X}_RESULT_SUCCESS)
            ${s}_fabric_port_state_t state
-           if (${s}SysmanFabricPortGetState(hPort, &state) == ${X}_RESULT_SUCCESS)
+           if (${s}FabricPortGetState(hPort, &state) == ${X}_RESULT_SUCCESS)
                ${s}_fabric_link_type_t link
-               if (${s}SysmanFabricPortGetLinkType(hPort, false, &link) == ${X}_RESULT_SUCCESS)
+               if (${s}FabricPortGetLinkType(hPort, false, &link) == ${X}_RESULT_SUCCESS)
                    ${s}_fabric_port_config_t config
-                   if (${s}SysmanFabricPortGetConfig(hPort, &config) == ${X}_RESULT_SUCCESS)
+                   if (${s}FabricPortGetConfig(hPort, &config) == ${X}_RESULT_SUCCESS)
                        output("        Model:                 %s", props.model)
                        if (props.onSubdevice)
                            output("        On sub-device:         %u", props.subdeviceId)
@@ -1408,9 +1405,9 @@ locations. The following locations are supported:
 
 For some sensors, it is possible to request that events be triggered
 when temperatures cross thresholds. This is accomplished using the
-function ::${s}SysmanTemperatureGetConfig() and
-::${s}SysmanTemperatureSetConfig(). Support for specific events is
-accomplished by calling ::${s}SysmanTemperatureGetProperties(). In
+function ::${s}TemperatureGetConfig() and
+::${s}TemperatureSetConfig(). Support for specific events is
+accomplished by calling ::${s}TemperatureGetProperties(). In
 general, temperature events are only supported on the temperature sensor
 of type ::${S}_TEMP_SENSORS_GLOBAL. The list below describes the list of
 temperature events:
@@ -1419,7 +1416,7 @@ temperature events:
 +-----------------------------------------+-----------------------+-----------------------+
 | Event                                   | Check support         | Description           |
 +=========================================+=======================+=======================+
-| ::${S}_SYSMAN_EVENT_TYPE_TEMP_CRITICAL   | ::${s}_temp_properties | The event is          |
+| ::${S}_EVENT_TYPE_TEMP_CRITICAL          | ::${s}_temp_properties | The event is          |
 |                                         | _t.isCriticalTempSupp | triggered when the    |
 |                                         | orted                 | temperature crosses   |
 |                                         |                       | into the critical     |
@@ -1427,7 +1424,7 @@ temperature events:
 |                                         |                       | frequency throttling  |
 |                                         |                       | will be taking place. |
 +-----------------------------------------+-----------------------+-----------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 | ::${s}_temp_properties | The event is          |
+| ::${S}_EVENT_TYPE_TEMP_THRESHOLD1        | ::${s}_temp_properties | The event is          |
 |                                         | _t.isThreshold1Suppor | triggered when the    |
 |                                         | ted                   | temperature crosses   |
 |                                         |                       | the custom threshold  |
@@ -1437,7 +1434,7 @@ temperature events:
 |                                         |                       | high to low or low to |
 |                                         |                       | high.                 |
 +-----------------------------------------+-----------------------+-----------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 | ::${s}_temp_properties | The event is          |
+| ::${S}_EVENT_TYPE_TEMP_THRESHOLD2        | ::${s}_temp_properties | The event is          |
 | PE_TEMP_THRESHOLD2                      | _t.isThreshold2Suppor | triggered when the    |
 |                                         | ted                   | temperature crosses   |
 |                                         |                       | the custom threshold  |
@@ -1454,26 +1451,26 @@ The following function can be used to manage temperature sensors:
 +---------------------------------------+-----------------------------------+
 | Function                              | Description                       |
 +=======================================+===================================+
-| ::${s}SysmanTemperatureGet()           | Enumerate the temperature sensors |
+| ::${s}DeviceEnumTemperatureSensors()   | Enumerate the temperature sensors |
 |                                       | on the device.                    |
 +---------------------------------------+-----------------------------------+
-| ::${s}SysmanTemperatureGetProperties() | Get static properties for a       |
+| ::${s}TemperatureGetProperties()       | Get static properties for a       |
 |                                       | temperature sensor. In            |
 |                                       | particular, this will indicate    |
 |                                       | which parts of the device the     |
 |                                       | sensor measures (one of           |
 |                                       | ::${s}_temp_sensors_t).            |
 +---------------------------------------+-----------------------------------+
-| ::${s}SysmanTemperatureGetConfig()     | Get information about the current |
+| ::${s}TemperatureGetConfig()           | Get information about the current |
 |                                       | temperature thresholds -          |
 |                                       | enabled/threshold/processID.      |
 +---------------------------------------+-----------------------------------+
-| ::${s}SysmanTemperatureSetConfig()     | Set new temperature thresholds.   |
+| ::${s}TemperatureSetConfig()           | Set new temperature thresholds.   |
 |                                       | Events will be triggered when the |
 |                                       | temperature crosses these         |
 |                                       | thresholds.                       |
 +---------------------------------------+-----------------------------------+
-| ::${s}SysmanTemperatureGetState()      | Read the temperature of a sensor. |
+| ::${s}TemperatureGetState()            | Read the temperature of a sensor. |
 +---------------------------------------+-----------------------------------+
 
 .. _PSU:
@@ -1487,13 +1484,13 @@ power-supply on a device:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanPsuGet()               | Enumerate the power supplies on   |
+| ::${s}DeviceEnumPsus()             | Enumerate the power supplies on   |
 |                                   | the device that can be managed.   |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanPsuGetProperties()     | Get static details about the      |
+| ::${s}PsuGetProperties()           | Get static details about the      |
 |                                   | power supply.                     |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanPsuGetState()          | Get information about the health  |
+| ::${s}PsuGetState()                | Get information about the health  |
 |                                   | (temperature, current, fan) of    |
 |                                   | the power supply.                 |
 +-----------------------------------+-----------------------------------+
@@ -1503,7 +1500,7 @@ power-supply on a device:
 Operations on fans
 ------------------
 
-If ::${s}SysmanFanGet() returns one or more fan handles, it is possible to
+If ::${s}DeviceEnumFans() returns one or more fan handles, it is possible to
 manage their speed. The hardware can be instructed to run the fan at a fixed
 speed (or 0 for silent operations) or to provide a table of temperature-speed
 points in which case the hardware will dynamically change the fan speed based
@@ -1517,37 +1514,37 @@ The following functions are available:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanFanGet()               | Enumerate the fans on the device. |
+| ::${s}DeviceEnumFans()             | Enumerate the fans on the device. |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanFanGetProperties()     | Get the maximum RPM of the fan    |
+| ::${s}FanGetProperties()           | Get the maximum RPM of the fan    |
 |                                   | and the maximum number of points  |
 |                                   | that can be specified in the      |
 |                                   | temperature-speed table for a     |
 |                                   | fan.                              |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanFanGetConfig()         | Get the current configuration     |
+| ::${s}FanGetConfig()               | Get the current configuration     |
 |                                   | (speed) of a fan.                 |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanFanSetConfig()         | Change the configuration (speed)  |
+| ::${s}FanSetConfig()               | Change the configuration (speed)  |
 |                                   | of a fan.                         |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanFanGetState()          | Get the current speed of a fan.   |
+| ::${s}FanGetState()                | Get the current speed of a fan.   |
 +-----------------------------------+-----------------------------------+
 
 The pseudo code below shows how to output the fan speed of all fans:
 
 .. code:: c
 
-    function ShowFans(${s}_sysman_handle_t hSysmanDevice)
+    function ShowFans(${s}_device_handle_t hSysmanDevice)
         uint32_t numFans
-        if (${s}SysmanFanGet(hSysmanDevice, &numFans, NULL) == ${X}_RESULT_SUCCESS)
-            ${s}_sysman_fan_handle_t* phFans =
-                allocate_memory(numFans * sizeof(${s}_sysman_fan_handle_t))
-            if (${s}SysmanFanGet(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
+        if (${s}DeviceEnumFans(hSysmanDevice, &numFans, NULL) == ${X}_RESULT_SUCCESS)
+            ${s}_fan_handle_t* phFans =
+                allocate_memory(numFans * sizeof(${s}_fan_handle_t))
+            if (${s}DeviceEnumFans(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
                 output("    Fans")
                 for (fanIndex = 0 .. numFans-1)
                     uint32_t speed
-                    if (${s}SysmanFanGetState(phFans[fanIndex], ${S}_FAN_SPEED_UNITS_RPM, &speed)
+                    if (${s}FanGetState(phFans[fanIndex], ${S}_FAN_SPEED_UNITS_RPM, &speed)
                         == ${X}_RESULT_SUCCESS)
                             output("        Fan %u: %u RPM", fanIndex, speed)
         free_memory(...)
@@ -1558,22 +1555,22 @@ value in RPM, but only if control is permitted:
 
 .. code:: c
 
-   function SetFanSpeed(${s}_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
+   function SetFanSpeed(${s}_device_handle_t hSysmanDevice, uint32_t SpeedRpm)
    {
        uint32_t numFans
-       if (${s}SysmanFanGet(hSysmanDevice, &numFans, NULL) == ${X}_RESULT_SUCCESS)
-           ${s}_sysman_fan_handle_t* phFans =
-               allocate_memory(numFans * sizeof(${s}_sysman_fan_handle_t))
-           if (${s}SysmanFanGet(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
+       if (${s}DeviceEnumFans(hSysmanDevice, &numFans, NULL) == ${X}_RESULT_SUCCESS)
+           ${s}_fan_handle_t* phFans =
+               allocate_memory(numFans * sizeof(${s}_fan_handle_t))
+           if (${s}DeviceEnumFans(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
                ${s}_fan_config_t config
                config.mode = ${S}_FAN_SPEED_MODE_FIXED
                config.speed = SpeedRpm
                config.speedUnits = ${S}_FAN_SPEED_UNITS_RPM
                for (fanIndex = 0 .. numFans-1)
                    ${s}_fan_properties_t fanprops
-                   if (${s}SysmanFanGetProperties(phFans[fanIndex], &fanprops) == ${X}_RESULT_SUCCESS)
+                   if (${s}FanGetProperties(phFans[fanIndex], &fanprops) == ${X}_RESULT_SUCCESS)
                        if (fanprops.canControl)
-                           ${s}SysmanFanSetConfig(phFans[fanIndex], &config)
+                           ${s}FanSetConfig(phFans[fanIndex], &config)
                        else
                            output("ERROR: Can't control fan %u.\n", fanIndex)
        free_memory(...)
@@ -1584,7 +1581,7 @@ value in RPM, but only if control is permitted:
 Operations on LEDs
 ------------------
 
-If ::${s}SysmanLedGet() returns one or more LED handles, it is possible
+If ::${s}DeviceEnumLeds() returns one or more LED handles, it is possible
 to manage LEDs on the device. This includes turning them off/on and
 where the capability exists, changing their color in real-time.
 
@@ -1593,17 +1590,17 @@ The following functions are available:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanLedGet()               | Enumerate the LEDs on the device  |
+| ::${s}DeviceEnumLeds()             | Enumerate the LEDs on the device  |
 |                                   | that can be managed.              |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanLedGetProperties()     | Find out if a LED supports color  |
+| ::${s}LedGetProperties()           | Find out if a LED supports color  |
 |                                   | changes.                          |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanLedGetState()          | Find out if a LED is currently    |
+| ::${s}LedGetState()                | Find out if a LED is currently    |
 |                                   | off/on and the color where the    |
 |                                   | capability is available.          |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanLedSetState()          | Turn a LED off/on and set the     |
+| ::${s}LedSetState()                | Turn a LED off/on and set the     |
 |                                   | color where the capability is     |
 |                                   | available.                        |
 +-----------------------------------+-----------------------------------+
@@ -1635,20 +1632,20 @@ errors. There are two types of errors and they are defined in ::${s}_ras_error_t
 |                                    | not cause data corruption.        |
 +------------------------------------+-----------------------------------+
 
-Software can use the function ::${s}SysmanRasGetProperties() to find out
+Software can use the function ::${s}RasGetProperties() to find out
 if the device supports RAS and if it is enabled. This information is
 returned in the structure ::${s}_ras_properties_t.
 
-The function ::${s}SysmanRasGet() enumerates the available sets of RAS
+The function ::${s}DeviceEnumRasErrorSets() enumerates the available sets of RAS
 errors. If no handles are returned, the device does not support RAS. A
 device without sub-devices will return one handle if RAS is supported. A
 device with sub-devices will return a handle for each sub-device.
 
 To determine if errors have occurred, software uses the function
-::${s}SysmanRasGetState(). This will return the total number of errors of
+::${s}RasGetState(). This will return the total number of errors of
 a given type (correctable/uncorrectable) that have occurred.
 
-When calling ::${s}SysmanRasGetState(), software can request that the
+When calling ::${s}RasGetState(), software can request that the
 error counters be cleared. When this is done, all counters of the
 specified type (correctable/uncorrectable) will be set to zero and any
 subsequent calls to this function will only show new errors that have
@@ -1656,7 +1653,7 @@ occurred. If software intends to clear errors, it should be the only
 application doing so and it should store the counters in an appropriate
 database for historical analysis.
 
-When calling ::${s}SysmanRasGetState(), an optional pointer to a
+When calling ::${s}RasGetState(), an optional pointer to a
 structure of type ::${s}_ras_details_t can be supplied. This will give a
 breakdown of the main device components where the errors occurred. The
 categories are defined in the structure ::${s}_ras_details_t. The meaning
@@ -1743,22 +1740,20 @@ of each category depends on the error type (correctable, uncorrectable).
 
 Each RAS error type can trigger events when the error counters exceed
 thresholds. The events are listed in the table below. Software can use
-the functions ::${s}SysmanRasGetConfig() and ::${s}SysmanRasSetConfig() to
+the functions ::${s}RasGetConfig() and ::${s}RasSetConfig() to
 get and set the thresholds for each error type. The default is for all
 thresholds to be 0 which means that no events are generated. Thresholds
 can be set on the total RAS error counter or on each of the detailed
 error counters.
 
 ## --validate=off
-+-----------------------------------+-----------------------------------+
-| RAS error Type                    | Event                             |
-+===================================+===================================+
-| ::${S}_RAS_ERROR_TYPE_UNCORRECTABL | ::${S}_SYSMAN_EVENT_TYPE_RAS_UNCOR |
-| E                                 | RECTABLE_ERRORS                   |
-+-----------------------------------+-----------------------------------+
-| ::${S}_RAS_ERROR_TYPE_CORRECTABLE  | ::${S}_SYSMAN_EVENT_TYPE_RAS_CORRE |
-|                                   | CTABLE_ERRORS                     |
-+-----------------------------------+-----------------------------------+
++------------------------------------+-------------------------------------------+
+| RAS error Type                     | Event                                     |
++====================================+===========================================+
+| ::${S}_RAS_ERROR_TYPE_UNCORRECTABLE | ::${S}_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS |
++------------------------------------+-------------------------------------------+
+| ::${S}_RAS_ERROR_TYPE_CORRECTABLE   | ::${S}_EVENT_TYPE_RAS_CORRECTABLE_ERRORS   |
++------------------------------------+-------------------------------------------+
 ## --validate=on
 
 The table below summaries all the RAS management functions:
@@ -1766,26 +1761,26 @@ The table below summaries all the RAS management functions:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanRasGet()               | Get handles to the available RAS  |
+| ::${s}DeviceEnumRasErrorSets()     | Get handles to the available RAS  |
 |                                   | error groups.                     |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanRasGetProperties()     | Get properties about a RAS error  |
+| ::${s}RasGetProperties()           | Get properties about a RAS error  |
 |                                   | group - type of RAS errors and if |
 |                                   | they are enabled.                 |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanRasGetConfig()         | Get the current list of           |
+| ::${s}RasGetConfig()               | Get the current list of           |
 |                                   | thresholds for each counter in    |
 |                                   | the RAS group. RAS error events   |
 |                                   | will be generated when the        |
 |                                   | thresholds are exceeded.          |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanRasSetConfig()         | Set current list of thresholds    |
+| ::${s}RasSetConfig()               | Set current list of thresholds    |
 |                                   | for each counter in the RAS       |
 |                                   | group. RAS error events will be   |
 |                                   | generated when the thresholds are |
 |                                   | exceeded.                         |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanRasGetState()          | Get the current state of the RAS  |
+| ::${s}RasGetState()                | Get the current state of the RAS  |
 |                                   | error counters. The counters can  |
 |                                   | also be cleared.                  |
 +-----------------------------------+-----------------------------------+
@@ -1795,15 +1790,15 @@ current state of RAS errors:
 
 .. code:: c
 
-   void ShowRasErrors(${s}_sysman_handle_t hSysmanDevice)
+   void ShowRasErrors(${s}_device_handle_t hSysmanDevice)
        uint32_t numRasErrorSets
-       if ((${s}SysmanRasGet(hSysmanDevice, &numRasErrorSets, NULL) == ${X}_RESULT_SUCCESS))
-           ${s}_sysman_ras_handle_t* phRasErrorSets =
-               allocate_memory(numRasErrorSets * sizeof(${s}_sysman_ras_handle_t))
-           if (${s}SysmanRasGet(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ${X}_RESULT_SUCCESS)
+       if ((${s}DeviceEnumRasErrorSets(hSysmanDevice, &numRasErrorSets, NULL) == ${X}_RESULT_SUCCESS))
+           ${s}_ras_handle_t* phRasErrorSets =
+               allocate_memory(numRasErrorSets * sizeof(${s}_ras_handle_t))
+           if (${s}DeviceEnumRasErrorSets(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ${X}_RESULT_SUCCESS)
                for (rasIndex = 0 .. numRasErrorSets)
                    ${s}_ras_properties_t props
-                   if (${s}SysmanRasGetProperties(phRasErrorSets[rasIndex], &props) == ${X}_RESULT_SUCCESS)
+                   if (${s}RasGetProperties(phRasErrorSets[rasIndex], &props) == ${X}_RESULT_SUCCESS)
                        var pErrorType
                        switch (props.type)
                            case ${S}_RAS_ERROR_TYPE_CORRECTABLE:
@@ -1820,7 +1815,7 @@ current state of RAS errors:
                        if (props.supported and props.enabled)
                            uint64_t newErrors
                            ${s}_ras_details_t errorDetails
-                           if (${s}SysmanRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                           if (${s}RasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
                                == ${X}_RESULT_SUCCESS)
                                    output("    Number new errors: %llu\n", (long long unsigned int)newErrors)
                                    if (newErrors)
@@ -1851,7 +1846,7 @@ and repairs.
 It is important that all workloads are stopped before initiating.
 
 This is achieved using
-the function ::${s}SysmanDiagnosticsRunTests(). On return from the
+the function ::${s}DiagnosticsRunTests(). On return from the
 function, software can use the diagnostics return code
 (::${s}_diag_result_t) to determine the new course of action:
 
@@ -1865,25 +1860,25 @@ function, software can use the diagnostics return code
    repair and requires a reboot after which time workloads can resume
    submission.
 
-The function ::${s}SysmanDeviceGetState() can be used to determine if
+The function ::${s}DeviceGetState() can be used to determine if
 the device has been repaired.
 
 There are multiple diagnostic test suites that can be run and these are
 defined in the enumerator ::${s}_diag_type_t. The function
-::${s}SysmanDiagnosticsGet() will enumerate each available test suite and
-the function ::${s}SysmanDiagnosticsGetProperties() can be used to
+::${s}DeviceEnumDiagnosticTestSuites() will enumerate each available test suite and
+the function ::${s}DiagnosticsGetProperties() can be used to
 determine the type and name of each test suite
 (::${s}_diag_properties_t.type and ::${s}_diag_properties_t.type).
 
 Each test suite contains one or more diagnostic tests. On some systems,
 it is possible to run only a subset of the tests. Use the function
-::${s}SysmanDiagnosticsGetProperties() and check that
+::${s}DiagnosticsGetProperties() and check that
 ::${s}_diag_properties_t.haveTests is true to determine if this feature
-is available. If it is, the function ::${s}SysmanDiagnosticsGetTests()
+is available. If it is, the function ::${s}DiagnosticsGetTests()
 can be called to get the list of individual tests that can be run.
 
 When running diagnostics for a test suite using
-::${s}SysmanDiagnosticsRunTests(), it is possible to specify the start
+::${s}DiagnosticsRunTests(), it is possible to specify the start
 and index of tests in the suite. Setting to ::${S}_DIAG_FIRST_TEST_INDEX
 and ::${S}_DIAG_LAST_TEST_INDEX will run all tests in the suite. If it is
 possible to run a subset of tests, specify the index of the start test
@@ -1895,18 +1890,18 @@ The table below summaries all the diagnostic management functions:
 +---------------------------------------+-----------------------------------+
 | Function                              | Description                       |
 +=======================================+===================================+
-| ::${s}SysmanDiagnosticsGet()           | Get handles to the available      |
+| ::${s}DeviceEnumDiagnosticTestSuites() | Get handles to the available      |
 |                                       | diagnostic test suites that can   |
 |                                       | be run.                           |
 +---------------------------------------+-----------------------------------+
-| ::${s}SysmanDiagnosticsGetProperties() | Get information about a test      |
+| ::${s}DiagnosticsGetProperties()       | Get information about a test      |
 |                                       | suite - type, name, location and  |
 |                                       | if individual tests can be run.   |
 +---------------------------------------+-----------------------------------+
-| ::${s}SysmanDiagnosticsGetTests()      | Get list of individual diagnostic |
+| ::${s}DiagnosticsGetTests()            | Get list of individual diagnostic |
 |                                       | tests that can be run.            |
 +---------------------------------------+-----------------------------------+
-| ::${s}SysmanDiagnosticsRunTests()      | Run either all or individual      |
+| ::${s}DiagnosticsRunTests()            | Run either all or individual      |
 |                                       | diagnostic tests.                 |
 +---------------------------------------+-----------------------------------+
 
@@ -1915,28 +1910,28 @@ tests in each:
 
 .. code:: c
 
-   function ListDiagnosticTests(${s}_sysman_handle_t hSysmanDevice)
+   function ListDiagnosticTests(${s}_device_handle_t hSysmanDevice)
    {
        uint32_t numTestSuites
-       if ((${s}SysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, NULL) == ${X}_RESULT_SUCCESS))
-           ${s}_sysman_diag_handle_t* phTestSuites =
-               allocate_memory(numTestSuites * sizeof(${s}_sysman_diag_handle_t))
-           if (${s}SysmanDiagnosticsGet(hSysmanDevice, &numTestSuites, phTestSuites) == ${X}_RESULT_SUCCESS)
+       if ((${s}DeviceEnumDiagnosticTestSuites(hSysmanDevice, &numTestSuites, NULL) == ${X}_RESULT_SUCCESS))
+           ${s}_diag_handle_t* phTestSuites =
+               allocate_memory(numTestSuites * sizeof(${s}_diag_handle_t))
+           if (${s}DeviceEnumDiagnosticTestSuites(hSysmanDevice, &numTestSuites, phTestSuites) == ${X}_RESULT_SUCCESS)
                for (suiteIndex = 0 .. numTestSuites-1)
                    uint32_t numTests = 0
                    ${s}_diag_test_t* pTests
                    ${s}_diag_properties_t suiteProps
-                   if (${s}SysmanDiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) != ${X}_RESULT_SUCCESS)
+                   if (${s}DiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) != ${X}_RESULT_SUCCESS)
                        next_loop(suiteIndex)
                    output("Diagnostic test suite %s:", suiteProps.name)
                    if (!suiteProps.haveTests)
                        output("    There are no individual tests that can be selected.")
                        next_loop(suiteIndex)
-                   if (${s}SysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, NULL) != ${X}_RESULT_SUCCESS)
+                   if (${s}DiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, NULL) != ${X}_RESULT_SUCCESS)
                        output("    Problem getting list of individual tests.")
                        next_loop(suiteIndex)
                    pTests = allocate_memory(numTests * sizeof(${s}_diag_test_t*))
-                   if (${s}SysmanDiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, pTests) != ${X}_RESULT_SUCCESS)
+                   if (${s}DiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, pTests) != ${X}_RESULT_SUCCESS)
                        output("    Problem getting list of individual tests.")
                        next_loop(suiteIndex)
                    for (i = 0 .. numTests-1)
@@ -1958,14 +1953,14 @@ received.
 For every device on which the application wants to receive events, it
 should perform the following actions:
 
-1. Use ::${s}SysmanEventGet() to get an event handler from the Sysman
+1. Use ::${s}DeviceCreateEvents() to get an event handler from the Sysman
    handle for the device.
-2. Use ::${s}SysmanEventSetConfig() to indicate which events it wasnts to
+2. Use ::${s}EventSetConfig() to indicate which events it wasnts to
    listen to.
 3. For each event, call the appropriate function to set conditions that
    will trigger the event.
 
-Finally, the application calls ::${s}SysmanEventListen() with a list of
+Finally, the application calls ::${s}EventListen() with a list of
 event handles that it wishes to listen for events on. A wait timeout is
 used to request non-blocking operations (timeout =
 ::${S}_EVENT_WAIT_NONE) or blocking operations (timeout =
@@ -1973,7 +1968,7 @@ used to request non-blocking operations (timeout =
 even if no events have been received.
 
 Once events have occurred, the application can call
-::${s}SysmanEventGetState() to determine the list of events that have
+::${s}EventGetState() to determine the list of events that have
 been received for each event handle. If events have been received, the
 application can use the function relevant to the event to determine the
 actual state.
@@ -1988,49 +1983,49 @@ called to enable the event and/or provide threshold conditions.
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
 | Event                                             | Trigger                     | Configuration function                | State function                    |
 +===================================================+=============================+=======================================+===================================+
-| ::${S}_SYSMAN_EVENT_TYPE_DEVICE_RESET              | Device is about to be reset |                                       |                                   |
+| ::${S}_EVENT_TYPE_DEVICE_RESET                     | Device is about to be reset |                                       |                                   |
 |                                                   | by the driver               |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER  | Device is about to enter a  |                                       |                                   |
+| ::${S}_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER         | Device is about to enter a  |                                       |                                   |
 |                                                   | deep sleep state            |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT   | Device is exiting a deep    |                                       |                                   |
+| ::${S}_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT          | Device is exiting a deep    |                                       |                                   |
 |                                                   | sleep state                 |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_FREQ_THROTTLED            | Frequency starts being      |                                       | ::${s}SysmanFrequencyGetState()    |
+| ::${S}_EVENT_TYPE_FREQ_THROTTLED                   | Frequency starts being      |                                       | ::${s}FrequencyGetState()          |
 |                                                   | throttled                   |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED  | Energy consumption          | ::${s}SysmanPowerSetEnergyThreshold()  |                                   |
+| ::${S}_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED         | Energy consumption          | ::${s}PowerSetEnergyThreshold()        |                                   |
 |                                                   | threshold is reached        |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_TEMP_CRITICAL             | Critical temperature is     | ::${s}SysmanTemperatureSetConfig()     | ::${s}SysmanTemperatureGetState()  |
+| ::${S}_EVENT_TYPE_TEMP_CRITICAL                    | Critical temperature is     | ::${s}TemperatureSetConfig()           | ::${s}TemperatureGetState()        |
 |                                                   | reached                     |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1           | Temperature crosses         | ::${s}SysmanTemperatureSetConfig()     | ::${s}SysmanTemperatureGetState()  |
+| ::${S}_EVENT_TYPE_TEMP_THRESHOLD1                  | Temperature crosses         | ::${s}TemperatureSetConfig()           | ::${s}TemperatureGetState()        |
 |                                                   | threshold 1                 |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2           | Temperature crosses         | ::${s}SysmanTemperatureSetConfig()     | ::${s}SysmanTemperatureGetState()  |
+| ::${S}_EVENT_TYPE_TEMP_THRESHOLD2                  | Temperature crosses         | ::${s}TemperatureSetConfig()           | ::${s}TemperatureGetState()        |
 |                                                   | threshold 2                 |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_MEM_HEALTH                | Health of device memory     |                                       | ::${s}SysmanMemoryGetState()       |
+| ::${S}_EVENT_TYPE_MEM_HEALTH                       | Health of device memory     |                                       | ::${s}MemoryGetState()             |
 |                                                   | changes                     |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH        | Health of fabric ports      |                                       | ::${s}SysmanFabricPortGetState()   |
+| ::${S}_EVENT_TYPE_FABRIC_PORT_HEALTH               | Health of fabric ports      |                                       | ::${s}FabricPortGetState()         |
 |                                                   | change                      |                                       | )                                 |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS    | RAS correctable errors      | ::${s}SysmanRasSetConfig()             | ::${s}SysmanRasGetState()          |
+| ::${S}_EVENT_TYPE_RAS_CORRECTABLE_ERRORS           | RAS correctable errors      | ::${s}RasSetConfig()                   | ::${s}RasGetState()                |
 |                                                   | cross thresholds            |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS  | RAS uncorrectable errors    | ::${s}SysmanRasSetConfig()             | ::${s}SysmanRasGetState()          |
+| ::${S}_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS         | RAS uncorrectable errors    | ::${s}RasSetConfig()                   | ::${s}RasGetState()                |
 |                                                   | cross thresholds            |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ::${S}_SYSMAN_EVENT_DEVICE_RESET_REQUIRED          | Driver has determined that  |                                       | ::${s}SysmanDeviceGetState()       |
+| ::${S}_EVENT_DEVICE_RESET_REQUIRED                 | Driver has determined that  |                                       | ::${s}DeviceGetState()             |
 |                                                   | an immediate reset is       |                                       |                                   |
 |                                                   | required                    |                                       |                                   |
 +---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
 ## --validate=on
 
-The call to ::${s}SysmanEventListen() requires the driver handle. The
+The call to ::${s}EventListen() requires the driver handle. The
 list of event handles must only be for devices that have been enumerated
 from that driver, otherwise and error will be returned. If the
 application is managing devices from multiple drivers, it will need to
@@ -2041,22 +2036,22 @@ The table below summaries all the event management functions:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}SysmanEventGet()             | Get the event handle for a        |
+| ::${s}DeviceCreateEvents()         | Get the event handle for a        |
 |                                   | specific Sysman device.           |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanEventGetConfig()       | Get the current list of events    |
+| ::${s}EventGetConfig()             | Get the current list of events    |
 |                                   | for a given event handle that     |
 |                                   | have been registered.             |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanEventSetConfig()       | Set the events that should be     |
+| ::${s}EventSetConfig()             | Set the events that should be     |
 |                                   | registered on a given event       |
 |                                   | handle.                           |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanEventGetState()        | Get the list of events that have  |
+| ::${s}EventGetState()              | Get the list of events that have  |
 |                                   | been received for a given event   |
 |                                   | handle.                           |
 +-----------------------------------+-----------------------------------+
-| ::${s}SysmanEventListen()          | Wait for events to arrive for a   |
+| ::${s}EventListen()                | Wait for events to arrive for a   |
 |                                   | given list of event handles.      |
 +-----------------------------------+-----------------------------------+
 
@@ -2078,11 +2073,11 @@ when the critical temperature is reached.
        ${x}_device_handle_t* phDevices =
            allocate_memory(deviceCount * sizeof(${x}_device_handle_t))
        # Allocate memory for the event handle for each device
-       ${s}_sysman_event_handle_t* phEvents =
-           allocate_memory(deviceCount * sizeof(${s}_sysman_event_handle_t))
+       ${s}_event_handle_t* phEvents =
+           allocate_memory(deviceCount * sizeof(${s}_event_handle_t))
        # Allocate memory for the event handles that we will actually listen to
-       ${s}_sysman_event_handle_t* phListenEvents =
-           allocate_memory(deviceCount * sizeof(${s}_sysman_event_handle_t))
+       ${s}_event_handle_t* phListenEvents =
+           allocate_memory(deviceCount * sizeof(${s}_event_handle_t))
        # Allocate memory so that we can map an event handle in phListenEvent to the device handle
        uint32_t* pListenDeviceIndex = allocate_memory(deviceCount * sizeof(uint32_t))
 
@@ -2090,26 +2085,23 @@ when the critical temperature is reached.
        ${x}DeviceGet(hDriver, &deviceCount, phDevices)
        for(devIndex = 0 .. deviceCount-1)
            # Get Sysman handle for the device
-           ${s}_sysman_handle_t hSysmanDevice
-           if (${s}SysmanGet(phDevices[devIndex], ${S}_SYSMAN_VERSION_CURRENT, &hSysmanDevice)
-               != ${X}_RESULT_SUCCESS)
-                   next_loop(devIndex)
+           ${s}_device_handle_t hSysmanDevice = (${s}_device_handle_t)phDevices[devIndex]
 
            # Get event handle for this device
-           if (${s}SysmanEventGet(hSysmanDevice, &phEvents[devIndex]) != ${X}_RESULT_SUCCESS)
+           if (${s}DeviceCreateEvents(hSysmanDevice, &phEvents[devIndex]) != ${X}_RESULT_SUCCESS)
                next_loop(devIndex)
 
            # Get handles to all temperature sensors
            uint32_t numTempSensors = 0
-           if (${s}SysmanTemperatureGet(hSysmanDevice, &numTempSensors, NULL) != ${X}_RESULT_SUCCESS)
+           if (${s}DeviceEnumTemperatureSensors(hSysmanDevice, &numTempSensors, NULL) != ${X}_RESULT_SUCCESS)
                next_loop(devIndex)
-           ${s}_sysman_temp_handle_t* allTempSensors
-               allocate_memory(deviceCount * sizeof(${s}_sysman_temp_handle_t))
-           if (${s}SysmanTemperatureGet(hSysmanDevice, &numTempSensors, allTempSensors) == ${X}_RESULT_SUCCESS)
+           ${s}_temp_handle_t* allTempSensors
+               allocate_memory(deviceCount * sizeof(${s}_temp_handle_t))
+           if (${s}DeviceEnumTemperatureSensors(hSysmanDevice, &numTempSensors, allTempSensors) == ${X}_RESULT_SUCCESS)
                # Configure each temperature sensor to trigger a critical event and a threshold1 event
                var numConfiguredTempSensors = 0
                for (tempIndex = 0 .. numTempSensors-1)
-                   if (${s}SysmanTemperatureGetConfig(allTempSensors[tempIndex], &config) != ${X}_RESULT_SUCCESS)
+                   if (${s}TemperatureGetConfig(allTempSensors[tempIndex], &config) != ${X}_RESULT_SUCCESS)
                        next_loop(tempIndex)
                    ${s}_temp_config_t config
                    config.enableCritical = true
@@ -2118,15 +2110,15 @@ when the critical temperature is reached.
                    config.threshold1.threshold = tempLimit
                    config.threshold2.enableHighToLow = false
                    config.threshold2.enableLowToHigh = false
-                   if (${s}SysmanTemperatureSetConfig(allTempSensors[tempIndex], &config) == ${X}_RESULT_SUCCESS)
+                   if (${s}TemperatureSetConfig(allTempSensors[tempIndex], &config) == ${X}_RESULT_SUCCESS)
                        numConfiguredTempSensors++
 
            # If we configured any sensors to generate events, we can now register to receive on this device
            if (numConfiguredTempSensors)
                ${s}_event_config_t eventConfig
                eventConfig.registered =
-                   ${S}_SYSMAN_EVENT_TYPE_TEMP_CRITICAL | ${S}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1
-               if (${s}SysmanEventSetConfig(phEvents[devIndex], &eventConfig) == ${X}_RESULT_SUCCESS)
+                   ${S}_EVENT_TYPE_TEMP_CRITICAL | ${S}_EVENT_TYPE_TEMP_THRESHOLD1
+               if (${s}EventSetConfig(phEvents[devIndex], &eventConfig) == ${X}_RESULT_SUCCESS)
                    phListenEvents[numEventHandles] = phEvents[devIndex]
                    pListenDeviceIndex[numEventHandles] = devIndex
                    numEventHandles++
@@ -2135,16 +2127,16 @@ when the critical temperature is reached.
        if (numEventHandles)
            # Block until we receive events
            uint32_t events
-           if (${s}SysmanEventListen(hDriver, ${S}_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events)
+           if (${s}EventListen(hDriver, ${S}_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events)
                == ${X}_RESULT_SUCCESS)
                    for (evtIndex .. numEventHandles)
-                       if (${s}SysmanEventGetState(phListenEvents[evtIndex], true, &events)
+                       if (${s}EventGetState(phListenEvents[evtIndex], true, &events)
                            != ${X}_RESULT_SUCCESS)
                                next_loop(evtIndex)
-                       if (events & ${S}_SYSMAN_EVENT_TYPE_TEMP_CRITICAL)
+                       if (events & ${S}_EVENT_TYPE_TEMP_CRITICAL)
                            output("Device %u: Went above the critical temperature.",
                                pListenDeviceIndex[evtIndex])
-                       else if (events & ${S}_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1)
+                       else if (events & ${S}_EVENT_TYPE_TEMP_THRESHOLD1)
                            output("Device %u: Went above the temperature threshold %f.",
                                pListenDeviceIndex[evtIndex], tempLimit)
 
@@ -2187,10 +2179,10 @@ below. For each file, the list of affected API functions is given.
 +-----------------------+-----------------------+------------------------------------+
 | sysfs file            | Description           | Functions                          |
 +=======================+=======================+====================================+
-| /sys/class/drm/card0/ | Used to               | ::${s}SysmanStandbyGet()            |
-| rc6_enable            | enable/disable        | ::${s}SysmanStandbyGetProperties()  |
-|                       | standby.              | ::${s}SysmanStandbyGetMode()        |
-|                       |                       | ::${s}SysmanStandbySetMode()        |
+| /sys/class/drm/card0/ | Used to               | ::${s}DeviceEnumStandbyDomains()    |
+| rc6_enable            | enable/disable        | ::${s}StandbyGetProperties()        |
+|                       | standby.              | ::${s}StandbyGetMode()              |
+|                       |                       | ::${s}StandbySetMode()              |
 +-----------------------+-----------------------+------------------------------------+
 | TBD                   | In development        | TBD                                |
 +-----------------------+-----------------------+------------------------------------+
@@ -2212,17 +2204,17 @@ API calls:
 +--------------------------------------+-----------------------------------+
 | Function                             | Description                       |
 +======================================+===================================+
-| ::${s}SysmanPciGetStats()             | Access to total PCI throughput    |
+| ::${s}DevicePciGetStats()             | Access to total PCI throughput    |
 |                                      | and number of packets can reveal  |
 |                                      | useful information about the      |
 |                                      | workload                          |
 +--------------------------------------+-----------------------------------+
-| ::${s}SysmanMemoryGetBandwidth()      | Access to real-time device local  |
+| ::${s}MemoryGetBandwidth()            | Access to real-time device local  |
 |                                      | memory bandwidth can reveal       |
 |                                      | useful information about the      |
 |                                      | workload                          |
 +--------------------------------------+-----------------------------------+
-| ::${s}SysmanFabricPortGetThroughput() | Access to real-time fabric data   |
+| ::${s}FabricPortGetThroughput()       | Access to real-time fabric data   |
 |                                      | bandwidth can reveal useful       |
 |                                      | information about the workload    |
 +--------------------------------------+-----------------------------------+
@@ -2238,26 +2230,26 @@ the preceding sections. This is the case for the following API calls:
 +------------------------------------+-----------------------------------+
 | Function                           | Description                       |
 +====================================+===================================+
-| ::${s}SysmanDeviceReset()           | Device resets cause loss of data  |
+| ::${s}DeviceReset()                 | Device resets cause loss of data  |
 |                                    | for running workloads.            |
 +------------------------------------+-----------------------------------+
-| ::${s}SysmanFirmwareGet()           | All firmware operations must be   |
+| ::${s}DeviceEnumFirmwares()         | All firmware operations must be   |
 |                                    | handled with care.                |
 +------------------------------------+-----------------------------------+
-| ::${s}SysmanFirmwareGetProperties() | All firmware operations must be   |
+| ::${s}FirmwareGetProperties()       | All firmware operations must be   |
 |                                    | handled with care.                |
 +------------------------------------+-----------------------------------+
-| ::${s}SysmanFirmwareGetChecksum()   | All firmware operations must be   |
+| ::${s}FirmwareGetChecksum()         | All firmware operations must be   |
 |                                    | handled with care.                |
 +------------------------------------+-----------------------------------+
-| ::${s}SysmanFirmwareFlash()         | All firmware operations must be   |
+| ::${s}FirmwareFlash()               | All firmware operations must be   |
 |                                    | handled with care.                |
 +------------------------------------+-----------------------------------+
-| ::${s}SysmanFabricPortSetConfig()   | Putting fabric ports offline can  |
+| ::${s}FabricPortSetConfig()         | Putting fabric ports offline can  |
 |                                    | distrupt workloads, causing       |
 |                                    | uncorrectable errors.             |
 +------------------------------------+-----------------------------------+
-| ::${s}SysmanDiagnosticsRunTests()   | Diagnostics take a device         |
+| ::${s}DiagnosticsRunTests()         | Diagnostics take a device         |
 |                                    | offline.                          |
 +------------------------------------+-----------------------------------+
 
@@ -2279,184 +2271,184 @@ function:
 | Function                                          | Administrator | Group       | Other       | Virtual     |
 |                                                   | access        | access      | access      | machine     |
 +===================================================+===============+=============+=============+=============+
-| ::${s}SysmanDeviceGetProperties()                  | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceGetProperties()                        | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanDeviceWasRepaired()                    | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceWasRepaired()                          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanSchedulerGet()                         | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumSchedulers()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanSchedulerGetProperties()               | read-only     | read-only   | read-only   | no-access   |
+| ::${s}SchedulerGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanSchedulerGetCurrentMode()              | read-only     | read-only   | read-only   | no-access   |
+| ::${s}SchedulerGetCurrentMode()                    | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanSchedulerGetTimeoutModeProperties()    | read-only     | read-only   | read-only   | no-access   |
+| ::${s}SchedulerGetTimeoutModeProperties()          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanSchedulerGetTimesliceModeProperties()  | read-only     | read-only   | read-only   | no-access   |
+| ::${s}SchedulerGetTimesliceModeProperties()        | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanSchedulerSetTimeoutMode()              | read-write    | read-write  | read-only   | no-access   |
+| ::${s}SchedulerSetTimeoutMode()                    | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanSchedulerSetTimesliceMode()            | read-write    | read-write  | read-only   | no-access   |
+| ::${s}SchedulerSetTimesliceMode()                  | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanSchedulerSetExclusiveMode()            | read-write    | read-write  | read-only   | no-access   |
+| ::${s}SchedulerSetExclusiveMode()                  | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanSchedulerSetComputeUnitDebugMode()     | read-write    | read-write  | read-only   | no-access   |
+| ::${s}SchedulerSetComputeUnitDebugMode()           | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanDeviceReset()                          | read-write    | no-access   | no-access   | no-access   |
+| ::${s}DeviceReset()                                | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPciGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PciGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPciGetState()                          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PciGetState()                                | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPciGetBars()                           | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PciGetBars()                                 | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPciGetStats                            | read-only     | no-access   | no-access   | no-access   |
+| ::${s}PciGetStats                                  | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPowerGet()                             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PowerGet()                                   | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPowerGetProperties()                   | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PowerGetProperties()                         | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPowerGetEnergyCounter()                | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PowerGetEnergyCounter()                      | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPowerGetEnergyThreshold()              | read-only     | read-only   | no-access   | no-access   |
+| ::${s}PowerGetEnergyThreshold()                    | read-only     | read-only   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPowerSetEnergyThreshold()              | read-write    | read-write  | no-access   | no-access   |
+| ::${s}PowerSetEnergyThreshold()                    | read-write    | read-write  | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPowerGetLimits()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PowerGetLimits()                             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPowerSetLimits()                       | read-write    | read-write  | read-only   | no-access   |
+| ::${s}PowerSetLimits()                             | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyGet()                         | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumFrequencyDomains()                 | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyGetProperties()               | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyGetAvailableClocks()          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyGetAvailableClocks()                | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyGetRange()                    | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyGetRange()                          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencySetRange()                    | read-write    | read-write  | read-only   | no-access   |
+| ::${s}FrequencySetRange()                          | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyGetState()                    | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyGetState()                          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyGetThrottleTime()             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyGetThrottleTime()                   | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyOcGetCapabilities()           | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyOcGetCapabilities()                 | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyOcGetConfig()                 | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyOcGetConfig()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyOcSetConfig()                 | read-write    | no-access   | no-access   | no-access   |
+| ::${s}FrequencyOcSetConfig()                       | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyOcGetIccMax()                 | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyOcGetIccMax()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyOcSetIccMax()                 | read-write    | no-access   | no-access   | no-access   |
+| ::${s}FrequencyOcSetIccMax()                       | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyOcGetTjMax()                  | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyOcGetTjMax()                        | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFrequencyOcSetTjMax()                  | read-write    | no-access   | no-access   | no-access   |
+| ::${s}FrequencyOcSetTjMax()                        | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanEngineGet()                            | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumEngineGroups()                     | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanEngineGetProperties()                  | read-only     | read-only   | read-only   | no-access   |
+| ::${s}EngineGetProperties()                        | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanEngineGetActivity()                    | read-only     | read-only   | read-only   | no-access   |
+| ::${s}EngineGetActivity()                          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanStandbyGet()                           | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumStandbyDomains()                   | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanStandbyGetProperties()                 | read-only     | read-only   | read-only   | no-access   |
+| ::${s}StandbyGetProperties()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanStandbyGetMode()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}StandbyGetMode()                             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanStandbySetMode()                       | read-write    | read-write  | read-only   | no-access   |
+| ::${s}StandbySetMode()                             | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFirmwareGet()                          | read-only     | no-access   | no-access   | no-access   |
+| ::${s}DeviceEnumFirmwares()                        | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFirmwareGetProperties()                | read-only     | no-access   | no-access   | no-access   |
+| ::${s}FirmwareGetProperties()                      | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFirmwareGetChecksum()                  | read-only     | no-access   | no-access   | no-access   |
+| ::${s}FirmwareGetChecksum()                        | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFirmwareFlash()                        | read-write    | no-access   | no-access   | no-access   |
+| ::${s}FirmwareFlash()                              | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanMemoryGet()                            | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumMemoryModules()                    | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanMemoryGetProperties()                  | read-only     | read-only   | read-only   | no-access   |
+| ::${s}MemoryGetProperties()                        | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanMemoryGetBandwidth()                   | read-only     | no-access   | no-access   | no-access   |
+| ::${s}MemoryGetBandwidth()                         | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanMemoryGetState()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}MemoryGetState()                             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFabricPortGet()                        | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumFabricPorts()                      | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFabricPortGetProperties()              | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FabricPortGetProperties()                    | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFabricPortGetLinkType()                | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FabricPortGetLinkType()                      | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFabricPortGetConfig()                  | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FabricPortGetConfig()                        | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFabricPortSetConfig()                  | read-write    | no-access   | no-access   | no-access   |
+| ::${s}FabricPortSetConfig()                        | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFabricPortGetState()                   | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FabricPortGetState()                         | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFabricPortGetThroughput()              | read-only     | no-access   | no-access   | no-access   |
+| ::${s}FabricPortGetThroughput()                    | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanTemperatureGet()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumTemperatureSensors()               | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanTemperatureGetProperties()             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}TemperatureGetProperties()                   | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanTemperatureGetConfig()                 | read-only     | read-only   | no-access   | no-access   |
+| ::${s}TemperatureGetConfig()                       | read-only     | read-only   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanTemperatureSetConfig()                 | read-write    | read-write  | no-access   | no-access   |
+| ::${s}TemperatureSetConfig()                       | read-write    | read-write  | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanTemperatureGetState()                  | read-only     | read-only   | read-only   | no-access   |
+| ::${s}TemperatureGetState()                        | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPsuGet()                               | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumPsus()                             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPsuGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PsuGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanPsuGetState()                          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PsuGetState()                                | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFanGet()                               | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumFans()                             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFanGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FanGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFanGetConfig()                         | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FanGetConfig()                               | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFanSetConfig()                         | read-write    | read-write  | read-only   | no-access   |
+| ::${s}FanSetConfig()                               | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanFanGetState()                          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FanGetState()                                | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanLedGet()                               | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumLeds()                             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanLedGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
+| ::${s}LedGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanLedGetState()                          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}LedGetState()                                | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanLedSetState()                          | read-write    | read-write  | read-only   | no-access   |
+| ::${s}LedSetState()                                | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanRasGet()                               | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumRasErrorSets()                     | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanRasGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
+| ::${s}RasGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanRasGetConfig()                         | read-only     | read-only   | read-only   | no-access   |
+| ::${s}RasGetConfig()                               | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanRasSetConfig()                         | read-write    | read-write  | no-access   | no-access   |
+| ::${s}RasSetConfig()                               | read-write    | read-write  | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanRasGetState()                          | read-write    | read-write  | read-only   | no-access   |
+| ::${s}RasGetState()                                | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanEventGet()                             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceCreateEvents()                         | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanEventGetConfig()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}EventGetConfig()                             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanEventSetConfig()                       | read-write    | read-write  | read-write  | no-access   |
+| ::${s}EventSetConfig()                             | read-write    | read-write  | read-write  | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanEventGetState()                        | read-only     | read-only   | read-only   | no-access   |
+| ::${s}EventGetState()                              | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanEventListen()                          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}EventListen()                                | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanDiagnosticsGet()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumDiagnosticTestSuites()             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanDiagnosticsGetProperties()             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DiagnosticsGetProperties()                   | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanDiagnosticsGetTests()                  | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DiagnosticsGetTests()                        | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SysmanDiagnosticsRunTests()                  | read-write    | no-access   | no-access   | no-access   |
+| ::${s}DiagnosticsRunTests()                        | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
 ## --validate=on

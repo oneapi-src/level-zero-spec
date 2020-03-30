@@ -1,0 +1,124 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Firmware management"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "PSU voltage status"
+class: $sPsu
+name: $s_psu_voltage_status_t
+etors:
+    - name: $S_PSU_VOLTAGE_STATUS_NORMAL
+      value: "0"
+      desc: "No unusual voltages have been detected"
+    - name: $S_PSU_VOLTAGE_STATUS_OVER
+      desc: "Over-voltage has occurred"
+    - name: $S_PSU_VOLTAGE_STATUS_UNDER
+      desc: "Under-voltage has occurred"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Static properties of the power supply"
+class: $sPsu
+name: $s_psu_properties_t
+members:
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: "haveFan"
+      desc: "[out] True if the power supply has a fan"
+    - type: uint32_t
+      name: "ampLimit"
+      desc: "[out] The maximum electrical current in amperes that can be drawn"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Dynamic state of the power supply"
+class: $sPsu
+name: $s_psu_state_t
+members:
+    - type: $s_psu_voltage_status_t
+      name: "voltStatus"
+      desc: "[out] The current PSU voltage status"
+    - type: $x_bool_t
+      name: "fanFailed"
+      desc: "[out] Indicates if the fan has failed"
+    - type: uint32_t
+      name: "temperature"
+      desc: "[out] Read the current heatsink temperature in degrees Celsius."
+    - type: uint32_t
+      name: "current"
+      desc: "[out] The amps being drawn in amperes"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of power supplies"
+class: $sDevice
+name: EnumPsus
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver will update the value with the total number of components of this type.
+            if count is non-zero, then driver will only retrieve that number of components.
+            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+    - type: "$s_psu_handle_t*"
+      name: phPsu
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get power supply properties"
+class: $sPsu
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_psu_handle_t
+      name: hPsu
+      desc: "[in] Handle for the component."
+    - type: $s_psu_properties_t*
+      name: pProperties
+      desc: "[in,out] Will contain the properties of the power supply."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current power supply state"
+class: $sPsu
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_psu_handle_t
+      name: hPsu
+      desc: "[in] Handle for the component."
+    - type: $s_psu_state_t*
+      name: pState
+      desc: "[in,out] Will contain the current state of the power supply."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device power supply"
+name: $sPsu
+owner: $sDevice
+members:
+    - type: $s_psu_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

@@ -12,17 +12,16 @@
 namespace layer
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanGet
+    /// @brief Intercept function for zesDeviceGetProperties
     __zedlllocal ze_result_t __zecall
-    zesSysmanGet(
-        zes_device_handle_t hDevice,                    ///< [in] Handle of the device
-        zes_sysman_version_t version,                   ///< [in] Sysman version that application was built with
-        zes_sysman_handle_t* phSysman                   ///< [out] Handle for accessing Sysman features
+    zesDeviceGetProperties(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        zes_device_properties_t* pProperties            ///< [in,out] Structure that will contain information about the device.
         )
     {
-        auto pfnGet = context.zesDdiTable.Sysman.pfnGet;
+        auto pfnGetProperties = context.zesDdiTable.Device.pfnGetProperties;
 
-        if( nullptr == pfnGet )
+        if( nullptr == pfnGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
@@ -30,59 +29,30 @@ namespace layer
             if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
-            if( 91 <= version )
-                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
-
-            if( nullptr == phSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGet( hDevice, version, phSysman );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanDeviceGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanDeviceGetProperties(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zes_sysman_properties_t* pProperties            ///< [in,out] Structure that will contain information about the device.
-        )
-    {
-        auto pfnDeviceGetProperties = context.zesDdiTable.Sysman.pfnDeviceGetProperties;
-
-        if( nullptr == pfnDeviceGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
             if( nullptr == pProperties )
                 return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
-        return pfnDeviceGetProperties( hSysman, pProperties );
+        return pfnGetProperties( hDevice, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanDeviceGetState
+    /// @brief Intercept function for zesDeviceGetState
     __zedlllocal ze_result_t __zecall
-    zesSysmanDeviceGetState(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        zes_sysman_state_t* pState                      ///< [in,out] Structure that will contain information about the device.
+    zesDeviceGetState(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        zes_device_state_t* pState                      ///< [in,out] Structure that will contain information about the device.
         )
     {
-        auto pfnDeviceGetState = context.zesDdiTable.Sysman.pfnDeviceGetState;
+        auto pfnGetState = context.zesDdiTable.Device.pfnGetState;
 
-        if( nullptr == pfnDeviceGetState )
+        if( nullptr == pfnGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pState )
@@ -90,407 +60,38 @@ namespace layer
 
         }
 
-        return pfnDeviceGetState( hSysman, pState );
+        return pfnGetState( hDevice, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanDeviceReset
+    /// @brief Intercept function for zesDeviceReset
     __zedlllocal ze_result_t __zecall
-    zesSysmanDeviceReset(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
+    zesDeviceReset(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle for the device
         ze_bool_t force                                 ///< [in] If set to true, all applications that are currently using the
                                                         ///< device will be forcibly killed.
         )
     {
-        auto pfnDeviceReset = context.zesDdiTable.Sysman.pfnDeviceReset;
+        auto pfnReset = context.zesDdiTable.Device.pfnReset;
 
-        if( nullptr == pfnDeviceReset )
+        if( nullptr == pfnReset )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
         }
 
-        return pfnDeviceReset( hSysman, force );
+        return pfnReset( hDevice, force );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanSchedulerGet
+    /// @brief Intercept function for zesDeviceProcessesGetState
     __zedlllocal ze_result_t __zecall
-    zesSysmanSchedulerGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_sched_handle_t* phScheduler          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnSchedulerGet = context.zesDdiTable.Sysman.pfnSchedulerGet;
-
-        if( nullptr == pfnSchedulerGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSchedulerGet( hSysman, pCount, phScheduler );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanSchedulerGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanSchedulerGetProperties(
-        zes_sysman_sched_handle_t hScheduler,           ///< [in] Handle for the component.
-        zes_sched_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanScheduler.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hScheduler )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hScheduler, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanSchedulerGetCurrentMode
-    __zedlllocal ze_result_t __zecall
-    zesSysmanSchedulerGetCurrentMode(
-        zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-        zes_sched_mode_t* pMode                         ///< [in,out] Will contain the current scheduler mode.
-        )
-    {
-        auto pfnGetCurrentMode = context.zesDdiTable.SysmanScheduler.pfnGetCurrentMode;
-
-        if( nullptr == pfnGetCurrentMode )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hScheduler )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pMode )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetCurrentMode( hScheduler, pMode );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanSchedulerGetTimeoutModeProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanSchedulerGetTimeoutModeProperties(
-        zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-        ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
-                                                        ///< this mode, otherwise it will return the current properties.
-        zes_sched_timeout_properties_t* pConfig         ///< [in,out] Will contain the current parameters for this mode.
-        )
-    {
-        auto pfnGetTimeoutModeProperties = context.zesDdiTable.SysmanScheduler.pfnGetTimeoutModeProperties;
-
-        if( nullptr == pfnGetTimeoutModeProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hScheduler )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetTimeoutModeProperties( hScheduler, getDefaults, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanSchedulerGetTimesliceModeProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanSchedulerGetTimesliceModeProperties(
-        zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-        ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
-                                                        ///< this mode, otherwise it will return the current properties.
-        zes_sched_timeslice_properties_t* pConfig       ///< [in,out] Will contain the current parameters for this mode.
-        )
-    {
-        auto pfnGetTimesliceModeProperties = context.zesDdiTable.SysmanScheduler.pfnGetTimesliceModeProperties;
-
-        if( nullptr == pfnGetTimesliceModeProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hScheduler )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetTimesliceModeProperties( hScheduler, getDefaults, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanSchedulerSetTimeoutMode
-    __zedlllocal ze_result_t __zecall
-    zesSysmanSchedulerSetTimeoutMode(
-        zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-        zes_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
-        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                        ///< apply the new scheduler mode.
-        )
-    {
-        auto pfnSetTimeoutMode = context.zesDdiTable.SysmanScheduler.pfnSetTimeoutMode;
-
-        if( nullptr == pfnSetTimeoutMode )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hScheduler )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-            if( nullptr == pNeedReload )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetTimeoutMode( hScheduler, pProperties, pNeedReload );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanSchedulerSetTimesliceMode
-    __zedlllocal ze_result_t __zecall
-    zesSysmanSchedulerSetTimesliceMode(
-        zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-        zes_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
-        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                        ///< apply the new scheduler mode.
-        )
-    {
-        auto pfnSetTimesliceMode = context.zesDdiTable.SysmanScheduler.pfnSetTimesliceMode;
-
-        if( nullptr == pfnSetTimesliceMode )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hScheduler )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-            if( nullptr == pNeedReload )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetTimesliceMode( hScheduler, pProperties, pNeedReload );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanSchedulerSetExclusiveMode
-    __zedlllocal ze_result_t __zecall
-    zesSysmanSchedulerSetExclusiveMode(
-        zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                        ///< apply the new scheduler mode.
-        )
-    {
-        auto pfnSetExclusiveMode = context.zesDdiTable.SysmanScheduler.pfnSetExclusiveMode;
-
-        if( nullptr == pfnSetExclusiveMode )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hScheduler )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pNeedReload )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetExclusiveMode( hScheduler, pNeedReload );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanSchedulerSetComputeUnitDebugMode
-    __zedlllocal ze_result_t __zecall
-    zesSysmanSchedulerSetComputeUnitDebugMode(
-        zes_sysman_sched_handle_t hScheduler,           ///< [in] Sysman handle for the component.
-        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
-                                                        ///< apply the new scheduler mode.
-        )
-    {
-        auto pfnSetComputeUnitDebugMode = context.zesDdiTable.SysmanScheduler.pfnSetComputeUnitDebugMode;
-
-        if( nullptr == pfnSetComputeUnitDebugMode )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hScheduler )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pNeedReload )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetComputeUnitDebugMode( hScheduler, pNeedReload );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPerformanceFactorGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPerformanceFactorGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_perf_handle_t* phPerf                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnPerformanceFactorGet = context.zesDdiTable.Sysman.pfnPerformanceFactorGet;
-
-        if( nullptr == pfnPerformanceFactorGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnPerformanceFactorGet( hSysman, pCount, phPerf );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPerformanceFactorGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPerformanceFactorGetProperties(
-        zes_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
-        zes_perf_properties_t* pProperties              ///< [in,out] Will contain information about the specified Performance
-                                                        ///< Factor domain.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanPerformanceFactor.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPerf )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hPerf, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPerformanceFactorGetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPerformanceFactorGetConfig(
-        zes_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
-        double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
-                                                        ///< hardware (may not be the same as the requested Performance Factor).
-        )
-    {
-        auto pfnGetConfig = context.zesDdiTable.SysmanPerformanceFactor.pfnGetConfig;
-
-        if( nullptr == pfnGetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPerf )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pFactor )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetConfig( hPerf, pFactor );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPerformanceFactorSetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPerformanceFactorSetConfig(
-        zes_sysman_perf_handle_t hPerf,                 ///< [in] Handle for the Performance Factor domain.
-        double factor                                   ///< [in] The new Performance Factor.
-        )
-    {
-        auto pfnSetConfig = context.zesDdiTable.SysmanPerformanceFactor.pfnSetConfig;
-
-        if( nullptr == pfnSetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPerf )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-        }
-
-        return pfnSetConfig( hPerf, factor );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanProcessesGetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanProcessesGetState(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
+    zesDeviceProcessesGetState(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle for the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of processes.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of processes currently using the device.
@@ -503,14 +104,14 @@ namespace layer
                                                         ///< one for each process currently using the device
         )
     {
-        auto pfnProcessesGetState = context.zesDdiTable.Sysman.pfnProcessesGetState;
+        auto pfnProcessesGetState = context.zesDdiTable.Device.pfnProcessesGetState;
 
         if( nullptr == pfnProcessesGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
@@ -518,25 +119,25 @@ namespace layer
 
         }
 
-        return pfnProcessesGetState( hSysman, pCount, pProcesses );
+        return pfnProcessesGetState( hDevice, pCount, pProcesses );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPciGetProperties
+    /// @brief Intercept function for zesDevicePciGetProperties
     __zedlllocal ze_result_t __zecall
-    zesSysmanPciGetProperties(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zesDevicePciGetProperties(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
         zes_pci_properties_t* pProperties               ///< [in,out] Will contain the PCI properties.
         )
     {
-        auto pfnPciGetProperties = context.zesDdiTable.Sysman.pfnPciGetProperties;
+        auto pfnPciGetProperties = context.zesDdiTable.Device.pfnPciGetProperties;
 
         if( nullptr == pfnPciGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pProperties )
@@ -544,25 +145,25 @@ namespace layer
 
         }
 
-        return pfnPciGetProperties( hSysman, pProperties );
+        return pfnPciGetProperties( hDevice, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPciGetState
+    /// @brief Intercept function for zesDevicePciGetState
     __zedlllocal ze_result_t __zecall
-    zesSysmanPciGetState(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zesDevicePciGetState(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
         zes_pci_state_t* pState                         ///< [in,out] Will contain the PCI properties.
         )
     {
-        auto pfnPciGetState = context.zesDdiTable.Sysman.pfnPciGetState;
+        auto pfnPciGetState = context.zesDdiTable.Device.pfnPciGetState;
 
         if( nullptr == pfnPciGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pState )
@@ -570,14 +171,14 @@ namespace layer
 
         }
 
-        return pfnPciGetState( hSysman, pState );
+        return pfnPciGetState( hDevice, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPciGetBars
+    /// @brief Intercept function for zesDevicePciGetBars
     __zedlllocal ze_result_t __zecall
-    zesSysmanPciGetBars(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zesDevicePciGetBars(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of PCI bars.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of bars.
@@ -587,14 +188,14 @@ namespace layer
         zes_pci_bar_properties_t* pProperties           ///< [in,out][optional][range(0, *pCount)] array of bar properties
         )
     {
-        auto pfnPciGetBars = context.zesDdiTable.Sysman.pfnPciGetBars;
+        auto pfnPciGetBars = context.zesDdiTable.Device.pfnPciGetBars;
 
         if( nullptr == pfnPciGetBars )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
@@ -602,25 +203,25 @@ namespace layer
 
         }
 
-        return pfnPciGetBars( hSysman, pCount, pProperties );
+        return pfnPciGetBars( hDevice, pCount, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPciGetStats
+    /// @brief Intercept function for zesDevicePciGetStats
     __zedlllocal ze_result_t __zecall
-    zesSysmanPciGetStats(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zesDevicePciGetStats(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
         zes_pci_stats_t* pStats                         ///< [in,out] Will contain a snapshot of the latest stats.
         )
     {
-        auto pfnPciGetStats = context.zesDdiTable.Sysman.pfnPciGetStats;
+        auto pfnPciGetStats = context.zesDdiTable.Device.pfnPciGetStats;
 
         if( nullptr == pfnPciGetStats )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pStats )
@@ -628,14 +229,14 @@ namespace layer
 
         }
 
-        return pfnPciGetStats( hSysman, pStats );
+        return pfnPciGetStats( hDevice, pStats );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPowerGet
+    /// @brief Intercept function for zesDeviceEnumDiagnosticTestSuites
     __zedlllocal ze_result_t __zecall
-    zesSysmanPowerGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zesDeviceEnumDiagnosticTestSuites(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -643,18 +244,18 @@ namespace layer
                                                         ///< if count is larger than the number of components available, then the
                                                         ///< driver will update the value with the correct number of components
                                                         ///< that are returned.
-        zes_sysman_pwr_handle_t* phPower                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+        zes_diag_handle_t* phDiagnostics                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                         ///< this type
         )
     {
-        auto pfnPowerGet = context.zesDdiTable.Sysman.pfnPowerGet;
+        auto pfnEnumDiagnosticTestSuites = context.zesDdiTable.Device.pfnEnumDiagnosticTestSuites;
 
-        if( nullptr == pfnPowerGet )
+        if( nullptr == pfnEnumDiagnosticTestSuites )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
@@ -662,25 +263,26 @@ namespace layer
 
         }
 
-        return pfnPowerGet( hSysman, pCount, phPower );
+        return pfnEnumDiagnosticTestSuites( hDevice, pCount, phDiagnostics );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPowerGetProperties
+    /// @brief Intercept function for zesDiagnosticsGetProperties
     __zedlllocal ze_result_t __zecall
-    zesSysmanPowerGetProperties(
-        zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zes_power_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
+    zesDiagnosticsGetProperties(
+        zes_diag_handle_t hDiagnostics,                 ///< [in] Handle for the component.
+        zes_diag_properties_t* pProperties              ///< [in,out] Structure describing the properties of a diagnostics test
+                                                        ///< suite
         )
     {
-        auto pfnGetProperties = context.zesDdiTable.SysmanPower.pfnGetProperties;
+        auto pfnGetProperties = context.zesDdiTable.Diagnostics.pfnGetProperties;
 
         if( nullptr == pfnGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hPower )
+            if( nullptr == hDiagnostics )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pProperties )
@@ -688,219 +290,32 @@ namespace layer
 
         }
 
-        return pfnGetProperties( hPower, pProperties );
+        return pfnGetProperties( hDiagnostics, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPowerGetEnergyCounter
+    /// @brief Intercept function for zesDiagnosticsGetTests
     __zedlllocal ze_result_t __zecall
-    zesSysmanPowerGetEnergyCounter(
-        zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zes_power_energy_counter_t* pEnergy             ///< [in,out] Will contain the latest snapshot of the energy counter and
-                                                        ///< timestamp when the last counter value was measured.
-        )
-    {
-        auto pfnGetEnergyCounter = context.zesDdiTable.SysmanPower.pfnGetEnergyCounter;
-
-        if( nullptr == pfnGetEnergyCounter )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPower )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pEnergy )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetEnergyCounter( hPower, pEnergy );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPowerGetLimits
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPowerGetLimits(
-        zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zes_power_sustained_limit_t* pSustained,        ///< [in,out][optional] The sustained power limit.
-        zes_power_burst_limit_t* pBurst,                ///< [in,out][optional] The burst power limit.
-        zes_power_peak_limit_t* pPeak                   ///< [in,out][optional] The peak power limit.
-        )
-    {
-        auto pfnGetLimits = context.zesDdiTable.SysmanPower.pfnGetLimits;
-
-        if( nullptr == pfnGetLimits )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPower )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-        }
-
-        return pfnGetLimits( hPower, pSustained, pBurst, pPeak );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPowerSetLimits
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPowerSetLimits(
-        zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        const zes_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
-        const zes_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
-        const zes_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
-        )
-    {
-        auto pfnSetLimits = context.zesDdiTable.SysmanPower.pfnSetLimits;
-
-        if( nullptr == pfnSetLimits )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPower )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-        }
-
-        return pfnSetLimits( hPower, pSustained, pBurst, pPeak );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPowerGetEnergyThreshold
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPowerGetEnergyThreshold(
-        zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        zes_energy_threshold_t* pThreshold              ///< [in,out] Returns information about the energy threshold setting -
-                                                        ///< enabled/energy threshold/process ID.
-        )
-    {
-        auto pfnGetEnergyThreshold = context.zesDdiTable.SysmanPower.pfnGetEnergyThreshold;
-
-        if( nullptr == pfnGetEnergyThreshold )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPower )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pThreshold )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetEnergyThreshold( hPower, pThreshold );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPowerSetEnergyThreshold
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPowerSetEnergyThreshold(
-        zes_sysman_pwr_handle_t hPower,                 ///< [in] Handle for the component.
-        double threshold                                ///< [in] The energy threshold to be set in joules.
-        )
-    {
-        auto pfnSetEnergyThreshold = context.zesDdiTable.SysmanPower.pfnSetEnergyThreshold;
-
-        if( nullptr == pfnSetEnergyThreshold )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPower )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-        }
-
-        return pfnSetEnergyThreshold( hPower, threshold );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_freq_handle_t* phFrequency           ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnFrequencyGet = context.zesDdiTable.Sysman.pfnFrequencyGet;
-
-        if( nullptr == pfnFrequencyGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnFrequencyGet( hSysman, pCount, phFrequency );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyGetProperties(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zes_freq_properties_t* pProperties              ///< [in,out] The frequency properties for the specified domain.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanFrequency.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hFrequency, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyGetAvailableClocks
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyGetAvailableClocks(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
+    zesDiagnosticsGetTests(
+        zes_diag_handle_t hDiagnostics,                 ///< [in] Handle for the component.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
                                                         ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of frequencies available.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of frequencies.
-                                                        ///< If count is larger than the number of frequencies available, then the
-                                                        ///< driver will update the value with the correct number of frequencies available.
-        double* phFrequency                             ///< [in,out][optional][range(0, *pCount)] array of frequencies in units of
-                                                        ///< MHz and sorted from slowest to fastest
+                                                        ///< number of tests available.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of tests.
+                                                        ///< If count is larger than the number of tests available, then the driver
+                                                        ///< will update the value with the correct number of tests available.
+        zes_diag_test_t* pTests                         ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
+                                                        ///< increasing value of ::zes_diag_test_t.index
         )
     {
-        auto pfnGetAvailableClocks = context.zesDdiTable.SysmanFrequency.pfnGetAvailableClocks;
+        auto pfnGetTests = context.zesDdiTable.Diagnostics.pfnGetTests;
 
-        if( nullptr == pfnGetAvailableClocks )
+        if( nullptr == pfnGetTests )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFrequency )
+            if( nullptr == hDiagnostics )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
@@ -908,305 +323,44 @@ namespace layer
 
         }
 
-        return pfnGetAvailableClocks( hFrequency, pCount, phFrequency );
+        return pfnGetTests( hDiagnostics, pCount, pTests );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyGetRange
+    /// @brief Intercept function for zesDiagnosticsRunTests
     __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyGetRange(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zes_freq_range_t* pLimits                       ///< [in,out] The range between which the hardware can operate for the
-                                                        ///< specified domain.
+    zesDiagnosticsRunTests(
+        zes_diag_handle_t hDiagnostics,                 ///< [in] Handle for the component.
+        uint32_t start,                                 ///< [in] The index of the first test to run. Set to
+                                                        ///< ::ZES_DIAG_FIRST_TEST_INDEX to start from the beginning.
+        uint32_t end,                                   ///< [in] The index of the last test to run. Set to
+                                                        ///< ::ZES_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
+        zes_diag_result_t* pResult                      ///< [in,out] The result of the diagnostics
         )
     {
-        auto pfnGetRange = context.zesDdiTable.SysmanFrequency.pfnGetRange;
+        auto pfnRunTests = context.zesDdiTable.Diagnostics.pfnRunTests;
 
-        if( nullptr == pfnGetRange )
+        if( nullptr == pfnRunTests )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hFrequency )
+            if( nullptr == hDiagnostics )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
-            if( nullptr == pLimits )
+            if( nullptr == pResult )
                 return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
-        return pfnGetRange( hFrequency, pLimits );
+        return pfnRunTests( hDiagnostics, start, end, pResult );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencySetRange
+    /// @brief Intercept function for zesDeviceEnumEngineGroups
     __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencySetRange(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        const zes_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
-                                                        ///< specified domain.
-        )
-    {
-        auto pfnSetRange = context.zesDdiTable.SysmanFrequency.pfnSetRange;
-
-        if( nullptr == pfnSetRange )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pLimits )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetRange( hFrequency, pLimits );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyGetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyGetState(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zes_freq_state_t* pState                        ///< [in,out] Frequency state for the specified domain.
-        )
-    {
-        auto pfnGetState = context.zesDdiTable.SysmanFrequency.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pState )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetState( hFrequency, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyGetThrottleTime
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyGetThrottleTime(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zes_freq_throttle_time_t* pThrottleTime         ///< [in,out] Will contain a snapshot of the throttle time counters for the
-                                                        ///< specified domain.
-        )
-    {
-        auto pfnGetThrottleTime = context.zesDdiTable.SysmanFrequency.pfnGetThrottleTime;
-
-        if( nullptr == pfnGetThrottleTime )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pThrottleTime )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetThrottleTime( hFrequency, pThrottleTime );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyOcGetCapabilities
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyOcGetCapabilities(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zes_oc_capabilities_t* pOcCapabilities          ///< [in,out] Pointer to the capabilities structure
-                                                        ///< ::zes_oc_capabilities_t.
-        )
-    {
-        auto pfnOcGetCapabilities = context.zesDdiTable.SysmanFrequency.pfnOcGetCapabilities;
-
-        if( nullptr == pfnOcGetCapabilities )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pOcCapabilities )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnOcGetCapabilities( hFrequency, pOcCapabilities );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyOcGetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyOcGetConfig(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zes_oc_config_t* pOcConfiguration               ///< [in,out] Pointer to the configuration structure ::zes_oc_config_t.
-        )
-    {
-        auto pfnOcGetConfig = context.zesDdiTable.SysmanFrequency.pfnOcGetConfig;
-
-        if( nullptr == pfnOcGetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pOcConfiguration )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnOcGetConfig( hFrequency, pOcConfiguration );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyOcSetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyOcSetConfig(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        zes_oc_config_t* pOcConfiguration,              ///< [in] Pointer to the configuration structure ::zes_oc_config_t.
-        ze_bool_t* pDeviceRestart                       ///< [in,out] This will be set to true if the device needs to be restarted
-                                                        ///< in order to enable the new overclock settings.
-        )
-    {
-        auto pfnOcSetConfig = context.zesDdiTable.SysmanFrequency.pfnOcSetConfig;
-
-        if( nullptr == pfnOcSetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pOcConfiguration )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-            if( nullptr == pDeviceRestart )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnOcSetConfig( hFrequency, pOcConfiguration, pDeviceRestart );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyOcGetIccMax
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyOcGetIccMax(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        double* pOcIccMax                               ///< [in,out] Will contain the maximum current limit in Amperes on
-                                                        ///< successful return.
-        )
-    {
-        auto pfnOcGetIccMax = context.zesDdiTable.SysmanFrequency.pfnOcGetIccMax;
-
-        if( nullptr == pfnOcGetIccMax )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pOcIccMax )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnOcGetIccMax( hFrequency, pOcIccMax );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyOcSetIccMax
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyOcSetIccMax(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
-        )
-    {
-        auto pfnOcSetIccMax = context.zesDdiTable.SysmanFrequency.pfnOcSetIccMax;
-
-        if( nullptr == pfnOcSetIccMax )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-        }
-
-        return pfnOcSetIccMax( hFrequency, ocIccMax );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyOcGetTjMax
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyOcGetTjMax(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        double* pOcTjMax                                ///< [in,out] Will contain the maximum temperature limit in degrees Celsius
-                                                        ///< on successful return.
-        )
-    {
-        auto pfnOcGetTjMax = context.zesDdiTable.SysmanFrequency.pfnOcGetTjMax;
-
-        if( nullptr == pfnOcGetTjMax )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pOcTjMax )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnOcGetTjMax( hFrequency, pOcTjMax );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFrequencyOcSetTjMax
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFrequencyOcSetTjMax(
-        zes_sysman_freq_handle_t hFrequency,            ///< [in] Handle for the component.
-        double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
-        )
-    {
-        auto pfnOcSetTjMax = context.zesDdiTable.SysmanFrequency.pfnOcSetTjMax;
-
-        if( nullptr == pfnOcSetTjMax )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFrequency )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-        }
-
-        return pfnOcSetTjMax( hFrequency, ocTjMax );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanEngineGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanEngineGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zesDeviceEnumEngineGroups(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -1214,18 +368,18 @@ namespace layer
                                                         ///< if count is larger than the number of components available, then the
                                                         ///< driver will update the value with the correct number of components
                                                         ///< that are returned.
-        zes_sysman_engine_handle_t* phEngine            ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+        zes_engine_handle_t* phEngine                   ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                         ///< this type
         )
     {
-        auto pfnEngineGet = context.zesDdiTable.Sysman.pfnEngineGet;
+        auto pfnEnumEngineGroups = context.zesDdiTable.Device.pfnEnumEngineGroups;
 
-        if( nullptr == pfnEngineGet )
+        if( nullptr == pfnEnumEngineGroups )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
@@ -1233,18 +387,18 @@ namespace layer
 
         }
 
-        return pfnEngineGet( hSysman, pCount, phEngine );
+        return pfnEnumEngineGroups( hDevice, pCount, phEngine );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanEngineGetProperties
+    /// @brief Intercept function for zesEngineGetProperties
     __zedlllocal ze_result_t __zecall
-    zesSysmanEngineGetProperties(
-        zes_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
+    zesEngineGetProperties(
+        zes_engine_handle_t hEngine,                    ///< [in] Handle for the component.
         zes_engine_properties_t* pProperties            ///< [in,out] The properties for the specified engine group.
         )
     {
-        auto pfnGetProperties = context.zesDdiTable.SysmanEngine.pfnGetProperties;
+        auto pfnGetProperties = context.zesDdiTable.Engine.pfnGetProperties;
 
         if( nullptr == pfnGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
@@ -1263,15 +417,15 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanEngineGetActivity
+    /// @brief Intercept function for zesEngineGetActivity
     __zedlllocal ze_result_t __zecall
-    zesSysmanEngineGetActivity(
-        zes_sysman_engine_handle_t hEngine,             ///< [in] Handle for the component.
+    zesEngineGetActivity(
+        zes_engine_handle_t hEngine,                    ///< [in] Handle for the component.
         zes_engine_stats_t* pStats                      ///< [in,out] Will contain a snapshot of the engine group activity
                                                         ///< counters.
         )
     {
-        auto pfnGetActivity = context.zesDdiTable.SysmanEngine.pfnGetActivity;
+        auto pfnGetActivity = context.zesDdiTable.Engine.pfnGetActivity;
 
         if( nullptr == pfnGetActivity )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
@@ -1290,1173 +444,21 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanStandbyGet
+    /// @brief Intercept function for zesDeviceCreateEvents
     __zedlllocal ze_result_t __zecall
-    zesSysmanStandbyGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_standby_handle_t* phStandby          ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
+    zesDeviceCreateEvents(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle for the device
+        zes_event_handle_t* phEvent                     ///< [out] The event handle for the specified device.
         )
     {
-        auto pfnStandbyGet = context.zesDdiTable.Sysman.pfnStandbyGet;
+        auto pfnCreateEvents = context.zesDdiTable.Device.pfnCreateEvents;
 
-        if( nullptr == pfnStandbyGet )
+        if( nullptr == pfnCreateEvents )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnStandbyGet( hSysman, pCount, phStandby );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanStandbyGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanStandbyGetProperties(
-        zes_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
-        zes_standby_properties_t* pProperties           ///< [in,out] Will contain the standby hardware properties.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanStandby.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hStandby )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hStandby, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanStandbyGetMode
-    __zedlllocal ze_result_t __zecall
-    zesSysmanStandbyGetMode(
-        zes_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
-        zes_standby_promo_mode_t* pMode                 ///< [in,out] Will contain the current standby mode.
-        )
-    {
-        auto pfnGetMode = context.zesDdiTable.SysmanStandby.pfnGetMode;
-
-        if( nullptr == pfnGetMode )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hStandby )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pMode )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetMode( hStandby, pMode );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanStandbySetMode
-    __zedlllocal ze_result_t __zecall
-    zesSysmanStandbySetMode(
-        zes_sysman_standby_handle_t hStandby,           ///< [in] Handle for the component.
-        zes_standby_promo_mode_t mode                   ///< [in] New standby mode.
-        )
-    {
-        auto pfnSetMode = context.zesDdiTable.SysmanStandby.pfnSetMode;
-
-        if( nullptr == pfnSetMode )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hStandby )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( 1 <= mode )
-                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
-
-        }
-
-        return pfnSetMode( hStandby, mode );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFirmwareGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFirmwareGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_firmware_handle_t* phFirmware        ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnFirmwareGet = context.zesDdiTable.Sysman.pfnFirmwareGet;
-
-        if( nullptr == pfnFirmwareGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnFirmwareGet( hSysman, pCount, phFirmware );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFirmwareGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFirmwareGetProperties(
-        zes_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
-        zes_firmware_properties_t* pProperties          ///< [in,out] Pointer to an array that will hold the properties of the
-                                                        ///< firmware
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanFirmware.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFirmware )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hFirmware, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFirmwareGetChecksum
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFirmwareGetChecksum(
-        zes_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
-        uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
-        )
-    {
-        auto pfnGetChecksum = context.zesDdiTable.SysmanFirmware.pfnGetChecksum;
-
-        if( nullptr == pfnGetChecksum )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFirmware )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pChecksum )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetChecksum( hFirmware, pChecksum );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFirmwareFlash
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFirmwareFlash(
-        zes_sysman_firmware_handle_t hFirmware,         ///< [in] Handle for the component.
-        void* pImage,                                   ///< [in] Image of the new firmware to flash.
-        uint32_t size                                   ///< [in] Size of the flash image.
-        )
-    {
-        auto pfnFlash = context.zesDdiTable.SysmanFirmware.pfnFlash;
-
-        if( nullptr == pfnFlash )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFirmware )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pImage )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnFlash( hFirmware, pImage, size );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanMemoryGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanMemoryGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_mem_handle_t* phMemory               ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnMemoryGet = context.zesDdiTable.Sysman.pfnMemoryGet;
-
-        if( nullptr == pfnMemoryGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnMemoryGet( hSysman, pCount, phMemory );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanMemoryGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanMemoryGetProperties(
-        zes_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zes_mem_properties_t* pProperties               ///< [in,out] Will contain memory properties.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanMemory.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hMemory )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hMemory, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanMemoryGetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanMemoryGetState(
-        zes_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zes_mem_state_t* pState                         ///< [in,out] Will contain the current health and allocated memory.
-        )
-    {
-        auto pfnGetState = context.zesDdiTable.SysmanMemory.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hMemory )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pState )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetState( hMemory, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanMemoryGetBandwidth
-    __zedlllocal ze_result_t __zecall
-    zesSysmanMemoryGetBandwidth(
-        zes_sysman_mem_handle_t hMemory,                ///< [in] Handle for the component.
-        zes_mem_bandwidth_t* pBandwidth                 ///< [in,out] Will contain the current health, free memory, total memory
-                                                        ///< size.
-        )
-    {
-        auto pfnGetBandwidth = context.zesDdiTable.SysmanMemory.pfnGetBandwidth;
-
-        if( nullptr == pfnGetBandwidth )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hMemory )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pBandwidth )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetBandwidth( hMemory, pBandwidth );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFabricPortGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFabricPortGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_fabric_port_handle_t* phPort         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnFabricPortGet = context.zesDdiTable.Sysman.pfnFabricPortGet;
-
-        if( nullptr == pfnFabricPortGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnFabricPortGet( hSysman, pCount, phPort );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFabricPortGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFabricPortGetProperties(
-        zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zes_fabric_port_properties_t* pProperties       ///< [in,out] Will contain properties of the Fabric Port.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanFabricPort.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPort )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hPort, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFabricPortGetLinkType
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFabricPortGetLinkType(
-        zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
-        zes_fabric_link_type_t* pLinkType               ///< [in,out] Will contain details about the link attached to the Fabric
-                                                        ///< port.
-        )
-    {
-        auto pfnGetLinkType = context.zesDdiTable.SysmanFabricPort.pfnGetLinkType;
-
-        if( nullptr == pfnGetLinkType )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPort )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pLinkType )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetLinkType( hPort, verbose, pLinkType );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFabricPortGetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFabricPortGetConfig(
-        zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zes_fabric_port_config_t* pConfig               ///< [in,out] Will contain configuration of the Fabric Port.
-        )
-    {
-        auto pfnGetConfig = context.zesDdiTable.SysmanFabricPort.pfnGetConfig;
-
-        if( nullptr == pfnGetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPort )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetConfig( hPort, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFabricPortSetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFabricPortSetConfig(
-        zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        const zes_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
-        )
-    {
-        auto pfnSetConfig = context.zesDdiTable.SysmanFabricPort.pfnSetConfig;
-
-        if( nullptr == pfnSetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPort )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetConfig( hPort, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFabricPortGetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFabricPortGetState(
-        zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zes_fabric_port_state_t* pState                 ///< [in,out] Will contain the current state of the Fabric Port
-        )
-    {
-        auto pfnGetState = context.zesDdiTable.SysmanFabricPort.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPort )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pState )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetState( hPort, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFabricPortGetThroughput
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFabricPortGetThroughput(
-        zes_sysman_fabric_port_handle_t hPort,          ///< [in] Handle for the component.
-        zes_fabric_port_throughput_t* pThroughput       ///< [in,out] Will contain the Fabric port throughput counters.
-        )
-    {
-        auto pfnGetThroughput = context.zesDdiTable.SysmanFabricPort.pfnGetThroughput;
-
-        if( nullptr == pfnGetThroughput )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPort )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pThroughput )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetThroughput( hPort, pThroughput );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanTemperatureGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanTemperatureGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_temp_handle_t* phTemperature         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnTemperatureGet = context.zesDdiTable.Sysman.pfnTemperatureGet;
-
-        if( nullptr == pfnTemperatureGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnTemperatureGet( hSysman, pCount, phTemperature );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanTemperatureGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanTemperatureGetProperties(
-        zes_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        zes_temp_properties_t* pProperties              ///< [in,out] Will contain the temperature sensor properties.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanTemperature.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hTemperature )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hTemperature, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanTemperatureGetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanTemperatureGetConfig(
-        zes_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        zes_temp_config_t* pConfig                      ///< [in,out] Returns current configuration.
-        )
-    {
-        auto pfnGetConfig = context.zesDdiTable.SysmanTemperature.pfnGetConfig;
-
-        if( nullptr == pfnGetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hTemperature )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetConfig( hTemperature, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanTemperatureSetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanTemperatureSetConfig(
-        zes_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        const zes_temp_config_t* pConfig                ///< [in] New configuration.
-        )
-    {
-        auto pfnSetConfig = context.zesDdiTable.SysmanTemperature.pfnSetConfig;
-
-        if( nullptr == pfnSetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hTemperature )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetConfig( hTemperature, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanTemperatureGetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanTemperatureGetState(
-        zes_sysman_temp_handle_t hTemperature,          ///< [in] Handle for the component.
-        double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
-                                                        ///< in degrees Celsius.
-        )
-    {
-        auto pfnGetState = context.zesDdiTable.SysmanTemperature.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hTemperature )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pTemperature )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetState( hTemperature, pTemperature );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPsuGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPsuGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_psu_handle_t* phPsu                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnPsuGet = context.zesDdiTable.Sysman.pfnPsuGet;
-
-        if( nullptr == pfnPsuGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnPsuGet( hSysman, pCount, phPsu );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPsuGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPsuGetProperties(
-        zes_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
-        zes_psu_properties_t* pProperties               ///< [in,out] Will contain the properties of the power supply.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanPsu.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPsu )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hPsu, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanPsuGetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanPsuGetState(
-        zes_sysman_psu_handle_t hPsu,                   ///< [in] Handle for the component.
-        zes_psu_state_t* pState                         ///< [in,out] Will contain the current state of the power supply.
-        )
-    {
-        auto pfnGetState = context.zesDdiTable.SysmanPsu.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hPsu )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pState )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetState( hPsu, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFanGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFanGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_fan_handle_t* phFan                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnFanGet = context.zesDdiTable.Sysman.pfnFanGet;
-
-        if( nullptr == pfnFanGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnFanGet( hSysman, pCount, phFan );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFanGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFanGetProperties(
-        zes_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-        zes_fan_properties_t* pProperties               ///< [in,out] Will contain the properties of the fan.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanFan.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFan )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hFan, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFanGetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFanGetConfig(
-        zes_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-        zes_fan_config_t* pConfig                       ///< [in,out] Will contain the current configuration of the fan.
-        )
-    {
-        auto pfnGetConfig = context.zesDdiTable.SysmanFan.pfnGetConfig;
-
-        if( nullptr == pfnGetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFan )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetConfig( hFan, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFanSetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFanSetConfig(
-        zes_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-        const zes_fan_config_t* pConfig                 ///< [in] New fan configuration.
-        )
-    {
-        auto pfnSetConfig = context.zesDdiTable.SysmanFan.pfnSetConfig;
-
-        if( nullptr == pfnSetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFan )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetConfig( hFan, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanFanGetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanFanGetState(
-        zes_sysman_fan_handle_t hFan,                   ///< [in] Handle for the component.
-        zes_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
-        uint32_t* pSpeed                                ///< [in,out] Will contain the current speed of the fan in the units
-                                                        ///< requested.
-        )
-    {
-        auto pfnGetState = context.zesDdiTable.SysmanFan.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFan )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( 1 <= units )
-                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
-
-            if( nullptr == pSpeed )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetState( hFan, units, pSpeed );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanLedGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanLedGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_led_handle_t* phLed                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnLedGet = context.zesDdiTable.Sysman.pfnLedGet;
-
-        if( nullptr == pfnLedGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnLedGet( hSysman, pCount, phLed );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanLedGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanLedGetProperties(
-        zes_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
-        zes_led_properties_t* pProperties               ///< [in,out] Will contain the properties of the LED.
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanLed.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hLed )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hLed, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanLedGetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanLedGetState(
-        zes_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
-        zes_led_state_t* pState                         ///< [in,out] Will contain the current state of the LED.
-        )
-    {
-        auto pfnGetState = context.zesDdiTable.SysmanLed.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hLed )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pState )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetState( hLed, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanLedSetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanLedSetState(
-        zes_sysman_led_handle_t hLed,                   ///< [in] Handle for the component.
-        const zes_led_state_t* pState                   ///< [in] New state of the LED.
-        )
-    {
-        auto pfnSetState = context.zesDdiTable.SysmanLed.pfnSetState;
-
-        if( nullptr == pfnSetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hLed )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pState )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetState( hLed, pState );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanRasGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanRasGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of components of this type.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
-                                                        ///< if count is larger than the number of components available, then the
-                                                        ///< driver will update the value with the correct number of components
-                                                        ///< that are returned.
-        zes_sysman_ras_handle_t* phRas                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
-                                                        ///< this type
-        )
-    {
-        auto pfnRasGet = context.zesDdiTable.Sysman.pfnRasGet;
-
-        if( nullptr == pfnRasGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pCount )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnRasGet( hSysman, pCount, phRas );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanRasGetProperties
-    __zedlllocal ze_result_t __zecall
-    zesSysmanRasGetProperties(
-        zes_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
-        zes_ras_properties_t* pProperties               ///< [in,out] Structure describing RAS properties
-        )
-    {
-        auto pfnGetProperties = context.zesDdiTable.SysmanRas.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hRas )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pProperties )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetProperties( hRas, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanRasGetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanRasGetConfig(
-        zes_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
-        zes_ras_config_t* pConfig                       ///< [in,out] Will be populed with the current RAS configuration -
-                                                        ///< thresholds used to trigger events
-        )
-    {
-        auto pfnGetConfig = context.zesDdiTable.SysmanRas.pfnGetConfig;
-
-        if( nullptr == pfnGetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hRas )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetConfig( hRas, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanRasSetConfig
-    __zedlllocal ze_result_t __zecall
-    zesSysmanRasSetConfig(
-        zes_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
-        const zes_ras_config_t* pConfig                 ///< [in] Change the RAS configuration - thresholds used to trigger events
-        )
-    {
-        auto pfnSetConfig = context.zesDdiTable.SysmanRas.pfnSetConfig;
-
-        if( nullptr == pfnSetConfig )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hRas )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pConfig )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnSetConfig( hRas, pConfig );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanRasGetState
-    __zedlllocal ze_result_t __zecall
-    zesSysmanRasGetState(
-        zes_sysman_ras_handle_t hRas,                   ///< [in] Handle for the component.
-        ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
-        uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
-        zes_ras_details_t* pDetails                     ///< [in,out][optional] Breakdown of where errors have occurred
-        )
-    {
-        auto pfnGetState = context.zesDdiTable.SysmanRas.pfnGetState;
-
-        if( nullptr == pfnGetState )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hRas )
-                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
-
-            if( nullptr == pTotalErrors )
-                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
-
-        }
-
-        return pfnGetState( hRas, clear, pTotalErrors, pDetails );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanEventGet
-    __zedlllocal ze_result_t __zecall
-    zesSysmanEventGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle for the device
-        zes_sysman_event_handle_t* phEvent              ///< [out] The event handle for the specified device.
-        )
-    {
-        auto pfnEventGet = context.zesDdiTable.Sysman.pfnEventGet;
-
-        if( nullptr == pfnEventGet )
-            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == phEvent )
@@ -2464,19 +466,19 @@ namespace layer
 
         }
 
-        return pfnEventGet( hSysman, phEvent );
+        return pfnCreateEvents( hDevice, phEvent );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanEventGetConfig
+    /// @brief Intercept function for zesEventGetConfig
     __zedlllocal ze_result_t __zecall
-    zesSysmanEventGetConfig(
-        zes_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+    zesEventGetConfig(
+        zes_event_handle_t hEvent,                      ///< [in] The event handle for the device
         zes_event_config_t* pConfig                     ///< [in,out] Will contain the current event configuration (list of
                                                         ///< registered events).
         )
     {
-        auto pfnGetConfig = context.zesDdiTable.SysmanEvent.pfnGetConfig;
+        auto pfnGetConfig = context.zesDdiTable.Event.pfnGetConfig;
 
         if( nullptr == pfnGetConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
@@ -2495,14 +497,14 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanEventSetConfig
+    /// @brief Intercept function for zesEventSetConfig
     __zedlllocal ze_result_t __zecall
-    zesSysmanEventSetConfig(
-        zes_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device
+    zesEventSetConfig(
+        zes_event_handle_t hEvent,                      ///< [in] The event handle for the device
         const zes_event_config_t* pConfig               ///< [in] New event configuration (list of registered events).
         )
     {
-        auto pfnSetConfig = context.zesDdiTable.SysmanEvent.pfnSetConfig;
+        auto pfnSetConfig = context.zesDdiTable.Event.pfnSetConfig;
 
         if( nullptr == pfnSetConfig )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
@@ -2521,16 +523,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanEventGetState
+    /// @brief Intercept function for zesEventGetState
     __zedlllocal ze_result_t __zecall
-    zesSysmanEventGetState(
-        zes_sysman_event_handle_t hEvent,               ///< [in] The event handle for the device.
+    zesEventGetState(
+        zes_event_handle_t hEvent,                      ///< [in] The event handle for the device.
         ze_bool_t clear,                                ///< [in] Indicates if the event list for this device should be cleared.
-        uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_sysman_event_type_t that have been
+        uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_event_type_t that have been
                                                         ///< triggered by this device.
         )
     {
-        auto pfnGetState = context.zesDdiTable.SysmanEvent.pfnGetState;
+        auto pfnGetState = context.zesDdiTable.Event.pfnGetState;
 
         if( nullptr == pfnGetState )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
@@ -2549,22 +551,22 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanEventListen
+    /// @brief Intercept function for zesEventListen
     __zedlllocal ze_result_t __zecall
-    zesSysmanEventListen(
+    zesEventListen(
         ze_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Set to
                                                         ///< ::ZES_EVENT_WAIT_NONE will check status and return immediately. Set to
                                                         ///< ::ZES_EVENT_WAIT_INFINITE to block until events arrive.
         uint32_t count,                                 ///< [in] Number of handles in phEvents
-        zes_sysman_event_handle_t* phEvents,            ///< [in][range(0, count)] Handle of events that should be listened to
-        uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_sysman_event_type_t that have been
+        zes_event_handle_t* phEvents,                   ///< [in][range(0, count)] Handle of events that should be listened to
+        uint32_t* pEvents                               ///< [in,out] Bitfield of events ::zes_event_type_t that have been
                                                         ///< triggered by any of the supplied event handles. If timeout is not
-                                                        ///< ::ZES_EVENT_WAIT_INFINITE and this value is
-                                                        ///< ::ZES_SYSMAN_EVENT_TYPE_NONE, then a timeout has occurred.
+                                                        ///< ::ZES_EVENT_WAIT_INFINITE and this value is ::ZES_EVENT_TYPE_NONE,
+                                                        ///< then a timeout has occurred.
         )
     {
-        auto pfnListen = context.zesDdiTable.SysmanEvent.pfnListen;
+        auto pfnListen = context.zesDdiTable.Event.pfnListen;
 
         if( nullptr == pfnListen )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
@@ -2586,10 +588,10 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanDiagnosticsGet
+    /// @brief Intercept function for zesDeviceEnumFabricPorts
     __zedlllocal ze_result_t __zecall
-    zesSysmanDiagnosticsGet(
-        zes_sysman_handle_t hSysman,                    ///< [in] Sysman handle of the device.
+    zesDeviceEnumFabricPorts(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
         uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of components of this type.
@@ -2597,18 +599,18 @@ namespace layer
                                                         ///< if count is larger than the number of components available, then the
                                                         ///< driver will update the value with the correct number of components
                                                         ///< that are returned.
-        zes_sysman_diag_handle_t* phDiagnostics         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+        zes_fabric_port_handle_t* phPort                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
                                                         ///< this type
         )
     {
-        auto pfnDiagnosticsGet = context.zesDdiTable.Sysman.pfnDiagnosticsGet;
+        auto pfnEnumFabricPorts = context.zesDdiTable.Device.pfnEnumFabricPorts;
 
-        if( nullptr == pfnDiagnosticsGet )
+        if( nullptr == pfnEnumFabricPorts )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hSysman )
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
@@ -2616,26 +618,25 @@ namespace layer
 
         }
 
-        return pfnDiagnosticsGet( hSysman, pCount, phDiagnostics );
+        return pfnEnumFabricPorts( hDevice, pCount, phPort );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanDiagnosticsGetProperties
+    /// @brief Intercept function for zesFabricPortGetProperties
     __zedlllocal ze_result_t __zecall
-    zesSysmanDiagnosticsGetProperties(
-        zes_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
-        zes_diag_properties_t* pProperties              ///< [in,out] Structure describing the properties of a diagnostics test
-                                                        ///< suite
+    zesFabricPortGetProperties(
+        zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+        zes_fabric_port_properties_t* pProperties       ///< [in,out] Will contain properties of the Fabric Port.
         )
     {
-        auto pfnGetProperties = context.zesDdiTable.SysmanDiagnostics.pfnGetProperties;
+        auto pfnGetProperties = context.zesDdiTable.FabricPort.pfnGetProperties;
 
         if( nullptr == pfnGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDiagnostics )
+            if( nullptr == hPort )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pProperties )
@@ -2643,32 +644,165 @@ namespace layer
 
         }
 
-        return pfnGetProperties( hDiagnostics, pProperties );
+        return pfnGetProperties( hPort, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanDiagnosticsGetTests
+    /// @brief Intercept function for zesFabricPortGetLinkType
     __zedlllocal ze_result_t __zecall
-    zesSysmanDiagnosticsGetTests(
-        zes_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of tests.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of tests available.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of tests.
-                                                        ///< If count is larger than the number of tests available, then the driver
-                                                        ///< will update the value with the correct number of tests available.
-        zes_diag_test_t* pTests                         ///< [in,out][optional][range(0, *pCount)] Array of tests sorted by
-                                                        ///< increasing value of ::zes_diag_test_t.index
+    zesFabricPortGetLinkType(
+        zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+        ze_bool_t verbose,                              ///< [in] Set to true to get a more detailed report.
+        zes_fabric_link_type_t* pLinkType               ///< [in,out] Will contain details about the link attached to the Fabric
+                                                        ///< port.
         )
     {
-        auto pfnGetTests = context.zesDdiTable.SysmanDiagnostics.pfnGetTests;
+        auto pfnGetLinkType = context.zesDdiTable.FabricPort.pfnGetLinkType;
 
-        if( nullptr == pfnGetTests )
+        if( nullptr == pfnGetLinkType )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDiagnostics )
+            if( nullptr == hPort )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pLinkType )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetLinkType( hPort, verbose, pLinkType );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFabricPortGetConfig
+    __zedlllocal ze_result_t __zecall
+    zesFabricPortGetConfig(
+        zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+        zes_fabric_port_config_t* pConfig               ///< [in,out] Will contain configuration of the Fabric Port.
+        )
+    {
+        auto pfnGetConfig = context.zesDdiTable.FabricPort.pfnGetConfig;
+
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetConfig( hPort, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFabricPortSetConfig
+    __zedlllocal ze_result_t __zecall
+    zesFabricPortSetConfig(
+        zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+        const zes_fabric_port_config_t* pConfig         ///< [in] Contains new configuration of the Fabric Port.
+        )
+    {
+        auto pfnSetConfig = context.zesDdiTable.FabricPort.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetConfig( hPort, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFabricPortGetState
+    __zedlllocal ze_result_t __zecall
+    zesFabricPortGetState(
+        zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+        zes_fabric_port_state_t* pState                 ///< [in,out] Will contain the current state of the Fabric Port
+        )
+    {
+        auto pfnGetState = context.zesDdiTable.FabricPort.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pState )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetState( hPort, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFabricPortGetThroughput
+    __zedlllocal ze_result_t __zecall
+    zesFabricPortGetThroughput(
+        zes_fabric_port_handle_t hPort,                 ///< [in] Handle for the component.
+        zes_fabric_port_throughput_t* pThroughput       ///< [in,out] Will contain the Fabric port throughput counters.
+        )
+    {
+        auto pfnGetThroughput = context.zesDdiTable.FabricPort.pfnGetThroughput;
+
+        if( nullptr == pfnGetThroughput )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPort )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pThroughput )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetThroughput( hPort, pThroughput );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumFans
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumFans(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_fan_handle_t* phFan                         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumFans = context.zesDdiTable.Device.pfnEnumFans;
+
+        if( nullptr == pfnEnumFans )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
             if( nullptr == pCount )
@@ -2676,37 +810,1873 @@ namespace layer
 
         }
 
-        return pfnGetTests( hDiagnostics, pCount, pTests );
+        return pfnEnumFans( hDevice, pCount, phFan );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for zesSysmanDiagnosticsRunTests
+    /// @brief Intercept function for zesFanGetProperties
     __zedlllocal ze_result_t __zecall
-    zesSysmanDiagnosticsRunTests(
-        zes_sysman_diag_handle_t hDiagnostics,          ///< [in] Handle for the component.
-        uint32_t start,                                 ///< [in] The index of the first test to run. Set to
-                                                        ///< ::ZES_DIAG_FIRST_TEST_INDEX to start from the beginning.
-        uint32_t end,                                   ///< [in] The index of the last test to run. Set to
-                                                        ///< ::ZES_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
-        zes_diag_result_t* pResult                      ///< [in,out] The result of the diagnostics
+    zesFanGetProperties(
+        zes_fan_handle_t hFan,                          ///< [in] Handle for the component.
+        zes_fan_properties_t* pProperties               ///< [in,out] Will contain the properties of the fan.
         )
     {
-        auto pfnRunTests = context.zesDdiTable.SysmanDiagnostics.pfnRunTests;
+        auto pfnGetProperties = context.zesDdiTable.Fan.pfnGetProperties;
 
-        if( nullptr == pfnRunTests )
+        if( nullptr == pfnGetProperties )
             return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDiagnostics )
+            if( nullptr == hFan )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
-            if( nullptr == pResult )
+            if( nullptr == pProperties )
                 return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
-        return pfnRunTests( hDiagnostics, start, end, pResult );
+        return pfnGetProperties( hFan, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFanGetConfig
+    __zedlllocal ze_result_t __zecall
+    zesFanGetConfig(
+        zes_fan_handle_t hFan,                          ///< [in] Handle for the component.
+        zes_fan_config_t* pConfig                       ///< [in,out] Will contain the current configuration of the fan.
+        )
+    {
+        auto pfnGetConfig = context.zesDdiTable.Fan.pfnGetConfig;
+
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFan )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetConfig( hFan, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFanSetConfig
+    __zedlllocal ze_result_t __zecall
+    zesFanSetConfig(
+        zes_fan_handle_t hFan,                          ///< [in] Handle for the component.
+        const zes_fan_config_t* pConfig                 ///< [in] New fan configuration.
+        )
+    {
+        auto pfnSetConfig = context.zesDdiTable.Fan.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFan )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetConfig( hFan, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFanGetState
+    __zedlllocal ze_result_t __zecall
+    zesFanGetState(
+        zes_fan_handle_t hFan,                          ///< [in] Handle for the component.
+        zes_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
+        uint32_t* pSpeed                                ///< [in,out] Will contain the current speed of the fan in the units
+                                                        ///< requested.
+        )
+    {
+        auto pfnGetState = context.zesDdiTable.Fan.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFan )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( 1 <= units )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+            if( nullptr == pSpeed )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetState( hFan, units, pSpeed );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumFirmwares
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumFirmwares(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_firmware_handle_t* phFirmware               ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumFirmwares = context.zesDdiTable.Device.pfnEnumFirmwares;
+
+        if( nullptr == pfnEnumFirmwares )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumFirmwares( hDevice, pCount, phFirmware );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFirmwareGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesFirmwareGetProperties(
+        zes_firmware_handle_t hFirmware,                ///< [in] Handle for the component.
+        zes_firmware_properties_t* pProperties          ///< [in,out] Pointer to an array that will hold the properties of the
+                                                        ///< firmware
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Firmware.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFirmware )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hFirmware, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFirmwareGetChecksum
+    __zedlllocal ze_result_t __zecall
+    zesFirmwareGetChecksum(
+        zes_firmware_handle_t hFirmware,                ///< [in] Handle for the component.
+        uint32_t* pChecksum                             ///< [in,out] Calculated checksum of the installed firmware.
+        )
+    {
+        auto pfnGetChecksum = context.zesDdiTable.Firmware.pfnGetChecksum;
+
+        if( nullptr == pfnGetChecksum )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFirmware )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pChecksum )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetChecksum( hFirmware, pChecksum );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFirmwareFlash
+    __zedlllocal ze_result_t __zecall
+    zesFirmwareFlash(
+        zes_firmware_handle_t hFirmware,                ///< [in] Handle for the component.
+        void* pImage,                                   ///< [in] Image of the new firmware to flash.
+        uint32_t size                                   ///< [in] Size of the flash image.
+        )
+    {
+        auto pfnFlash = context.zesDdiTable.Firmware.pfnFlash;
+
+        if( nullptr == pfnFlash )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFirmware )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pImage )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnFlash( hFirmware, pImage, size );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumFrequencyDomains
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumFrequencyDomains(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_freq_handle_t* phFrequency                  ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumFrequencyDomains = context.zesDdiTable.Device.pfnEnumFrequencyDomains;
+
+        if( nullptr == pfnEnumFrequencyDomains )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumFrequencyDomains( hDevice, pCount, phFrequency );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyGetProperties(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        zes_freq_properties_t* pProperties              ///< [in,out] The frequency properties for the specified domain.
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Frequency.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hFrequency, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyGetAvailableClocks
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyGetAvailableClocks(
+        zes_freq_handle_t hFrequency,                   ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of frequencies.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of frequencies available.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of frequencies.
+                                                        ///< If count is larger than the number of frequencies available, then the
+                                                        ///< driver will update the value with the correct number of frequencies available.
+        double* phFrequency                             ///< [in,out][optional][range(0, *pCount)] array of frequencies in units of
+                                                        ///< MHz and sorted from slowest to fastest
+        )
+    {
+        auto pfnGetAvailableClocks = context.zesDdiTable.Frequency.pfnGetAvailableClocks;
+
+        if( nullptr == pfnGetAvailableClocks )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetAvailableClocks( hFrequency, pCount, phFrequency );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyGetRange
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyGetRange(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        zes_freq_range_t* pLimits                       ///< [in,out] The range between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        auto pfnGetRange = context.zesDdiTable.Frequency.pfnGetRange;
+
+        if( nullptr == pfnGetRange )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pLimits )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetRange( hFrequency, pLimits );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencySetRange
+    __zedlllocal ze_result_t __zecall
+    zesFrequencySetRange(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        const zes_freq_range_t* pLimits                 ///< [in] The limits between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        auto pfnSetRange = context.zesDdiTable.Frequency.pfnSetRange;
+
+        if( nullptr == pfnSetRange )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pLimits )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetRange( hFrequency, pLimits );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyGetState
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyGetState(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        zes_freq_state_t* pState                        ///< [in,out] Frequency state for the specified domain.
+        )
+    {
+        auto pfnGetState = context.zesDdiTable.Frequency.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pState )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetState( hFrequency, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyGetThrottleTime
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyGetThrottleTime(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        zes_freq_throttle_time_t* pThrottleTime         ///< [in,out] Will contain a snapshot of the throttle time counters for the
+                                                        ///< specified domain.
+        )
+    {
+        auto pfnGetThrottleTime = context.zesDdiTable.Frequency.pfnGetThrottleTime;
+
+        if( nullptr == pfnGetThrottleTime )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pThrottleTime )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetThrottleTime( hFrequency, pThrottleTime );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyOcGetCapabilities
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyOcGetCapabilities(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        zes_oc_capabilities_t* pOcCapabilities          ///< [in,out] Pointer to the capabilities structure
+                                                        ///< ::zes_oc_capabilities_t.
+        )
+    {
+        auto pfnOcGetCapabilities = context.zesDdiTable.Frequency.pfnOcGetCapabilities;
+
+        if( nullptr == pfnOcGetCapabilities )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pOcCapabilities )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnOcGetCapabilities( hFrequency, pOcCapabilities );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyOcGetConfig
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyOcGetConfig(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        zes_oc_config_t* pOcConfiguration               ///< [in,out] Pointer to the configuration structure ::zes_oc_config_t.
+        )
+    {
+        auto pfnOcGetConfig = context.zesDdiTable.Frequency.pfnOcGetConfig;
+
+        if( nullptr == pfnOcGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pOcConfiguration )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnOcGetConfig( hFrequency, pOcConfiguration );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyOcSetConfig
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyOcSetConfig(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        zes_oc_config_t* pOcConfiguration,              ///< [in] Pointer to the configuration structure ::zes_oc_config_t.
+        ze_bool_t* pDeviceRestart                       ///< [in,out] This will be set to true if the device needs to be restarted
+                                                        ///< in order to enable the new overclock settings.
+        )
+    {
+        auto pfnOcSetConfig = context.zesDdiTable.Frequency.pfnOcSetConfig;
+
+        if( nullptr == pfnOcSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pOcConfiguration )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( nullptr == pDeviceRestart )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnOcSetConfig( hFrequency, pOcConfiguration, pDeviceRestart );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyOcGetIccMax
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyOcGetIccMax(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        double* pOcIccMax                               ///< [in,out] Will contain the maximum current limit in Amperes on
+                                                        ///< successful return.
+        )
+    {
+        auto pfnOcGetIccMax = context.zesDdiTable.Frequency.pfnOcGetIccMax;
+
+        if( nullptr == pfnOcGetIccMax )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pOcIccMax )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnOcGetIccMax( hFrequency, pOcIccMax );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyOcSetIccMax
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyOcSetIccMax(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        double ocIccMax                                 ///< [in] The new maximum current limit in Amperes.
+        )
+    {
+        auto pfnOcSetIccMax = context.zesDdiTable.Frequency.pfnOcSetIccMax;
+
+        if( nullptr == pfnOcSetIccMax )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+        }
+
+        return pfnOcSetIccMax( hFrequency, ocIccMax );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyOcGetTjMax
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyOcGetTjMax(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        double* pOcTjMax                                ///< [in,out] Will contain the maximum temperature limit in degrees Celsius
+                                                        ///< on successful return.
+        )
+    {
+        auto pfnOcGetTjMax = context.zesDdiTable.Frequency.pfnOcGetTjMax;
+
+        if( nullptr == pfnOcGetTjMax )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pOcTjMax )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnOcGetTjMax( hFrequency, pOcTjMax );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesFrequencyOcSetTjMax
+    __zedlllocal ze_result_t __zecall
+    zesFrequencyOcSetTjMax(
+        zes_freq_handle_t hFrequency,                   ///< [in] Handle for the component.
+        double ocTjMax                                  ///< [in] The new maximum temperature limit in degrees Celsius.
+        )
+    {
+        auto pfnOcSetTjMax = context.zesDdiTable.Frequency.pfnOcSetTjMax;
+
+        if( nullptr == pfnOcSetTjMax )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFrequency )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+        }
+
+        return pfnOcSetTjMax( hFrequency, ocTjMax );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumLeds
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumLeds(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_led_handle_t* phLed                         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumLeds = context.zesDdiTable.Device.pfnEnumLeds;
+
+        if( nullptr == pfnEnumLeds )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumLeds( hDevice, pCount, phLed );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesLedGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesLedGetProperties(
+        zes_led_handle_t hLed,                          ///< [in] Handle for the component.
+        zes_led_properties_t* pProperties               ///< [in,out] Will contain the properties of the LED.
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Led.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hLed )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hLed, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesLedGetState
+    __zedlllocal ze_result_t __zecall
+    zesLedGetState(
+        zes_led_handle_t hLed,                          ///< [in] Handle for the component.
+        zes_led_state_t* pState                         ///< [in,out] Will contain the current state of the LED.
+        )
+    {
+        auto pfnGetState = context.zesDdiTable.Led.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hLed )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pState )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetState( hLed, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesLedSetState
+    __zedlllocal ze_result_t __zecall
+    zesLedSetState(
+        zes_led_handle_t hLed,                          ///< [in] Handle for the component.
+        const zes_led_state_t* pState                   ///< [in] New state of the LED.
+        )
+    {
+        auto pfnSetState = context.zesDdiTable.Led.pfnSetState;
+
+        if( nullptr == pfnSetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hLed )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pState )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetState( hLed, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumMemoryModules
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumMemoryModules(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_mem_handle_t* phMemory                      ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumMemoryModules = context.zesDdiTable.Device.pfnEnumMemoryModules;
+
+        if( nullptr == pfnEnumMemoryModules )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumMemoryModules( hDevice, pCount, phMemory );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesMemoryGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesMemoryGetProperties(
+        zes_mem_handle_t hMemory,                       ///< [in] Handle for the component.
+        zes_mem_properties_t* pProperties               ///< [in,out] Will contain memory properties.
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Memory.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMemory )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hMemory, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesMemoryGetState
+    __zedlllocal ze_result_t __zecall
+    zesMemoryGetState(
+        zes_mem_handle_t hMemory,                       ///< [in] Handle for the component.
+        zes_mem_state_t* pState                         ///< [in,out] Will contain the current health and allocated memory.
+        )
+    {
+        auto pfnGetState = context.zesDdiTable.Memory.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMemory )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pState )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetState( hMemory, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesMemoryGetBandwidth
+    __zedlllocal ze_result_t __zecall
+    zesMemoryGetBandwidth(
+        zes_mem_handle_t hMemory,                       ///< [in] Handle for the component.
+        zes_mem_bandwidth_t* pBandwidth                 ///< [in,out] Will contain the current health, free memory, total memory
+                                                        ///< size.
+        )
+    {
+        auto pfnGetBandwidth = context.zesDdiTable.Memory.pfnGetBandwidth;
+
+        if( nullptr == pfnGetBandwidth )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMemory )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pBandwidth )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetBandwidth( hMemory, pBandwidth );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumPerformanceFactorDomains
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumPerformanceFactorDomains(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_perf_handle_t* phPerf                       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumPerformanceFactorDomains = context.zesDdiTable.Device.pfnEnumPerformanceFactorDomains;
+
+        if( nullptr == pfnEnumPerformanceFactorDomains )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumPerformanceFactorDomains( hDevice, pCount, phPerf );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPerformanceFactorGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesPerformanceFactorGetProperties(
+        zes_perf_handle_t hPerf,                        ///< [in] Handle for the Performance Factor domain.
+        zes_perf_properties_t* pProperties              ///< [in,out] Will contain information about the specified Performance
+                                                        ///< Factor domain.
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.PerformanceFactor.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPerf )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hPerf, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPerformanceFactorGetConfig
+    __zedlllocal ze_result_t __zecall
+    zesPerformanceFactorGetConfig(
+        zes_perf_handle_t hPerf,                        ///< [in] Handle for the Performance Factor domain.
+        double* pFactor                                 ///< [in,out] Will contain the actual Performance Factor being used by the
+                                                        ///< hardware (may not be the same as the requested Performance Factor).
+        )
+    {
+        auto pfnGetConfig = context.zesDdiTable.PerformanceFactor.pfnGetConfig;
+
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPerf )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pFactor )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetConfig( hPerf, pFactor );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPerformanceFactorSetConfig
+    __zedlllocal ze_result_t __zecall
+    zesPerformanceFactorSetConfig(
+        zes_perf_handle_t hPerf,                        ///< [in] Handle for the Performance Factor domain.
+        double factor                                   ///< [in] The new Performance Factor.
+        )
+    {
+        auto pfnSetConfig = context.zesDdiTable.PerformanceFactor.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPerf )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+        }
+
+        return pfnSetConfig( hPerf, factor );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumPowerDomains
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumPowerDomains(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_pwr_handle_t* phPower                       ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumPowerDomains = context.zesDdiTable.Device.pfnEnumPowerDomains;
+
+        if( nullptr == pfnEnumPowerDomains )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumPowerDomains( hDevice, pCount, phPower );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPowerGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesPowerGetProperties(
+        zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+        zes_power_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Power.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hPower, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPowerGetEnergyCounter
+    __zedlllocal ze_result_t __zecall
+    zesPowerGetEnergyCounter(
+        zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+        zes_power_energy_counter_t* pEnergy             ///< [in,out] Will contain the latest snapshot of the energy counter and
+                                                        ///< timestamp when the last counter value was measured.
+        )
+    {
+        auto pfnGetEnergyCounter = context.zesDdiTable.Power.pfnGetEnergyCounter;
+
+        if( nullptr == pfnGetEnergyCounter )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pEnergy )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetEnergyCounter( hPower, pEnergy );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPowerGetLimits
+    __zedlllocal ze_result_t __zecall
+    zesPowerGetLimits(
+        zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+        zes_power_sustained_limit_t* pSustained,        ///< [in,out][optional] The sustained power limit.
+        zes_power_burst_limit_t* pBurst,                ///< [in,out][optional] The burst power limit.
+        zes_power_peak_limit_t* pPeak                   ///< [in,out][optional] The peak power limit.
+        )
+    {
+        auto pfnGetLimits = context.zesDdiTable.Power.pfnGetLimits;
+
+        if( nullptr == pfnGetLimits )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+        }
+
+        return pfnGetLimits( hPower, pSustained, pBurst, pPeak );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPowerSetLimits
+    __zedlllocal ze_result_t __zecall
+    zesPowerSetLimits(
+        zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+        const zes_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
+        const zes_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
+        const zes_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
+        )
+    {
+        auto pfnSetLimits = context.zesDdiTable.Power.pfnSetLimits;
+
+        if( nullptr == pfnSetLimits )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+        }
+
+        return pfnSetLimits( hPower, pSustained, pBurst, pPeak );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPowerGetEnergyThreshold
+    __zedlllocal ze_result_t __zecall
+    zesPowerGetEnergyThreshold(
+        zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+        zes_energy_threshold_t* pThreshold              ///< [in,out] Returns information about the energy threshold setting -
+                                                        ///< enabled/energy threshold/process ID.
+        )
+    {
+        auto pfnGetEnergyThreshold = context.zesDdiTable.Power.pfnGetEnergyThreshold;
+
+        if( nullptr == pfnGetEnergyThreshold )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pThreshold )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetEnergyThreshold( hPower, pThreshold );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPowerSetEnergyThreshold
+    __zedlllocal ze_result_t __zecall
+    zesPowerSetEnergyThreshold(
+        zes_pwr_handle_t hPower,                        ///< [in] Handle for the component.
+        double threshold                                ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        auto pfnSetEnergyThreshold = context.zesDdiTable.Power.pfnSetEnergyThreshold;
+
+        if( nullptr == pfnSetEnergyThreshold )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPower )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+        }
+
+        return pfnSetEnergyThreshold( hPower, threshold );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumPsus
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumPsus(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_psu_handle_t* phPsu                         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumPsus = context.zesDdiTable.Device.pfnEnumPsus;
+
+        if( nullptr == pfnEnumPsus )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumPsus( hDevice, pCount, phPsu );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPsuGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesPsuGetProperties(
+        zes_psu_handle_t hPsu,                          ///< [in] Handle for the component.
+        zes_psu_properties_t* pProperties               ///< [in,out] Will contain the properties of the power supply.
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Psu.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPsu )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hPsu, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesPsuGetState
+    __zedlllocal ze_result_t __zecall
+    zesPsuGetState(
+        zes_psu_handle_t hPsu,                          ///< [in] Handle for the component.
+        zes_psu_state_t* pState                         ///< [in,out] Will contain the current state of the power supply.
+        )
+    {
+        auto pfnGetState = context.zesDdiTable.Psu.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hPsu )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pState )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetState( hPsu, pState );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumRasErrorSets
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumRasErrorSets(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_ras_handle_t* phRas                         ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumRasErrorSets = context.zesDdiTable.Device.pfnEnumRasErrorSets;
+
+        if( nullptr == pfnEnumRasErrorSets )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumRasErrorSets( hDevice, pCount, phRas );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesRasGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesRasGetProperties(
+        zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
+        zes_ras_properties_t* pProperties               ///< [in,out] Structure describing RAS properties
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Ras.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hRas )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hRas, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesRasGetConfig
+    __zedlllocal ze_result_t __zecall
+    zesRasGetConfig(
+        zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
+        zes_ras_config_t* pConfig                       ///< [in,out] Will be populed with the current RAS configuration -
+                                                        ///< thresholds used to trigger events
+        )
+    {
+        auto pfnGetConfig = context.zesDdiTable.Ras.pfnGetConfig;
+
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hRas )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetConfig( hRas, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesRasSetConfig
+    __zedlllocal ze_result_t __zecall
+    zesRasSetConfig(
+        zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
+        const zes_ras_config_t* pConfig                 ///< [in] Change the RAS configuration - thresholds used to trigger events
+        )
+    {
+        auto pfnSetConfig = context.zesDdiTable.Ras.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hRas )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetConfig( hRas, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesRasGetState
+    __zedlllocal ze_result_t __zecall
+    zesRasGetState(
+        zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
+        ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
+        uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
+        zes_ras_details_t* pDetails                     ///< [in,out][optional] Breakdown of where errors have occurred
+        )
+    {
+        auto pfnGetState = context.zesDdiTable.Ras.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hRas )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pTotalErrors )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetState( hRas, clear, pTotalErrors, pDetails );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumSchedulers
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumSchedulers(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_sched_handle_t* phScheduler                 ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumSchedulers = context.zesDdiTable.Device.pfnEnumSchedulers;
+
+        if( nullptr == pfnEnumSchedulers )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumSchedulers( hDevice, pCount, phScheduler );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesSchedulerGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesSchedulerGetProperties(
+        zes_sched_handle_t hScheduler,                  ///< [in] Handle for the component.
+        zes_sched_properties_t* pProperties             ///< [in,out] Structure that will contain property data.
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Scheduler.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hScheduler )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hScheduler, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesSchedulerGetCurrentMode
+    __zedlllocal ze_result_t __zecall
+    zesSchedulerGetCurrentMode(
+        zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+        zes_sched_mode_t* pMode                         ///< [in,out] Will contain the current scheduler mode.
+        )
+    {
+        auto pfnGetCurrentMode = context.zesDdiTable.Scheduler.pfnGetCurrentMode;
+
+        if( nullptr == pfnGetCurrentMode )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hScheduler )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pMode )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetCurrentMode( hScheduler, pMode );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesSchedulerGetTimeoutModeProperties
+    __zedlllocal ze_result_t __zecall
+    zesSchedulerGetTimeoutModeProperties(
+        zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+        ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
+                                                        ///< this mode, otherwise it will return the current properties.
+        zes_sched_timeout_properties_t* pConfig         ///< [in,out] Will contain the current parameters for this mode.
+        )
+    {
+        auto pfnGetTimeoutModeProperties = context.zesDdiTable.Scheduler.pfnGetTimeoutModeProperties;
+
+        if( nullptr == pfnGetTimeoutModeProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hScheduler )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetTimeoutModeProperties( hScheduler, getDefaults, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesSchedulerGetTimesliceModeProperties
+    __zedlllocal ze_result_t __zecall
+    zesSchedulerGetTimesliceModeProperties(
+        zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+        ze_bool_t getDefaults,                          ///< [in] If TRUE, the driver will return the system default properties for
+                                                        ///< this mode, otherwise it will return the current properties.
+        zes_sched_timeslice_properties_t* pConfig       ///< [in,out] Will contain the current parameters for this mode.
+        )
+    {
+        auto pfnGetTimesliceModeProperties = context.zesDdiTable.Scheduler.pfnGetTimesliceModeProperties;
+
+        if( nullptr == pfnGetTimesliceModeProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hScheduler )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetTimesliceModeProperties( hScheduler, getDefaults, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesSchedulerSetTimeoutMode
+    __zedlllocal ze_result_t __zecall
+    zesSchedulerSetTimeoutMode(
+        zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+        zes_sched_timeout_properties_t* pProperties,    ///< [in] The properties to use when configurating this mode.
+        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
+        )
+    {
+        auto pfnSetTimeoutMode = context.zesDdiTable.Scheduler.pfnSetTimeoutMode;
+
+        if( nullptr == pfnSetTimeoutMode )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hScheduler )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( nullptr == pNeedReload )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetTimeoutMode( hScheduler, pProperties, pNeedReload );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesSchedulerSetTimesliceMode
+    __zedlllocal ze_result_t __zecall
+    zesSchedulerSetTimesliceMode(
+        zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+        zes_sched_timeslice_properties_t* pProperties,  ///< [in] The properties to use when configurating this mode.
+        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
+        )
+    {
+        auto pfnSetTimesliceMode = context.zesDdiTable.Scheduler.pfnSetTimesliceMode;
+
+        if( nullptr == pfnSetTimesliceMode )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hScheduler )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+            if( nullptr == pNeedReload )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetTimesliceMode( hScheduler, pProperties, pNeedReload );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesSchedulerSetExclusiveMode
+    __zedlllocal ze_result_t __zecall
+    zesSchedulerSetExclusiveMode(
+        zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
+        )
+    {
+        auto pfnSetExclusiveMode = context.zesDdiTable.Scheduler.pfnSetExclusiveMode;
+
+        if( nullptr == pfnSetExclusiveMode )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hScheduler )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pNeedReload )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetExclusiveMode( hScheduler, pNeedReload );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesSchedulerSetComputeUnitDebugMode
+    __zedlllocal ze_result_t __zecall
+    zesSchedulerSetComputeUnitDebugMode(
+        zes_sched_handle_t hScheduler,                  ///< [in] Sysman handle for the component.
+        ze_bool_t* pNeedReload                          ///< [in,out] Will be set to TRUE if a device driver reload is needed to
+                                                        ///< apply the new scheduler mode.
+        )
+    {
+        auto pfnSetComputeUnitDebugMode = context.zesDdiTable.Scheduler.pfnSetComputeUnitDebugMode;
+
+        if( nullptr == pfnSetComputeUnitDebugMode )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hScheduler )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pNeedReload )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetComputeUnitDebugMode( hScheduler, pNeedReload );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumStandbyDomains
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumStandbyDomains(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_standby_handle_t* phStandby                 ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumStandbyDomains = context.zesDdiTable.Device.pfnEnumStandbyDomains;
+
+        if( nullptr == pfnEnumStandbyDomains )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumStandbyDomains( hDevice, pCount, phStandby );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesStandbyGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesStandbyGetProperties(
+        zes_standby_handle_t hStandby,                  ///< [in] Handle for the component.
+        zes_standby_properties_t* pProperties           ///< [in,out] Will contain the standby hardware properties.
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Standby.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hStandby )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hStandby, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesStandbyGetMode
+    __zedlllocal ze_result_t __zecall
+    zesStandbyGetMode(
+        zes_standby_handle_t hStandby,                  ///< [in] Handle for the component.
+        zes_standby_promo_mode_t* pMode                 ///< [in,out] Will contain the current standby mode.
+        )
+    {
+        auto pfnGetMode = context.zesDdiTable.Standby.pfnGetMode;
+
+        if( nullptr == pfnGetMode )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hStandby )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pMode )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetMode( hStandby, pMode );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesStandbySetMode
+    __zedlllocal ze_result_t __zecall
+    zesStandbySetMode(
+        zes_standby_handle_t hStandby,                  ///< [in] Handle for the component.
+        zes_standby_promo_mode_t mode                   ///< [in] New standby mode.
+        )
+    {
+        auto pfnSetMode = context.zesDdiTable.Standby.pfnSetMode;
+
+        if( nullptr == pfnSetMode )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hStandby )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( 1 <= mode )
+                return ZE_RESULT_ERROR_INVALID_ENUMERATION;
+
+        }
+
+        return pfnSetMode( hStandby, mode );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesDeviceEnumTemperatureSensors
+    __zedlllocal ze_result_t __zecall
+    zesDeviceEnumTemperatureSensors(
+        zes_device_handle_t hDevice,                    ///< [in] Sysman handle of the device.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of components of this type.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of components of this type.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of components.
+                                                        ///< if count is larger than the number of components available, then the
+                                                        ///< driver will update the value with the correct number of components
+                                                        ///< that are returned.
+        zes_temp_handle_t* phTemperature                ///< [in,out][optional][range(0, *pCount)] array of handle of components of
+                                                        ///< this type
+        )
+    {
+        auto pfnEnumTemperatureSensors = context.zesDdiTable.Device.pfnEnumTemperatureSensors;
+
+        if( nullptr == pfnEnumTemperatureSensors )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pCount )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnEnumTemperatureSensors( hDevice, pCount, phTemperature );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesTemperatureGetProperties
+    __zedlllocal ze_result_t __zecall
+    zesTemperatureGetProperties(
+        zes_temp_handle_t hTemperature,                 ///< [in] Handle for the component.
+        zes_temp_properties_t* pProperties              ///< [in,out] Will contain the temperature sensor properties.
+        )
+    {
+        auto pfnGetProperties = context.zesDdiTable.Temperature.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pProperties )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetProperties( hTemperature, pProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesTemperatureGetConfig
+    __zedlllocal ze_result_t __zecall
+    zesTemperatureGetConfig(
+        zes_temp_handle_t hTemperature,                 ///< [in] Handle for the component.
+        zes_temp_config_t* pConfig                      ///< [in,out] Returns current configuration.
+        )
+    {
+        auto pfnGetConfig = context.zesDdiTable.Temperature.pfnGetConfig;
+
+        if( nullptr == pfnGetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetConfig( hTemperature, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesTemperatureSetConfig
+    __zedlllocal ze_result_t __zecall
+    zesTemperatureSetConfig(
+        zes_temp_handle_t hTemperature,                 ///< [in] Handle for the component.
+        const zes_temp_config_t* pConfig                ///< [in] New configuration.
+        )
+    {
+        auto pfnSetConfig = context.zesDdiTable.Temperature.pfnSetConfig;
+
+        if( nullptr == pfnSetConfig )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pConfig )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnSetConfig( hTemperature, pConfig );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for zesTemperatureGetState
+    __zedlllocal ze_result_t __zecall
+    zesTemperatureGetState(
+        zes_temp_handle_t hTemperature,                 ///< [in] Handle for the component.
+        double* pTemperature                            ///< [in,out] Will contain the temperature read from the specified sensor
+                                                        ///< in degrees Celsius.
+        )
+    {
+        auto pfnGetState = context.zesDdiTable.Temperature.pfnGetState;
+
+        if( nullptr == pfnGetState )
+            return ZE_RESULT_ERROR_UNSUPPORTED_VERSION;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTemperature )
+                return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
+
+            if( nullptr == pTemperature )
+                return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
+
+        }
+
+        return pfnGetState( hTemperature, pTemperature );
     }
 
 } // namespace layer
@@ -2716,7 +2686,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Sysman table
+/// @brief Exported function for filling application's Device table
 ///        with current process' addresses
 ///
 /// @returns
@@ -2724,12 +2694,12 @@ extern "C" {
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanProcAddrTable(
+zesGetDeviceProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
+    zes_device_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.Sysman;
+    auto& dditable = layer::context.zesDdiTable.Device;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -2739,86 +2709,83 @@ zesGetSysmanProcAddrTable(
 
     ze_result_t result = ZE_RESULT_SUCCESS;
 
-    dditable.pfnGet                                      = pDdiTable->pfnGet;
-    pDdiTable->pfnGet                                    = layer::zesSysmanGet;
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesDeviceGetProperties;
 
-    dditable.pfnDeviceGetProperties                      = pDdiTable->pfnDeviceGetProperties;
-    pDdiTable->pfnDeviceGetProperties                    = layer::zesSysmanDeviceGetProperties;
+    dditable.pfnGetState                                 = pDdiTable->pfnGetState;
+    pDdiTable->pfnGetState                               = layer::zesDeviceGetState;
 
-    dditable.pfnDeviceGetState                           = pDdiTable->pfnDeviceGetState;
-    pDdiTable->pfnDeviceGetState                         = layer::zesSysmanDeviceGetState;
-
-    dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
-    pDdiTable->pfnDeviceReset                            = layer::zesSysmanDeviceReset;
-
-    dditable.pfnSchedulerGet                             = pDdiTable->pfnSchedulerGet;
-    pDdiTable->pfnSchedulerGet                           = layer::zesSysmanSchedulerGet;
-
-    dditable.pfnPerformanceFactorGet                     = pDdiTable->pfnPerformanceFactorGet;
-    pDdiTable->pfnPerformanceFactorGet                   = layer::zesSysmanPerformanceFactorGet;
+    dditable.pfnReset                                    = pDdiTable->pfnReset;
+    pDdiTable->pfnReset                                  = layer::zesDeviceReset;
 
     dditable.pfnProcessesGetState                        = pDdiTable->pfnProcessesGetState;
-    pDdiTable->pfnProcessesGetState                      = layer::zesSysmanProcessesGetState;
+    pDdiTable->pfnProcessesGetState                      = layer::zesDeviceProcessesGetState;
 
     dditable.pfnPciGetProperties                         = pDdiTable->pfnPciGetProperties;
-    pDdiTable->pfnPciGetProperties                       = layer::zesSysmanPciGetProperties;
+    pDdiTable->pfnPciGetProperties                       = layer::zesDevicePciGetProperties;
 
     dditable.pfnPciGetState                              = pDdiTable->pfnPciGetState;
-    pDdiTable->pfnPciGetState                            = layer::zesSysmanPciGetState;
+    pDdiTable->pfnPciGetState                            = layer::zesDevicePciGetState;
 
     dditable.pfnPciGetBars                               = pDdiTable->pfnPciGetBars;
-    pDdiTable->pfnPciGetBars                             = layer::zesSysmanPciGetBars;
+    pDdiTable->pfnPciGetBars                             = layer::zesDevicePciGetBars;
 
     dditable.pfnPciGetStats                              = pDdiTable->pfnPciGetStats;
-    pDdiTable->pfnPciGetStats                            = layer::zesSysmanPciGetStats;
+    pDdiTable->pfnPciGetStats                            = layer::zesDevicePciGetStats;
 
-    dditable.pfnPowerGet                                 = pDdiTable->pfnPowerGet;
-    pDdiTable->pfnPowerGet                               = layer::zesSysmanPowerGet;
+    dditable.pfnEnumDiagnosticTestSuites                 = pDdiTable->pfnEnumDiagnosticTestSuites;
+    pDdiTable->pfnEnumDiagnosticTestSuites               = layer::zesDeviceEnumDiagnosticTestSuites;
 
-    dditable.pfnFrequencyGet                             = pDdiTable->pfnFrequencyGet;
-    pDdiTable->pfnFrequencyGet                           = layer::zesSysmanFrequencyGet;
+    dditable.pfnEnumEngineGroups                         = pDdiTable->pfnEnumEngineGroups;
+    pDdiTable->pfnEnumEngineGroups                       = layer::zesDeviceEnumEngineGroups;
 
-    dditable.pfnEngineGet                                = pDdiTable->pfnEngineGet;
-    pDdiTable->pfnEngineGet                              = layer::zesSysmanEngineGet;
+    dditable.pfnCreateEvents                             = pDdiTable->pfnCreateEvents;
+    pDdiTable->pfnCreateEvents                           = layer::zesDeviceCreateEvents;
 
-    dditable.pfnStandbyGet                               = pDdiTable->pfnStandbyGet;
-    pDdiTable->pfnStandbyGet                             = layer::zesSysmanStandbyGet;
+    dditable.pfnEnumFabricPorts                          = pDdiTable->pfnEnumFabricPorts;
+    pDdiTable->pfnEnumFabricPorts                        = layer::zesDeviceEnumFabricPorts;
 
-    dditable.pfnFirmwareGet                              = pDdiTable->pfnFirmwareGet;
-    pDdiTable->pfnFirmwareGet                            = layer::zesSysmanFirmwareGet;
+    dditable.pfnEnumFans                                 = pDdiTable->pfnEnumFans;
+    pDdiTable->pfnEnumFans                               = layer::zesDeviceEnumFans;
 
-    dditable.pfnMemoryGet                                = pDdiTable->pfnMemoryGet;
-    pDdiTable->pfnMemoryGet                              = layer::zesSysmanMemoryGet;
+    dditable.pfnEnumFirmwares                            = pDdiTable->pfnEnumFirmwares;
+    pDdiTable->pfnEnumFirmwares                          = layer::zesDeviceEnumFirmwares;
 
-    dditable.pfnFabricPortGet                            = pDdiTable->pfnFabricPortGet;
-    pDdiTable->pfnFabricPortGet                          = layer::zesSysmanFabricPortGet;
+    dditable.pfnEnumFrequencyDomains                     = pDdiTable->pfnEnumFrequencyDomains;
+    pDdiTable->pfnEnumFrequencyDomains                   = layer::zesDeviceEnumFrequencyDomains;
 
-    dditable.pfnTemperatureGet                           = pDdiTable->pfnTemperatureGet;
-    pDdiTable->pfnTemperatureGet                         = layer::zesSysmanTemperatureGet;
+    dditable.pfnEnumLeds                                 = pDdiTable->pfnEnumLeds;
+    pDdiTable->pfnEnumLeds                               = layer::zesDeviceEnumLeds;
 
-    dditable.pfnPsuGet                                   = pDdiTable->pfnPsuGet;
-    pDdiTable->pfnPsuGet                                 = layer::zesSysmanPsuGet;
+    dditable.pfnEnumMemoryModules                        = pDdiTable->pfnEnumMemoryModules;
+    pDdiTable->pfnEnumMemoryModules                      = layer::zesDeviceEnumMemoryModules;
 
-    dditable.pfnFanGet                                   = pDdiTable->pfnFanGet;
-    pDdiTable->pfnFanGet                                 = layer::zesSysmanFanGet;
+    dditable.pfnEnumPerformanceFactorDomains             = pDdiTable->pfnEnumPerformanceFactorDomains;
+    pDdiTable->pfnEnumPerformanceFactorDomains           = layer::zesDeviceEnumPerformanceFactorDomains;
 
-    dditable.pfnLedGet                                   = pDdiTable->pfnLedGet;
-    pDdiTable->pfnLedGet                                 = layer::zesSysmanLedGet;
+    dditable.pfnEnumPowerDomains                         = pDdiTable->pfnEnumPowerDomains;
+    pDdiTable->pfnEnumPowerDomains                       = layer::zesDeviceEnumPowerDomains;
 
-    dditable.pfnRasGet                                   = pDdiTable->pfnRasGet;
-    pDdiTable->pfnRasGet                                 = layer::zesSysmanRasGet;
+    dditable.pfnEnumPsus                                 = pDdiTable->pfnEnumPsus;
+    pDdiTable->pfnEnumPsus                               = layer::zesDeviceEnumPsus;
 
-    dditable.pfnEventGet                                 = pDdiTable->pfnEventGet;
-    pDdiTable->pfnEventGet                               = layer::zesSysmanEventGet;
+    dditable.pfnEnumRasErrorSets                         = pDdiTable->pfnEnumRasErrorSets;
+    pDdiTable->pfnEnumRasErrorSets                       = layer::zesDeviceEnumRasErrorSets;
 
-    dditable.pfnDiagnosticsGet                           = pDdiTable->pfnDiagnosticsGet;
-    pDdiTable->pfnDiagnosticsGet                         = layer::zesSysmanDiagnosticsGet;
+    dditable.pfnEnumSchedulers                           = pDdiTable->pfnEnumSchedulers;
+    pDdiTable->pfnEnumSchedulers                         = layer::zesDeviceEnumSchedulers;
+
+    dditable.pfnEnumStandbyDomains                       = pDdiTable->pfnEnumStandbyDomains;
+    pDdiTable->pfnEnumStandbyDomains                     = layer::zesDeviceEnumStandbyDomains;
+
+    dditable.pfnEnumTemperatureSensors                   = pDdiTable->pfnEnumTemperatureSensors;
+    pDdiTable->pfnEnumTemperatureSensors                 = layer::zesDeviceEnumTemperatureSensors;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanScheduler table
+/// @brief Exported function for filling application's Scheduler table
 ///        with current process' addresses
 ///
 /// @returns
@@ -2826,12 +2793,12 @@ zesGetSysmanProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanSchedulerProcAddrTable(
+zesGetSchedulerProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_scheduler_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
+    zes_scheduler_dditable_t* pDdiTable             ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanScheduler;
+    auto& dditable = layer::context.zesDdiTable.Scheduler;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -2842,34 +2809,34 @@ zesGetSysmanSchedulerProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanSchedulerGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesSchedulerGetProperties;
 
     dditable.pfnGetCurrentMode                           = pDdiTable->pfnGetCurrentMode;
-    pDdiTable->pfnGetCurrentMode                         = layer::zesSysmanSchedulerGetCurrentMode;
+    pDdiTable->pfnGetCurrentMode                         = layer::zesSchedulerGetCurrentMode;
 
     dditable.pfnGetTimeoutModeProperties                 = pDdiTable->pfnGetTimeoutModeProperties;
-    pDdiTable->pfnGetTimeoutModeProperties               = layer::zesSysmanSchedulerGetTimeoutModeProperties;
+    pDdiTable->pfnGetTimeoutModeProperties               = layer::zesSchedulerGetTimeoutModeProperties;
 
     dditable.pfnGetTimesliceModeProperties               = pDdiTable->pfnGetTimesliceModeProperties;
-    pDdiTable->pfnGetTimesliceModeProperties             = layer::zesSysmanSchedulerGetTimesliceModeProperties;
+    pDdiTable->pfnGetTimesliceModeProperties             = layer::zesSchedulerGetTimesliceModeProperties;
 
     dditable.pfnSetTimeoutMode                           = pDdiTable->pfnSetTimeoutMode;
-    pDdiTable->pfnSetTimeoutMode                         = layer::zesSysmanSchedulerSetTimeoutMode;
+    pDdiTable->pfnSetTimeoutMode                         = layer::zesSchedulerSetTimeoutMode;
 
     dditable.pfnSetTimesliceMode                         = pDdiTable->pfnSetTimesliceMode;
-    pDdiTable->pfnSetTimesliceMode                       = layer::zesSysmanSchedulerSetTimesliceMode;
+    pDdiTable->pfnSetTimesliceMode                       = layer::zesSchedulerSetTimesliceMode;
 
     dditable.pfnSetExclusiveMode                         = pDdiTable->pfnSetExclusiveMode;
-    pDdiTable->pfnSetExclusiveMode                       = layer::zesSysmanSchedulerSetExclusiveMode;
+    pDdiTable->pfnSetExclusiveMode                       = layer::zesSchedulerSetExclusiveMode;
 
     dditable.pfnSetComputeUnitDebugMode                  = pDdiTable->pfnSetComputeUnitDebugMode;
-    pDdiTable->pfnSetComputeUnitDebugMode                = layer::zesSysmanSchedulerSetComputeUnitDebugMode;
+    pDdiTable->pfnSetComputeUnitDebugMode                = layer::zesSchedulerSetComputeUnitDebugMode;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanPerformanceFactor table
+/// @brief Exported function for filling application's PerformanceFactor table
 ///        with current process' addresses
 ///
 /// @returns
@@ -2877,12 +2844,12 @@ zesGetSysmanSchedulerProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanPerformanceFactorProcAddrTable(
+zesGetPerformanceFactorProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_performance_factor_dditable_t* pDdiTable ///< [in,out] pointer to table of DDI function pointers
+    zes_performance_factor_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanPerformanceFactor;
+    auto& dditable = layer::context.zesDdiTable.PerformanceFactor;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -2893,19 +2860,19 @@ zesGetSysmanPerformanceFactorProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanPerformanceFactorGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesPerformanceFactorGetProperties;
 
     dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
-    pDdiTable->pfnGetConfig                              = layer::zesSysmanPerformanceFactorGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zesPerformanceFactorGetConfig;
 
     dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
-    pDdiTable->pfnSetConfig                              = layer::zesSysmanPerformanceFactorSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zesPerformanceFactorSetConfig;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanPower table
+/// @brief Exported function for filling application's Power table
 ///        with current process' addresses
 ///
 /// @returns
@@ -2913,12 +2880,12 @@ zesGetSysmanPerformanceFactorProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanPowerProcAddrTable(
+zesGetPowerProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_power_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    zes_power_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanPower;
+    auto& dditable = layer::context.zesDdiTable.Power;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -2929,28 +2896,28 @@ zesGetSysmanPowerProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanPowerGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesPowerGetProperties;
 
     dditable.pfnGetEnergyCounter                         = pDdiTable->pfnGetEnergyCounter;
-    pDdiTable->pfnGetEnergyCounter                       = layer::zesSysmanPowerGetEnergyCounter;
+    pDdiTable->pfnGetEnergyCounter                       = layer::zesPowerGetEnergyCounter;
 
     dditable.pfnGetLimits                                = pDdiTable->pfnGetLimits;
-    pDdiTable->pfnGetLimits                              = layer::zesSysmanPowerGetLimits;
+    pDdiTable->pfnGetLimits                              = layer::zesPowerGetLimits;
 
     dditable.pfnSetLimits                                = pDdiTable->pfnSetLimits;
-    pDdiTable->pfnSetLimits                              = layer::zesSysmanPowerSetLimits;
+    pDdiTable->pfnSetLimits                              = layer::zesPowerSetLimits;
 
     dditable.pfnGetEnergyThreshold                       = pDdiTable->pfnGetEnergyThreshold;
-    pDdiTable->pfnGetEnergyThreshold                     = layer::zesSysmanPowerGetEnergyThreshold;
+    pDdiTable->pfnGetEnergyThreshold                     = layer::zesPowerGetEnergyThreshold;
 
     dditable.pfnSetEnergyThreshold                       = pDdiTable->pfnSetEnergyThreshold;
-    pDdiTable->pfnSetEnergyThreshold                     = layer::zesSysmanPowerSetEnergyThreshold;
+    pDdiTable->pfnSetEnergyThreshold                     = layer::zesPowerSetEnergyThreshold;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanFrequency table
+/// @brief Exported function for filling application's Frequency table
 ///        with current process' addresses
 ///
 /// @returns
@@ -2958,12 +2925,12 @@ zesGetSysmanPowerProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanFrequencyProcAddrTable(
+zesGetFrequencyProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_frequency_dditable_t* pDdiTable      ///< [in,out] pointer to table of DDI function pointers
+    zes_frequency_dditable_t* pDdiTable             ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanFrequency;
+    auto& dditable = layer::context.zesDdiTable.Frequency;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -2974,49 +2941,49 @@ zesGetSysmanFrequencyProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanFrequencyGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesFrequencyGetProperties;
 
     dditable.pfnGetAvailableClocks                       = pDdiTable->pfnGetAvailableClocks;
-    pDdiTable->pfnGetAvailableClocks                     = layer::zesSysmanFrequencyGetAvailableClocks;
+    pDdiTable->pfnGetAvailableClocks                     = layer::zesFrequencyGetAvailableClocks;
 
     dditable.pfnGetRange                                 = pDdiTable->pfnGetRange;
-    pDdiTable->pfnGetRange                               = layer::zesSysmanFrequencyGetRange;
+    pDdiTable->pfnGetRange                               = layer::zesFrequencyGetRange;
 
     dditable.pfnSetRange                                 = pDdiTable->pfnSetRange;
-    pDdiTable->pfnSetRange                               = layer::zesSysmanFrequencySetRange;
+    pDdiTable->pfnSetRange                               = layer::zesFrequencySetRange;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zesSysmanFrequencyGetState;
+    pDdiTable->pfnGetState                               = layer::zesFrequencyGetState;
 
     dditable.pfnGetThrottleTime                          = pDdiTable->pfnGetThrottleTime;
-    pDdiTable->pfnGetThrottleTime                        = layer::zesSysmanFrequencyGetThrottleTime;
+    pDdiTable->pfnGetThrottleTime                        = layer::zesFrequencyGetThrottleTime;
 
     dditable.pfnOcGetCapabilities                        = pDdiTable->pfnOcGetCapabilities;
-    pDdiTable->pfnOcGetCapabilities                      = layer::zesSysmanFrequencyOcGetCapabilities;
+    pDdiTable->pfnOcGetCapabilities                      = layer::zesFrequencyOcGetCapabilities;
 
     dditable.pfnOcGetConfig                              = pDdiTable->pfnOcGetConfig;
-    pDdiTable->pfnOcGetConfig                            = layer::zesSysmanFrequencyOcGetConfig;
+    pDdiTable->pfnOcGetConfig                            = layer::zesFrequencyOcGetConfig;
 
     dditable.pfnOcSetConfig                              = pDdiTable->pfnOcSetConfig;
-    pDdiTable->pfnOcSetConfig                            = layer::zesSysmanFrequencyOcSetConfig;
+    pDdiTable->pfnOcSetConfig                            = layer::zesFrequencyOcSetConfig;
 
     dditable.pfnOcGetIccMax                              = pDdiTable->pfnOcGetIccMax;
-    pDdiTable->pfnOcGetIccMax                            = layer::zesSysmanFrequencyOcGetIccMax;
+    pDdiTable->pfnOcGetIccMax                            = layer::zesFrequencyOcGetIccMax;
 
     dditable.pfnOcSetIccMax                              = pDdiTable->pfnOcSetIccMax;
-    pDdiTable->pfnOcSetIccMax                            = layer::zesSysmanFrequencyOcSetIccMax;
+    pDdiTable->pfnOcSetIccMax                            = layer::zesFrequencyOcSetIccMax;
 
     dditable.pfnOcGetTjMax                               = pDdiTable->pfnOcGetTjMax;
-    pDdiTable->pfnOcGetTjMax                             = layer::zesSysmanFrequencyOcGetTjMax;
+    pDdiTable->pfnOcGetTjMax                             = layer::zesFrequencyOcGetTjMax;
 
     dditable.pfnOcSetTjMax                               = pDdiTable->pfnOcSetTjMax;
-    pDdiTable->pfnOcSetTjMax                             = layer::zesSysmanFrequencyOcSetTjMax;
+    pDdiTable->pfnOcSetTjMax                             = layer::zesFrequencyOcSetTjMax;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanEngine table
+/// @brief Exported function for filling application's Engine table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3024,12 +2991,12 @@ zesGetSysmanFrequencyProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanEngineProcAddrTable(
+zesGetEngineProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_engine_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
+    zes_engine_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanEngine;
+    auto& dditable = layer::context.zesDdiTable.Engine;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3040,16 +3007,16 @@ zesGetSysmanEngineProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanEngineGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesEngineGetProperties;
 
     dditable.pfnGetActivity                              = pDdiTable->pfnGetActivity;
-    pDdiTable->pfnGetActivity                            = layer::zesSysmanEngineGetActivity;
+    pDdiTable->pfnGetActivity                            = layer::zesEngineGetActivity;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanStandby table
+/// @brief Exported function for filling application's Standby table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3057,12 +3024,12 @@ zesGetSysmanEngineProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanStandbyProcAddrTable(
+zesGetStandbyProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_standby_dditable_t* pDdiTable        ///< [in,out] pointer to table of DDI function pointers
+    zes_standby_dditable_t* pDdiTable               ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanStandby;
+    auto& dditable = layer::context.zesDdiTable.Standby;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3073,19 +3040,19 @@ zesGetSysmanStandbyProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanStandbyGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesStandbyGetProperties;
 
     dditable.pfnGetMode                                  = pDdiTable->pfnGetMode;
-    pDdiTable->pfnGetMode                                = layer::zesSysmanStandbyGetMode;
+    pDdiTable->pfnGetMode                                = layer::zesStandbyGetMode;
 
     dditable.pfnSetMode                                  = pDdiTable->pfnSetMode;
-    pDdiTable->pfnSetMode                                = layer::zesSysmanStandbySetMode;
+    pDdiTable->pfnSetMode                                = layer::zesStandbySetMode;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanFirmware table
+/// @brief Exported function for filling application's Firmware table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3093,12 +3060,12 @@ zesGetSysmanStandbyProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanFirmwareProcAddrTable(
+zesGetFirmwareProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_firmware_dditable_t* pDdiTable       ///< [in,out] pointer to table of DDI function pointers
+    zes_firmware_dditable_t* pDdiTable              ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanFirmware;
+    auto& dditable = layer::context.zesDdiTable.Firmware;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3109,19 +3076,19 @@ zesGetSysmanFirmwareProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanFirmwareGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesFirmwareGetProperties;
 
     dditable.pfnGetChecksum                              = pDdiTable->pfnGetChecksum;
-    pDdiTable->pfnGetChecksum                            = layer::zesSysmanFirmwareGetChecksum;
+    pDdiTable->pfnGetChecksum                            = layer::zesFirmwareGetChecksum;
 
     dditable.pfnFlash                                    = pDdiTable->pfnFlash;
-    pDdiTable->pfnFlash                                  = layer::zesSysmanFirmwareFlash;
+    pDdiTable->pfnFlash                                  = layer::zesFirmwareFlash;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanMemory table
+/// @brief Exported function for filling application's Memory table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3129,12 +3096,12 @@ zesGetSysmanFirmwareProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanMemoryProcAddrTable(
+zesGetMemoryProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_memory_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
+    zes_memory_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanMemory;
+    auto& dditable = layer::context.zesDdiTable.Memory;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3145,19 +3112,19 @@ zesGetSysmanMemoryProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanMemoryGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesMemoryGetProperties;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zesSysmanMemoryGetState;
+    pDdiTable->pfnGetState                               = layer::zesMemoryGetState;
 
     dditable.pfnGetBandwidth                             = pDdiTable->pfnGetBandwidth;
-    pDdiTable->pfnGetBandwidth                           = layer::zesSysmanMemoryGetBandwidth;
+    pDdiTable->pfnGetBandwidth                           = layer::zesMemoryGetBandwidth;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanFabricPort table
+/// @brief Exported function for filling application's FabricPort table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3165,12 +3132,12 @@ zesGetSysmanMemoryProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanFabricPortProcAddrTable(
+zesGetFabricPortProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_fabric_port_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    zes_fabric_port_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanFabricPort;
+    auto& dditable = layer::context.zesDdiTable.FabricPort;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3181,28 +3148,28 @@ zesGetSysmanFabricPortProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanFabricPortGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesFabricPortGetProperties;
 
     dditable.pfnGetLinkType                              = pDdiTable->pfnGetLinkType;
-    pDdiTable->pfnGetLinkType                            = layer::zesSysmanFabricPortGetLinkType;
+    pDdiTable->pfnGetLinkType                            = layer::zesFabricPortGetLinkType;
 
     dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
-    pDdiTable->pfnGetConfig                              = layer::zesSysmanFabricPortGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zesFabricPortGetConfig;
 
     dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
-    pDdiTable->pfnSetConfig                              = layer::zesSysmanFabricPortSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zesFabricPortSetConfig;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zesSysmanFabricPortGetState;
+    pDdiTable->pfnGetState                               = layer::zesFabricPortGetState;
 
     dditable.pfnGetThroughput                            = pDdiTable->pfnGetThroughput;
-    pDdiTable->pfnGetThroughput                          = layer::zesSysmanFabricPortGetThroughput;
+    pDdiTable->pfnGetThroughput                          = layer::zesFabricPortGetThroughput;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanTemperature table
+/// @brief Exported function for filling application's Temperature table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3210,12 +3177,12 @@ zesGetSysmanFabricPortProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanTemperatureProcAddrTable(
+zesGetTemperatureProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_temperature_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    zes_temperature_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanTemperature;
+    auto& dditable = layer::context.zesDdiTable.Temperature;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3226,22 +3193,22 @@ zesGetSysmanTemperatureProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanTemperatureGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesTemperatureGetProperties;
 
     dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
-    pDdiTable->pfnGetConfig                              = layer::zesSysmanTemperatureGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zesTemperatureGetConfig;
 
     dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
-    pDdiTable->pfnSetConfig                              = layer::zesSysmanTemperatureSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zesTemperatureSetConfig;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zesSysmanTemperatureGetState;
+    pDdiTable->pfnGetState                               = layer::zesTemperatureGetState;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanPsu table
+/// @brief Exported function for filling application's Psu table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3249,12 +3216,12 @@ zesGetSysmanTemperatureProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanPsuProcAddrTable(
+zesGetPsuProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_psu_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    zes_psu_dditable_t* pDdiTable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanPsu;
+    auto& dditable = layer::context.zesDdiTable.Psu;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3265,16 +3232,16 @@ zesGetSysmanPsuProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanPsuGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesPsuGetProperties;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zesSysmanPsuGetState;
+    pDdiTable->pfnGetState                               = layer::zesPsuGetState;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanFan table
+/// @brief Exported function for filling application's Fan table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3282,12 +3249,12 @@ zesGetSysmanPsuProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanFanProcAddrTable(
+zesGetFanProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_fan_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    zes_fan_dditable_t* pDdiTable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanFan;
+    auto& dditable = layer::context.zesDdiTable.Fan;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3298,22 +3265,22 @@ zesGetSysmanFanProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanFanGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesFanGetProperties;
 
     dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
-    pDdiTable->pfnGetConfig                              = layer::zesSysmanFanGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zesFanGetConfig;
 
     dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
-    pDdiTable->pfnSetConfig                              = layer::zesSysmanFanSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zesFanSetConfig;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zesSysmanFanGetState;
+    pDdiTable->pfnGetState                               = layer::zesFanGetState;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanLed table
+/// @brief Exported function for filling application's Led table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3321,12 +3288,12 @@ zesGetSysmanFanProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanLedProcAddrTable(
+zesGetLedProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_led_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    zes_led_dditable_t* pDdiTable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanLed;
+    auto& dditable = layer::context.zesDdiTable.Led;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3337,19 +3304,19 @@ zesGetSysmanLedProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanLedGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesLedGetProperties;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zesSysmanLedGetState;
+    pDdiTable->pfnGetState                               = layer::zesLedGetState;
 
     dditable.pfnSetState                                 = pDdiTable->pfnSetState;
-    pDdiTable->pfnSetState                               = layer::zesSysmanLedSetState;
+    pDdiTable->pfnSetState                               = layer::zesLedSetState;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanRas table
+/// @brief Exported function for filling application's Ras table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3357,12 +3324,12 @@ zesGetSysmanLedProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanRasProcAddrTable(
+zesGetRasProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_ras_dditable_t* pDdiTable            ///< [in,out] pointer to table of DDI function pointers
+    zes_ras_dditable_t* pDdiTable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanRas;
+    auto& dditable = layer::context.zesDdiTable.Ras;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3373,22 +3340,22 @@ zesGetSysmanRasProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanRasGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesRasGetProperties;
 
     dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
-    pDdiTable->pfnGetConfig                              = layer::zesSysmanRasGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zesRasGetConfig;
 
     dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
-    pDdiTable->pfnSetConfig                              = layer::zesSysmanRasSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zesRasSetConfig;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zesSysmanRasGetState;
+    pDdiTable->pfnGetState                               = layer::zesRasGetState;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanDiagnostics table
+/// @brief Exported function for filling application's Diagnostics table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3396,12 +3363,12 @@ zesGetSysmanRasProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanDiagnosticsProcAddrTable(
+zesGetDiagnosticsProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_diagnostics_dditable_t* pDdiTable    ///< [in,out] pointer to table of DDI function pointers
+    zes_diagnostics_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanDiagnostics;
+    auto& dditable = layer::context.zesDdiTable.Diagnostics;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3412,19 +3379,19 @@ zesGetSysmanDiagnosticsProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::zesSysmanDiagnosticsGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::zesDiagnosticsGetProperties;
 
     dditable.pfnGetTests                                 = pDdiTable->pfnGetTests;
-    pDdiTable->pfnGetTests                               = layer::zesSysmanDiagnosticsGetTests;
+    pDdiTable->pfnGetTests                               = layer::zesDiagnosticsGetTests;
 
     dditable.pfnRunTests                                 = pDdiTable->pfnRunTests;
-    pDdiTable->pfnRunTests                               = layer::zesSysmanDiagnosticsRunTests;
+    pDdiTable->pfnRunTests                               = layer::zesDiagnosticsRunTests;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanEvent table
+/// @brief Exported function for filling application's Event table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3432,12 +3399,12 @@ zesGetSysmanDiagnosticsProcAddrTable(
 ///     - ::ZE_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::ZE_RESULT_ERROR_UNSUPPORTED_VERSION
 __zedllexport ze_result_t __zecall
-zesGetSysmanEventProcAddrTable(
+zesGetEventProcAddrTable(
     ze_api_version_t version,                       ///< [in] API version requested
-    zes_sysman_event_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    zes_event_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.zesDdiTable.SysmanEvent;
+    auto& dditable = layer::context.zesDdiTable.Event;
 
     if( nullptr == pDdiTable )
         return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
@@ -3448,16 +3415,16 @@ zesGetSysmanEventProcAddrTable(
     ze_result_t result = ZE_RESULT_SUCCESS;
 
     dditable.pfnGetConfig                                = pDdiTable->pfnGetConfig;
-    pDdiTable->pfnGetConfig                              = layer::zesSysmanEventGetConfig;
+    pDdiTable->pfnGetConfig                              = layer::zesEventGetConfig;
 
     dditable.pfnSetConfig                                = pDdiTable->pfnSetConfig;
-    pDdiTable->pfnSetConfig                              = layer::zesSysmanEventSetConfig;
+    pDdiTable->pfnSetConfig                              = layer::zesEventSetConfig;
 
     dditable.pfnGetState                                 = pDdiTable->pfnGetState;
-    pDdiTable->pfnGetState                               = layer::zesSysmanEventGetState;
+    pDdiTable->pfnGetState                               = layer::zesEventGetState;
 
     dditable.pfnListen                                   = pDdiTable->pfnListen;
-    pDdiTable->pfnListen                                 = layer::zesSysmanEventListen;
+    pDdiTable->pfnListen                                 = layer::zesEventListen;
 
     return result;
 }

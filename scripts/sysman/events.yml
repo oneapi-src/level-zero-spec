@@ -1,0 +1,191 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Firmware management"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Event types"
+class: $sDevice
+name: $s_event_type_t
+etors:
+    - name: $S_EVENT_TYPE_NONE
+      value: "0"
+      desc: "Specifies no events"
+    - name: $S_EVENT_TYPE_DEVICE_RESET
+      value: "$X_BIT( 0 )"
+      desc: "Event is triggered when the driver is going to reset the device"
+    - name: $S_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER
+      value: "$X_BIT( 1 )"
+      desc: "Event is triggered when the driver is about to put the device into a deep sleep state"
+    - name: $S_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT
+      value: "$X_BIT( 2 )"
+      desc: "Event is triggered when the driver is waking the device up from a deep sleep state"
+    - name: $S_EVENT_TYPE_FREQ_THROTTLED
+      value: "$X_BIT( 3 )"
+      desc: "Event is triggered when the frequency starts being throttled"
+    - name: $S_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED
+      value: "$X_BIT( 4 )"
+      desc: "Event is triggered when the energy consumption threshold is reached (use $sPowerSetEnergyThreshold() to configure)."
+    - name: $S_EVENT_TYPE_TEMP_CRITICAL
+      value: "$X_BIT( 5 )"
+      desc: "Event is triggered when the critical temperature is reached (use $sTemperatureSetConfig() to configure - disabled by default)."
+    - name: $S_EVENT_TYPE_TEMP_THRESHOLD1
+      value: "$X_BIT( 6 )"
+      desc: "Event is triggered when the temperature crosses threshold 1 (use $sTemperatureSetConfig() to configure - disabled by default)."
+    - name: $S_EVENT_TYPE_TEMP_THRESHOLD2
+      value: "$X_BIT( 7 )"
+      desc: "Event is triggered when the temperature crosses threshold 2 (use $sTemperatureSetConfig() to configure - disabled by default)."
+    - name: $S_EVENT_TYPE_MEM_HEALTH
+      value: "$X_BIT( 8 )"
+      desc: "Event is triggered when the health of device memory changes."
+    - name: $S_EVENT_TYPE_FABRIC_PORT_HEALTH
+      value: "$X_BIT( 9 )"
+      desc: "Event is triggered when the health of fabric ports change."
+    - name: $S_EVENT_TYPE_PCI_LINK_HEALTH
+      value: "$X_BIT( 10 )"
+      desc: "Event is triggered when the health of the PCI link changes."
+    - name: $S_EVENT_TYPE_RAS_CORRECTABLE_ERRORS
+      value: "$X_BIT( 11 )"
+      desc: "Event is triggered when accelerator RAS correctable errors cross thresholds (use $sRasSetConfig() to configure - disabled by default)."
+    - name: $S_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS
+      value: "$X_BIT( 12 )"
+      desc: "Event is triggered when accelerator RAS uncorrectable errors cross thresholds (use $sRasSetConfig() to configure - disabled by default)."
+    - name: $S_EVENT_TYPE_DEVICE_RESET_REQUIRED
+      value: "$X_BIT( 14 )"
+      desc: "Event is triggered when the device needs to be reset (use $sDeviceGetState() to determine the reasons for the reset)."
+    - name: $S_EVENT_TYPE_ALL
+      value: "0x0FFF"
+      desc: "Specifies all events"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event configuration for a device"
+class: $sEvent
+name: $s_event_config_t
+members:
+    - type: uint32_t
+      name: "registered"
+      desc: "[in,out] List of registered events (Bitfield of events $s_event_type_t). $S_EVENT_TYPE_NONE indicates there are no registered events. $S_EVENT_TYPE_ALL indicates that all events are registered."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the event handle for the specified device"
+class: $sDevice
+name: CreateEvents
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle for the device"
+    - type: "$s_event_handle_t*"
+      name: phEvent
+      desc: "[out] The event handle for the specified device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which events are currently registered on the specified device event handler"
+class: $sEvent
+name: GetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_event_handle_t
+      name: hEvent
+      desc: "[in] The event handle for the device"
+    - type: "$s_event_config_t*"
+      name: pConfig
+      desc: "[in,out] Will contain the current event configuration (list of registered events)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set a new event configuration (list of registered events) on the specified device event handler"
+class: $sEvent
+name: SetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_event_handle_t
+      name: hEvent
+      desc: "[in] The event handle for the device"
+    - type: "const $s_event_config_t*"
+      name: pConfig
+      desc: "[in] New event configuration (list of registered events)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get events that have been triggered for a specific device"
+class: $sEvent
+name: GetState
+details:
+    - "If events have occurred on the specified device event handle, they are returned and the corresponding event status is cleared if the argument clear = true."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_event_handle_t
+      name: hEvent
+      desc: "[in] The event handle for the device."
+    - type: $x_bool_t
+      name: clear
+      desc: "[in] Indicates if the event list for this device should be cleared."
+    - type: "uint32_t*"
+      name: pEvents
+      desc: "[in,out] Bitfield of events $s_event_type_t that have been triggered by this device."
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Don't wait - just check if there are any new events"
+name: $S_EVENT_WAIT_NONE
+value: "0x0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Wait infinitely for events to arrive."
+name: $S_EVENT_WAIT_INFINITE
+value: "0xFFFFFFFF"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Wait for the specified list of event handles to receive any registered events"
+class: $sEvent
+decl: static
+name: Listen
+details:
+    - "If previous events arrived and were not cleared using $sEventGetState(), this call will return immediately."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
+    - type: uint32_t
+      name: timeout
+      desc: "[in] How long to wait in milliseconds for events to arrive. Set to $S_EVENT_WAIT_NONE will check status and return immediately. Set to $S_EVENT_WAIT_INFINITE to block until events arrive."
+    - type: uint32_t
+      name: count
+      desc: "[in] Number of handles in phEvents"
+    - type: "$s_event_handle_t*"
+      name: phEvents
+      desc: "[in][range(0, count)] Handle of events that should be listened to"
+    - type: "uint32_t*"
+      name: pEvents
+      desc: "[in,out] Bitfield of events $s_event_type_t that have been triggered by any of the supplied event handles. If timeout is not $S_EVENT_WAIT_INFINITE and this value is $S_EVENT_TYPE_NONE, then a timeout has occurred."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to listen to events."
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "One or more of the supplied event handles are for devices that belong to a different driver handle."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device event"
+name: $sEvent
+owner: $sDevice
+members:
+    - type: $s_event_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"
