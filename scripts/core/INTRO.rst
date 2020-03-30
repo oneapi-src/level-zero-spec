@@ -268,7 +268,7 @@ Applications should not rely on experimental APIs in production.
 An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED_FEATURE for any experimental API not supported by that driver.
 
 Import Library
--------
+--------------
 
 A static import library shall be provided to allow applications
 to make direct API calls without understanding the underlying
@@ -292,7 +292,7 @@ driver behavior.
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                  |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Sysman          | ${X]_ENABLE_SYSMAN                    | {**0**, 1} | Enables system management initialization and dependencies                         |
+| Sysman          | ${X}_ENABLE_SYSMAN                    | {**0**, 1} | Enables system management initialization and dependencies                         |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 ## --validate=on
 
