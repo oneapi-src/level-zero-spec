@@ -15,15 +15,15 @@
 #include <stdio.h>
 #include "zes_api.h"
 
-void PrintRasDetails(zes_ras_details_t* pDetails)
+void PrintRasDetails(zes_ras_state_t* pDetails)
 {
-    fprintf(stdout, "        Number new resets:                %llu\n", (long long unsigned int)pDetails->numResets);
-    fprintf(stdout, "        Number new programming errors:    %llu\n", (long long unsigned int)pDetails->numProgrammingErrors);
-    fprintf(stdout, "        Number new driver errors:         %llu\n", (long long unsigned int)pDetails->numDriverErrors);
-    fprintf(stdout, "        Number new compute errors:        %llu\n", (long long unsigned int)pDetails->numComputeErrors);
-    fprintf(stdout, "        Number new non-compute errors:    %llu\n", (long long unsigned int)pDetails->numNonComputeErrors);
-    fprintf(stdout, "        Number new cache errors:          %llu\n", (long long unsigned int)pDetails->numCacheErrors);
-    fprintf(stdout, "        Number new display errors:        %llu\n", (long long unsigned int)pDetails->numDisplayErrors);
+    fprintf(stdout, "        Number new resets:                %llu\n", (long long unsigned int)pDetails->category[ZES_RAS_ERROR_CAT_RESET]);
+    fprintf(stdout, "        Number new programming errors:    %llu\n", (long long unsigned int)pDetails->category[ZES_RAS_ERROR_CAT_PROGRAMMING_ERRORS]);
+    fprintf(stdout, "        Number new driver errors:         %llu\n", (long long unsigned int)pDetails->category[ZES_RAS_ERROR_CAT_DRIVER_ERRORS]);
+    fprintf(stdout, "        Number new compute errors:        %llu\n", (long long unsigned int)pDetails->category[ZES_RAS_ERROR_CAT_COMPUTE_ERRORS]);
+    fprintf(stdout, "        Number new non-compute errors:    %llu\n", (long long unsigned int)pDetails->category[ZES_RAS_ERROR_CAT_NON_COMPUTE_ERRORS]);
+    fprintf(stdout, "        Number new cache errors:          %llu\n", (long long unsigned int)pDetails->category[ZES_RAS_ERROR_CAT_CACHE_ERRORS]);
+    fprintf(stdout, "        Number new display errors:        %llu\n", (long long unsigned int)pDetails->category[ZES_RAS_ERROR_CAT_DISPLAY_ERRORS]);
 }
 
 void ShowRasErrors(zes_device_handle_t hSysmanDevice)
@@ -48,8 +48,7 @@ void ShowRasErrors(zes_device_handle_t hSysmanDevice)
             zes_ras_properties_t props;
             if (zesRasGetProperties(phRasErrorSets[rasIndex], &props) == ZE_RESULT_SUCCESS)
             {
-                uint64_t newErrors;
-                zes_ras_details_t errorDetails;
+                zes_ras_state_t errorDetails;
                 const char* pErrorType;
                 switch (props.type)
                 {
@@ -68,11 +67,16 @@ void ShowRasErrors(zes_device_handle_t hSysmanDevice)
                 {
                     fprintf(stdout, "    On sub-device: %u\n", props.subdeviceId);
                 }
-                if (zesRasGetState(phRasErrorSets[rasIndex], 1, &newErrors, &errorDetails)
+                if (zesRasGetState(phRasErrorSets[rasIndex], 1, &errorDetails)
                     == ZE_RESULT_SUCCESS)
                 {
-                    fprintf(stdout, "    Number new errors: %llu\n", (long long unsigned int)newErrors);
-                    if (newErrors)
+                    uint64_t numErrors = 0;
+                    for (int i = 0; i < ZES_RAS_ERROR_CAT_MAX; i++)
+                    {
+                        numErrors += errorDetails.category[i];
+                    }
+                    fprintf(stdout, "    Number new errors: %llu\n", (long long unsigned int)numErrors);
+                    if (numErrors)
                     {
                         PrintRasDetails(&errorDetails);
                     }

@@ -2344,15 +2344,13 @@ namespace zes
     void __zecall
     Ras::GetState(
         ze::bool_t clear,                               ///< [in] Set to 1 to clear the counters of this type
-        uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
-        details_t* pDetails                             ///< [in,out][optional] Breakdown of where errors have occurred
+        state_t* pState                                 ///< [in,out] Breakdown of where errors have occurred
         )
     {
         auto result = static_cast<result_t>( ::zesRasGetState(
             reinterpret_cast<zes_ras_handle_t>( getHandle() ),
             static_cast<ze_bool_t>( clear ),
-            pTotalErrors,
-            reinterpret_cast<zes_ras_details_t*>( pDetails ) ) );
+            reinterpret_cast<zes_ras_state_t*>( pState ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, ZE_STRING(__LINE__), "zes::Ras::GetState" );
@@ -4849,6 +4847,54 @@ namespace zes
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Ras::error_cat_t to std::string
+    std::string to_string( const Ras::error_cat_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Ras::error_cat_t::RESET:
+            str = "Ras::error_cat_t::RESET";
+            break;
+
+        case Ras::error_cat_t::PROGRAMMING_ERRORS:
+            str = "Ras::error_cat_t::PROGRAMMING_ERRORS";
+            break;
+
+        case Ras::error_cat_t::DRIVER_ERRORS:
+            str = "Ras::error_cat_t::DRIVER_ERRORS";
+            break;
+
+        case Ras::error_cat_t::COMPUTE_ERRORS:
+            str = "Ras::error_cat_t::COMPUTE_ERRORS";
+            break;
+
+        case Ras::error_cat_t::NON_COMPUTE_ERRORS:
+            str = "Ras::error_cat_t::NON_COMPUTE_ERRORS";
+            break;
+
+        case Ras::error_cat_t::CACHE_ERRORS:
+            str = "Ras::error_cat_t::CACHE_ERRORS";
+            break;
+
+        case Ras::error_cat_t::DISPLAY_ERRORS:
+            str = "Ras::error_cat_t::DISPLAY_ERRORS";
+            break;
+
+        case Ras::error_cat_t::MAX:
+            str = "Ras::error_cat_t::MAX";
+            break;
+
+        default:
+            str = "Ras::error_cat_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Ras::properties_t to std::string
     std::string to_string( const Ras::properties_t val )
     {
@@ -4870,37 +4916,21 @@ namespace zes
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Ras::details_t to std::string
-    std::string to_string( const Ras::details_t val )
+    /// @brief Converts Ras::state_t to std::string
+    std::string to_string( const Ras::state_t val )
     {
         std::string str;
         
-        str += "Ras::details_t::numResets : ";
-        str += std::to_string(val.numResets);
-        str += "\n";
-        
-        str += "Ras::details_t::numProgrammingErrors : ";
-        str += std::to_string(val.numProgrammingErrors);
-        str += "\n";
-        
-        str += "Ras::details_t::numDriverErrors : ";
-        str += std::to_string(val.numDriverErrors);
-        str += "\n";
-        
-        str += "Ras::details_t::numComputeErrors : ";
-        str += std::to_string(val.numComputeErrors);
-        str += "\n";
-        
-        str += "Ras::details_t::numNonComputeErrors : ";
-        str += std::to_string(val.numNonComputeErrors);
-        str += "\n";
-        
-        str += "Ras::details_t::numCacheErrors : ";
-        str += std::to_string(val.numCacheErrors);
-        str += "\n";
-        
-        str += "Ras::details_t::numDisplayErrors : ";
-        str += std::to_string(val.numDisplayErrors);
+        str += "Ras::state_t::category : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.category )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
         str += "\n";
 
         return str;

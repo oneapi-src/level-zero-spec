@@ -2149,8 +2149,7 @@ namespace layer
     zesRasGetState(
         zes_ras_handle_t hRas,                          ///< [in] Handle for the component.
         ze_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
-        uint64_t* pTotalErrors,                         ///< [in,out] The number total number of errors that have occurred
-        zes_ras_details_t* pDetails                     ///< [in,out][optional] Breakdown of where errors have occurred
+        zes_ras_state_t* pState                         ///< [in,out] Breakdown of where errors have occurred
         )
     {
         auto pfnGetState = context.zesDdiTable.Ras.pfnGetState;
@@ -2163,12 +2162,12 @@ namespace layer
             if( nullptr == hRas )
                 return ZE_RESULT_ERROR_INVALID_NULL_HANDLE;
 
-            if( nullptr == pTotalErrors )
+            if( nullptr == pState )
                 return ZE_RESULT_ERROR_INVALID_NULL_POINTER;
 
         }
 
-        return pfnGetState( hRas, clear, pTotalErrors, pDetails );
+        return pfnGetState( hRas, clear, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
