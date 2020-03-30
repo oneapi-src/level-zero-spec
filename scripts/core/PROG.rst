@@ -533,6 +533,7 @@ A fence is a heavyweight synchronization primitive used to communicate to the ho
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists) and can only be waited upon from the host.
 - A fence guarantees both execution completion and memory coherency, across the device and host, prior to being signaled.
 - A fence only has two states: not signaled and signaled.
+- A fence doesn't implicitly reset. Signaling a signaled fence (or resetting an unsignaled fence) is valid and has no effect on the state of the fence.
 - A fence can only be reset from the Host.
 - A fence cannot be shared across processes.
 
