@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file zes_api.h
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  */
 #ifndef _ZES_API_H
@@ -321,7 +321,8 @@ typedef struct _zes_temp_config_t zes_temp_config_t;
 /// @brief API version of Sysman
 typedef enum _zes_version_t
 {
-    ZES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),      ///< version 1.0
+    ZES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< latest known version
 
 } zes_version_t;
 

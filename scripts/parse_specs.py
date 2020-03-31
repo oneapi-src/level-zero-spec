@@ -39,6 +39,12 @@ def _filter_version(d, max_ver):
             ver = float(e.get('version', default_version))
             if ver <= max_ver:
                 flt.append(e)
+        if d['name'].endswith('version_t'):
+            flt.append({
+                'name': d['name'][:-1].upper() + "CURRENT",
+                'value': flt[-1]['value'],
+                'desc': "latest known version"
+                })
         d['etors'] = flt
 
     elif 'function' == type:

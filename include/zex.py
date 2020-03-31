@@ -4,7 +4,7 @@
  SPDX-License-Identifier: MIT
 
  @file zex.py
- @version v1.0-r0.9.276
+ @version v1.0-r0.9.277
 
  """
 import platform
@@ -27,7 +27,8 @@ class zex_command_graph_handle_t(c_void_p):
 ###############################################################################
 ## @brief API version of ::zex_command_graph_desc_t
 class zex_command_graph_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
+    _1_0 = ZE_MAKE_VERSION( 1, 0 )                  ## version 1.0
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## latest known version
 
 class zex_command_graph_desc_version_t(c_int):
     def __str__(self):

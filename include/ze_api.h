@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file ze_api.h
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  */
 #ifndef _ZE_API_H
@@ -430,6 +430,7 @@ zeDriverGet(
 typedef enum _ze_api_version_t
 {
     ZE_API_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< 1.0
+    ZE_API_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } ze_api_version_t;
 
@@ -458,7 +459,8 @@ zeDriverGetApiVersion(
 /// @brief API version of ::ze_driver_properties_t
 typedef enum _ze_driver_properties_version_t
 {
-    ZE_DRIVER_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DRIVER_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DRIVER_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< latest known version
 
 } ze_driver_properties_version_t;
 
@@ -517,7 +519,8 @@ zeDriverGetProperties(
 /// @brief API version of ::ze_driver_ipc_properties_t
 typedef enum _ze_driver_ipc_properties_version_t
 {
-    ZE_DRIVER_IPC_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DRIVER_IPC_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DRIVER_IPC_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< latest known version
 
 } ze_driver_ipc_properties_version_t;
 
@@ -645,7 +648,8 @@ zeDeviceGetSubDevices(
 /// @brief API version of ::ze_device_properties_t
 typedef enum _ze_device_properties_version_t
 {
-    ZE_DEVICE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< latest known version
 
 } ze_device_properties_version_t;
 
@@ -736,7 +740,8 @@ zeDeviceGetProperties(
 /// @brief API version of ::ze_device_compute_properties_t
 typedef enum _ze_device_compute_properties_version_t
 {
-    ZE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_COMPUTE_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< latest known version
 
 } ze_device_compute_properties_version_t;
 
@@ -795,7 +800,8 @@ zeDeviceGetComputeProperties(
 /// @brief API version of ::ze_device_kernel_properties_t
 typedef enum _ze_device_kernel_properties_version_t
 {
-    ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_DEVICE_KERNEL_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< latest known version
 
 } ze_device_kernel_properties_version_t;
 
@@ -885,7 +891,8 @@ zeDeviceGetKernelProperties(
 /// @brief API version of ::ze_command_queue_group_properties_t
 typedef enum _ze_command_queue_group_properties_version_t
 {
-    ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< latest known version
 
 } ze_command_queue_group_properties_version_t;
 
@@ -944,7 +951,8 @@ zeDeviceGetCommandQueueGroupProperties(
 /// @brief API version of ::ze_device_memory_properties_t
 typedef enum _ze_device_memory_properties_version_t
 {
-    ZE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_DEVICE_MEMORY_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< latest known version
 
 } ze_device_memory_properties_version_t;
 
@@ -1000,7 +1008,8 @@ zeDeviceGetMemoryProperties(
 /// @brief API version of ::ze_device_memory_access_properties_t
 typedef enum _ze_device_memory_access_properties_version_t
 {
-    ZE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } ze_device_memory_access_properties_version_t;
 
@@ -1063,7 +1072,8 @@ zeDeviceGetMemoryAccessProperties(
 /// @brief API version of ::ze_device_cache_properties_t
 typedef enum _ze_device_cache_properties_version_t
 {
-    ZE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_DEVICE_CACHE_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } ze_device_cache_properties_version_t;
 
@@ -1112,7 +1122,8 @@ zeDeviceGetCacheProperties(
 /// @brief API version of ::ze_device_image_properties_t
 typedef enum _ze_device_image_properties_version_t
 {
-    ZE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_DEVICE_IMAGE_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } ze_device_image_properties_version_t;
 
@@ -1137,8 +1148,7 @@ typedef struct _ze_device_image_properties_t
 } ze_device_image_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves image X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT of
-///        the device
+/// @brief Retrieves image properties of the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1162,7 +1172,8 @@ zeDeviceGetImageProperties(
 /// @brief API version of ::ze_device_p2p_properties_t
 typedef enum _ze_device_p2p_properties_version_t
 {
-    ZE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_P2P_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< latest known version
 
 } ze_device_p2p_properties_version_t;
 
@@ -1278,7 +1289,8 @@ zeDeviceSetLastLevelCacheConfig(
 /// @brief API version of ::ze_command_queue_desc_t
 typedef enum _ze_command_queue_desc_version_t
 {
-    ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_COMMAND_QUEUE_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< latest known version
 
 } ze_command_queue_desc_version_t;
 
@@ -1453,7 +1465,8 @@ zeCommandQueueSynchronize(
 /// @brief API version of ::ze_command_list_desc_t
 typedef enum _ze_command_list_desc_version_t
 {
-    ZE_COMMAND_LIST_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_COMMAND_LIST_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_COMMAND_LIST_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< latest known version
 
 } ze_command_list_desc_version_t;
 
@@ -2175,7 +2188,8 @@ zeCommandListAppendMemAdvise(
 /// @brief API version of ::ze_event_pool_desc_t
 typedef enum _ze_event_pool_desc_version_t
 {
-    ZE_EVENT_POOL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_EVENT_POOL_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_EVENT_POOL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } ze_event_pool_desc_version_t;
 
@@ -2266,7 +2280,8 @@ zeEventPoolDestroy(
 /// @brief API version of ::ze_event_desc_t
 typedef enum _ze_event_desc_version_t
 {
-    ZE_EVENT_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_EVENT_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_EVENT_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< latest known version
 
 } ze_event_desc_version_t;
 
@@ -2659,7 +2674,8 @@ zeEventGetTimestamp(
 /// @brief API version of ::ze_fence_desc_t
 typedef enum _ze_fence_desc_version_t
 {
-    ZE_FENCE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_FENCE_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_FENCE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< latest known version
 
 } ze_fence_desc_version_t;
 
@@ -2824,7 +2840,8 @@ zeFenceReset(
 /// @brief API version of ::ze_image_desc_t
 typedef enum _ze_image_desc_version_t
 {
-    ZE_IMAGE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_IMAGE_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZE_IMAGE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< latest known version
 
 } ze_image_desc_version_t;
 
@@ -2954,7 +2971,8 @@ typedef struct _ze_image_desc_t
 /// @brief API version of ::ze_image_properties_t
 typedef enum _ze_image_properties_version_t
 {
-    ZE_IMAGE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_IMAGE_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_IMAGE_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< latest known version
 
 } ze_image_properties_version_t;
 
@@ -3073,7 +3091,8 @@ zeImageDestroy(
 /// @brief API version of ::ze_device_mem_alloc_desc_t
 typedef enum _ze_device_mem_alloc_desc_version_t
 {
-    ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_MEM_ALLOC_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< latest known version
 
 } ze_device_mem_alloc_desc_version_t;
 
@@ -3102,7 +3121,8 @@ typedef struct _ze_device_mem_alloc_desc_t
 /// @brief API version of ::ze_host_mem_alloc_desc_t
 typedef enum _ze_host_mem_alloc_desc_version_t
 {
-    ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_HOST_MEM_ALLOC_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } ze_host_mem_alloc_desc_version_t;
 
@@ -3280,7 +3300,8 @@ zeDriverFreeMem(
 /// @brief API version of ::ze_memory_allocation_properties_t
 typedef enum _ze_memory_allocation_properties_version_t
 {
-    ZE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_MEMORY_ALLOCATION_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< latest known version
 
 } ze_memory_allocation_properties_version_t;
 
@@ -3444,7 +3465,8 @@ zeDriverCloseMemIpcHandle(
 /// @brief API version of ::ze_module_desc_t
 typedef enum _ze_module_desc_version_t
 {
-    ZE_MODULE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_MODULE_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_MODULE_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } ze_module_desc_version_t;
 
@@ -3691,7 +3713,8 @@ zeModuleGetKernelNames(
 /// @brief API version of ::ze_kernel_desc_t
 typedef enum _ze_kernel_desc_version_t
 {
-    ZE_KERNEL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_KERNEL_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZE_KERNEL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } ze_kernel_desc_version_t;
 
@@ -4009,7 +4032,8 @@ zeKernelSetIntermediateCacheConfig(
 /// @brief API version of ::ze_kernel_properties_t
 typedef enum _ze_kernel_properties_version_t
 {
-    ZE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_KERNEL_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZE_KERNEL_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< latest known version
 
 } ze_kernel_properties_version_t;
 
@@ -4327,7 +4351,8 @@ zeDeviceEvictImage(
 /// @brief API version of ::ze_sampler_desc_t
 typedef enum _ze_sampler_desc_version_t
 {
-    ZE_SAMPLER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_SAMPLER_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZE_SAMPLER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< latest known version
 
 } ze_sampler_desc_version_t;
 

@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file zex_api.h
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  */
 #ifndef _ZEX_API_H
@@ -70,7 +70,8 @@ zexCommandListReserveSpace(
 /// @brief API version of ::zex_command_graph_desc_t
 typedef enum _zex_command_graph_desc_version_t
 {
-    ZEX_COMMAND_GRAPH_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZEX_COMMAND_GRAPH_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZEX_COMMAND_GRAPH_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } zex_command_graph_desc_version_t;
 

@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file zex_api.hpp
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  */
 #ifndef _ZEX_API_HPP
@@ -111,7 +111,8 @@ namespace zex
         /// @brief API version of ::zex_command_graph_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 

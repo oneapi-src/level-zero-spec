@@ -96,7 +96,7 @@ desc: "API version of $x_driver_properties_t"
 class: $xDriver
 name: $x_driver_properties_version_t
 etors:
-    - name: $X_DRIVER_PROPERTIES_VERSION_CURRENT
+    - name: $X_DRIVER_PROPERTIES_VERSION_1_0
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
@@ -154,7 +154,7 @@ desc: "API version of $x_driver_ipc_properties_t"
 class: $xDriver
 name: $x_driver_ipc_properties_version_t
 etors:
-    - name: $X_DRIVER_IPC_PROPERTIES_VERSION_CURRENT
+    - name: $X_DRIVER_IPC_PROPERTIES_VERSION_1_0
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------

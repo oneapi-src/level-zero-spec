@@ -15,7 +15,7 @@ desc: "API version of Sysman"
 class: $sDevice
 name: $s_version_t
 etors:
-    - name: $S_VERSION_CURRENT
+    - name: $S_VERSION_1_0
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------

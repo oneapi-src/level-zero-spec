@@ -14,7 +14,7 @@ desc: "API version of $e_command_graph_desc_t"
 class: $eCommandGraph
 name: $e_command_graph_desc_version_t
 etors:
-    - name: $E_COMMAND_GRAPH_DESC_VERSION_CURRENT
+    - name: $E_COMMAND_GRAPH_DESC_VERSION_1_0
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------

@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file zet_wprapi.cpp
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  * @brief C++ wrapper of zet
  *
@@ -1542,8 +1542,8 @@ namespace zet
 
         switch( val )
         {
-        case MetricGroup::properties_version_t::CURRENT:
-            str = "MetricGroup::properties_version_t::CURRENT";
+        case MetricGroup::properties_version_t::_1_0:
+            str = "MetricGroup::properties_version_t::_1_0";
             break;
 
         default:
@@ -1647,8 +1647,8 @@ namespace zet
 
         switch( val )
         {
-        case Metric::properties_version_t::CURRENT:
-            str = "Metric::properties_version_t::CURRENT";
+        case Metric::properties_version_t::_1_0:
+            str = "Metric::properties_version_t::_1_0";
             break;
 
         default:
@@ -1708,8 +1708,8 @@ namespace zet
 
         switch( val )
         {
-        case MetricTracer::desc_version_t::CURRENT:
-            str = "MetricTracer::desc_version_t::CURRENT";
+        case MetricTracer::desc_version_t::_1_0:
+            str = "MetricTracer::desc_version_t::_1_0";
             break;
 
         default:
@@ -1749,8 +1749,8 @@ namespace zet
 
         switch( val )
         {
-        case MetricQueryPool::desc_version_t::CURRENT:
-            str = "MetricQueryPool::desc_version_t::CURRENT";
+        case MetricQueryPool::desc_version_t::_1_0:
+            str = "MetricQueryPool::desc_version_t::_1_0";
             break;
 
         default:
@@ -1834,8 +1834,8 @@ namespace zet
 
         switch( val )
         {
-        case Kernel::profile_info_version_t::CURRENT:
-            str = "Kernel::profile_info_version_t::CURRENT";
+        case Kernel::profile_info_version_t::_1_0:
+            str = "Kernel::profile_info_version_t::_1_0";
             break;
 
         default:
@@ -1952,8 +1952,8 @@ namespace zet
 
         switch( val )
         {
-        case Tracer::desc_version_t::CURRENT:
-            str = "Tracer::desc_version_t::CURRENT";
+        case Tracer::desc_version_t::_1_0:
+            str = "Tracer::desc_version_t::_1_0";
             break;
 
         default:

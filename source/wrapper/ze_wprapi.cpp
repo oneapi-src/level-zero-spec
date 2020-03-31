@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file ze_wprapi.cpp
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  * @brief C++ wrapper of ze
  *
@@ -536,8 +536,7 @@ namespace ze
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves image X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT of
-    ///        the device
+    /// @brief Retrieves image properties of the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -3913,8 +3912,8 @@ namespace ze
 
         switch( val )
         {
-        case Driver::properties_version_t::CURRENT:
-            str = "Driver::properties_version_t::CURRENT";
+        case Driver::properties_version_t::_1_0:
+            str = "Driver::properties_version_t::_1_0";
             break;
 
         default:
@@ -3933,8 +3932,8 @@ namespace ze
 
         switch( val )
         {
-        case Driver::ipc_properties_version_t::CURRENT:
-            str = "Driver::ipc_properties_version_t::CURRENT";
+        case Driver::ipc_properties_version_t::_1_0:
+            str = "Driver::ipc_properties_version_t::_1_0";
             break;
 
         default:
@@ -3953,8 +3952,8 @@ namespace ze
 
         switch( val )
         {
-        case Driver::device_mem_alloc_desc_version_t::CURRENT:
-            str = "Driver::device_mem_alloc_desc_version_t::CURRENT";
+        case Driver::device_mem_alloc_desc_version_t::_1_0:
+            str = "Driver::device_mem_alloc_desc_version_t::_1_0";
             break;
 
         default:
@@ -3995,8 +3994,8 @@ namespace ze
 
         switch( val )
         {
-        case Driver::host_mem_alloc_desc_version_t::CURRENT:
-            str = "Driver::host_mem_alloc_desc_version_t::CURRENT";
+        case Driver::host_mem_alloc_desc_version_t::_1_0:
+            str = "Driver::host_mem_alloc_desc_version_t::_1_0";
             break;
 
         default:
@@ -4040,8 +4039,8 @@ namespace ze
 
         switch( val )
         {
-        case Driver::memory_allocation_properties_version_t::CURRENT:
-            str = "Driver::memory_allocation_properties_version_t::CURRENT";
+        case Driver::memory_allocation_properties_version_t::_1_0:
+            str = "Driver::memory_allocation_properties_version_t::_1_0";
             break;
 
         default:
@@ -4234,8 +4233,8 @@ namespace ze
 
         switch( val )
         {
-        case Device::properties_version_t::CURRENT:
-            str = "Device::properties_version_t::CURRENT";
+        case Device::properties_version_t::_1_0:
+            str = "Device::properties_version_t::_1_0";
             break;
 
         default:
@@ -4278,8 +4277,8 @@ namespace ze
 
         switch( val )
         {
-        case Device::compute_properties_version_t::CURRENT:
-            str = "Device::compute_properties_version_t::CURRENT";
+        case Device::compute_properties_version_t::_1_0:
+            str = "Device::compute_properties_version_t::_1_0";
             break;
 
         default:
@@ -4298,8 +4297,8 @@ namespace ze
 
         switch( val )
         {
-        case Device::kernel_properties_version_t::CURRENT:
-            str = "Device::kernel_properties_version_t::CURRENT";
+        case Device::kernel_properties_version_t::_1_0:
+            str = "Device::kernel_properties_version_t::_1_0";
             break;
 
         default:
@@ -4358,8 +4357,8 @@ namespace ze
 
         switch( val )
         {
-        case Device::command_queue_group_properties_version_t::CURRENT:
-            str = "Device::command_queue_group_properties_version_t::CURRENT";
+        case Device::command_queue_group_properties_version_t::_1_0:
+            str = "Device::command_queue_group_properties_version_t::_1_0";
             break;
 
         default:
@@ -4378,8 +4377,8 @@ namespace ze
 
         switch( val )
         {
-        case Device::memory_properties_version_t::CURRENT:
-            str = "Device::memory_properties_version_t::CURRENT";
+        case Device::memory_properties_version_t::_1_0:
+            str = "Device::memory_properties_version_t::_1_0";
             break;
 
         default:
@@ -4398,8 +4397,8 @@ namespace ze
 
         switch( val )
         {
-        case Device::memory_access_properties_version_t::CURRENT:
-            str = "Device::memory_access_properties_version_t::CURRENT";
+        case Device::memory_access_properties_version_t::_1_0:
+            str = "Device::memory_access_properties_version_t::_1_0";
             break;
 
         default:
@@ -4446,8 +4445,8 @@ namespace ze
 
         switch( val )
         {
-        case Device::cache_properties_version_t::CURRENT:
-            str = "Device::cache_properties_version_t::CURRENT";
+        case Device::cache_properties_version_t::_1_0:
+            str = "Device::cache_properties_version_t::_1_0";
             break;
 
         default:
@@ -4466,8 +4465,8 @@ namespace ze
 
         switch( val )
         {
-        case Device::image_properties_version_t::CURRENT:
-            str = "Device::image_properties_version_t::CURRENT";
+        case Device::image_properties_version_t::_1_0:
+            str = "Device::image_properties_version_t::_1_0";
             break;
 
         default:
@@ -4486,8 +4485,8 @@ namespace ze
 
         switch( val )
         {
-        case Device::p2p_properties_version_t::CURRENT:
-            str = "Device::p2p_properties_version_t::CURRENT";
+        case Device::p2p_properties_version_t::_1_0:
+            str = "Device::p2p_properties_version_t::_1_0";
             break;
 
         default:
@@ -4950,8 +4949,8 @@ namespace ze
 
         switch( val )
         {
-        case CommandQueue::desc_version_t::CURRENT:
-            str = "CommandQueue::desc_version_t::CURRENT";
+        case CommandQueue::desc_version_t::_1_0:
+            str = "CommandQueue::desc_version_t::_1_0";
             break;
 
         default:
@@ -5074,8 +5073,8 @@ namespace ze
 
         switch( val )
         {
-        case CommandList::desc_version_t::CURRENT:
-            str = "CommandList::desc_version_t::CURRENT";
+        case CommandList::desc_version_t::_1_0:
+            str = "CommandList::desc_version_t::_1_0";
             break;
 
         default:
@@ -5283,8 +5282,8 @@ namespace ze
 
         switch( val )
         {
-        case EventPool::desc_version_t::CURRENT:
-            str = "EventPool::desc_version_t::CURRENT";
+        case EventPool::desc_version_t::_1_0:
+            str = "EventPool::desc_version_t::_1_0";
             break;
 
         default:
@@ -5381,8 +5380,8 @@ namespace ze
 
         switch( val )
         {
-        case Event::desc_version_t::CURRENT:
-            str = "Event::desc_version_t::CURRENT";
+        case Event::desc_version_t::_1_0:
+            str = "Event::desc_version_t::_1_0";
             break;
 
         default:
@@ -5451,8 +5450,8 @@ namespace ze
 
         switch( val )
         {
-        case Fence::desc_version_t::CURRENT:
-            str = "Fence::desc_version_t::CURRENT";
+        case Fence::desc_version_t::_1_0:
+            str = "Fence::desc_version_t::_1_0";
             break;
 
         default:
@@ -5508,8 +5507,8 @@ namespace ze
 
         switch( val )
         {
-        case Image::desc_version_t::CURRENT:
-            str = "Image::desc_version_t::CURRENT";
+        case Image::desc_version_t::_1_0:
+            str = "Image::desc_version_t::_1_0";
             break;
 
         default:
@@ -5809,8 +5808,8 @@ namespace ze
 
         switch( val )
         {
-        case Image::properties_version_t::CURRENT:
-            str = "Image::properties_version_t::CURRENT";
+        case Image::properties_version_t::_1_0:
+            str = "Image::properties_version_t::_1_0";
             break;
 
         default:
@@ -5946,8 +5945,8 @@ namespace ze
 
         switch( val )
         {
-        case Module::desc_version_t::CURRENT:
-            str = "Module::desc_version_t::CURRENT";
+        case Module::desc_version_t::_1_0:
+            str = "Module::desc_version_t::_1_0";
             break;
 
         default:
@@ -6060,8 +6059,8 @@ namespace ze
 
         switch( val )
         {
-        case Kernel::desc_version_t::CURRENT:
-            str = "Kernel::desc_version_t::CURRENT";
+        case Kernel::desc_version_t::_1_0:
+            str = "Kernel::desc_version_t::_1_0";
             break;
 
         default:
@@ -6136,8 +6135,8 @@ namespace ze
 
         switch( val )
         {
-        case Kernel::properties_version_t::CURRENT:
-            str = "Kernel::properties_version_t::CURRENT";
+        case Kernel::properties_version_t::_1_0:
+            str = "Kernel::properties_version_t::_1_0";
             break;
 
         default:
@@ -6234,8 +6233,8 @@ namespace ze
 
         switch( val )
         {
-        case Sampler::desc_version_t::CURRENT:
-            str = "Sampler::desc_version_t::CURRENT";
+        case Sampler::desc_version_t::_1_0:
+            str = "Sampler::desc_version_t::_1_0";
             break;
 
         default:

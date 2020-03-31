@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file ze_api.hpp
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  */
 #ifndef _ZE_API_HPP
@@ -345,6 +345,7 @@ namespace ze
         enum class api_version_t
         {
             _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -352,7 +353,8 @@ namespace ze
         /// @brief API version of ::ze_driver_properties_t
         enum class properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -360,7 +362,8 @@ namespace ze
         /// @brief API version of ::ze_driver_ipc_properties_t
         enum class ipc_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -368,7 +371,8 @@ namespace ze
         /// @brief API version of ::ze_device_mem_alloc_desc_t
         enum class device_mem_alloc_desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -386,7 +390,8 @@ namespace ze
         /// @brief API version of ::ze_host_mem_alloc_desc_t
         enum class host_mem_alloc_desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -405,7 +410,8 @@ namespace ze
         /// @brief API version of ::ze_memory_allocation_properties_t
         enum class memory_allocation_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -887,7 +893,8 @@ namespace ze
         /// @brief API version of ::ze_device_properties_t
         enum class properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -904,7 +911,8 @@ namespace ze
         /// @brief API version of ::ze_device_compute_properties_t
         enum class compute_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -912,7 +920,8 @@ namespace ze
         /// @brief API version of ::ze_device_kernel_properties_t
         enum class kernel_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -940,7 +949,8 @@ namespace ze
         /// @brief API version of ::ze_command_queue_group_properties_t
         enum class command_queue_group_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -948,7 +958,8 @@ namespace ze
         /// @brief API version of ::ze_device_memory_properties_t
         enum class memory_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -956,7 +967,8 @@ namespace ze
         /// @brief API version of ::ze_device_memory_access_properties_t
         enum class memory_access_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -980,7 +992,8 @@ namespace ze
         /// @brief API version of ::ze_device_cache_properties_t
         enum class cache_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -988,7 +1001,8 @@ namespace ze
         /// @brief API version of ::ze_device_image_properties_t
         enum class image_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -996,7 +1010,8 @@ namespace ze
         /// @brief API version of ::ze_device_p2p_properties_t
         enum class p2p_properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -1382,8 +1397,7 @@ namespace ze
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves image X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT of
-        ///        the device
+        /// @brief Retrieves image properties of the device
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1686,7 +1700,8 @@ namespace ze
         /// @brief API version of ::ze_command_queue_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -1882,7 +1897,8 @@ namespace ze
         /// @brief API version of ::ze_command_list_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -2594,7 +2610,8 @@ namespace ze
         /// @brief API version of ::ze_event_pool_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -2761,7 +2778,8 @@ namespace ze
         /// @brief API version of ::ze_event_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -3008,7 +3026,8 @@ namespace ze
         /// @brief API version of ::ze_fence_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -3187,7 +3206,8 @@ namespace ze
         /// @brief API version of ::ze_image_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -3282,7 +3302,8 @@ namespace ze
         /// @brief API version of ::ze_image_properties_t
         enum class properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -3504,7 +3525,8 @@ namespace ze
         /// @brief API version of ::ze_module_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -3769,7 +3791,8 @@ namespace ze
         /// @brief API version of ::ze_kernel_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -3807,7 +3830,8 @@ namespace ze
         /// @brief API version of ::ze_kernel_properties_t
         enum class properties_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 
@@ -4112,7 +4136,8 @@ namespace ze
         /// @brief API version of ::ze_sampler_desc_t
         enum class desc_version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 

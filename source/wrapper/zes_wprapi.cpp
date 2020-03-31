@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file zes_wprapi.cpp
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  * @brief C++ wrapper of zes
  *
@@ -2915,8 +2915,8 @@ namespace zes
 
         switch( val )
         {
-        case Device::version_t::CURRENT:
-            str = "Device::version_t::CURRENT";
+        case Device::version_t::_1_0:
+            str = "Device::version_t::_1_0";
             break;
 
         default:

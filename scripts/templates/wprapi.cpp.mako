@@ -294,12 +294,14 @@ namespace ${n}
         switch( val )
         {
         %for item in obj['etors']:
+        %if not item['name'].endswith("CURRENT"):
         <%
             ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
         %>case ${tname}::${ename}:
             str = "${tname}::${ename}";
             break;
 
+        %endif
         %endfor
         default:
             str = "${tname}::?";
@@ -389,12 +391,14 @@ namespace ${n}
         switch( val )
         {
         %for item in e['etors']:
+        %if not item['name'].endswith("CURRENT"):
         <%
             ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
         %>case ${tname}::${ename}:
             str = "${tname}::${ename}";
             break;
 
+        %endif
         %endfor
         default:
             str = "${tname}::?";

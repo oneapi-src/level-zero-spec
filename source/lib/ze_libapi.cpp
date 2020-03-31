@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file ze_libapi.cpp
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  * @brief C++ static library for ze
  *
@@ -524,8 +524,7 @@ zeDeviceGetCacheProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves image X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT of
-///        the device
+/// @brief Retrieves image properties of the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.

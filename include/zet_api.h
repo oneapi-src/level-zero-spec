@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file zet_api.h
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  */
 #ifndef _ZET_API_H
@@ -584,7 +584,8 @@ typedef enum _zet_metric_group_sampling_type_t
 /// @brief API version of ::zet_metric_group_properties_t
 typedef enum _zet_metric_group_properties_version_t
 {
-    ZET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZET_METRIC_GROUP_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< latest known version
 
 } zet_metric_group_properties_version_t;
 
@@ -760,7 +761,8 @@ zetMetricGet(
 /// @brief API version of ::zet_metric_properties_t
 typedef enum _zet_metric_properties_version_t
 {
-    ZET_METRIC_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZET_METRIC_PROPERTIES_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),///< version 1.0
+    ZET_METRIC_PROPERTIES_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),///< latest known version
 
 } zet_metric_properties_version_t;
 
@@ -826,7 +828,8 @@ zetDeviceActivateMetricGroups(
 /// @brief API version of ::zet_metric_tracer_desc_t
 typedef enum _zet_metric_tracer_desc_version_t
 {
-    ZET_METRIC_TRACER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZET_METRIC_TRACER_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZET_METRIC_TRACER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } zet_metric_tracer_desc_version_t;
 
@@ -945,7 +948,8 @@ zetMetricTracerReadData(
 /// @brief API version of ::zet_metric_query_pool_desc_t
 typedef enum _zet_metric_query_pool_desc_version_t
 {
-    ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZET_METRIC_QUERY_POOL_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+    ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),   ///< latest known version
 
 } zet_metric_query_pool_desc_version_t;
 
@@ -1215,7 +1219,8 @@ zetModuleGetDebugInfo(
 /// @brief API version of ::zet_profile_info_t
 typedef enum _zet_profile_info_version_t
 {
-    ZET_PROFILE_INFO_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZET_PROFILE_INFO_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+    ZET_PROFILE_INFO_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ), ///< latest known version
 
 } zet_profile_info_version_t;
 
@@ -1305,7 +1310,8 @@ typedef ze_callbacks_t zet_core_callbacks_t;
 /// @brief API version of ::zet_tracer_desc_t
 typedef enum _zet_tracer_desc_version_t
 {
-    ZET_TRACER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZET_TRACER_DESC_VERSION_1_0 = ZE_MAKE_VERSION( 1, 0 ),  ///< version 1.0
+    ZET_TRACER_DESC_VERSION_CURRENT = ZE_MAKE_VERSION( 1, 0 ),  ///< latest known version
 
 } zet_tracer_desc_version_t;
 

@@ -22,7 +22,7 @@ desc: "API version of $t_tracer_desc_t"
 class: $tTracer
 name: $t_tracer_desc_version_t
 etors:
-    - name: $T_TRACER_DESC_VERSION_CURRENT
+    - name: $T_TRACER_DESC_VERSION_1_0
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------

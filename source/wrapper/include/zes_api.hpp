@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file zes_api.hpp
- * @version v1.0-r0.9.276
+ * @version v1.0-r0.9.277
  *
  */
 #ifndef _ZES_API_HPP
@@ -186,7 +186,8 @@ namespace zes
         /// @brief API version of Sysman
         enum class version_t
         {
-            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+            _1_0 = ZE_MAKE_VERSION( 1, 0 ),                 ///< version 1.0
+            CURRENT = ZE_MAKE_VERSION( 1, 0 ),              ///< latest known version
 
         };
 

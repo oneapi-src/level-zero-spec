@@ -14,7 +14,7 @@ desc: "API version of $x_image_desc_t"
 class: $xImage
 name: $x_image_desc_version_t
 etors:
-    - name: $X_IMAGE_DESC_VERSION_CURRENT
+    - name: $X_IMAGE_DESC_VERSION_1_0
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
@@ -224,7 +224,7 @@ desc: "API version of $x_image_properties_t"
 class: $xImage
 name: $x_image_properties_version_t
 etors:
-    - name: $X_IMAGE_PROPERTIES_VERSION_CURRENT
+    - name: $X_IMAGE_PROPERTIES_VERSION_1_0
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
