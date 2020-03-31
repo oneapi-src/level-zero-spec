@@ -2,19 +2,22 @@ cache:
   paths:
   - .irepo/
   - third_party/
+  - include/
+  - source/
+  - docs/
 
 stages:
 - build
 - deploy
 
-generate_html:
+generate:
   stage: build
   script:
     - call ci/pyenv.cmd update_pip
     - call ci/pyenv.cmd up
     - set PATH=%PATH%;%_CI_TOOLS_DIR%\doxygen_1.8.15.windows.x64;%VDIR%\Scripts
     - cd scripts
-    - python run.py --!core --!experimental --!tools --!rst
+    - python run.py
   artifacts:
     name: "%CI_JOB_NAME%"
     paths:
