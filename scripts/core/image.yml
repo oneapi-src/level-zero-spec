@@ -100,9 +100,7 @@ etors:
     - name: $X_IMAGE_FORMAT_LAYOUT_UYVY
       desc: "Media Format: UYVY. Format type and swizzle is ignored for this."
     - name: $X_IMAGE_FORMAT_LAYOUT_AYUV
-      desc: "Media Format: AYUV. Format type and swizzle is ignored for this."   
-    - name: $X_IMAGE_FORMAT_LAYOUT_YUAV
-      desc: "Media Format: YUAV. Format type and swizzle is ignored for this."
+      desc: "Media Format: AYUV. Format type and swizzle is ignored for this."
     - name: $X_IMAGE_FORMAT_LAYOUT_P010
       desc: "Media Format: P010. Format type and swizzle is ignored for this."
     - name: $X_IMAGE_FORMAT_LAYOUT_Y410
@@ -117,8 +115,6 @@ etors:
       desc: "Media Format: Y216. Format type and swizzle is ignored for this."
     - name: $X_IMAGE_FORMAT_LAYOUT_P216
       desc: "Media Format: P216. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_P416
-      desc: "Media Format: P416. Format type and swizzle is ignored for this."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image format types"

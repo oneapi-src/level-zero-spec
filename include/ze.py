@@ -947,7 +947,6 @@ class ze_image_format_layout_v(IntEnum):
     YVYU = auto()                                   ## Media Format: YVYU. Format type and swizzle is ignored for this.
     UYVY = auto()                                   ## Media Format: UYVY. Format type and swizzle is ignored for this.
     AYUV = auto()                                   ## Media Format: AYUV. Format type and swizzle is ignored for this.
-    YUAV = auto()                                   ## Media Format: YUAV. Format type and swizzle is ignored for this.
     P010 = auto()                                   ## Media Format: P010. Format type and swizzle is ignored for this.
     Y410 = auto()                                   ## Media Format: Y410. Format type and swizzle is ignored for this.
     P012 = auto()                                   ## Media Format: P012. Format type and swizzle is ignored for this.
@@ -955,7 +954,6 @@ class ze_image_format_layout_v(IntEnum):
     P016 = auto()                                   ## Media Format: P016. Format type and swizzle is ignored for this.
     Y216 = auto()                                   ## Media Format: Y216. Format type and swizzle is ignored for this.
     P216 = auto()                                   ## Media Format: P216. Format type and swizzle is ignored for this.
-    P416 = auto()                                   ## Media Format: P416. Format type and swizzle is ignored for this.
 
 class ze_image_format_layout_t(c_int):
     def __str__(self):

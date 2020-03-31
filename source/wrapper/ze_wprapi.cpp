@@ -5676,10 +5676,6 @@ namespace ze
             str = "Image::format_layout_t::AYUV";
             break;
 
-        case Image::format_layout_t::YUAV:
-            str = "Image::format_layout_t::YUAV";
-            break;
-
         case Image::format_layout_t::P010:
             str = "Image::format_layout_t::P010";
             break;
@@ -5706,10 +5702,6 @@ namespace ze
 
         case Image::format_layout_t::P216:
             str = "Image::format_layout_t::P216";
-            break;
-
-        case Image::format_layout_t::P416:
-            str = "Image::format_layout_t::P416";
             break;
 
         default:

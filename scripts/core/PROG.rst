@@ -254,6 +254,47 @@ these details in the API in a backwards compatible fashion.
        ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr);
        ...
 
+A format descriptor is a combination of a format layout, type, and a swizzle.
+The format layout describes the number of components and their corresponding bit
+widths. The type describes the data type for all of these components with some
+exceptions that are described below. The swizzles associate how the image
+components are mapped into XYZW/RGBA channels of the kernel. It is allowed
+to replicate components into the channels.
+
+The following table describes which types are required for each layout.
+
++---------------+-------------+-------------+-------------+-------------+-------------+
+| Format layout | UINT        | SINT        | UNORM       | SNORM       | FLOAT       |
++===============+=============+=============+=============+=============+=============+
+| 8             | Required    | Required    | Required    | Required    | Unsupported |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 8_8           | Required    | Required    | Required    | Required    | Unsupported |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 8_8_8_8       | Required    | Required    | Required    | Required    | Unsupported |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 16            | Required    | Required    | Required    | Required    | Required    |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 16_16         | Required    | Required    | Required    | Required    | Required    |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 16_16_16_16   | Required    | Required    | Required    | Required    | Required    |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 32            | Required    | Required    | Required    | Required    | Required    |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 32_32         | Required    | Required    | Required    | Required    | Required    |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 32_32_32_32   | Required    | Required    | Required    | Required    | Required    |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 10_10_10_2    | Required    | Required    | Required    | Required    | Required    |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 11_11_10      | Unsupported | Unsupported | Unsupported | Unsupported | Required    |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 5_6_5         | Unsupported | Unsupported | Required    | Unsupported | Unsupported |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 5_5_5_1       | Unsupported | Unsupported | Required    | Unsupported | Unsupported |
++---------------+-------------+-------------+-------------+-------------+-------------+
+| 4_4_4_4       | Unsupported | Unsupported | Required    | Unsupported | Unsupported |
++---------------+-------------+-------------+-------------+-------------+-------------+
+
 Device Cache Settings
 ---------------------
 
@@ -1416,7 +1457,7 @@ The following code examples demonstrate how to use the event IPC APIs:
        // get IPC handle from other process
        ${x}_ipc_event_pool_handle_t hIpcEventPool;
        receive_from_sending_process(&hIpcEventPool);
-    
+
        // open event pool
        ${x}_event_pool_handle_t hEventPool;
        ${x}EventPoolOpenIpcHandle(hDriver, hIpcEventPool, &hEventPool);

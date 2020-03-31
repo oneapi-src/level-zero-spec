@@ -2894,7 +2894,6 @@ typedef enum _ze_image_format_layout_t
     ZE_IMAGE_FORMAT_LAYOUT_YVYU,                    ///< Media Format: YVYU. Format type and swizzle is ignored for this.
     ZE_IMAGE_FORMAT_LAYOUT_UYVY,                    ///< Media Format: UYVY. Format type and swizzle is ignored for this.
     ZE_IMAGE_FORMAT_LAYOUT_AYUV,                    ///< Media Format: AYUV. Format type and swizzle is ignored for this.
-    ZE_IMAGE_FORMAT_LAYOUT_YUAV,                    ///< Media Format: YUAV. Format type and swizzle is ignored for this.
     ZE_IMAGE_FORMAT_LAYOUT_P010,                    ///< Media Format: P010. Format type and swizzle is ignored for this.
     ZE_IMAGE_FORMAT_LAYOUT_Y410,                    ///< Media Format: Y410. Format type and swizzle is ignored for this.
     ZE_IMAGE_FORMAT_LAYOUT_P012,                    ///< Media Format: P012. Format type and swizzle is ignored for this.
@@ -2902,7 +2901,6 @@ typedef enum _ze_image_format_layout_t
     ZE_IMAGE_FORMAT_LAYOUT_P016,                    ///< Media Format: P016. Format type and swizzle is ignored for this.
     ZE_IMAGE_FORMAT_LAYOUT_Y216,                    ///< Media Format: Y216. Format type and swizzle is ignored for this.
     ZE_IMAGE_FORMAT_LAYOUT_P216,                    ///< Media Format: P216. Format type and swizzle is ignored for this.
-    ZE_IMAGE_FORMAT_LAYOUT_P416,                    ///< Media Format: P416. Format type and swizzle is ignored for this.
 
 } ze_image_format_layout_t;
 

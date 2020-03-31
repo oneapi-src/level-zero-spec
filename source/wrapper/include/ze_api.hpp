@@ -3260,7 +3260,6 @@ namespace ze
             YVYU,                                           ///< Media Format: YVYU. Format type and swizzle is ignored for this.
             UYVY,                                           ///< Media Format: UYVY. Format type and swizzle is ignored for this.
             AYUV,                                           ///< Media Format: AYUV. Format type and swizzle is ignored for this.
-            YUAV,                                           ///< Media Format: YUAV. Format type and swizzle is ignored for this.
             P010,                                           ///< Media Format: P010. Format type and swizzle is ignored for this.
             Y410,                                           ///< Media Format: Y410. Format type and swizzle is ignored for this.
             P012,                                           ///< Media Format: P012. Format type and swizzle is ignored for this.
@@ -3268,7 +3267,6 @@ namespace ze
             P016,                                           ///< Media Format: P016. Format type and swizzle is ignored for this.
             Y216,                                           ///< Media Format: Y216. Format type and swizzle is ignored for this.
             P216,                                           ///< Media Format: P216. Format type and swizzle is ignored for this.
-            P416,                                           ///< Media Format: P416. Format type and swizzle is ignored for this.
 
         };
 
