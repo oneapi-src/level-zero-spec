@@ -20,6 +20,8 @@ generate_html:
     paths:
       - docs/html/
       - docs/ref/
+      - include/
+      - source/wrapper/include/
     expire_in: 1 week
   only:
     refs:
