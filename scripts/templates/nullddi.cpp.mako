@@ -14,7 +14,7 @@ from templates import helper as th
  * SPDX-License-Identifier: MIT
  *
  * @file ${name}.cpp
- * @version v${ver}-${rev}
+ * @version v${ver}-r${rev}
  *
  */
 #include "${x}_null.h"

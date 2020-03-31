@@ -15,8 +15,8 @@ class: $xFence
 name: $x_fence_desc_version_t
 etors:
     - name: $X_FENCE_DESC_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 0, 91 )"
-      desc: "version 0.91"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported fence creation flags"

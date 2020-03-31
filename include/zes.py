@@ -4,7 +4,7 @@
  SPDX-License-Identifier: MIT
 
  @file zes.py
- @version v0.91-275
+ @version v1.0-r0.9.276
 
  """
 import platform
@@ -107,7 +107,7 @@ class zes_event_handle_t(c_void_p):
 ###############################################################################
 ## @brief API version of Sysman
 class zes_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
 class zes_version_t(c_int):
     def __str__(self):

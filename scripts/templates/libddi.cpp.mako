@@ -14,7 +14,7 @@ from templates import helper as th
  * SPDX-License-Identifier: MIT
  *
  * @file ${name}.cpp
- * @version v${ver}-${rev}
+ * @version v${ver}-r${rev}
  *
  */
 #include "${x}_lib.h"
@@ -31,7 +31,7 @@ namespace ${x}_lib
         {
             auto getTable = reinterpret_cast<${tbl['pfn']}>(
                 GET_FUNCTION_PTR(loader, "${tbl['export']['name']}") );
-            result = getTable( ${X}_API_VERSION_0_91, &${n}DdiTable.${tbl['name']} );
+            result = getTable( ${X}_API_VERSION_1_0, &${n}DdiTable.${tbl['name']} );
         }
 
     %endfor

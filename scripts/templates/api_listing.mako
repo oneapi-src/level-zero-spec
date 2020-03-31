@@ -7,7 +7,7 @@ from templates import helper as th
 ==============================
 ${groupname} API
 ==============================
-oneAPI Level Zero Specification - Version ${ver}
+oneAPI Level Zero Specification - Version ${ver} - Revision ${rev}
 
 %for s in specs:
 <%

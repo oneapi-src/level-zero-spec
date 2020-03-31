@@ -59,16 +59,17 @@ def revision():
     result = subprocess.run(['git', 'describe', '--dirty'], cwd=os.path.dirname(os.path.abspath(__file__)), stdout=subprocess.PIPE)
     if result.returncode:
         print('ERROR: Could not get revision number from git', file=sys.stderr)
-        return 0
+        return '0'
 
-    str = result.stdout.decode().strip()
-    revision = int(str.split('-')[1])
+    items = result.stdout.decode().strip().split('-')
+    tag = items[0][1:] # remove 'v'
+    count = int(items[1])
 
-    # Bump revision number if any local files are dirty.  
-    # Keeps the revision the same after doing a commit (assuming all dirty files are committed)
-    if 'dirty' in str:
-        revision += 1
-    return revision
+    # Bump count if any local files are dirty.  
+    # Keeps the count the same after doing a commit (assuming all dirty files are committed)
+    if 'dirty' in items[-1]:
+        count += 1
+    return '%s.%s'%(tag, count)
 
 
 """
@@ -95,7 +96,7 @@ def main():
     add_argument(parser, "pdf", "generation of PDF file.")
     add_argument(parser, "rst", "generation of reStructuredText files.", True)
     parser.add_argument("--update_spec", type=str, help="root of integrated spec directory to update")
-    parser.add_argument("--ver", type=str, default="0.91", required=False, help="specification version to generate.")
+    parser.add_argument("--ver", type=str, default="1.0", required=False, help="specification version to generate.")
     args = vars(parser.parse_args())
     args['rev'] = revision()
 

@@ -118,7 +118,8 @@ def generate_rst(srcpath, dstpath, tags, ver, rev, meta, specs):
         groupname = os.path.basename(dstpath).capitalize()
         util.makoWrite(fin, fout,
             groupname=groupname,
-            ver=float(ver),
+            ver=ver,
+            rev=rev,
             tags=tags,
             meta=meta,
             specs=specs)

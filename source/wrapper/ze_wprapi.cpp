@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file ze_wprapi.cpp
- * @version v0.91-275
+ * @version v1.0-r0.9.276
  *
  * @brief C++ wrapper of ze
  *
@@ -3893,8 +3893,8 @@ namespace ze
 
         switch( val )
         {
-        case Driver::api_version_t::_0_91:
-            str = "Driver::api_version_t::_0_91";
+        case Driver::api_version_t::_1_0:
+            str = "Driver::api_version_t::_1_0";
             break;
 
         default:

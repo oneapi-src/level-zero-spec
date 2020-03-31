@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file zex_libddi.cpp
- * @version v0.91-275
+ * @version v1.0-r0.9.276
  *
  */
 #include "ze_lib.h"
@@ -21,14 +21,14 @@ namespace ze_lib
         {
             auto getTable = reinterpret_cast<zex_pfnGetCommandListProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "zexGetCommandListProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zexDdiTable.CommandList );
+            result = getTable( ZE_API_VERSION_1_0, &zexDdiTable.CommandList );
         }
 
         if( ZE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<zex_pfnGetCommandGraphProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "zexGetCommandGraphProcAddrTable") );
-            result = getTable( ZE_API_VERSION_0_91, &zexDdiTable.CommandGraph );
+            result = getTable( ZE_API_VERSION_1_0, &zexDdiTable.CommandGraph );
         }
 
         return result;

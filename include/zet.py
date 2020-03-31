@@ -4,7 +4,7 @@
  SPDX-License-Identifier: MIT
 
  @file zet.py
- @version v0.91-275
+ @version v1.0-r0.9.276
 
  """
 import platform
@@ -251,7 +251,7 @@ class zet_metric_group_sampling_type_t(c_int):
 ###############################################################################
 ## @brief API version of ::zet_metric_group_properties_t
 class zet_metric_group_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
 class zet_metric_group_properties_version_t(c_int):
     def __str__(self):
@@ -344,7 +344,7 @@ ZET_MAX_METRIC_RESULT_UNITS = 256
 ###############################################################################
 ## @brief API version of ::zet_metric_properties_t
 class zet_metric_properties_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
 class zet_metric_properties_version_t(c_int):
     def __str__(self):
@@ -368,7 +368,7 @@ class zet_metric_properties_t(Structure):
 ###############################################################################
 ## @brief API version of ::zet_metric_tracer_desc_t
 class zet_metric_tracer_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
 class zet_metric_tracer_desc_version_t(c_int):
     def __str__(self):
@@ -388,7 +388,7 @@ class zet_metric_tracer_desc_t(Structure):
 ###############################################################################
 ## @brief API version of ::zet_metric_query_pool_desc_t
 class zet_metric_query_pool_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
 class zet_metric_query_pool_desc_version_t(c_int):
     def __str__(self):
@@ -428,7 +428,7 @@ class zet_module_debug_info_format_t(c_int):
 ###############################################################################
 ## @brief API version of ::zet_profile_info_t
 class zet_profile_info_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
 class zet_profile_info_version_t(c_int):
     def __str__(self):
@@ -495,7 +495,7 @@ class zet_core_callbacks_t(ze_callbacks_t):
 ###############################################################################
 ## @brief API version of ::zet_tracer_desc_t
 class zet_tracer_desc_version_v(IntEnum):
-    CURRENT = ZE_MAKE_VERSION( 0, 91 )              ## version 0.91
+    CURRENT = ZE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
 class zet_tracer_desc_version_t(c_int):
     def __str__(self):

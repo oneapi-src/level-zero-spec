@@ -27,7 +27,7 @@ def _validate_doc(d):
     filters object by version
 """
 def _filter_version(d, max_ver):
-    default_version = "0.91"
+    default_version = "1.0"
     type = d['type']
     ver = float(d.get('version', default_version))
     if ver > max_ver:

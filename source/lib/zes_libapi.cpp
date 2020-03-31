@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: MIT
  *
  * @file zes_libapi.cpp
- * @version v0.91-275
+ * @version v1.0-r0.9.276
  *
  * @brief C++ static library for zes
  *

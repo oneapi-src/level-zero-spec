@@ -59,8 +59,8 @@ class: $tMetricGroup
 name: $t_metric_group_properties_version_t
 etors:
     - name: $T_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 0, 91 )"
-      desc: "version 0.91"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric group properties queried using $tMetricGroupGetProperties"
@@ -253,8 +253,8 @@ class: $tMetric
 name: $t_metric_properties_version_t
 etors:
     - name: $T_METRIC_PROPERTIES_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 0, 91 )"
-      desc: "version 0.91"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric properties queried using $tMetricGetProperties"
@@ -325,8 +325,8 @@ class: $tMetricTracer
 name: $t_metric_tracer_desc_version_t
 etors:
     - name: $T_METRIC_TRACER_DESC_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 0, 91 )"
-      desc: "version 0.91"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric tracer descriptor"
@@ -430,8 +430,8 @@ class: $tMetricQueryPool
 name: $t_metric_query_pool_desc_version_t
 etors:
     - name: $T_METRIC_QUERY_POOL_DESC_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 0, 91 )"
-      desc: "version 0.91"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric query pool types"

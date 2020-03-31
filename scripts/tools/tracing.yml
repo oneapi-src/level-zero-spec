@@ -23,8 +23,8 @@ class: $tTracer
 name: $t_tracer_desc_version_t
 etors:
     - name: $T_TRACER_DESC_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 0, 91 )"
-      desc: "version 0.91"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Tracer descriptor"
