@@ -668,11 +668,61 @@ The following pseudo-code demonstrates a sequence for creation and submission of
 
        // Execute the command list with the signal
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+
+       // Wait on event to complete
+       ${x}EventHostSynchronize(hEvent, 0);
        ...
 
 The following diagram illustrates an event being signaled between kernels within a command list:
 
 .. image:: ../images/core_event.png
+
+Timestamp Events
+~~~~~~~~~~~~~~~
+
+A timestamp event is a special type of event that records device timestamps at the start and end of the execution of functions.
+
+.. code:: c
+
+       // Get timestamp frequency
+       uint64_t timestampFreq = device_properties.timerResolution;
+
+       // Create event pool
+       ${x}_event_pool_desc_t tsEventPoolDesc = {
+           ${X}_EVENT_POOL_DESC_VERSION_CURRENT,
+           ${X}_EVENT_POOL_FLAG_TIMESTAMP, // all events in pool are timestamps
+           1
+       };
+       ${x}_event_pool_handle_t hTSEventPool;
+       ${x}EventPoolCreate(hDriver, &tsEventPoolDesc, 0, nullptr, &hTSEventPool);
+
+       ${x}_event_desc_t tsEventDesc = {
+           ${X}_EVENT_DESC_VERSION_CURRENT,
+           0,
+           ${X}_EVENT_SCOPE_FLAG_NONE,
+           ${X}_EVENT_SCOPE_FLAG_NONE
+       };
+       ${x}_event_handle_t hTSEvent;
+       ${x}EventCreate(hEventPool, &tsEventDesc, &hTSEvent);
+
+       // Append a signal of a timestamp event into the command list after the kernel executes
+       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hTSEvent, 0, nullptr);
+
+       // Append a query of a timestamp event into the command list
+       ${x}_timestamp_result_t tsResult = {0};
+       ${x}CommandListAppendQueryTimestamps(hCommandList, 1, &hTSEvent, &tsResult, nullptr, hEvent, 1, &hTSEvent);
+
+       // Execute the command list with the signal
+       ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+
+       // Wait on event to complete
+       ${x}EventHostSynchronize(hEvent, 0);
+
+       // Calculation execution time(s)
+       double globalTimeInNs = ( tsResult.global.functionEnd - tsResult.global.functionStart ) / (double)timestampFreq;
+       double contextTimeInNs = ( tsResult.context.functionEnd - tsResult.context.functionStart ) / (double)timestampFreq;
+       ...
+
 
 Barriers
 ========

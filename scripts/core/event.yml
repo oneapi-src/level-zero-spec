@@ -34,7 +34,7 @@ etors:
       desc: "signals and waits may be shared across processes"
     - name: $X_EVENT_POOL_FLAG_TIMESTAMP
       value: "$X_BIT(2)"
-      desc: "Indicates all events in pool will contain timestamp information that can be queried using $xEventGetTimestamp"
+      desc: "Indicates all events in pool will contain timestamp information"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event pool descriptor"
@@ -279,7 +279,7 @@ params:
       desc: "[in] number of events to wait on before continuing"
     - type: "$x_event_handle_t*"
       name: phEvents
-      desc: "[in][range(0, numEvents)] handle of the events to wait on before continuing"
+      desc: "[in][range(0, numEvents)] handles of the events to wait on before continuing"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
@@ -324,7 +324,7 @@ returns:
        - "timeout expired"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Queries an event object's status."
+desc: "Queries an event object's status on the host."
 class: $xEvent
 name: QueryStatus
 analogue:
@@ -343,7 +343,7 @@ returns:
         - not signaled
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reset an event back to not signaled state"
+desc: "Appends a reset of an event back to not signaled state into a command list."
 class: $xCommandList
 name: AppendEventReset
 analogue:
@@ -362,7 +362,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reset an event back to not signaled state"
+desc: "The current host thread resets an event back to not signaled state."
 class: $xEvent
 name: HostReset
 analogue:
@@ -377,38 +377,82 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported timestamp types"
-class: $xEventPool
-name: $x_event_timestamp_type_t
-etors:
-    - name: $X_EVENT_TIMESTAMP_GLOBAL_START
-      value: "0"
-      desc: "wall-clock time start in GPU clocks for event. Data is uint64_t."
-    - name: $X_EVENT_TIMESTAMP_GLOBAL_END
-      desc: "wall-clock time end in GPU clocks for event.Data is uint64_t."
-    - name: $X_EVENT_TIMESTAMP_CONTEXT_START
-      desc: "context time start in GPU clocks for event.  Only includes time while HW context is actively running on GPU. Data is uint64_t."
-    - name: $X_EVENT_TIMESTAMP_CONTEXT_END
-      desc: "context time end in GPU clocks for event.  Only includes time while HW context is actively running on GPU. Data is uint64_t."
+type: struct
+desc: "Raw timestamp clock data"
+class: $xEvent
+name: $x_timestamp_data_t
+members:
+    - type: uint64_t
+      name: functionStart
+      desc: "[out] GPU clock at start of function execution"
+    - type: uint64_t
+      name: functionEnd
+      desc: "[out] GPU clock at start of function execution"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Timestamp result"
+class: $xEvent
+name: $x_timestamp_result_t
+members:
+    - type: $x_timestamp_data_t
+      name: global
+      desc: "[out] wall-clock data"
+    - type: $x_timestamp_data_t
+      name: context
+      desc: "[out] context-active data; only includes clocks while device context was actively executing."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Query timestamp information associated with an event. Event must come from an event pool that was created using $X_EVENT_POOL_FLAG_TIMESTAMP flag."
+desc: "Queries and event's timestamp value on the host."
 class: $xEvent
-name: GetTimestamp
+name: QueryTimestamp
 details:
+    - "The event must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_TIMESTAMP flag."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-    - type: $x_event_timestamp_type_t
-      name: timestampType
-      desc: "[in] specifies timestamp type to query for that is associated with hEvent."
-    - type: void*
+    - type: "$x_timestamp_result_t*"
       name: dstptr
-      desc: "[in,out] pointer to memory for where timestamp will be written to. The size of timestamp is specified in the $x_event_timestamp_type_t definition."
+      desc: "[in,out] pointer to memory for where timestamp result will be written."
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appens a query of an events' timestamp value(s) into a command list."
+class: $xCommandList
+name: AppendQueryTimestamps
+details:
+    - "The events must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_TIMESTAMP flag."
+    - "If pOffsets is nullptr, then multiple results will be appended sequentially into memory in the same order as phEvents."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint32_t
+      name: numEvents
+      desc: "[in] the number of timestamp events to query"
+    - type: "$x_event_handle_t*"
+      name: phEvents
+      desc: "[in][range(0, numEvents)] handles of timestamp events to query"
+    - type: "void*"
+      name: dstptr
+      desc: "[in,out] pointer to memory for where timestamp results will be written."
+    - type: "const size_t*"
+      name: pOffsets
+      desc: "[in][optional][range(0, numEvents)] offset to write results; must be 64bit-aligned."
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before executing query"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before executing query"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
