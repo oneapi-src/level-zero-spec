@@ -420,7 +420,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Appens a query of an events' timestamp value(s) into a command list."
+desc: "Appends a query of an events' timestamp value(s) into a command list."
 class: $xCommandList
 name: AppendQueryTimestamps
 details:
