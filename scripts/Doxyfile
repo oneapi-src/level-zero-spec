@@ -1790,9 +1790,6 @@ LATEX_EXTRA_FILES      = ../docs/source/images/core_device.png \
                          ../docs/source/images/core_subdevice.png \
                          ../docs/source/images/core_sync.png \
                          ../docs/source/images/intel-logo.png \
-                         ../docs/source/images/intro_driver.png \
-                         ../docs/source/images/intro_loader.png \
-                         ../docs/source/images/intro_tools.png \
                          ../docs/source/images/tools_metric_hierarchy.png \
                          ../docs/source/images/tools_metric_query.png \
                          ../docs/source/images/tools_metric_tracer.png \

@@ -156,7 +156,7 @@ def generate_html(dstpath, sections, ver, rev):
         loc += util.makoWrite(
             "./templates/%s.mako" % fn,
             os.path.join(sourcepath, fn),
-            ver=float(ver),
+            ver=rev,
             sourcepath=sourcepath,
             sections=sections)
 
