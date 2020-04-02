@@ -98,7 +98,7 @@ def _generate_returns(specs, meta):
                             _append(rets, "$X_RESULT_ERROR_INVALID_NULL_HANDLE", "`nullptr == %s`"%item['name'])
 
                         elif type_traits.is_enum(item['type'], meta):
-                            _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s <= %s`"%(meta['enum'][typename]['max'], item['name']))
+                            _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s`"%(meta['enum'][typename]['max'], item['name']))
 
                         if type_traits.is_descriptor(item['type']):
                             # walk each entry in the desc for pointers and enums
@@ -112,7 +112,7 @@ def _generate_returns(specs, meta):
                                     if re.match(r"version", meta['struct'][typename]['names'][i]):
                                         _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s < %s->version`"%(re.sub(r"(.*)_t.*", r"\1_CURRENT", mtypename).upper(), item['name']))
                                     else:
-                                        _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s <= %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], meta['struct'][typename]['names'][i]))
+                                        _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], meta['struct'][typename]['names'][i]))
 
                 # finally, append all user entries
                 for item in obj.get('returns', []):
@@ -187,7 +187,7 @@ def _generate_meta(d, ordinal, meta):
         # add values to list
         if 'enum' == type:
             max_value = -1
-            for etor in d['etors']:
+            for idx, etor in enumerate(d['etors']):
                 meta[type][name]['types'].append(etor['name'])
                 if 'value' in etor:
                     ver = re.match(r"\$X_MAKE_VERSION\(\s*(\d+)\s*\,\s*(\d+)\s*\)", etor['value'])
@@ -202,8 +202,10 @@ def _generate_meta(d, ordinal, meta):
                         value = int(etor['value'])
                 else:
                     value = max_value+1
-                max_value = max(max_value, value)
-            meta[type][name]['max'] = str(max_value)
+                if value > max_value:
+                    max_value = value
+                    max_index = idx
+            meta[type][name]['max'] = d['etors'][idx]['name']
 
         elif 'macro' == type:
             if 'value' in d:
