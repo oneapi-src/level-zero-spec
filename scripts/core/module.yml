@@ -66,11 +66,11 @@ members:
       init: nullptr
     - type: "const char*"
       name: pBuildFlags
-      desc: "[in] string containing compiler flags. See programming guide for build flags."
+      desc: "[in][optional] string containing compiler flags. See programming guide for build flags."
       init: nullptr
     - type: "const $x_module_constants_t*"
       name: pConstants
-      desc: "[in] pointer to specialization constants. Valid only for SPIR-V input. This must be set to nullptr if no specialization constants are provided."
+      desc: "[in][optional] pointer to specialization constants. Valid only for SPIR-V input. This must be set to nullptr if no specialization constants are provided."
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function

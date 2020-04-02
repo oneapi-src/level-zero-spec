@@ -68,6 +68,10 @@ class type_traits:
     RE_POINTER  = r"(.*\w+)\*+"
     RE_DESC     = r"(.*)desc_t.*"
 
+    @staticmethod
+    def base(name):
+        return _remove_const_ptr(name)
+
     @classmethod
     def is_handle(cls, name):
         try:
@@ -1210,92 +1214,17 @@ def make_details_lines(namespace, tags, obj, cpp=False):
 Public:
     returns a dict of auto-generated c++ parameter validation checks
 """
-def make_param_checks(namespace, tags, obj, comment=False, cpp=False, meta=None):
-    euv = subt(namespace, tags, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", comment, cpp)
-    eia = subt(namespace, tags, "$X_RESULT_ERROR_INVALID_ARGUMENT", comment, cpp)
-    eih = subt(namespace, tags, "$X_RESULT_ERROR_INVALID_NULL_HANDLE", comment, cpp)
-    eio = subt(namespace, tags, "$X_RESULT_ERROR_HANDLE_OBJECT_IN_USE", comment, cpp)
-    eip = subt(namespace, tags, "$X_RESULT_ERROR_INVALID_NULL_POINTER", comment, cpp)
-    eie = subt(namespace, tags, "$X_RESULT_ERROR_INVALID_ENUMERATION", comment, cpp)
-
+def make_param_checks(namespace, tags, obj, cpp=False, meta=None):
     checks = {}
-    for item in obj['params']:
-        if not param_traits.is_optional(item):
-            is_pointer = type_traits.is_pointer(item['type'])
-            is_handle = type_traits.is_handle(item['type'])
-            is_ipc_handle = type_traits.is_ipc_handle(item['type'])
-            is_desc = type_traits.is_descriptor(item['type'])
-            is_enum = type_traits.is_enum(item['type'], meta)
-
-            cpp_name = subt(namespace, tags, item['name'], comment, cpp)
-            if is_pointer:
-                if eip not in checks:
-                    checks[eip] = []
-                if comment:
-                    checks[eip].append("`nullptr == %s`"%cpp_name)
-                else:
-                    checks[eip].append("nullptr == %s"%cpp_name)
-            elif is_handle and not is_ipc_handle:
-                if eih not in checks:
-                    checks[eih] = []
-                if comment:
-                    checks[eih].append("`nullptr == %s`"%cpp_name)
-                else:
-                    checks[eih].append("nullptr == %s"%cpp_name)
-            elif is_enum:
-                if eie not in checks:
-                    checks[eie] = []
-                typename = _remove_const_ptr(item['type'])
-                if comment:
-                    checks[eie].append("%s"%cpp_name)
-                else:
-                    checks[eie].append("%s <= %s"%(meta['enum'][typename]['max'], cpp_name))
-
-            if is_desc: # descriptor-type
-                if euv not in checks:
-                    checks[euv] = []
-                typename = _remove_const_ptr(item['type'])
-
-                # walk each entry in the desc for pointers and enums
-                for idx, mtype in enumerate(meta['struct'][typename]['types']):
-                    mis_pointer = type_traits.is_pointer(mtype)
-                    mis_enum = type_traits.is_enum(mtype, meta)
-                    cpp_mname = subt(namespace, tags, meta['struct'][typename]['names'][idx], comment, cpp)
-
-                    if mis_pointer:
-                        if eip not in checks:
-                            checks[eip] = []
-                        if comment:
-                            checks[eip].append("`nullptr == %s->%s`"%(cpp_name, cpp_mname))
-                        else:
-                            checks[eip].append("nullptr == %s->%s"%(cpp_name, cpp_mname))
-                    elif mis_enum:
-                        if eie not in checks:
-                            checks[eie] = []
-                        mtypename = _remove_const_ptr(mtype)
-                        if re.match(r"version", cpp_mname):
-                            ver = re.sub(r"(.*)_t.*", r"\1_CURRENT", subt(namespace, tags, mtypename, comment, cpp)).upper()
-                            if comment:
-                                checks[euv].append("`%s < %s->version`"%(ver, cpp_name))
-                            else:
-                                checks[euv].append("%s < %s->version"%(ver, cpp_name))
-                        else:
-                            if comment:
-                                checks[eie].append("%s->%s"%(cpp_name, cpp_mname))
-                            else:
-                                checks[eie].append("%s <= %s->%s"%(meta['enum'][mtypename]['max'], cpp_name, cpp_mname))
-
-    if not comment and 'returns' in obj:
-        for item in obj['returns']:
-            if isinstance(item, dict):
-                for key, values in item.items():
-                    key = subt(namespace, tags, key, False, cpp)
-                    for val in values:
-                        code = re.match(r"^\`(.*)\`$", val)
-                        if code:
-                            if key not in checks:
-                                checks[key] = []
-                            checks[key].append(subt(namespace, tags, code.group(1), False, cpp))
+    for item in obj.get('returns', []):
+        for key, values in item.items():
+            key = subt(namespace, tags, key, False, cpp)
+            for val in values:
+                code = re.match(r"^\`(.*)\`$", val)
+                if code:
+                    if key not in checks:
+                        checks[key] = []
+                    checks[key].append(subt(namespace, tags, code.group(1), False, cpp))
     return checks
 
 """
@@ -1313,48 +1242,22 @@ def make_returns_lines(namespace, tags, obj, cpp=False, meta=None):
                 tname = _remove_const_ptr(_get_type_name(namespace, tags, obj, p, cpp, meta))
                 lines.append("    - %s"%subt(namespace, tags, "%s:%s"%(tname, desc), True, cpp))
             lines.append("")
-        if 'returns' in obj:
-            for item in obj['returns']:
-                if isinstance(item, dict):
-                    for key, values in item.items():
-                        rname = key
-                else:
-                    rname = item
-                if "$X_RESULT_NOT_READY" == rname:
+        for item in obj.get('returns', []):
+            for key, values in item.items():
+                if "$X_RESULT_NOT_READY" == key:
                     if len(lines) == 0:
                         lines.append("@returns")
                     lines.append("    - %s"%subt(namespace, tags, "$x_bool_t:'0' when $X_RESULT_NOT_READY", cpp=cpp))
         lines.append("@throws result_t")
-        return lines
 
-    lines.append("@returns")
-    lines.append("    - %s"%subt(namespace, tags, "$X_RESULT_SUCCESS", True, cpp))
-    lines.append("    - %s"%subt(namespace, tags, "$X_RESULT_ERROR_UNINITIALIZED", True, cpp))
-    lines.append("    - %s"%subt(namespace, tags, "$X_RESULT_ERROR_DEVICE_LOST", True, cpp))
+    else:
+        lines.append("@returns")
+        for item in obj.get('returns', []):
+            for key, values in item.items():
+                lines.append("    - %s"%subt(namespace, tags, key, True, cpp))
+                for val in values:
+                    lines.append("        + %s"%subt(namespace, tags, val, True, cpp))
 
-    # generate default checks
-    gen = make_param_checks(namespace, tags, obj, True, cpp, meta)
-
-    # merge user-specified values
-    if 'returns' in obj:
-        for item in obj['returns']:
-            if isinstance(item, dict):
-                for key, values in item.items():
-                    key = subt(namespace, tags, key, True, cpp)
-                    if key not in gen:
-                        gen[key] = []
-                    for val in values:
-                        gen[key].append(subt(namespace, tags, val, True, cpp))
-            else:
-                key = subt(namespace, tags, item, True, cpp)
-                if key not in gen:
-                    gen[key] = []
-
-    # now make combined lines
-    for key, values in gen.items():
-        lines.append("    - %s"%key)
-        for val in values:
-            lines.append("        + %s"%val)
     return lines
 
 """
@@ -1383,14 +1286,9 @@ def make_return_type(namespace, tags, obj, cpp=False, decl=False, meta=None):
 
             types.append(tname)
 
-    if 'returns' in obj:
-        for item in obj['returns']:
-            if isinstance(item, dict):
-                for key, values in item.items():
-                    rname = key
-            else:
-                rname = item
-            if "$X_RESULT_NOT_READY" == rname:
+    for item in obj.get('returns', []):
+        for key, values in item.items():
+            if "$X_RESULT_NOT_READY" == key:
                 types.append(subt(namespace, tags, "$x_bool_t", cpp=cpp))
 
     if len(types) == 0:
