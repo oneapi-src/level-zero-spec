@@ -683,7 +683,7 @@ Kernel Timestamp Events
 A kernel timestamp event is a special type of event that records device timestamps at the start and end of the execution of kernels.
 
 - A kernel timestamp event can only be signaled from ::${x}CommandListAppendLaunchKernel et al. functions
-- A kernel timestamp event result can be queried using either ::${x}EventQueryTimestamp or ::${x}CommandListAppendQueryTimestamps
+- A kernel timestamp event result can be queried using either ::${x}EventQueryKernelTimestamp or ::${x}CommandListAppendQueryKernelTimestamps
 - The ::${x}_kernel_timestamp_result_t contains both the per-context and global timestamp values at the start and end of the kernel's execution
 - Since these counters are only 32bits, the application must detect and handle counter wrapping when calculating execution time
 
@@ -715,7 +715,7 @@ A kernel timestamp event is a special type of event that records device timestam
 
        // Append a query of a timestamp event into the command list
        ${x}_kernel_timestamp_result_t tsResult = {0};
-       ${x}CommandListAppendQueryTimestamps(hCommandList, 1, &hTSEvent, &tsResult, nullptr, hEvent, 1, &hTSEvent);
+       ${x}CommandListAppendQueryKernelTimestamps(hCommandList, 1, &hTSEvent, &tsResult, nullptr, hEvent, 1, &hTSEvent);
 
        // Execute the command list with the signal
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);

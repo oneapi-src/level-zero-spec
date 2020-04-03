@@ -158,6 +158,34 @@ params:
       name: hCommandList
       desc: "[in] handle of command list object to reset"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Appends a memory write of the device's timestamp value into a command list."
+class: $xCommandList
+name: AppendWriteTimestamp
+details:
+    - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
+    - "The timestamp frequency can be queried from ::${x}_device_properties_t.timerResolution."
+    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "uint64_t*"
+      name: dstptr
+      desc: "[in,out] pointer to memory where 64bit timestamp will be written; must be 8byte-aligned."
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before executing query"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before executing query"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command list"
 name: $xCommandList
