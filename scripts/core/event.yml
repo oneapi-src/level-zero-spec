@@ -32,9 +32,9 @@ etors:
     - name: $X_EVENT_POOL_FLAG_IPC
       value: "$X_BIT(1)"
       desc: "signals and waits may be shared across processes"
-    - name: $X_EVENT_POOL_FLAG_TIMESTAMP
+    - name: $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP
       value: "$X_BIT(2)"
-      desc: "Indicates all events in pool will contain timestamp information"
+      desc: "Indicates all events in pool will contain kernel timestamps; cannot be combined with $X_EVENT_POOL_FLAG_IPC"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event pool descriptor"
@@ -203,6 +203,7 @@ desc: "Gets an IPC event pool handle for the specified event handle that can be 
 class: $xEventPool
 name: GetIpcHandle
 details:
+    - "Event pool must have been created with $X_EVENT_POOL_FLAG_IPC."
     - "The application may call this function from simultaneous threads."
 params:
     - type: $x_event_pool_handle_t
@@ -211,6 +212,8 @@ params:
     - type: $x_ipc_event_pool_handle_t*
       name: phIpc
       desc: "[out] Returned IPC event handle"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Opens an IPC event pool handle to retrieve an event pool handle from another process."
@@ -251,6 +254,7 @@ analogue:
     - "**clSetUserEventStatus**"
     - vkCmdSetEvent
 details:
+    - "The event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -290,6 +294,7 @@ name: HostSignal
 analogue:
     - clSetUserEventStatus
 details:
+    - "The event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -378,26 +383,26 @@ returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Raw timestamp clock data"
+desc: "Kernel timestamp clock data"
 class: $xEvent
-name: $x_timestamp_data_t
+name: $x_kernel_timestamp_data_t
 members:
-    - type: uint64_t
-      name: functionStart
-      desc: "[out] GPU clock at start of function execution"
-    - type: uint64_t
-      name: functionEnd
-      desc: "[out] GPU clock at start of function execution"
+    - type: uint32_t
+      name: kernelStart
+      desc: "[out] GPU clock at start of kernel execution"
+    - type: uint32_t
+      name: kernelEnd
+      desc: "[out] GPU clock at start of kernel execution"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Timestamp result"
+desc: "Kernel timestamp result"
 class: $xEvent
-name: $x_timestamp_result_t
+name: $x_kernel_timestamp_result_t
 members:
-    - type: $x_timestamp_data_t
+    - type: $x_kernel_timestamp_data_t
       name: global
       desc: "[out] wall-clock data"
-    - type: $x_timestamp_data_t
+    - type: $x_kernel_timestamp_data_t
       name: context
       desc: "[out] context-active data; only includes clocks while device context was actively executing."
 --- #--------------------------------------------------------------------------
@@ -406,25 +411,29 @@ desc: "Queries and event's timestamp value on the host."
 class: $xEvent
 name: QueryTimestamp
 details:
-    - "The event must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_TIMESTAMP flag."
+    - "The event must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The destination memory will be unmodified if the event has not been signaled."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in] handle of the event"
-    - type: "$x_timestamp_result_t*"
+    - type: "$x_kernel_timestamp_result_t*"
       name: dstptr
       desc: "[in,out] pointer to memory for where timestamp result will be written."
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_NOT_READY:
+        - not signaled
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends a query of an events' timestamp value(s) into a command list."
 class: $xCommandList
 name: AppendQueryTimestamps
 details:
-    - "The events must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_TIMESTAMP flag."
+    - "The events must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The value(s) written to the destination buffer are undefined if any event has not been signaled."
     - "If pOffsets is nullptr, then multiple results will be appended sequentially into memory in the same order as phEvents."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -440,10 +449,10 @@ params:
       desc: "[in][range(0, numEvents)] handles of timestamp events to query"
     - type: "void*"
       name: dstptr
-      desc: "[in,out] pointer to memory for where timestamp results will be written."
+      desc: "[in,out] pointer to memory for where $x_kernel_timestamp_result_t will be written."
     - type: "const size_t*"
       name: pOffsets
-      desc: "[in][optional][range(0, numEvents)] offset to write results; must be 64bit-aligned."
+      desc: "[in][optional][range(0, numEvents)] offset, in bytes, to write results; must be 4byte-aligned."
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"

@@ -350,6 +350,8 @@ class: $tMetricTracer
 name: Open
 decl: static
 details:
+    - "The notification event must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_HOST_VISIBLE flag."
+    - "The notification event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same device handle."
 params:
     - type: "$t_device_handle_t"
@@ -363,7 +365,7 @@ params:
       desc: "[in,out] metric tracer descriptor"
     - type: "$x_event_handle_t"
       name: hNotificationEvent
-      desc: "[in][optional] event used for report availability notification. Must be device to host type."
+      desc: "[in][optional] event used for report availability notification"
     - type: "$t_metric_tracer_handle_t*"
       name: phMetricTracer
       desc: "[out] handle of metric tracer"
@@ -561,6 +563,7 @@ desc: "Appends metric query end into a command list."
 class: $tCommandList
 name: AppendMetricQueryEnd
 details:
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$t_command_list_handle_t"
@@ -569,9 +572,15 @@ params:
     - type: "$t_metric_query_handle_t"
       name: hMetricQuery
       desc: "[in] handle of the metric query"
-    - type: "$x_event_handle_t"
-      name: hCompletionEvent
-      desc: "[in][optional] handle of the completion event to signal"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------

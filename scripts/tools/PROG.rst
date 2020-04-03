@@ -449,7 +449,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
            eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
            ${x}EventCreate( hEventPool, &eventDesc, &hCompletionEvent);
-           ${t}CommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
+           ${t}CommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent, 0, nullptr );
 
            // use ${x}CommandQueueExecuteCommandLists( , , , ) to submit your workload to the device
       

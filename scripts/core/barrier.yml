@@ -20,6 +20,7 @@ details:
     - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
     - "If numWaitEvents is non-zero, then then all phWaitEvents must be signaled prior to the execution of the barrier."
     - "This command blocks all following commands from beginning until the execution of the barrier completes."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -46,6 +47,7 @@ details:
     - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
     - "If numWaitEvents is non-zero, then then all phWaitEvents must be signaled prior to the execution of the barrier."
     - "This command blocks all following commands from beginning until the execution of the barrier completes."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:

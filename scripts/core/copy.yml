@@ -15,6 +15,7 @@ class: $xCommandList
 name: AppendMemoryCopy
 details:
     - "The memory pointed to by both srcptr and dstptr must be accessible by the device on which the command list is created."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
@@ -36,8 +37,14 @@ params:
       name: size
       desc: "[in] size in bytes to copy"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
@@ -49,6 +56,7 @@ details:
     - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
     - "The value to initialize memory to is described by the pattern and the pattern size."
     - "The pattern size must be a power of two."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
@@ -71,8 +79,14 @@ params:
       name: size
       desc: "[in] size in bytes to initialize"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
@@ -108,6 +122,7 @@ details:
     - "The memory pointed to by both srcptr and dstptr must be accessible by the device on which the command list is created."
     - "The region width, height, and depth for both src and dst must be same. The origins can be different."
     - "The src and dst regions cannot be overlapping."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -139,8 +154,14 @@ params:
       name: srcSlicePitch
       desc: "[in] source slice pitch in bytes. This is required for 3D region copies where $x_copy_region_t::depth is not 0, otherwise it's ignored."
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_OVERLAPPING_REGIONS
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
@@ -153,6 +174,7 @@ analogue:
     - "**clEnqueueCopyImage**"
 details:
     - "Images format descriptors for both source and destination images must be the same."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -166,8 +188,14 @@ params:
       name: hSrcImage
       desc: "[in] handle of source image to copy from"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
@@ -203,6 +231,7 @@ details:
     - "The region width and height for both src and dst must be same. The origins can be different."
     - "The src and dst regions cannot be overlapping."
     - "Images format descriptors for both source and destination images must be the same."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -222,8 +251,14 @@ params:
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
     - $X_RESULT_ERROR_OVERLAPPING_REGIONS
@@ -237,6 +272,7 @@ analogue:
 details:
     - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
     - "Media formats are not supported for this function."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -253,8 +289,14 @@ params:
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
@@ -267,6 +309,7 @@ analogue:
 details:
     - "The memory pointed to by srcptr must be accessible by the device on which the command list is created."
     - "Media formats are not supported for this function."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -283,8 +326,14 @@ params:
       name: pDstRegion
       desc: "[in][optional] destination region descriptor"
     - type: $x_event_handle_t
-      name: hEvent
+      name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------

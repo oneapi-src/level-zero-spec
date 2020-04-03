@@ -251,7 +251,7 @@ these details in the API in a backwards compatible fashion.
        ${x}ImageCreate(hDevice, &imageDesc, &hImage);
 
        // upload contents from host pointer
-       ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr);
+       ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr, 0, nullptr);
        ...
 
 A format descriptor is a combination of a format layout, type, and a swizzle.
@@ -677,10 +677,15 @@ The following diagram illustrates an event being signaled between kernels within
 
 .. image:: ../images/core_event.png
 
-Timestamp Events
+Kernel Timestamp Events
 ~~~~~~~~~~~~~~~
 
-A timestamp event is a special type of event that records device timestamps at the start and end of the execution of functions.
+A kernel timestamp event is a special type of event that records device timestamps at the start and end of the execution of kernels.
+
+- A kernel timestamp event can only be signaled from ::${x}CommandListAppendLaunchKernel et al. functions
+- A kernel timestamp event result can be queried using either ::${x}EventQueryTimestamp or ::${x}CommandListAppendQueryTimestamps
+- The ::${x}_kernel_timestamp_result_t contains both the per-context and global timestamp values at the start and end of the kernel's execution
+- Since these counters are only 32bits, the application must detect and handle counter wrapping when calculating execution time
 
 .. code:: c
 
@@ -690,7 +695,7 @@ A timestamp event is a special type of event that records device timestamps at t
        // Create event pool
        ${x}_event_pool_desc_t tsEventPoolDesc = {
            ${X}_EVENT_POOL_DESC_VERSION_CURRENT,
-           ${X}_EVENT_POOL_FLAG_TIMESTAMP, // all events in pool are timestamps
+           ${X}_EVENT_POOL_FLAG_KERNEL_TIMESTAMP, // all events in pool are kernel timestamps
            1
        };
        ${x}_event_pool_handle_t hTSEventPool;
@@ -709,7 +714,7 @@ A timestamp event is a special type of event that records device timestamps at t
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hTSEvent, 0, nullptr);
 
        // Append a query of a timestamp event into the command list
-       ${x}_timestamp_result_t tsResult = {0};
+       ${x}_kernel_timestamp_result_t tsResult = {0};
        ${x}CommandListAppendQueryTimestamps(hCommandList, 1, &hTSEvent, &tsResult, nullptr, hEvent, 1, &hTSEvent);
 
        // Execute the command list with the signal
@@ -719,8 +724,13 @@ A timestamp event is a special type of event that records device timestamps at t
        ${x}EventHostSynchronize(hEvent, 0);
 
        // Calculation execution time(s)
-       double globalTimeInNs = ( tsResult.global.functionEnd - tsResult.global.functionStart ) / (double)timestampFreq;
-       double contextTimeInNs = ( tsResult.context.functionEnd - tsResult.context.functionStart ) / (double)timestampFreq;
+       double globalTimeInNs = ( tsResult.global.functionEnd >= tsResult.global.functionStart ) 
+           ? ( tsResult.global.kernelEnd - tsResult.global.kernelStart ) / (double)timestampFreq
+           : (( 0xffffffff - tsResult.global.kernelStart) + tsResult.global.kernelEnd + 1 ) / (double)timestampFreq;
+
+       double contextTimeInNs = ( tsResult.context.kernelEnd >= tsResult.context.kernelStart )
+           ? ( tsResult.context.kernelEnd - tsResult.context.kernelStart ) / (double)timestampFreq
+           : (( 0xffffffff - tsResult.context.kernelStart) + tsResult.context.kernelEnd + 1 ) / (double)timestampFreq;
        ...
 
 
@@ -1088,7 +1098,7 @@ Kernel Arguments
 Kernel arguments represent only the explicit kernel arguments that are within ?brackets? e.g.?func(arg1, arg2, ?).
 
 - Use ::${x}KernelSetArgumentValue to setup arguments for a kernel launch.
-- The AppendLaunchKernel command will make a copy the kernel arguments to send to the device.
+- The ::${x}CommandListAppendLaunchKernel et al functions will make a copy the kernel arguments to send to the device.
 - Kernel arguments can be updated at any time and used across multiple append calls.
 
 The following pseudo-code demonstrates a sequence for setting kernel args and launching the kernel:
@@ -1118,7 +1128,7 @@ The following pseudo-code demonstrates a sequence for setting kernel args and la
 Kernel Launch
 ~~~~~~~~~~~~~
 
-In order to launch a kernel on the device an application must call one of the CommandListAppendLaunch\* functions for
+In order to launch a kernel on the device an application must call one of the AppendLaunchKernel-style functions for
 a command list. The most basic version of these is ::${x}CommandListAppendLaunchKernel which takes a
 command list, kernel handle, launch arguments, and an optional synchronization event used to signal completion.
 The launch arguments contain thread group dimensions.
