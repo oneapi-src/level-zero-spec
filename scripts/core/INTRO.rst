@@ -126,6 +126,8 @@ The following section provides high-level design philosophy of the APIs.
 For more detailed information, refer to the programming guides and
 detailed specification pages.
 
+Header files can be found at: https://github.com/oneapi-src/level-zero
+
 Terminology
 -----------
 
