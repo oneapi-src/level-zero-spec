@@ -724,13 +724,13 @@ A kernel timestamp event is a special type of event that records device timestam
        ${x}EventHostSynchronize(hEvent, 0);
 
        // Calculation execution time(s)
-       double globalTimeInNs = ( tsResult.global.functionEnd >= tsResult.global.functionStart ) 
-           ? ( tsResult.global.kernelEnd - tsResult.global.kernelStart ) / (double)timestampFreq
-           : (( 0xffffffff - tsResult.global.kernelStart) + tsResult.global.kernelEnd + 1 ) / (double)timestampFreq;
+       double globalTimeInNs = ( tsResult.global.kernelEnd >= tsResult.global.kernelStart ) 
+           ? ( tsResult.global.kernelEnd - tsResult.global.kernelStart ) * (double)timestampFreq
+           : (( 0xffffffff - tsResult.global.kernelStart) + tsResult.global.kernelEnd + 1 ) * (double)timestampFreq;
 
        double contextTimeInNs = ( tsResult.context.kernelEnd >= tsResult.context.kernelStart )
-           ? ( tsResult.context.kernelEnd - tsResult.context.kernelStart ) / (double)timestampFreq
-           : (( 0xffffffff - tsResult.context.kernelStart) + tsResult.context.kernelEnd + 1 ) / (double)timestampFreq;
+           ? ( tsResult.context.kernelEnd - tsResult.context.kernelStart ) * (double)timestampFreq
+           : (( 0xffffffff - tsResult.context.kernelStart) + tsResult.context.kernelEnd + 1 ) * (double)timestampFreq;
        ...
 
 

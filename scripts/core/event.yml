@@ -392,7 +392,7 @@ members:
       desc: "[out] device clock at start of kernel execution"
     - type: uint32_t
       name: kernelEnd
-      desc: "[out] device clock at start of kernel execution"
+      desc: "[out] device clock at end of kernel execution"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel timestamp result"
