@@ -436,7 +436,7 @@ details:
     - "The events must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The memory pointed to by both dstptr and pOffsets must be accessible by the device on which the command list is created."
     - "The timestamp frequency can be queried from ::${x}_device_properties_t.timerResolution."
-    - "The value(s) written to the destination buffer are undefined if any event has not been signaled."
+    - "The value(s) written to the destination buffer are undefined if any timestamp event has not been signaled."
     - "If pOffsets is nullptr, then multiple results will be appended sequentially into memory in the same order as phEvents."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
