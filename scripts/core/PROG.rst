@@ -468,9 +468,10 @@ Submission
 - There is no implicit association between a command list and a logical command queue. 
   Therefore, a command list may be submitted to any or multiple logical command queues.
 - However, if a command list is meant to be submitted to a physical copy-only command queue,
-  then it must be created using a command queue group ordinal with the
-  ::${X}_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY property, and submitted to a logical command
-  queue created using the same ordinal.
+  then it must be created using a command queue group ordinal with its
+  ::${x}_command_queue_group_properties_t.copySupported equal true (1) and
+  ::${x}_command_queue_group_properties_t.computeSupported equal false (0), and submitted to a logical command
+  queue created using the same ordinal.  
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
@@ -1164,7 +1165,7 @@ Cooperative Kernels
 Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ::${x}CommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
 The command list must be submitted to a logical command queue that was created with an ordinal of a physical command queue
-that supports the ::${X}_COMMAND_QUEUE_GROUP_FLAG_SUPPORTS_COOPERATIVE_KERNELS flag.
+that has the property ::${x}_command_queue_group_properties_t.cooperativeKernelsSupported equal true (1).
 Finally, there is a ::${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that
 the device supports.
 
