@@ -350,7 +350,7 @@ Creation
    same priority, due to possible performance penalties with hardware context switching.
 -  The maximum number of logical command queues an application can create is limited by device-specific
    resources; e.g., the maximum number of logical hardware contexts supported by the device. 
-   This can be queried from ::ze_device_properties_t.maxHardwareContexts.
+   This can be queried from ::${x}_device_properties_t.maxHardwareContexts.
 -  All command lists executed on a logical command queue are guaranteed to **only** execute on the physical
    command queue which it is assigned; e.g., copy commands in a compute command list / queue will
    execute via the compute engine, not the copy engine.
@@ -361,11 +361,11 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 
     // Discover all command queue types
     uint32_t cmdqueueGroupCount = 0;_
-    zeDeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, nullptr);
+    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, nullptr);
 
-    ze_command_queue_group_properties_t* cmdqueueGroupProperties = (ze_command_queue_group_properties_t*)
-        malloc(cmdqueueGroupCount * sizeof(ze_command_queue_group_properties_t));
-    zeDeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, allQueues);
+    ${x}_command_queue_group_properties_t* cmdqueueGroupProperties = (${x}_command_queue_group_properties_t*)
+        malloc(cmdqueueGroupCount * sizeof(${x}_command_queue_group_properties_t));
+    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, allQueues);
 
 
     // Find a proper command queue
@@ -380,16 +380,16 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
         return; // no compute queues found
 
     // Create a command queue
-    ze_command_queue_desc_t commandQueueDesc = {
-        ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT,
+    ${x}_command_queue_desc_t commandQueueDesc = {
+        ${X}_COMMAND_QUEUE_DESC_VERSION_CURRENT,
         computeQueueGroupOrdinal,
-        ZE_COMMAND_QUEUE_FLAG_NONE,
-        ZE_COMMAND_QUEUE_MODE_DEFAULT,
-        ZE_COMMAND_QUEUE_PRIORITY_NORMAL,
+        ${X}_COMMAND_QUEUE_FLAG_NONE,
+        ${X}_COMMAND_QUEUE_MODE_DEFAULT,
+        ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
         0
     };
-    ze_command_queue_handle_t hCommandQueue;
-    zeCommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
+    ${x}_command_queue_handle_t hCommandQueue;
+    ${x}CommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
     ...
 
 Execution
@@ -469,7 +469,7 @@ Submission
   Therefore, a command list may be submitted to any or multiple logical command queues.
 - However, if a command list is meant to be submitted to a physical copy-only command queue,
   then it must be created using a command queue group ordinal with the
-  ::ZE_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY property, and submitted to a logical command
+  ::${X}_COMMAND_QUEUE_GROUP_FLAG_COPY_ONLY property, and submitted to a logical command
   queue created using the same ordinal.
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
@@ -525,7 +525,7 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
        ${x}_command_queue_desc_t commandQueueDesc = {
            ${X}_COMMAND_QUEUE_DESC_VERSION_CURRENT,
            computeQueueGroupOrdinal,
-           ZE_COMMAND_QUEUE_FLAG_NONE,
+           ${X}_COMMAND_QUEUE_FLAG_NONE,
            ${X}_COMMAND_QUEUE_MODE_DEFAULT,
            ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
            0
@@ -678,7 +678,7 @@ The following diagram illustrates an event being signaled between kernels within
 .. image:: ../images/core_event.png
 
 Kernel Timestamp Events
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 A kernel timestamp event is a special type of event that records device timestamps at the start and end of the execution of kernels.
 
@@ -1164,7 +1164,7 @@ Cooperative Kernels
 Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ::${x}CommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
 The command list must be submitted to a logical command queue that was created with an ordinal of a physical command queue
-that supports the ::ZE_COMMAND_QUEUE_GROUP_FLAG_SUPPORTS_COOPERATIVE_KERNELS flag.
+that supports the ::${X}_COMMAND_QUEUE_GROUP_FLAG_SUPPORTS_COOPERATIVE_KERNELS flag.
 Finally, there is a ::${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that
 the device supports.
 
