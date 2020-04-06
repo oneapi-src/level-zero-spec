@@ -180,13 +180,29 @@ params:
       name: pIPCProperties
       desc: "[out] query result for IPC properties"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Retrieves an extension function for the specified driver"
+type: macro
+desc: "Maximum extension name string size"
+name: $X_MAX_EXTENSION_NAME
+value: "256"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Extension properties queried using $xDriverGetExtensionProperties"
 class: $xDriver
-name: GetExtensionFunctionAddress
-ordinal: "1"
+name: $x_driver_extension_properties_t
+members:
+    - type: char
+      name: "name[$X_MAX_EXTENSION_NAME]"
+      desc: "Extension name"
+    - type: uint32_t
+      name: version
+      desc: "Extension version using $X_MAKE_VERSION"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves extension properties"
+class: $xDriver
+name: GetExtensionProperties
 analogue:
-    - "**clGetExtensionFunctionAddressForPlatform**"
+    - "**vkEnumerateInstanceExtensionProperties**"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -194,12 +210,16 @@ params:
     - type: $x_driver_handle_t
       name: hDriver
       desc: "[in] handle of the driver instance"
-    - type: "const char*"
-      name: pFuncName
-      desc: "[in] name of the extension function"
-    - type: "void**"
-      name: pfunc
-      desc: "[out] pointer to extension function"
+    - type: uint32_t*
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of extension properties.
+            if count is zero, then the driver will update the value with the total number of extension properties available.
+            if count is non-zero, then driver will only retrieve that number of extension properties.
+            if count is larger than the number of extension properties available, then the driver will update the value with the correct number of extension properties available.
+    - type: "$x_driver_extension_properties_t*"
+      name: pExtensionProperties
+      desc: "[in,out][optional][range(0, *pCount)] array of query results for extension properties"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a driver instance handle"
