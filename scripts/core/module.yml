@@ -520,9 +520,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_KERNEL_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: char
       name: "name[$X_MAX_KERNEL_NAME]"

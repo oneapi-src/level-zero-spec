@@ -30,9 +30,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $T_STRUCTURE_TYPE_PROFILE_INFO
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $t_profile_flag_t
       name: flags

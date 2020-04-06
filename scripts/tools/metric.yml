@@ -62,9 +62,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $T_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: char
       name: "name[$T_MAX_METRIC_GROUP_NAME]"
@@ -251,9 +251,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $T_STRUCTURE_TYPE_METRIC_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: char
       name: "name[$T_MAX_METRIC_NAME]"

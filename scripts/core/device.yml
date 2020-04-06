@@ -97,9 +97,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DEVICE_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $x_device_type_t
       name: type
@@ -191,9 +191,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: uint32_t
       name: maxTotalGroupSize
@@ -302,9 +302,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DEVICE_KERNEL_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: uint32_t
       name: spirvVersionSupported
@@ -372,9 +372,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $x_bool_t
       name: computeSupported
@@ -424,9 +424,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: uint32_t
       name: maxClockRate
@@ -496,9 +496,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $x_memory_access_capabilities_t
       name: hostAllocCapabilities
@@ -543,9 +543,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $x_bool_t
       name: intermediateCacheControlSupported
@@ -593,9 +593,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $x_bool_t
       name: supported
@@ -650,9 +650,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $x_bool_t
       name: accessSupported

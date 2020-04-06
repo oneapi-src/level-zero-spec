@@ -113,9 +113,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DRIVER_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $x_driver_uuid_t
       name: uuid
@@ -153,9 +153,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $x_bool_t
       name: memsSupported

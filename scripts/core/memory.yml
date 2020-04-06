@@ -230,9 +230,9 @@ members:
       name: stype
       desc: "[in] type of this structure"
       init: $X_STRUCTURE_TYPE_MEMORY_ALLOCATION_PROPERTIES
-    - type: "const void*"
+    - type: "void*"
       name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
+      desc: "[in,out][optional] pointer to extension-specific structure"
       init: nullptr
     - type: $x_memory_type_t
       name: type
