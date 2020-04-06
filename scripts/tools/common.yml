@@ -69,3 +69,21 @@ type: handle
 desc: "Handle of tracer object"
 class: $tTracer
 name: "$t_tracer_handle_t"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Defines structure types"
+name: $t_structure_type_t
+etors:
+    - name: $T_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES
+      desc: $t_metric_group_properties_t
+      value: "0x1"
+    - name: $T_STRUCTURE_TYPE_METRIC_PROPERTIES
+      desc: $t_metric_properties_t
+    - name: $T_STRUCTURE_TYPE_METRIC_TRACER_DESC
+      desc: $t_metric_tracer_desc_t
+    - name: $T_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC
+      desc: $t_metric_query_pool_desc_t
+    - name: $T_STRUCTURE_TYPE_PROFILE_INFO
+      desc: $t_profile_info_t
+    - name: $T_STRUCTURE_TYPE_TRACER_DESC
+      desc: $t_tracer_desc_t

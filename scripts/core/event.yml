@@ -10,15 +10,6 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Event"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "API version of $x_event_pool_desc_t"
-class: $xEventPool
-name: $x_event_pool_desc_version_t
-etors:
-    - name: $X_EVENT_POOL_DESC_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported event pool creation flags"
 class: $xEventPool
 name: $x_event_pool_flag_t
@@ -41,10 +32,14 @@ desc: "Event pool descriptor"
 class: $xEventPool
 name: $x_event_pool_desc_t
 members:
-    - type: $x_event_pool_desc_version_t
-      name: version
-      desc: "[in] $X_EVENT_POOL_DESC_VERSION_CURRENT"
-      init: $X_EVENT_POOL_DESC_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_EVENT_POOL_DESC
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: $x_event_pool_flag_t
       name: flags
       desc: "[in] creation flags"
@@ -104,15 +99,6 @@ returns:
     - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "API version of $x_event_desc_t"
-class: $xEvent
-name: $x_event_desc_version_t
-etors:
-    - name: $X_EVENT_DESC_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported event scope flags"
 class: $xEvent
 name: $x_event_scope_flag_t
@@ -135,10 +121,14 @@ desc: "Event descriptor"
 class: $xEvent
 name: $x_event_desc_t
 members:
-    - type: $x_event_desc_version_t
-      name: version
-      desc: "[in] $X_EVENT_DESC_VERSION_CURRENT"
-      init: $X_EVENT_DESC_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_EVENT_DESC
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: uint32_t
       name: index
       desc: "[in] index of the event within the pool; must be less-than the count specified during pool creation"

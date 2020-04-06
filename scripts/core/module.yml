@@ -10,15 +10,6 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Module"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: API version of $x_module_desc_t
-class: $xModule
-name: $x_module_desc_version_t
-etors:
-    - name: $X_MODULE_DESC_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported module creation input formats"
 class: $xModule
 name: $x_module_format_t
@@ -49,10 +40,14 @@ desc: "Module descriptor"
 class: $xModule
 name: $x_module_desc_t
 members:
-    - type: $x_module_desc_version_t
-      name: version
-      desc: "[in] $X_MODULE_DESC_VERSION_CURRENT"
-      init: $X_MODULE_DESC_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_MODULE_DESC
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: "$x_module_format_t"
       name: format
       desc: "[in] Module format passed in with pInputModule"
@@ -233,15 +228,6 @@ params:
       desc: "[in,out][optional][range(0, *pCount)] array of names of functions"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: API version of $x_kernel_desc_t
-class: $xKernel
-name: $x_kernel_desc_version_t
-etors:
-    - name: $X_KERNEL_DESC_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported kernel creation flags"
 class: $xKernel
 name: $x_kernel_flag_t
@@ -257,10 +243,14 @@ desc: "Kernel descriptor"
 class: $xKernel
 name: $x_kernel_desc_t
 members:
-    - type: $x_kernel_desc_version_t
-      name: version
-      desc: "[in] $X_KERNEL_DESC_VERSION_CURRENT"
-      init: $X_KERNEL_DESC_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_KERNEL_DESC
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: "$x_kernel_flag_t"
       name: flags
       desc: "[in] creation flags"
@@ -516,15 +506,6 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
 --- #--------------------------------------------------------------------------
-type: enum
-desc: API version of $x_kernel_properties_t
-class: $xKernel
-name: $x_kernel_properties_version_t
-etors:
-    - name: $X_KERNEL_PROPERTIES_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device name string size"
 name: $X_MAX_KERNEL_NAME
@@ -535,10 +516,14 @@ desc: "Kernel properties"
 class: $xKernel
 name: $x_kernel_properties_t
 members:
-    - type: $x_kernel_properties_version_t
-      name: version
-      desc: "[in] $X_KERNEL_PROPERTIES_VERSION_CURRENT"
-      init: $X_KERNEL_PROPERTIES_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_KERNEL_PROPERTIES
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: char
       name: "name[$X_MAX_KERNEL_NAME]"
       desc: "[out] Kernel name"

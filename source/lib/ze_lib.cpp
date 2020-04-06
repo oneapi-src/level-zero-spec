@@ -46,12 +46,6 @@ namespace ze_lib
             result = zetInit();
         }
 
-#ifdef ZE_EXPERIMENTAL
-        if( ZE_RESULT_SUCCESS == result )
-        {
-            result = zexInit();
-        }
-#endif
         return result;
     }
 

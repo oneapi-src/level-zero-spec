@@ -65,69 +65,6 @@ def _filter_version(d, max_ver):
     return d
 
 """
-    generate complete return permutations
-"""
-def _generate_returns(specs, meta):
-    for s in specs:
-        for obj in s['objects']:
-            if re.match(r"function", obj['type']):
-                # default results for all functions
-                rets = [
-                    {"$X_RESULT_SUCCESS":[]},
-                    {"$X_RESULT_ERROR_UNINITIALIZED":[]},
-                    {"$X_RESULT_ERROR_DEVICE_LOST":[]}
-                    ]
-
-                # special function for appending to our list of dicts; avoiding duplicates
-                def _append(lst, key, val):
-                    idx = next((i for i, v in enumerate(lst) if v.get(key)), len(lst))
-                    if idx == len(lst):
-                        rets.append({key:[]})
-                    if val and val not in rets[idx][key]:
-                        rets[idx][key].append(val)
-
-                # generate results based on parameters
-                for item in obj['params']:
-                    if not param_traits.is_optional(item):
-                        typename = type_traits.base(item['type'])
-
-                        if type_traits.is_pointer(item['type']):
-                            _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s`"%item['name'])
-
-                        elif type_traits.is_handle(item['type']) and not type_traits.is_ipc_handle(item['type']):
-                            _append(rets, "$X_RESULT_ERROR_INVALID_NULL_HANDLE", "`nullptr == %s`"%item['name'])
-
-                        elif type_traits.is_enum(item['type'], meta):
-                            _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s`"%(meta['enum'][typename]['max'], item['name']))
-
-                        if type_traits.is_descriptor(item['type']):
-                            # walk each entry in the desc for pointers and enums
-                            for i, mtype in enumerate(meta['struct'][typename]['types']):
-                                mtypename = type_traits.base(mtype)
-
-                                if type_traits.is_pointer(mtype) and not param_traits.is_optional({'desc': meta['struct'][typename]['desc'][i]}):
-                                    _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s->%s`"%(item['name'], meta['struct'][typename]['names'][i]))
-
-                                elif type_traits.is_enum(mtype, meta):
-                                    if re.match(r"version", meta['struct'][typename]['names'][i]):
-                                        _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s < %s->version`"%(re.sub(r"(.*)_t.*", r"\1_CURRENT", mtypename).upper(), item['name']))
-                                    else:
-                                        _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], meta['struct'][typename]['names'][i]))
-
-                # finally, append all user entries
-                for item in obj.get('returns', []):
-                    if isinstance(item, dict):
-                        for key, values in item.items():
-                            for val in values:
-                                _append(rets, key, val)
-                    else:
-                        _append(rets, item, None)
-
-                # update doc
-                obj['returns'] = rets
-
-
-"""
     generates SHA512 string for the given object
 """
 def _generate_hash(d):
@@ -290,6 +227,67 @@ def _generate_ref(d, tags, ref):
     ref[type][name] = d
     return ref
 
+"""
+    generate complete return permutations
+"""
+def _generate_returns(specs, meta):
+    for s in specs:
+        for obj in s['objects']:
+            if re.match(r"function", obj['type']):
+                # default results for all functions
+                rets = [
+                    {"$X_RESULT_SUCCESS":[]},
+                    {"$X_RESULT_ERROR_UNINITIALIZED":[]},
+                    {"$X_RESULT_ERROR_DEVICE_LOST":[]}
+                    ]
+
+                # special function for appending to our list of dicts; avoiding duplicates
+                def _append(lst, key, val):
+                    idx = next((i for i, v in enumerate(lst) if v.get(key)), len(lst))
+                    if idx == len(lst):
+                        rets.append({key:[]})
+                    if val and val not in rets[idx][key]:
+                        rets[idx][key].append(val)
+
+                # generate results based on parameters
+                for item in obj['params']:
+                    if not param_traits.is_optional(item):
+                        typename = type_traits.base(item['type'])
+
+                        if type_traits.is_pointer(item['type']):
+                            _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s`"%item['name'])
+
+                        elif type_traits.is_handle(item['type']) and not type_traits.is_ipc_handle(item['type']):
+                            _append(rets, "$X_RESULT_ERROR_INVALID_NULL_HANDLE", "`nullptr == %s`"%item['name'])
+
+                        elif type_traits.is_enum(item['type'], meta):
+                            _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s`"%(meta['enum'][typename]['max'], item['name']))
+
+                        if type_traits.is_descriptor(item['type']):
+                            # walk each entry in the desc for pointers and enums
+                            for i, mtype in enumerate(meta['struct'][typename]['types']):
+                                mtypename = type_traits.base(mtype)
+
+                                if type_traits.is_pointer(mtype) and not param_traits.is_optional({'desc': meta['struct'][typename]['desc'][i]}):
+                                    _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s->%s`"%(item['name'], meta['struct'][typename]['names'][i]))
+
+                                elif type_traits.is_enum(mtype, meta):
+                                    if re.match(r"version", meta['struct'][typename]['names'][i]):
+                                        _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s < %s->version`"%(re.sub(r"(.*)_t.*", r"\1_CURRENT", mtypename).upper(), item['name']))
+                                    else:
+                                        _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], meta['struct'][typename]['names'][i]))
+
+                # finally, append all user entries
+                for item in obj.get('returns', []):
+                    if isinstance(item, dict):
+                        for key, values in item.items():
+                            for val in values:
+                                _append(rets, key, val)
+                    else:
+                        _append(rets, item, None)
+
+                # update doc
+                obj['returns'] = rets
 
 """
 Entry-point:
@@ -332,9 +330,10 @@ def parse(path, version, tags, meta = {'class':{}}, ref = {}):
             'objects'   : objects
         })
 
+    specs = sorted(specs, key=lambda x: x['header']['ordinal'])
     _generate_returns(specs, meta)
 
     print("Parsed %s files and found:"%len(specs))
     for key in meta:
         print(" - %s %s(s)"%(len(meta[key]),key))
-    return sorted(specs, key=lambda x: x['header']['ordinal']), meta, ref
+    return specs, meta, ref

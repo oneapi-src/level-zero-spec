@@ -512,7 +512,7 @@ def _get_value_name(namespace, tags, value, cpp, meta, is_array_size=False, cbas
                 cname = type_traits.find_class_name(name, meta)
                 cname = subt(namespace, tags, cname, cpp=cpp)
                 enum = _remove_class(enum, cname)
-                if cpp and cbase and (cbase != None):
+                if cname and cbase:
                     cbase = subt(namespace, tags, cbase, cpp=cpp)
                     if cbase == cname:
                         enum = _remove_class(enum, cname)

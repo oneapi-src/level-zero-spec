@@ -17,24 +17,19 @@ class: $tTracer
 name: $t_core_callbacks_t
 value: $x_callbacks_t
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "API version of $t_tracer_desc_t"
-class: $tTracer
-name: $t_tracer_desc_version_t
-etors:
-    - name: $T_TRACER_DESC_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
 type: struct
 desc: "Tracer descriptor"
 class: $tTracer
 name: $t_tracer_desc_t
 members:
-    - type: $t_tracer_desc_version_t
-      name: version
-      desc: "[in] $T_TRACER_DESC_VERSION_CURRENT"
-      init: $T_TRACER_DESC_VERSION_CURRENT
+    - type: $t_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $T_STRUCTURE_TYPE_TRACER_DESC
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: void*
       name: pUserData
       desc: "[in] pointer passed to every tracer's callbacks"

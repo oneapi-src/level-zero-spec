@@ -10,15 +10,6 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Images"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "API version of $x_image_desc_t"
-class: $xImage
-name: $x_image_desc_version_t
-etors:
-    - name: $X_IMAGE_DESC_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported image creation flags"
 class: $xImage
 name: $x_image_flag_t
@@ -181,10 +172,14 @@ desc: "Image descriptor"
 class: $xImage
 name: $x_image_desc_t
 members:
-    - type: $x_image_desc_version_t
-      name: version
-      desc: "[in] $X_IMAGE_DESC_VERSION_CURRENT"
-      init: $X_IMAGE_DESC_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_IMAGE_DESC
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: $x_image_flag_t
       name: flags
       desc: "[in] creation flags"
@@ -216,15 +211,6 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "API version of $x_image_properties_t"
-class: $xImage
-name: $x_image_properties_version_t
-etors:
-    - name: $X_IMAGE_PROPERTIES_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported sampler filtering flags"
 class: $xImage
 name: $x_image_sampler_filter_flags_t
@@ -244,10 +230,14 @@ desc: "Image properties"
 class: $xImage
 name: $x_image_properties_t
 members:
-    - type: $x_image_properties_version_t
-      name: version
-      desc: "[in] $X_IMAGE_PROPERTIES_VERSION_CURRENT"
-      init: $X_IMAGE_PROPERTIES_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_IMAGE_PROPERTIES
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: $x_image_sampler_filter_flags_t
       name: samplerFilterFlags
       desc: "[out] supported sampler filtering"

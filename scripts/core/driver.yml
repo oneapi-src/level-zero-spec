@@ -91,15 +91,6 @@ params:
       name: version
       desc: "[out] api version"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "API version of $x_driver_properties_t"
-class: $xDriver
-name: $x_driver_properties_version_t
-etors:
-    - name: $X_DRIVER_PROPERTIES_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum driver universal unique id (UUID) size in bytes"
 name: $X_MAX_DRIVER_UUID_SIZE
@@ -118,10 +109,14 @@ desc: "Driver properties queried using $xDriverGetProperties"
 class: $xDriver
 name: $x_driver_properties_t
 members:
-    - type: $x_driver_properties_version_t
-      name: version
-      desc: "[in] $X_DRIVER_PROPERTIES_VERSION_CURRENT"
-      init: $X_DRIVER_PROPERTIES_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_DRIVER_PROPERTIES
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: $x_driver_uuid_t
       name: uuid
       desc: "[out] universal unique identifier."
@@ -149,24 +144,19 @@ params:
       name: pDriverProperties
       desc: "[in,out] query result for driver properties"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "API version of $x_driver_ipc_properties_t"
-class: $xDriver
-name: $x_driver_ipc_properties_version_t
-etors:
-    - name: $X_DRIVER_IPC_PROPERTIES_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
 type: struct
 desc: "IPC properties queried using $xDriverGetIPCProperties"
 class: $xDriver
 name: $x_driver_ipc_properties_t
 members:
-    - type: $x_driver_ipc_properties_version_t
-      name: version
-      desc: "[in] $X_DRIVER_IPC_PROPERTIES_VERSION_CURRENT"
-      init: $X_DRIVER_IPC_PROPERTIES_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIES
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: $x_bool_t
       name: memsSupported
       desc: "[out] Supports passing memory allocations between processes. See ::$xDriverGetMemIpcHandle."

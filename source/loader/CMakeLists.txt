@@ -1,26 +1,16 @@
 set(TARGET_NAME ze_loader)
 
-set(loader_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_object.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_ldrddi.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/ze_ldrddi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/zet_ldrddi.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/zet_ldrddi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/zes_ldrddi.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/zes_ldrddi.cpp
-)
-if(ZE_EXPERIMENTAL)
-    set(loader_SOURCES ${loader_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/zex_ldrddi.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/zex_ldrddi.cpp
-    )
-endif()
-
 add_library(${TARGET_NAME}
     SHARED
-        ${loader_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_object.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_ldrddi.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_ldrddi.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_ldrddi.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_ldrddi.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zes_ldrddi.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/zes_ldrddi.cpp
 )
 
 target_include_directories(${TARGET_NAME}

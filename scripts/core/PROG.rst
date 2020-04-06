@@ -241,7 +241,8 @@ these details in the API in a backwards compatible fashion.
        };
 
        ${x}_image_desc_t imageDesc = {
-           ${X}_IMAGE_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_IMAGE_DESC,
+           nullptr,
            ${X}_IMAGE_FLAG_PROGRAM_READ,
            ${X}_IMAGE_TYPE_2D,
            formatDesc,
@@ -381,7 +382,8 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 
     // Create a command queue
     ${x}_command_queue_desc_t commandQueueDesc = {
-        ${X}_COMMAND_QUEUE_DESC_VERSION_CURRENT,
+        ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
+        nullptr,
         computeQueueGroupOrdinal,
         ${X}_COMMAND_QUEUE_FLAG_NONE,
         ${X}_COMMAND_QUEUE_MODE_DEFAULT,
@@ -454,7 +456,8 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 
        // Create a command list
        ${x}_command_list_desc_t commandListDesc = {
-           ${X}_COMMAND_LIST_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_COMMAND_LIST_DESC,
+           nullptr,
            computeQueueGroupOrdinal,
            ${X}_COMMAND_LIST_FLAG_NONE
        };
@@ -523,7 +526,8 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
 
        // Create an immediate command list
        ${x}_command_queue_desc_t commandQueueDesc = {
-           ${X}_COMMAND_QUEUE_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
+           nullptr,
            computeQueueGroupOrdinal,
            ${X}_COMMAND_QUEUE_FLAG_NONE,
            ${X}_COMMAND_QUEUE_MODE_DEFAULT,
@@ -584,7 +588,8 @@ The following pseudo-code demonstrates a sequence for creation, submission and q
 
        // Create fence
        ${x}_fence_desc_t fenceDesc = {
-           ${X}_FENCE_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_FENCE_DESC,
+           nullptr,
            ${X}_FENCE_FLAG_NONE
        };
        ${x}_fence_handle_t hFence;
@@ -647,7 +652,8 @@ The following pseudo-code demonstrates a sequence for creation and submission of
 
        // Create event pool
        ${x}_event_pool_desc_t eventPoolDesc = {
-           ${X}_EVENT_POOL_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
+           nullptr,
            ${X}_EVENT_POOL_FLAG_HOST_VISIBLE, // all events in pool are visible to Host
            1
        };
@@ -655,7 +661,8 @@ The following pseudo-code demonstrates a sequence for creation and submission of
        ${x}EventPoolCreate(hDriver, &eventPoolDesc, 0, nullptr, &hEventPool);
 
        ${x}_event_desc_t eventDesc = {
-           ${X}_EVENT_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           nullptr,
            0,
            ${X}_EVENT_SCOPE_FLAG_NONE,
            ${X}_EVENT_SCOPE_FLAG_HOST  // ensure memory coherency across device and Host after event completes
@@ -694,7 +701,8 @@ A kernel timestamp event is a special type of event that records device timestam
 
        // Create event pool
        ${x}_event_pool_desc_t tsEventPoolDesc = {
-           ${X}_EVENT_POOL_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
+           nullptr,
            ${X}_EVENT_POOL_FLAG_KERNEL_TIMESTAMP, // all events in pool are kernel timestamps
            1
        };
@@ -702,7 +710,8 @@ A kernel timestamp event is a special type of event that records device timestam
        ${x}EventPoolCreate(hDriver, &tsEventPoolDesc, 0, nullptr, &hTSEventPool);
 
        ${x}_event_desc_t tsEventDesc = {
-           ${X}_EVENT_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           nullptr,
            0,
            ${X}_EVENT_SCOPE_FLAG_NONE,
            ${X}_EVENT_SCOPE_FLAG_NONE
@@ -767,7 +776,8 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
 .. code:: c
 
        ${x}_event_desc_t event1Desc = {
-           ${X}_EVENT_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           nullptr,
            0,
            ${X}_EVENT_SCOPE_FLAG_NONE, // no memory/cache coherency required on signal
            ${X}_EVENT_SCOPE_FLAG_NONE  // no memory/cache coherency required on wait
@@ -796,7 +806,8 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
 .. code:: c
 
        ${x}_event_desc_t event1Desc = {
-           ${X}_EVENT_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           nullptr,
            0,
            ${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signaled
            ${X}_EVENT_SCOPE_FLAG_NONE
@@ -874,7 +885,8 @@ The following pseudo-code demonstrates a sequence for creating a module from an 
 
        // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
        ${x}_module_desc_t moduleDesc = {
-           ${X}_MODULE_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_MODULE_DESC,
+           nullptr,
            ${X}_MODULE_FORMAT_IL_SPIRV,
            ilSize,
            pImageScalingIL,
@@ -920,7 +932,8 @@ corresponding identifiers to be passed in to override the constants in the SPIR-
        };
        // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
        ${x}_module_desc_t moduleDesc = {
-           ${X}_MODULE_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_MODULE_DESC,
+           nullptr,
            ${X}_MODULE_FORMAT_IL_SPIRV,
            ilSize,
            pImageScalingIL,
@@ -1010,7 +1023,8 @@ The following pseudo-code demonstrates a sequence for creating a kernel from a m
 .. code:: c
 
        ${x}_kernel_desc_t kernelDesc = {
-           ${X}_KERNEL_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_KERNEL_DESC,
+           nullptr,
            ${X}_KERNEL_FLAG_NONE,
            "image_scaling"
        };
@@ -1196,7 +1210,8 @@ The following is sample for code creating a sampler object and passing it as a k
 
        // Setup sampler for linear filtering and clamp out of bounds accesses to edge.
        ${x}_sampler_desc_t desc = {
-           ${X}_SAMPLER_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_SAMPLER_DESC,
+           nullptr,
            ${X}_SAMPLER_ADDRESS_MODE_CLAMP,
            ${X}_SAMPLER_FILTER_MODE_LINEAR,
            false
@@ -1498,7 +1513,8 @@ The following code examples demonstrate how to use the event IPC APIs:
 
        // create event pool
        ${x}_event_pool_desc_t eventPoolDesc = {
-           ${X}_EVENT_POOL_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
+           nullptr,
            ${X}_EVENT_POOL_FLAG_IPC | ${X}_EVENT_POOL_FLAG_HOST_VISIBLE,
            10
        };
@@ -1530,7 +1546,8 @@ The following code examples demonstrate how to use the event IPC APIs:
 
        ${x}_event_handle_t hEvent;
        ${x}_event_desc_t eventDesc = {
-           ${X}_EVENT_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           nullptr,
            5,
            ${X}_EVENT_SCOPE_FLAG_NONE,
            ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
@@ -1548,7 +1565,8 @@ The following code examples demonstrate how to use the event IPC APIs:
 
        ${x}_event_handle_t hEvent;
        ${x}_event_desc_t eventDesc = {
-           ${X}_EVENT_DESC_VERSION_CURRENT,
+           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           nullptr,
            5,
            ${X}_EVENT_SCOPE_FLAG_NONE,
            ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled

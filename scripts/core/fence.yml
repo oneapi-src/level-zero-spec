@@ -10,15 +10,6 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Fence"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "API version of $x_fence_desc_t"
-class: $xFence
-name: $x_fence_desc_version_t
-etors:
-    - name: $X_FENCE_DESC_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported fence creation flags"
 class: $xFence
 name: $x_fence_flag_t
@@ -32,10 +23,14 @@ desc: "Fence descriptor"
 class: $xFence
 name: $x_fence_desc_t
 members:
-    - type: $x_fence_desc_version_t
-      name: version
-      desc: "[in] $X_FENCE_DESC_VERSION_CURRENT"
-      init: $X_FENCE_DESC_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_FENCE_DESC
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: $x_fence_flag_t
       name: flags
       desc: "[in] creation flags"

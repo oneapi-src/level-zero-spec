@@ -227,3 +227,59 @@ etors:
     - name: $X_RESULT_ERROR_UNKNOWN
       value: "0x7fffffff"
       desc: "[Core] unknown or internal error"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Defines structure types"
+name: $x_structure_type_t
+etors:
+    - name: $X_STRUCTURE_TYPE_DRIVER_PROPERTIES
+      desc: $x_driver_properties_t
+      value: "0x1"
+    - name: $X_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIES
+      desc: $x_driver_ipc_properties_t
+    - name: $X_STRUCTURE_TYPE_DEVICE_PROPERTIES
+      desc: $x_device_properties_t
+    - name: $X_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIES
+      desc: $x_device_compute_properties_t
+    - name: $X_STRUCTURE_TYPE_DEVICE_KERNEL_PROPERTIES
+      desc: $x_device_kernel_properties_t
+    - name: $X_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES
+      desc: $x_command_queue_group_properties_t
+    - name: $X_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIES
+      desc: $x_device_memory_properties_t
+    - name: $X_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIES
+      desc: $x_device_memory_access_properties_t
+    - name: $X_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIES
+      desc: $x_device_cache_properties_t
+    - name: $X_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIES
+      desc: $x_device_image_properties_t
+    - name: $X_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES
+      desc: $x_device_p2p_properties_t
+    - name: $X_STRUCTURE_TYPE_COMMAND_QUEUE_DESC
+      desc: $x_command_queue_desc_t
+    - name: $X_STRUCTURE_TYPE_COMMAND_LIST_DESC
+      desc: $x_command_list_desc_t
+    - name: $X_STRUCTURE_TYPE_EVENT_POOL_DESC
+      desc: $x_event_pool_desc_t
+    - name: $X_STRUCTURE_TYPE_EVENT_DESC
+      desc: $x_event_desc_t
+    - name: $X_STRUCTURE_TYPE_FENCE_DESC
+      desc: $x_fence_desc_t
+    - name: $X_STRUCTURE_TYPE_IMAGE_DESC
+      desc: $x_image_desc_t
+    - name: $X_STRUCTURE_TYPE_IMAGE_PROPERTIES
+      desc: $x_image_properties_t
+    - name: $X_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC
+      desc: $x_device_mem_alloc_desc_t
+    - name: $X_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESC
+      desc: $x_host_mem_alloc_desc_t
+    - name: $X_STRUCTURE_TYPE_MEMORY_ALLOCATION_PROPERTIES
+      desc: $x_memory_allocation_properties_t
+    - name: $X_STRUCTURE_TYPE_MODULE_DESC
+      desc: $x_module_desc_t
+    - name: $X_STRUCTURE_TYPE_KERNEL_DESC
+      desc: $x_kernel_desc_t
+    - name: $X_STRUCTURE_TYPE_KERNEL_PROPERTIES
+      desc: $x_kernel_properties_t
+    - name: $X_STRUCTURE_TYPE_SAMPLER_DESC
+      desc: $x_sampler_desc_t

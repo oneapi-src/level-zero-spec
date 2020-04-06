@@ -48,7 +48,7 @@ def update_spec(target):
     helper for running cmake windows build
 """
 def build():
-    os.system('cmake -B ../build/ -S .. -G "Visual Studio 15 2017 Win64"')
+    os.system('cmake -B ../build/ -S .. -G "Visual Studio 16 2019" -A x64')
     os.system('cmake --build ../build --clean-first')
 
 """

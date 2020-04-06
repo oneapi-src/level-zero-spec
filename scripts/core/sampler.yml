@@ -10,15 +10,6 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Sampler"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: API version of $x_sampler_desc_t
-class: $xSampler
-name: $x_sampler_desc_version_t
-etors:
-    - name: $X_SAMPLER_DESC_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Sampler addressing modes"
 class: $xSampler
 name: $x_sampler_address_mode_t
@@ -51,10 +42,14 @@ desc: "Sampler descriptor"
 class: $xSampler
 name: $x_sampler_desc_t
 members:
-    - type: $x_sampler_desc_version_t
-      name: version
-      desc: "[in] $X_SAMPLER_DESC_VERSION_CURRENT"
-      init: $X_SAMPLER_DESC_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_SAMPLER_DESC
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: "$x_sampler_address_mode_t"
       name: addressMode
       desc: "[in] Sampler addressing mode to determine how out-of-bounds coordinates are handled."

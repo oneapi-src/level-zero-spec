@@ -55,7 +55,7 @@ namespace driver
             ze_driver_properties_t* pDriverProperties )
         {
             ze_driver_properties_t driverProperties = {};
-            driverProperties.version = ZE_DRIVER_PROPERTIES_VERSION_CURRENT;
+            driverProperties.stype = ZE_STRUCTURE_TYPE_DRIVER_PROPERTIES;
             //driverProperties.uuid
             driverProperties.driverVersion = 0;
 
@@ -128,7 +128,7 @@ namespace driver
             ze_device_properties_t* pDeviceProperties )
         {
             ze_device_properties_t deviceProperties = {};
-            deviceProperties.version = ZE_DEVICE_PROPERTIES_VERSION_CURRENT;
+            deviceProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES;
             deviceProperties.type = ZE_DEVICE_TYPE_GPU;
             strcpy( deviceProperties.name, "Null Device" );
 
@@ -142,7 +142,7 @@ namespace driver
             ze_device_compute_properties_t* pComputeProperties )
         {
             ze_device_compute_properties_t computeProperties = {};
-            computeProperties.version = ZE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT;
+            computeProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIES;
 
             *pComputeProperties = computeProperties;
             return ZE_RESULT_SUCCESS;
@@ -157,7 +157,7 @@ namespace driver
             if( nullptr != pCommandQueueGroupProperties )
             {
                 ze_command_queue_group_properties_t commandQueueGroupProperties = {};
-                commandQueueGroupProperties.version = ZE_COMMAND_QUEUE_GROUP_PROPERTIES_VERSION_CURRENT;
+                commandQueueGroupProperties.stype = ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES;
                 commandQueueGroupProperties.computeSupported = 1;
                 commandQueueGroupProperties.copySupported = 1;
 
@@ -175,7 +175,7 @@ namespace driver
             ze_device_memory_properties_t* pMemProperties )
         {
             ze_device_memory_properties_t memoryProperties = {};
-            memoryProperties.version = ZE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT;
+            memoryProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIES;
 
             *pCount = 1;
             if( nullptr != pMemProperties ) *pMemProperties = memoryProperties;
@@ -189,7 +189,7 @@ namespace driver
             ze_device_memory_access_properties_t* pMemAccessProperties )
         {
             ze_device_memory_access_properties_t memoryAccessProperties = {};
-            memoryAccessProperties.version = ZE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT;
+            memoryAccessProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIES;
 
             *pMemAccessProperties = memoryAccessProperties;
             return ZE_RESULT_SUCCESS;
@@ -201,7 +201,7 @@ namespace driver
             ze_device_cache_properties_t* pCacheProperties )
         {
             ze_device_cache_properties_t cacheProperties = {};
-            cacheProperties.version = ZE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT;
+            cacheProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIES;
 
             *pCacheProperties = cacheProperties;
             return ZE_RESULT_SUCCESS;
@@ -213,7 +213,7 @@ namespace driver
             ze_device_image_properties_t* pImageProperties )
         {
             ze_device_image_properties_t imageProperties = {};
-            imageProperties.version = ZE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT;
+            imageProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIES;
 
             *pImageProperties = imageProperties;
             return ZE_RESULT_SUCCESS;
@@ -236,7 +236,7 @@ namespace driver
             zet_metric_group_properties_t* pProperties )
         {
             zet_metric_group_properties_t metricGroupProperties = {};
-            metricGroupProperties.version = ZET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT;
+            metricGroupProperties.stype = ZET_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES;
             metricGroupProperties.metricCount = 1;
             metricGroupProperties.samplingType = static_cast<zet_metric_group_sampling_type_t>(
                 ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED | ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED );
@@ -276,7 +276,7 @@ namespace driver
             zet_metric_properties_t* pProperties )
         {
             zet_metric_properties_t metricProperties = {};
-            metricProperties.version = ZET_METRIC_PROPERTIES_VERSION_CURRENT;
+            metricProperties.stype = ZET_STRUCTURE_TYPE_METRIC_PROPERTIES;
             metricProperties.metricType = ZET_METRIC_TYPE_DURATION;
             metricProperties.resultType = ZET_VALUE_TYPE_UINT32;
             strcpy( metricProperties.name, "Null Metric" );

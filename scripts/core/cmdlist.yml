@@ -11,15 +11,6 @@ desc: "Intel $OneApi Level-Zero APIs for Command List"
 ordinal: "4"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "API version of $x_command_list_desc_t"
-class: $xCommandList
-name: $x_command_list_desc_version_t
-etors:
-    - name: $X_COMMAND_LIST_DESC_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Supported command list creation flags"
 class: $xCommandList
 name: $x_command_list_flag_t
@@ -51,10 +42,14 @@ desc: "Command List descriptor"
 class: $xCommandList
 name: $x_command_list_desc_t
 members:
-    - type: $x_command_list_desc_version_t
-      name: version
-      desc: "[in] $X_COMMAND_LIST_DESC_VERSION_CURRENT"
-      init: $X_COMMAND_LIST_DESC_VERSION_CURRENT
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_COMMAND_LIST_DESC
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
     - type: uint32_t
       name: commandQueueGroupOrdinal
       desc: "[in] command queue group ordinal to which this command list will be submitted"
