@@ -1230,6 +1230,48 @@ The following is sample for code creating a sampler object and passing it as a k
 Advanced
 ========
 
+Environment Variables
+---------------------
+
+The following table documents the supported knobs for overriding default functional behavior.
+
+## --validate=off
++-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+| Category        | Name                                | Values     | Description                                                                       |
++=================+=====================================+============+===================================================================================+
+| Device          | ${X}_AFFINITY_MASK                    | Hex String | Forces driver to only report devices (and sub-devices) as specified by mask value |
++-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                  |
++-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+## --validate=on
+
+Affinity Mask
+~~~~~~~~~~~~
+
+The affinity mask allows an application or tool to restrict which
+devices (and sub-devices) are visible to 3rd-party libraries or
+applications in another process, respectively. The affinity mask is
+specified via an environment variable as a string of hexadecimal values.
+The value is specific to system configuration; e.g., the number of
+devices and the number of sub-devices for each device.
+## --validate=off
+The following examples demonstrate proper usage:
+## --validate=on
+
+- "" (empty string) = disabled; i.e. all devices and sub-devices are reported. This is the default value.
+- Two devices, each with four sub-devices
+
+    + "FF" = all devices and sub-devices are reported (same as default)
+    + "0F" = only device 0 (with all its sub-devices) is reported
+    + "F0" = only device 1 (with all its sub-devices) is reported as device 0'
+    + "AA" = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1
+
+- Two devices, device 0 with one sub-device and device 1 with two sub-devices
+
+    + "07" = all devices and sub-devices are reported (same as default) + "01" = only device 0 (with all its sub-devices) is reported
+    + "06" = only device 1 (with all its sub-devices) is reported as device 0
+    + "05" = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
+
 Sub-Device Support
 ------------------
 

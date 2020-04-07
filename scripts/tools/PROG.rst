@@ -18,6 +18,25 @@ The driver must be initialized by calling ::${x}Init
 and before calling any other experimental function. Simultaneous calls
 to ::${x}Init are thread-safe.
 
+Environment Variables
+---------------------
+
+The following environment variables are required to be enabled during initialization for the respective feature.
+
+## --validate=off
++-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+| Category        | Name                                | Values     | Description                                                                       |
++=================+=====================================+============+===================================================================================+
+| Tools           | ${T}_ENABLE_API_TRACING              | {**0**, 1} | Enables driver instrumentation for API tracing                                    |
+|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
+|                 | ${T}_ENABLE_METRICS                  | {**0**, 1} | Enables driver instrumentation and dependencies for device metrics                |
+|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
+|                 | ${T}_ENABLE_PROGRAM_INSTRUMENTATION  | {**0**, 1} | Enables driver instrumentation and dependencies for program instrumentation       |
+|                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
+|                 | ${T}_ENABLE_PROGRAM_DEBUGGING        | {**0**, 1} | Enables driver instrumentation and dependencies for program debugging             |
++-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+## --validate=on
+
 .. _API-Tracing:
 
 API Tracing

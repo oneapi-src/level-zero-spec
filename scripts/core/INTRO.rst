@@ -83,7 +83,7 @@ management of the resources by the application or runtimes. The
 interface also provides query capabilities for all memory objects.
 
 Subdevice Support
---------------------------------------
+-----------------
 
 The API supports sub-devices and there are functions to query
 and obtain a sub-device. A sub-device can represent a physical or
@@ -255,19 +255,18 @@ The primary usage-models enabled by these rules is:
 - multiple, simultaneous threads may operate on independent driver objects with no implicit thread-locks
 - driver object handles may be passed between and used by multiple threads with no implicit thread-locks
 
-Experimental API Support
-------------------------
+Extension Support
+-----------------
 
-Features which are still being considered for inclusion into the "Core"
-API, but require additional experimentation by application vendors
-before ratification, are exposed as "Experimental" APIs.
+Features which are device- or vendor-specific can be exposed as extensions.
+The list of extensions supported by the driver implementation can be queried using ::${x}DriverGetExtensionProperties.
 
-Applications should not rely on experimental APIs in production.
-- Experimental APIs may be added and removed from the API at any time; with or without an official API revision.
-- Experimental APIs are not guaranteed to be forward or backward compatible between API versions.
-- Experimental APIs are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.
+"Experimental" extensions require additional experimentation and feedback from application vendors
+before ratification, therefore applications should not rely on experimental extensions in production.
 
-An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED_FEATURE for any experimental API not supported by that driver.
+- Experimental extensions may be added and removed from the driver at any time.
+- Experimental extensions are not guaranteed to be forward or backward compatible between versions.
+- Experimental extensions are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.
 
 Import Library
 --------------
@@ -279,51 +278,6 @@ driver interfaces.
 ## --validate=off
 C/C++ applications may include "${x}_api.h" and link with "${x}_api.lib".
 ## --validate=on
-
-Environment Variables
----------------------
-
-The following table documents the supported knobs for overriding default
-driver behavior.
-
-## --validate=off
-+-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Category        | Name                                | Values     | Description                                                                       |
-+=================+=====================================+============+===================================================================================+
-| Device          | ${X}_AFFINITY_MASK                    | Hex String | Forces driver to only report devices (and sub-devices) as specified by mask value |
-+-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                  |
-+-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Sysman          | ${X}_ENABLE_SYSMAN                    | {**0**, 1} | Enables system management initialization and dependencies                         |
-+-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-## --validate=on
-
-Affinity Mask
-~~~~~~~~~~~~~
-
-The affinity mask allows an application or tool to restrict which
-devices (and sub-devices) are visible to 3rd-party libraries or
-applications in another process, respectively. The affinity mask is
-specified via an environment variable as a string of hexadecimal values.
-The value is specific to system configuration; e.g., the number of
-devices and the number of sub-devices for each device.
-## --validate=off
-The following examples demonstrate proper usage:
-## --validate=on
-
-- "" (empty string) = disabled; i.e. all devices and sub-devices are reported. This is the default value.
-- Two devices, each with four sub-devices
-
-    + "FF" = all devices and sub-devices are reported (same as default)
-    + "0F" = only device 0 (with all its sub-devices) is reported
-    + "F0" = only device 1 (with all its sub-devices) is reported as device 0'
-    + "AA" = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1
-
-- Two devices, device 0 with one sub-device and device 1 with two sub-devices
-
-    + "07" = all devices and sub-devices are reported (same as default) + "01" = only device 0 (with all its sub-devices) is reported
-    + "06" = only device 1 (with all its sub-devices) is reported as device 0
-    + "05" = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
 
 .. _Tools:
 

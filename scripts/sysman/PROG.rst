@@ -20,6 +20,19 @@ control the power and performance of accelerator devices.
 High-level overview
 ===================
 
+Environment Variables
+---------------------
+
+The following environment variables are required to be enabled during initialization for the respective feature.
+
+## --validate=off
++-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+| Category        | Name                                | Values     | Description                                                                       |
++=================+=====================================+============+===================================================================================+
+| Sysman          | ${S}_ENABLE_SYSMAN                   | {**0**, 1} | Enables driver initialization and dependencies for system management              |
++-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+## --validate=on
+
 Initialization
 --------------
 
