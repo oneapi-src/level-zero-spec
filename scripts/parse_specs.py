@@ -272,10 +272,17 @@ def _generate_returns(specs, meta):
                                     _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s->%s`"%(item['name'], meta['struct'][typename]['names'][i]))
 
                                 elif type_traits.is_enum(mtype, meta):
-                                    if re.match(r"version", meta['struct'][typename]['names'][i]):
-                                        _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s < %s->version`"%(re.sub(r"(.*)_t.*", r"\1_CURRENT", mtypename).upper(), item['name']))
+                                    if re.match(r"stype", meta['struct'][typename]['names'][i]):
+                                        _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
                                     else:
                                         _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], meta['struct'][typename]['names'][i]))
+
+                        elif type_traits.is_properties(item['type']):
+                            # walk each entry in the properties
+                            for i, mtype in enumerate(meta['struct'][typename]['types']):
+                                if type_traits.is_enum(mtype, meta):
+                                    if re.match(r"stype", meta['struct'][typename]['names'][i]):
+                                        _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
 
                 # finally, append all user entries
                 for item in obj.get('returns', []):

@@ -67,6 +67,7 @@ class type_traits:
     RE_IPC      = r"(.*)ipc(.*)handle_t"
     RE_POINTER  = r"(.*\w+)\*+"
     RE_DESC     = r"(.*)desc_t.*"
+    RE_PROPS    = r"(.*)properties_t.*"
 
     @staticmethod
     def base(name):
@@ -105,6 +106,13 @@ class type_traits:
     def is_descriptor(cls, name):
         try:
             return True if re.match(cls.RE_DESC, name) else False
+        except:
+            return False
+
+    @classmethod
+    def is_properties(cls, name):
+        try:
+            return True if re.match(cls.RE_PROPS, name) else False
         except:
             return False
 
