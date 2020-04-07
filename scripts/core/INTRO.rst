@@ -145,17 +145,19 @@ Naming Convention
 
 The following naming conventions are followed in order to avoid
 conflicts within the API, or with other APIs and libraries:
+
 ## --validate=off
-- all driver entry points are prefixed with ${x}
-- all types follow \**${x}_<name>_t*\* convention
-- all macros and enumerator values use all caps \**${X}_<SCOPE>_<NAME>*\* convention
-- all functions use camel case **${x}<Object><Action>** convention - exception: since "driver" functions use implicit <Object>, it is omitted
-- all structure members and function parameters use camel case convention
+  - all driver entry points are prefixed with ${x}
+  - all types follow **${x}_name_t** convention
+  - all macros and enumerator values use all caps **${X}_SCOPE_NAME** convention
+  - all functions use camel case **${x}ObjectAction** convention
+  - all structure members and function parameters use camel case convention
 ## --validate=on
 
 In addition, the following coding standards are followed:
-- all function input parameters precede output parameters
-- all functions return ::${x}_result_t
+
+  - all function input parameters precede output parameters
+  - all functions return ::${x}_result_t
 
 Versioning
 ----------
@@ -168,11 +170,6 @@ There are multiple versions that should be used by the application to determine 
   - There is a single API version that represents a collection of APIs.
   - The value is determined from calling ::${x}DriverGetApiVersion
   - The value returned will be the minimum of the ::${x}_api_version_t supported by the device and known by the driver.
-
-**Structure Version** - these are the versions of the structures passed-by-pointer to the driver.
-
-  - These are typically used by the driver to support applications written to older versions of the API.
-  - They are provided as the first member of every structure passed to the driver.
 
 **Driver Version** - this is the version of the driver installed in the system.
 
