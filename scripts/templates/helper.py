@@ -1385,23 +1385,14 @@ Public:
     returns a list of all function objs for the specified class
 """
 def get_class_function_objs(specs, cname):
-    buckets = dict() # bucket per function ordinals
+    objects = []
     for s in specs:
         for obj in s['objects']:
             is_function = obj_traits.is_function(obj)
             match_cls = cname == obj_traits.class_name(obj)
             if is_function and match_cls:
-                # append to bucket
-                ordinal = obj['ordinal'] if 'ordinal' in obj else '9999'
-                if ordinal not in buckets:
-                    buckets[ordinal] = []
-                buckets[ordinal].append(obj)
-
-    # finally, generate a single list that is storted by ordinal
-    objs = []
-    for k, v in sorted(buckets.items()):
-        objs.extend(v)
-    return objs
+                objects.append(obj)
+    return sorted(objects, key=lambda obj: int(int(obj.get('ordinal',"1000")) * float(obj.get('version',"1.0"))))
 
 """
 Public:

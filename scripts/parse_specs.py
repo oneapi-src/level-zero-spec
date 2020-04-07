@@ -95,7 +95,7 @@ def _generate_meta(d, ordinal, meta):
         # create dict if class name is not already known...
         if c not in meta['class']:
             meta['class'][c] = {}
-            meta['class'][c]['ordinal'] = "0"
+            meta['class'][c]['ordinal'] = 0
 
         # create list if object-type is not already known for class...
         if type not in meta['class'][c]:
@@ -307,11 +307,7 @@ def parse(path, version, tags, meta = {'class':{}}, ref = {}):
             # extract header from objects
             if re.match(r"header", d['type']):
                 header = d
-                if 'includes' not in header:
-                    header['includes'] = []
-
-                if 'ordinal' not in header:
-                    header['ordinal'] = "9999"
+                header['ordinal'] = int(int(header.get('ordinal',"1000")) * float(header.get('version',"1.0")))
 
             else:
                 d = _filter_version(d, float(version))
@@ -330,7 +326,7 @@ def parse(path, version, tags, meta = {'class':{}}, ref = {}):
             'objects'   : objects
         })
 
-    specs = sorted(specs, key=lambda x: x['header']['ordinal'])
+    specs = sorted(specs, key=lambda s: s['header']['ordinal'])
     _generate_returns(specs, meta)
 
     print("Parsed %s files and found:"%len(specs))

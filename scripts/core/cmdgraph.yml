@@ -8,6 +8,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Experimental Extension APIs for CommandGraph"
+version: "2.0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Command Graph Experimental Extension Name"
