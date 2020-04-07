@@ -257,9 +257,11 @@ Extension Support
 
 Features which are device- or vendor-specific can be exposed as extensions.
 The list of extensions supported by the driver implementation can be queried using ::${x}DriverGetExtensionProperties.
+All extension APIs include "ext" appended to the API object name.
 
 "Experimental" extensions require additional experimentation and feedback from application vendors
 before ratification, therefore applications should not rely on experimental extensions in production.
+All experimental extension APIs include "exp" appended to the API object name.
 
 - Experimental extensions may be added and removed from the driver at any time.
 - Experimental extensions are not guaranteed to be forward or backward compatible between versions.

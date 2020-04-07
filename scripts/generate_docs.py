@@ -5,7 +5,6 @@
 
 """
 import os
-import shutil
 import util
 import re
 
@@ -197,7 +196,7 @@ def prepare(docpath, gen_rst, gen_html, ver):
             util.removePath(docpath)
 
     docsourcepath = os.path.join(docpath, "source")
-    shutil.copytree("./assets/html/_static",    os.path.join(docsourcepath, "_static"))
-    shutil.copytree("./assets/html/_templates", os.path.join(docsourcepath, "_templates"))
-    shutil.copytree("./assets/images",          os.path.join(docsourcepath, "images"))
+    util.copyTree("./assets/html/_static",    os.path.join(docsourcepath, "_static"))
+    util.copyTree("./assets/html/_templates", os.path.join(docsourcepath, "_templates"))
+    util.copyTree("./assets/images",          os.path.join(docsourcepath, "images"))
     

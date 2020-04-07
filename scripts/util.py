@@ -42,8 +42,10 @@ def makePath(path):
     copy tree
 """
 def copyTree(src, dst):
-    print("Copytree src:%s dst:%s" % (src,dst))
-    shutil.copytree(src, dst)
+    try:
+        shutil.copytree(src, dst)
+    except:
+        print("warning: failed to copy %s to %s"%(src,dst))
 
 """
     remove directory and all contents
@@ -154,6 +156,7 @@ def yamlWrite(path, data):
     generates file using template, args
 """
 makoFileList = []
+makoErrorList = []
 def makoWrite(inpath, outpath, **args):
     try:
         template = Template(filename=inpath)
@@ -167,13 +170,18 @@ def makoWrite(inpath, outpath, **args):
         return len(rendered.splitlines())
     except:
         traceback = RichTraceback()
-        for (filename, lineno, function, line) in traceback.traceback:
-            print("%s(%s) : error in %s" % (filename, lineno, function))
-            print(line, "\n")
-        print("%s: %s" % (str(traceback.error.__class__.__name__), traceback.error))
+        #for (filename, lineno, function, line) in traceback.traceback:
+        #    print("%s(%s) : error in %s" % (filename, lineno, function))
+        #    print(line, "\n")
+        line = "%s: %s" % (str(traceback.error.__class__.__name__), traceback.error)
+        makoErrorList.append(line)
+        print(line)
         return 0
 
 def makoFileListWrite(outpath):
     jsonWrite(outpath, makoFileList)
+
+def makeErrorCount():
+    return len(makoErrorList)
 
 # END OF FILE

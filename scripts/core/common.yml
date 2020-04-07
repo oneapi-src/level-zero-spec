@@ -123,6 +123,12 @@ desc: "Handle of driver's sampler object"
 class: $xSampler
 name: "$x_sampler_handle_t"
 --- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's command graph object"
+version: "2.0"
+class: $xCommandGraphExp
+name: "$x_command_graph_exp_handle_t"
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum IPC handle size"
 name: $X_MAX_IPC_HANDLE_SIZE
@@ -283,3 +289,7 @@ etors:
       desc: $x_kernel_properties_t
     - name: $X_STRUCTURE_TYPE_SAMPLER_DESC
       desc: $x_sampler_desc_t
+    - name: $X_STRUCTURE_TYPE_COMMAND_GRAPH_EXP_DESC
+      desc: $x_command_graph_exp_desc_t
+      value: "0x00010001"
+      version: "2.0"

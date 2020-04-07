@@ -36,7 +36,9 @@ extern "C" {
 #endif
 
 %for spec in specs:
+%if len(spec['objects']):
 #pragma region ${spec['name']}
+%endif
 %for obj in spec['objects']:
 %if not re.match(r"class", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,7 +134,9 @@ typedef struct _${th.make_type_name(n, tags, obj)} ${th.make_type_name(n, tags, 
 %endfor
 
 %endif
+%if len(spec['objects']):
 #pragma endregion
+%endif
 %endfor # spec in specs
 %if n not in ["zet", "zes"]:
 #pragma region callbacks

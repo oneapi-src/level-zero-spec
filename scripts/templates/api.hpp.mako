@@ -56,7 +56,9 @@ def declare_dbg(obj, tags):
 %endif
 
 %for spec in specs:
+%if len(spec['objects']):
 #pragma region ${spec['name']}
+%endif
 ## MACROS #####################################################################
 %for obj in th.filter_items(spec['objects'], 'type', "macro"):
 ///////////////////////////////////////////////////////////////////////////////
@@ -384,7 +386,9 @@ namespace ${n}
 
 } // namespace ${n}
 %endif
+%if len(spec['objects']):
 #pragma endregion
+%endif
 %endfor # spec in specs
 #endif // defined(__cplusplus)
 #endif // _${N}_API_HPP

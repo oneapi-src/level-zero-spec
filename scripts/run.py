@@ -48,8 +48,10 @@ def update_spec(target):
     helper for running cmake windows build
 """
 def build():
-    os.system('cmake -B ../build/ -S .. -G "Visual Studio 16 2019" -A x64')
-    os.system('cmake --build ../build --clean-first')
+    result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 16 2019" -A x64')
+    if result == 0:
+        result = os.system('cmake --build ../build --clean-first')
+    return result == 0
 
 """
     helper for getting revision number from git repository
@@ -154,6 +156,10 @@ def main():
             if args['rst']:
                 generate_docs.generate_rst(ymlpath, rstpath, tags, args['ver'], args['rev'], specs[1], specs[0])
 
+    if util.makeErrorCount():
+        print("\n%s Errors found during generation, stopping execution!"%util.makeErrorCount())
+        return
+
     if args['debug']:
         util.makoFileListWrite("generated.json")
 
@@ -162,7 +168,9 @@ def main():
 
     # build code
     if args['build']:
-        build()
+        if not build():
+            print("\nBuild failed, stopping execution!")
+            return
 
     # generate documentation
     if args['html']:
