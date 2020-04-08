@@ -20,10 +20,7 @@ RE_PROPER_TAG_FORMAT   = r".*"+RE_EXTRACT_TAG_NAME+r".*"
 
 RE_DOXY_LINK    = r".*\:\:\$\{\w\}.*"
 
-RE_CODE_BLOCK_BEGIN = r"^\`\`\`c$"
-RE_CODE_BLOCK_END   = r"^\`\`\`$"
-
-RE_CODE_BLOCK_BEGIN_RST = r"\s*..\scode::"
+RE_CODE_BLOCK_BEGIN = r"\s*..\scode::"
 
 RE_EXTRACT_NAME     = r"\$\{\w\}\w+"
 RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
@@ -45,54 +42,66 @@ def _find_symbol_type(name, meta):
     return None
 
 """
-    validate the reStructuredText file
+    generate a valid reStructuredText file
 """
-def _validate_rst(fpath, meta):
+def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
     enable = True
     code_block = False
 
-    for iline, line in enumerate(util.textRead(fpath)):
+    print("Generating %s..."%fout)
+
+    outlines = []
+    for iline, line in enumerate(util.textRead(fin)):
+    
         if re.match(RE_ENABLE, line) or re.match(RE_PYCODE_BLOCK_END, line):
             enable = True
-            continue
         elif re.match(RE_DISABLE, line) or re.match(RE_PYCODE_BLOCK_BEGIN, line):
             enable = False
-            continue
-
-        if re.match(RE_CODE_BLOCK_BEGIN, line) or re.match(RE_CODE_BLOCK_BEGIN_RST, line):
+        elif re.match(RE_CODE_BLOCK_BEGIN, line):
             code_block = True
-            continue
-        elif re.match(RE_CODE_BLOCK_END, line):
-            code_block = False
-            continue
         # code is always indented
         elif re.match(r'\w', line) and code_block:
             code_block = False
-            continue
 
         if not enable:
+            outlines.append(line)
             continue
 
         if re.match(RE_INVALID_TAG_FORMAT, line):
-            print("%s(%s) : error : invalid %s tag used"%(fpath, iline+1, re.sub(RE_INVALID_TAG_FORMAT, r"\1", line)))
+            print("%s(%s) : error : invalid %s tag used"%(fin, iline+1, re.sub(RE_INVALID_TAG_FORMAT, r"\1", line)))
 
         if re.match(RE_PROPER_TAG_FORMAT, line):
+            link_found = False
             words = re.findall(RE_EXTRACT_NAME, line)
             for word in words:
                 symbol = re.sub(RE_EXTRACT_TAG_NAME, r"$\1", word)
                 if symbol:
                     symbol_type = _find_symbol_type(symbol, meta)
                     if not symbol_type:
-                        print("%s(%s) : error : symbol '%s' not found"%(fpath, iline+1, symbol))
+                        print("%s(%s) : error : symbol '%s' not found"%(fin, iline+1, symbol))
+
+                    if not code_block and 'function' == symbol_type:
+                        funcref = ":ref:`" + word + "`"
+                        line = line.replace("::" + word + "(", funcref + "\\(")
+                        line = line.replace("::" + word, funcref)
+                        link_found = True
 
                     if code_block and 'function' == symbol_type:
                         words = re.sub(RE_EXTRACT_PARAMS, r"\1", line).split(",")
                         if len(words) != len(meta['function'][symbol]['types']):
-                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fpath, iline+1, symbol, len(words), len(meta['function'][symbol]['types'])))
+                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, len(words), len(meta['function'][symbol]['types'])))
 
-            if not code_block:
+            if not code_block and not link_found:
                  if not re.match(RE_DOXY_LINK, line):
-                    print("%s(%s) : warning : doxygen link not used"%(fpath, iline+1, ))
+                    print("%s(%s) : warning : doxygen link not used"%(fin, iline+1, ))
+
+        outlines.append(line)
+
+    util.writelines(os.path.abspath(fout), outlines)
+
+    return util.makoWrite(os.path.abspath(fout), fout,
+                          tags=tags,
+                          ver=float(ver))
 
 """
 Entry-point:
@@ -104,11 +113,8 @@ def generate_rst(srcpath, dstpath, tags, ver, rev, meta, specs):
     util.removeFiles(dstpath, "*.rst")
     for fin in util.findFiles(srcpath, "*.rst"):
         fout = os.path.join(dstpath, os.path.basename(fin))
-        print("Generating %s..."%fout)
-        _validate_rst(os.path.abspath(fin), meta)
-        loc += util.makoWrite(fin, fout,
-            tags=tags,
-            ver=float(ver))
+        loc += _generate_valid_rst(os.path.abspath(fin), fout, tags, ver, rev, meta)
+
     print("Generated %s lines of reStructuredText (rst).\n"%loc)
 
     if (loc > 0):

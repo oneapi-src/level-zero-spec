@@ -417,11 +417,11 @@ device:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}DeviceGetProperties()        | Get static device properties -    |
+| ::${s}DeviceGetProperties()  | Get static device properties -    |
 |                                   | device UUID, sub-device ID,       |
 |                                   | device brand/model/vendor strings |
 +-----------------------------------+-----------------------------------+
-| ::${s}DeviceGetState()             | Determine device state: was the   |
+| ::${s}DeviceGetState()       | Determine device state: was the   |
 |                                   | device repaired, does the device  |
 |                                   | need to be reset and for what     |
 |                                   | reasons (wedged, initiate repair) |
@@ -458,15 +458,15 @@ Host processes
 The following functions provide information about host processes that
 are using the device:
 
-+-----------------------------------+-----------------------------------+
-| Function                          | Description                       |
-+===================================+===================================+
-| ::${s}DeviceProcessesGetState()    | Get information about all         |
-|                                   | processes that are using this     |
-|                                   | device - process ID, device       |
-|                                   | memory allocation size,           |
-|                                   | accelerators being used.          |
-+-----------------------------------+-----------------------------------+
++--------------------------------------+-----------------------------------+
+| Function                             | Description                       |
++======================================+===================================+
+| ::${s}DeviceProcessesGetState() | Get information about all         |
+|                                      | processes that are using this     |
+|                                      | device - process ID, device       |
+|                                      | memory allocation size,           |
+|                                      | accelerators being used.          |
++--------------------------------------+-----------------------------------+
 
 Using the process ID, an application can determine the owner and the
 path to the executable - this information is not returned by the API.
@@ -553,34 +553,34 @@ the scheduler mode for each scheduler component:
 +--------------------------------------------------+-----------------------------------+
 | Function                                         | Description                       |
 +==================================================+===================================+
-| ::${s}DeviceEnumSchedulers()                      | Get handles to each scheduler     |
+| ::${s}DeviceEnumSchedulers()                | Get handles to each scheduler     |
 |                                                  | component.                        |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SchedulerGetProperties()                    | Get properties of a scheduler     |
+| ::${s}SchedulerGetProperties()              | Get properties of a scheduler     |
 |                                                  | component (sub-device, engines    |
 |                                                  | linked to this scheduler,         |
 |                                                  | supported scheduler modes.        |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SchedulerGetCurrentMode()                   | Get the current scheduler mode    |
+| ::${s}SchedulerGetCurrentMode()             | Get the current scheduler mode    |
 |                                                  | (timeout, timeslice, exclusive,   |
 |                                                  | single command queue)             |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SchedulerGetTimeoutModeProperties()         | Get the settings for the timeout  |
+| ::${s}SchedulerGetTimeoutModeProperties()   | Get the settings for the timeout  |
 |                                                  | scheduler mode                    |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SchedulerGetTimesliceModeProperties()       | Get the settings for the          |
+| ::${s}SchedulerGetTimesliceModeProperties() | Get the settings for the          |
 |                                                  | timeslice scheduler mode          |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SchedulerSetTimeoutMode()                   | Change to timeout scheduler mode  |
+| ::${s}SchedulerSetTimeoutMode()             | Change to timeout scheduler mode  |
 |                                                  | and/or change properties          |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SchedulerSetTimesliceMode()                 | Change to timeslice scheduler     |
+| ::${s}SchedulerSetTimesliceMode()           | Change to timeslice scheduler     |
 |                                                  | mode and/or change properties     |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SchedulerSetExclusiveMode()                 | Change to exclusive scheduler     |
+| ::${s}SchedulerSetExclusiveMode()           | Change to exclusive scheduler     |
 |                                                  | mode and/or change properties     |
 +--------------------------------------------------+-----------------------------------+
-| ::${s}SchedulerSetComputeUnitDebugMode()          | Change to compute unit debug      |
+| ::${s}SchedulerSetComputeUnitDebugMode()    | Change to compute unit debug      |
 |                                                  | scheduler mode and/or change      |
 |                                                  | properties                        |
 +--------------------------------------------------+-----------------------------------+
@@ -629,7 +629,7 @@ The device can be reset using the following function:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}DeviceReset()                | Requests that the driver          |
+| ::${s}DeviceReset()          | Requests that the driver          |
 |                                   | perform a PCI bus reset of the    |
 |                                   | device.                           |
 +-----------------------------------+-----------------------------------+
@@ -639,23 +639,23 @@ PCI link operations
 
 The following functions permit getting data about the PCI endpoint for the device:
 
-+-----------------------------------+-----------------------------------+
-| Function                          | Description                       |
-+===================================+===================================+
-| ::${s}DevicePciGetProperties()     | Get static properties for the PCI |
-|                                   | port - BDF address, number of     |
-|                                   | bars, maximum supported speed     |
-+-----------------------------------+-----------------------------------+
-| ::${s}DevicePciGetState()          | Get current PCI port speed        |
-|                                   | (number of lanes, generation)     |
-+-----------------------------------+-----------------------------------+
-| ::${s}DevicePciGetBars()           | Get information about each        |
-|                                   | configured PCI bar                |
-+-----------------------------------+-----------------------------------+
-| ::${s}DevicePciGetStats()          | Get PCI statistics - throughput,  |
-|                                   | total packets, number of packet   |
-|                                   | replays                           |
-+-----------------------------------+-----------------------------------+
++-------------------------------------+-----------------------------------+
+| Function                            | Description                       |
++=====================================+===================================+
+| ::${s}DevicePciGetProperties() | Get static properties for the PCI |
+|                                     | port - BDF address, number of     |
+|                                     | bars, maximum supported speed     |
++-------------------------------------+-----------------------------------+
+| ::${s}DevicePciGetState()      | Get current PCI port speed        |
+|                                     | (number of lanes, generation)     |
++-------------------------------------+-----------------------------------+
+| ::${s}DevicePciGetBars()       | Get information about each        |
+|                                     | configured PCI bar                |
++-------------------------------------+-----------------------------------+
+| ::${s}DevicePciGetStats()      | Get PCI statistics - throughput,  |
+|                                     | total packets, number of packet   |
+|                                     | replays                           |
++-------------------------------------+-----------------------------------+
 
 The pseudo code below shows how to output the PCI BDF address:
 
@@ -770,28 +770,28 @@ The following functions are provided to manage the power of the device:
 +--------------------------------------+--------------------------------------------------+
 | Function                             | Description                                      |
 +======================================+==================================================+
-| ::${s}DeviceEnumPowerDomains()        | Enumerate the power domains.                     |
+| ::${s}DeviceEnumPowerDomains()  | Enumerate the power domains.                     |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}PowerGetProperties()            | Get the minimum/maximum power limit that can be  |
+| ::${s}PowerGetProperties()      | Get the minimum/maximum power limit that can be  |
 |                                      | specified when changing the power limits of a    |
 |                                      | specific power domain. Also read the factory     |
 |                                      | default sustained power limit of the part.       |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}PowerGetEnergyCounter()         | Read the energy consumption of                   |
+| ::${s}PowerGetEnergyCounter()   | Read the energy consumption of                   |
 |                                      | the specific domain.                             |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}PowerGetLimits()                | Get the sustained/burst/peak                     |
+| ::${s}PowerGetLimits()          | Get the sustained/burst/peak                     |
 |                                      | power limits for the specific                    |
 |                                      | power domain.                                    |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}PowerSetLimits()                | Set the sustained/burst/peak                     |
+| ::${s}PowerSetLimits()          | Set the sustained/burst/peak                     |
 |                                      | power limits for the specific                    |
 |                                      | power domain.                                    |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}PowerGetEnergyThreshold()       | Get the current energy threshold.                |
+| ::${s}PowerGetEnergyThreshold() | Get the current energy threshold.                |
 |                                      |                                                  |
 +--------------------------------------+--------------------------------------------------+
-| ::${s}PowerSetEnergyThreshold()       | Set the energy threshold. Event                  |
+| ::${s}PowerSetEnergyThreshold() | Set the energy threshold. Event                  |
 |                                      | ::${S}_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED        |
 |                                      |                                                  |
 |                                      | will be generated when the energy                |
@@ -872,33 +872,33 @@ the device:
 +------------------------------------------+-----------------------------------+
 | Function                                 | Description                       |
 +==========================================+===================================+
-| ::${s}DeviceEnumFrequencyDomains()        | Enumerate all the frequency       |
+| ::${s}DeviceEnumFrequencyDomains()  | Enumerate all the frequency       |
 |                                          | domains on the device and         |
 |                                          | sub-devices.                      |
 +------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetProperties()            | Find out which domain             |
+| ::${s}FrequencyGetProperties()      | Find out which domain             |
 |                                          | ::${s}_freq_domain_t is controlled |
 |                                          | by this frequency and min/max     |
 |                                          | hardware frequencies.             |
 +------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetAvailableClocks()       | Get an array of all available     |
+| ::${s}FrequencyGetAvailableClocks() | Get an array of all available     |
 |                                          | frequencies that can be requested |
 |                                          | on this domain.                   |
 +------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetRange()                 | Get the current min/max frequency |
+| ::${s}FrequencyGetRange()           | Get the current min/max frequency |
 |                                          | between which the hardware can    |
 |                                          | operate for a frequency domain.   |
 +------------------------------------------+-----------------------------------+
-| ::${s}FrequencySetRange()                 | Set the min/max frequency between |
+| ::${s}FrequencySetRange()           | Set the min/max frequency between |
 |                                          | which the hardware can operate    |
 |                                          | for a frequency domain.           |
 +------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetState()                 | Get the current frequency         |
+| ::${s}FrequencyGetState()           | Get the current frequency         |
 |                                          | request, actual frequency, TDP    |
 |                                          | frequency and throttle reasons    |
 |                                          | for a frequency domain.           |
 +------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetThrottleTime()          | Gets the amount of time a         |
+| ::${s}FrequencyGetThrottleTime()    | Gets the amount of time a         |
 |                                          | frequency domain has been         |
 |                                          | throttled.                        |
 +------------------------------------------+-----------------------------------+
@@ -990,24 +990,24 @@ The following functions are provided to handle overclocking:
 +-----------------------------------------+-----------------------------------+
 | Function                                | Description                       |
 +=========================================+===================================+
-| ::${s}FrequencyOcGetCapabilities()       | Determine the overclock           |
+| ::${s}FrequencyOcGetCapabilities() | Determine the overclock           |
 |                                         | capabilities of the device.       |
 +-----------------------------------------+-----------------------------------+
-| ::${s}FrequencyOcGetConfig()             | Get the overclock configuration   |
+| ::${s}FrequencyOcGetConfig()       | Get the overclock configuration   |
 |                                         | in effect.                        |
 +-----------------------------------------+-----------------------------------+
-| ::${s}FrequencyOcSetConfig()             | Set a new overclock               |
+| ::${s}FrequencyOcSetConfig()       | Set a new overclock               |
 |                                         | configuration.                    |
 +-----------------------------------------+-----------------------------------+
-| ::${s}FrequencyOcGetIccMax()             | Get the maximum current limit in  |
+| ::${s}FrequencyOcGetIccMax()       | Get the maximum current limit in  |
 |                                         | effect.                           |
 +-----------------------------------------+-----------------------------------+
-| ::${s}FrequencyOcSetIccMax()             | Set a new maximum current limit.  |
+| ::${s}FrequencyOcSetIccMax()       | Set a new maximum current limit.  |
 +-----------------------------------------+-----------------------------------+
-| ::${s}FrequencyOcGetTjMax()              | Get the maximum temperature limit |
+| ::${s}FrequencyOcGetTjMax()        | Get the maximum temperature limit |
 |                                         | in effect.                        |
 +-----------------------------------------+-----------------------------------+
-| ::${s}FrequencyOcSetTjMax()              | Set a new maximum temperature     |
+| ::${s}FrequencyOcSetTjMax()        | Set a new maximum temperature     |
 |                                         | limit.                            |
 +-----------------------------------------+-----------------------------------+
 
@@ -1055,20 +1055,20 @@ functions to change the Performance Factor for a domain.
 
 Here is a summary of the available functions:
 
-+----------------------------------------------+--------------------------------------------------------------------+
-| Function                                     | Description                                                        |
-+==============================================+====================================================================+
-| ::${s}DeviceEnumPerformanceFactorDomains()    | Enumerate the Performance Factor domains available on the          |
-|                                              | hardware.                                                          |
-+----------------------------------------------+--------------------------------------------------------------------+
-| ::${s}PerformanceFactorGetProperties()        | Find out if the Performance Factor domain is located on a          |
-|                                              | sub-device and which accelerators are affected by it.              |
-+----------------------------------------------+--------------------------------------------------------------------+
-| ::${s}PerformanceFactorGetConfig()            | Read the current performance factor being used by the hardware     |
-|                                              | for a domain.                                                      |
-+----------------------------------------------+--------------------------------------------------------------------+
-| ::${s}PerformanceFactorSetConfig()            | Change the Performance Factor of the hardware for a domain.        |
-+----------------------------------------------+--------------------------------------------------------------------+
++-------------------------------------------------+--------------------------------------------------------------------+
+| Function                                        | Description                                                        |
++=================================================+====================================================================+
+| ::${s}DeviceEnumPerformanceFactorDomains() | Enumerate the Performance Factor domains available on the          |
+|                                                 | hardware.                                                          |
++-------------------------------------------------+--------------------------------------------------------------------+
+| ::${s}PerformanceFactorGetProperties()     | Find out if the Performance Factor domain is located on a          |
+|                                                 | sub-device and which accelerators are affected by it.              |
++-------------------------------------------------+--------------------------------------------------------------------+
+| ::${s}PerformanceFactorGetConfig()         | Read the current performance factor being used by the hardware     |
+|                                                 | for a domain.                                                      |
++-------------------------------------------------+--------------------------------------------------------------------+
+| ::${s}PerformanceFactorSetConfig()         | Change the Performance Factor of the hardware for a domain.        |
++-------------------------------------------------+--------------------------------------------------------------------+
 
 
 .. _Engines:
@@ -1088,22 +1088,22 @@ calculate the average utilization of different parts of the device.
 
 The following functions are provided:
 
-+-----------------------------------+-----------------------------------+
-| Function                          | Description                       |
-+===================================+===================================+
-| ::${s}DeviceEnumEngineGroups()     | Enumerate the engine groups that  |
-|                                   | can be queried.                   |
-+-----------------------------------+-----------------------------------+
-| ::${s}EngineGetProperties()        | Get the properties of an engine   |
-|                                   | group. This will return the type  |
-|                                   | of engine group (one of           |
-|                                   | ::${s}_engine_group_t) and on      |
-|                                   | which sub-device the group is     |
-|                                   | making measurements.              |
-+-----------------------------------+-----------------------------------+
-| ::${s}EngineGetActivity()          | Returns the activity counters for |
-|                                   | an engine group.                  |
-+-----------------------------------+-----------------------------------+
++-------------------------------------+-----------------------------------+
+| Function                            | Description                       |
++=====================================+===================================+
+| ::${s}DeviceEnumEngineGroups() | Enumerate the engine groups that  |
+|                                     | can be queried.                   |
++-------------------------------------+-----------------------------------+
+| ::${s}EngineGetProperties()    | Get the properties of an engine   |
+|                                     | group. This will return the type  |
+|                                     | of engine group (one of           |
+|                                     | ::${s}_engine_group_t) and on      |
+|                                     | which sub-device the group is     |
+|                                     | making measurements.              |
++-------------------------------------+-----------------------------------+
+| ::${s}EngineGetActivity()      | Returns the activity counters for |
+|                                     | an engine group.                  |
++-------------------------------------+-----------------------------------+
 
 .. _Standby:
 
@@ -1123,28 +1123,28 @@ domains is given by ::${s}_standby_type_t.
 The following functions can be used to control how the hardware promotes
 to standby states:
 
-+-----------------------------------+-----------------------------------+
-| Function                          | Description                       |
-+===================================+===================================+
-| ::${s}DeviceEnumStandbyDomains()   | Enumerate the standby domains.    |
-+-----------------------------------+-----------------------------------+
-| ::${s}StandbyGetProperties()       | Get the properties of a standby   |
-|                                   | domain. This will return the      |
-|                                   | parts of the device that are      |
-|                                   | affected by this domain (one of   |
-|                                   | ::${s}_engine_group_t) and on      |
-|                                   | which sub-device the domain is    |
-|                                   | located.                          |
-+-----------------------------------+-----------------------------------+
-| ::${s}StandbyGetMode()             | Get the current promotion mode    |
-|                                   | (one of                           |
-|                                   | ::${s}_standby_promo_mode_t) for a |
-|                                   | standby domain.                   |
-+-----------------------------------+-----------------------------------+
-| ::${s}StandbySetMode()             | Set the promotion mode (one of    |
-|                                   | ::${s}_standby_promo_mode_t) for a |
-|                                   | standby domain.                   |
-+-----------------------------------+-----------------------------------+
++---------------------------------------+-----------------------------------+
+| Function                              | Description                       |
++=======================================+===================================+
+| ::${s}DeviceEnumStandbyDomains() | Enumerate the standby domains.    |
++---------------------------------------+-----------------------------------+
+| ::${s}StandbyGetProperties()     | Get the properties of a standby   |
+|                                       | domain. This will return the      |
+|                                       | parts of the device that are      |
+|                                       | affected by this domain (one of   |
+|                                       | ::${s}_engine_group_t) and on      |
+|                                       | which sub-device the domain is    |
+|                                       | located.                          |
++---------------------------------------+-----------------------------------+
+| ::${s}StandbyGetMode()           | Get the current promotion mode    |
+|                                       | (one of                           |
+|                                       | ::${s}_standby_promo_mode_t) for a |
+|                                       | standby domain.                   |
++---------------------------------------+-----------------------------------+
+| ::${s}StandbySetMode()           | Set the promotion mode (one of    |
+|                                       | ::${s}_standby_promo_mode_t) for a |
+|                                       | standby domain.                   |
++---------------------------------------+-----------------------------------+
 
 .. _Firmware:
 
@@ -1156,16 +1156,16 @@ The following functions are provided to manage firmwares on the device:
 +------------------------------------+-----------------------------------+
 | Function                           | Description                       |
 +====================================+===================================+
-| ::${s}DeviceEnumFirmwares()         | Enumerate all firmwares that can  |
+| ::${s}DeviceEnumFirmwares()   | Enumerate all firmwares that can  |
 |                                    | be managed on the device.         |
 +------------------------------------+-----------------------------------+
-| ::${s}FirmwareGetProperties()       | Find out the name and version of  |
+| ::${s}FirmwareGetProperties() | Find out the name and version of  |
 |                                    | a firmware.                       |
 +------------------------------------+-----------------------------------+
-| ::${s}FirmwareGetChecksum()         | Get the checksum for an installed |
+| ::${s}FirmwareGetChecksum()   | Get the checksum for an installed |
 |                                    | firmware.                         |
 +------------------------------------+-----------------------------------+
-| ::${s}FirmwareFlash()               | Flash a new firmware image.       |
+| ::${s}FirmwareFlash()         | Flash a new firmware image.       |
 +------------------------------------+-----------------------------------+
 
 .. _Memory:
@@ -1201,22 +1201,22 @@ When the health state of a memory module changes, the event
 The following functions provide access to information about the device
 memory modules:
 
-+-----------------------------------+-----------------------------------+
-| Function                          | Description                       |
-+===================================+===================================+
-| ::${s}DeviceEnumMemoryModules()    | Enumerate the memory modules.     |
-+-----------------------------------+-----------------------------------+
-| ::${s}MemoryGetProperties()        | Find out the type of memory and   |
-|                                   | maximum physical memory of a      |
-|                                   | module.                           |
-+-----------------------------------+-----------------------------------+
-| ::${s}MemoryGetBandwidth()         | Returns memory bandwidth counters |
-|                                   | for a module.                     |
-+-----------------------------------+-----------------------------------+
-| ::${s}MemoryGetState()             | Returns the currently health free |
-|                                   | memory and total physical memory  |
-|                                   | for a memory module.              |
-+-----------------------------------+-----------------------------------+
++--------------------------------------+-----------------------------------+
+| Function                             | Description                       |
++======================================+===================================+
+| ::${s}DeviceEnumMemoryModules() | Enumerate the memory modules.     |
++--------------------------------------+-----------------------------------+
+| ::${s}MemoryGetProperties()     | Find out the type of memory and   |
+|                                      | maximum physical memory of a      |
+|                                      | module.                           |
++--------------------------------------+-----------------------------------+
+| ::${s}MemoryGetBandwidth()      | Returns memory bandwidth counters |
+|                                      | for a module.                     |
++--------------------------------------+-----------------------------------+
+| ::${s}MemoryGetState()          | Returns the currently health free |
+|                                      | memory and total physical memory  |
+|                                      | for a memory module.              |
++--------------------------------------+-----------------------------------+
 
 .. _Fabric-Port:
 
@@ -1301,30 +1301,30 @@ The following functions can be used to manage Fabric ports:
 +--------------------------------------+-----------------------------------+
 | Function                             | Description                       |
 +======================================+===================================+
-| ::${s}DeviceEnumFabricPorts()         | Enumerate all fabric ports on the |
+| ::${s}DeviceEnumFabricPorts()   | Enumerate all fabric ports on the |
 |                                      | device.                           |
 +--------------------------------------+-----------------------------------+
-| ::${s}FabricPortGetProperties()       | Get static properties about the   |
+| ::${s}FabricPortGetProperties() | Get static properties about the   |
 |                                      | port (model, pord Id, max         |
 |                                      | receive/transmit speed).          |
 +--------------------------------------+-----------------------------------+
-| ::${s}FabricPortGetLinkType()         | Get details about the physical    |
+| ::${s}FabricPortGetLinkType()   | Get details about the physical    |
 |                                      | link connected to the port.       |
 +--------------------------------------+-----------------------------------+
-| ::${s}FabricPortGetConfig()           | Determine if the port is          |
+| ::${s}FabricPortGetConfig()     | Determine if the port is          |
 |                                      | configured UP and if beaconing is |
 |                                      | on or off.                        |
 +--------------------------------------+-----------------------------------+
-| ::${s}FabricPortSetConfig()           | Configure the port UP or DOWN and |
+| ::${s}FabricPortSetConfig()     | Configure the port UP or DOWN and |
 |                                      | turn beaconing on or off.         |
 +--------------------------------------+-----------------------------------+
-| ::${s}FabricPortGetState()            | Determine the health of the port  |
+| ::${s}FabricPortGetState()      | Determine the health of the port  |
 |                                      | connection, reasons for link      |
 |                                      | degradation or connection issues, |
 |                                      | current receive/transmit and port |
 |                                      | Id of the remote end-point.       |
 +--------------------------------------+-----------------------------------+
-| ::${s}FabricPortGetThroughput()       | Get port receive/transmit         |
+| ::${s}FabricPortGetThroughput() | Get port receive/transmit         |
 |                                      | counters along with current       |
 |                                      | receive/transmit port speed.      |
 +--------------------------------------+-----------------------------------+
@@ -1461,30 +1461,30 @@ temperature events:
 
 The following function can be used to manage temperature sensors:
 
-+---------------------------------------+-----------------------------------+
-| Function                              | Description                       |
-+=======================================+===================================+
-| ::${s}DeviceEnumTemperatureSensors()   | Enumerate the temperature sensors |
-|                                       | on the device.                    |
-+---------------------------------------+-----------------------------------+
-| ::${s}TemperatureGetProperties()       | Get static properties for a       |
-|                                       | temperature sensor. In            |
-|                                       | particular, this will indicate    |
-|                                       | which parts of the device the     |
-|                                       | sensor measures (one of           |
-|                                       | ::${s}_temp_sensors_t).            |
-+---------------------------------------+-----------------------------------+
-| ::${s}TemperatureGetConfig()           | Get information about the current |
-|                                       | temperature thresholds -          |
-|                                       | enabled/threshold/processID.      |
-+---------------------------------------+-----------------------------------+
-| ::${s}TemperatureSetConfig()           | Set new temperature thresholds.   |
-|                                       | Events will be triggered when the |
-|                                       | temperature crosses these         |
-|                                       | thresholds.                       |
-+---------------------------------------+-----------------------------------+
-| ::${s}TemperatureGetState()            | Read the temperature of a sensor. |
-+---------------------------------------+-----------------------------------+
++-------------------------------------------+-----------------------------------+
+| Function                                  | Description                       |
++===========================================+===================================+
+| ::${s}DeviceEnumTemperatureSensors() | Enumerate the temperature sensors |
+|                                           | on the device.                    |
++-------------------------------------------+-----------------------------------+
+| ::${s}TemperatureGetProperties()     | Get static properties for a       |
+|                                           | temperature sensor. In            |
+|                                           | particular, this will indicate    |
+|                                           | which parts of the device the     |
+|                                           | sensor measures (one of           |
+|                                           | ::${s}_temp_sensors_t).            |
++-------------------------------------------+-----------------------------------+
+| ::${s}TemperatureGetConfig()         | Get information about the current |
+|                                           | temperature thresholds -          |
+|                                           | enabled/threshold/processID.      |
++-------------------------------------------+-----------------------------------+
+| ::${s}TemperatureSetConfig()         | Set new temperature thresholds.   |
+|                                           | Events will be triggered when the |
+|                                           | temperature crosses these         |
+|                                           | thresholds.                       |
++-------------------------------------------+-----------------------------------+
+| ::${s}TemperatureGetState()          | Read the temperature of a sensor. |
++-------------------------------------------+-----------------------------------+
 
 .. _PSU:
 
@@ -1497,13 +1497,13 @@ power-supply on a device:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}DeviceEnumPsus()             | Enumerate the power supplies on   |
+| ::${s}DeviceEnumPsus()       | Enumerate the power supplies on   |
 |                                   | the device that can be managed.   |
 +-----------------------------------+-----------------------------------+
-| ::${s}PsuGetProperties()           | Get static details about the      |
+| ::${s}PsuGetProperties()     | Get static details about the      |
 |                                   | power supply.                     |
 +-----------------------------------+-----------------------------------+
-| ::${s}PsuGetState()                | Get information about the health  |
+| ::${s}PsuGetState()          | Get information about the health  |
 |                                   | (temperature, current, fan) of    |
 |                                   | the power supply.                 |
 +-----------------------------------+-----------------------------------+
@@ -1527,21 +1527,21 @@ The following functions are available:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}DeviceEnumFans()             | Enumerate the fans on the device. |
+| ::${s}DeviceEnumFans()       | Enumerate the fans on the device. |
 +-----------------------------------+-----------------------------------+
-| ::${s}FanGetProperties()           | Get the maximum RPM of the fan    |
+| ::${s}FanGetProperties()     | Get the maximum RPM of the fan    |
 |                                   | and the maximum number of points  |
 |                                   | that can be specified in the      |
 |                                   | temperature-speed table for a     |
 |                                   | fan.                              |
 +-----------------------------------+-----------------------------------+
-| ::${s}FanGetConfig()               | Get the current configuration     |
+| ::${s}FanGetConfig()         | Get the current configuration     |
 |                                   | (speed) of a fan.                 |
 +-----------------------------------+-----------------------------------+
-| ::${s}FanSetConfig()               | Change the configuration (speed)  |
+| ::${s}FanSetConfig()         | Change the configuration (speed)  |
 |                                   | of a fan.                         |
 +-----------------------------------+-----------------------------------+
-| ::${s}FanGetState()                | Get the current speed of a fan.   |
+| ::${s}FanGetState()          | Get the current speed of a fan.   |
 +-----------------------------------+-----------------------------------+
 
 The pseudo code below shows how to output the fan speed of all fans:
@@ -1603,17 +1603,17 @@ The following functions are available:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}DeviceEnumLeds()             | Enumerate the LEDs on the device  |
+| ::${s}DeviceEnumLeds()       | Enumerate the LEDs on the device  |
 |                                   | that can be managed.              |
 +-----------------------------------+-----------------------------------+
-| ::${s}LedGetProperties()           | Find out if a LED supports color  |
+| ::${s}LedGetProperties()     | Find out if a LED supports color  |
 |                                   | changes.                          |
 +-----------------------------------+-----------------------------------+
-| ::${s}LedGetState()                | Find out if a LED is currently    |
+| ::${s}LedGetState()          | Find out if a LED is currently    |
 |                                   | off/on and the color where the    |
 |                                   | capability is available.          |
 +-----------------------------------+-----------------------------------+
-| ::${s}LedSetState()                | Turn a LED off/on and set the     |
+| ::${s}LedSetState()          | Turn a LED off/on and set the     |
 |                                   | color where the capability is     |
 |                                   | available.                        |
 +-----------------------------------+-----------------------------------+
@@ -1768,32 +1768,32 @@ error counters.
 
 The table below summaries all the RAS management functions:
 
-+-----------------------------------+-----------------------------------+
-| Function                          | Description                       |
-+===================================+===================================+
-| ::${s}DeviceEnumRasErrorSets()     | Get handles to the available RAS  |
-|                                   | error groups.                     |
-+-----------------------------------+-----------------------------------+
-| ::${s}RasGetProperties()           | Get properties about a RAS error  |
-|                                   | group - type of RAS errors and if |
-|                                   | they are enabled.                 |
-+-----------------------------------+-----------------------------------+
-| ::${s}RasGetConfig()               | Get the current list of           |
-|                                   | thresholds for each counter in    |
-|                                   | the RAS group. RAS error events   |
-|                                   | will be generated when the        |
-|                                   | thresholds are exceeded.          |
-+-----------------------------------+-----------------------------------+
-| ::${s}RasSetConfig()               | Set current list of thresholds    |
-|                                   | for each counter in the RAS       |
-|                                   | group. RAS error events will be   |
-|                                   | generated when the thresholds are |
-|                                   | exceeded.                         |
-+-----------------------------------+-----------------------------------+
-| ::${s}RasGetState()                | Get the current state of the RAS  |
-|                                   | error counters. The counters can  |
-|                                   | also be cleared.                  |
-+-----------------------------------+-----------------------------------+
++-------------------------------------+-----------------------------------+
+| Function                            | Description                       |
++=====================================+===================================+
+| ::${s}DeviceEnumRasErrorSets() | Get handles to the available RAS  |
+|                                     | error groups.                     |
++-------------------------------------+-----------------------------------+
+| ::${s}RasGetProperties()       | Get properties about a RAS error  |
+|                                     | group - type of RAS errors and if |
+|                                     | they are enabled.                 |
++-------------------------------------+-----------------------------------+
+| ::${s}RasGetConfig()           | Get the current list of           |
+|                                     | thresholds for each counter in    |
+|                                     | the RAS group. RAS error events   |
+|                                     | will be generated when the        |
+|                                     | thresholds are exceeded.          |
++-------------------------------------+-----------------------------------+
+| ::${s}RasSetConfig()           | Set current list of thresholds    |
+|                                     | for each counter in the RAS       |
+|                                     | group. RAS error events will be   |
+|                                     | generated when the thresholds are |
+|                                     | exceeded.                         |
++-------------------------------------+-----------------------------------+
+| ::${s}RasGetState()            | Get the current state of the RAS  |
+|                                     | error counters. The counters can  |
+|                                     | also be cleared.                  |
++-------------------------------------+-----------------------------------+
 
 The pseudo code below shows how to determine if RAS is supported and the
 current state of RAS errors:
@@ -1896,23 +1896,23 @@ run.
 
 The table below summaries all the diagnostic management functions:
 
-+---------------------------------------+-----------------------------------+
-| Function                              | Description                       |
-+=======================================+===================================+
++---------------------------------------------+-----------------------------------+
+| Function                                    | Description                       |
++=============================================+===================================+
 | ::${s}DeviceEnumDiagnosticTestSuites() | Get handles to the available      |
-|                                       | diagnostic test suites that can   |
-|                                       | be run.                           |
-+---------------------------------------+-----------------------------------+
+|                                             | diagnostic test suites that can   |
+|                                             | be run.                           |
++---------------------------------------------+-----------------------------------+
 | ::${s}DiagnosticsGetProperties()       | Get information about a test      |
-|                                       | suite - type, name, location and  |
-|                                       | if individual tests can be run.   |
-+---------------------------------------+-----------------------------------+
+|                                             | suite - type, name, location and  |
+|                                             | if individual tests can be run.   |
++---------------------------------------------+-----------------------------------+
 | ::${s}DiagnosticsGetTests()            | Get list of individual diagnostic |
-|                                       | tests that can be run.            |
-+---------------------------------------+-----------------------------------+
+|                                             | tests that can be run.            |
++---------------------------------------------+-----------------------------------+
 | ::${s}DiagnosticsRunTests()            | Run either all or individual      |
-|                                       | diagnostic tests.                 |
-+---------------------------------------+-----------------------------------+
+|                                             | diagnostic tests.                 |
++---------------------------------------------+-----------------------------------+
 
 The pseudo code below shows how to discover all test suites and the
 tests in each:
@@ -2045,22 +2045,22 @@ The table below summaries all the event management functions:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ::${s}DeviceCreateEvents()         | Get the event handle for a        |
+| ::${s}DeviceCreateEvents()   | Get the event handle for a        |
 |                                   | specific Sysman device.           |
 +-----------------------------------+-----------------------------------+
-| ::${s}EventGetConfig()             | Get the current list of events    |
+| ::${s}EventGetConfig()       | Get the current list of events    |
 |                                   | for a given event handle that     |
 |                                   | have been registered.             |
 +-----------------------------------+-----------------------------------+
-| ::${s}EventSetConfig()             | Set the events that should be     |
+| ::${s}EventSetConfig()       | Set the events that should be     |
 |                                   | registered on a given event       |
 |                                   | handle.                           |
 +-----------------------------------+-----------------------------------+
-| ::${s}EventGetState()              | Get the list of events that have  |
+| ::${s}EventGetState()        | Get the list of events that have  |
 |                                   | been received for a given event   |
 |                                   | handle.                           |
 +-----------------------------------+-----------------------------------+
-| ::${s}EventListen()                | Wait for events to arrive for a   |
+| ::${s}EventListen()          | Wait for events to arrive for a   |
 |                                   | given list of event handles.      |
 +-----------------------------------+-----------------------------------+
 
@@ -2185,16 +2185,16 @@ disable standby, the following udev daemon rule would be needed:
 The full list of sysfs files used by the API are described in the table
 below. For each file, the list of affected API functions is given.
 
-+-----------------------+-----------------------+------------------------------------+
-| sysfs file            | Description           | Functions                          |
-+=======================+=======================+====================================+
++-----------------------+-----------------------+------------------------------------------+
+| sysfs file            | Description           | Functions                                |
++=======================+=======================+==========================================+
 | /sys/class/drm/card0/ | Used to               | ::${s}DeviceEnumStandbyDomains()    |
 | rc6_enable            | enable/disable        | ::${s}StandbyGetProperties()        |
 |                       | standby.              | ::${s}StandbyGetMode()              |
 |                       |                       | ::${s}StandbySetMode()              |
-+-----------------------+-----------------------+------------------------------------+
-| TBD                   | In development        | TBD                                |
-+-----------------------+-----------------------+------------------------------------+
++-----------------------+-----------------------+------------------------------------------+
+| TBD                   | In development        | TBD                                      |
++-----------------------+-----------------------+------------------------------------------+
 
 Windows
 -------
@@ -2213,17 +2213,17 @@ API calls:
 +--------------------------------------+-----------------------------------+
 | Function                             | Description                       |
 +======================================+===================================+
-| ::${s}DevicePciGetStats()             | Access to total PCI throughput    |
+| ::${s}DevicePciGetStats()       | Access to total PCI throughput    |
 |                                      | and number of packets can reveal  |
 |                                      | useful information about the      |
 |                                      | workload                          |
 +--------------------------------------+-----------------------------------+
-| ::${s}MemoryGetBandwidth()            | Access to real-time device local  |
+| ::${s}MemoryGetBandwidth()      | Access to real-time device local  |
 |                                      | memory bandwidth can reveal       |
 |                                      | useful information about the      |
 |                                      | workload                          |
 +--------------------------------------+-----------------------------------+
-| ::${s}FabricPortGetThroughput()       | Access to real-time fabric data   |
+| ::${s}FabricPortGetThroughput() | Access to real-time fabric data   |
 |                                      | bandwidth can reveal useful       |
 |                                      | information about the workload    |
 +--------------------------------------+-----------------------------------+
@@ -2239,26 +2239,26 @@ the preceding sections. This is the case for the following API calls:
 +------------------------------------+-----------------------------------+
 | Function                           | Description                       |
 +====================================+===================================+
-| ::${s}DeviceReset()                 | Device resets cause loss of data  |
+| ::${s}DeviceReset()           | Device resets cause loss of data  |
 |                                    | for running workloads.            |
 +------------------------------------+-----------------------------------+
-| ::${s}DeviceEnumFirmwares()         | All firmware operations must be   |
+| ::${s}DeviceEnumFirmwares()   | All firmware operations must be   |
 |                                    | handled with care.                |
 +------------------------------------+-----------------------------------+
-| ::${s}FirmwareGetProperties()       | All firmware operations must be   |
+| ::${s}FirmwareGetProperties() | All firmware operations must be   |
 |                                    | handled with care.                |
 +------------------------------------+-----------------------------------+
-| ::${s}FirmwareGetChecksum()         | All firmware operations must be   |
+| ::${s}FirmwareGetChecksum()   | All firmware operations must be   |
 |                                    | handled with care.                |
 +------------------------------------+-----------------------------------+
-| ::${s}FirmwareFlash()               | All firmware operations must be   |
+| ::${s}FirmwareFlash()         | All firmware operations must be   |
 |                                    | handled with care.                |
 +------------------------------------+-----------------------------------+
-| ::${s}FabricPortSetConfig()         | Putting fabric ports offline can  |
+| ::${s}FabricPortSetConfig()   | Putting fabric ports offline can  |
 |                                    | distrupt workloads, causing       |
 |                                    | uncorrectable errors.             |
 +------------------------------------+-----------------------------------+
-| ::${s}DiagnosticsRunTests()         | Diagnostics take a device         |
+| ::${s}DiagnosticsRunTests()   | Diagnostics take a device         |
 |                                    | offline.                          |
 +------------------------------------+-----------------------------------+
 
@@ -2275,189 +2275,183 @@ Function summary
 The table below summarizes the default permissions for each API
 function:
 
-## --validate=off
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
 | Function                                          | Administrator | Group       | Other       | Virtual     |
 |                                                   | access        | access      | access      | machine     |
 +===================================================+===============+=============+=============+=============+
-| ::${s}DeviceGetProperties()                        | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceGetProperties()                  | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceWasRepaired()                          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumSchedulers()                 | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumSchedulers()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}SchedulerGetProperties()               | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SchedulerGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
+| ::${s}SchedulerGetCurrentMode()              | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SchedulerGetCurrentMode()                    | read-only     | read-only   | read-only   | no-access   |
+| ::${s}SchedulerGetTimeoutModeProperties()    | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SchedulerGetTimeoutModeProperties()          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}SchedulerGetTimesliceModeProperties()  | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SchedulerGetTimesliceModeProperties()        | read-only     | read-only   | read-only   | no-access   |
+| ::${s}SchedulerSetTimeoutMode()              | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SchedulerSetTimeoutMode()                    | read-write    | read-write  | read-only   | no-access   |
+| ::${s}SchedulerSetTimesliceMode()            | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SchedulerSetTimesliceMode()                  | read-write    | read-write  | read-only   | no-access   |
+| ::${s}SchedulerSetExclusiveMode()            | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SchedulerSetExclusiveMode()                  | read-write    | read-write  | read-only   | no-access   |
+| ::${s}SchedulerSetComputeUnitDebugMode()     | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}SchedulerSetComputeUnitDebugMode()           | read-write    | read-write  | read-only   | no-access   |
+| ::${s}DeviceReset()                          | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceReset()                                | read-write    | no-access   | no-access   | no-access   |
+| ::${s}DevicePciGetProperties()               | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PciGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DevicePciGetState()                    | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PciGetState()                                | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DevicePciGetBars()                     | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PciGetBars()                                 | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DevicePciGetStats()                    | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PciGetStats                                  | read-only     | no-access   | no-access   | no-access   |
+| ::${s}PowerGetProperties()                   | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PowerGet()                                   | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PowerGetEnergyCounter()                | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PowerGetProperties()                         | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PowerGetEnergyThreshold()              | read-only     | read-only   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PowerGetEnergyCounter()                      | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PowerSetEnergyThreshold()              | read-write    | read-write  | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PowerGetEnergyThreshold()                    | read-only     | read-only   | no-access   | no-access   |
+| ::${s}PowerGetLimits()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PowerSetEnergyThreshold()                    | read-write    | read-write  | no-access   | no-access   |
+| ::${s}PowerSetLimits()                       | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PowerGetLimits()                             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumFrequencyDomains()           | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PowerSetLimits()                             | read-write    | read-write  | read-only   | no-access   |
+| ::${s}FrequencyGetProperties()               | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumFrequencyDomains()                 | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyGetAvailableClocks()          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyGetRange()                    | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyGetAvailableClocks()                | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencySetRange()                    | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyGetRange()                          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyGetState()                    | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencySetRange()                          | read-write    | read-write  | read-only   | no-access   |
+| ::${s}FrequencyGetThrottleTime()             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyGetState()                          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyOcGetCapabilities()           | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyGetThrottleTime()                   | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyOcGetConfig()                 | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyOcGetCapabilities()                 | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyOcSetConfig()                 | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyOcGetConfig()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyOcGetIccMax()                 | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyOcSetConfig()                       | read-write    | no-access   | no-access   | no-access   |
+| ::${s}FrequencyOcSetIccMax()                 | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyOcGetIccMax()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FrequencyOcGetTjMax()                  | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyOcSetIccMax()                       | read-write    | no-access   | no-access   | no-access   |
+| ::${s}FrequencyOcSetTjMax()                  | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyOcGetTjMax()                        | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumEngineGroups()               | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FrequencyOcSetTjMax()                        | read-write    | no-access   | no-access   | no-access   |
+| ::${s}EngineGetProperties()                  | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumEngineGroups()                     | read-only     | read-only   | read-only   | no-access   |
+| ::${s}EngineGetActivity()                    | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}EngineGetProperties()                        | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumStandbyDomains()             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}EngineGetActivity()                          | read-only     | read-only   | read-only   | no-access   |
+| ::${s}StandbyGetProperties()                 | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumStandbyDomains()                   | read-only     | read-only   | read-only   | no-access   |
+| ::${s}StandbyGetMode()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}StandbyGetProperties()                       | read-only     | read-only   | read-only   | no-access   |
+| ::${s}StandbySetMode()                       | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}StandbyGetMode()                             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumFirmwares()                  | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}StandbySetMode()                             | read-write    | read-write  | read-only   | no-access   |
+| ::${s}FirmwareGetProperties()                | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumFirmwares()                        | read-only     | no-access   | no-access   | no-access   |
+| ::${s}FirmwareGetChecksum()                  | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FirmwareGetProperties()                      | read-only     | no-access   | no-access   | no-access   |
+| ::${s}FirmwareFlash()                        | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FirmwareGetChecksum()                        | read-only     | no-access   | no-access   | no-access   |
+| ::${s}DeviceEnumMemoryModules()              | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FirmwareFlash()                              | read-write    | no-access   | no-access   | no-access   |
+| ::${s}MemoryGetProperties()                  | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumMemoryModules()                    | read-only     | read-only   | read-only   | no-access   |
+| ::${s}MemoryGetBandwidth()                   | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}MemoryGetProperties()                        | read-only     | read-only   | read-only   | no-access   |
+| ::${s}MemoryGetState()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}MemoryGetBandwidth()                         | read-only     | no-access   | no-access   | no-access   |
+| ::${s}DeviceEnumFabricPorts()                | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}MemoryGetState()                             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FabricPortGetProperties()              | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumFabricPorts()                      | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FabricPortGetLinkType()                | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FabricPortGetProperties()                    | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FabricPortGetConfig()                  | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FabricPortGetLinkType()                      | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FabricPortSetConfig()                  | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FabricPortGetConfig()                        | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FabricPortGetState()                   | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FabricPortSetConfig()                        | read-write    | no-access   | no-access   | no-access   |
+| ::${s}FabricPortGetThroughput()              | read-only     | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FabricPortGetState()                         | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumTemperatureSensors()         | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FabricPortGetThroughput()                    | read-only     | no-access   | no-access   | no-access   |
+| ::${s}TemperatureGetProperties()             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumTemperatureSensors()               | read-only     | read-only   | read-only   | no-access   |
+| ::${s}TemperatureGetConfig()                 | read-only     | read-only   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}TemperatureGetProperties()                   | read-only     | read-only   | read-only   | no-access   |
+| ::${s}TemperatureSetConfig()                 | read-write    | read-write  | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}TemperatureGetConfig()                       | read-only     | read-only   | no-access   | no-access   |
+| ::${s}TemperatureGetState()                  | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}TemperatureSetConfig()                       | read-write    | read-write  | no-access   | no-access   |
+| ::${s}DeviceEnumPsus()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}TemperatureGetState()                        | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PsuGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumPsus()                             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}PsuGetState()                          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PsuGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumFans()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}PsuGetState()                                | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FanGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumFans()                             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FanGetConfig()                         | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FanGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FanSetConfig()                         | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FanGetConfig()                               | read-only     | read-only   | read-only   | no-access   |
+| ::${s}FanGetState()                          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FanSetConfig()                               | read-write    | read-write  | read-only   | no-access   |
+| ::${s}DeviceEnumLeds()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}FanGetState()                                | read-only     | read-only   | read-only   | no-access   |
+| ::${s}LedGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumLeds()                             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}LedGetState()                          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}LedGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
+| ::${s}LedSetState()                          | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}LedGetState()                                | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumRasErrorSets()               | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}LedSetState()                                | read-write    | read-write  | read-only   | no-access   |
+| ::${s}RasGetProperties()                     | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumRasErrorSets()                     | read-only     | read-only   | read-only   | no-access   |
+| ::${s}RasGetConfig()                         | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}RasGetProperties()                           | read-only     | read-only   | read-only   | no-access   |
+| ::${s}RasSetConfig()                         | read-write    | read-write  | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}RasGetConfig()                               | read-only     | read-only   | read-only   | no-access   |
+| ::${s}RasGetState()                          | read-write    | read-write  | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}RasSetConfig()                               | read-write    | read-write  | no-access   | no-access   |
+| ::${s}DeviceCreateEvents()                   | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}RasGetState()                                | read-write    | read-write  | read-only   | no-access   |
+| ::${s}EventGetConfig()                       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceCreateEvents()                         | read-only     | read-only   | read-only   | no-access   |
+| ::${s}EventSetConfig()                       | read-write    | read-write  | read-write  | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}EventGetConfig()                             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}EventGetState()                        | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}EventSetConfig()                             | read-write    | read-write  | read-write  | no-access   |
+| ::${s}EventListen()                          | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}EventGetState()                              | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DeviceEnumDiagnosticTestSuites()       | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}EventListen()                                | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DiagnosticsGetProperties()             | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DeviceEnumDiagnosticTestSuites()             | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DiagnosticsGetTests()                  | read-only     | read-only   | read-only   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DiagnosticsGetProperties()                   | read-only     | read-only   | read-only   | no-access   |
+| ::${s}DiagnosticsRunTests()                  | read-write    | no-access   | no-access   | no-access   |
 +---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DiagnosticsGetTests()                        | read-only     | read-only   | read-only   | no-access   |
-+---------------------------------------------------+---------------+-------------+-------------+-------------+
-| ::${s}DiagnosticsRunTests()                        | read-write    | no-access   | no-access   | no-access   |
-+---------------------------------------------------+---------------+-------------+-------------+-------------+
-## --validate=on

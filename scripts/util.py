@@ -184,4 +184,16 @@ def makoFileListWrite(outpath):
 def makeErrorCount():
     return len(makoErrorList)
 
+"""
+    write to array of string lines to file
+"""
+def writelines(fout, lines):
+    try:
+        with open(fout, "w") as f:
+            f.writelines(lines)
+            f.close()
+    except:
+        print("Could not write %s"%fout)
+        return None
+
 # END OF FILE
