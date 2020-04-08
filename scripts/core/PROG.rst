@@ -1246,7 +1246,7 @@ The following table documents the supported knobs for overriding default functio
 ## --validate=on
 
 Affinity Mask
-~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
 The affinity mask allows an application or tool to restrict which
 devices (and sub-devices) are visible to 3rd-party libraries or
