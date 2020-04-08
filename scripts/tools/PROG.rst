@@ -140,7 +140,7 @@ The following pseudo-code demonstrates a basic usage of API tracing:
        {
            my_tracer_data_t tracer_data = {};
            ${t}_tracer_desc_t tracer_desc;
-           tracer_desc.version = ZET_TRACER_DESC_VERSION_CURRENT;
+           tracer_desc.stype = ${T}_STRUCTURE_TYPE_TRACER_DESC;
            tracer_desc.pUserData = &tracer_data;
            ${t}_tracer_handle_t hTracer;
            ${t}TracerCreate(hDevice, &tracer_desc, &hTracer);
@@ -356,13 +356,13 @@ The following pseudo-code demonstrates a basic sequence for tracer-based collect
            ${t}_metric_group_handle_t     hMetricGroup           = nullptr;
            ${x}_event_handle_t            hNotificationEvent     = nullptr;
            ${x}_event_pool_handle_t       hEventPool             = nullptr;
-           ${x}_event_pool_desc_t         eventPoolDesc          = {ZE_EVENT_POOL_DESC_VERSION_CURRENT, ZE_EVENT_POOL_FLAG_DEFAULT , 1};
-           ${x}_event_desc_t              eventDesc              = {ZE_EVENT_DESC_VERSION_CURRENT};
+           ${x}_event_pool_desc_t         eventPoolDesc          = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC, nullptr, ${X}_EVENT_POOL_FLAG_DEFAULT , 1};
+           ${x}_event_desc_t              eventDesc              = {${X}_STRUCTURE_TYPE_EVENT_DESC};
            ${t}_metric_tracer_handle_t    hMetricTracer          = nullptr;
-           ${t}_metric_tracer_desc_t      metricTracerDescriptor = {ZET_METRIC_TRACER_DESC_VERSION_CURRENT}; 
+           ${t}_metric_tracer_desc_t      metricTracerDescriptor = {${T}_STRUCTURE_TYPE_METRIC_TRACER_DESC}; 
 
            // Find a "ComputeBasic" metric group suitable for Time Based collection
-           FindMetricGroup( hDevice, "ComputeBasic", ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
+           FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
 
            // Configure the HW
            ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
@@ -370,8 +370,8 @@ The following pseudo-code demonstrates a basic sequence for tracer-based collect
            // Create notification event
            ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
            eventDesc.index  = 0;
-           eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
-           eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
+           eventDesc.signal = ${X}_EVENT_SCOPE_FLAG_HOST;
+           eventDesc.wait   = ${X}_EVENT_SCOPE_FLAG_HOST; 
            ${x}EventCreate( hEventPool, &eventDesc, &hNotificationEvent );
            
            // Open metric tracer
@@ -436,24 +436,24 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
        {
            ${t}_metric_group_handle_t      hMetricGroup          = nullptr;
            ${x}_event_handle_t             hCompletionEvent      = nullptr;
-           ${x}_event_pool_desc_t          eventPoolDesc         = {ZE_EVENT_POOL_DESC_VERSION_CURRENT};
-           ${x}_event_desc_t               eventDesc             = {ZE_EVENT_DESC_VERSION_CURRENT};
+           ${x}_event_pool_desc_t          eventPoolDesc         = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC};
+           ${x}_event_desc_t               eventDesc             = {${X}_STRUCTURE_TYPE_EVENT_DESC};
            ${x}_event_pool_handle_t        hEventPool            = nullptr;
            ${t}_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
            ${t}_metric_query_handle_t      hMetricQuery          = nullptr;
-           ${t}_metric_query_pool_desc_t   queryPoolDesc         = {ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT};
+           ${t}_metric_query_pool_desc_t   queryPoolDesc         = {${T}_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC};
        
            // Find a "ComputeBasic" metric group suitable for Event Based collection
-           FindMetricGroup( hDevice, "ComputeBasic", ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
+           FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
 
            // Configure HW
            ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
            // Create metric query pool & completion event
-           queryPoolDesc.flags        = ZET_METRIC_QUERY_POOL_FLAG_PERFORMANCE;
+           queryPoolDesc.flags        = ${T}_METRIC_QUERY_POOL_FLAG_PERFORMANCE;
            queryPoolDesc.count        = 1000;
            ${t}MetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
-           eventPoolDesc.flags = ZE_EVENT_POOL_FLAG_DEFAULT;
+           eventPoolDesc.flags = ${X}_EVENT_POOL_FLAG_DEFAULT;
            eventPoolDesc.count = 1000;
            ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
@@ -465,8 +465,8 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
 
            // Write END metric query to command list, use an event to determine if the data is available
            eventDesc.index  = 0;
-           eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
-           eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
+           eventDesc.signal = ${X}_EVENT_SCOPE_FLAG_HOST;
+           eventDesc.wait   = ${X}_EVENT_SCOPE_FLAG_HOST; 
            ${x}EventCreate( hEventPool, &eventDesc, &hCompletionEvent);
            ${t}CommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent, 0, nullptr );
 
@@ -536,19 +536,19 @@ The following pseudo-code demonstrates a basic sequence for metric calculation a
 
                    switch( data.type )
                    {
-                   case ZET_VALUE_TYPE_UINT32:
+                   case ${T}_VALUE_TYPE_UINT32:
                        printf(" Value: %lu\n", data.value.ui32 );
                        break;
-                   case ZET_VALUE_TYPE_UINT64:
+                   case ${T}_VALUE_TYPE_UINT64:
                        printf(" Value: %llu\n", data.value.ui64 );
                        break;
-                   case ZET_VALUE_TYPE_FLOAT32:
+                   case ${T}_VALUE_TYPE_FLOAT32:
                        printf(" Value: %f\n", data.value.fp32 );
                        break;
-                   case ZET_VALUE_TYPE_FLOAT64:
+                   case ${T}_VALUE_TYPE_FLOAT64:
                        printf(" Value: %f\n", data.value.fp64 );
                        break;
-                   case ZET_VALUE_TYPE_BOOL8:
+                   case ${T}_VALUE_TYPE_BOOL8:
                        if( data.value.ui32 )
                            printf(" Value: true\n" );
                        else

@@ -60,7 +60,7 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
         elif re.match(RE_CODE_BLOCK_BEGIN, line):
             code_block = True
         # code is always indented
-        elif re.match(r'\w', line) and code_block:
+        elif re.match(r'^\w', line) and code_block:
             code_block = False
 
         if not enable:
