@@ -159,7 +159,7 @@ class: $xCommandList
 name: AppendWriteTimestamp
 details:
     - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
-    - "The timestamp frequency can be queried from ::${x}_device_properties_t.timerResolution."
+    - "The timestamp frequency can be queried from ::$x_device_properties_t.timerResolution."
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
