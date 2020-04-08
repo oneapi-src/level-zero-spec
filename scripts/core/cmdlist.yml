@@ -154,9 +154,9 @@ params:
       desc: "[in] handle of command list object to reset"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Appends a memory write of the device's timestamp value into a command list."
+desc: "Appends a memory write of the device's global timestamp value into a command list."
 class: $xCommandList
-name: AppendWriteTimestamp
+name: AppendWriteGlobalTimestamp
 details:
     - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
     - "The timestamp frequency can be queried from ::$x_device_properties_t.timerResolution."
