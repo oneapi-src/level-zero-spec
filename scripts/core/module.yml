@@ -126,6 +126,35 @@ returns:
     - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Dynamically link modules together that share import/export linkage dependencies."
+class: $xModule
+name: DynamicLink
+details:
+    - "Modules support import and export linkage for functions and global variables."
+    - "Modules that have imports can be dynamically linked to export modules that satisfy those import requirements."
+    - "Modules can have both import and export linkages."
+    - "Modules that do not have any imports or exports do not need to be linked."
+    - "Modules needed to satisfy all import dependencies for a specific module must be passed in or a $X_RESULT_ERROR_MODULE_LINK_FAILURE will returned."
+    - "Modules with imports need to be linked before kernel objects can be created from them."    
+    - "ModuleGetNativeBinary can be called on any module regardless of whether it is linked or not."
+    - "A link log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
+    - "See SPIR-V specification for linkage details."
+    - "The application may **not** call this function from simultaneous threads with the same module handles."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: uint32_t
+      name: numModules
+      desc: "[in] number of modules to be linked pointed to by phModules."
+    - type: "$x_module_handle_t*"
+      name: phModules
+      desc: "[in][out][range(0, numModules)] pointer to an array of modules to dynamically link together."
+    - type: "$x_module_build_log_handle_t*"
+      name: phLinkLog
+      desc: "[out][optional] pointer to handle of dynamic link log."
+returns:
+    - $X_RESULT_ERROR_MODULE_LINK_FAILURE
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Destroys module build log object"
 class: $xModuleBuildLog
 name: Destroy
