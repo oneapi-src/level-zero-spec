@@ -720,12 +720,21 @@ A kernel timestamp event is a special type of event that records device timestam
        ${x}_event_handle_t hTSEvent;
        ${x}EventCreate(hEventPool, &tsEventDesc, &hTSEvent);
 
+       // allocate memory for results
+       ${x}_device_mem_alloc_desc_t tsResultDesc = {
+           ${X}_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC,
+           nullptr,
+           ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+           0
+       };
+       ${x}_kernel_timestamp_result_t* tsResult = nullptr;
+       ${x}DriverAllocDeviceMem(hDriver, &tsResultDesc, sizeof(${x}_kernel_timestamp_result_t), sizeof(uint32_t), hDevice, &tsResult);
+
        // Append a signal of a timestamp event into the command list after the kernel executes
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hTSEvent, 0, nullptr);
 
        // Append a query of a timestamp event into the command list
-       ${x}_kernel_timestamp_result_t tsResult = {0};
-       ${x}CommandListAppendQueryKernelTimestamps(hCommandList, 1, &hTSEvent, &tsResult, nullptr, hEvent, 1, &hTSEvent);
+       ${x}CommandListAppendQueryKernelTimestamps(hCommandList, 1, &hTSEvent, tsResult, nullptr, hEvent, 1, &hTSEvent);
 
        // Execute the command list with the signal
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
@@ -734,13 +743,13 @@ A kernel timestamp event is a special type of event that records device timestam
        ${x}EventHostSynchronize(hEvent, 0);
 
        // Calculation execution time(s)
-       double globalTimeInNs = ( tsResult.global.kernelEnd >= tsResult.global.kernelStart ) 
-           ? ( tsResult.global.kernelEnd - tsResult.global.kernelStart ) * (double)timestampFreq
-           : (( 0xffffffff - tsResult.global.kernelStart) + tsResult.global.kernelEnd + 1 ) * (double)timestampFreq;
+       double globalTimeInNs = ( tsResult->global.kernelEnd >= tsResult->global.kernelStart ) 
+           ? ( tsResult->global.kernelEnd - tsResult->global.kernelStart ) * (double)timestampFreq
+           : (( 0xffffffff - tsResult->global.kernelStart) + tsResult->global.kernelEnd + 1 ) * (double)timestampFreq;
 
-       double contextTimeInNs = ( tsResult.context.kernelEnd >= tsResult.context.kernelStart )
-           ? ( tsResult.context.kernelEnd - tsResult.context.kernelStart ) * (double)timestampFreq
-           : (( 0xffffffff - tsResult.context.kernelStart) + tsResult.context.kernelEnd + 1 ) * (double)timestampFreq;
+       double contextTimeInNs = ( tsResult->context.kernelEnd >= tsResult->context.kernelStart )
+           ? ( tsResult->context.kernelEnd - tsResult->context.kernelStart ) * (double)timestampFreq
+           : (( 0xffffffff - tsResult->context.kernelStart) + tsResult->context.kernelEnd + 1 ) * (double)timestampFreq;
        ...
 
 
