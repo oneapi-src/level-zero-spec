@@ -327,7 +327,6 @@ The following are the motivations for separating a command queue from a command 
 - Command queues provide (near) zero-latency access to the device.
 - Command lists are mostly associated with Host threads for simultaneous construction.
 - Command list appending can occur independently of command queue submission.
-- Command list submission can occur to more than one command queue.
 
 The following diagram illustrates the hierarchy of command lists and command queues to the device:
 
@@ -470,7 +469,8 @@ Submission
 
 - There is no implicit association between a command list and a logical command queue. 
   Therefore, a command list may be submitted to any or multiple logical command queues.
-- However, if a command list is meant to be submitted to a physical copy-only command queue,
+- By definition, a command list cannot be executed concurrently on multiple physical command queues.
+- If a command list is meant to be submitted to a physical copy-only command queue,
   then it must be created using a command queue group ordinal with its
   ::${x}_command_queue_group_properties_t.copySupported equal true (1) and
   ::${x}_command_queue_group_properties_t.computeSupported equal false (0), and submitted to a logical command
