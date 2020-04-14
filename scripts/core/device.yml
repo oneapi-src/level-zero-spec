@@ -388,6 +388,9 @@ members:
     - type: $x_bool_t
       name: cooperativeKernelsSupported
       desc: "[out] command queue group supports cooperative kernels. See $xCommandListAppendLaunchCooperativeKernel for more details."
+    - type: uint32_t
+      name: numQueues
+      desc: "[out] the number of physical command queues within the group."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves command queue group properties of the device."

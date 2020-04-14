@@ -326,7 +326,7 @@ The following are the motivations for separating a command queue from a command 
 - Command queues are mostly associated with physical device properties, such as the number of input streams.
 - Command queues provide (near) zero-latency access to the device.
 - Command lists are mostly associated with Host threads for simultaneous construction.
-- Command list appending can occur independently of command queue submission.
+- Command list construction can occur independently of command queue submission.
 
 The following diagram illustrates the hierarchy of command lists and command queues to the device:
 
@@ -341,11 +341,11 @@ stream.
 Creation
 ~~~~~~~~
 
--  The application explicitly binds the logical command queue to a physical command queue, via its ordinal at creation time.
--  The number and properties of physical command queues is queried by using zeDeviceGetCommandQueueGroupProperties.
+-  At creation time, the logical command queue is explicitly bound to a physical command queue.
+-  The number and properties of physical command queues is queried by using ::${x}DeviceGetCommandQueueGroupProperties.
 -  Multiple logical command queues may be created that use the same physical command queue. For example,
    an application may create a logical command queue per Host thread with different scheduling priorities.
--  However, because each logical command queue allocates a logical hardware context, an application 
+-  However, since each logical command queue may allocate a logical hardware context, an application 
    should avoid creating multiple logical command queues for the same physical command queue with the
    same priority, due to possible performance penalties with hardware context switching.
 -  The maximum number of logical command queues an application can create is limited by device-specific
@@ -384,6 +384,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
         ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
         nullptr,
         computeQueueGroupOrdinal,
+        0,
         ${X}_COMMAND_QUEUE_FLAG_NONE,
         ${X}_COMMAND_QUEUE_MODE_DEFAULT,
         ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
@@ -435,19 +436,21 @@ Appending
    application may share a command list handle across multiple Host threads. However,
    the application is responsible for ensuring that multiple Host threads do not access
    the same command list simultaneously.
--  By default, commands are executed in the same order in which they are appended.
+-  By default, commands are started in the same order in which they are appended.
    However, an application may allow the driver to optimize the ordering by using
    ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING. Reordering is guaranteed to be only occur
    between barriers and synchronization primitives.
 -  By default, commands submitted to a command list are optimized for execution by
-   balancing both device throughput and Host latency. For very low-level latency
-   usage-models, applications should use immediate command lists. For usage-models where
-   maximum throughput is desired, applications should use ::${X}_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT.
--  By default, commands submitted to a command list may be optimized by the driver
-   to fully exploit the concurrency of the device by distributing commands across
-   multiple engines and/or sub-devices. If the application prefers to opt-out of
-   these optimizations, such as when the application plans to perform this distribution
-   itself, then it should use ::${X}_COMMAND_LIST_FLAG_EXPLICIT_ONLY.
+   balancing both device throughput and Host latency. 
+-  For very low-level latency usage-models, applications should use immediate command lists. 
+-  For usage-models where maximum throughput is desired, applications should 
+   use ::${X}_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT. This flag will indicate to the driver
+   it may perform additional device-specific optimizations.
+-  If a device contains multiple sub-devices, then commands submitted to a device-level
+   command list may be optimized by the driver to fully exploit the concurrency of the
+   sub-devices by distributing commands across sub-devices. If the application prefers
+   to opt-out of these optimizations, such as when the application plans to perform this
+   distribution itself, then it should use ::${X}_COMMAND_LIST_FLAG_EXPLICIT_ONLY.
 
 The following pseudo-code demonstrates a basic sequence for creation of command lists:
 

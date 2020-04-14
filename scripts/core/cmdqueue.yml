@@ -68,6 +68,9 @@ members:
     - type: uint32_t
       name: ordinal
       desc: "[in] command queue group ordinal"
+    - type: uint32_t
+      name: index
+      desc: "[in] command queue index within the group"
     - type: $x_command_queue_flag_t
       name: flags
       desc: "[in] usage flags"
