@@ -129,6 +129,7 @@ type: function
 desc: "Dynamically link modules together that share import/export linkage dependencies."
 class: $xModule
 name: DynamicLink
+decl: static
 details:
     - "Modules support import and export linkage for functions and global variables."
     - "Modules that have imports can be dynamically linked to export modules that satisfy those import requirements."
@@ -147,7 +148,7 @@ params:
       desc: "[in] number of modules to be linked pointed to by phModules."
     - type: "$x_module_handle_t*"
       name: phModules
-      desc: "[in][out][range(0, numModules)] pointer to an array of modules to dynamically link together."
+      desc: "[in][range(0, numModules)] pointer to an array of modules to dynamically link together."
     - type: "$x_module_build_log_handle_t*"
       name: phLinkLog
       desc: "[out][optional] pointer to handle of dynamic link log."
