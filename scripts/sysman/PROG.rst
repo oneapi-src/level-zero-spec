@@ -481,69 +481,69 @@ submitted concurrently. This policy is referred to as a scheduler mode.
 The available scheduler operating modes are given by the enum
 ::${s}_sched_mode_t and summarized in the table below:
 
-+-------------------------------------+-------------------------------------+
-| Scheduler mode                      | Description                         |
-+=====================================+=====================================+
-| ::${S}_SCHED_MODE_TIMEOUT            | This mode is optimized for          |
-|                                     | multiple applications or contexts   |
-|                                     | submitting work to the hardware.    |
-|                                     | When higher priority work           |
-|                                     | arrives, the scheduler attempts     |
-|                                     | to pause the current executing      |
-|                                     | work within some timeout            |
-|                                     | interval, then submits the other    |
-|                                     | work.It is possible to configure    |
-|                                     | (::${s}_sched_timeout_properties_t)  |
-|                                     | the watchdog timeout which          |
-|                                     | controls the maximum time the       |
-|                                     | scheduler will wait for a           |
-|                                     | workload to complete a batch of     |
-|                                     | work or yield to other              |
-|                                     | applications before it is           |
-|                                     | terminated. If the watchdog         |
-|                                     | timeout is set to                   |
-|                                     | ::${S}_SCHED_WATCHDOG_DISABLE, the   |
-|                                     | scheduler enforces no fairness.     |
-|                                     | This means that if there is other   |
-|                                     | work to execute, the scheduler      |
-|                                     | will try to submit it but will      |
-|                                     | not terminate an executing          |
-|                                     | process that does not complete      |
-|                                     | quickly.                            |
-+-------------------------------------+-------------------------------------+
-| ::${S}_SCHED_MODE_TIMESLICE          | This mode is optimized to provide   |
-|                                     | fair sharing of hardware            |
-|                                     | execution time between multiple     |
-|                                     | contexts submitting work to the     |
-|                                     | hardware concurrently.It is         |
-|                                     | possible to configure               |
-|                                     | (::${s}_sched_timeslice_properties_t)|
-|                                     |                                     |
-|                                     | the timeslice interval and the      |
-|                                     | amount of time the scheduler will   |
-|                                     | wait for work to yield to another   |
-|                                     | application before it is            |
-|                                     | terminated.                         |
-+-------------------------------------+-------------------------------------+
-| ::${S}_SCHED_MODE_EXCLUSIVE          | This mode is optimized for single   |
-|                                     | application/context use-cases. It   |
-|                                     | permits a context to run            |
-|                                     | indefinitely on the hardware        |
-|                                     | without being preempted or          |
-|                                     | terminated. All pending work for    |
-|                                     | other contexts must wait until      |
-|                                     | the running context completes       |
-|                                     | with no further submitted work.     |
-+-------------------------------------+-------------------------------------+
-| ::${S}_SCHED_MODE_COMPUTE_UNIT_DEBUG | This mode is optimized for          |
-|                                     | application debug. It ensures       |
-|                                     | that only one command queue can     |
-|                                     | execute work on the hardware at a   |
-|                                     | given time. Work is permitted to    |
-|                                     | run as long as needed without       |
-|                                     | enforcing any scheduler fairness    |
-|                                     | policies.                           |
-+-------------------------------------+-------------------------------------+
++-------------------------------------+-------------------------------------------+
+| Scheduler mode                      | Description                               |
++=====================================+===========================================+
+| ::${S}_SCHED_MODE_TIMEOUT            | This mode is optimized for                |
+|                                     | multiple applications or contexts         |
+|                                     | submitting work to the hardware.          |
+|                                     | When higher priority work                 |
+|                                     | arrives, the scheduler attempts           |
+|                                     | to pause the current executing            |
+|                                     | work within some timeout                  |
+|                                     | interval, then submits the other          |
+|                                     | work.It is possible to configure          |
+|                                     | (::${s}_sched_timeout_properties_t)   |
+|                                     | the watchdog timeout which                |
+|                                     | controls the maximum time the             |
+|                                     | scheduler will wait for a                 |
+|                                     | workload to complete a batch of           |
+|                                     | work or yield to other                    |
+|                                     | applications before it is                 |
+|                                     | terminated. If the watchdog               |
+|                                     | timeout is set to                         |
+|                                     | ::${S}_SCHED_WATCHDOG_DISABLE, the         |
+|                                     | scheduler enforces no fairness.           |
+|                                     | This means that if there is other         |
+|                                     | work to execute, the scheduler            |
+|                                     | will try to submit it but will            |
+|                                     | not terminate an executing                |
+|                                     | process that does not complete            |
+|                                     | quickly.                                  |
++-------------------------------------+-------------------------------------------+
+| ::${S}_SCHED_MODE_TIMESLICE          | This mode is optimized to provide         |
+|                                     | fair sharing of hardware                  |
+|                                     | execution time between multiple           |
+|                                     | contexts submitting work to the           |
+|                                     | hardware concurrently.It is               |
+|                                     | possible to configure                     |
+|                                     | (::${s}_sched_timeslice_properties_t) |
+|                                     |                                           |
+|                                     | the timeslice interval and the            |
+|                                     | amount of time the scheduler will         |
+|                                     | wait for work to yield to another         |
+|                                     | application before it is                  |
+|                                     | terminated.                               |
++-------------------------------------+-------------------------------------------+
+| ::${S}_SCHED_MODE_EXCLUSIVE          | This mode is optimized for single         |
+|                                     | application/context use-cases. It         |
+|                                     | permits a context to run                  |
+|                                     | indefinitely on the hardware              |
+|                                     | without being preempted or                |
+|                                     | terminated. All pending work for          |
+|                                     | other contexts must wait until            |
+|                                     | the running context completes             |
+|                                     | with no further submitted work.           |
++-------------------------------------+-------------------------------------------+
+| ::${S}_SCHED_MODE_COMPUTE_UNIT_DEBUG | This mode is optimized for                |
+|                                     | application debug. It ensures             |
+|                                     | that only one command queue can           |
+|                                     | execute work on the hardware at a         |
+|                                     | given time. Work is permitted to          |
+|                                     | run as long as needed without             |
+|                                     | enforcing any scheduler fairness          |
+|                                     | policies.                                 |
++-------------------------------------+-------------------------------------------+
 
 A device can have multiple scheduler components. Each scheduler component controls
 the workload execution behavior on one or more accelerator engines
@@ -959,31 +959,31 @@ Frequency/voltage overclocking is accomplished by calling ::${s}FrequencyOcSetCo
 with a new overclock configuration ::${s}_oc_config_t. There are two modes that control the
 way voltage is handled when overclocking the frequency:
 
-+-----------------------------------+-------------------------------------------+
-| Voltage overclock mode            | Description                               |
-+===================================+===========================================+
-| ::${S}_OC_MODE_OVERRIDE            | In this mode, a fixed                     |
-|                                   | user-supplied voltage                     |
++-----------------------------------+------------------------------------------------+
+| Voltage overclock mode            | Description                                    |
++===================================+================================================+
+| ::${S}_OC_MODE_OVERRIDE            | In this mode, a fixed                          |
+|                                   | user-supplied voltage                          |
 |                                   | (::${s}_oc_config_t.voltageTarget +        |
 |                                   | ::${s}_oc_config_t.voltageOffset)          |
-|                                   | is applied at all times,                  |
-|                                   | independent of the frequency              |
-|                                   | request. This is not efficient but        |
-|                                   | can improve stability by avoiding         |
-|                                   | power-supply voltage changes as the       |
-|                                   | frequency changes.                        |
-+-----------------------------------+-------------------------------------------+
-| ::${S}_OC_MODE_OVERRIDE            | In this mode, a fixed                     |
-|                                   | user-supplied voltage is applied          |
-|                                   | at all times, independent of the          |
-|                                   | frequency request. This is not            |
-|                                   | efficient but can improve                 |
-|                                   | stability by avoiding                     |
-|                                   | power-supply voltage changes as           |
-|                                   | the frequency changes. Generally,         |
-|                                   | this mode is used in conjunction          |
-|                                   | with a fixed frequency.                   |
-+-----------------------------------+-------------------------------------------+
+|                                   | is applied at all times,                       |
+|                                   | independent of the frequency                   |
+|                                   | request. This is not efficient but             |
+|                                   | can improve stability by avoiding              |
+|                                   | power-supply voltage changes as the            |
+|                                   | frequency changes.                             |
++-----------------------------------+------------------------------------------------+
+| ::${S}_OC_MODE_OVERRIDE            | In this mode, a fixed                          |
+|                                   | user-supplied voltage is applied               |
+|                                   | at all times, independent of the               |
+|                                   | frequency request. This is not                 |
+|                                   | efficient but can improve                      |
+|                                   | stability by avoiding                          |
+|                                   | power-supply voltage changes as                |
+|                                   | the frequency changes. Generally,              |
+|                                   | this mode is used in conjunction               |
+|                                   | with a fixed frequency.                        |
++-----------------------------------+------------------------------------------------+
 
 The following functions are provided to handle overclocking:
 
