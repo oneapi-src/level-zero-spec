@@ -29,12 +29,12 @@ def _validate_doc(d):
 """
 def _filter_version(d, max_ver):
     default_version = "1.0"
-    type = d['type']
     ver = float(d.get('version', default_version))
     if ver > max_ver:
         return None
 
     flt = []
+    type = d['type']
     if 'enum' == type:
         for e in d['etors']:
             ver = float(e.get('version', default_version))
@@ -307,18 +307,18 @@ def parse(path, version, tags, meta = {'class':{}}, ref = {}):
         print("Parsing %s..."%f)
         docs = util.yamlRead(f)
 
-        header = {}
+        header = None
         objects = []
 
         for d in docs:
-            # extract header from objects
-            if re.match(r"header", d['type']):
-                header = d
-                header['ordinal'] = int(int(header.get('ordinal',"1000")) * float(header.get('version',"1.0")))
+            d = _filter_version(d, float(version))
+            if d:
+                # extract header from objects
+                if re.match(r"header", d['type']):
+                    header = d
+                    header['ordinal'] = int(int(header.get('ordinal',"1000")) * float(header.get('version',"1.0")))
 
-            else:
-                d = _filter_version(d, float(version))
-                if d:
+                elif header:
                     hash = _generate_hash(d)
                     if hash:
                         d['hash'] = hash
@@ -327,11 +327,12 @@ def parse(path, version, tags, meta = {'class':{}}, ref = {}):
                     meta = _generate_meta(d, header['ordinal'], meta)
                     ref = _generate_ref(d, tags, ref)
 
-        specs.append({
-            'name'      : os.path.splitext(os.path.basename(f))[0],
-            'header'    : header,
-            'objects'   : objects
-        })
+        if header:
+            specs.append({
+                'name'      : os.path.splitext(os.path.basename(f))[0],
+                'header'    : header,
+                'objects'   : objects
+            })
 
     specs = sorted(specs, key=lambda s: s['header']['ordinal'])
     _generate_returns(specs, meta)

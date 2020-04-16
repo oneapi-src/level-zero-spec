@@ -37,6 +37,7 @@ extern "C" {
 
 %for spec in specs:
 %if len(spec['objects']):
+// ${th.subt(n, tags, spec['header']['desc'])}
 #pragma region ${spec['name']}
 %endif
 %for obj in spec['objects']:
@@ -66,15 +67,7 @@ extern "C" {
 %endif
 ## TYPEDEF ####################################################################
 %elif re.match(r"typedef", obj['type']):
-%if 'params' in obj:
-typedef ${obj['returns']}(__${x}call *${th.make_type_name(n, tags, obj)})(
-    %for line in th.make_param_lines(n, tags, obj):
-    ${line}
-    %endfor
-    );
-%else:
 typedef ${th.subt(n, tags, obj['value'])} ${th.make_type_name(n, tags, obj)};
-%endif
 ## ENUM #######################################################################
 %elif re.match(r"enum", obj['type']):
 typedef enum _${th.make_type_name(n, tags, obj)}
@@ -139,6 +132,7 @@ typedef struct _${th.make_type_name(n, tags, obj)} ${th.make_type_name(n, tags, 
 %endif
 %endfor # spec in specs
 %if n not in ["zet", "zes"]:
+// Intel ${tags['$OneApi']} Level-Zero API Callbacks
 #pragma region callbacks
 %for tbl in th.get_pfncbtables(specs, meta, n, tags):
 %for obj in tbl['functions']:

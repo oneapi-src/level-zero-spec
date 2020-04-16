@@ -45,13 +45,8 @@ ${th.make_macro_name(n, tags, obj)} = ${th.subt(n, tags, obj['value'])}
 %endif
 ## TYPEDEF ####################################################################
 %elif re.match(r"typedef", obj['type']):
-%if 'params' in obj:
-class ${th.make_type_name(n, tags, obj)}(c_void_p):
-    pass
-%else:
 class ${th.make_type_name(n, tags, obj)}(${th.get_ctype_name(n, tags, {'type': obj['value']})}):
     pass
-%endif
 ## ENUM #######################################################################
 %elif re.match(r"enum", obj['type']):
 class ${re.sub(r"(\w+)_t", r"\1_v", th.make_type_name(n, tags, obj))}(IntEnum):

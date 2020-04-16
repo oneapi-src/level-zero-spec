@@ -57,6 +57,7 @@ def declare_dbg(obj, tags):
 
 %for spec in specs:
 %if len(spec['objects']):
+// ${th.subt(n, tags, spec['header']['desc'])}
 #pragma region ${spec['name']}
 %endif
 ## MACROS #####################################################################
@@ -104,18 +105,10 @@ namespace ${n}
     %endfor
     ## TYPEDEF ####################################################################
     %if re.match(r"typedef", obj['type']):
-    %if 'params' in obj:
-    typedef ${obj['returns']}(__${x}call *${th.make_type_name(n, tags, obj, cpp=True)})(
-        %for line in th.make_param_lines(n, tags, obj, cpp=True):
-        ${line}
-        %endfor
-        );
-    %else:
     using ${th.make_type_name(n, tags, obj, cpp=True)} = ${th.get_type_name(n, tags, obj, obj['value'], cpp=True, meta=meta, handle_to_class=True)};
-    %endif
     ## ENUM #######################################################################
     %elif re.match(r"enum", obj['type']):
-    enum class ${th.make_type_name(n, tags, obj, cpp=True)}
+    enum class ${th.make_type_name(n, tags, obj, cpp=True)} : uint32_t
     {
         %for line in th.make_etor_lines(n, tags, obj, cpp=True, meta=meta):
         ${line}
@@ -188,7 +181,7 @@ namespace ${n}
         %for line in th.make_details_lines(n, tags, e, cpp=True):
         /// ${line}
         %endfor
-        enum class ${th.make_type_name(n, tags, e, cpp=True)}
+        enum class ${th.make_type_name(n, tags, e, cpp=True)} : uint32_t
         {
             %for line in th.make_etor_lines(n, tags, e, cpp=True, meta=meta):
             ${line}
