@@ -135,12 +135,12 @@ details:
     - "Modules that have imports can be dynamically linked to export modules that satisfy those import requirements."
     - "Modules can have both import and export linkages."
     - "Modules that do not have any imports or exports do not need to be linked."
-    - "Modules needed to satisfy all import dependencies for a specific module must be passed in or a $X_RESULT_ERROR_MODULE_LINK_FAILURE will returned."
+    - "Modules cannot be partially linked. All modules needed to satisfy all import dependencies for a module must be passed in or $X_RESULT_ERROR_MODULE_LINK_FAILURE will returned."
     - "Modules with imports need to be linked before kernel objects can be created from them."    
     - "ModuleGetNativeBinary can be called on any module regardless of whether it is linked or not."
     - "A link log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
     - "See SPIR-V specification for linkage details."
-    - "The application may **not** call this function from simultaneous threads with the same module handles."
+    - "The application may call this function from simultaneous threads as long as the import modules being linked are not the same."
     - "The implementation of this function should be lock-free."
 params:
     - type: uint32_t
