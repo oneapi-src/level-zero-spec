@@ -833,9 +833,7 @@ The following sample code demonstrates reading an event:
     if (errcode)
         return errcode;
 
-A debug event is described by the ::${t}_debug_event_t structure.  Note
-that the declaration of this structure depends on the API version
-requested on attach.  The current version contains:
+A debug event is described by the ::${t}_debug_event_t structure, which contains:
 
   * The event type as ::${t}_debug_event_type_t.
 

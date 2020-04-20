@@ -80,10 +80,13 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
                     if not symbol_type:
                         print("%s(%s) : error : symbol '%s' not found"%(fin, iline+1, symbol))
 
-                    if not code_block and 'function' == symbol_type:
-                        funcref = ":ref:`" + word + "`"
-                        line = line.replace("::" + word + "(", funcref + "\\(")
-                        line = line.replace("::" + word, funcref)
+                    if not code_block and re.match(r"struct|union|function", symbol_type):
+                        refword = word
+                        if re.match(r"struct|union", symbol_type):
+                            refword = refword.replace("_", "-")
+                        ref = ":ref:`" + refword + "`"
+                        line = line.replace("::" + word + "(", ref + "\\(")
+                        line = line.replace("::" + word, ref)
                         link_found = True
 
                     if code_block and 'function' == symbol_type:
