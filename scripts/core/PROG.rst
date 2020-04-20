@@ -16,7 +16,7 @@ Drivers
 
 A driver represents a collection of physical devices in the system using the same Level-Zero driver.
 
-- The application may query the number of Level-Zero drivers installed on the system and the properties of each driver.
+- The application may query the number of Level-Zero drivers installed on the system using ::${x}DriverGet.
 - More than one driver may be available in the system. For example, one driver may support two GPUs from one vendor, another driver supports a GPU from a different vendor, and finally a different driver may support an FPGA.
 - A driver is primarily used to allocate and manage resources that are used by multiple devices.
 - Memory is **not** implicitly shared across all devices supported by a driver. However, it is available to be explicitly shared.
@@ -26,7 +26,7 @@ Device
 
 A device represents a physical device in the system that support Level-Zero.
 
-- The application may query the number devices supported by a driver.
+- The application may query the number devices supported by a driver using ::${x}DeviceGet.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 - Device may expose sub-devices that allow finer-grained control of physical or logical partitions of a device.
 
@@ -37,12 +37,9 @@ The following diagram illustrates the relationship between the driver, device an
 Initialization and Discovery
 ----------------------------
 
-The driver must be initialized by calling Init before any other
-function. This function will load and initialize all Level-Zero
-driver(s) in the system for all threads in the current process.
-Simultaneous calls to ::${x}Init are thread-safe and only one instance of
-driver(s) will be loaded per-process. This function will allow queries
-of the available driver instances in the system.
+The driver(s) must be initialized by calling ::${x}Init before calling any other API function.
+This function will load all Level-Zero driver(s) in the system into memory for the current process, for use by all Host threads.
+Simultaneous calls to ::${x}Init are thread-safe and only one instance of driver(s) will be loaded per-process. 
 
 The following pseudo-code demonstrates a basic initialization and device discovery sequence:
 
