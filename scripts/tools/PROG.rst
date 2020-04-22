@@ -93,7 +93,7 @@ will stall and wait for any outstanding threads during ::${t}TracerDestroy.
 The following pseudo-code demonstrates a basic usage of API tracing:
 
 
-.. code:: c
+.. parsed-literal::
 
 ## --validate=off
        typedef struct _my_tracer_data_t
@@ -107,19 +107,19 @@ The following pseudo-code demonstrates a basic usage of API tracing:
        } my_instance_data_t;
 
        void OnEnterCommandListAppendLaunchKernel(
-           ${x}_command_list_append_launch_function_params_t* params,
+           ::${x}_command_list_append_launch_function_params_t* params,
            ${x}_result_t result,
            void* pTracerUserData,
            void** ppTracerInstanceUserData )
        {
            my_instance_data_t* instance_data = malloc( sizeof(my_instance_data_t) );
-           *ppTracerInstanceUserData = instance_data;
+           \*ppTracerInstanceUserData = instance_data;
            
            instance_data->start = clock();
        }
 
        void OnExitCommandListAppendLaunchKernel(
-           ${x}_command_list_append_launch_function_params_t* params,
+           ::${x}_command_list_append_launch_function_params_t* params,
            ${x}_result_t result,
            void* pTracerUserData,
            void** ppTracerInstanceUserData )
@@ -139,11 +139,11 @@ The following pseudo-code demonstrates a basic usage of API tracing:
        void TracingExample( ... )
        {
            my_tracer_data_t tracer_data = {};
-           ${t}_tracer_desc_t tracer_desc;
+           ::${t}_tracer_desc_t tracer_desc;
            tracer_desc.stype = ${T}_STRUCTURE_TYPE_TRACER_DESC;
            tracer_desc.pUserData = &tracer_data;
            ${t}_tracer_handle_t hTracer;
-           ${t}TracerCreate(hDevice, &tracer_desc, &hTracer);
+           ::${t}TracerCreate(hDevice, &tracer_desc, &hTracer);
 
            // Set all callbacks
            ${t}_core_callbacks_t prologCbs = {};
@@ -151,17 +151,17 @@ The following pseudo-code demonstrates a basic usage of API tracing:
            prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchKernel;
            epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchKernel;
 
-           ${t}TracerSetPrologues(hTracer, &prologCbs);
-           ${t}TracerSetEpilogues(hTracer, &epilogCbs);
+           ::${t}TracerSetPrologues(hTracer, &prologCbs);
+           ::${t}TracerSetEpilogues(hTracer, &epilogCbs);
 
-           ${t}TracerSetEnabled(hTracer, true);
+           ::${t}TracerSetEnabled(hTracer, true);
 
-           ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-           ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-           ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+           ::${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+           ::${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+           ::${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
-           ${t}TracerSetEnabled(hTracer, false);
-           ${t}TracerDestroy(hTracer);
+           ::${t}TracerSetEnabled(hTracer, false);
+           ::${t}TracerDestroy(hTracer);
        }
 
 Metrics
@@ -262,7 +262,7 @@ To enumerate through the Metric tree:
     - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
     - Metric Group names may not be unique.
 
-4. For each Metric Group obtain their Metric count calling ::${t}MetricGroupGetProperties with Metric Group handle (::${t}_metric_group_handle_t) and checking ${t}_metric_group_properties_t.metricCount.
+4. For each Metric Group obtain their Metric count calling ::${t}MetricGroupGetProperties with Metric Group handle (::${t}_metric_group_handle_t) and checking ::${t}_metric_group_properties_t.metricCount.
 5. Iterate over available Metrics using ::${t}MetricGet with parent Metric Group (::${t}_metric_group_handle_t).
 6. Check Metric properties (e.g. name, description) calling ::${t}MetricGetProperties with parent Metric (::${t}_metric_handle_t).
 
@@ -272,7 +272,7 @@ metric group with a chosen name and sampling type. Similar code could be
 used for selecting a preferred metric group for a specific type of
 measurements.
 
-.. code:: c
+.. parsed-literal::
 
        ${x}_result_t FindMetricGroup( ${x}_device_handle_t hDevice,
                                       char* pMetricGroupName,
@@ -281,17 +281,17 @@ measurements.
        {
            // Obtain available metric groups for the specific device
            uint32_t metricGroupCount = 0;
-           ${t}MetricGroupGet( hDevice, &metricGroupCount, nullptr );
+           ::${t}MetricGroupGet( hDevice, &metricGroupCount, nullptr );
 
            ${t}_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(${t}_metric_group_handle_t));
-           ${t}MetricGroupGet( hDevice, &metricGroupCount, phMetricGroups );
+           ::${t}MetricGroupGet( hDevice, &metricGroupCount, phMetricGroups );
 
            // Iterate over all metric groups available
            for( i = 0; i < metricGroupCount; i++ )
            {   
                // Get metric group under index 'i' and its properties
-               ${t}_metric_group_properties_t metricGroupProperties;
-               ${t}MetricGroupGetProperties( phMetricGroups[i], &metricGroupProperties );
+               ::${t}_metric_group_properties_t metricGroupProperties;
+               ::${t}MetricGroupGetProperties( phMetricGroups[i], &metricGroupProperties );
 
                printf("Metric Group: %s\n", metricGroupProperties.name);
 
@@ -301,7 +301,7 @@ measurements.
                    // Check whether the obtained metric group has the desired name
                    if( strcmp( pMetricGroupName, metricGroupProperties.name ) == 0 )
                    {
-                       *phMetricGroup = phMetricGroups[i];
+                       \*phMetricGroup = phMetricGroups[i];
                        break;
                    }
                }
@@ -348,7 +348,7 @@ Time-based collection uses a simple Open, Wait, Read, Close scheme:
 
 The following pseudo-code demonstrates a basic sequence for tracer-based collection:
 
-.. code:: c
+.. parsed-literal::
 
        ${x}_result_t TimeBasedUsageExample( ${x}_driver_handle_t hDriver,
                                             ${x}_device_handle_t hDevice )
@@ -356,28 +356,28 @@ The following pseudo-code demonstrates a basic sequence for tracer-based collect
            ${t}_metric_group_handle_t     hMetricGroup           = nullptr;
            ${x}_event_handle_t            hNotificationEvent     = nullptr;
            ${x}_event_pool_handle_t       hEventPool             = nullptr;
-           ${x}_event_pool_desc_t         eventPoolDesc          = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC, nullptr, ${X}_EVENT_POOL_FLAG_DEFAULT , 1};
-           ${x}_event_desc_t              eventDesc              = {${X}_STRUCTURE_TYPE_EVENT_DESC};
+           ::${x}_event_pool_desc_t         eventPoolDesc          = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC, nullptr, ${X}_EVENT_POOL_FLAG_DEFAULT , 1};
+           ::${x}_event_desc_t              eventDesc              = {${X}_STRUCTURE_TYPE_EVENT_DESC};
            ${t}_metric_tracer_handle_t    hMetricTracer          = nullptr;
-           ${t}_metric_tracer_desc_t      metricTracerDescriptor = {${T}_STRUCTURE_TYPE_METRIC_TRACER_DESC}; 
+           ::${t}_metric_tracer_desc_t      metricTracerDescriptor = {${T}_STRUCTURE_TYPE_METRIC_TRACER_DESC}; 
 
            // Find a "ComputeBasic" metric group suitable for Time Based collection
            FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
 
            // Configure the HW
-           ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
+           ::${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
            // Create notification event
-           ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
+           ::${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
            eventDesc.index  = 0;
            eventDesc.signal = ${X}_EVENT_SCOPE_FLAG_HOST;
            eventDesc.wait   = ${X}_EVENT_SCOPE_FLAG_HOST; 
-           ${x}EventCreate( hEventPool, &eventDesc, &hNotificationEvent );
+           ::${x}EventCreate( hEventPool, &eventDesc, &hNotificationEvent );
            
            // Open metric tracer
            metricTracerDescriptor.samplingPeriod       = 1000;
            metricTracerDescriptor.notifyEveryNReports  = 32768;
-           ${t}MetricTracerOpen( hDevice, hMetricGroup, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
+           ::${t}MetricTracerOpen( hDevice, hMetricGroup, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
 
            // Run your workload, in this example we assume the data for the whole experiment fits in the device buffer
            Workload(hDevice);
@@ -390,17 +390,17 @@ The following pseudo-code demonstrates a basic sequence for tracer-based collect
 
            // Read raw data
            size_t rawSize = 0;
-           ${t}MetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, nullptr );
+           ::${t}MetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, nullptr );
            uint8_t* rawData = malloc(rawSize); 
-           ${t}MetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, rawData );
+           ::${t}MetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, rawData );
 
            // Close metric tracer
-           ${t}MetricTracerClose( hMetricTracer );   
-           ${x}EventDestroy( hNotificationEvent );
-           ${x}EventPoolDestroy( hEventPool );
+           ::${t}MetricTracerClose( hMetricTracer );   
+           ::${x}EventDestroy( hNotificationEvent );
+           ::${x}EventPoolDestroy( hEventPool );
 
            // Deconfigure the device
-           ${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
+           ::${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
 
            // Calculate metric data
            CalculateMetricsExample( hMetricGroup, rawSize, rawData );
@@ -429,37 +429,37 @@ Typically, multiple queries are used and recycled to characterize a workload. A 
 
 The following pseudo-code demonstrates a basic sequence for query-based collection:
 
-.. code:: c
+.. parsed-literal::
 
        ${x}_result_t MetricQueryUsageExample( ${x}_driver_handle_t hDriver,
                                               ${x}_device_handle_t hDevice )
        {
            ${t}_metric_group_handle_t      hMetricGroup          = nullptr;
-           ${x}_event_handle_t             hCompletionEvent      = nullptr;
-           ${x}_event_pool_desc_t          eventPoolDesc         = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC};
-           ${x}_event_desc_t               eventDesc             = {${X}_STRUCTURE_TYPE_EVENT_DESC};
+           ::${x}_event_handle_t             hCompletionEvent      = nullptr;
+           ::${x}_event_pool_desc_t          eventPoolDesc         = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC};
+           ::${x}_event_desc_t               eventDesc             = {${X}_STRUCTURE_TYPE_EVENT_DESC};
            ${x}_event_pool_handle_t        hEventPool            = nullptr;
            ${t}_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
            ${t}_metric_query_handle_t      hMetricQuery          = nullptr;
-           ${t}_metric_query_pool_desc_t   queryPoolDesc         = {${T}_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC};
+           ::${t}_metric_query_pool_desc_t   queryPoolDesc         = {${T}_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC};
        
            // Find a "ComputeBasic" metric group suitable for Event Based collection
            FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
 
            // Configure HW
-           ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
+           ::${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
            // Create metric query pool & completion event
            queryPoolDesc.flags        = ${T}_METRIC_QUERY_POOL_FLAG_PERFORMANCE;
            queryPoolDesc.count        = 1000;
-           ${t}MetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
+           ::${t}MetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
            eventPoolDesc.flags = ${X}_EVENT_POOL_FLAG_DEFAULT;
            eventPoolDesc.count = 1000;
-           ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
+           ::${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
            // Write BEGIN metric query to command list 
-           ${t}MetricQueryCreate( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );
-           ${t}CommandListAppendMetricQueryBegin( hCommandList, hMetricQuery );
+           ::${t}MetricQueryCreate( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );
+           ::${t}CommandListAppendMetricQueryBegin( hCommandList, hMetricQuery );
 
            // build your command list
 
@@ -467,27 +467,27 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            eventDesc.index  = 0;
            eventDesc.signal = ${X}_EVENT_SCOPE_FLAG_HOST;
            eventDesc.wait   = ${X}_EVENT_SCOPE_FLAG_HOST; 
-           ${x}EventCreate( hEventPool, &eventDesc, &hCompletionEvent);
-           ${t}CommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent, 0, nullptr );
+           ::${x}EventCreate( hEventPool, &eventDesc, &hCompletionEvent);
+           ::${t}CommandListAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent, 0, nullptr );
 
-           // use ${x}CommandQueueExecuteCommandLists( , , , ) to submit your workload to the device
+           // use ::${x}CommandQueueExecuteCommandLists( , , , ) to submit your workload to the device
       
            // Wait for data
-           ${x}EventHostSynchronize( hCompletionEvent, 1000 /*timeout*/ );
+           ::${x}EventHostSynchronize( hCompletionEvent, 1000 /*timeout*/ );
 
            // Read raw data
            size_t rawSize = 0;
-           ${t}MetricQueryGetData( hMetricQuery, &rawSize, nullptr );
+           ::${t}MetricQueryGetData( hMetricQuery, &rawSize, nullptr );
            uint8_t* rawData = malloc(rawSize); 
-           ${t}MetricQueryGetData( hMetricQuery, &rawSize, rawData );
+           ::${t}MetricQueryGetData( hMetricQuery, &rawSize, rawData );
 
            // Free the resources
-           ${x}EventDestroy( hCompletionEvent );
-           ${x}EventPoolDestroy( hEventPool );
-           ${t}MetricQueryPoolDestroy( hMetricQueryPool );
+           ::${x}EventDestroy( hCompletionEvent );
+           ::${x}EventPoolDestroy( hEventPool );
+           ::${t}MetricQueryPoolDestroy( hMetricQueryPool );
 
            // Deconfigure HW
-           ${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
+           ::${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
 
            // Calculate metric data
            CalculateMetricsExample( hMetricGroup, rawSize, rawData );
@@ -501,23 +501,23 @@ Both MetricTracer and MetricQueryPool collect the data in device specific, raw f
 
 The following pseudo-code demonstrates a basic sequence for metric calculation and interpretation:
 
-.. code:: c
+.. parsed-literal::
 
        ${x}_result_t CalculateMetricsExample( ${t}_metric_group_handle_t hMetricGroup,
                                               size_t rawSize, uint8_t* rawData )
        {
            // Calculate metric data
            uint32_t numMetricValues = 0;
-           ${t}MetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, nullptr );
-           ${t}_typed_value_t* metricValues = malloc( numMetricValues * sizeof(${t}_typed_value_t) );
-           ${t}MetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, metricValues );
+           ::${t}MetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, nullptr );
+           ::${t}_typed_value_t* metricValues = malloc( numMetricValues * sizeof(::${t}_typed_value_t) );
+           ::${t}MetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, metricValues );
 
            // Obtain available metrics for the specific metric group
            uint32_t metricCount = 0;
-           ${t}MetricGet( hMetricGroup, &metricCount, nullptr );
+           ::${t}MetricGet( hMetricGroup, &metricCount, nullptr );
 
            ${t}_metric_handle_t* phMetrics = malloc(metricCount * sizeof(${t}_metric_handle_t));
-           ${t}MetricGet( hMetricGroup, &metricCount, phMetrics );
+           ::${t}MetricGet( hMetricGroup, &metricCount, phMetrics );
 
            // Print metric results
            uint32_t numReports = numMetricValues / metricCount;
@@ -527,10 +527,10 @@ The following pseudo-code demonstrates a basic sequence for metric calculation a
 
                for( uint32_t metric = 0; metric < metricCount; ++metric )
                {
-                   ${t}_typed_value_t data = metricValues[report * metricCount + metric];
+                   ::${t}_typed_value_t data = metricValues[report * metricCount + metric];
 
-                   ${t}_metric_properties_t metricProperties;
-                   ${t}MetricGetProperties( phMetrics[ metric ], &metricProperties );
+                   ::${t}_metric_properties_t metricProperties;
+                   ::${t}MetricGetProperties( phMetrics[ metric ], &metricProperties );
 
                    printf("Metric: %s\n", metricProperties.name );
 
@@ -718,24 +718,24 @@ To detach a debug session, a tool calls ::${t}DebugDetach passing the
 
 The following sample code demonstrates attaching and detaching:
 
-.. code:: c
+.. parsed-literal::
 
     ${x}_device_handle_t device = ...;
     ${t}_debug_session_handle_t session;
-    ${t}_debug_config_t config;
+    ::${t}_debug_config_t config;
     ${x}_result_t errcode;
 
     memset(&config, 0, sizeof(config));
     config.version = ${T}_DEBUG_API_VERSION;
     config.variant.v1.pid = ...;
 
-    errcode = ${t}DebugAttach(device, &config, &session);
+    errcode = ::${t}DebugAttach(device, &config, &session);
     if (errcode)
         return errcode;
 
     ...
 
-    errcode = ${t}DebugDetach(session);
+    errcode = ::${t}DebugDetach(session);
     if (errcode)
         return errcode;
 
@@ -823,13 +823,13 @@ On success, the topmost event is copied into the buffer.
 
 The following sample code demonstrates reading an event:
 
-.. code:: c
+.. parsed-literal::
 
     ${t}_debug_session_handle_t session = ...;
-    ${t}_debug_event_t event;
+    ::${t}_debug_event_t event;
     ${x}_result_t errcode;
 
-    errcode = ${t}DebugReadEvent(session, ${T}_DEBUG_TIMEOUT_INFINITE, sizeof(event), &event);
+    errcode = ::${t}DebugReadEvent(session, ${T}_DEBUG_TIMEOUT_INFINITE, sizeof(event), &event);
     if (errcode)
         return errcode;
 
@@ -949,18 +949,18 @@ individually.
 The following sample code demonstrates how to interrupt and resume a debug
 session:
 
-.. code:: c
+.. parsed-literal::
 
     ${t}_debug_session_handle_t session = ...;
     ${x}_result_t errcode;
 
-    errcode = ${t}DebugInterrupt(session, ${T}_DEBUG_THREAD_ALL);
+    errcode = ::${t}DebugInterrupt(session, ${T}_DEBUG_THREAD_ALL);
     if (errcode)
         return errcode;
 
     ...
 
-    errcode = ${t}DebugResume(session, ${T}_DEBUG_THREAD_ALL);
+    errcode = ::${t}DebugResume(session, ${T}_DEBUG_THREAD_ALL);
     if (errcode)
         return errcode;
 
@@ -998,7 +998,7 @@ The following example copies 16 bytes of memory from one location in the
 context of one Intel graphics device thread to another location in the
 default memory space.
 
-.. code:: c
+.. parsed-literal::
 
     ${t}_debug_session_handle_t session = ...;
     int memSpace = ...;
@@ -1007,13 +1007,13 @@ default memory space.
     uint8_t buffer[16];
     ${x}_result_t errcode;
 
-    errcode = ${t}DebugReadMemory(session, threadid, memSpace, src, sizeof(buffer), buffer);
+    errcode = ::${t}DebugReadMemory(session, threadid, memSpace, src, sizeof(buffer), buffer);
     if (errcode)
         return errcode;
 
     ...
 
-    errcode = ${t}DebugWriteMemory(session, ${T}_DEBUG_THREAD_NONE, ${T}_DEBUG_MEMORY_SPACE_GEN_DEFAULT, dst, sizeof(buffer), buffer);
+    errcode = ::${t}DebugWriteMemory(session, ${T}_DEBUG_THREAD_NONE, ${T}_DEBUG_MEMORY_SPACE_GEN_DEFAULT, dst, sizeof(buffer), buffer);
     if (errcode)
         return errcode;
 
@@ -1073,25 +1073,25 @@ via the following fields:
 
 The following sample code demonstrates iterating over register files:
 
-.. code:: c
+.. parsed-literal::
 
     ${t}_debug_session_handle_t session = ...;
     uint64_t threadid = ...;
-    ${t}_debug_state_t state;
+    ::${t}_debug_state_t state;
     ${x}_result_t errcode;
     uint16_t sec;
 
-    errcode = ${t}DebugReadState(session, threadid, 0ull, sizeof(state), &state);
+    errcode = ::${t}DebugReadState(session, threadid, 0ull, sizeof(state), &state);
     if (errcode)
         return errcode;
 
     for (sec = 0; sec < state.numSec; ++i) {
-        ${t}_debug_state_section_t section;
+        ::${t}_debug_state_section_t section;
         uint64_t offset;
 
         offset = state.headerSize + (state.secSize * sec);
 
-        errcode = ${t}DebugReadState(session, threadid, offset, sizeof(section), &section);
+        errcode = ::${t}DebugReadState(session, threadid, offset, sizeof(section), &section);
         if (errcode)
             return errcode;
 

@@ -20,7 +20,7 @@ RE_PROPER_TAG_FORMAT   = r".*"+RE_EXTRACT_TAG_NAME+r".*"
 
 RE_DOXY_LINK    = r".*\:\:\$\{\w\}.*"
 
-RE_CODE_BLOCK_BEGIN = r"\s*..\scode::"
+RE_CODE_BLOCK_BEGIN = r"\s*..\sparsed-literal::"
 
 RE_EXTRACT_NAME     = r"\$\{\w\}\w+"
 RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
@@ -80,13 +80,16 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
                     if not symbol_type:
                         print("%s(%s) : error : symbol '%s' not found"%(fin, iline+1, symbol))
 
-                    if not code_block and re.match(r"struct|union|function", symbol_type):
+                    if re.match(r"struct|union|function", symbol_type):
                         refword = word
                         if re.match(r"struct|union", symbol_type):
                             refword = refword.replace("_", "-")
                         ref = ":ref:`" + refword + "`"
-                        line = line.replace("::" + word + "(", ref + "\\(")
-                        line = line.replace("::" + word, ref)
+                        if not line.partition("::" + word)[2].isspace():
+                            # need to add escape character after references that are not followed by whitespace in RST.
+                            line = line.replace("::" + word, ref + "\\")
+                        else:
+                            line = line.replace("::" + word, ref)
                         link_found = True
 
                     if code_block and 'function' == symbol_type:

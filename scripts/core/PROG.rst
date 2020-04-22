@@ -43,31 +43,31 @@ Simultaneous calls to ::${x}Init are thread-safe and only one instance of driver
 
 The following pseudo-code demonstrates a basic initialization and device discovery sequence:
 
-.. code:: c
+.. parsed-literal::
 
        // Initialize the driver
-       ${x}Init(${X}_INIT_FLAG_NONE);
+       ::${x}Init(${X}_INIT_FLAG_NONE);
 
        // Discover all the driver instances
        uint32_t driverCount = 0;
-       ${x}DriverGet(&driverCount, nullptr);
+       ::${x}DriverGet(&driverCount, nullptr);
 
        ${x}_driver_handle_t* allDrivers = allocate(driverCount * sizeof(${x}_driver_handle_t));
-       ${x}DriverGet(&driverCount, allDrivers);
+       ::${x}DriverGet(&driverCount, allDrivers);
 
        // Find a driver instance with a GPU device
        ${x}_driver_handle_t hDriver = nullptr;
        ${x}_device_handle_t hDevice = nullptr;
        for(i = 0; i < driverCount; ++i) {
            uint32_t deviceCount = 0;
-           ${x}DeviceGet(allDrivers[i], &deviceCount, nullptr);
+           ::${x}DeviceGet(allDrivers[i], &deviceCount, nullptr);
 
            ${x}_device_handle_t* allDevices = allocate(deviceCount * sizeof(${x}_device_handle_t));
-           ${x}DeviceGet(allDrivers[i], &deviceCount, allDevices);
+           ::${x}DeviceGet(allDrivers[i], &deviceCount, allDevices);
 
            for(d = 0; d < deviceCount; ++d) {
                ${x}_device_properties_t device_properties;
-               ${x}DeviceGetProperties(allDevices[d], &device_properties);
+               ::${x}DeviceGetProperties(allDevices[d], &device_properties);
        
                if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
                    hDriver = allDrivers[i];
@@ -229,15 +229,15 @@ methodology allows for device-specific encoding of image contents (e.g.,
 tile swizzle patterns, lossless compression, etc.) and avoids exposing
 these details in the API in a backwards compatible fashion.
 
-.. code:: c
+.. parsed-literal::
 
        // Specify single component FLOAT32 format
-       ${x}_image_format_desc_t formatDesc = {
+       ::${x}_image_format_desc_t formatDesc = {
            ${X}_IMAGE_FORMAT_LAYOUT_32, ${X}_IMAGE_FORMAT_TYPE_FLOAT,
            ${X}_IMAGE_FORMAT_SWIZZLE_R, ${X}_IMAGE_FORMAT_SWIZZLE_0, ${X}_IMAGE_FORMAT_SWIZZLE_0, ${X}_IMAGE_FORMAT_SWIZZLE_1
        };
 
-       ${x}_image_desc_t imageDesc = {
+       ::${x}_image_desc_t imageDesc = {
            ${X}_STRUCTURE_TYPE_IMAGE_DESC,
            nullptr,
            ${X}_IMAGE_FLAG_PROGRAM_READ,
@@ -246,10 +246,10 @@ these details in the API in a backwards compatible fashion.
            128, 128, 0, 0, 0
        };
        ${x}_image_handle_t hImage;
-       ${x}ImageCreate(hDevice, &imageDesc, &hImage);
+       ::${x}ImageCreate(hDevice, &imageDesc, &hImage);
 
        // upload contents from host pointer
-       ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr, 0, nullptr);
+       ::${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr, 0, nullptr);
        ...
 
 A format descriptor is a combination of a format layout, type, and a swizzle.
@@ -307,12 +307,12 @@ There are two methods for device and kernel cache control:
 The following pseudo-code demonstrates a basic sequence for Cache size
 configuration:
 
-.. code:: c
+.. parsed-literal::
 
        // Large SLM for Intermediate and Last Level cache.
        // Note: The intermediate cache setting is applied to each kernel. Last level is applied for the device.
-       ${x}KernelSetIntermediateCacheConfig(hKernel, ${X}_CACHE_CONFIG_LARGE_SLM);
-       ${x}DeviceSetLastLevelCacheConfig(hDevice, ${X}_CACHE_CONFIG_LARGE_SLM);
+       ::${x}KernelSetIntermediateCacheConfig(hKernel, ${X}_CACHE_CONFIG_LARGE_SLM);
+       ::${x}DeviceSetLastLevelCacheConfig(hDevice, ${X}_CACHE_CONFIG_LARGE_SLM);
        ...
 
 Command Queues and Command Lists
@@ -354,15 +354,15 @@ Creation
 
 The following pseudo-code demonstrates a basic sequence for creation of command queues:
 
-.. code:: c
+.. parsed-literal::
 
     // Discover all command queue types
     uint32_t cmdqueueGroupCount = 0;_
-    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, nullptr);
+    ::${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, nullptr);
 
-    ${x}_command_queue_group_properties_t* cmdqueueGroupProperties = (${x}_command_queue_group_properties_t*)
-        malloc(cmdqueueGroupCount * sizeof(${x}_command_queue_group_properties_t));
-    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, allQueues);
+    ::${x}_command_queue_group_properties_t* cmdqueueGroupProperties = (::${x}_command_queue_group_properties_t*)
+        malloc(cmdqueueGroupCount * sizeof(::${x}_command_queue_group_properties_t));
+    ::${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, allQueues);
 
 
     // Find a proper command queue
@@ -377,7 +377,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
         return; // no compute queues found
 
     // Create a command queue
-    ${x}_command_queue_desc_t commandQueueDesc = {
+    ::${x}_command_queue_desc_t commandQueueDesc = {
         ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
         nullptr,
         computeQueueGroupOrdinal,
@@ -388,7 +388,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
         0
     };
     ${x}_command_queue_handle_t hCommandQueue;
-    ${x}CommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
+    ::${x}CommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
     ...
 
 Execution
@@ -451,17 +451,17 @@ Appending
 
 The following pseudo-code demonstrates a basic sequence for creation of command lists:
 
-.. code:: c
+.. parsed-literal::
 
        // Create a command list
-       ${x}_command_list_desc_t commandListDesc = {
+       ::${x}_command_list_desc_t commandListDesc = {
            ${X}_STRUCTURE_TYPE_COMMAND_LIST_DESC,
            nullptr,
            computeQueueGroupOrdinal,
            ${X}_COMMAND_LIST_FLAG_NONE
        };
        ${x}_command_list_handle_t hCommandList;
-       ${x}CommandListCreate(hDevice, &commandListDesc, &hCommandList);
+       ::${x}CommandListCreate(hDevice, &commandListDesc, &hCommandList);
        ...
 
 Submission
@@ -484,20 +484,20 @@ Submission
 
 The following pseudo-code demonstrates submission of commands to a command queue, via a command list:
 
-.. code:: c
+.. parsed-literal::
 
        ...
        // finished appending commands (typically done on another thread)
-       ${x}CommandListClose(hCommandList);
+       ::${x}CommandListClose(hCommandList);
 
        // Execute command list in command queue
-       ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+       ::${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
        // synchronize host and device
-       ${x}CommandQueueSynchronize(hCommandQueue, UINT32_MAX);
+       ::${x}CommandQueueSynchronize(hCommandQueue, UINT32_MAX);
 
        // Reset (recycle) command list for new commands
-       ${x}CommandListReset(hCommandList);
+       ::${x}CommandListReset(hCommandList);
        ...
 
 Recycling
@@ -523,10 +523,10 @@ A special type of command list can be used for very low-latency submission usage
 
 The following pseudo-code demonstrates a basic sequence for creation and usage of immediate command lists:
 
-.. code:: c
+.. parsed-literal::
 
        // Create an immediate command list
-       ${x}_command_queue_desc_t commandQueueDesc = {
+       ::${x}_command_queue_desc_t commandQueueDesc = {
            ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
            nullptr,
            computeQueueGroupOrdinal,
@@ -536,10 +536,10 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
            0
        };
        ${x}_command_list_handle_t hCommandList;
-       ${x}CommandListCreateImmediate(hDevice, &commandQueueDesc, &hCommandList);
+       ::${x}CommandListCreateImmediate(hDevice, &commandQueueDesc, &hCommandList);
 
        // Immediately submit a kernel to the device
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
        ...
 
 Synchronization Primitives
@@ -585,23 +585,23 @@ A fence is a heavyweight synchronization primitive used to communicate to the ho
 
 The following pseudo-code demonstrates a sequence for creation, submission and querying of a fence:
 
-.. code:: c
+.. parsed-literal::
 
        // Create fence
-       ${x}_fence_desc_t fenceDesc = {
+       ::${x}_fence_desc_t fenceDesc = {
            ${X}_STRUCTURE_TYPE_FENCE_DESC,
            nullptr,
            ${X}_FENCE_FLAG_NONE
        };
        ${x}_fence_handle_t hFence;
-       ${x}FenceCreate(hCommandQueue, &fenceDesc, &hFence);
+       ::${x}FenceCreate(hCommandQueue, &fenceDesc, &hFence);
 
        // Execute a command list with a signal of the fence
-       ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
+       ::${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
        // Wait for fence to be signaled
-       ${x}FenceHostSynchronize(hFence, UINT32_MAX);
-       ${x}FenceReset(hFence);
+       ::${x}FenceHostSynchronize(hFence, UINT32_MAX);
+       ::${x}FenceReset(hFence);
        ...
 
 The primary usage model(s) for fences are to notify the Host when a command list has finished execution to allow:
@@ -649,19 +649,19 @@ An event pool is used for creation of individual events:
 
 The following pseudo-code demonstrates a sequence for creation and submission of an event:
 
-.. code:: c
+.. parsed-literal::
 
        // Create event pool
-       ${x}_event_pool_desc_t eventPoolDesc = {
+       ::${x}_event_pool_desc_t eventPoolDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
            nullptr,
            ${X}_EVENT_POOL_FLAG_HOST_VISIBLE, // all events in pool are visible to Host
            1
        };
        ${x}_event_pool_handle_t hEventPool;
-       ${x}EventPoolCreate(hDriver, &eventPoolDesc, 0, nullptr, &hEventPool);
+       ::${x}EventPoolCreate(hDriver, &eventPoolDesc, 0, nullptr, &hEventPool);
 
-       ${x}_event_desc_t eventDesc = {
+       ::${x}_event_desc_t eventDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0,
@@ -669,16 +669,16 @@ The following pseudo-code demonstrates a sequence for creation and submission of
            ${X}_EVENT_SCOPE_FLAG_HOST  // ensure memory coherency across device and Host after event completes
        };
        ${x}_event_handle_t hEvent;
-       ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
+       ::${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
        // Append a signal of an event into the command list after the kernel executes
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent, 0, nullptr);
 
        // Execute the command list with the signal
-       ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+       ::${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
        // Wait on event to complete
-       ${x}EventHostSynchronize(hEvent, 0);
+       ::${x}EventHostSynchronize(hEvent, 0);
        ...
 
 The following diagram illustrates an event being signaled between kernels within a command list:
@@ -695,22 +695,22 @@ A kernel timestamp event is a special type of event that records device timestam
 - The ::${x}_kernel_timestamp_result_t contains both the per-context and global timestamp values at the start and end of the kernel's execution
 - Since these counters are only 32bits, the application must detect and handle counter wrapping when calculating execution time
 
-.. code:: c
+.. parsed-literal::
 
        // Get timestamp frequency
        uint64_t timestampFreq = device_properties.timerResolution;
 
        // Create event pool
-       ${x}_event_pool_desc_t tsEventPoolDesc = {
+       ::${x}_event_pool_desc_t tsEventPoolDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
            nullptr,
            ${X}_EVENT_POOL_FLAG_KERNEL_TIMESTAMP, // all events in pool are kernel timestamps
            1
        };
        ${x}_event_pool_handle_t hTSEventPool;
-       ${x}EventPoolCreate(hDriver, &tsEventPoolDesc, 0, nullptr, &hTSEventPool);
+       ::${x}EventPoolCreate(hDriver, &tsEventPoolDesc, 0, nullptr, &hTSEventPool);
 
-       ${x}_event_desc_t tsEventDesc = {
+       ::${x}_event_desc_t tsEventDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0,
@@ -718,29 +718,29 @@ A kernel timestamp event is a special type of event that records device timestam
            ${X}_EVENT_SCOPE_FLAG_NONE
        };
        ${x}_event_handle_t hTSEvent;
-       ${x}EventCreate(hEventPool, &tsEventDesc, &hTSEvent);
+       ::${x}EventCreate(hEventPool, &tsEventDesc, &hTSEvent);
 
        // allocate memory for results
-       ${x}_device_mem_alloc_desc_t tsResultDesc = {
+       ::${x}_device_mem_alloc_desc_t tsResultDesc = {
            ${X}_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC,
            nullptr,
            ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
            0
        };
-       ${x}_kernel_timestamp_result_t* tsResult = nullptr;
-       ${x}DriverAllocDeviceMem(hDriver, &tsResultDesc, sizeof(${x}_kernel_timestamp_result_t), sizeof(uint32_t), hDevice, &tsResult);
+       ::${x}_kernel_timestamp_result_t* tsResult = nullptr;
+       ::${x}DriverAllocDeviceMem(hDriver, &tsResultDesc, sizeof(::${x}_kernel_timestamp_result_t), sizeof(uint32_t), hDevice, &tsResult);
 
        // Append a signal of a timestamp event into the command list after the kernel executes
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hTSEvent, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hTSEvent, 0, nullptr);
 
        // Append a query of a timestamp event into the command list
-       ${x}CommandListAppendQueryKernelTimestamps(hCommandList, 1, &hTSEvent, tsResult, nullptr, hEvent, 1, &hTSEvent);
+       ::${x}CommandListAppendQueryKernelTimestamps(hCommandList, 1, &hTSEvent, tsResult, nullptr, hEvent, 1, &hTSEvent);
 
        // Execute the command list with the signal
-       ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+       ::${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
        // Wait on event to complete
-       ${x}EventHostSynchronize(hEvent, 0);
+       ::${x}EventHostSynchronize(hEvent, 0);
 
        // Calculation execution time(s)
        double globalTimeInNs = ( tsResult->global.kernelEnd >= tsResult->global.kernelStart ) 
@@ -763,14 +763,14 @@ There are two types of barriers:
 
 The following pseudo-code demonstrates a sequence for submission of a brute-force execution and global memory barrier:
 
-.. code:: c
+.. parsed-literal::
 
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
        // Append a barrier into a command list to ensure hKernel1 completes before hKernel2 begins
-       ${x}CommandListAppendBarrier(hCommandList, nullptr, 0, nullptr);
+       ::${x}CommandListAppendBarrier(hCommandList, nullptr, 0, nullptr);
 
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
        ...
 
 Execution Barriers
@@ -783,9 +783,9 @@ Commands executed on a command list are only guaranteed to start in the same ord
 
 The following pseudo-code demonstrates a sequence for submission of a fine-grain execution-only dependency using events:
 
-.. code:: c
+.. parsed-literal::
 
-       ${x}_event_desc_t event1Desc = {
+       ::${x}_event_desc_t event1Desc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0,
@@ -793,13 +793,13 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
            ${X}_EVENT_SCOPE_FLAG_NONE  // no memory/cache coherency required on wait
        };
        ${x}_event_handle_t hEvent1;
-       ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
+       ::${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
 
        // Ensure hKernel1 completes before signaling hEvent1
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
 
        // Ensure hEvent1 is signaled before starting hKernel2
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
        ...
 
 Memory Barriers
@@ -813,9 +813,9 @@ i.e. there is no implicit memory or cache coherency.
 
 The following pseudo-code demonstrates a sequence for submission of a fine-grain memory dependency using events:
 
-.. code:: c
+.. parsed-literal::
 
-       ${x}_event_desc_t event1Desc = {
+       ::${x}_event_desc_t event1Desc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0,
@@ -823,13 +823,13 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
            ${X}_EVENT_SCOPE_FLAG_NONE
        };
        ${x}_event_handle_t hEvent1;
-       ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
+       ::${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
 
        // Ensure hKernel1 memory writes are fully coherent across the device before signaling hEvent1
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hEvent1, 0, nullptr);
 
        // Ensure hEvent1 is signaled before starting hKernel2
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 1, &hEvent1);
        ...
 
 Range-based Memory Barriers
@@ -840,14 +840,14 @@ require coherency.
 
 The following pseudo-code demonstrates a sequence for submission of a range-based memory barrier:
 
-.. code:: c
+.. parsed-literal::
 
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, nullptr, 0, nullptr);
 
        // Ensure memory range is fully coherent across the device after hKernel1 and before hKernel2
-       ${x}CommandListAppendMemoryRangesBarrier(hCommandList, 1, &size, &ptr, nullptr, 0, nullptr);
+       ::${x}CommandListAppendMemoryRangesBarrier(hCommandList, 1, &size, &ptr, nullptr, 0, nullptr);
 
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel2, &launchArgs, nullptr, 0, nullptr);
        ...
 
 Modules and Kernels
@@ -875,7 +875,7 @@ Modules can be created from an IL or directly from native format using ::${x}Mod
 
 The following pseudo-code demonstrates a sequence for creating a module from an OpenCL kernel:
 
-.. code:: c
+.. parsed-literal::
 
        __kernel void image_scaling( __read_only  image2d_t src_img,
                                     __write_only image2d_t dest_img,
@@ -891,10 +891,10 @@ The following pseudo-code demonstrates a sequence for creating a module from an 
        }
        ...
 
-.. code:: c
+.. parsed-literal::
 
        // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
-       ${x}_module_desc_t moduleDesc = {
+       ::${x}_module_desc_t moduleDesc = {
            ${X}_STRUCTURE_TYPE_MODULE_DESC,
            nullptr,
            ${X}_MODULE_FORMAT_IL_SPIRV,
@@ -904,7 +904,7 @@ The following pseudo-code demonstrates a sequence for creating a module from an 
            nullptr
        };
        ${x}_module_handle_t hModule;
-       ${x}ModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
+       ::${x}ModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
        ...
 
 Module Build Options
@@ -932,16 +932,16 @@ values during runtime execution. Each specialization constant in SPIR-V has an i
 and default value. The ::${x}ModuleCreate function allows for an array of constants and their
 corresponding identifiers to be passed in to override the constants in the SPIR-V module.
 
-.. code:: c
+.. parsed-literal::
 
        // Spec constant overrides for group size.
-       ${x}_module_constants_t specConstants = {
+       ::${x}_module_constants_t specConstants = {
            3,
            pGroupSizeIds,
            pGroupSizeValues
        };
        // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
-       ${x}_module_desc_t moduleDesc = {
+       ::${x}_module_desc_t moduleDesc = {
            ${X}_STRUCTURE_TYPE_MODULE_DESC,
            nullptr,
            ${X}_MODULE_FORMAT_IL_SPIRV,
@@ -951,7 +951,7 @@ corresponding identifiers to be passed in to override the constants in the SPIR-
            &specConstants
        };
        ${x}_module_handle_t hModule;
-       ${x}ModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
+       ::${x}ModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
        ...
 
 Note: Specialization constants are only handled at module create time and therefore if
@@ -962,20 +962,20 @@ Module Build Log
 
 The ::${x}ModuleCreate function can optionally generate a build log object ::${x}_module_build_log_handle_t.
 
-.. code:: c
+.. parsed-literal::
 
        ...
        ${x}_module_build_log_handle_t buildlog;
-       ${x}_result_t result = ${x}ModuleCreate(hDevice, &desc, &module, &buildlog);
+       ${x}_result_t result = ::${x}ModuleCreate(hDevice, &desc, &module, &buildlog);
 
        // Only save build logs for module creation errors.
        if (result != ${X}_RESULT_SUCCESS)
        {
            size_t szLog = 0;
-           ${x}ModuleBuildLogGetString(buildlog, &szLog, nullptr);
+           ::${x}ModuleBuildLogGetString(buildlog, &szLog, nullptr);
            
            char_t* strLog = allocate(szLog);
-           ${x}ModuleBuildLogGetString(buildlog, &szLog, strLog);
+           ::${x}ModuleBuildLogGetString(buildlog, &szLog, strLog);
 
            // Save log to disk.
            ...
@@ -983,7 +983,7 @@ The ::${x}ModuleCreate function can optionally generate a build log object ::${x
            free(strLog);
        }
 
-       ${x}ModuleBuildLogDestroy(buildlog);
+       ::${x}ModuleBuildLogDestroy(buildlog);
 
 Module Caching with Native Binaries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -991,7 +991,7 @@ Module Caching with Native Binaries
 Disk caching of modules is not supported by the driver. If a disk cache for modules is desired, then it is the
 responsibility of the application to implement this using ::${x}ModuleGetNativeBinary.
 
-.. code:: c
+.. parsed-literal::
 
        ...
        // compute hash for pIL and check cache.
@@ -1000,10 +1000,10 @@ responsibility of the application to implement this using ::${x}ModuleGetNativeB
        if (cacheUpdateNeeded)
        {
            size_t szBinary = 0;
-           ${x}ModuleGetNativeBinary(hModule, &szBinary, nullptr);
+           ::${x}ModuleGetNativeBinary(hModule, &szBinary, nullptr);
 
            uint8_t* pBinary = allocate(szBinary);
-           ${x}ModuleGetNativeBinary(hModule, &szBinary, pBinary);
+           ::${x}ModuleGetNativeBinary(hModule, &szBinary, pBinary);
 
            // cache pBinary for corresponding IL
            ...
@@ -1030,16 +1030,16 @@ arguments along with data needed for launch.
 
 The following pseudo-code demonstrates a sequence for creating a kernel from a module:
 
-.. code:: c
+.. parsed-literal::
 
-       ${x}_kernel_desc_t kernelDesc = {
+       ::${x}_kernel_desc_t kernelDesc = {
            ${X}_STRUCTURE_TYPE_KERNEL_DESC,
            nullptr,
            ${X}_KERNEL_FLAG_NONE,
            "image_scaling"
        };
        ${x}_kernel_handle_t hKernel;
-       ${x}KernelCreate(hModule, &kernelDesc, &hKernel);
+       ::${x}KernelCreate(hModule, &kernelDesc, &hKernel);
        ...
 
 Kernel Attributes and Properties
@@ -1047,38 +1047,38 @@ Kernel Attributes and Properties
 
 Use ::${x}KernelSetAttribute to set attributes for a kernel object.
 
-.. code:: c
+.. parsed-literal::
 
     // Kernel performs indirect device access.
     bool_t isIndirect = true;
-    ${x}KernelSetAttribute(hKernel, ${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
+    ::${x}KernelSetAttribute(hKernel, ${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
     ...
 
 Use ::${x}KernelSetAttribute to get attributes for a kernel object.
 
-.. code:: c
+.. parsed-literal::
 
     // Does kernel perform indirect device access.
-    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
+    ::${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
     ...
     
     uint32_t strSize = 0; // Size of string + null terminator
-    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, nullptr );
+    ::${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, nullptr );
     char* pAttributes = allocate(strSize);
-    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, pAttributes );
+    ::${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, pAttributes );
     ...
 
 See ::${x}_kernel_attribute_t for more information on the "set" and "get" attributes.
 
 Use ::${x}KernelGetProperties to query invariant properties from a kernel object.
 
-.. code:: c
+.. parsed-literal::
 
     ...
-    ${x}_kernel_properties_t kernelProperties;
+    ::${x}_kernel_properties_t kernelProperties;
 
     // 
-    ${x}KernelGetProperties(hKernel, &kernelProperties);
+    ::${x}KernelGetProperties(hKernel, &kernelProperties);
     ...
 
 See ::${x}_kernel_properties_t for more information for kernel properties.
@@ -1096,23 +1096,23 @@ set prior to appending a kernel into a command list then a default will be chose
 The group size can be updated over a series of append operations. The driver will copy the
 group size information when appending the kernel into the command list.
 
-.. code:: c
+.. parsed-literal::
 
-       ${x}KernelSetGroupSize(hKernel, groupSizeX, groupSizeY, 1);
+       ::${x}KernelSetGroupSize(hKernel, groupSizeX, groupSizeY, 1);
 
        ...
 
 The API supports a query for suggested group size when providing the global size. This function ignores the
 group size that was set on the kernel using ::${x}KernelSetGroupSize.
 
-.. code:: c
+.. parsed-literal::
 
        // Find suggested group size for processing image.
        uint32_t groupSizeX;
        uint32_t groupSizeY;
-       ${x}KernelSuggestGroupSize(hKernel, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
+       ::${x}KernelSuggestGroupSize(hKernel, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
 
-       ${x}KernelSetGroupSize(hKernel, groupSizeX, groupSizeY, 1);
+       ::${x}KernelSetGroupSize(hKernel, groupSizeX, groupSizeY, 1);
 
        ...
 
@@ -1127,25 +1127,25 @@ Kernel arguments represent only the explicit kernel arguments that are within ?b
 
 The following pseudo-code demonstrates a sequence for setting kernel args and launching the kernel:
 
-.. code:: c
+.. parsed-literal::
 
        // Bind arguments
-       ${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_image_handle_t), &src_image);
-       ${x}KernelSetArgumentValue(hKernel, 1, sizeof(${x}_image_handle_t), &dest_image);
-       ${x}KernelSetArgumentValue(hKernel, 2, sizeof(uint32_t), &width);
-       ${x}KernelSetArgumentValue(hKernel, 3, sizeof(uint32_t), &height);
+       ::${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_image_handle_t), &src_image);
+       ::${x}KernelSetArgumentValue(hKernel, 1, sizeof(${x}_image_handle_t), &dest_image);
+       ::${x}KernelSetArgumentValue(hKernel, 2, sizeof(uint32_t), &width);
+       ::${x}KernelSetArgumentValue(hKernel, 3, sizeof(uint32_t), &height);
 
-       ${x}_group_count_t launchArgs = { numGroupsX, numGroupsY, 1 };
+       ::${x}_group_count_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
        // Append launch kernel
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
        // Update image pointers to copy and scale next image.
-       ${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_image_handle_t), &src2_image);
-       ${x}KernelSetArgumentValue(hKernel, 1, sizeof(${x}_image_handle_t), &dest2_image);
+       ::${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_image_handle_t), &src2_image);
+       ::${x}KernelSetArgumentValue(hKernel, 1, sizeof(${x}_image_handle_t), &dest2_image);
 
        // Append launch kernel
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
        ...
 
@@ -1157,30 +1157,30 @@ a command list. The most basic version of these is ::${x}CommandListAppendLaunch
 command list, kernel handle, launch arguments, and an optional synchronization event used to signal completion.
 The launch arguments contain thread group dimensions.
 
-.. code:: c
+.. parsed-literal::
 
        // compute number of groups to launch based on image size and group size.
        uint32_t numGroupsX = imageWidth / groupSizeX;
        uint32_t numGroupsY = imageHeight / groupSizeY;
 
-       ${x}_group_count_t launchArgs = { numGroupsX, numGroupsY, 1 };
+       ::${x}_group_count_t launchArgs = { numGroupsX, numGroupsY, 1 };
 
        // Append launch kernel
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
 The function ::${x}CommandListAppendLaunchKernelIndirect allows the launch parameters to be supplied indirectly in a
 buffer that the device reads instead of the command itself. This allows for the previous operations on the
 device to generate the parameters.
 
-.. code:: c
+.. parsed-literal::
 
-       ${x}_group_count_t* pIndirectArgs;
+       ::${x}_group_count_t* pIndirectArgs;
        
        ...
-       ${x}DriverAllocDeviceMem(hDriver, &desc, sizeof(${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
+       ::${x}DriverAllocDeviceMem(hDriver, &desc, sizeof(::${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
 
        // Append launch kernel - indirect
-       ${x}CommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
 
 Cooperative Kernels
 ~~~~~~~~~~~~~~~~~~~
@@ -1216,10 +1216,10 @@ kernels. The ::${x}SamplerCreate function takes a sampler descriptor (::${x}_sam
 
 The following is sample for code creating a sampler object and passing it as a kernel argument:
 
-.. code:: c
+.. parsed-literal::
 
        // Setup sampler for linear filtering and clamp out of bounds accesses to edge.
-       ${x}_sampler_desc_t desc = {
+       ::${x}_sampler_desc_t desc = {
            ${X}_STRUCTURE_TYPE_SAMPLER_DESC,
            nullptr,
            ${X}_SAMPLER_ADDRESS_MODE_CLAMP,
@@ -1227,14 +1227,14 @@ The following is sample for code creating a sampler object and passing it as a k
            false
            };
        ${x}_sampler_handle_t sampler;
-       ${x}SamplerCreate(hDevice, &desc, &sampler);
+       ::${x}SamplerCreate(hDevice, &desc, &sampler);
        ...
        
        // The sampler can be passed as a kernel argument.
-       ${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_sampler_handle_t), &sampler);
+       ::${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_sampler_handle_t), &sampler);
 
        // Append launch kernel
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
 Advanced
 ========
@@ -1323,28 +1323,28 @@ more details.
 A 16-byte unique device identifier (uuid) can be obtained for a device
 or sub-device using ::${x}DeviceGetProperties.
 
-.. code:: c
+.. parsed-literal::
 
        // Query for all sub-devices of the device
        uint32_t subdeviceCount = 0;
-       ${x}DeviceGetSubDevices(hDevice, &subdeviceCount, nullptr);
+       ::${x}DeviceGetSubDevices(hDevice, &subdeviceCount, nullptr);
 
        ${x}_device_handle_t* allSubDevices = allocate(subdeviceCount * sizeof(${x}_device_handle_t));
-       ${x}DeviceGetSubDevices(hDevice, &subdeviceCount, &allSubDevices);
+       ::${x}DeviceGetSubDevices(hDevice, &subdeviceCount, &allSubDevices);
 
        // Desire is to allocate and dispatch work to sub-device 2.
        assert(subdeviceCount >= 3);
        ${x}_device_handle_t hSubdevice = allSubDevices[2];
 
        // Query sub-device properties.
-       ${x}_device_properties_t subdeviceProps;
-       ${x}DeviceGetProperties(hSubdevice, &subdeviceProps);
+       ::${x}_device_properties_t subdeviceProps;
+       ::${x}DeviceGetProperties(hSubdevice, &subdeviceProps);
 
        assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
        assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
        void* pMemForSubDevice2;
-       ${x}DriverAllocDeviceMem(hDriver, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
+       ::${x}DriverAllocDeviceMem(hDriver, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
        ...
 
        ...
@@ -1352,7 +1352,7 @@ or sub-device using ::${x}DeviceGetProperties.
        assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
 
        ${x}_command_queue_handle_t commandQueueForSubDevice2;
-       ${x}CommandQueueCreate(hSubdevice, &desc, &commandQueueForSubDevice2);
+       ::${x}CommandQueueCreate(hSubdevice, &desc, &commandQueueForSubDevice2);
        ...
 
 Device Residency
@@ -1383,56 +1383,56 @@ If the application does not properly manage residency for these cases then the d
 
 The following pseudo-code demonstrate a sequence for using coarse-grain residency control for indirect arguments:
 
-.. code:: c
+.. parsed-literal::
 
        struct node {
            node* next;
        };
        node* begin = nullptr;
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
+       ::${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
+       ::${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
+       ::${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
 
        // 'begin' is passed as kernel argument and appended into command list
        bool hasIndirectHostAccess = true;
-       ${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, sizeof(bool), &hasIndirectHostAccess);
-       ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+       ::${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, sizeof(bool), &hasIndirectHostAccess);
+       ::${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
        ...
 
-       ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+       ::${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
        ...
 
 The following pseudo-code demonstrate a sequence for using fine-grain residency control for indirect arguments:
 
-.. code:: c
+.. parsed-literal::
 
        struct node {
            node* next;
        };
        node* begin = nullptr;
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
+       ::${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
+       ::${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
+       ::${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
 
        // 'begin' is passed as kernel argument and appended into command list
-       ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+       ::${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
        ...
 
        // Make indirect allocations resident before enqueuing
-       ${x}DeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
-       ${x}DeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
+       ::${x}DeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
+       ::${x}DeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
 
-       ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
+       ::${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
        // wait until complete
-       ${x}FenceHostSynchronize(hFence, UINT32_MAX);
+       ::${x}FenceHostSynchronize(hFence, UINT32_MAX);
 
        // Finally, evict to free device resources
-       ${x}DeviceEvictMemory(hDevice, begin->next, sizeof(node));
-       ${x}DeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
+       ::${x}DeviceEvictMemory(hDevice, begin->next, sizeof(node));
+       ::${x}DeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
        ...
 
 OpenCL Interoperability
@@ -1521,13 +1521,13 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending
    process:
 
-.. code:: c
+.. parsed-literal::
 
        void* dptr = nullptr;
-       ${x}DriverAllocDeviceMem(hDriver, &desc, size, alignment, hDevice, &dptr);
+       ::${x}DriverAllocDeviceMem(hDriver, &desc, size, alignment, hDevice, &dptr);
 
        ${x}_ipc_mem_handle_t hIPC;
-       ${x}DriverGetMemIpcHandle(hDriver, dptr, &hIPC);
+       ::${x}DriverGetMemIpcHandle(hDriver, dptr, &hIPC);
 
        // Method of sending to receiving process is not defined by Level-Zero:
        send_to_receiving_process(hIPC);
@@ -1535,29 +1535,29 @@ The following code examples demonstrate how to use the memory IPC APIs:
 2. Next, the allocation is received and un-packaged on the receiving
    process:
 
-.. code:: c
+.. parsed-literal::
 
        // Method of receiving from sending process is not defined by Level-Zero:
        ${x}_ipc_mem_handle_t hIPC;
        hIPC = receive_from_sending_process();
 
        void* dptr = nullptr;
-       ${x}DriverOpenMemIpcHandle(hDriver, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
+       ::${x}DriverOpenMemIpcHandle(hDriver, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
 
 3. Each process may now refer to the same device memory allocation via its ``dptr``.
    Note, there is no guaranteed address equivalence for the values of ``dptr`` in each process.
 
 4. To cleanup, first close the handle in the receiving process:
 
-.. code:: c
+.. parsed-literal::
 
-       ${x}DriverCloseMemIpcHandle(hDriver, dptr);
+       ::${x}DriverCloseMemIpcHandle(hDriver, dptr);
 
 5. Finally, free the device pointer in the sending process:
 
-.. code:: c
+.. parsed-literal::
 
-       ${x}DriverFreeMem(hDriver, dptr);
+       ::${x}DriverFreeMem(hDriver, dptr);
 
 .. _events-1:
 
@@ -1568,26 +1568,26 @@ The following code examples demonstrate how to use the event IPC APIs:
 
 1. First, the event pool is created, packaged, and sent on the sending process:
 
-    .. code:: c
+.. parsed-literal::
 
        // create event pool
-       ${x}_event_pool_desc_t eventPoolDesc = {
+       ::${x}_event_pool_desc_t eventPoolDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
            nullptr,
            ${X}_EVENT_POOL_FLAG_IPC | ${X}_EVENT_POOL_FLAG_HOST_VISIBLE,
            10
        };
        ${x}_event_pool_handle_t hEventPool;
-       ${x}EventPoolCreate(hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool);
+       ::${x}EventPoolCreate(hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool);
     
        // get IPC handle and send to another process
        ${x}_ipc_event_pool_handle_t hIpcEvent;
-       ${x}EventPoolGetIpcHandle(hEventPool, &hIpcEventPool);
+       ::${x}EventPoolGetIpcHandle(hEventPool, &hIpcEventPool);
        send_to_receiving_process(hIpcEventPool);
 
 2. Next, the event pool is received and un-packaged on the receiving process:
 
-    .. code:: c
+.. parsed-literal::
 
        // get IPC handle from other process
        ${x}_ipc_event_pool_handle_t hIpcEventPool;
@@ -1595,60 +1595,60 @@ The following code examples demonstrate how to use the event IPC APIs:
 
        // open event pool
        ${x}_event_pool_handle_t hEventPool;
-       ${x}EventPoolOpenIpcHandle(hDriver, hIpcEventPool, &hEventPool);
+       ::${x}EventPoolOpenIpcHandle(hDriver, hIpcEventPool, &hEventPool);
 
 3. Each process may now refer to the same device event allocation via its handle.
 
    a. receiving process creates event at location
 
-    .. code:: c
+.. parsed-literal::
 
        ${x}_event_handle_t hEvent;
-       ${x}_event_desc_t eventDesc = {
+       ::${x}_event_desc_t eventDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            5,
            ${X}_EVENT_SCOPE_FLAG_NONE,
            ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
-       ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
+       ::${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
        // submit kernel and signal event when complete
-       ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &args, hEvent, 0, nullptr);
-       ${x}CommandListClose(hCommandList);
-       ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
+       ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &args, hEvent, 0, nullptr);
+       ::${x}CommandListClose(hCommandList);
+       ::${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
    b. sending process creates event at same location
 
-    .. code:: c
+.. parsed-literal::
 
        ${x}_event_handle_t hEvent;
-       ${x}_event_desc_t eventDesc = {
+       ::${x}_event_desc_t eventDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            5,
            ${X}_EVENT_SCOPE_FLAG_NONE,
            ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
-       ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
+       ::${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
-       ${x}EventHostSynchronize(hEvent, UINT32_MAX);
+       ::${x}EventHostSynchronize(hEvent, UINT32_MAX);
 
    Note, there is no guaranteed address equivalence for the values of ``hEvent`` in each process.
 
 4. To cleanup, first close the pool handle in the receiving process:
 
-    .. code:: c
+.. parsed-literal::
 
-       ${x}EventDestroy(hEvent);
-       ${x}EventPoolCloseIpcHandle(&hEventPool);
+       ::${x}EventDestroy(hEvent);
+       ::${x}EventPoolCloseIpcHandle(&hEventPool);
 
 5. Finally, free the event pool handle in the sending process:
 
-    .. code:: c
+.. parsed-literal::
 
-       ${x}EventDestroy(hEvent);
-       ${x}EventPoolDestroy(hEventPool);
+       ::${x}EventDestroy(hEvent);
+       ::${x}EventPoolDestroy(hEventPool);
 
 Peer-to-Peer Access and Queries
 -------------------------------
