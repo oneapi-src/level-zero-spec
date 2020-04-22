@@ -1249,6 +1249,8 @@ The following table documents the supported knobs for overriding default functio
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
 | Device          | ${X}_AFFINITY_MASK                    | Hex String | Forces driver to only report devices (and sub-devices) as specified by mask value |
++                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
+|                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER       | {**0**, 1} | Forces driver to report devices from lowest to highest PCI bus ID                 |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                  |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
@@ -1263,6 +1265,11 @@ applications in another process, respectively. The affinity mask is
 specified via an environment variable as a string of hexadecimal values.
 The value is specific to system configuration; e.g., the number of
 devices and the number of sub-devices for each device.
+The value is specific to the order in which devices are reported by the driver; i.e., the first device maps to bit 0, the second device to bit 1, and so forth.
+## --validate=off
+The order of the devices reported by the driver can be forced to be consistent by setting the `${X}_ENABLE_PCI_ID_DEVICE_ORDER` environment variable.
+## --validate=on
+
 ## --validate=off
 The following examples demonstrate proper usage:
 ## --validate=on
