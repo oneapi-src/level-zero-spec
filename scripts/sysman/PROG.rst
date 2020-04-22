@@ -1668,84 +1668,82 @@ database for historical analysis.
 ::${s}RasGetState() returns a breakdown of errors by category
 in the structure ::${s}_ras_state_t. The table below describes the categories:
 
-## --validate=off
-+------------------------------------------+----------------------------------+------------------------------------+
-| Error category                           | ::${S}_RAS_ERROR_TYPE_CORRECTABLE | ::${S}_RAS_ERROR_TYPE_UNCORRECTABLE |
-|                                          |                                  |                                    |
-+==========================================+==================================+====================================+
++------------------------------------------------+----------------------------------+------------------------------------+
+| Error category                                 | ::${S}_RAS_ERROR_TYPE_CORRECTABLE | ::${S}_RAS_ERROR_TYPE_UNCORRECTABLE |
+|                                                |                                  |                                    |
++================================================+==================================+====================================+
 | ::${s}_ras_state_t.numResets              | Always zero.                     | Number of device resets that have  |
-|                                          |                                  | taken place.                       |
-+------------------------------------------+----------------------------------+------------------------------------+
+|                                                |                                  | taken place.                       |
++------------------------------------------------+----------------------------------+------------------------------------+
 | ::${s}_ras_state_t.numProgrammingErrors   | Always zero.                     | Number of hardware                 |
-|                                          |                                  | exceptions generated               |
-|                                          |                                  | by the way workloads               |
-|                                          |                                  | have programmed the                |
-|                                          |                                  | hardware.                          |
-+------------------------------------------+----------------------------------+------------------------------------+
+|                                                |                                  | exceptions generated               |
+|                                                |                                  | by the way workloads               |
+|                                                |                                  | have programmed the                |
+|                                                |                                  | hardware.                          |
++------------------------------------------------+----------------------------------+------------------------------------+
 | ::${s}_ras_state_t.numDriverErrors        | Always zero.                     | Number of low level                |
-|                                          |                                  | driver communication               |
-|                                          |                                  | errors have occurred.              |
-+------------------------------------------+----------------------------------+------------------------------------+
+|                                                |                                  | driver communication               |
+|                                                |                                  | errors have occurred.              |
++------------------------------------------------+----------------------------------+------------------------------------+
 | ::${s}_ras_state_t.numComputeErrors       | Number of errors that            | Number of errors that              |
-|                                          | have occurred in the             | have occurred in the               |
-|                                          | accelerator hardware             | accelerator hardware               |
-|                                          | that were corrected.             | that were not                      |
-|                                          |                                  | corrected. These                   |
-|                                          |                                  | would have caused the              |
-|                                          |                                  | hardware to hang and               |
-|                                          |                                  | the driver to reset.               |
-+------------------------------------------+----------------------------------+------------------------------------+
+|                                                | have occurred in the             | have occurred in the               |
+|                                                | accelerator hardware             | accelerator hardware               |
+|                                                | that were corrected.             | that were not                      |
+|                                                |                                  | corrected. These                   |
+|                                                |                                  | would have caused the              |
+|                                                |                                  | hardware to hang and               |
+|                                                |                                  | the driver to reset.               |
++------------------------------------------------+----------------------------------+------------------------------------+
 | ::${s}_ras_state_t.numNonComputeErrors    | Number of errors                 | Number of errors                   |
-|                                          | occurring in                     | occurring in the                   |
-|                                          | fixed-function                   | fixed-function                     |
-|                                          | accelerator hardware             | accelerator hardware               |
-|                                          | that were corrected.             | there could not be                 |
-|                                          |                                  | corrected. Typically               |
-|                                          |                                  | these will result in               |
-|                                          |                                  | a PCI bus reset and                |
-|                                          |                                  | driver reset.                      |
-+------------------------------------------+----------------------------------+------------------------------------+
+|                                                | occurring in                     | occurring in the                   |
+|                                                | fixed-function                   | fixed-function                     |
+|                                                | accelerator hardware             | accelerator hardware               |
+|                                                | that were corrected.             | there could not be                 |
+|                                                |                                  | corrected. Typically               |
+|                                                |                                  | these will result in               |
+|                                                |                                  | a PCI bus reset and                |
+|                                                |                                  | driver reset.                      |
++------------------------------------------------+----------------------------------+------------------------------------+
 | ::${s}_ras_state_t.numCacheErrors         | Number of ECC                    | Number of ECC                      |
-|                                          | correctable errors               | uncorrectable errors               |
-|                                          | that have occurred in            | that have occurred in              |
-|                                          | the on-chip caches               | the on-chip caches                 |
-|                                          | (caches/register                 | (caches/register                   |
-|                                          | file/shared local                | file/shared local                  |
-|                                          | memory).                         | memory). These would               |
-|                                          |                                  | have caused the                    |
-|                                          |                                  | hardware to hang and               |
-|                                          |                                  | the driver to reset.               |
-+------------------------------------------+----------------------------------+------------------------------------+
+|                                                | correctable errors               | uncorrectable errors               |
+|                                                | that have occurred in            | that have occurred in              |
+|                                                | the on-chip caches               | the on-chip caches                 |
+|                                                | (caches/register                 | (caches/register                   |
+|                                                | file/shared local                | file/shared local                  |
+|                                                | memory).                         | memory). These would               |
+|                                                |                                  | have caused the                    |
+|                                                |                                  | hardware to hang and               |
+|                                                |                                  | the driver to reset.               |
++------------------------------------------------+----------------------------------+------------------------------------+
 | ::${s}_ras_state_t.numMemoryErrors        | Number of times the              | Number of times the                |
-|                                          | device memory has                | device memory has                  |
-|                                          | transitioned from a              | transitioned from a                |
-|                                          | healthy state to a               | healthy/degraded                   |
-|                                          | degraded state.                  | state to a                         |
-|                                          | Degraded state occurs            | critical/replace                   |
-|                                          | when the number of               | state.                             |
-|                                          | correctable errors               |                                    |
-|                                          | cross a threshold.               |                                    |
-+------------------------------------------+----------------------------------+------------------------------------+
+|                                                | device memory has                | device memory has                  |
+|                                                | transitioned from a              | transitioned from a                |
+|                                                | healthy state to a               | healthy/degraded                   |
+|                                                | degraded state.                  | state to a                         |
+|                                                | Degraded state occurs            | critical/replace                   |
+|                                                | when the number of               | state.                             |
+|                                                | correctable errors               |                                    |
+|                                                | cross a threshold.               |                                    |
++------------------------------------------------+----------------------------------+------------------------------------+
 | ::${s}_ras_state_t.numPciErrors           | controllerNumber of              | Number of PCI bus                  |
-|                                          | PCI packet replays               | resets.                            |
-|                                          | that have occurred.              |                                    |
-+------------------------------------------+----------------------------------+------------------------------------+
+|                                                | PCI packet replays               | resets.                            |
+|                                                | that have occurred.              |                                    |
++------------------------------------------------+----------------------------------+------------------------------------+
 | ::${s}_ras_state_t.numFabricErrors        | Number of times one              | Number of times one                |
-|                                          | or more ports have               | or more ports have                 |
-|                                          | transitioned from a              | transitioned from a                |
-|                                          | green status to a                | green/yellow status                |
-|                                          | yellow status. This              | to a red status. This              |
-|                                          | indicates that links             | indicates that links               |
-|                                          | are experiencing                 | are experiencing                   |
-|                                          | quality degradation.             | connectivity                       |
-|                                          |                                  | statibility issues.                |
-+------------------------------------------+----------------------------------+------------------------------------+
+|                                                | or more ports have               | or more ports have                 |
+|                                                | transitioned from a              | transitioned from a                |
+|                                                | green status to a                | green/yellow status                |
+|                                                | yellow status. This              | to a red status. This              |
+|                                                | indicates that links             | indicates that links               |
+|                                                | are experiencing                 | are experiencing                   |
+|                                                | quality degradation.             | connectivity                       |
+|                                                |                                  | statibility issues.                |
++------------------------------------------------+----------------------------------+------------------------------------+
 | ::${s}_ras_state_t.numDisplayErrors       | Number of ECC                    | Number of ECC                      |
-|                                          | correctable errors               | uncorrectable errors               |
-|                                          | that have occurred in            | that have occurred in              |
-|                                          | the display.                     | the display.                       |
-+------------------------------------------+----------------------------------+------------------------------------+
-## --validate=on
+|                                                | correctable errors               | uncorrectable errors               |
+|                                                | that have occurred in            | that have occurred in              |
+|                                                | the display.                     | the display.                       |
++------------------------------------------------+----------------------------------+------------------------------------+
 
 Each RAS error type can trigger events when the error counters exceed
 thresholds. The events are listed in the table below. Software can use
