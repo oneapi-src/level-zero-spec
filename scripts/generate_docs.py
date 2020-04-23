@@ -85,7 +85,7 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
                         if re.match(r"struct|union", symbol_type):
                             refword = refword.replace("_", "-")
                         ref = ":ref:`" + refword + "`"
-                        if not line.partition("::" + word)[2].isspace():
+                        if not re.match(r'\s', line.partition("::" + word)[2]):
                             # need to add escape character after references that are not followed by whitespace in RST.
                             line = line.replace("::" + word, ref + "\\")
                         else:
