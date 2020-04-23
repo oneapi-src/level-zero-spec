@@ -8,15 +8,15 @@
 
 set _CI_ROOTDIR=%~dp0..\
 set _CI_SETUP_DIR=%~dp0
-set _CI_TOOLS_DIR=%_CI_ROOTDIR%third_party
-set _CI_MANIFEST_DIR=%_CI_TOOLS_DIR%
+set _CI_TOOLS_DIR=%_CI_ROOTDIR%.deps
+set _CI_THIRD_PARTY_DIR=%_CI_ROOTDIR%third_party
 set VDIR=%_CI_TOOLS_DIR%\pyvirtualenv
-set MANIFEST_FILE=%_CI_MANIFEST_DIR%\windows_docs.yml
+set MANIFEST_FILE=%_CI_THIRD_PARTY_DIR%\windows_docs.yml
 
 ::echo _CI_ROOTDIR=%_CI_ROOTDIR%
 ::echo _CI_SETUP_DIR=%_CI_SETUP_DIR%
 ::echo _CI_TOOLS_DIR=%_CI_TOOLS_DIR%
-::echo _CI_MANIFEST_DIR=%_CI_MANIFEST_DIR%
+::echo _CI_THIRD_PARTY_DIR=%_CI_THIRD_PARTY_DIR%
 ::echo VDIR=%VDIR%
 ::echo MANIFEST_FILE=%MANIFEST_FILE%
 
@@ -58,7 +58,7 @@ goto :eof
 ::===============================================================
 :setup_python
 set PYTHON_VERSION=3.6.5-2-win64-full
-set _PYDIR=%_CI_TOOLS_DIR%\%PYTHON_VERSION%
+set _PYDIR=%_CI_TOOLS_DIR%\python
 if not exist "%_PYDIR%" (
     call :setup_manifest
 )
@@ -99,7 +99,7 @@ if exist "%VDIR%" (
     python -m pip install --upgrade pip
 
     :: Install PIP modules here
-    python -m pip install -r %_CI_TOOLS_DIR%\requirements.txt
+    python -m pip install -r %_CI_THIRD_PARTY_DIR%\requirements.txt
 
     call "%VDIR%\Scripts\deactivate.bat"
 

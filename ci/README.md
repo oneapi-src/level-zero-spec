@@ -61,7 +61,7 @@ local> ci\pyenv.cmd reset
 Doxygen was added when pyenv.cmd setup the environment so you need to add it to your path by running the following in your shell:
 
 ```console
-set PATH=<PATH TO YOUR REPO>\one-api\level_zero\third_party\doxygen_1.8.15.windows.x64;%PATH%
+set PATH=<PATH TO YOUR REPO>\one-api\level_zero\.deps\doxygen;%PATH%
 ```
 
 *Note:* this dependent on the location specified in *third_party\windows_docs.yml* and may change in the future. Refer to the file for correct location.

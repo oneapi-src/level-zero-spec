@@ -1,7 +1,7 @@
 cache:
   paths:
   - .irepo/
-  - third_party/
+  - .deps/
   - include/
   - source/
   - docs/
@@ -15,7 +15,7 @@ generate:
   script:
     - call ci/pyenv.cmd update_pip
     - call ci/pyenv.cmd up
-    - set PATH=%PATH%;%_CI_TOOLS_DIR%\doxygen_1.8.15.windows.x64;%VDIR%\Scripts
+    - set PATH=%PATH%;%_CI_TOOLS_DIR%\doxygen;%VDIR%\Scripts
     - cd scripts
     - python run.py
   artifacts:
