@@ -138,6 +138,7 @@ details:
     - "Modules cannot be partially linked. All modules needed to satisfy all import dependencies for a module must be passed in or $X_RESULT_ERROR_MODULE_LINK_FAILURE will returned."
     - "Modules with imports need to be linked before kernel objects can be created from them."
     - "Modules will only be linked once. A module can be used in multiple link calls if it has exports but it's imports will not be re-linked."
+    - "Ambiguous dependencies, where multiple modules satisfy the import dependencies for another module, is not allowed."
     - "ModuleGetNativeBinary can be called on any module regardless of whether it is linked or not."
     - "A link log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
     - "See SPIR-V specification for linkage details."
