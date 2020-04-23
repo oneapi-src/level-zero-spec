@@ -15,7 +15,7 @@ generate:
   script:
     - call ci/pyenv.cmd update_pip
     - call ci/pyenv.cmd up
-    - set PATH=%PATH%;%_CI_TOOLS_DIR%\doxygen;%VDIR%\Scripts
+    - set PATH=%_CI_TOOLS_DIR%\doxygen;%VDIR%\Scripts;%PATH%
     - cd scripts
     - python run.py
   artifacts:
