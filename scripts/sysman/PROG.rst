@@ -481,69 +481,69 @@ submitted concurrently. This policy is referred to as a scheduler mode.
 The available scheduler operating modes are given by the enum
 ::${s}_sched_mode_t and summarized in the table below:
 
-+-------------------------------------+-------------------------------------------+
-| Scheduler mode                      | Description                               |
-+=====================================+===========================================+
++-------------------------------------------------------------+-------------------------------------------+
+| Scheduler mode                                              | Description                               |
++=============================================================+===========================================+
 | ::${S}_SCHED_MODE_TIMEOUT            | This mode is optimized for                |
-|                                     | multiple applications or contexts         |
-|                                     | submitting work to the hardware.          |
-|                                     | When higher priority work                 |
-|                                     | arrives, the scheduler attempts           |
-|                                     | to pause the current executing            |
-|                                     | work within some timeout                  |
-|                                     | interval, then submits the other          |
-|                                     | work.It is possible to configure          |
-|                                     | (::${s}_sched_timeout_properties_t)  |
-|                                     | the watchdog timeout which                |
-|                                     | controls the maximum time the             |
-|                                     | scheduler will wait for a                 |
-|                                     | workload to complete a batch of           |
-|                                     | work or yield to other                    |
-|                                     | applications before it is                 |
-|                                     | terminated. If the watchdog               |
-|                                     | timeout is set to                         |
-|                                     | ::${S}_SCHED_WATCHDOG_DISABLE, the         |
-|                                     | scheduler enforces no fairness.           |
-|                                     | This means that if there is other         |
-|                                     | work to execute, the scheduler            |
-|                                     | will try to submit it but will            |
-|                                     | not terminate an executing                |
-|                                     | process that does not complete            |
-|                                     | quickly.                                  |
-+-------------------------------------+-------------------------------------------+
+|                                                             | multiple applications or contexts         |
+|                                                             | submitting work to the hardware.          |
+|                                                             | When higher priority work                 |
+|                                                             | arrives, the scheduler attempts           |
+|                                                             | to pause the current executing            |
+|                                                             | work within some timeout                  |
+|                                                             | interval, then submits the other          |
+|                                                             | work.It is possible to configure          |
+|                                                             | (::${s}_sched_timeout_properties_t)  |
+|                                                             | the watchdog timeout which                |
+|                                                             | controls the maximum time the             |
+|                                                             | scheduler will wait for a                 |
+|                                                             | workload to complete a batch of           |
+|                                                             | work or yield to other                    |
+|                                                             | applications before it is                 |
+|                                                             | terminated. If the watchdog               |
+|                                                             | timeout is set to                         |
+|                                                             | ::${S}_SCHED_WATCHDOG_DISABLE, the         |
+|                                                             | scheduler enforces no fairness.           |
+|                                                             | This means that if there is other         |
+|                                                             | work to execute, the scheduler            |
+|                                                             | will try to submit it but will            |
+|                                                             | not terminate an executing                |
+|                                                             | process that does not complete            |
+|                                                             | quickly.                                  |
++-------------------------------------------------------------+-------------------------------------------+
 | ::${S}_SCHED_MODE_TIMESLICE          | This mode is optimized to provide         |
-|                                     | fair sharing of hardware                  |
-|                                     | execution time between multiple           |
-|                                     | contexts submitting work to the           |
-|                                     | hardware concurrently.It is               |
-|                                     | possible to configure                     |
-|                                     | (::${s}_sched_timeslice_properties_t)|
-|                                     |                                           |
-|                                     | the timeslice interval and the            |
-|                                     | amount of time the scheduler will         |
-|                                     | wait for work to yield to another         |
-|                                     | application before it is                  |
-|                                     | terminated.                               |
-+-------------------------------------+-------------------------------------------+
+|                                                             | fair sharing of hardware                  |
+|                                                             | execution time between multiple           |
+|                                                             | contexts submitting work to the           |
+|                                                             | hardware concurrently.It is               |
+|                                                             | possible to configure                     |
+|                                                             | (::${s}_sched_timeslice_properties_t)|
+|                                                             |                                           |
+|                                                             | the timeslice interval and the            |
+|                                                             | amount of time the scheduler will         |
+|                                                             | wait for work to yield to another         |
+|                                                             | application before it is                  |
+|                                                             | terminated.                               |
++-------------------------------------------------------------+-------------------------------------------+
 | ::${S}_SCHED_MODE_EXCLUSIVE          | This mode is optimized for single         |
-|                                     | application/context use-cases. It         |
-|                                     | permits a context to run                  |
-|                                     | indefinitely on the hardware              |
-|                                     | without being preempted or                |
-|                                     | terminated. All pending work for          |
-|                                     | other contexts must wait until            |
-|                                     | the running context completes             |
-|                                     | with no further submitted work.           |
-+-------------------------------------+-------------------------------------------+
+|                                                             | application/context use-cases. It         |
+|                                                             | permits a context to run                  |
+|                                                             | indefinitely on the hardware              |
+|                                                             | without being preempted or                |
+|                                                             | terminated. All pending work for          |
+|                                                             | other contexts must wait until            |
+|                                                             | the running context completes             |
+|                                                             | with no further submitted work.           |
++-------------------------------------------------------------+-------------------------------------------+
 | ::${S}_SCHED_MODE_COMPUTE_UNIT_DEBUG | This mode is optimized for                |
-|                                     | application debug. It ensures             |
-|                                     | that only one command queue can           |
-|                                     | execute work on the hardware at a         |
-|                                     | given time. Work is permitted to          |
-|                                     | run as long as needed without             |
-|                                     | enforcing any scheduler fairness          |
-|                                     | policies.                                 |
-+-------------------------------------+-------------------------------------------+
+|                                                             | application debug. It ensures             |
+|                                                             | that only one command queue can           |
+|                                                             | execute work on the hardware at a         |
+|                                                             | given time. Work is permitted to          |
+|                                                             | run as long as needed without             |
+|                                                             | enforcing any scheduler fairness          |
+|                                                             | policies.                                 |
++-------------------------------------------------------------+-------------------------------------------+
 
 A device can have multiple scheduler components. Each scheduler component controls
 the workload execution behavior on one or more accelerator engines
@@ -767,38 +767,38 @@ the event is triggered, and the application is woken up.
 
 The following functions are provided to manage the power of the device:
 
-+--------------------------------------+--------------------------------------------------+
-| Function                             | Description                                      |
-+======================================+==================================================+
-| ::${s}DeviceEnumPowerDomains()  | Enumerate the power domains.                     |
-+--------------------------------------+--------------------------------------------------+
-| ::${s}PowerGetProperties()      | Get the minimum/maximum power limit that can be  |
-|                                      | specified when changing the power limits of a    |
-|                                      | specific power domain. Also read the factory     |
-|                                      | default sustained power limit of the part.       |
-+--------------------------------------+--------------------------------------------------+
-| ::${s}PowerGetEnergyCounter()   | Read the energy consumption of                   |
-|                                      | the specific domain.                             |
-+--------------------------------------+--------------------------------------------------+
-| ::${s}PowerGetLimits()          | Get the sustained/burst/peak                     |
-|                                      | power limits for the specific                    |
-|                                      | power domain.                                    |
-+--------------------------------------+--------------------------------------------------+
-| ::${s}PowerSetLimits()          | Set the sustained/burst/peak                     |
-|                                      | power limits for the specific                    |
-|                                      | power domain.                                    |
-+--------------------------------------+--------------------------------------------------+
-| ::${s}PowerGetEnergyThreshold() | Get the current energy threshold.                |
-|                                      |                                                  |
-+--------------------------------------+--------------------------------------------------+
-| ::${s}PowerSetEnergyThreshold() | Set the energy threshold. Event                  |
++--------------------------------------+--------------------------------------------------------------------------+
+| Function                             | Description                                                              |
++======================================+==========================================================================+
+| ::${s}DeviceEnumPowerDomains()  | Enumerate the power domains.                                             |
++--------------------------------------+--------------------------------------------------------------------------+
+| ::${s}PowerGetProperties()      | Get the minimum/maximum power limit that can be                          |
+|                                      | specified when changing the power limits of a                            |
+|                                      | specific power domain. Also read the factory                             |
+|                                      | default sustained power limit of the part.                               |
++--------------------------------------+--------------------------------------------------------------------------+
+| ::${s}PowerGetEnergyCounter()   | Read the energy consumption of                                           |
+|                                      | the specific domain.                                                     |
++--------------------------------------+--------------------------------------------------------------------------+
+| ::${s}PowerGetLimits()          | Get the sustained/burst/peak                                             |
+|                                      | power limits for the specific                                            |
+|                                      | power domain.                                                            |
++--------------------------------------+--------------------------------------------------------------------------+
+| ::${s}PowerSetLimits()          | Set the sustained/burst/peak                                             |
+|                                      | power limits for the specific                                            |
+|                                      | power domain.                                                            |
++--------------------------------------+--------------------------------------------------------------------------+
+| ::${s}PowerGetEnergyThreshold() | Get the current energy threshold.                                        |
+|                                      |                                                                          |
++--------------------------------------+--------------------------------------------------------------------------+
+| ::${s}PowerSetEnergyThreshold() | Set the energy threshold. Event                                          |
 |                                      | ::${S}_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED        |
-|                                      |                                                  |
-|                                      | will be generated when the energy                |
-|                                      | consumed since calling this                      |
-|                                      | function exceeds the specified                   |
-|                                      | threshold.                                       |
-+--------------------------------------+--------------------------------------------------+
+|                                      |                                                                          |
+|                                      | will be generated when the energy                                        |
+|                                      | consumed since calling this                                              |
+|                                      | function exceeds the specified                                           |
+|                                      | threshold.                                                               |
++--------------------------------------+--------------------------------------------------------------------------+
 
 The pseudo code below shows how to output information about each power
 domain on a device:
@@ -868,39 +868,39 @@ frequency domains.
 The following functions are provided to manage the frequency domains on
 the device:
 
-+------------------------------------------+-----------------------------------+
-| Function                                 | Description                       |
-+==========================================+===================================+
-| ::${s}DeviceEnumFrequencyDomains()  | Enumerate all the frequency       |
-|                                          | domains on the device and         |
-|                                          | sub-devices.                      |
-+------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetProperties()      | Find out which domain             |
++------------------------------------------+----------------------------------------+
+| Function                                 | Description                            |
++==========================================+========================================+
+| ::${s}DeviceEnumFrequencyDomains()  | Enumerate all the frequency            |
+|                                          | domains on the device and              |
+|                                          | sub-devices.                           |
++------------------------------------------+----------------------------------------+
+| ::${s}FrequencyGetProperties()      | Find out which domain                  |
 |                                          | ::${s}_freq_domain_t is controlled |
-|                                          | by this frequency and min/max     |
-|                                          | hardware frequencies.             |
-+------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetAvailableClocks() | Get an array of all available     |
-|                                          | frequencies that can be requested |
-|                                          | on this domain.                   |
-+------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetRange()           | Get the current min/max frequency |
-|                                          | between which the hardware can    |
-|                                          | operate for a frequency domain.   |
-+------------------------------------------+-----------------------------------+
-| ::${s}FrequencySetRange()           | Set the min/max frequency between |
-|                                          | which the hardware can operate    |
-|                                          | for a frequency domain.           |
-+------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetState()           | Get the current frequency         |
-|                                          | request, actual frequency, TDP    |
-|                                          | frequency and throttle reasons    |
-|                                          | for a frequency domain.           |
-+------------------------------------------+-----------------------------------+
-| ::${s}FrequencyGetThrottleTime()    | Gets the amount of time a         |
-|                                          | frequency domain has been         |
-|                                          | throttled.                        |
-+------------------------------------------+-----------------------------------+
+|                                          | by this frequency and min/max          |
+|                                          | hardware frequencies.                  |
++------------------------------------------+----------------------------------------+
+| ::${s}FrequencyGetAvailableClocks() | Get an array of all available          |
+|                                          | frequencies that can be requested      |
+|                                          | on this domain.                        |
++------------------------------------------+----------------------------------------+
+| ::${s}FrequencyGetRange()           | Get the current min/max frequency      |
+|                                          | between which the hardware can         |
+|                                          | operate for a frequency domain.        |
++------------------------------------------+----------------------------------------+
+| ::${s}FrequencySetRange()           | Set the min/max frequency between      |
+|                                          | which the hardware can operate         |
+|                                          | for a frequency domain.                |
++------------------------------------------+----------------------------------------+
+| ::${s}FrequencyGetState()           | Get the current frequency              |
+|                                          | request, actual frequency, TDP         |
+|                                          | frequency and throttle reasons         |
+|                                          | for a frequency domain.                |
++------------------------------------------+----------------------------------------+
+| ::${s}FrequencyGetThrottleTime()    | Gets the amount of time a              |
+|                                          | frequency domain has been              |
+|                                          | throttled.                             |
++------------------------------------------+----------------------------------------+
 
 It is only permitted to set the frequency range if the device property
 ::${s}_freq_properties_t.canControl is true for the specific frequency
@@ -958,31 +958,31 @@ Frequency/voltage overclocking is accomplished by calling ::${s}FrequencyOcSetCo
 with a new overclock configuration ::${s}_oc_config_t. There are two modes that control the
 way voltage is handled when overclocking the frequency:
 
-+-----------------------------------+------------------------------------------------+
-| Voltage overclock mode            | Description                                    |
-+===================================+================================================+
++--------------------------------------------------------+------------------------------------------------+
+| Voltage overclock mode                                 | Description                                    |
++========================================================+================================================+
 | ::${S}_OC_MODE_OVERRIDE            | In this mode, a fixed                          |
-|                                   | user-supplied voltage                          |
-|                                   | (::${s}_oc_config_t.voltageTarget +       |
-|                                   | ::${s}_oc_config_t.voltageOffset)         |
-|                                   | is applied at all times,                       |
-|                                   | independent of the frequency                   |
-|                                   | request. This is not efficient but             |
-|                                   | can improve stability by avoiding              |
-|                                   | power-supply voltage changes as the            |
-|                                   | frequency changes.                             |
-+-----------------------------------+------------------------------------------------+
+|                                                        | user-supplied voltage                          |
+|                                                        | (::${s}_oc_config_t.voltageTarget +       |
+|                                                        | ::${s}_oc_config_t.voltageOffset)         |
+|                                                        | is applied at all times,                       |
+|                                                        | independent of the frequency                   |
+|                                                        | request. This is not efficient but             |
+|                                                        | can improve stability by avoiding              |
+|                                                        | power-supply voltage changes as the            |
+|                                                        | frequency changes.                             |
++--------------------------------------------------------+------------------------------------------------+
 | ::${S}_OC_MODE_OVERRIDE            | In this mode, a fixed                          |
-|                                   | user-supplied voltage is applied               |
-|                                   | at all times, independent of the               |
-|                                   | frequency request. This is not                 |
-|                                   | efficient but can improve                      |
-|                                   | stability by avoiding                          |
-|                                   | power-supply voltage changes as                |
-|                                   | the frequency changes. Generally,              |
-|                                   | this mode is used in conjunction               |
-|                                   | with a fixed frequency.                        |
-+-----------------------------------+------------------------------------------------+
+|                                                        | user-supplied voltage is applied               |
+|                                                        | at all times, independent of the               |
+|                                                        | frequency request. This is not                 |
+|                                                        | efficient but can improve                      |
+|                                                        | stability by avoiding                          |
+|                                                        | power-supply voltage changes as                |
+|                                                        | the frequency changes. Generally,              |
+|                                                        | this mode is used in conjunction               |
+|                                                        | with a fixed frequency.                        |
++--------------------------------------------------------+------------------------------------------------+
 
 The following functions are provided to handle overclocking:
 
@@ -1087,22 +1087,22 @@ calculate the average utilization of different parts of the device.
 
 The following functions are provided:
 
-+-------------------------------------+-----------------------------------+
-| Function                            | Description                       |
-+=====================================+===================================+
-| ::${s}DeviceEnumEngineGroups() | Enumerate the engine groups that  |
-|                                     | can be queried.                   |
-+-------------------------------------+-----------------------------------+
-| ::${s}EngineGetProperties()    | Get the properties of an engine   |
-|                                     | group. This will return the type  |
-|                                     | of engine group (one of           |
++-------------------------------------+-----------------------------------------+
+| Function                            | Description                             |
++=====================================+=========================================+
+| ::${s}DeviceEnumEngineGroups() | Enumerate the engine groups that        |
+|                                     | can be queried.                         |
++-------------------------------------+-----------------------------------------+
+| ::${s}EngineGetProperties()    | Get the properties of an engine         |
+|                                     | group. This will return the type        |
+|                                     | of engine group (one of                 |
 |                                     | ::${s}_engine_group_t) and on      |
-|                                     | which sub-device the group is     |
-|                                     | making measurements.              |
-+-------------------------------------+-----------------------------------+
-| ::${s}EngineGetActivity()      | Returns the activity counters for |
-|                                     | an engine group.                  |
-+-------------------------------------+-----------------------------------+
+|                                     | which sub-device the group is           |
+|                                     | making measurements.                    |
++-------------------------------------+-----------------------------------------+
+| ::${s}EngineGetActivity()      | Returns the activity counters for       |
+|                                     | an engine group.                        |
++-------------------------------------+-----------------------------------------+
 
 .. _Standby:
 
@@ -1122,28 +1122,28 @@ domains is given by ::${s}_standby_type_t.
 The following functions can be used to control how the hardware promotes
 to standby states:
 
-+---------------------------------------+-----------------------------------+
-| Function                              | Description                       |
-+=======================================+===================================+
-| ::${s}DeviceEnumStandbyDomains() | Enumerate the standby domains.    |
-+---------------------------------------+-----------------------------------+
-| ::${s}StandbyGetProperties()     | Get the properties of a standby   |
-|                                       | domain. This will return the      |
-|                                       | parts of the device that are      |
-|                                       | affected by this domain (one of   |
++---------------------------------------+-----------------------------------------+
+| Function                              | Description                             |
++=======================================+=========================================+
+| ::${s}DeviceEnumStandbyDomains() | Enumerate the standby domains.          |
++---------------------------------------+-----------------------------------------+
+| ::${s}StandbyGetProperties()     | Get the properties of a standby         |
+|                                       | domain. This will return the            |
+|                                       | parts of the device that are            |
+|                                       | affected by this domain (one of         |
 |                                       | ::${s}_engine_group_t) and on      |
-|                                       | which sub-device the domain is    |
-|                                       | located.                          |
-+---------------------------------------+-----------------------------------+
-| ::${s}StandbyGetMode()           | Get the current promotion mode    |
-|                                       | (one of                           |
+|                                       | which sub-device the domain is          |
+|                                       | located.                                |
++---------------------------------------+-----------------------------------------+
+| ::${s}StandbyGetMode()           | Get the current promotion mode          |
+|                                       | (one of                                 |
 |                                       | ::${s}_standby_promo_mode_t) for a |
-|                                       | standby domain.                   |
-+---------------------------------------+-----------------------------------+
-| ::${s}StandbySetMode()           | Set the promotion mode (one of    |
+|                                       | standby domain.                         |
++---------------------------------------+-----------------------------------------+
+| ::${s}StandbySetMode()           | Set the promotion mode (one of          |
 |                                       | ::${s}_standby_promo_mode_t) for a |
-|                                       | standby domain.                   |
-+---------------------------------------+-----------------------------------+
+|                                       | standby domain.                         |
++---------------------------------------+-----------------------------------------+
 
 .. _Firmware:
 
@@ -1177,22 +1177,22 @@ memory module, the current and maximum bandwidth can be queried. The API
 also provides a health metric which can take one of the following values
 (::${s}_mem_health_t):
 
-+-----------------------------------+-----------------------------------+
-| Memory health                     | Description                       |
-+===================================+===================================+
++-----------------------------------+-----------------------------------------------------------+
+| Memory health                     | Description                                               |
++===================================+===========================================================+
 | ::${S}_MEM_HEALTH_OK               | All memory channels are healthy.  |
-+-----------------------------------+-----------------------------------+
++-----------------------------------+-----------------------------------------------------------+
 | ::${S}_MEM_HEALTH_DEGRADED         | Excessive correctable errors have |
-|                                   | been detected on one or more      |
-|                                   | channels. Device should be reset. |
-+-----------------------------------+-----------------------------------+
+|                                   | been detected on one or more                              |
+|                                   | channels. Device should be reset.                         |
++-----------------------------------+-----------------------------------------------------------+
 | ::${S}_MEM_HEALTH_CRITICAL         | Operating with reduced memory to  |
-|                                   | cover banks with too many         |
-|                                   | uncorrectable errors.             |
-+-----------------------------------+-----------------------------------+
+|                                   | cover banks with too many                                 |
+|                                   | uncorrectable errors.                                     |
++-----------------------------------+-----------------------------------------------------------+
 | ::${S}_MEM_HEALTH_REPLACE          | Device should be replaced due to  |
-|                                   | excessive uncorrectable errors.   |
-+-----------------------------------+-----------------------------------+
+|                                   | excessive uncorrectable errors.                           |
++-----------------------------------+-----------------------------------------------------------+
 
 When the health state of a memory module changes, the event
 ::${S}_EVENT_TYPE_MEM_HEALTH is triggered.
@@ -1259,21 +1259,21 @@ a topology map of connectivity.
 For each port, the API permits querying its configuration (UP/DOWN) and
 its health which can take one of the following values:
 
-+-----------------------------------+-----------------------------------+
-| Fabric port health                | Description                       |
-+===================================+===================================+
++-----------------------------------+-------------------------------------------------------------------+
+| Fabric port health                | Description                                                       |
++===================================+===================================================================+
 | ::${S}_FABRIC_PORT_STATUS_GREEN    | The port is up and operating as   |
-|                                   | expected.                         |
-+-----------------------------------+-----------------------------------+
+|                                   | expected.                                                         |
++-----------------------------------+-------------------------------------------------------------------+
 | ::${S}_FABRIC_PORT_STATUS_YELLOW   | The port is up but has quality    |
-|                                   | and/or bandwidth degradation.     |
-+-----------------------------------+-----------------------------------+
+|                                   | and/or bandwidth degradation.                                     |
++-----------------------------------+-------------------------------------------------------------------+
 | ::${S}_FABRIC_PORT_STATUS_RED      | Port connection instabilities are |
-|                                   | preventing workloads making       |
-|                                   | forward progress.                 |
-+-----------------------------------+-----------------------------------+
+|                                   | preventing workloads making                                       |
+|                                   | forward progress.                                                 |
++-----------------------------------+-------------------------------------------------------------------+
 | ::${S}_FABRIC_PORT_STATUS_BLACK    | The port is configured down.      |
-+-----------------------------------+-----------------------------------+
++-----------------------------------+-------------------------------------------------------------------+
 
 If the port is in a yellow state, the API provides additional
 information about the types of quality degradation that are being
@@ -1400,20 +1400,20 @@ Querying temperature
 A device has multiple temperature sensors embedded at different
 locations. The following locations are supported:
 
-+-----------------------------------+-----------------------------------+
-| Temperature sensor location       | Description                       |
-+===================================+===================================+
++-----------------------------------+-------------------------------------------------------------+
+| Temperature sensor location       | Description                                                 |
++===================================+=============================================================+
 | ::${S}_TEMP_SENSORS_GLOBAL         | Returns the maximum measured      |
-|                                   | across all sensors in the device. |
-+-----------------------------------+-----------------------------------+
+|                                   | across all sensors in the device.                           |
++-----------------------------------+-------------------------------------------------------------+
 | ::${S}_TEMP_SENSORS_GPU            | Returns the maximum measured      |
-|                                   | across all sensors in the GPU     |
-|                                   | accelerator.                      |
-+-----------------------------------+-----------------------------------+
+|                                   | across all sensors in the GPU                               |
+|                                   | accelerator.                                                |
++-----------------------------------+-------------------------------------------------------------+
 | ::${S}_TEMP_SENSORS_MEMORY         | Returns the maximum measured      |
-|                                   | across all sensors in the device  |
-|                                   | memory.                           |
-+-----------------------------------+-----------------------------------+
+|                                   | across all sensors in the device                            |
+|                                   | memory.                                                     |
++-----------------------------------+-------------------------------------------------------------+
 
 For some sensors, it is possible to request that events be triggered
 when temperatures cross thresholds. This is accomplished using the
@@ -1460,30 +1460,30 @@ temperature events:
 
 The following function can be used to manage temperature sensors:
 
-+-------------------------------------------+-----------------------------------+
-| Function                                  | Description                       |
-+===========================================+===================================+
-| ::${s}DeviceEnumTemperatureSensors() | Enumerate the temperature sensors |
-|                                           | on the device.                    |
-+-------------------------------------------+-----------------------------------+
-| ::${s}TemperatureGetProperties()     | Get static properties for a       |
-|                                           | temperature sensor. In            |
-|                                           | particular, this will indicate    |
-|                                           | which parts of the device the     |
-|                                           | sensor measures (one of           |
++-------------------------------------------+-----------------------------------------+
+| Function                                  | Description                             |
++===========================================+=========================================+
+| ::${s}DeviceEnumTemperatureSensors() | Enumerate the temperature sensors       |
+|                                           | on the device.                          |
++-------------------------------------------+-----------------------------------------+
+| ::${s}TemperatureGetProperties()     | Get static properties for a             |
+|                                           | temperature sensor. In                  |
+|                                           | particular, this will indicate          |
+|                                           | which parts of the device the           |
+|                                           | sensor measures (one of                 |
 |                                           | ::${s}_temp_sensors_t).            |
-+-------------------------------------------+-----------------------------------+
-| ::${s}TemperatureGetConfig()         | Get information about the current |
-|                                           | temperature thresholds -          |
-|                                           | enabled/threshold/processID.      |
-+-------------------------------------------+-----------------------------------+
-| ::${s}TemperatureSetConfig()         | Set new temperature thresholds.   |
-|                                           | Events will be triggered when the |
-|                                           | temperature crosses these         |
-|                                           | thresholds.                       |
-+-------------------------------------------+-----------------------------------+
-| ::${s}TemperatureGetState()          | Read the temperature of a sensor. |
-+-------------------------------------------+-----------------------------------+
++-------------------------------------------+-----------------------------------------+
+| ::${s}TemperatureGetConfig()         | Get information about the current       |
+|                                           | temperature thresholds -                |
+|                                           | enabled/threshold/processID.            |
++-------------------------------------------+-----------------------------------------+
+| ::${s}TemperatureSetConfig()         | Set new temperature thresholds.         |
+|                                           | Events will be triggered when the       |
+|                                           | temperature crosses these               |
+|                                           | thresholds.                             |
++-------------------------------------------+-----------------------------------------+
+| ::${s}TemperatureGetState()          | Read the temperature of a sensor.       |
++-------------------------------------------+-----------------------------------------+
 
 .. _PSU:
 
@@ -1629,20 +1629,20 @@ and provide redundancy where permanent damage has occurred.
 If a device supports RAS, it maintains counters for hardware and software
 errors. There are two types of errors and they are defined in ::${s}_ras_error_type_t:
 
-+------------------------------------+-----------------------------------+
-| Error Type                         | Description                       |
-+====================================+===================================+
++------------------------------------+---------------------------------------------------------------+
+| Error Type                         | Description                                                   |
++====================================+===============================================================+
 | ::${S}_RAS_ERROR_TYPE_UNCORRECTABLE | Hardware errors occurred which    |
-|                                    | most likely resulted in loss of   |
-|                                    | data or even a device hang. If an |
-|                                    | error results in device lockup, a |
-|                                    | warm boot is required before      |
-|                                    | those errors will be reported.    |
-+------------------------------------+-----------------------------------+
+|                                    | most likely resulted in loss of                               |
+|                                    | data or even a device hang. If an                             |
+|                                    | error results in device lockup, a                             |
+|                                    | warm boot is required before                                  |
+|                                    | those errors will be reported.                                |
++------------------------------------+---------------------------------------------------------------+
 | ::${S}_RAS_ERROR_TYPE_CORRECTABLE   | These are errors that were        |
-|                                    | corrected by the hardware and did |
-|                                    | not cause data corruption.        |
-+------------------------------------+-----------------------------------+
+|                                    | corrected by the hardware and did                             |
+|                                    | not cause data corruption.                                    |
++------------------------------------+---------------------------------------------------------------+
 
 Software can use the function ::${s}RasGetProperties() to find out
 if the device supports RAS and if it is enabled. This information is
@@ -1668,82 +1668,81 @@ database for historical analysis.
 ::${s}RasGetState() returns a breakdown of errors by category
 in the structure ::${s}_ras_state_t. The table below describes the categories:
 
-+------------------------------------------------+----------------------------------+------------------------------------+
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
 | Error category                                 | ::${S}_RAS_ERROR_TYPE_CORRECTABLE | ::${S}_RAS_ERROR_TYPE_UNCORRECTABLE |
-|                                                |                                  |                                    |
-+================================================+==================================+====================================+
-| ::${s}_ras_state_t.numResets              | Always zero.                     | Number of device resets that have  |
-|                                                |                                  | taken place.                       |
-+------------------------------------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_state_t.numProgrammingErrors   | Always zero.                     | Number of hardware                 |
-|                                                |                                  | exceptions generated               |
-|                                                |                                  | by the way workloads               |
-|                                                |                                  | have programmed the                |
-|                                                |                                  | hardware.                          |
-+------------------------------------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_state_t.numDriverErrors        | Always zero.                     | Number of low level                |
-|                                                |                                  | driver communication               |
-|                                                |                                  | errors have occurred.              |
-+------------------------------------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_state_t.numComputeErrors       | Number of errors that            | Number of errors that              |
-|                                                | have occurred in the             | have occurred in the               |
-|                                                | accelerator hardware             | accelerator hardware               |
-|                                                | that were corrected.             | that were not                      |
-|                                                |                                  | corrected. These                   |
-|                                                |                                  | would have caused the              |
-|                                                |                                  | hardware to hang and               |
-|                                                |                                  | the driver to reset.               |
-+------------------------------------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_state_t.numNonComputeErrors    | Number of errors                 | Number of errors                   |
-|                                                | occurring in                     | occurring in the                   |
-|                                                | fixed-function                   | fixed-function                     |
-|                                                | accelerator hardware             | accelerator hardware               |
-|                                                | that were corrected.             | there could not be                 |
-|                                                |                                  | corrected. Typically               |
-|                                                |                                  | these will result in               |
-|                                                |                                  | a PCI bus reset and                |
-|                                                |                                  | driver reset.                      |
-+------------------------------------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_state_t.numCacheErrors         | Number of ECC                    | Number of ECC                      |
-|                                                | correctable errors               | uncorrectable errors               |
-|                                                | that have occurred in            | that have occurred in              |
-|                                                | the on-chip caches               | the on-chip caches                 |
-|                                                | (caches/register                 | (caches/register                   |
-|                                                | file/shared local                | file/shared local                  |
-|                                                | memory).                         | memory). These would               |
-|                                                |                                  | have caused the                    |
-|                                                |                                  | hardware to hang and               |
-|                                                |                                  | the driver to reset.               |
-+------------------------------------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_state_t.numMemoryErrors        | Number of times the              | Number of times the                |
-|                                                | device memory has                | device memory has                  |
-|                                                | transitioned from a              | transitioned from a                |
-|                                                | healthy state to a               | healthy/degraded                   |
-|                                                | degraded state.                  | state to a                         |
-|                                                | Degraded state occurs            | critical/replace                   |
-|                                                | when the number of               | state.                             |
-|                                                | correctable errors               |                                    |
-|                                                | cross a threshold.               |                                    |
-+------------------------------------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_state_t.numPciErrors           | controllerNumber of              | Number of PCI bus                  |
-|                                                | PCI packet replays               | resets.                            |
-|                                                | that have occurred.              |                                    |
-+------------------------------------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_state_t.numFabricErrors        | Number of times one              | Number of times one                |
-|                                                | or more ports have               | or more ports have                 |
-|                                                | transitioned from a              | transitioned from a                |
-|                                                | green status to a                | green/yellow status                |
-|                                                | yellow status. This              | to a red status. This              |
-|                                                | indicates that links             | indicates that links               |
-|                                                | are experiencing                 | are experiencing                   |
-|                                                | quality degradation.             | connectivity                       |
-|                                                |                                  | statibility issues.                |
-+------------------------------------------------+----------------------------------+------------------------------------+
-| ::${s}_ras_state_t.numDisplayErrors       | Number of ECC                    | Number of ECC                      |
-|                                                | correctable errors               | uncorrectable errors               |
-|                                                | that have occurred in            | that have occurred in              |
-|                                                | the display.                     | the display.                       |
-+------------------------------------------------+----------------------------------+------------------------------------+
++================================================+==============================================================+================================================================+
+| ::${s}_ras_state_t.numResets              | Always zero.                                                 | Number of device resets that have                              |
+|                                                |                                                              | taken place.                                                   |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ::${s}_ras_state_t.numProgrammingErrors   | Always zero.                                                 | Number of hardware                                             |
+|                                                |                                                              | exceptions generated                                           |
+|                                                |                                                              | by the way workloads                                           |
+|                                                |                                                              | have programmed the                                            |
+|                                                |                                                              | hardware.                                                      |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ::${s}_ras_state_t.numDriverErrors        | Always zero.                                                 | Number of low level                                            |
+|                                                |                                                              | driver communication                                           |
+|                                                |                                                              | errors have occurred.                                          |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ::${s}_ras_state_t.numComputeErrors       | Number of errors that                                        | Number of errors that                                          |
+|                                                | have occurred in the                                         | have occurred in the                                           |
+|                                                | accelerator hardware                                         | accelerator hardware                                           |
+|                                                | that were corrected.                                         | that were not                                                  |
+|                                                |                                                              | corrected. These                                               |
+|                                                |                                                              | would have caused the                                          |
+|                                                |                                                              | hardware to hang and                                           |
+|                                                |                                                              | the driver to reset.                                           |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ::${s}_ras_state_t.numNonComputeErrors    | Number of errors                                             | Number of errors                                               |
+|                                                | occurring in                                                 | occurring in the                                               |
+|                                                | fixed-function                                               | fixed-function                                                 |
+|                                                | accelerator hardware                                         | accelerator hardware                                           |
+|                                                | that were corrected.                                         | there could not be                                             |
+|                                                |                                                              | corrected. Typically                                           |
+|                                                |                                                              | these will result in                                           |
+|                                                |                                                              | a PCI bus reset and                                            |
+|                                                |                                                              | driver reset.                                                  |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ::${s}_ras_state_t.numCacheErrors         | Number of ECC                                                | Number of ECC                                                  |
+|                                                | correctable errors                                           | uncorrectable errors                                           |
+|                                                | that have occurred in                                        | that have occurred in                                          |
+|                                                | the on-chip caches                                           | the on-chip caches                                             |
+|                                                | (caches/register                                             | (caches/register                                               |
+|                                                | file/shared local                                            | file/shared local                                              |
+|                                                | memory).                                                     | memory). These would                                           |
+|                                                |                                                              | have caused the                                                |
+|                                                |                                                              | hardware to hang and                                           |
+|                                                |                                                              | the driver to reset.                                           |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ::${s}_ras_state_t.numMemoryErrors        | Number of times the                                          | Number of times the                                            |
+|                                                | device memory has                                            | device memory has                                              |
+|                                                | transitioned from a                                          | transitioned from a                                            |
+|                                                | healthy state to a                                           | healthy/degraded                                               |
+|                                                | degraded state.                                              | state to a                                                     |
+|                                                | Degraded state occurs                                        | critical/replace                                               |
+|                                                | when the number of                                           | state.                                                         |
+|                                                | correctable errors                                           |                                                                |
+|                                                | cross a threshold.                                           |                                                                |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ::${s}_ras_state_t.numPciErrors           | controllerNumber of                                          | Number of PCI bus                                              |
+|                                                | PCI packet replays                                           | resets.                                                        |
+|                                                | that have occurred.                                          |                                                                |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ::${s}_ras_state_t.numFabricErrors        | Number of times one                                          | Number of times one                                            |
+|                                                | or more ports have                                           | or more ports have                                             |
+|                                                | transitioned from a                                          | transitioned from a                                            |
+|                                                | green status to a                                            | green/yellow status                                            |
+|                                                | yellow status. This                                          | to a red status. This                                          |
+|                                                | indicates that links                                         | indicates that links                                           |
+|                                                | are experiencing                                             | are experiencing                                               |
+|                                                | quality degradation.                                         | connectivity                                                   |
+|                                                |                                                              | statibility issues.                                            |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ::${s}_ras_state_t.numDisplayErrors       | Number of ECC                                                | Number of ECC                                                  |
+|                                                | correctable errors                                           | uncorrectable errors                                           |
+|                                                | that have occurred in                                        | that have occurred in                                          |
+|                                                | the display.                                                 | the display.                                                   |
++------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
 
 Each RAS error type can trigger events when the error counters exceed
 thresholds. The events are listed in the table below. Software can use

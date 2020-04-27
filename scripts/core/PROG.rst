@@ -46,7 +46,7 @@ The following pseudo-code demonstrates a basic initialization and device discove
 .. parsed-literal::
 
        // Initialize the driver
-       ::${x}Init(${X}_INIT_FLAG_NONE);
+       ::${x}Init(::${X}_INIT_FLAG_NONE);
 
        // Discover all the driver instances
        uint32_t driverCount = 0;
@@ -69,7 +69,7 @@ The following pseudo-code demonstrates a basic initialization and device discove
                ${x}_device_properties_t device_properties;
                ::${x}DeviceGetProperties(allDevices[d], &device_properties);
        
-               if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
+               if(::${X}_DEVICE_TYPE_GPU == device_properties.type) {
                    hDriver = allDrivers[i];
                    hDevice = allDevices[d];
                    break;
@@ -233,15 +233,15 @@ these details in the API in a backwards compatible fashion.
 
        // Specify single component FLOAT32 format
        ::${x}_image_format_desc_t formatDesc = {
-           ${X}_IMAGE_FORMAT_LAYOUT_32, ${X}_IMAGE_FORMAT_TYPE_FLOAT,
-           ${X}_IMAGE_FORMAT_SWIZZLE_R, ${X}_IMAGE_FORMAT_SWIZZLE_0, ${X}_IMAGE_FORMAT_SWIZZLE_0, ${X}_IMAGE_FORMAT_SWIZZLE_1
+           ::${X}_IMAGE_FORMAT_LAYOUT_32, ::${X}_IMAGE_FORMAT_TYPE_FLOAT,
+           ::${X}_IMAGE_FORMAT_SWIZZLE_R, ::${X}_IMAGE_FORMAT_SWIZZLE_0, ::${X}_IMAGE_FORMAT_SWIZZLE_0, ::${X}_IMAGE_FORMAT_SWIZZLE_1
        };
 
        ::${x}_image_desc_t imageDesc = {
-           ${X}_STRUCTURE_TYPE_IMAGE_DESC,
+           ::${X}_STRUCTURE_TYPE_IMAGE_DESC,
            nullptr,
-           ${X}_IMAGE_FLAG_PROGRAM_READ,
-           ${X}_IMAGE_TYPE_2D,
+           ::${X}_IMAGE_FLAG_PROGRAM_READ,
+           ::${X}_IMAGE_TYPE_2D,
            formatDesc,
            128, 128, 0, 0, 0
        };
@@ -311,8 +311,8 @@ configuration:
 
        // Large SLM for Intermediate and Last Level cache.
        // Note: The intermediate cache setting is applied to each kernel. Last level is applied for the device.
-       ::${x}KernelSetIntermediateCacheConfig(hKernel, ${X}_CACHE_CONFIG_LARGE_SLM);
-       ::${x}DeviceSetLastLevelCacheConfig(hDevice, ${X}_CACHE_CONFIG_LARGE_SLM);
+       ::${x}KernelSetIntermediateCacheConfig(hKernel, ::${X}_CACHE_CONFIG_LARGE_SLM);
+       ::${x}DeviceSetLastLevelCacheConfig(hDevice, ::${X}_CACHE_CONFIG_LARGE_SLM);
        ...
 
 Command Queues and Command Lists
@@ -378,13 +378,13 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 
     // Create a command queue
     ::${x}_command_queue_desc_t commandQueueDesc = {
-        ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
+        ::${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
         nullptr,
         computeQueueGroupOrdinal,
         0,
-        ${X}_COMMAND_QUEUE_FLAG_NONE,
-        ${X}_COMMAND_QUEUE_MODE_DEFAULT,
-        ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
+        ::${X}_COMMAND_QUEUE_FLAG_NONE,
+        ::${X}_COMMAND_QUEUE_MODE_DEFAULT,
+        ::${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
         0
     };
     ${x}_command_queue_handle_t hCommandQueue;
@@ -455,10 +455,10 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 
        // Create a command list
        ::${x}_command_list_desc_t commandListDesc = {
-           ${X}_STRUCTURE_TYPE_COMMAND_LIST_DESC,
+           ::${X}_STRUCTURE_TYPE_COMMAND_LIST_DESC,
            nullptr,
            computeQueueGroupOrdinal,
-           ${X}_COMMAND_LIST_FLAG_NONE
+           ::${X}_COMMAND_LIST_FLAG_NONE
        };
        ${x}_command_list_handle_t hCommandList;
        ::${x}CommandListCreate(hDevice, &commandListDesc, &hCommandList);
@@ -527,12 +527,12 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
 
        // Create an immediate command list
        ::${x}_command_queue_desc_t commandQueueDesc = {
-           ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
+           ::${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
            nullptr,
            computeQueueGroupOrdinal,
-           ${X}_COMMAND_QUEUE_FLAG_NONE,
-           ${X}_COMMAND_QUEUE_MODE_DEFAULT,
-           ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
+           ::${X}_COMMAND_QUEUE_FLAG_NONE,
+           ::${X}_COMMAND_QUEUE_MODE_DEFAULT,
+           ::${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
            0
        };
        ${x}_command_list_handle_t hCommandList;
@@ -589,9 +589,9 @@ The following pseudo-code demonstrates a sequence for creation, submission and q
 
        // Create fence
        ::${x}_fence_desc_t fenceDesc = {
-           ${X}_STRUCTURE_TYPE_FENCE_DESC,
+           ::${X}_STRUCTURE_TYPE_FENCE_DESC,
            nullptr,
-           ${X}_FENCE_FLAG_NONE
+           ::${X}_FENCE_FLAG_NONE
        };
        ${x}_fence_handle_t hFence;
        ::${x}FenceCreate(hCommandQueue, &fenceDesc, &hFence);
@@ -653,20 +653,20 @@ The following pseudo-code demonstrates a sequence for creation and submission of
 
        // Create event pool
        ::${x}_event_pool_desc_t eventPoolDesc = {
-           ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
+           ::${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
            nullptr,
-           ${X}_EVENT_POOL_FLAG_HOST_VISIBLE, // all events in pool are visible to Host
+           ::${X}_EVENT_POOL_FLAG_HOST_VISIBLE, // all events in pool are visible to Host
            1
        };
        ${x}_event_pool_handle_t hEventPool;
        ::${x}EventPoolCreate(hDriver, &eventPoolDesc, 0, nullptr, &hEventPool);
 
        ::${x}_event_desc_t eventDesc = {
-           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           ::${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0,
-           ${X}_EVENT_SCOPE_FLAG_NONE,
-           ${X}_EVENT_SCOPE_FLAG_HOST  // ensure memory coherency across device and Host after event completes
+           ::${X}_EVENT_SCOPE_FLAG_NONE,
+           ::${X}_EVENT_SCOPE_FLAG_HOST  // ensure memory coherency across device and Host after event completes
        };
        ${x}_event_handle_t hEvent;
        ::${x}EventCreate(hEventPool, &eventDesc, &hEvent);
@@ -702,29 +702,29 @@ A kernel timestamp event is a special type of event that records device timestam
 
        // Create event pool
        ::${x}_event_pool_desc_t tsEventPoolDesc = {
-           ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
+           ::${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
            nullptr,
-           ${X}_EVENT_POOL_FLAG_KERNEL_TIMESTAMP, // all events in pool are kernel timestamps
+           ::${X}_EVENT_POOL_FLAG_KERNEL_TIMESTAMP, // all events in pool are kernel timestamps
            1
        };
        ${x}_event_pool_handle_t hTSEventPool;
        ::${x}EventPoolCreate(hDriver, &tsEventPoolDesc, 0, nullptr, &hTSEventPool);
 
        ::${x}_event_desc_t tsEventDesc = {
-           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           ::${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0,
-           ${X}_EVENT_SCOPE_FLAG_NONE,
-           ${X}_EVENT_SCOPE_FLAG_NONE
+           ::${X}_EVENT_SCOPE_FLAG_NONE,
+           ::${X}_EVENT_SCOPE_FLAG_NONE
        };
        ${x}_event_handle_t hTSEvent;
        ::${x}EventCreate(hEventPool, &tsEventDesc, &hTSEvent);
 
        // allocate memory for results
        ::${x}_device_mem_alloc_desc_t tsResultDesc = {
-           ${X}_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC,
+           ::${X}_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC,
            nullptr,
-           ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+           ::${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
            0
        };
        ::${x}_kernel_timestamp_result_t* tsResult = nullptr;
@@ -786,11 +786,11 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
 .. parsed-literal::
 
        ::${x}_event_desc_t event1Desc = {
-           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           ::${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0,
-           ${X}_EVENT_SCOPE_FLAG_NONE, // no memory/cache coherency required on signal
-           ${X}_EVENT_SCOPE_FLAG_NONE  // no memory/cache coherency required on wait
+           ::${X}_EVENT_SCOPE_FLAG_NONE, // no memory/cache coherency required on signal
+           ::${X}_EVENT_SCOPE_FLAG_NONE  // no memory/cache coherency required on wait
        };
        ${x}_event_handle_t hEvent1;
        ::${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
@@ -816,11 +816,11 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
 .. parsed-literal::
 
        ::${x}_event_desc_t event1Desc = {
-           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           ::${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0,
-           ${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signaled
-           ${X}_EVENT_SCOPE_FLAG_NONE
+           ::${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signaled
+           ::${X}_EVENT_SCOPE_FLAG_NONE
        };
        ${x}_event_handle_t hEvent1;
        ::${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
@@ -895,9 +895,9 @@ The following pseudo-code demonstrates a sequence for creating a module from an 
 
        // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
        ::${x}_module_desc_t moduleDesc = {
-           ${X}_STRUCTURE_TYPE_MODULE_DESC,
+           ::${X}_STRUCTURE_TYPE_MODULE_DESC,
            nullptr,
-           ${X}_MODULE_FORMAT_IL_SPIRV,
+           ::${X}_MODULE_FORMAT_IL_SPIRV,
            ilSize,
            pImageScalingIL,
            nullptr,
@@ -942,9 +942,9 @@ corresponding identifiers to be passed in to override the constants in the SPIR-
        };
        // OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)
        ::${x}_module_desc_t moduleDesc = {
-           ${X}_STRUCTURE_TYPE_MODULE_DESC,
+           ::${X}_STRUCTURE_TYPE_MODULE_DESC,
            nullptr,
-           ${X}_MODULE_FORMAT_IL_SPIRV,
+           ::${X}_MODULE_FORMAT_IL_SPIRV,
            ilSize,
            pImageScalingIL,
            nullptr,
@@ -969,7 +969,7 @@ The ::${x}ModuleCreate function can optionally generate a build log object ::${x
        ${x}_result_t result = ::${x}ModuleCreate(hDevice, &desc, &module, &buildlog);
 
        // Only save build logs for module creation errors.
-       if (result != ${X}_RESULT_SUCCESS)
+       if (result != ::${X}_RESULT_SUCCESS)
        {
            size_t szLog = 0;
            ::${x}ModuleBuildLogGetString(buildlog, &szLog, nullptr);
@@ -1033,9 +1033,9 @@ The following pseudo-code demonstrates a sequence for creating a kernel from a m
 .. parsed-literal::
 
        ::${x}_kernel_desc_t kernelDesc = {
-           ${X}_STRUCTURE_TYPE_KERNEL_DESC,
+           ::${X}_STRUCTURE_TYPE_KERNEL_DESC,
            nullptr,
-           ${X}_KERNEL_FLAG_NONE,
+           ::${X}_KERNEL_FLAG_NONE,
            "image_scaling"
        };
        ${x}_kernel_handle_t hKernel;
@@ -1051,7 +1051,7 @@ Use ::${x}KernelSetAttribute to set attributes for a kernel object.
 
     // Kernel performs indirect device access.
     bool_t isIndirect = true;
-    ::${x}KernelSetAttribute(hKernel, ${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
+    ::${x}KernelSetAttribute(hKernel, ::${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
     ...
 
 Use ::${x}KernelSetAttribute to get attributes for a kernel object.
@@ -1059,13 +1059,13 @@ Use ::${x}KernelSetAttribute to get attributes for a kernel object.
 .. parsed-literal::
 
     // Does kernel perform indirect device access.
-    ::${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
+    ::${x}KernelGetAttribute(hKernel, ::${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
     ...
     
     uint32_t strSize = 0; // Size of string + null terminator
-    ::${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, nullptr );
+    ::${x}KernelGetAttribute(hKernel, ::${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, nullptr );
     char* pAttributes = allocate(strSize);
-    ::${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, pAttributes );
+    ::${x}KernelGetAttribute(hKernel, ::${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, pAttributes );
     ...
 
 See ::${x}_kernel_attribute_t for more information on the "set" and "get" attributes.
@@ -1198,21 +1198,21 @@ Sampler
 The API supports Sampler objects that represent state needed for sampling images from within
 kernels. The ::${x}SamplerCreate function takes a sampler descriptor (::${x}_sampler_desc_t):
 
-+-----------------------------------+-----------------------------------+
-| Sampler Field                     | Description                       |
-+===================================+===================================+
-| Address Mode                      | Determines how out-of-bounds      |
-|                                   | accessse are handled. See         |
++-----------------------------------+-----------------------------------------+
+| Sampler Field                     | Description                             |
++===================================+=========================================+
+| Address Mode                      | Determines how out-of-bounds            |
+|                                   | accessse are handled. See               |
 |                                   | ::${x}_sampler_address_mode_t.      |
-+-----------------------------------+-----------------------------------+
-| Filter Mode                       | Specifies which filtering mode to |
-|                                   | use. See                          |
-|                                   | ::${x}_sampler_filter_mode_t        |
-+-----------------------------------+-----------------------------------+
-| Normalized                        | Specifies whether coordinates for |
-|                                   | addressing image are normalized   |
-|                                   | [0,1] or not.                     |
-+-----------------------------------+-----------------------------------+
++-----------------------------------+-----------------------------------------+
+| Filter Mode                       | Specifies which filtering mode to       |
+|                                   | use. See                                |
+|                                   | ::${x}_sampler_filter_mode_t.       |
++-----------------------------------+-----------------------------------------+
+| Normalized                        | Specifies whether coordinates for       |
+|                                   | addressing image are normalized         |
+|                                   | [0,1] or not.                           |
++-----------------------------------+-----------------------------------------+
 
 The following is sample for code creating a sampler object and passing it as a kernel argument:
 
@@ -1220,10 +1220,10 @@ The following is sample for code creating a sampler object and passing it as a k
 
        // Setup sampler for linear filtering and clamp out of bounds accesses to edge.
        ::${x}_sampler_desc_t desc = {
-           ${X}_STRUCTURE_TYPE_SAMPLER_DESC,
+           ::${X}_STRUCTURE_TYPE_SAMPLER_DESC,
            nullptr,
-           ${X}_SAMPLER_ADDRESS_MODE_CLAMP,
-           ${X}_SAMPLER_FILTER_MODE_LINEAR,
+           ::${X}_SAMPLER_ADDRESS_MODE_CLAMP,
+           ::${X}_SAMPLER_FILTER_MODE_LINEAR,
            false
            };
        ${x}_sampler_handle_t sampler;
@@ -1372,8 +1372,8 @@ as multiple levels of indirection, there are two methods available:
 
 1. The application may set the ::${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 
-       + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_attribute_t (${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, DEVICE_ACCESS, or SHARED_ACCESS).
-       + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueExecuteCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+       + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_attribute_t (::${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, DEVICE_ACCESS, or SHARED_ACCESS).
+       + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueExecuteCommandLists will return ::${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
 2. Explcit ::${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
 
@@ -1395,7 +1395,7 @@ The following pseudo-code demonstrate a sequence for using coarse-grain residenc
 
        // 'begin' is passed as kernel argument and appended into command list
        bool hasIndirectHostAccess = true;
-       ::${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, sizeof(bool), &hasIndirectHostAccess);
+       ::${x}KernelSetAttribute(hFuncArgs, ::${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, sizeof(bool), &hasIndirectHostAccess);
        ::${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
        ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
@@ -1542,7 +1542,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
        hIPC = receive_from_sending_process();
 
        void* dptr = nullptr;
-       ::${x}DriverOpenMemIpcHandle(hDriver, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
+       ::${x}DriverOpenMemIpcHandle(hDriver, hDevice, hIPC, ::${X}_IPC_MEMORY_FLAG_NONE, &dptr);
 
 3. Each process may now refer to the same device memory allocation via its ``dptr``.
    Note, there is no guaranteed address equivalence for the values of ``dptr`` in each process.
@@ -1572,9 +1572,9 @@ The following code examples demonstrate how to use the event IPC APIs:
 
        // create event pool
        ::${x}_event_pool_desc_t eventPoolDesc = {
-           ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
+           ::${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
            nullptr,
-           ${X}_EVENT_POOL_FLAG_IPC | ${X}_EVENT_POOL_FLAG_HOST_VISIBLE,
+           ::${X}_EVENT_POOL_FLAG_IPC | ::${X}_EVENT_POOL_FLAG_HOST_VISIBLE,
            10
        };
        ${x}_event_pool_handle_t hEventPool;
@@ -1605,11 +1605,11 @@ The following code examples demonstrate how to use the event IPC APIs:
 
        ${x}_event_handle_t hEvent;
        ::${x}_event_desc_t eventDesc = {
-           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           ::${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            5,
-           ${X}_EVENT_SCOPE_FLAG_NONE,
-           ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
+           ::${X}_EVENT_SCOPE_FLAG_NONE,
+           ::${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
        ::${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
@@ -1624,11 +1624,11 @@ The following code examples demonstrate how to use the event IPC APIs:
 
        ${x}_event_handle_t hEvent;
        ::${x}_event_desc_t eventDesc = {
-           ${X}_STRUCTURE_TYPE_EVENT_DESC,
+           ::${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            5,
-           ${X}_EVENT_SCOPE_FLAG_NONE,
-           ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
+           ::${X}_EVENT_SCOPE_FLAG_NONE,
+           ::${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
        ::${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 

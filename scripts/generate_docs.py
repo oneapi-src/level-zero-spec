@@ -42,6 +42,43 @@ def _find_symbol_type(name, meta):
     return None
 
 """
+    fix up tag for template (e.g. $x to ${x})
+"""
+def _fixup_tag(name):
+    return re.sub(r"\$(?P<tag>\w)", r"${\g<tag>}", name)
+
+"""
+    find the enum type name for a given enumerator
+"""
+def _find_enum_from_etor(etor, meta):
+    for name in meta['enum']:
+        if etor in meta['enum'][name]['types']:
+            return _fixup_tag(name)
+
+    return None
+
+"""
+    make restructedtext reference from symbol.
+"""
+def _make_ref(symbol, symbol_type, meta):
+    if not re.match(r"function|struct|union|enum|etor", symbol_type):
+        return ""
+
+    ref = _fixup_tag(symbol)
+    if re.match("etor", symbol_type):
+        target = _find_enum_from_etor(symbol, meta)
+        if target:
+            ref = ":ref:`" + ref + " <" + target.replace("_", "-") + ">`"
+        else:
+            print("%s(%s) : error : enum symbol not found for etor %s"%(fin, iline+1, symbol))
+    elif not re.match("function", symbol_type):
+        ref = ":ref:`" + ref.replace("_", "-") + "`"
+    else:
+        ref = ":ref:`" + ref + "`"
+
+    return ref
+
+"""
     generate a valid reStructuredText file
 """
 def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
@@ -80,11 +117,8 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
                     if not symbol_type:
                         print("%s(%s) : error : symbol '%s' not found"%(fin, iline+1, symbol))
 
-                    if re.match(r"struct|union|function", symbol_type):
-                        refword = word
-                        if re.match(r"struct|union", symbol_type):
-                            refword = refword.replace("_", "-")
-                        ref = ":ref:`" + refword + "`"
+                    ref = _make_ref(symbol, symbol_type, meta)
+                    if ref:
                         if not re.match(r'\s', line.partition("::" + word)[2]):
                             # need to add escape character after references that are not followed by whitespace in RST.
                             line = line.replace("::" + word, ref + "\\")
