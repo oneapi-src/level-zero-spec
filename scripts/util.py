@@ -71,7 +71,7 @@ def removeFile(lst):
 """
 def findFiles(path, pattern):
     try:
-        return glob.glob(os.path.join(path, pattern))
+        return sorted(glob.glob(os.path.join(path, pattern)))
     except:
         print("warning: unable to find %s"%path)
         return []
