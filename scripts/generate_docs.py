@@ -116,6 +116,16 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
                     symbol_type = _find_symbol_type(symbol, meta)
                     if not symbol_type:
                         print("%s(%s) : error : symbol '%s' not found"%(fin, iline+1, symbol))
+                        continue
+
+                    if code_block and 'function' == symbol_type:
+                        words = re.sub(RE_EXTRACT_PARAMS, r"\1", line)
+                        words = line.split(",")
+                        if len(words) != len(meta['function'][symbol]['types']):
+                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, len(words), len(meta['function'][symbol]['types'])))
+                            print("line = %s"%line)
+                            for word in words:
+                                print("word = %s"%word)
 
                     ref = _make_ref(symbol, symbol_type, meta)
                     if ref:
@@ -125,11 +135,6 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
                         else:
                             line = line.replace("::" + word, ref)
                         link_found = True
-
-                    if code_block and 'function' == symbol_type:
-                        words = re.sub(RE_EXTRACT_PARAMS, r"\1", line).split(",")
-                        if len(words) != len(meta['function'][symbol]['types']):
-                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, len(words), len(meta['function'][symbol]['types'])))
 
             if not code_block and not link_found:
                  if not re.match(RE_DOXY_LINK, line):

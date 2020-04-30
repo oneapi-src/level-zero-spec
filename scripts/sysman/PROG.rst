@@ -55,7 +55,7 @@ system and create Sysman handles for them:
 .. parsed-literal::
 
    function main( ... )
-       if (${x}Init(${X}_INIT_FLAG_NONE) != ${X}_RESULT_SUCCESS)
+       if (::${x}Init(::${X}_INIT_FLAG_NONE) != ::${X}_RESULT_SUCCESS)
            output("Can't initialize the API")
        else
            # Discover all the drivers
@@ -77,7 +77,7 @@ system and create Sysman handles for them:
                for(devIndex = 0 .. deviceCount-1)
                    ::${x}_device_properties_t device_properties
                    ::${x}DeviceGetProperties(allDevices[devIndex], &device_properties)
-                   if(${X}_DEVICE_TYPE_GPU != device_properties.type)
+                   if(::${X}_DEVICE_TYPE_GPU != device_properties.type)
                        next
                    # Get the Sysman device handle
                    ${s}_device_handle_t hSysmanDevice = (${s}_device_handle_t)allDevices[devIndex]
@@ -315,17 +315,17 @@ supported:
 
    function FixGpuFrequency(${s}_device_handle_t hSysmanDevice, double FreqMHz)
        uint32_t numFreqDomains
-       if ((::${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, NULL) == ${X}_RESULT_SUCCESS))
+       if ((::${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, NULL) == ::${X}_RESULT_SUCCESS))
            ${s}_freq_handle_t* pFreqHandles =
                allocate_memory(numFreqDomains * sizeof(${s}_freq_handle_t))
-           if (::${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, pFreqHandles) == ::${X}_RESULT_SUCCESS)
                for (index = 0 .. numFreqDomains-1)
                    ::${s}_freq_properties_t props
-                   if (::${s}FrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
+                   if (::${s}FrequencyGetProperties(pFreqHandles[index], &props) == ::${X}_RESULT_SUCCESS)
                        # Only change the frequency of the domain if:
                        # 1. The domain controls a GPU accelerator
                        # 2. The domain frequency can be changed
-                       if (props.type == ${S}_FREQ_DOMAIN_GPU
+                       if (props.type == ::${S}_FREQ_DOMAIN_GPU
                            and props.canControl)
                                # Fix the frequency
                                ::${s}_freq_range_t range
@@ -357,18 +357,18 @@ sub-device (notice the additional sub-device check):
 
    function FixSubdeviceGpuFrequency(${s}_device_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
        uint32_t numFreqDomains
-       if ((::${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, NULL) == ${X}_RESULT_SUCCESS))
+       if ((::${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, NULL) == ::${X}_RESULT_SUCCESS))
            ${s}_freq_handle_t* pFreqHandles =
                allocate_memory(numFreqDomains * sizeof(${s}_freq_handle_t))
-           if (::${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, pFreqHandles) == ::${X}_RESULT_SUCCESS)
                for (index = 0 .. numFreqDomains-1)
                    ::${s}_freq_properties_t props
-                   if (::${s}FrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
+                   if (::${s}FrequencyGetProperties(pFreqHandles[index], &props) == ::${X}_RESULT_SUCCESS)
                        # Only change the frequency of the domain if:
                        # 1. The domain controls a GPU accelerator
                        # 2. The domain frequency can be changed
                        # 3. The domain is located in the specified sub-device
-                       if (props.type == ${S}_FREQ_DOMAIN_GPU
+                       if (props.type == ::${S}_FREQ_DOMAIN_GPU
                            and props.canControl
                            and props.subdeviceId == subdeviceId)
                                # Fix the frequency
@@ -435,19 +435,19 @@ device:
   function ShowDeviceInfo(${s}_device_handle_t hSysmanDevice)
       ::${s}_device_properties_t devProps
       ::${s}_device_state_t devState
-      if (::${s}DeviceGetProperties(hSysmanDevice, &devProps) == ${X}_RESULT_SUCCESS)
+      if (::${s}DeviceGetProperties(hSysmanDevice, &devProps) == ::${X}_RESULT_SUCCESS)
           output("    UUID:           %s", devProps.core.uuid.id)
           output("    #subdevices:    %u", devProps.numSubdevices)
           output("    brand:          %s", devProps.brandName)
           output("    model:          %s", devProps.modelName)
-      if (::${s}DeviceGetState(hSysmanDevice, &devState) == ${X}_RESULT_SUCCESS)
-          output("    Was repaired:   %s", (devState.repaired == ${S}_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
-          if (devState.reset != ${S}_RESET_REASONS_NONE)
+      if (::${s}DeviceGetState(hSysmanDevice, &devState) == ::${X}_RESULT_SUCCESS)
+          output("    Was repaired:   %s", (devState.repaired == ::${S}_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
+          if (devState.reset != ::${S}_RESET_REASONS_NONE)
         {
             output("DEVICE RESET REQUIRED:")
-            if (devState.reset & ${S}_RESET_REASONS_WEDGED)
+            if (devState.reset & ::${S}_RESET_REASONS_WEDGED)
                 output("- Hardware is wedged")
-            if (devState.reset & ${S}_RESET_REASONS_REPAIR)
+            if (devState.reset & ::${S}_RESET_REASONS_REPAIR)
                 output("- Hardware needs to complete repairs")
         }
     }
@@ -592,31 +592,31 @@ while permitting other work to attempt to run:
 
    function DisableSchedulerWatchdog(${s}_device_handle_t hSysmanDevice)
        uint32_t numSched
-       if ((::${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, NULL) == ${X}_RESULT_SUCCESS))
+       if ((::${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, NULL) == ::${X}_RESULT_SUCCESS))
            ${s}_sched_handle_t* pSchedHandles =
                allocate_memory(numSched * sizeof(${s}_sched_handle_t))
-           if (::${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, pSchedHandles) == ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, pSchedHandles) == ::${X}_RESULT_SUCCESS)
                for (index = 0 .. numSched-1)
-                   ${x}_result_t res
+                   ::${x}_result_t res
                    ${s}_sched_mode_t currentMode
                    res = ::${s}SchedulerGetCurrentMode(pSchedHandles[index], &currentMode)
-                   if (res == ${X}_RESULT_SUCCESS)
-                       ${x}_bool_t requireReload
+                   if (res == ::${X}_RESULT_SUCCESS)
+                       ::${x}_bool_t requireReload
                        ::${s}_sched_timeout_properties_t props
-                       props.watchdogTimeout = ${S}_SCHED_WATCHDOG_DISABLE
+                       props.watchdogTimeout = ::${S}_SCHED_WATCHDOG_DISABLE
                        res = ::${s}SchedulerSetTimeoutMode(pSchedHandles[index], &props, &requireReload)
-                       if (res == ${X}_RESULT_SUCCESS)
+                       if (res == ::${X}_RESULT_SUCCESS)
                            if (requireReload)
                                output("WARNING: Reload the driver to complete desired configuration.")
                            else
                                output("Schedule mode changed successfully.")
-                       else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
+                       else if(res == ::${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
                            output("ERROR: The timeout scheduler mode is not supported on this device.")
-                       else if(res == ${X}_RESULT_ERROR_INSUFFICIENT_PERMISSIONS)
+                       else if(res == ::${X}_RESULT_ERROR_INSUFFICIENT_PERMISSIONS)
                            output("ERROR: Don't have permissions to change the scheduler mode.")
                        else
                            output("ERROR: Problem calling the API to change the scheduler mode.")
-                   else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
+                   else if(res == ::${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
                        output("ERROR: Scheduler modes are not supported on this device.")
                    else
                        output("ERROR: Problem calling the API.")
@@ -663,7 +663,7 @@ The pseudo code below shows how to output the PCI BDF address:
 
    function ShowPciInfo(${s}_device_handle_t hSysmanDevice)
        ::${s}_pci_properties_t pciProps;
-       if (::${s}DevicePciGetProperties(hSysmanDevice, &pciProps) == ${X}_RESULT_SUCCESS)
+       if (::${s}DevicePciGetProperties(hSysmanDevice, &pciProps) == ::${X}_RESULT_SUCCESS)
            output("    PCI address:        %04u:%02u:%02u.%u",
                pciProps.address.domain,
                pciProps.address.bus,
@@ -807,13 +807,13 @@ domain on a device:
 
    function ShowPowerDomains(${s}_device_handle_t hSysmanDevice)
        uint32_t numPowerDomains
-       if (::${s}DeviceEnumPowerDomains(hSysmanDevice, &numPowerDomains, NULL) == ${X}_RESULT_SUCCESS)
+       if (::${s}DeviceEnumPowerDomains(hSysmanDevice, &numPowerDomains, NULL) == ::${X}_RESULT_SUCCESS)
            ${s}_pwr_handle_t* phPower =
                allocate_memory(numPowerDomains * sizeof(${s}_pwr_handle_t))
-           if (::${s}DeviceEnumPowerDomains(hSysmanDevice, &numPowerDomains, phPower) == ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumPowerDomains(hSysmanDevice, &numPowerDomains, phPower) == ::${X}_RESULT_SUCCESS)
                for (pwrIndex = 0 .. numPowerDomains-1)
                    ::${s}_power_properties_t props
-                   if (::${s}PowerGetProperties(phPower[pwrIndex], &props) == ${X}_RESULT_SUCCESS)
+                   if (::${s}PowerGetProperties(phPower[pwrIndex], &props) == ::${X}_RESULT_SUCCESS)
                        if (props.onSubdevice)
                            output("Sub-device %u power:\n", props.subdeviceId)
                            output("    Can control: %s", props.canControl ? "yes" : "no")
@@ -829,7 +829,7 @@ domain on a device:
        ::${s}_power_sustained_limit_t sustainedLimits
        ::${s}_power_burst_limit_t burstLimits
        ::${s}_power_peak_limit_t peakLimits
-       if (::${s}PowerGetLimits(hPower, &sustainedLimits, &burstLimits, &peakLimits) == ${X}_RESULT_SUCCESS)
+       if (::${s}PowerGetLimits(hPower, &sustainedLimits, &burstLimits, &peakLimits) == ::${X}_RESULT_SUCCESS)
            output("    Power limits\n")
            if (sustainedLimits.enabled)
                output("        Sustained: %.3f W %.3f sec",
@@ -850,7 +850,7 @@ the function is called regularly (say every 100ms).
 
    function ShowAveragePower(${s}_pwr_handle_t hPower, ::${s}_power_energy_counter_t* pPrevEnergyCounter)
        ::${s}_power_energy_counter_t newEnergyCounter;
-       if (::${s}PowerGetEnergyCounter(hPower, &newEnergyCounter) == ${X}_RESULT_SUCCESS)
+       if (::${s}PowerGetEnergyCounter(hPower, &newEnergyCounter) == ::${X}_RESULT_SUCCESS)
            uint64_t deltaTime = newEnergyCounter.timestamp - pPrevEnergyCounter->timestamp;
            if (deltaTime)
                output("    Average power: %.3f W", (newEnergyCounter.energy - pPrevEnergyCounter->energy) / deltaTime);
@@ -971,17 +971,6 @@ way voltage is handled when overclocking the frequency:
 |                                                        | can improve stability by avoiding              |
 |                                                        | power-supply voltage changes as the            |
 |                                                        | frequency changes.                             |
-+--------------------------------------------------------+------------------------------------------------+
-| ::${S}_OC_MODE_OVERRIDE            | In this mode, a fixed                          |
-|                                                        | user-supplied voltage is applied               |
-|                                                        | at all times, independent of the               |
-|                                                        | frequency request. This is not                 |
-|                                                        | efficient but can improve                      |
-|                                                        | stability by avoiding                          |
-|                                                        | power-supply voltage changes as                |
-|                                                        | the frequency changes. Generally,              |
-|                                                        | this mode is used in conjunction               |
-|                                                        | with a fixed frequency.                        |
 +--------------------------------------------------------+------------------------------------------------+
 
 The following functions are provided to handle overclocking:
@@ -1342,10 +1331,10 @@ the device and sub-devices:
 
    void ShowFabricPorts(${s}_device_handle_t hSysmanDevice)
        uint32_t numPorts
-       if ((::${s}DeviceEnumFabricPorts(hSysmanDevice, &numPorts, NULL) == ${X}_RESULT_SUCCESS))
+       if ((::${s}DeviceEnumFabricPorts(hSysmanDevice, &numPorts, NULL) == ::${X}_RESULT_SUCCESS))
            ${s}_fabric_port_handle_t* phPorts =
                allocate_memory(numPorts * sizeof(${s}_fabric_port_handle_t))
-           if (::${s}DeviceEnumFabricPorts(hSysmanDevice, &numPorts, phPorts) == ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumFabricPorts(hSysmanDevice, &numPorts, phPorts) == ::${X}_RESULT_SUCCESS)
                for (index = 0 .. numPorts-1)
                    # Show information about a particular port
                    output("    Port %u:\n", index)
@@ -1354,13 +1343,13 @@ the device and sub-devices:
 
    function ShowFabricPortInfo(${s}_fabric_port_handle_t hPort)
        ::${s}_fabric_port_properties_t props
-       if (::${s}FabricPortGetProperties(hPort, &props) == ${X}_RESULT_SUCCESS)
+       if (::${s}FabricPortGetProperties(hPort, &props) == ::${X}_RESULT_SUCCESS)
            ::${s}_fabric_port_state_t state
-           if (::${s}FabricPortGetState(hPort, &state) == ${X}_RESULT_SUCCESS)
+           if (::${s}FabricPortGetState(hPort, &state) == ::${X}_RESULT_SUCCESS)
                ::${s}_fabric_link_type_t link
-               if (::${s}FabricPortGetLinkType(hPort, false, &link) == ${X}_RESULT_SUCCESS)
+               if (::${s}FabricPortGetLinkType(hPort, false, &link) == ::${X}_RESULT_SUCCESS)
                    ::${s}_fabric_port_config_t config
-                   if (::${s}FabricPortGetConfig(hPort, &config) == ${X}_RESULT_SUCCESS)
+                   if (::${s}FabricPortGetConfig(hPort, &config) == ::${X}_RESULT_SUCCESS)
                        output("        Model:                 %s", props.model)
                        if (props.onSubdevice)
                            output("        On sub-device:         %u", props.subdeviceId)
@@ -1369,13 +1358,13 @@ the device and sub-devices:
                            var status
                            output("        Config:                UP")
                            switch (state.status)
-                               case ${S}_FABRIC_PORT_STATUS_GREEN:
+                               case ::${S}_FABRIC_PORT_STATUS_GREEN:
                                    status = "GREEN - The port is up and operating as expected"
-                               case ${S}_FABRIC_PORT_STATUS_YELLOW:
+                               case ::${S}_FABRIC_PORT_STATUS_YELLOW:
                                    status = "YELLOW - The port is up but has quality and/or bandwidth degradation"
-                               case ${S}_FABRIC_PORT_STATUS_RED:
+                               case ::${S}_FABRIC_PORT_STATUS_RED:
                                    status = "RED - Port connection instabilities"
-                               case ${S}_FABRIC_PORT_STATUS_BLACK:
+                               case ::${S}_FABRIC_PORT_STATUS_BLACK:
                                    status = "BLACK - The port is configured down"
                                default:
                                    status = "UNKNOWN"
@@ -1549,15 +1538,15 @@ The pseudo code below shows how to output the fan speed of all fans:
 
     function ShowFans(${s}_device_handle_t hSysmanDevice)
         uint32_t numFans
-        if (::${s}DeviceEnumFans(hSysmanDevice, &numFans, NULL) == ${X}_RESULT_SUCCESS)
+        if (::${s}DeviceEnumFans(hSysmanDevice, &numFans, NULL) == ::${X}_RESULT_SUCCESS)
             ${s}_fan_handle_t* phFans =
                 allocate_memory(numFans * sizeof(${s}_fan_handle_t))
-            if (::${s}DeviceEnumFans(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
+            if (::${s}DeviceEnumFans(hSysmanDevice, &numFans, phFans) == ::${X}_RESULT_SUCCESS)
                 output("    Fans")
                 for (fanIndex = 0 .. numFans-1)
                     uint32_t speed
-                    if (::${s}FanGetState(phFans[fanIndex], ${S}_FAN_SPEED_UNITS_RPM, &speed)
-                        == ${X}_RESULT_SUCCESS)
+                    if (::${s}FanGetState(phFans[fanIndex], ::${S}_FAN_SPEED_UNITS_RPM, &speed)
+                        == ::${X}_RESULT_SUCCESS)
                             output("        Fan %u: %u RPM", fanIndex, speed)
         free_memory(...)
     }
@@ -1570,17 +1559,17 @@ value in RPM, but only if control is permitted:
    function SetFanSpeed(${s}_device_handle_t hSysmanDevice, uint32_t SpeedRpm)
    {
        uint32_t numFans
-       if (::${s}DeviceEnumFans(hSysmanDevice, &numFans, NULL) == ${X}_RESULT_SUCCESS)
+       if (::${s}DeviceEnumFans(hSysmanDevice, &numFans, NULL) == ::${X}_RESULT_SUCCESS)
            ${s}_fan_handle_t* phFans =
                allocate_memory(numFans * sizeof(${s}_fan_handle_t))
-           if (::${s}DeviceEnumFans(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumFans(hSysmanDevice, &numFans, phFans) == ::${X}_RESULT_SUCCESS)
                ${s}_fan_config_t config
-               config.mode = ${S}_FAN_SPEED_MODE_FIXED
+               config.mode = ::${S}_FAN_SPEED_MODE_FIXED
                config.speed = SpeedRpm
-               config.speedUnits = ${S}_FAN_SPEED_UNITS_RPM
+               config.speedUnits = ::${S}_FAN_SPEED_UNITS_RPM
                for (fanIndex = 0 .. numFans-1)
                    ::${s}_fan_properties_t fanprops
-                   if (::${s}FanGetProperties(phFans[fanIndex], &fanprops) == ${X}_RESULT_SUCCESS)
+                   if (::${s}FanGetProperties(phFans[fanIndex], &fanprops) == ::${X}_RESULT_SUCCESS)
                        if (fanprops.canControl)
                            ::${s}FanSetConfig(phFans[fanIndex], &config)
                        else
@@ -1798,18 +1787,18 @@ current state of RAS errors:
 
    void ShowRasErrors(${s}_device_handle_t hSysmanDevice)
        uint32_t numRasErrorSets
-       if ((::${s}DeviceEnumRasErrorSets(hSysmanDevice, &numRasErrorSets, NULL) == ${X}_RESULT_SUCCESS))
+       if ((::${s}DeviceEnumRasErrorSets(hSysmanDevice, &numRasErrorSets, NULL) == ::${X}_RESULT_SUCCESS))
            ${s}_ras_handle_t* phRasErrorSets =
                allocate_memory(numRasErrorSets * sizeof(${s}_ras_handle_t))
-           if (::${s}DeviceEnumRasErrorSets(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumRasErrorSets(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ::${X}_RESULT_SUCCESS)
                for (rasIndex = 0 .. numRasErrorSets)
                    ::${s}_ras_properties_t props
-                   if (::${s}RasGetProperties(phRasErrorSets[rasIndex], &props) == ${X}_RESULT_SUCCESS)
+                   if (::${s}RasGetProperties(phRasErrorSets[rasIndex], &props) == ::${X}_RESULT_SUCCESS)
                        var pErrorType
                        switch (props.type)
-                           case ${S}_RAS_ERROR_TYPE_CORRECTABLE:
+                           case ::${S}_RAS_ERROR_TYPE_CORRECTABLE:
                                pErrorType = "Correctable"
-                           case ${S}_RAS_ERROR_TYPE_UNCORRECTABLE:
+                           case ::${S}_RAS_ERROR_TYPE_UNCORRECTABLE:
                                pErrorType = "Uncorrectable"
                            default:
                                pErrorType = "Unknown"
@@ -1821,7 +1810,7 @@ current state of RAS errors:
                        if (props.supported and props.enabled)
                            ${s}_ras_state_t errorDetails
                            if (::${s}RasGetState(phRasErrorSets[rasIndex], 1, &errorDetails)
-                               == ${X}_RESULT_SUCCESS)
+                               == ::${X}_RESULT_SUCCESS)
                                     uint64_t numErrors = 0
                                     for (int i = 0; i < ZES_RAS_ERROR_CAT_MAX; i++)
                                         numErrors += errorDetails.category[i];
@@ -1918,25 +1907,25 @@ tests in each:
    function ListDiagnosticTests(${s}_device_handle_t hSysmanDevice)
    {
        uint32_t numTestSuites
-       if ((::${s}DeviceEnumDiagnosticTestSuites(hSysmanDevice, &numTestSuites, NULL) == ${X}_RESULT_SUCCESS))
+       if ((::${s}DeviceEnumDiagnosticTestSuites(hSysmanDevice, &numTestSuites, NULL) == ::${X}_RESULT_SUCCESS))
            ${s}_diag_handle_t* phTestSuites =
                allocate_memory(numTestSuites * sizeof(${s}_diag_handle_t))
-           if (::${s}DeviceEnumDiagnosticTestSuites(hSysmanDevice, &numTestSuites, phTestSuites) == ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumDiagnosticTestSuites(hSysmanDevice, &numTestSuites, phTestSuites) == ::${X}_RESULT_SUCCESS)
                for (suiteIndex = 0 .. numTestSuites-1)
                    uint32_t numTests = 0
                    ::${s}_diag_test_t* pTests
                    ::${s}_diag_properties_t suiteProps
-                   if (::${s}DiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) != ${X}_RESULT_SUCCESS)
+                   if (::${s}DiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) != ::${X}_RESULT_SUCCESS)
                        next_loop(suiteIndex)
                    output("Diagnostic test suite %s:", suiteProps.name)
                    if (!suiteProps.haveTests)
                        output("    There are no individual tests that can be selected.")
                        next_loop(suiteIndex)
-                   if (::${s}DiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, NULL) != ${X}_RESULT_SUCCESS)
+                   if (::${s}DiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, NULL) != ::${X}_RESULT_SUCCESS)
                        output("    Problem getting list of individual tests.")
                        next_loop(suiteIndex)
                    pTests = allocate_memory(numTests * sizeof(::${s}_diag_test_t*))
-                   if (::${s}DiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, pTests) != ${X}_RESULT_SUCCESS)
+                   if (::${s}DiagnosticsGetTests(phTestSuites[suiteIndex], &numTests, pTests) != ::${X}_RESULT_SUCCESS)
                        output("    Problem getting list of individual tests.")
                        next_loop(suiteIndex)
                    for (i = 0 .. numTests-1)
@@ -2093,20 +2082,20 @@ when the critical temperature is reached.
            ${s}_device_handle_t hSysmanDevice = (${s}_device_handle_t)phDevices[devIndex]
 
            # Get event handle for this device
-           if (::${s}DeviceCreateEvents(hSysmanDevice, &phEvents[devIndex]) != ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceCreateEvents(hSysmanDevice, &phEvents[devIndex]) != ::${X}_RESULT_SUCCESS)
                next_loop(devIndex)
 
            # Get handles to all temperature sensors
            uint32_t numTempSensors = 0
-           if (::${s}DeviceEnumTemperatureSensors(hSysmanDevice, &numTempSensors, NULL) != ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumTemperatureSensors(hSysmanDevice, &numTempSensors, NULL) != ::${X}_RESULT_SUCCESS)
                next_loop(devIndex)
            ${s}_temp_handle_t* allTempSensors
                allocate_memory(deviceCount * sizeof(${s}_temp_handle_t))
-           if (::${s}DeviceEnumTemperatureSensors(hSysmanDevice, &numTempSensors, allTempSensors) == ${X}_RESULT_SUCCESS)
+           if (::${s}DeviceEnumTemperatureSensors(hSysmanDevice, &numTempSensors, allTempSensors) == ::${X}_RESULT_SUCCESS)
                # Configure each temperature sensor to trigger a critical event and a threshold1 event
                var numConfiguredTempSensors = 0
                for (tempIndex = 0 .. numTempSensors-1)
-                   if (::${s}TemperatureGetConfig(allTempSensors[tempIndex], &config) != ${X}_RESULT_SUCCESS)
+                   if (::${s}TemperatureGetConfig(allTempSensors[tempIndex], &config) != ::${X}_RESULT_SUCCESS)
                        next_loop(tempIndex)
                    ::${s}_temp_config_t config
                    config.enableCritical = true
@@ -2115,15 +2104,15 @@ when the critical temperature is reached.
                    config.threshold1.threshold = tempLimit
                    config.threshold2.enableHighToLow = false
                    config.threshold2.enableLowToHigh = false
-                   if (::${s}TemperatureSetConfig(allTempSensors[tempIndex], &config) == ${X}_RESULT_SUCCESS)
+                   if (::${s}TemperatureSetConfig(allTempSensors[tempIndex], &config) == ::${X}_RESULT_SUCCESS)
                        numConfiguredTempSensors++
 
            # If we configured any sensors to generate events, we can now register to receive on this device
            if (numConfiguredTempSensors)
                ::${s}_event_config_t eventConfig
                eventConfig.registered =
-                   ${S}_EVENT_TYPE_TEMP_CRITICAL | ${S}_EVENT_TYPE_TEMP_THRESHOLD1
-               if (::${s}EventSetConfig(phEvents[devIndex], &eventConfig) == ${X}_RESULT_SUCCESS)
+                   ::${S}_EVENT_TYPE_TEMP_CRITICAL | ::${S}_EVENT_TYPE_TEMP_THRESHOLD1
+               if (::${s}EventSetConfig(phEvents[devIndex], &eventConfig) == ::${X}_RESULT_SUCCESS)
                    phListenEvents[numEventHandles] = phEvents[devIndex]
                    pListenDeviceIndex[numEventHandles] = devIndex
                    numEventHandles++
@@ -2132,16 +2121,16 @@ when the critical temperature is reached.
        if (numEventHandles)
            # Block until we receive events
            uint32_t events
-           if (::${s}EventListen(hDriver, ${S}_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events)
-               == ${X}_RESULT_SUCCESS)
+           if (::${s}EventListen(hDriver, ::${S}_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events)
+               == ::${X}_RESULT_SUCCESS)
                    for (evtIndex .. numEventHandles)
                        if (::${s}EventGetState(phListenEvents[evtIndex], true, &events)
-                           != ${X}_RESULT_SUCCESS)
+                           != ::${X}_RESULT_SUCCESS)
                                next_loop(evtIndex)
-                       if (events & ${S}_EVENT_TYPE_TEMP_CRITICAL)
+                       if (events & ::${S}_EVENT_TYPE_TEMP_CRITICAL)
                            output("Device %u: Went above the critical temperature.",
                                pListenDeviceIndex[evtIndex])
-                       else if (events & ${S}_EVENT_TYPE_TEMP_THRESHOLD1)
+                       else if (events & ::${S}_EVENT_TYPE_TEMP_THRESHOLD1)
                            output("Device %u: Went above the temperature threshold %f.",
                                pListenDeviceIndex[evtIndex], tempLimit)
 
