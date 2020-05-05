@@ -399,7 +399,7 @@ members:
       desc: "[out] context-active data; only includes clocks while device context was actively executing."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Queries and event's timestamp value on the host."
+desc: "Queries an event's timestamp value on the host."
 class: $xEvent
 name: QueryKernelTimestamp
 details:
