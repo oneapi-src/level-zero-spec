@@ -43,6 +43,7 @@ ordinal: "1"
 analogue:
     - clCreateSubDevices
 details:
+    - "The number of handles returned from this function is affected by the $X_AFFINITY_MASK environment variable."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
