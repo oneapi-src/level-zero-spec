@@ -9,7 +9,7 @@ import util
 import re
 import hashlib
 import json
-from templates.helper import param_traits, type_traits
+from templates.helper import param_traits, type_traits, value_traits
 
 """
     validate documents meet some basic requirements of code generation
@@ -128,11 +128,10 @@ def _generate_meta(d, ordinal, meta):
                 meta[type][name]['types'].append(etor['name'])
                 if 'value' in etor:
                     ver = re.match(r"\$X_MAKE_VERSION\(\s*(\d+)\s*\,\s*(\d+)\s*\)", etor['value'])
-                    mask = re.match(r"\$X_BIT\(\s*(\d+)\s*\)", etor['value'])
                     if ver:
                         value = (int(ver.group(1)) << 16) + int(ver.group(2))
-                    elif mask:
-                        value = 1 << int(mask.group(1))
+                    elif value_traits.is_bit(etor['value']):
+                        value = 1 << int(value_traits.get_bit_count(etor['value']))
                     elif re.match(r"0x\w+", etor['value']):
                         value = int(etor['value'], 16)
                     else:
@@ -142,7 +141,10 @@ def _generate_meta(d, ordinal, meta):
                 if value > max_value:
                     max_value = value
                     max_index = idx
-            meta[type][name]['max'] = d['etors'][idx]['name']
+            if type_traits.is_flag(name):
+                meta[type][name]['max'] = hex((max_value << 1)-1)
+            else:
+                meta[type][name]['max'] = d['etors'][idx]['name']
 
         elif 'macro' == type:
             if 'value' in d:

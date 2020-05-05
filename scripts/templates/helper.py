@@ -68,6 +68,7 @@ class type_traits:
     RE_POINTER  = r"(.*\w+)\*+"
     RE_DESC     = r"(.*)desc_t.*"
     RE_PROPS    = r"(.*)properties_t.*"
+    RE_FLAG     = r"(.*)flag_t"
 
     @staticmethod
     def base(name):
@@ -116,6 +117,13 @@ class type_traits:
         except:
             return False
 
+    @classmethod
+    def is_flag(cls, name):
+        try:
+            return True if re.match(cls.RE_FLAG, name) else False
+        except:
+            return False
+
     @staticmethod
     def is_known(name, meta):
         try:
@@ -152,7 +160,7 @@ class type_traits:
     Extracts traits from a value name
 """
 class value_traits:
-    RE_BIT      = r".*BIT\((.*)\)"
+    RE_BIT      = r".*BIT\(\s*(.*)\s*\)"
     RE_MACRO    = r"(\$\w+)\(.*\)"
     RE_ARRAY    = r"(.*)\[(.*)\]"
 
@@ -162,6 +170,13 @@ class value_traits:
             return True if re.match(cls.RE_BIT, name) else False
         except:
             return False
+
+    @classmethod
+    def get_bit_count(cls, name):
+        try:
+            return re.sub(cls.RE_BIT, r"\1", name)
+        except:
+            return name
 
     @classmethod
     def is_macro(cls, name, meta):
