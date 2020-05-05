@@ -563,8 +563,8 @@ params:
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
-    - $X_RESULT_ERROR_INVALID_SIZE
-        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends metric query commands to flush all caches."
