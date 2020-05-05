@@ -142,7 +142,7 @@ def _generate_meta(d, ordinal, meta):
                     max_value = value
                     max_index = idx
             if type_traits.is_flag(name):
-                meta[type][name]['max'] = hex((max_value << 1)-1)
+                meta[type][name]['max'] = hex((max_value << 1)-1) if max_value else '0'
             else:
                 meta[type][name]['max'] = d['etors'][idx]['name']
 
