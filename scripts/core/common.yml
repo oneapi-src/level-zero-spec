@@ -178,9 +178,12 @@ etors:
       desc: "[Core] error occurred when linking modules, see build log for details"
     - name: $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
       value: "0x70010000"
-      desc: "[Tools] access denied due to permission level"
+      desc: "[Sysman] access denied due to permission level"
     - name: $X_RESULT_ERROR_NOT_AVAILABLE
-      desc: "[Tools] resource already in use and simultaneous access not allowed"
+      desc: "[Sysman] resource already in use and simultaneous access not allowed"
+    - name: $X_RESULT_ERROR_DEPENDENCY_UNAVAILABLE
+      value: "0x70020000"
+      desc: "[Tools] external required dependency is unavailable or missing"
     - name: $X_RESULT_ERROR_UNINITIALIZED
       value: "0x78000001"
       desc: "[Validation] driver is not initialized"
