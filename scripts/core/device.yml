@@ -17,6 +17,7 @@ name: Get
 decl: static
 ordinal: "0"
 details:
+    - "The number and order of handles returned from this function is affected by the $X_AFFINITY_MASK and $X_ENABLE_PCI_ID_DEVICE_ORDER environment variables."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
