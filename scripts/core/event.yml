@@ -66,7 +66,7 @@ params:
       desc: "[in] pointer to event pool descriptor"
     - type: uint32_t
       name: numDevices
-      desc: "[in] number of device handles"
+      desc: "[in][optional] number of device handles; must be 0 if `nullptr == phDevices`"
     - type: $x_device_handle_t*
       name: phDevices
       desc: |
@@ -78,6 +78,8 @@ params:
 returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phDevices) && (0 < numDevices)`
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event pool object."
@@ -451,12 +453,14 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before executing query"
+      desc: "[in][optional] number of events to wait on before executing query; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before executing query"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for event pool"

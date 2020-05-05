@@ -557,12 +557,14 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching"
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends metric query commands to flush all caches."

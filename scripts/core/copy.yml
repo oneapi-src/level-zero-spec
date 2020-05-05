@@ -41,12 +41,14 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching"
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initializes host, device, or shared memory."
@@ -83,12 +85,14 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching"
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Copy region descriptor"
@@ -158,13 +162,15 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching"
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_OVERLAPPING_REGIONS
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies a image."
@@ -192,12 +198,14 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching"
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Region descriptor"
@@ -255,13 +263,15 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching"
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
     - $X_RESULT_ERROR_OVERLAPPING_REGIONS
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies from a image to device or shared memory."
@@ -293,12 +303,14 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching"
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Copies to a image from device or shared memory."
@@ -330,12 +342,14 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching"
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE
+        - `(nullptr == phWaitEvents) && (0 < numWaitEvents)`
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Asynchronously prefetches shared memory to the device associated with the specified command list"
