@@ -168,7 +168,7 @@ members:
 type: function
 desc: "Retrieves IPC attributes of the driver"
 class: $xDriver
-name: GetIPCProperties
+name: GetIpcProperties
 ordinal: "1"
 details:
     - "The application may call this function from simultaneous threads."
@@ -178,7 +178,7 @@ params:
       name: hDriver
       desc: "[in] handle of the driver instance"
     - type: "$x_driver_ipc_properties_t*"
-      name: pIPCProperties
+      name: pIpcProperties
       desc: "[out] query result for IPC properties"
 --- #--------------------------------------------------------------------------
 type: macro
