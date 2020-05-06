@@ -298,3 +298,25 @@ etors:
       desc: $x_command_graph_exp_desc_t
       value: "0x00010001"
       version: "2.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all properties types"
+name: $x_base_properties_t
+members:
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "void*"
+      name: pNext
+      desc: "[in,out][optional] pointer to extension-specific structure"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all descriptor types"
+name: $x_base_desc_t
+members:
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"

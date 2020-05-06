@@ -1,8 +1,10 @@
-The following describes the YaML format used by the scripts for the API specifications:
+This document describes the YaML format used by the scripts for the API specifications.
 
 ## Input Structure
 * The scripts search for all `.yml` files in the folders specified in `config.ini`.
 * Each yml file represents a collection of APIs to be generated.
+  * It is recommended that each yml file represents a single feature definition, but this is not required.
+  * However, each extensions definition must be limited to a single yml file.
 * The name of the yml file will be used as C++ `#pragma region` name in the specification.
 
 ## YML Syntax

@@ -143,21 +143,27 @@ Terminology
 Naming Convention
 -----------------
 
-The following naming conventions are followed in order to avoid
-conflicts within the API, or with other APIs and libraries:
+The following naming conventions must be followed:
 
 ## --validate=off
-  - all driver entry points are prefixed with ${x}
-  - all types follow **${x}_name_t** convention
-  - all macros and enumerator values use all caps **${X}_SCOPE_NAME** convention
-  - all functions use camel case **${x}ObjectAction** convention
-  - all structure members and function parameters use camel case convention
+  - All functions must be prefixed with `${x}`
+  - All functions must use camel case `${x}ObjectAction` convention
+  - All macros must use all caps `${X}_NAME` convention
+  - All structures, enumerations and other types must follow `${x}_name_t` snake case convention
+  - All structure members and function parameters must use camel case convention
+  - All enumerator values must use all caps `${X}_ENUM_ETOR_NAME` convention
+  - All handle types must end with `handle_t`
+  - All descriptor structures must end with `desc_t`
+  - All property structures must end with `properties_t`
+  - All flag enumerations must end with `flag_t`
 ## --validate=on
 
-In addition, the following coding standards are followed:
+The following coding conventions must be followed:
 
-  - all function input parameters precede output parameters
-  - all functions return ::${x}_result_t
+  - All descriptor structures must be derived from `${x}_base_desc_t`
+  - All property structures must be derived from `${x}_base_properties_t`
+  - All function input parameters must precede output parameters
+  - All functions must return ::${x}_result_t
 
 Versioning
 ----------
@@ -181,11 +187,11 @@ Error Handling
 
 The following design philosophies are adopted in order to reduce Host-side overhead:
 
-* By default, the driver implementation does no parameter validation of any kind
+* By default, the driver implementation may not perform parameter validation of any kind
 
-   * This can be enabled via environment variables, described below
+    * This should be handled by validation layer(s)
 
-* By default, neither the driver nor device provide any protection against the following:
+* By default, neither the driver nor device provide may provide any protection against the following:
 
    * Invalid API programming
    * Invalid function arguments
@@ -216,16 +222,16 @@ The following design philosophies are adopted in order to maximize Host thread c
 
 - APIs are not thread-safe when the driver object handle is the same, except when explicitly noted.
 
-    + the application is responsible for ensuring multiple threads do not enter an API when the handle is the same
+    + the application must ensure multiple threads do not enter an API when the handle is the same
 
 - APIs are not thread-safe with other APIs that use the same driver object handle
 
-    + the application is responsible for ensuring multiple threads do not enter these APIs when the handle is the same
+    + the application must ensure multiple threads do not enter these APIs when the handle is the same
 
 - APIs do not support reference counting of handles.
 
-    + the application is responsible for tracking ownership and explicitly freeing handles and memory
-    + the application is responsible for ensuring that all driver objects and memory are no longer in-use by the device before freeing; otherwise the Host or device may fault
+    + the application must track ownership and explicitly free handles and memory
+    + the application must ensure that all driver objects and memory are no longer in-use by the device before freeing; otherwise the Host or device may fault
     + no implicit garabage collection is supported by the driver
 
 In general, the API is designed to be free-threaded rather than thread-safe.
@@ -257,15 +263,30 @@ Extension Support
 
 Features which are device- or vendor-specific can be exposed as extensions.
 The list of extensions supported by the driver implementation can be queried using ::${x}DriverGetExtensionProperties.
-All extension APIs include "ext" appended to the API object name.
+
+  - All extension functions must be postfixed with `Ext`
+  - All macros must use all caps `${X}_NAME_EXT` convention
+  - All structures, enumerations and other types must follow `${x}_name_ext_t` snake case convention
+  - All enumerator values must use all caps `${X}_ENUM_EXT_ETOR_NAME` convention
+  - All handle types must end with `ext_handle_t`
+  - All descriptor structures must end with `ext_desc_t`
+  - All property structures must end with `ext_properties_t`
+  - All flag enumerations must end with `ext_flag_t`
 
 "Experimental" extensions require additional experimentation and feedback from application vendors
 before ratification, therefore applications should not rely on experimental extensions in production.
-All experimental extension APIs include "exp" appended to the API object name.
 
-- Experimental extensions may be added and removed from the driver at any time.
-- Experimental extensions are not guaranteed to be forward or backward compatible between versions.
-- Experimental extensions are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.
+  - Experimental extensions may be added and removed from the driver at any time.
+  - Experimental extensions are not guaranteed to be forward or backward compatible between versions.
+  - Experimental extensions are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.
+  - All extension functions must be postfixed with `Exp`
+  - All macros must use all caps `${X}_NAME_EXP` convention
+  - All structures, enumerations and other types must follow `${x}_name_exp_t` snake case convention
+  - All enumerator values must use all caps `${X}_ENUM_EXP_ETOR_NAME` convention
+  - All handle types must end with `exp_handle_t`
+  - All descriptor structures must end with `exp_desc_t`
+  - All property structures must end with `exp_properties_t`
+  - All flag enumerations must end with `exp_flag_t`
 
 Import Library
 --------------
