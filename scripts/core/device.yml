@@ -157,6 +157,12 @@ members:
     - type: uint64_t
       name: timerResolution
       desc: "[out] Returns the resolution of device timer in nanoseconds used for profiling, timestamps, etc."
+    - type: uint32_t
+      name: timestampValidBits
+      desc: "[out] Returns the number of valid bits in the timestamp value."
+    - type: uint32_t
+      name: kernelTimestampValidBits
+      desc: "[out] Returns the number of valid bits in the kernel timestamp values"
     - type: char
       name: "name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
