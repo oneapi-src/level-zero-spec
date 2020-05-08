@@ -125,7 +125,7 @@ returns:
         - "`0 == size`"
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
         - "Must be zero or a power-of-two"
-        - "`0 == (alignment & (alignment - 1))`"
+        - "`0 != (alignment & (alignment - 1))`"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -161,7 +161,7 @@ returns:
         - "`0 == size`"
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
         - "Must be zero or a power-of-two"
-        - "`0 == (alignment & (alignment - 1))`"
+        - "`0 != (alignment & (alignment - 1))`"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
@@ -195,7 +195,7 @@ returns:
         - "`0 == size`"
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
         - "Must be zero or a power-of-two"
-        - "`0 == (alignment & (alignment - 1))`"
+        - "`0 != (alignment & (alignment - 1))`"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
