@@ -118,9 +118,10 @@ ordinal: "0"
 analogue:
     - "**clReleaseCommandQueue**"
 details:
-    - "The application is responsible for making sure the device is not currently referencing the command queue before it is deleted"
-    - "The implementation of this function will immediately free all Host and Device allocations associated with this command queue"
-    - "The application may **not** call this function from simultaneous threads with the same command queue handle."
+    - "The application must destroy all fence handles created from the command queue before destroying the command queue itself"
+    - "The application must ensure the device is not currently referencing the command queue before it is deleted"
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this command queue"
+    - "The application must **not** call this function from simultaneous threads with the same command queue handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_queue_handle_t

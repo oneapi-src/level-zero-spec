@@ -65,7 +65,7 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application may **not** call this function from simultaneous threads with the same tracer handle."
+    - "The application must **not** call this function from simultaneous threads with the same tracer handle."
     - "The implementation of this function will stall and wait on any outstanding threads executing callbacks before freeing any Host allocations associated with this tracer."
 params:
     - type: $t_tracer_handle_t
@@ -81,7 +81,7 @@ name: SetPrologues
 details:
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
-    - "The application may **not** call this function from simultaneous threads with the same tracer handle."
+    - "The application must **not** call this function from simultaneous threads with the same tracer handle."
 params:
     - type: "$t_tracer_handle_t"
       name: hTracer
@@ -97,7 +97,7 @@ name: SetEpilogues
 details:
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
-    - "The application may **not** call this function from simultaneous threads with the same tracer handle."
+    - "The application must **not** call this function from simultaneous threads with the same tracer handle."
 params:
     - type: "$t_tracer_handle_t"
       name: hTracer
@@ -111,7 +111,7 @@ desc: "Enables (or disables) the tracer"
 class: $tTracer
 name: SetEnabled
 details:
-    - "The application may **not** call this function from simultaneous threads with the same tracer handle."
+    - "The application must **not** call this function from simultaneous threads with the same tracer handle."
 params:
     - type: "$t_tracer_handle_t"
       name: hTracer

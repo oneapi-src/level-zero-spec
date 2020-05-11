@@ -88,10 +88,10 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application is responsible for destroying all event handles created from the pool before destroying the pool itself"
-    - "The application is responsible for making sure the device is not currently referencing the any event within the pool before it is deleted"
-    - "The implementation of this function will immediately free all Host and Device allocations associated with this event pool"
-    - "The application may **not** call this function from simultaneous threads with the same event pool handle."
+    - "The application must destroy all event handles created from the pool before destroying the pool itself"
+    - "The application must ensure the device is not currently referencing the any event within the pool before it is deleted"
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this event pool"
+    - "The application must **not** call this function from simultaneous threads with the same event pool handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_pool_handle_t
@@ -154,7 +154,7 @@ analogue:
     - vkCreateEvent
 details:
     - "Multiple events cannot be created using the same location within the same pool."
-    - "The application may **not** call this function from simultaneous threads with the same event pool handle."
+    - "The application must **not** call this function from simultaneous threads with the same event pool handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_event_pool_handle_t
@@ -176,9 +176,9 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application is responsible for making sure the device is not currently referencing the event before it is deleted"
-    - "The implementation of this function will immediately free all Host and Device allocations associated with this event"
-    - "The application may **not** call this function from simultaneous threads with the same event handle."
+    - "The application must ensure the device is not currently referencing the event before it is deleted"
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this event"
+    - "The application must **not** call this function from simultaneous threads with the same event handle."
     - "The implementation of this function should be lock-free."
 analogue:
      - "**clReleaseEvent**"
@@ -232,7 +232,7 @@ class: $xEventPool
 name: CloseIpcHandle
 details:
     - "Closes an IPC event handle by destroying events that were opened in this process using $xEventPoolOpenIpcHandle."
-    - "The application may **not** call this function from simultaneous threads with the same event pool handle."
+    - "The application must **not** call this function from simultaneous threads with the same event pool handle."
 params:
     - type: $x_event_pool_handle_t
       name: hEventPool
@@ -247,7 +247,7 @@ analogue:
     - vkCmdSetEvent
 details:
     - "The event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -264,7 +264,7 @@ desc: "Appends wait on event(s) on the device into a command list."
 class: $xCommandList
 name: AppendWaitOnEvents
 details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -346,7 +346,7 @@ name: AppendEventReset
 analogue:
     - vkResetEvent
 details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -431,7 +431,7 @@ details:
     - "The memory pointed to by both dstptr and pOffsets must be accessible by the device on which the command list is created."
     - "The value(s) written to the destination buffer are undefined if any timestamp event has not been signaled."
     - "If pOffsets is nullptr, then multiple results will be appended sequentially into memory in the same order as phEvents."
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t

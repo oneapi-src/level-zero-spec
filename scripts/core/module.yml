@@ -114,9 +114,10 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application is responsible for making sure the device is not currently referencing the module before it is deleted"
-    - "The implementation of this function will immediately free all Host and Device allocations associated with this module"
-    - "The application may **not** call this function from simultaneous threads with the same module handle."
+    - "The application must destroy all kernel and build log handles created from the module before destroying the module itself"
+    - "The application must ensure the device is not currently referencing the module before it is deleted"
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this module"
+    - "The application must **not** call this function from simultaneous threads with the same module handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_module_handle_t"
@@ -164,8 +165,8 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The implementation of this function will immediately free all Host allocations associated with this object"
-    - "The application may **not** call this function from simultaneous threads with the same build log handle."
+    - "The implementation of this function may immediately free all Host allocations associated with this object"
+    - "The application must **not** call this function from simultaneous threads with the same build log handle."
     - "The implementation of this function should be lock-free."
     - "This function can be called before or after $xModuleDestroy for the associated module."
 params:
@@ -323,10 +324,9 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "All kernels must be destroyed before the module is destroyed."
-    - "The application is responsible for making sure the device is not currently referencing the kernel before it is deleted"
-    - "The implementation of this function will immediately free all Host and Device allocations associated with this kernel"
-    - "The application may **not** call this function from simultaneous threads with the same kernel handle."
+    - "The application must ensure the device is not currently referencing the kernel before it is deleted"
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this kernel"
+    - "The application must **not** call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_kernel_handle_t"
@@ -362,7 +362,7 @@ desc: "Set group size for a kernel"
 class: $xKernel
 name: SetGroupSize
 details:
-    - "The application may **not** call this function from simultaneous threads with the same kernel handle."
+    - "The application must **not** call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
     - "The implementation will copy the group size information into a command list when the function is appended."
 params:
@@ -527,7 +527,7 @@ class: $xKernel
 name: SetIntermediateCacheConfig
 ordinal: "2"
 details:
-    - "The application may **not** call this function from simultaneous threads with the same kernel handle."
+    - "The application must **not** call this function from simultaneous threads with the same kernel handle."
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel

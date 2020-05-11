@@ -93,9 +93,9 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application is responsible for making sure the device is not currently referencing the sampler before it is deleted"
-    - "The implementation of this function will immediately free all Host and Device allocations associated with this module"
-    - "The application may **not** call this function from simultaneous threads with the same sampler handle."
+    - "The application must ensure the device is not currently referencing the sampler before it is deleted"
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this module"
+    - "The application must **not** call this function from simultaneous threads with the same sampler handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_sampler_handle_t"

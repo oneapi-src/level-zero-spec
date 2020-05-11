@@ -115,9 +115,9 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application is responsible for making sure the device is not currently referencing the command list before it is deleted"
-    - "The implementation of this function will immediately free all Host and Device allocations associated with this command list."
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must ensure the device is not currently referencing the command list before it is deleted"
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this command list."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -132,7 +132,7 @@ class: $xCommandList
 name: Close
 ordinal: "1"
 details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -145,8 +145,8 @@ class: $xCommandList
 name: Reset
 ordinal: "1"
 details:
-    - "The application is responsible for making sure the device is not currently referencing the command list before it is reset"
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must ensure the device is not currently referencing the command list before it is reset"
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t
@@ -161,7 +161,7 @@ details:
     - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
     - "The timestamp frequency can be queried from ::$x_device_properties_t.timerResolution."
     - "The number of valid bits in the timestamp value can be queried from ::$x_device_properties_t.timestampValidBits."
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t

@@ -81,8 +81,8 @@ class: $xCommandGraphExp
 name: Destroy
 decl: static
 details:
-    - "The implementation of this function will immediately free all Host allocations associated with this command graph."
-    - "The application may **not** call this function from simultaneous threads with the same command graph handle."
+    - "The implementation of this function may immediately free all Host allocations associated with this command graph."
+    - "The application must **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_graph_exp_handle_t
@@ -99,7 +99,7 @@ name: Close
 details:
     - "The command graph will optimize the execution order of the command lists."
     - "A command list may **not** be reset after the command graph is closed."
-    - "The application may **not** call this function from simultaneous threads with the same command graph handle."
+    - "The application must **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_graph_exp_handle_t

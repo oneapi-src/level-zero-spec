@@ -743,7 +743,7 @@ class: $xDevice
 name: SetLastLevelCacheConfig
 ordinal: "2"
 details:
-    - "The application may **not** call this function from simultaneous threads with the same device handle."
+    - "The application must **not** call this function from simultaneous threads with the same device handle."
 params:
     - type: "$x_device_handle_t"
       name: hDevice

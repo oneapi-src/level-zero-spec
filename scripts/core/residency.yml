@@ -14,7 +14,7 @@ desc: "Makes memory resident for the device."
 class: $xDevice
 name: MakeMemoryResident
 details:
-    - "If the application does not properly manage residency then the device may experience unrecoverable page-faults."
+    - "The application must ensure the memory is resident before being referenced by the device"
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -36,8 +36,8 @@ desc: "Allows memory to be evicted from the device."
 class: $xDevice
 name: EvictMemory
 details:
-    - "The application is responsible for making sure the device is not currently referencing the memory before it is evicted"
-    - "Memory is always implicitly evicted if it is resident when freed."
+    - "The application must ensure the device is not currently referencing the memory before it is evicted"
+    - "The application may free the memory without evicting; the memory is implicitly evicted when freed."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -59,7 +59,7 @@ desc: "Makes image resident for the device."
 class: $xDevice
 name: MakeImageResident
 details:
-    - "If the application does not properly manage residency then the device may experience unrecoverable page-faults."
+    - "The application must ensure the image is resident before being referenced by the device"
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -78,8 +78,8 @@ desc: "Allows image to be evicted from the device."
 class: $xDevice
 name: EvictImage
 details:
-    - "The application is responsible for making sure the device is not currently referencing the memory before it is evicted"
-    - "An image is always implicitly evicted if it is resident when destroyed."
+    - "The application must ensure the device is not currently referencing the image before it is evicted"
+    - "The application may destroy the image without evicting; the image is implicitly evicted when destroyed."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

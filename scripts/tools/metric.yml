@@ -337,7 +337,7 @@ decl: static
 details:
     - "The notification event must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_HOST_VISIBLE flag."
     - "The notification event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "The application may **not** call this function from simultaneous threads with the same device handle."
+    - "The application must **not** call this function from simultaneous threads with the same device handle."
 params:
     - type: "$t_device_handle_t"
       name: hDevice
@@ -362,7 +362,7 @@ desc: "Append metric tracer marker into a command list."
 class: $tCommandList
 name: AppendMetricTracerMarker
 details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$t_command_list_handle_t"
       name: hCommandList
@@ -379,7 +379,7 @@ desc: "Closes metric tracer."
 class: $tMetricTracer
 name: Close
 details:
-    - "The application may **not** call this function from simultaneous threads with the same metric tracer handle."
+    - "The application must **not** call this function from simultaneous threads with the same metric tracer handle."
 params:
     - type: "$t_metric_tracer_handle_t"
       name: hMetricTracer
@@ -469,9 +469,9 @@ class: $tMetricQueryPool
 name: Destroy
 decl: static
 details:
-    - "The application is responsible for destroying all query handles created from the pool before destroying the pool itself"
-    - "The application is responsible for making sure the device is not currently referencing the any query within the pool before it is deleted"
-    - "The application may **not** call this function from simultaneous threads with the same query pool handle."
+    - "The application must destroy all query handles created from the pool before destroying the pool itself"
+    - "The application must ensure the device is not currently referencing the any query within the pool before it is deleted"
+    - "The application must **not** call this function from simultaneous threads with the same query pool handle."
 params:
     - type: "$t_metric_query_pool_handle_t"
       name: hMetricQueryPool
@@ -503,8 +503,8 @@ class: $tMetricQuery
 name: Destroy
 decl: static
 details:
-    - "The application is responsible for making sure the device is not currently referencing the query before it is deleted"
-    - "The application may **not** call this function from simultaneous threads with the same query handle."
+    - "The application must ensure the device is not currently referencing the query before it is deleted"
+    - "The application must **not** call this function from simultaneous threads with the same query handle."
 params:
     - type: "$t_metric_query_handle_t"
       name: hMetricQuery
@@ -517,8 +517,8 @@ desc: "Resets a metric query object back to inital state."
 class: $tMetricQuery
 name: Reset
 details:
-    - "The application is responsible for making sure the device is not currently referencing the query before it is reset"
-    - "The application may **not** call this function from simultaneous threads with the same query handle."
+    - "The application must ensure the device is not currently referencing the query before it is reset"
+    - "The application must **not** call this function from simultaneous threads with the same query handle."
 params:
     - type: "$t_metric_query_handle_t"
       name: hMetricQuery
@@ -529,7 +529,7 @@ desc: "Appends metric query begin into a command list."
 class: $tCommandList
 name: AppendMetricQueryBegin
 details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$t_command_list_handle_t"
       name: hCommandList
@@ -544,7 +544,7 @@ class: $tCommandList
 name: AppendMetricQueryEnd
 details:
     - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$t_command_list_handle_t"
       name: hCommandList
@@ -571,7 +571,7 @@ desc: "Appends metric query commands to flush all caches."
 class: $tCommandList
 name: AppendMetricMemoryBarrier
 details:
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$t_command_list_handle_t"
       name: hCommandList
