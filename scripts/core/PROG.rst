@@ -11,6 +11,17 @@
 Drivers and Devices
 ===================
 
+The API architecture exposes both physical and logical abstraction of
+the underlying devices capabilities. The device, sub-device and memory
+are exposed at physical level while command queues, events and
+synchronization methods are defined as logical entities. All logical
+entities will be bound to device level physical capabilities.
+
+Device discovery APIs enumerate the accelerators functional features.
+These APIs provide interface to query information like compute unit
+count within the device or sub device, available memory and affinity to
+the compute, user managed cache size and work submission command queues.
+
 Drivers
 -------
 
@@ -93,6 +104,29 @@ The following pseudo-code demonstrates a basic initialization and device discove
 
 Memory and Images
 =================
+
+Memory is visible to the upper-level software stack as unified memory
+with a single virtual address space covering both the Host and a
+specific device.
+
+For GPUs, the API exposes two levels of the device memory hierarchy:
+
+1. Local Device Memory: can be managed at the device and/or sub device level.
+2. Device Cache(s):
+
+    + Last Level Cache (L3) can be controlled through memory allocation APIs.
+    + Low Level Cache (L1) can be controlled through program language intrinsics.
+
+The API allows allocation of buffers and images at device and sub device
+granularity with full cacheablity hints.
+
+- Buffers are transparent memory accessed through virtual address pointers
+- Images are opaque objects accessed through handles
+
+The memory APIs provide allocation methods to allocate either device,
+host or shared memory. The APIs enable both implicit and explicit
+management of the resources by the application or runtimes. The
+interface also provides query capabilities for all memory objects.
 
 There are two types of allocations:
 
@@ -1508,6 +1542,12 @@ cases, command queue sharing may be much more efficient.
 Inter-Process Communication
 ---------------------------
 
+The API allows sharing of memory objects across different device
+processes. Since each process has its own virtual address space, there
+is no guarantee that the same virtual address will be available when the
+memory object is shared in new process. There are a set of APIs that
+makes it easier to share the memory objects with ease.
+
 There are two types of Inter-Process Communication (IPC) APIs for using
 Level-Zero allocations across processes:
 
@@ -1655,6 +1695,12 @@ The following code examples demonstrate how to use the event IPC APIs:
 
 Peer-to-Peer Access and Queries
 -------------------------------
+
+Peer to Peer API's provide capabilities to marshall data across Host to
+Device, Device to Host and Device to Device. The data marshalling API
+can be scheduled as asynchronous operations or can be synchronized with
+kernel execution through command queues. Data coherency is maintained by
+the driver without any explicit involvement from the application.
 
 Devices may be linked together within a node by a scale-up fabric and depending on the configuration,
 the fabric can support atomics, compute kernel remote access, and data copies.

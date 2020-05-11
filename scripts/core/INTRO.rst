@@ -4,14 +4,14 @@
     x=tags['$x']
     X=x.upper()
 %>
-==========
- Overview
-==========
+==============
+ Introduction
+==============
 
 Objective
 =========
 
-The objective of the ${OneApi} Level-Zero API is to provide
+The objective of the ${OneApi} Level-Zero Application Programming Interface (API) is to provide
 direct-to-metal interfaces to offload accelerator devices. It is a
 programming interface that can be published at a cadence that better
 matches Intel hardware releases and can be tailored to any device needs.
@@ -20,18 +20,6 @@ function pointers, virtual functions, unified memory, and I/O
 capabilities.
 
 .. image:: ../images/one_api_sw_stack.png
-
-The Level-Zero API provides the lowest-level, fine-grain and most explicit control over:
-
-- Device Discovery
-- Memory Allocation
-- Peer-to-Peer Communication
-- Inter-Process Sharing
-- Kernel Submission
-- Asynchronous Execution and Scheduling
-- Synchronization Primitives
-- Metrics Reporting
-- System Management Interface
 
 Most applications should not require the additional control provided by
 the Level-Zero API. The Level-Zero API is intended for providing
@@ -42,87 +30,50 @@ the Level-Zero APIs are designed to evolve independently. While initially
 influenced by GPU architecture, the Level-Zero APIs are designed to be supportable
 across different compute device architectures, such as FPGAs, CSAs, etc.
 
-Devices
--------
+Core
+----
 
-The API architecture exposes both physical and logical abstraction of
-the underlying devices capabilities. The device, sub device and memory
-are exposed at physical level while command queues, events and
-synchronization methods are defined as logical entities. All logical
-entities will be bound to device level physical capabilities.
+The Level-Zero core APIa provide the lowest-level, fine-grain and most explicit control over:
 
-Device discovery APIs enumerate the accelerators functional features.
-These APIs provide interface to query information like compute unit
-count within the device or sub device, available memory and affinity to
-the compute, user managed cache size and work submission command queues.
+- Device Discovery and Partitioning
+- Memory Allocation, Visibility and Caching
+- Kernel Execution and Scheduling
+- Peer-to-Peer Communication
+- Inter-Process Sharing
 
-Memory & Caches
----------------
+See the "Core Programming Guide" for more details.
 
-Memory is visible to the upper-level software stack as unified memory
-with a single virtual address space covering both the Host and a
-specific device.
+Tools
+-----
 
-For GPUs, the API exposes two levels of the device memory hierarchy:
+The Level-Zero tool APIs provide low-level access to device capabilities in order to support both 
+direct application use and 3rd-party tools:
 
-1. Local Device Memory: can be managed at the device and/or sub device level.
-2. Device Cache(s):
+- Metrics Discovery and Reporting
+- Kernel Profiling, Instrumentation and Debug
 
-    + Last Level Cache (L3) can be controlled through memory allocation APIs.
-    + Low Level Cache (L1) can be controlled through program language intrinsics.
-
-The API allows allocation of buffers and images at device and sub device
-granularity with full cacheablity hints.
-
-- Buffers are transparent memory accessed through virtual address pointers
-- Images are opaque objects accessed through handles
-
-The memory APIs provide allocation methods to allocate either device,
-host or shared memory. The APIs enable both implicit and explicit
-management of the resources by the application or runtimes. The
-interface also provides query capabilities for all memory objects.
-
-Subdevice Support
------------------
-
-The API supports sub-devices and there are functions to query
-and obtain a sub-device. A sub-device can represent a physical or
-logical partition of the device. Outside of these functions there are no
-distinction between sub-devices and devices. For example, a sub-device
-can be used with memory allocation and tasks and allow placement and
-submission to a specific sub-device.
-
-Peer-to-Peer Communication
---------------------------
-
-Peer to Peer API's provide capabilities to marshall data across Host to
-Device, Device to Host and Device to Device. The data marshalling API
-can be scheduled as asynchronous operations or can be synchronized with
-kernel execution through command queues. Data coherency is maintained by
-the driver without any explicit involvement from the application.
-
-Inter-Process Communication
----------------------------
-
-The API allows sharing of memory objects across different device
-processes. Since each process has its own virtual address space, there
-is no guarantee that the same virtual address will be available when the
-memory object is shared in new process. There are a set of APIs that
-makes it easier to share the memory objects with ease.
+See the "Tools Programming Guide" for more details.
 
 System Management
 -----------------
 
-The API provides in-band ability to query the performance, power and
-health of accelerator resources. It also enables controlling the
-performance and power profile of these resources. Finally, it provides
-access to maintenance facilities such as performing hardware diagnostics
-or updating firmware.
+The Level-Zero sysman APIs provide in-band access to the following features for each accelerator device:
 
-API Specification
-=================
+- Query the performance, power and health of accelerator resources
+- Control the performance and power profile of accelerator resources
+- Maintenance facilities such as performing hardware diagnostics, updating firmware or resetting the device
 
-The following section provides high-level design philosophy of the APIs.
+By default, only administrator users have permissions to perform control
+operations on resources. Most queries are available to any user with the
+exception of those that could be used for side-channel attacks. The
+systems administrator can tighten/relax the default permissions.
+
+See the "Sysman Programming Guide" for more details.
+
+Fundamentals
+============
+
+The following section provides fundamentals of the API design.
 For more detailed information, refer to the programming guides and
 detailed specification pages.
 
@@ -173,13 +124,17 @@ There are multiple versions that should be used by the application to determine 
 **API Version** - this is the version of the API supported by the device.
 
   - This is typically used to determine if the device supports the minimum set of APIs required by the application.
-  - There is a single API version that represents a collection of APIs.
+  - There is a single 32-bit value that represents an entire collection of APIs.
+  - The value is encoded with 16-bit Major and 16-bit Minor parts:
+    + Major versions consist of modified functionality, including deprecate features, and may break backwards-compatibility
+    + Minor versions consist of additional functionality, including promoted extensions, and must retain backwards-compatibility
   - The value is determined from calling ::${x}DriverGetApiVersion
   - The value returned will be the minimum of the ::${x}_api_version_t supported by the device and known by the driver.
 
 **Driver Version** - this is the version of the driver installed in the system.
 
   - This is typically used to mitigate driver implementation issues for a feature.
+  - The value encoding is vendor-specific but must be monotonically increasing.
   - The value is determined from calling ::${x}DriverGetProperties
 
 Error Handling
@@ -253,7 +208,7 @@ should be create and provided by the application.
 Each API function must document details on the multithreading
 requirements for that call.
 
-The primary usage-models enabled by these rules is:
+The primary usage-model enabled by these rules is:
 
 - multiple, simultaneous threads may operate on independent driver objects with no implicit thread-locks
 - driver object handles may be passed between and used by multiple threads with no implicit thread-locks
@@ -264,6 +219,7 @@ Extension Support
 Features which are device- or vendor-specific can be exposed as extensions.
 The list of extensions supported by the driver implementation can be queried using ::${x}DriverGetExtensionProperties.
 
+## --validate=off
   - All extension functions must be postfixed with `Ext`
   - All macros must use all caps `${X}_NAME_EXT` convention
   - All structures, enumerations and other types must follow `${x}_name_ext_t` snake case convention
@@ -272,12 +228,14 @@ The list of extensions supported by the driver implementation can be queried usi
   - All descriptor structures must end with `ext_desc_t`
   - All property structures must end with `ext_properties_t`
   - All flag enumerations must end with `ext_flag_t`
+## --validate=on
 
 "Experimental" extensions require additional experimentation and feedback from application vendors
 before ratification, therefore applications should not rely on experimental extensions in production.
 
+## --validate=off
   - Experimental extensions may be added and removed from the driver at any time.
-  - Experimental extensions are not guaranteed to be forward or backward compatible between versions.
+  - Experimental extensions are not guaranteed to be forward- or backward-compatible between versions.
   - Experimental extensions are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.
   - All extension functions must be postfixed with `Exp`
   - All macros must use all caps `${X}_NAME_EXP` convention
@@ -287,71 +245,26 @@ before ratification, therefore applications should not rely on experimental exte
   - All descriptor structures must end with `exp_desc_t`
   - All property structures must end with `exp_properties_t`
   - All flag enumerations must end with `exp_flag_t`
-
-Import Library
---------------
-
-A static import library shall be provided to allow applications
-to make direct API calls without understanding the underlying
-driver interfaces. 
-
-## --validate=off
-C/C++ applications may include "${x}_api.h" and link with "${x}_api.lib".
 ## --validate=on
 
-.. _Tools:
+Application Binary Interface
+----------------------------
 
-Tools
-=====
+The Level-Zero C APIs are provided to applications by a shared import library.
+## --validate=off
+C/C++ applications must include "${x}_api.h" and link with "${x}_api.lib".
+## --validate=on
+The Level-Zero C Device-Driver Interfaces (DDIs) are provided to the import library by the shared loader and driver libraries.
+## --validate=off
+C/C++ loaders and drivers must include "${x}_ddi.h".
+## --validate=on
 
-Level-Zero APIs specific for supporting 3rd-party tools are separated
-from "Core" into "Tools" APIs. The "Tools" APIs are designed to provided
-low-level access to device capabilities in order to support 3rd-party
-tools, but are not intended to replace or directly interface 3rd-party
-tools. The "Tools" APIs are still available for direct application use.
+The implementation of these libraries must use the default Application Binary Interface (ABI) of the standard C compiler for the platform.
+An ABI in this context means the size, alignment, and layout of C data types; the procedure calling convention;
+and the naming convention for shared library symbols corresponding to C functions. 
 
-The "Tools" APIs provide the following capabilities for 3rd-party tools:
-
-- Allow for callbacks to be registered, in order to be notified of specific application events.
-- Allow for device metrics to be queried, in order to profile application usage.
-- Allow for application programs to be instrumented with custom instructions, for low-level code profiling.
-- Allow for application programs to be debugged using breakpoints and register access.
-
-See the "Tools" programming guide for more details.
-
-.. _system-management-1:
-
-System Management
-=================
-
-All global management of accelerator resources are separated from "Core" into the "Sysman" API.
-
-The "Sysman" API provides in-band access to the following features for each accelerator device:
-
-- Query inventory information
-- Query information about host processes using the device
-- Change the accelerator workload scheduling policies
-- Query and control frequency/voltage/power
-- Query temperature sensors
-- Query load on various accelerator engines (overall, media, compute, copy)
-- Query device memory bandwidth and health
-- Query PCI bandwidth and health
-- Query high-speed Fabric bandwidth and health
-- Control the standby policy of the device
-- Query ECC/RAS status of various components on the device
-- Query power supply status
-- Control LEDs
-- Control fans
-- Perform overclocking/under-voltage changes where appropriate
-- Listen for events (temperature excursion, frequency throttling, RAS errors)
-- Flash firmware
-- Run diagnostics
-- Reset the device
-
-By default, only administrator users have permissions to perform control
-operations on resources. Most queries are available to any user with the
-exception of those that could be used for side-channel attacks. The
-systems administrator can tighten/relax the default permissions.
-
-See the "Sysman" programming guide for more details.
+On platforms where Level-Zero is provided as a shared library, library symbols beginning with "${x}", "${x}t" or "${x}s" 
+and followed by a digit or uppercase letter are reserved for use by the implementation. 
+Applications which use Level-Zero must not provide definitions of these symbols. 
+This allows the Level-Zero shared library to be updated with additional symbols for new API versions or extensions without causing symbol conflicts with existing applications.
 
