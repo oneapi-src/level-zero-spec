@@ -146,7 +146,7 @@ params:
       desc: "[in,out] query result for driver properties"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "IPC properties queried using $xDriverGetIPCProperties"
+desc: "IPC properties queried using $xDriverGetIpcProperties"
 class: $xDriver
 name: $x_driver_ipc_properties_t
 members:
