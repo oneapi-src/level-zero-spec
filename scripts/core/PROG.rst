@@ -11,16 +11,14 @@
 Drivers and Devices
 ===================
 
-The API architecture exposes both physical and logical abstraction of
-the underlying devices capabilities. The device, sub-device and memory
-are exposed at physical level while command queues, events and
-synchronization methods are defined as logical entities. All logical
-entities will be bound to device level physical capabilities.
+The API architecture exposes both physical and logical abstraction of the underlying devices capabilities.
+The device, sub-device and memory are exposed at physical level while command queues, events and
+synchronization methods are defined as logical entities.
+All logical entities will be bound to device level physical capabilities.
 
 Device discovery APIs enumerate the accelerators functional features.
-These APIs provide interface to query information like compute unit
-count within the device or sub device, available memory and affinity to
-the compute, user managed cache size and work submission command queues.
+These APIs provide interface to query information like compute unit count within the device or sub device, 
+available memory and affinity to the compute, user managed cache size and work submission command queues.
 
 Drivers
 -------
