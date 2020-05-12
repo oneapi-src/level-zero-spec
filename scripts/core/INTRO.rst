@@ -131,29 +131,29 @@ Error Handling
 
 The following design philosophies are adopted in order to reduce Host-side overhead:
 
-  * By default, the driver implementation may not perform parameter validation of any kind
+  - By default, the driver implementation may not perform parameter validation of any kind
 
-    * This should be handled by validation layer(s)
+    + This should be handled by validation layer(s)
 
-  * By default, neither the driver nor device provide may provide any protection against the following:
+  - By default, neither the driver nor device provide may provide any protection against the following:
 
-   * Invalid API programming
-   * Invalid function arguments
-   * Function infinite loops or recursions
-   * Synchronization primitive deadlocks
-   * Non-visible memory access by the Host or device
-   * Non-resident memory access by the device
+    + Invalid API programming
+    + Invalid function arguments
+    + Function infinite loops or recursions
+    + Synchronization primitive deadlocks
+    + Non-visible memory access by the Host or device
+    + Non-resident memory access by the device
 
-   * The driver implementation is **not** required to perform API validation of any kind
+  - The driver implementation is **not** required to perform API validation of any kind
 
-   * The driver should ensure well-behaved applications are not burdened with the overhead needed for non-behaving applications
-   * Unless otherwise specified, the driver behavior is undefined when APIs are improperly used
-   * For debug purposes, API validation can be enabled via the [Validation Layers](#v0)
+    + The driver should ensure well-behaved applications are not burdened with the overhead needed for non-behaving applications
+    + Unless otherwise specified, the driver behavior is undefined when APIs are improperly used
+    + For debug purposes, API validation can be enabled via the loader's validation layer(s)
 
-   * All API functions return ::${x}_result_t
+  - All API functions return ::${x}_result_t
 
-   * This enumeration contains error codes for the core APIs and validation layers
-   * This allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled
+    + This enumeration contains error codes for the Level-Zero APIs and validation layers
+    + This allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled
 
 Multithreading and Concurrency
 ------------------------------
