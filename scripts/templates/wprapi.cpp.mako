@@ -91,7 +91,7 @@ namespace ${n}
     %if 'tparams' in obj:
     template<${th.make_tparams_line(n, tags, obj)}>
     %endif
-    ${th.make_return_type(n, tags, obj, cpp=True, meta=meta)} __${x}call
+    ${th.make_return_type(n, tags, obj, cpp=True, meta=meta)} ${X}_APICALL
     %if 'class' in obj and obj['class'] not in tags:
     ${th.subt(n, tags, obj['class'], cpp=True)}::${th.make_func_name(n, tags, obj, cpp=True)}(
     %else:

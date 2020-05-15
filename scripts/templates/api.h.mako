@@ -6,6 +6,7 @@ from templates import helper as th
     N=n.upper()
 
     x=tags['$x']
+    X=x.upper()
 %>/*
  *
  * Copyright (C) 2019 Intel Corporation
@@ -92,7 +93,7 @@ typedef ${obj['type']} _${th.make_type_name(n, tags, obj)}
 %for line in th.make_returns_lines(n, tags, obj, meta=meta):
 /// ${line}
 %endfor
-__${x}_api_export ${x}_result_t __${x}call
+${X}_APIEXPORT ${x}_result_t ${X}_APICALL
 ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_param_lines(n, tags, obj):
     ${line}
@@ -162,7 +163,7 @@ typedef struct _${th.make_pfncb_param_type(n, tags, obj)}
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-typedef void (__${x}call *${th.make_pfncb_type(n, tags, obj)})(
+typedef void (${X}_APICALL *${th.make_pfncb_type(n, tags, obj)})(
     ${th.make_pfncb_param_type(n, tags, obj)}* params,
     ${x}_result_t result,
     void* pTracerUserData,

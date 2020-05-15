@@ -35,7 +35,7 @@ extern "C" {
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-typedef ${x}_result_t (__${x}call *${th.make_pfn_type(n, tags, obj)})(
+typedef ${x}_result_t (${X}_APICALL *${th.make_pfn_type(n, tags, obj)})(
     %for line in th.make_param_lines(n, tags, obj, format=["type", "delim"]):
     ${line}
     %endfor
@@ -71,7 +71,7 @@ typedef struct _${tbl['type']}
 ///     - ::${X}_RESULT_ERROR_UNINITIALIZED
 ///     - ::${X}_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::${X}_RESULT_ERROR_UNSUPPORTED_VERSION
-__${x}dllexport ${x}_result_t __${x}call
+${X}_DLLEXPORT ${x}_result_t ${X}_APICALL
 ${tbl['export']['name']}(
     %for line in th.make_param_lines(n, tags, tbl['export']):
     ${line}
@@ -80,7 +80,7 @@ ${tbl['export']['name']}(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for ${tbl['export']['name']}
-typedef ${x}_result_t (__${x}call *${tbl['pfn']})(
+typedef ${x}_result_t (${X}_APICALL *${tbl['pfn']})(
     %for line in th.make_param_lines(n, tags, tbl['export'], format=["type", "delim"]):
     ${line}
     %endfor

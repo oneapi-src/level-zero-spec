@@ -130,7 +130,7 @@ namespace ${n}
     %for line in th.make_returns_lines(n, tags, obj, cpp=True, meta=meta):
     /// ${line}
     %endfor
-    ${th.make_return_type(n, tags, obj, cpp=True, decl=True, meta=meta)} __${x}call
+    ${th.make_return_type(n, tags, obj, cpp=True, decl=True, meta=meta)} ${X}_APICALL
     ${th.make_func_name(n, tags, obj, cpp=True)}(
         %for line in th.make_param_lines(n, tags, obj, cpp=True, decl=True, meta=meta):
         ${line}
@@ -155,7 +155,7 @@ namespace ${n}
         /// ${line}
         %endfor
         %if 'params' in t:
-        typedef ${t['returns']}(__${x}call *${th.make_type_name(n, tags, t, cpp=True)})(
+        typedef ${t['returns']}(${X}_APICALL *${th.make_type_name(n, tags, t, cpp=True)})(
             %for line in th.make_param_lines(n, tags, t):
             ${line}
             %endfor
@@ -274,9 +274,9 @@ namespace ${n}
         template<${th.make_tparams_line(n, tags, f)}>
         %endif
         %if 'decl' in f:
-        ${f['decl']} ${th.make_return_type(n, tags, f, cpp=True, decl=True, meta=meta)} __${x}call
+        ${f['decl']} ${th.make_return_type(n, tags, f, cpp=True, decl=True, meta=meta)} ${X}_APICALL
         %else:
-        ${th.make_return_type(n, tags, f, cpp=True, decl=True, meta=meta)} __${x}call
+        ${th.make_return_type(n, tags, f, cpp=True, decl=True, meta=meta)} ${X}_APICALL
         %endif
         ${th.make_func_name(n, tags, f, cpp=True)}(
             %for line in th.make_param_lines(n, tags, f, cpp=True, decl=True, meta=meta):

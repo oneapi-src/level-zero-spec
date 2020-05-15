@@ -27,7 +27,7 @@ namespace layer
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    __${x}dlllocal ${x}_result_t __${x}call
+    __${x}dlllocal ${x}_result_t ${X}_APICALL
     ${th.make_func_name(n, tags, obj)}(
         %for line in th.make_param_lines(n, tags, obj):
         ${line}
@@ -72,7 +72,7 @@ extern "C" {
 ///     - ::${X}_RESULT_SUCCESS
 ///     - ::${X}_RESULT_ERROR_INVALID_NULL_POINTER
 ///     - ::${X}_RESULT_ERROR_UNSUPPORTED_VERSION
-__${x}dllexport ${x}_result_t __${x}call
+${X}_DLLEXPORT ${x}_result_t ${X}_APICALL
 ${tbl['export']['name']}(
     %for line in th.make_param_lines(n, tags, tbl['export']):
     ${line}

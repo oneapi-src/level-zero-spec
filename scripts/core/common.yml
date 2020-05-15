@@ -28,27 +28,27 @@ value: "( _ver & 0x0000ffff )"
 type: macro
 desc: "Calling convention for all API functions"
 condition: "defined(_WIN32)"
-name: __$xcall
+name: $X_APICALL
 value: __cdecl
 altvalue: ""
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Microsoft-specific dllexport storage-class attribute"
 condition: "defined(_WIN32)"
-name: __$x_api_export
+name: $X_APIEXPORT
 value: __declspec(dllexport)
 altvalue: ""
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Microsoft-specific dllexport storage-class attribute"
 condition: "defined(_WIN32)"
-name: __$xdllexport
+name: $X_DLLEXPORT
 value: __declspec(dllexport)
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "GCC-specific dllexport storage-class attribute"
 condition: "__GNUC__ >= 4"
-name: __$xdllexport
+name: $X_DLLEXPORT
 value: __attribute__ ((visibility ("default")))
 altvalue: ""
 --- #--------------------------------------------------------------------------
