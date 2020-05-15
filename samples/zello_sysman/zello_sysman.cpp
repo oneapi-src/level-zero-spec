@@ -262,7 +262,7 @@ void ShowFabricPortInfo(zes_fabric_port_handle_t hPort)
         if (zesFabricPortGetState(hPort, &state) == ZE_RESULT_SUCCESS)
         {
             zes_fabric_link_type_t link;
-            if (zesFabricPortGetLinkType(hPort, false, &link) == ZE_RESULT_SUCCESS)
+            if (zesFabricPortGetLinkType(hPort, &link) == ZE_RESULT_SUCCESS)
             {
                 zes_fabric_port_config_t config;
                 if (zesFabricPortGetConfig(hPort, &config) == ZE_RESULT_SUCCESS)

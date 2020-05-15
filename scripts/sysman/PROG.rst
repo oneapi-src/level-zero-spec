@@ -1347,7 +1347,7 @@ the device and sub-devices:
            ::${s}_fabric_port_state_t state
            if (::${s}FabricPortGetState(hPort, &state) == ::${X}_RESULT_SUCCESS)
                ::${s}_fabric_link_type_t link
-               if (::${s}FabricPortGetLinkType(hPort, false, &link) == ::${X}_RESULT_SUCCESS)
+               if (::${s}FabricPortGetLinkType(hPort, &link) == ::${X}_RESULT_SUCCESS)
                    ::${s}_fabric_port_config_t config
                    if (::${s}FabricPortGetConfig(hPort, &config) == ::${X}_RESULT_SUCCESS)
                        output("        Model:                 %s", props.model)
