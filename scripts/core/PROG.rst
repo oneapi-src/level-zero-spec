@@ -1351,7 +1351,7 @@ One thing to note is that the ordinal that is used when creating a
 command queue is relative to the sub-device. This ordinal specifies
 which physical compute queue on the device or sub-device to map the
 logical queue to. The application needs to query
-::${x}_device_properties_t.numAsyncComputeEngines from the sub-device to
+::${x}_command_queue_group_properties_t from the sub-device to
 determine how to set this ordinal. See ::${x}_command_queue_desc_t for
 more details.
 
@@ -1380,14 +1380,6 @@ or sub-device using ::${x}DeviceGetProperties.
 
        void* pMemForSubDevice2;
        ::${x}DriverAllocDeviceMem(hDriver, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
-       ...
-
-       ...
-       // Check that cmd queue ordinal that was chosen is valid.
-       assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
-
-       ${x}_command_queue_handle_t commandQueueForSubDevice2;
-       ::${x}CommandQueueCreate(hSubdevice, &desc, &commandQueueForSubDevice2);
        ...
 
 Device Residency
