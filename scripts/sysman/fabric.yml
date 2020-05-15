@@ -233,9 +233,6 @@ params:
     - type: $s_fabric_port_handle_t
       name: hPort
       desc: "[in] Handle for the component."
-    - type: $x_bool_t
-      name: verbose
-      desc: "[in] Set to true to get a more detailed report."
     - type: $s_fabric_link_type_t*
       name: pLinkType
       desc: "[in,out] Will contain details about the link attached to the Fabric port."
