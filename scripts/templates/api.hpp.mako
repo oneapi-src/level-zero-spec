@@ -23,6 +23,7 @@ def declare_dbg(obj, tags):
     N=n.upper()
 
     x=tags['$x']
+    X=x.upper()
 %>/*
  *
  * Copyright (C) 2019 Intel Corporation
