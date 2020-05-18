@@ -56,7 +56,7 @@ n/a
   - `altvalue` must be an ISO-C standard preprocessor replacement list. If specified, then will be contained within the `#else` conditional block.
   - `ordinal` will be used to override the default order (in which they appear) the macro appears within its section; `default="1000"`
   - `version` will be used to define the minimum API version in which the macro will appear; `default="1.0"` This will also affect the order in which the macro appears within its section.
-* A macro may take the following optional sequence of scalars: {`details`}
+* A macro may take the following optional sequence of scalars or scalars to sequences: {`details`}
   - `detail` will be used as the macro's detailed comment
 
 <table>
@@ -147,7 +147,7 @@ n/a
   - `altvalue` must be an ISO-C standard identifier. If specified, then will be contained within the `#else` conditional block.
   - `ordinal` will be used to override the default order (in which they appear) the typedef appears within its section; `default="1000"`
   - `version` will be used to define the minimum API version in which the typedef will appear; `default="1.0"` This will also affect the order in which the typedef appears within its section and class.
-* A typedef may take the following optional sequence of scalars: {`details`}
+* A typedef may take the following optional sequence of scalars or scalars to sequences: {`details`}
   - `detail` will be used as the typedef's detailed comment
 
 <table>
@@ -201,7 +201,7 @@ class ze_name_t(c_void_p):
   - `condition` will be used as a C/C++ preprocessor `#if` conditional expression
   - `ordinal` will be used to override the default order (in which they appear) the handles appears within its section; `default="1000"`
   - `version` will be used to define the minimum API version in which the handles will appear; `default="1.0"` This will also affect the order in which the handles appears within its section.
-* A handle may take the following optional sequence of scalars: {`details`}
+* A handle may take the following optional sequence of scalars or scalars to sequences: {`details`}
   - `detail` will be used as the handle's detailed comment
 
 <table>
@@ -286,7 +286,7 @@ class ze_name_handle_t(c_void_p):
   - An etor may take the following optional scalar field: {`value`, `version`}
     + `value` must be an ISO-C standard identifier
     + `version` will be used to define the minimum API version in which the etor will appear; `default="1.0"` This will also affect the order in which the etor appears within the enum.
-* An enum may take the following optional sequence of scalars: {`details`}
+* An enum may take the following optional sequence of scalars or scalars to sequences: {`details`}
   - `detail` will be used as the enum's detailed comment
 
 <table>
@@ -350,8 +350,9 @@ class ze_name_v(IntEnum):
   - `name` must be a unique ISO-C standard identifier, start with `$` tag, be snake_case and end with `_t`
     + The special-case descriptor struct should always end with `_desc_t`
     + The special-case property struct should always end with `_properties_t`
-* A struct|union may take the following optional scalar fields: {`class`, `condition`, `ordinal`, `version`}
+* A struct|union may take the following optional scalar fields: {`class`, `base`, `condition`, `ordinal`, `version`}
   - `class` will be used to scope the struct|union declaration within the specified C++ class
+  - `base` will be used as the base type of the structure
   - `condition` will be used as a C/C++ preprocessor `#if` conditional expression
   - `ordinal` will be used to override the default order (in which they appear) the struct|union appears within its section; `default="1000"`
   - `version` will be used to define the minimum API version in which the struct|union will appear; `default="1.0"` This will also affect the order in which the struct|union appears within its section and class.
@@ -370,7 +371,7 @@ class ze_name_v(IntEnum):
     + `init` will be used to initialize the C++ struct|union member's value
     + `init` must be an ISO-C standard identifier or literal
     + `version` will be used to define the minimum API version in which the member will appear; `default="1.0"` This will also affect the order in which the member appears within the struct|union.
-* A struct|union may take the following optional sequence of scalars: {`details`}
+* A struct|union may take the following optional sequence of scalars or scalars to sequences: {`details`}
   - `detail` will be used as the struct|union's detailed comment
 
 <table>
@@ -513,10 +514,10 @@ class ze_name_t(Structure):
     + `init` must be an ISO-C standard identifier or literal
     + `version` will be used to define the minimum API version in which the param will appear; `default="1.0"` This will also affect the order in which the param appears within the function.
   - if `class` is specified and the function is not `decl: static`, then the first param **must** be the handle associated with the class
-* A function may take the following optional sequence of scalars: {`details`, `analogue`}
-  - `detail` will be used as the function's detailed comment
+* A function may take the following optional sequence of scalars: {`analogue`}
   - 'analogue` will be used as the function's remarks comment
-* A function may take the following optional sequence of scalars or scalars to sequences: {`returns`}
+* A function may take the following optional sequence of scalars or scalars to sequences: {`details`, `returns`}
+  - `detail` will be used as the function's detailed comment
   - `return` will be used as the function's returns comment
   - `return` must be an etor of `$x_result_t`
   - `return` defaults are generated by parsing the function's params' description annotations
@@ -628,7 +629,7 @@ _zeClsNameFnName_t = CFUNCTYPE( ze_result_t, ze_cls_handle_t, c_ulong, POINTER(c
   - The first member must be the handle associated with the class; the `name` must be `"handle"`
   - If `owner` is specified, then the second member must be the pointer to the owner 
   - The next member may be the `_desc_t` used to create the object; the `name` must be `"desc"`
-* A class may take the following optional sequence of scalars: {`details`}
+* A class may take the following optional sequence of scalars or scalars to sequences: {`details`}
   - `detail` will be used as the class's detailed comment
 
 <table>
