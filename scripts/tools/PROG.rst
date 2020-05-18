@@ -849,7 +849,7 @@ A debug event is described by the ::${t}_debug_event_t structure, which contains
   * A bit-vector of ::${t}_debug_event_flags_t, which can be one of the
     following:
 
-    * ::${T}_DEBUG_EVENT_FLAG_STOPPED indicates that the thread that
+    * ::${T}_DEBUG_EVENT_FLAGS_STOPPED indicates that the thread that
       reported the event is stopped and needs to be resumed in order to
       proceed.
 
@@ -870,25 +870,25 @@ Following the common fields, the event object contains event-specific
 fields depending on the event type.  Not all events have event-specific
 fields.
 
-  * ::${T}_DEBUG_EVENT_DETACHED: the tool was detached.
+  * ::${T}_DEBUG_EVENT_TYPE_DETACHED: the tool was detached.
 
     * The detach reason as ::${t}_debug_detach_reason_t.  This can be one
       of the following reasons:
 
-        * ::${T}_DEBUG_DETACH_HOST_EXIT indicates that the host process
+        * ::${T}_DEBUG_DETACH_REASON_HOST_EXIT indicates that the host process
           exited.
 
-  * ::${T}_DEBUG_EVENT_PROCESS_ENTRY: the host process created one or more
+  * ::${T}_DEBUG_EVENT_TYPE_PROCESS_ENTRY: the host process created one or more
     command queues on the device.
 
-  * ::${T}_DEBUG_EVENT_PROCESS_EXIT: the host process destroyed all
+  * ::${T}_DEBUG_EVENT_TYPE_PROCESS_EXIT: the host process destroyed all
     command queues on the device.
 
-  * ::${T}_DEBUG_EVENT_MODULE_LOAD: an in-memory module was loaded onto
+  * ::${T}_DEBUG_EVENT_TYPE_MODULE_LOAD: an in-memory module was loaded onto
     the device.
 
     The event is generated in the ::${x}ModuleCreate() flow with thread ==
-    ::${T}_DEBUG_THREAD_NONE.  If ::${T}_DEBUG_EVENT_FLAG_STOPPED is set,
+    ::${T}_DEBUG_THREAD_NONE.  If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is set,
     the event blocks the ::${x}ModuleCreate() call until the debugger
     acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
 
@@ -898,11 +898,11 @@ fields.
 
     * The load address of the module.
 
-  * ::${T}_DEBUG_EVENT_MODULE_UNLOAD: an in-memory module is about to get
+  * ::${T}_DEBUG_EVENT_TYPE_MODULE_UNLOAD: an in-memory module is about to get
     unloaded from the device.
 
     The event is generated in the ::${x}ModuleDestroy() flow with thread
-    == ::${T}_DEBUG_THREAD_NONE.  If ::${T}_DEBUG_EVENT_FLAG_STOPPED is
+    == ::${T}_DEBUG_THREAD_NONE.  If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is
     set, the event blocks the ::${x}ModuleDestroy() call until the
     debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
 
@@ -912,7 +912,7 @@ fields.
 
     * The load address of the module.
 
-  * ::${T}_DEBUG_EVENT_EXCEPTION: the thread stopped due to a device
+  * ::${T}_DEBUG_EVENT_TYPE_EXCEPTION: the thread stopped due to a device
     exception.
 
 Run Control
@@ -927,7 +927,7 @@ To interrupt an individual thread or an entire debug session, call
 
 When interrupting an entire debug session, threads that are already
 stopped as well as threads that are not available will be ignored.  After
-threads have been interrupted, a ::${T}_DEBUG_EVENT_EXCEPTION event with
+threads have been interrupted, a ::${T}_DEBUG_EVENT_TYPE_EXCEPTION event with
 thread == ::${T}_DEBUG_THREAD_ALL is created.
 
 To resume an individual thread or an entire debug session, call
@@ -966,7 +966,7 @@ session:
 
 
 After interrupting one or all threads, the tool needs to wait for the
-corresponding ::${T}_DEBUG_EVENT_EXCEPTION event.  Note that there may be
+corresponding ::${T}_DEBUG_EVENT_TYPE_EXCEPTION event.  Note that there may be
 other events preceding that event.  There may further be exception events
 for individual threads preceding or succeeding a debug session exception
 event.
@@ -980,7 +980,7 @@ as if that thread had read or written the memory.
 
 Memory may be partitioned into device-specific memory spaces.  Intel
 graphics devices, for example, use the following memory spaces defined in
-::${t}_debug_memory_space_intel_graphics_t:
+::${t}_debug_memory_space_igfx_t:
 
   * 0: default memory space
   * 1: shared local memory space
@@ -1013,7 +1013,7 @@ default memory space.
 
     ...
 
-    errcode = ::${t}DebugWriteMemory(session, ::${T}_DEBUG_THREAD_NONE, ::${T}_DEBUG_MEMORY_SPACE_GEN_DEFAULT, dst, sizeof(buffer), buffer);
+    errcode = ::${t}DebugWriteMemory(session, ::${T}_DEBUG_THREAD_NONE, ::${T}_DEBUG_MEMORY_SPACE_IGFX_DEFAULT, dst, sizeof(buffer), buffer);
     if (errcode)
         return errcode;
 
@@ -1100,23 +1100,23 @@ The following sample code demonstrates iterating over register files:
 
 Intel graphics devices, for example, provide:
 
-  * ::${T}_DEBUG_STATE_GEN_GRF, the general register file.
+  * ::${T}_DEBUG_STATE_IGFX_GRF, the general register file.
 
     In version one, this register file consists of a homogeneous array of
     256 bit wide registers starting at `r0`.
 
-  * ::${T}_DEBUG_STATE_GEN_ACC, the accumulator register file.
+  * ::${T}_DEBUG_STATE_IGFX_ACC, the accumulator register file.
 
     In version one, this register file consists of a homogeneous array of
     256 bit wide registers starting at `acc0`.
 
-  * ::${T}_DEBUG_STATE_GEN_ADDR, the address register file.
+  * ::${T}_DEBUG_STATE_IGFX_ADDR, the address register file.
 
     In version one, this register file consists of a homogeneous array of
     256 bit wide registers starting at `a0`.  Each register is split into
     16 elements, each 16 bit wide.
 
-  * ::${T}_DEBUG_STATE_GEN_FLAG, the flags register file.
+  * ::${T}_DEBUG_STATE_IGFX_FLAG, the flags register file.
 
     In version one, this register file consists of a homogeneous array of
     32 bit wide registers starting at `flag0`.  Each register is split

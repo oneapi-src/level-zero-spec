@@ -34,7 +34,7 @@ name: $t_debug_config_v1_t
 members:
     - type: "int"
       name: pid
-      desc: "The host process identifier"
+      desc: "[in] the host process identifier"
 --- #--------------------------------------------------------------------------
 type: union
 desc: "Debug configuration: version-dependent fields"
@@ -43,7 +43,7 @@ name: $t_debug_config_variants_t
 members:
     - type: $t_debug_config_v1_t
       name: v1
-      desc: "Version 1"
+      desc: "[in] version 1"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Debug configuration"
@@ -52,10 +52,10 @@ name: $t_debug_config_t
 members:
     - type: "uint16_t"
       name: version
-      desc: "The requested program debug API version"
+      desc: "[in] the requested program debug API version"
     - type: $t_debug_config_variants_t
       name: variant
-      desc: "Version-specific fields"
+      desc: "[in] version-specific fields"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Attach to a device."
@@ -120,10 +120,10 @@ desc: "Debug event flags."
 class: $tDebug
 name: $t_debug_event_flags_t
 etors:
-    - name: $T_DEBUG_EVENT_FLAG_NONE
+    - name: $T_DEBUG_EVENT_FLAGS_NONE
       desc: "No event flags"
       value: "0"
-    - name: $T_DEBUG_EVENT_FLAG_STOPPED
+    - name: $T_DEBUG_EVENT_FLAGS_STOPPED
       desc: "The reporting thread stopped"
       value: "$X_BIT(0)"
 --- #--------------------------------------------------------------------------
@@ -132,20 +132,20 @@ desc: "Debug event types."
 class: $tDebug
 name: $t_debug_event_type_t
 etors:
-    - name: $T_DEBUG_EVENT_INVALID
+    - name: $T_DEBUG_EVENT_TYPE_INVALID
       desc: "The event is invalid"
       value: "0"
-    - name: $T_DEBUG_EVENT_DETACHED
+    - name: $T_DEBUG_EVENT_TYPE_DETACHED
       desc: "The tool was detached"
-    - name: $T_DEBUG_EVENT_PROCESS_ENTRY
+    - name: $T_DEBUG_EVENT_TYPE_PROCESS_ENTRY
       desc: "The debuggee process created command queues on the device"
-    - name: $T_DEBUG_EVENT_PROCESS_EXIT
+    - name: $T_DEBUG_EVENT_TYPE_PROCESS_EXIT
       desc: "The debuggee process destroyed all command queues on the device"
-    - name: $T_DEBUG_EVENT_MODULE_LOAD
+    - name: $T_DEBUG_EVENT_TYPE_MODULE_LOAD
       desc: "An in-memory module was loaded onto the device"
-    - name: $T_DEBUG_EVENT_MODULE_UNLOAD
+    - name: $T_DEBUG_EVENT_TYPE_MODULE_UNLOAD
       desc: "An in-memory module is about to get unloaded from the device"
-    - name: $T_DEBUG_EVENT_EXCEPTION
+    - name: $T_DEBUG_EVENT_TYPE_EXCEPTION
       desc: "The thread stopped due to a device exception"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -153,10 +153,10 @@ desc: "Debug detach reason."
 class: $tDebug
 name: $t_debug_detach_reason_t
 etors:
-    - name: $T_DEBUG_DETACH_INVALID
+    - name: $T_DEBUG_DETACH_REASON_INVALID
       desc: "The detach reason is not valid"
       value: "0"
-    - name: $T_DEBUG_DETACH_HOST_EXIT
+    - name: $T_DEBUG_DETACH_REASON_HOST_EXIT
       desc: "The host process exited"
 --- #--------------------------------------------------------------------------
 type: macro
@@ -176,7 +176,7 @@ name: $t_debug_event_info_detached_t
 members:
     - type: "uint8_t"
       name: reason
-      desc: "The detach reason"
+      desc: "[out] the detach reason"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event information for $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
@@ -185,13 +185,13 @@ name: $t_debug_event_info_module_t
 members:
     - type: "uint64_t"
       name: moduleBegin
-      desc: "The begin address of the in-memory module"
+      desc: "[out] the begin address of the in-memory module"
     - type: "uint64_t"
       name: moduleEnd
-      desc: "The end address of the in-memory module"
+      desc: "[out] the end address of the in-memory module"
     - type: "uint64_t"
       name: load
-      desc: "The load address of the module on the device"
+      desc: "[out] the load address of the module on the device"
 --- #--------------------------------------------------------------------------
 type: union
 desc: "Event type specific information"
@@ -200,10 +200,10 @@ name: $t_debug_event_info_t
 members:
     - type: $t_debug_event_info_detached_t
       name: detached
-      desc: "type == $T_DEBUG_EVENT_DETACHED"
+      desc: "[out] type == $T_DEBUG_EVENT_DETACHED"
     - type: $t_debug_event_info_module_t
       name: module
-      desc: "type == $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
+      desc: "[out] type == $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "A debug event on the device."
@@ -212,16 +212,16 @@ name: $t_debug_event_t
 members:
     - type: "uint8_t"
       name: type
-      desc: "The event type"
+      desc: "[out] the event type"
     - type: "uint64_t"
       name: thread
-      desc: "The thread reporting the event"
+      desc: "[out] the thread reporting the event"
     - type: "uint64_t"
       name: flags
-      desc: "A bit-vector of $t_debug_event_flags_t"
+      desc: "[out] a bit-vector of $t_debug_event_flags_t"
     - type: $t_debug_event_info_t
       name: info
-      desc: "Event type specific information"
+      desc: "[out] event type specific information"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read the topmost debug event."
@@ -283,12 +283,12 @@ returns:
 type: enum
 desc: "Memory spaces for Intel Graphics devices."
 class: $tDebug
-name: $t_debug_memory_space_intel_graphics_t
+name: $t_debug_memory_space_igfx_t
 etors:
-    - name: $T_DEBUG_MEMORY_SPACE_GEN_DEFAULT
+    - name: $T_DEBUG_MEMORY_SPACE_IGFX_DEFAULT
       desc: "default memory space (attribute may be omitted)"
       value: "0"
-    - name: $T_DEBUG_MEMORY_SPACE_GEN_SLM
+    - name: $T_DEBUG_MEMORY_SPACE_IGFX_SLM
       desc: "shared local memory space"
 --- #--------------------------------------------------------------------------
 type: function
@@ -356,18 +356,18 @@ returns:
 type: enum
 desc: "Register file types for Intel Graphics devices."
 class: $tDebug
-name: $t_debug_state_intel_graphics_t
+name: $t_debug_state_igfx_t
 etors:
-    - name: $T_DEBUG_STATE_GEN_INVALID
+    - name: $T_DEBUG_STATE_IGFX_INVALID
       desc: "An invalid register file"
       value: "0"
-    - name: $T_DEBUG_STATE_GEN_GRF
+    - name: $T_DEBUG_STATE_IGFX_GRF
       desc: "The general register file"
-    - name: $T_DEBUG_STATE_GEN_ACC
+    - name: $T_DEBUG_STATE_IGFX_ACC
       desc: "The accumulator register file"
-    - name: $T_DEBUG_STATE_GEN_ADDR
+    - name: $T_DEBUG_STATE_IGFX_ADDR
       desc: "The address register file"
-    - name: $T_DEBUG_STATE_GEN_FLAG
+    - name: $T_DEBUG_STATE_IGFX_FLAG
       desc: "The flags register file"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -377,16 +377,16 @@ name: $t_debug_state_section_t
 members:
     - type: "uint16_t"
       name: type
-      desc: "The register file type type"
+      desc: "[out] the register file type type"
     - type: "uint16_t"
       name: version
-      desc: "The register file version"
+      desc: "[out] the register file version"
     - type: "uint32_t"
       name: size
-      desc: "The size of the register file in bytes"
+      desc: "[out] the size of the register file in bytes"
     - type: "uint64_t"
       name: offset
-      desc: "The offset into the register state area"
+      desc: "[out] the offset into the register state area"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "A register state descriptor."
@@ -395,16 +395,16 @@ name: $t_debug_state_t
 members:
     - type: "uint32_t"
       name: size
-      desc: "The size of the register state object in bytes"
+      desc: "[out] the size of the register state object in bytes"
     - type: "uint8_t"
       name: headerSize
-      desc: "The size of the register state descriptor in bytes"
+      desc: "[out] the size of the register state descriptor in bytes"
     - type: "uint8_t"
       name: secSize
-      desc: "The size of the register file descriptors in bytes"
+      desc: "[out] the size of the register file descriptors in bytes"
     - type: "uint16_t"
       name: numSec
-      desc: "The number of register file descriptors"
+      desc: "[out] the number of register file descriptors"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read register state."
