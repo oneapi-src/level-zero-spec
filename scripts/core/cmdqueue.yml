@@ -56,15 +56,8 @@ type: struct
 desc: "Command Queue descriptor"
 class: $xCommandQueue
 name: $x_command_queue_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_COMMAND_QUEUE_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: uint32_t
       name: ordinal
       desc: "[in] command queue group ordinal"

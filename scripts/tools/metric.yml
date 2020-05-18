@@ -57,15 +57,8 @@ type: struct
 desc: "Metric group properties queried using $tMetricGroupGetProperties"
 class: $tMetricGroup
 name: $t_metric_group_properties_t
+base: $t_base_properties_t
 members:
-    - type: $t_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $T_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: char
       name: "name[$T_MAX_METRIC_GROUP_NAME]"
       desc: "[out] metric group name"
@@ -246,15 +239,8 @@ type: struct
 desc: "Metric properties queried using $tMetricGetProperties"
 class: $tMetric
 name: $t_metric_properties_t
+base: $t_base_properties_t
 members:
-    - type: $t_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $T_STRUCTURE_TYPE_METRIC_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: char
       name: "name[$T_MAX_METRIC_NAME]"
       desc: "[out] metric name"
@@ -313,15 +299,8 @@ type: struct
 desc: "Metric tracer descriptor"
 class: $tMetricTracer
 name: $t_metric_tracer_desc_t
+base: $t_base_desc_t
 members:
-    - type: $t_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $T_STRUCTURE_TYPE_METRIC_TRACER_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: uint32_t
       name: "notifyEveryNReports"
       desc: "[in,out] number of collected reports after which notification event will be signalled"
@@ -425,15 +404,8 @@ type: struct
 desc: "Metric query pool description"
 class: $tMetricQueryPool
 name: $t_metric_query_pool_desc_t
+base: $t_base_desc_t
 members:
-    - type: $t_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $T_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $t_metric_query_pool_flag_t
       name: flags
       desc: "[in] Query pool type."

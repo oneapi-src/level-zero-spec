@@ -39,15 +39,8 @@ type: struct
 desc: "Module descriptor"
 class: $xModule
 name: $x_module_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_MODULE_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: "$x_module_format_t"
       name: format
       desc: "[in] Module format passed in with pInputModule"
@@ -275,15 +268,8 @@ type: struct
 desc: "Kernel descriptor"
 class: $xKernel
 name: $x_kernel_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_KERNEL_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: "$x_kernel_flag_t"
       name: flags
       desc: "[in] creation flags"
@@ -461,14 +447,14 @@ name: $x_kernel_attribute_t
 analogue:
     - "**cl_kernel_exec_info**"
 etors:
-    - name: $X_KERNEL_ATTR_INDIRECT_HOST_ACCESS
+    - name: $X_KERNEL_ATTRIBUTE_INDIRECT_HOST_ACCESS
       value: "0"
       desc: "Indicates that the function accesses host allocations indirectly (default: false, type: bool_t)"
-    - name: $X_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS
+    - name: $X_KERNEL_ATTRIBUTE_INDIRECT_DEVICE_ACCESS
       desc: "Indicates that the function accesses device allocations indirectly (default: false, type: bool_t)"
-    - name: $X_KERNEL_ATTR_INDIRECT_SHARED_ACCESS
+    - name: $X_KERNEL_ATTRIBUTE_INDIRECT_SHARED_ACCESS
       desc: "Indicates that the function accesses shared allocations indirectly (default: false, type: bool_t)"
-    - name: $X_KERNEL_ATTR_SOURCE_ATTRIBUTE
+    - name: $X_KERNEL_ATTRIBUTE_SOURCE_ATTRIBUTE
       desc: "Declared kernel attributes (i.e. can be specified with __attribute__ in runtime language). (type: char[]) Returned as a null-terminated string and each attribute is separated by a space. $xKernelSetAttribute is not supported for this."
 --- #--------------------------------------------------------------------------
 type: function
@@ -547,15 +533,8 @@ type: struct
 desc: "Kernel properties"
 class: $xKernel
 name: $x_kernel_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_KERNEL_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: char
       name: "name[$X_MAX_KERNEL_NAME]"
       desc: "[out] Kernel name"

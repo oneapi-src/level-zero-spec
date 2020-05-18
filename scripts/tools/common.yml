@@ -83,7 +83,31 @@ etors:
       desc: $t_metric_tracer_desc_t
     - name: $T_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC
       desc: $t_metric_query_pool_desc_t
-    - name: $T_STRUCTURE_TYPE_PROFILE_INFO
-      desc: $t_profile_info_t
+    - name: $T_STRUCTURE_TYPE_PROFILE_PROPERTIES
+      desc: $t_profile_properties_t
     - name: $T_STRUCTURE_TYPE_TRACER_DESC
       desc: $t_tracer_desc_t
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all properties types"
+name: $t_base_properties_t
+members:
+    - type: $t_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "void*"
+      name: pNext
+      desc: "[in,out][optional] pointer to extension-specific structure"
+      init: nullptr
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all descriptor types"
+name: $t_base_desc_t
+members:
+    - type: $t_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr

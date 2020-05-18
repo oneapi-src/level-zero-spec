@@ -37,15 +37,8 @@ desc: "CommandGraph descriptor"
 version: "2.0"
 class: $xCommandGraphExp
 name: $x_command_graph_exp_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_COMMAND_GRAPH_EXP_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_command_graph_exp_flag_t
       name: flags
       desc: "[in] creation flags"

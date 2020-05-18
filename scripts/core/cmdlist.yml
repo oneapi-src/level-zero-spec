@@ -41,15 +41,8 @@ type: struct
 desc: "Command List descriptor"
 class: $xCommandList
 name: $x_command_list_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_COMMAND_LIST_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: uint32_t
       name: commandQueueGroupOrdinal
       desc: "[in] command queue group ordinal to which this command list will be submitted"

@@ -140,7 +140,7 @@ name: "$x_ipc_mem_handle_t"
 members:
     - type: char
       name: "data[$X_MAX_IPC_HANDLE_SIZE]"
-      desc: "Opaque data representing an IPC handle"
+      desc: "[out] Opaque data representing an IPC handle"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "IPC handle to a event pool allocation"
@@ -148,7 +148,7 @@ name: "$x_ipc_event_pool_handle_t"
 members:
     - type: char
       name: "data[$X_MAX_IPC_HANDLE_SIZE]"
-      desc: "Opaque data representing an IPC handle"
+      desc: "[out] Opaque data representing an IPC handle"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Generic macro for enumerator bit masks"
@@ -309,6 +309,7 @@ members:
     - type: "void*"
       name: pNext
       desc: "[in,out][optional] pointer to extension-specific structure"
+      init: nullptr
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all descriptor types"
@@ -320,3 +321,4 @@ members:
     - type: "const void*"
       name: pNext
       desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr

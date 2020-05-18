@@ -31,15 +31,8 @@ type: struct
 desc: "Event pool descriptor"
 class: $xEventPool
 name: $x_event_pool_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_EVENT_POOL_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_event_pool_flag_t
       name: flags
       desc: "[in] creation flags"
@@ -122,15 +115,8 @@ type: struct
 desc: "Event descriptor"
 class: $xEvent
 name: $x_event_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_EVENT_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: uint32_t
       name: index
       desc: "[in] index of the event within the pool; must be less-than the count specified during pool creation"

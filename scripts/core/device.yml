@@ -83,7 +83,7 @@ name: "$x_device_uuid_t"
 members:
     - type: uint8_t
       name: "id[$X_MAX_DEVICE_UUID_SIZE]"
-      desc: "Opaque data representing a device UUID"
+      desc: "[out] opaque data representing a device UUID"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device name string size"
@@ -94,15 +94,8 @@ type: struct
 desc: "Device properties queried using $xDeviceGetProperties"
 class: $xDevice
 name: $x_device_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DEVICE_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_device_type_t
       name: type
       desc: "[out] generic device type"
@@ -194,15 +187,8 @@ type: struct
 desc: "Device compute properties queried using $xDeviceGetComputeProperties"
 class: $xDevice
 name: $x_device_compute_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: uint32_t
       name: maxTotalGroupSize
       desc: "[out] Maximum items per compute group. (maxGroupSizeX * maxGroupSizeY * maxGroupSizeZ) <= maxTotalGroupSize"
@@ -264,12 +250,12 @@ name: "$x_native_kernel_uuid_t"
 members:
     - type: uint8_t
       name: "id[$X_MAX_NATIVE_KERNEL_UUID_SIZE]"
-      desc: "Opaque data representing a native kernel UUID"
+      desc: "[out] opaque data representing a native kernel UUID"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Floating Point capabilities"
+desc: "Floating-Point capabilities"
 class: $xDevice
-name: $x_fp_capabilities_t
+name: $x_fp_caps_t
 details:
     - "floating-point capabilities of the device."
 etors:
@@ -305,15 +291,8 @@ type: struct
 desc: "Device properties queried using $xDeviceGetKernelProperties"
 class: $xDevice
 name: $x_device_kernel_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DEVICE_KERNEL_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: uint32_t
       name: spirvVersionSupported
       desc: |
@@ -339,14 +318,14 @@ members:
     - type: $x_bool_t
       name: dp4aSupported
       desc: "[out] Supports four component dot product and accumulate operations"
-    - type: $x_fp_capabilities_t
-      name: halfFpCapabilities
+    - type: $x_fp_caps_t
+      name: fp16Capabilities
       desc: "[out] Capabilities for half-precision floating-point operations."
-    - type: $x_fp_capabilities_t
-      name: singleFpCapabilities
+    - type: $x_fp_caps_t
+      name: fp32Capabilities
       desc: "[out] Capabilities for single-precision floating-point operations."
-    - type: $x_fp_capabilities_t
-      name: doubleFpCapabilities
+    - type: $x_fp_caps_t
+      name: fp64Capabilities
       desc: "[out] Capabilities for double-precision floating-point operations."
     - type: uint32_t
       name: maxArgumentsSize
@@ -375,15 +354,8 @@ type: struct
 desc: "Command queue group properties queried using $xDeviceGetCommandQueueGroupProperties"
 class: $xDevice
 name: $x_command_queue_group_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_bool_t
       name: computeSupported
       desc: "[out] command queue group supports enqueing compute commands."
@@ -433,15 +405,8 @@ type: struct
 desc: "Device local memory properties queried using $xDeviceGetMemoryProperties"
 class: $xDevice
 name: $x_device_memory_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: uint32_t
       name: maxClockRate
       desc: "[out] Maximum clock rate for device memory."
@@ -481,23 +446,23 @@ params:
 type: enum
 desc: "Memory access capabilities"
 class: $xDevice
-name: $x_memory_access_capabilities_t
+name: $x_memory_access_caps_t
 details:
     - "Supported access capabilities for different types of memory allocations"
 etors:
-    - name: $X_MEMORY_ACCESS_NONE
+    - name: $X_MEMORY_ACCESS_CAPS_NONE
       value: "0"
       desc: "Access not supported"
-    - name: $X_MEMORY_ACCESS
+    - name: $X_MEMORY_ACCESS_CAPS_RW
       value: "$X_BIT( 0 )"
       desc: "Supports load/store access"
-    - name: $X_MEMORY_ATOMIC_ACCESS
+    - name: $X_MEMORY_ACCESS_CAPS_ATOMIC
       value: "$X_BIT( 1 )"
       desc: "Supports atomic access"
-    - name: $X_MEMORY_CONCURRENT_ACCESS
+    - name: $X_MEMORY_ACCESS_CAPS_CONCURRENT
       value: "$X_BIT( 2 )"
       desc: "Supports concurrent access"
-    - name: $X_MEMORY_CONCURRENT_ATOMIC_ACCESS
+    - name: $X_MEMORY_ACCESS_CAPS_CONCURRENT_ATOMIC
       value: "$X_BIT( 3 )"
       desc: "Supports concurrent atomic access"
 --- #--------------------------------------------------------------------------
@@ -505,28 +470,21 @@ type: struct
 desc: "Device memory access properties queried using $xDeviceGetMemoryAccessProperties"
 class: $xDevice
 name: $x_device_memory_access_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
-    - type: $x_memory_access_capabilities_t
+    - type: $x_memory_access_caps_t
       name: hostAllocCapabilities
       desc: "[out] Bitfield describing host memory capabilities"
-    - type: $x_memory_access_capabilities_t
+    - type: $x_memory_access_caps_t
       name: deviceAllocCapabilities
       desc: "[out] Bitfield describing device memory capabilities"
-    - type: $x_memory_access_capabilities_t
+    - type: $x_memory_access_caps_t
       name: sharedSingleDeviceAllocCapabilities
       desc: "[out] Bitfield describing shared (single-device) memory capabilities"
-    - type: $x_memory_access_capabilities_t
+    - type: $x_memory_access_caps_t
       name: sharedCrossDeviceAllocCapabilities
       desc: "[out] Bitfield describing shared (cross-device) memory capabilities"
-    - type: $x_memory_access_capabilities_t
+    - type: $x_memory_access_caps_t
       name: sharedSystemAllocCapabilities
       desc: "[out] Bitfield describing shared (system) memory capabilities"
 --- #--------------------------------------------------------------------------
@@ -552,15 +510,8 @@ type: struct
 desc: "Device cache properties queried using $xDeviceGetCacheProperties"
 class: $xDevice
 name: $x_device_cache_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_bool_t
       name: intermediateCacheControlSupported
       desc: "[out] Support User control on Intermediate Cache (i.e. Resize SLM section vs Generic Cache)"
@@ -602,15 +553,8 @@ type: struct
 desc: "Device image properties queried using $xDeviceGetComputeProperties"
 class: $xDevice
 name: $x_device_image_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_bool_t
       name: supported
       desc: "[out] Supports reading and writing of images. See ::$xImageGetProperties for format-specific capabilities."
@@ -659,15 +603,8 @@ type: struct
 desc: "Device properties queried using $xDeviceGetP2PProperties"
 class: $xDevice
 name: $x_device_p2p_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_bool_t
       name: accessSupported
       desc: "[out] Supports access between peer devices."

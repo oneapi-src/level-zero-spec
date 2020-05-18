@@ -171,15 +171,8 @@ type: struct
 desc: "Image descriptor"
 class: $xImage
 name: $x_image_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_IMAGE_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_image_flag_t
       name: flags
       desc: "[in] creation flags"
@@ -229,15 +222,8 @@ type: struct
 desc: "Image properties"
 class: $xImage
 name: $x_image_properties_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_IMAGE_PROPERTIES
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_image_sampler_filter_flags_t
       name: samplerFilterFlags
       desc: "[out] supported sampler filtering"

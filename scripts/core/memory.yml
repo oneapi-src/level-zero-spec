@@ -28,15 +28,8 @@ type: struct
 desc: "Device mem alloc descriptor"
 class: $xDriver
 name: $x_device_mem_alloc_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: "$x_device_mem_alloc_flag_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
@@ -70,15 +63,8 @@ type: struct
 desc: "Host mem alloc descriptor"
 class: $xDriver
 name: $x_host_mem_alloc_desc_t
+base: $x_base_desc_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: "$x_host_mem_alloc_flag_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
@@ -234,15 +220,8 @@ type: struct
 desc: "Memory allocation properties queried using $xDriverGetMemAllocProperties"
 class: $xDriver
 name: $x_memory_allocation_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_MEMORY_ALLOCATION_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_memory_type_t
       name: type
       desc: "[out] type of allocated memory"

@@ -21,15 +21,8 @@ type: struct
 desc: "Tracer descriptor"
 class: $tTracer
 name: $t_tracer_desc_t
+base: $t_base_desc_t
 members:
-    - type: $t_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $T_STRUCTURE_TYPE_TRACER_DESC
-    - type: "const void*"
-      name: pNext
-      desc: "[in][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: void*
       name: pUserData
       desc: "[in] pointer passed to every tracer's callbacks"

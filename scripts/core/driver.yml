@@ -103,21 +103,14 @@ name: "$x_driver_uuid_t"
 members:
     - type: uint8_t
       name: "id[$X_MAX_DRIVER_UUID_SIZE]"
-      desc: "Opaque data representing a driver UUID"
+      desc: "[out] opaque data representing a driver UUID"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Driver properties queried using $xDriverGetProperties"
 class: $xDriver
 name: $x_driver_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DRIVER_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_driver_uuid_t
       name: uuid
       desc: "[out] universal unique identifier."
@@ -149,15 +142,8 @@ type: struct
 desc: "IPC properties queried using $xDriverGetIpcProperties"
 class: $xDriver
 name: $x_driver_ipc_properties_t
+base: $x_base_properties_t
 members:
-    - type: $x_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-      init: $X_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIES
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] pointer to extension-specific structure"
-      init: nullptr
     - type: $x_bool_t
       name: memsSupported
       desc: "[out] Supports passing memory allocations between processes. See ::$xDriverGetMemIpcHandle."
@@ -193,10 +179,10 @@ name: $x_driver_extension_properties_t
 members:
     - type: char
       name: "name[$X_MAX_EXTENSION_NAME]"
-      desc: "Extension name"
+      desc: "[out] extension name"
     - type: uint32_t
       name: version
-      desc: "Extension version using $X_MAKE_VERSION"
+      desc: "[out] extension version using $X_MAKE_VERSION"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves extension properties"

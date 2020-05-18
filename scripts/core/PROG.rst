@@ -208,28 +208,28 @@ In summary:
 
 Devices may support different capabilities for each type of allocation. Supported capabilities are:
 
-* ::${X}_MEMORY_ACCESS - if a device supports access (read or write) to allocations of the specified type.
-* ::${X}_MEMORY_ATOMIC_ACCESS - if a device support atomic operations on allocations of the specified type. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
-* ::${X}_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type. Concurrent access may be from another device that supports concurrent access, or from the host. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
-* ::${X}_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic operations on allocations of the specified type. Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host. Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.
+* ::${X}_MEMORY_ACCESS_CAPS_RW - if a device supports access (read or write) to allocations of the specified type.
+* ::${X}_MEMORY_ACCESS_CAPS_ATOMIC - if a device support atomic operations on allocations of the specified type. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
+* ::${X}_MEMORY_ACCESS_CAPS_CONCURRENT - if a device supports concurrent access to allocations of the specified type. Concurrent access may be from another device that supports concurrent access, or from the host. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
+* ::${X}_MEMORY_ACCESS_CAPS_CONCURRENT_ATOMIC - if a device supports concurrent atomic operations on allocations of the specified type. Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host. Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.
 
 Some devices may *oversubscribe* some **shared** allocations. When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.
 
 The required matrix of capabilities are:
 
-+----------------------------------+----------+---------------+-------------------+--------------------------+
-| Allocation Type                  | Access   | Atomic Access | Concurrent Access | Concurrent Atomic Access |
-+==================================+==========+===============+===================+==========================+
-| **Host**                         | Required | Optional      | Optional          | Optional                 |
-+----------------------------------+----------+---------------+-------------------+--------------------------+
-| **Device**                       | Required | Optional      | Optional          | Optional                 |
-+----------------------------------+----------+---------------+-------------------+--------------------------+
-| **Shared**                       | Required | Optional      | Optional          | Optional                 |
-+----------------------------------+----------+---------------+-------------------+--------------------------+
-| **Shared** (Cross-Device)        | Optional | Optional      | Optional          | Optional                 |
-+----------------------------------+----------+---------------+-------------------+--------------------------+
-| **Shared System** (Cross-Device) | Optional | Optional      | Optional          | Optional                 |
-+----------------------------------+----------+---------------+-------------------+--------------------------+
++----------------------------------+-----------+---------------+-------------------+--------------------------+
+| Allocation Type                  | RW Access | Atomic Access | Concurrent Access | Concurrent Atomic Access |
++==================================+===========+===============+===================+==========================+
+| **Host**                         | Required  | Optional      | Optional          | Optional                 |
++----------------------------------+-----------+---------------+-------------------+--------------------------+
+| **Device**                       | Required  | Optional      | Optional          | Optional                 |
++----------------------------------+-----------+---------------+-------------------+--------------------------+
+| **Shared**                       | Required  | Optional      | Optional          | Optional                 |
++----------------------------------+-----------+---------------+-------------------+--------------------------+
+| **Shared** (Cross-Device)        | Optional  | Optional      | Optional          | Optional                 |
++----------------------------------+-----------+---------------+-------------------+--------------------------+
+| **Shared System** (Cross-Device) | Optional  | Optional      | Optional          | Optional                 |
++----------------------------------+-----------+---------------+-------------------+--------------------------+
 
 Cache Hints, Prefetch, and Memory Advice
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1087,7 +1087,7 @@ Use ::${x}KernelSetAttribute to set attributes for a kernel object.
 
     // Kernel performs indirect device access.
     bool_t isIndirect = true;
-    ::${x}KernelSetAttribute(hKernel, ::${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
+    ::${x}KernelSetAttribute(hKernel, ::${X}_KERNEL_ATTRIBUTE_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
     ...
 
 Use ::${x}KernelSetAttribute to get attributes for a kernel object.
@@ -1095,13 +1095,13 @@ Use ::${x}KernelSetAttribute to get attributes for a kernel object.
 .. parsed-literal::
 
     // Does kernel perform indirect device access.
-    ::${x}KernelGetAttribute(hKernel, ::${X}_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
+    ::${x}KernelGetAttribute(hKernel, ::${X}_KERNEL_ATTRIBUTE_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
     ...
     
     uint32_t strSize = 0; // Size of string + null terminator
-    ::${x}KernelGetAttribute(hKernel, ::${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, nullptr );
+    ::${x}KernelGetAttribute(hKernel, ::${X}_KERNEL_ATTRIBUTE_SOURCE_ATTRIBUTE, &strSize, nullptr );
     char* pAttributes = allocate(strSize);
-    ::${x}KernelGetAttribute(hKernel, ::${X}_KERNEL_ATTR_SOURCE_ATTRIBUTE, &strSize, pAttributes );
+    ::${x}KernelGetAttribute(hKernel, ::${X}_KERNEL_ATTRIBUTE_SOURCE_ATTRIBUTE, &strSize, pAttributes );
     ...
 
 See ::${x}_kernel_attribute_t for more information on the "set" and "get" attributes.
@@ -1399,7 +1399,7 @@ as multiple levels of indirection, there are two methods available:
 
 1. The application may set the ::${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 
-       + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_attribute_t (::${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, DEVICE_ACCESS, or SHARED_ACCESS).
+       + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_attribute_t (::${X}_KERNEL_ATTRIBUTE_INDIRECT_HOST_ACCESS, DEVICE_ACCESS, or SHARED_ACCESS).
        + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueExecuteCommandLists will return ::${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
 2. Explcit ::${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
@@ -1422,7 +1422,7 @@ The following pseudo-code demonstrate a sequence for using coarse-grain residenc
 
        // 'begin' is passed as kernel argument and appended into command list
        bool hasIndirectHostAccess = true;
-       ::${x}KernelSetAttribute(hFuncArgs, ::${X}_KERNEL_ATTR_INDIRECT_HOST_ACCESS, sizeof(bool), &hasIndirectHostAccess);
+       ::${x}KernelSetAttribute(hFuncArgs, ::${X}_KERNEL_ATTRIBUTE_INDIRECT_HOST_ACCESS, sizeof(bool), &hasIndirectHostAccess);
        ::${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
        ::${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
