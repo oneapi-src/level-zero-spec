@@ -42,7 +42,7 @@ etors:
     - name: $S_FABRIC_PORT_QUAL_ISSUES_NONE
       value: "0"
       desc: "There are no quality issues with the link at this time"
-    - name: $S_FABRIC_PORT_QUAL_LINK_ERRORS
+    - name: $S_FABRIC_PORT_QUAL_ISSUES_LINK_ERRORS
       value: "$X_BIT( 0 )"
       desc: "Excessive link errors are occurring"
     - name: $S_FABRIC_PORT_QUAL_ISSUES_SPEED
