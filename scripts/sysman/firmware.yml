@@ -80,7 +80,7 @@ params:
       desc: "[in] Handle for the component."
     - type: uint32_t*
       name: pChecksum
-      desc: "[in,out] Calculated checksum of the installed firmware."
+      desc: "[in,out] Calculated CRC32 checksum of the installed firmware."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."
