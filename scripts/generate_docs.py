@@ -129,11 +129,13 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
 
                     ref = _make_ref(symbol, symbol_type, meta)
                     if ref:
-                        if not re.match(r'\s', line.partition("::" + word)[2]):
-                            # need to add escape character after references that are not followed by whitespace in RST.
-                            line = line.replace("::" + word, ref + "\\")
-                        else:
-                            line = line.replace("::" + word, ref)
+                        tuple = line.partition("::" + word)
+                        line = tuple[0] + tuple[1].replace("::" + word, ref)
+                        if tuple[2] and not re.match(r'\s', tuple[2]):
+                            # reStructuredText requires an escape character after references that are not followed by whitespace.
+                            line += "\\"
+                        line += tuple[2]
+
                         link_found = True
 
             if not code_block and not link_found:
