@@ -102,7 +102,7 @@ desc: "Fabric port properties"
 class: $sFabricPort
 name: $s_fabric_port_properties_t
 members:
-    - type: int8_t
+    - type: char
       name: "model[$S_MAX_FABRIC_PORT_MODEL_SIZE]"
       desc: "[out] Description of port technology"
     - type: $x_bool_t
@@ -126,7 +126,7 @@ desc: "Provides information about the fabric link attached to a port"
 class: $sFabricPort
 name: $s_fabric_link_type_t
 members:
-    - type: int8_t
+    - type: char
       name: "desc[$S_MAX_FABRIC_LINK_TYPE_SIZE]"
       desc: "[out] This provides a static textural description of the physic attachment type"
 --- #--------------------------------------------------------------------------

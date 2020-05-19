@@ -92,22 +92,22 @@ members:
     - type: uint32_t
       name: "numSubdevices"
       desc: "[out] Number of sub-devices"
-    - type: int8_t
+    - type: char
       name: "serialNumber[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Manufacturing serial number (NULL terminated string value)"
-    - type: int8_t
+    - type: char
       name: "boardNumber[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Manufacturing board number (NULL terminated string value)"
-    - type: int8_t
+    - type: char
       name: "brandName[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Brand name of the device (NULL terminated string value)"
-    - type: int8_t
+    - type: char
       name: "modelName[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Model name of the device (NULL terminated string value)"
-    - type: int8_t
+    - type: char
       name: "vendorName[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Vendor name of the device (NULL terminated string value)"
-    - type: int8_t
+    - type: char
       name: "driverVersion[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Installed driver version (NULL terminated string value)"
 --- #--------------------------------------------------------------------------

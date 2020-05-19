@@ -23,10 +23,10 @@ members:
     - type: $x_bool_t
       name: "canControl"
       desc: "[out] Indicates if software can flash the firmware assuming the user has permissions"
-    - type: int8_t
+    - type: char
       name: "name[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
-    - type: int8_t
+    - type: char
       name: "version[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
 --- #--------------------------------------------------------------------------
