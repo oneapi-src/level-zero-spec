@@ -176,7 +176,7 @@ members:
     - type: uint32_t
       name: "processId"
       desc: "[out] Host OS process ID."
-    - type: int64_t
+    - type: uint64_t
       name: "memSize"
       desc: "[out] Device memory size in bytes allocated by this process (may not necessarily be resident on the device at the time of reading)."
     - type: uint64_t
