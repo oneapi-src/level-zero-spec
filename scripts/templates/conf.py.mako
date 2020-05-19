@@ -197,7 +197,7 @@ todo_include_todos = True
 
 cpp_index_common_prefix = ['ze::', 'zet::']
 
-cpp_id_attributes = ['__ze_api_export', '__zecall']
+cpp_id_attributes = ['ZE_APIEXPORT', 'ZE_APICALL']
 
 breathe_projects = { "LevelZero": "../xml" }
 breathe_default_project = "LevelZero"
