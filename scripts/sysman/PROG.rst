@@ -6,10 +6,11 @@
     s=tags['$s']
     S=s.upper()
 %>
+.. _sysman-programming-guide:
+
 ==========================
  Sysman Programming Guide
 ==========================
-
 
 Introduction
 ============

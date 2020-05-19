@@ -12,8 +12,8 @@ Objective
 =========
 
 The objective of the ${OneApi} Level-Zero Application Programming Interface (API) is to provide direct-to-metal interfaces to offload accelerator devices.
-It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any device needs.
-It can be adapted to support broader set of languages features, such as function pointers, virtual functions, unified memory, and I/O capabilities.
+Its programming interface can be tailored to any device needs and can be adapted to support broader set of languages features
+such as function pointers, virtual functions, unified memory, and I/O capabilities.
 
 .. image:: ../images/one_api_sw_stack.png
 
@@ -26,7 +26,7 @@ While initially influenced by GPU architecture, the Level-Zero APIs are designed
 Core
 ----
 
-The Level-Zero core APIa provide the lowest-level, fine-grain and most explicit control over:
+The Level-Zero core APIs provide the lowest-level, fine-grain and most explicit control over:
 
   - Device Discovery and Partitioning
   - Memory Allocation, Visibility and Caching
@@ -34,7 +34,7 @@ The Level-Zero core APIa provide the lowest-level, fine-grain and most explicit 
   - Peer-to-Peer Communication
   - Inter-Process Sharing
 
-See the "Core Programming Guide" for more details.
+See the :ref:`core-programming-guide` for more details.
 
 Tools
 -----
@@ -45,12 +45,12 @@ direct application use and 3rd-party tools:
   - Metrics Discovery and Reporting
   - Kernel Profiling, Instrumentation and Debug
 
-See the "Tools Programming Guide" for more details.
+See the :ref:`tools-programming-guide` for more details.
 
 System Management
 -----------------
 
-The Level-Zero sysman APIs provide in-band access to the following features for each accelerator device:
+The Level-Zero Sysman APIs provide in-band access to the following features for each accelerator device:
 
   - Query the performance, power and health of accelerator resources
   - Control the performance and power profile of accelerator resources
@@ -60,7 +60,7 @@ By default, only administrator users have permissions to perform control operati
 Most queries are available to any user with the exception of those that could be used for side-channel attacks.
 The systems administrator can tighten/relax the default permissions.
 
-See the "Sysman Programming Guide" for more details.
+See the :ref:`sysman-programming-guide` for more details.
 
 Fundamentals
 ============

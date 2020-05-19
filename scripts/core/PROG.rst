@@ -4,6 +4,8 @@
     x=tags['$x']
     X=x.upper()
 %>
+.. _core-programming-guide:
+
 ========================
  Core Programming Guide
 ========================

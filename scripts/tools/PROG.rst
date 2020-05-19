@@ -6,10 +6,12 @@
     t=tags['$t']
     T=t.upper()
 %>
+
+.. _tools-programming-guide:
+
 =========================
  Tools Programming Guide
 =========================
-
 
 Initialization
 ==============
@@ -54,10 +56,10 @@ into the command stream, such as metrics.
 Registration
 ------------
 
-Tools may independently register for enter and exist callbacks for individual API calls, per driver instance.
+Tools may independently register for enter and exit callbacks for individual API calls, per driver instance.
 
 * ::${t}TracerSetPrologues is used to specify all the enter callbacks
-* ::${t}TracerSetEpilogues is used to specify all the exist callbacks
+* ::${t}TracerSetEpilogues is used to specify all the exit callbacks
 * If the value of a callback is nullptr, then it will be ignored.
 
 The callbacks are defined as a collection of per-API function pointers, with the following parameters:
@@ -174,7 +176,9 @@ Introduction
 
 Devices provide programmable infrastructure designed to support
 performance debugging. The API described in this document provides
-access to these device metrics.
+access to these device metrics. The intention of this API is to support
+performance debug and it is not advised to use it in regular execution
+as overall performance can be negatively impacted.
 
 | The following diagram illustrates the relationship between the metric
   objects described in this document.
@@ -187,22 +191,18 @@ programming is in most cases global. This generally means that if a
 software tool or an application is using the metrics then no other
 application can reliably use the same device resources.
 
-The use of some metrics may negatively impact the performance of the
-device. The intention of this API is to support performance debug and it
-is not advised to use it in regular execution.
-
 Metric Groups
 -------------
 
-The device infrastructure consists of non-programmable, pre-defined set
-of counters, and a programmable network of connections that work with a
+The device infrastructure consists of a pre-defined set of non-programmable
+counters, and a programmable network of connections that work with a
 separate set of counters as well as other types of counters. For sake of
 simplicity, the smallest unit of configuration is a Metric Group. Metric
 Groups are sets of metrics that provide certain perspective on
 workload's performance. The groups aggregate metrics, define device
 programming and available collection methods. An application may choose
 to collect data from several Metric Groups provided that they all
-belong to different domains. Domains_ are used as a software
+belong to different domains. :ref:`Domains` are used as a software
 representation of independent device resources that can safely be used
 concurrently.
 
@@ -262,7 +262,7 @@ To enumerate through the Metric tree:
     - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
     - Metric Group names may not be unique.
 
-4. For each Metric Group obtain their Metric count calling ::${t}MetricGroupGetProperties with Metric Group handle (::${t}_metric_group_handle_t) and checking ::${t}_metric_group_properties_t.metricCount.
+4. Obtain the metric count for each Metric Group by calling ::${t}MetricGroupGetProperties with Metric Group handle (::${t}_metric_group_handle_t) and checking ::${t}_metric_group_properties_t.metricCount.
 5. Iterate over available Metrics using ::${t}MetricGet with parent Metric Group (::${t}_metric_group_handle_t).
 6. Check Metric properties (e.g. name, description) calling ::${t}MetricGetProperties with parent Metric (::${t}_metric_handle_t).
 
@@ -462,6 +462,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            ::${t}CommandListAppendMetricQueryBegin( hCommandList, hMetricQuery );
 
            // build your command list
+           ...
 
            // Write END metric query to command list, use an event to determine if the data is available
            eventDesc.index  = 0;
@@ -572,13 +573,13 @@ Program Instrumentation
 Introduction
 ------------
 
-The program instrumentation APIs provide tools a basic framework for
-low-level profiling of device programs, by allowing direct
+The program instrumentation APIs provide a basic framework for
+low-level profiling of device programs for tools, by allowing direct
 instrumentation of those programs. These capabilities, in combination
 with those already provided, in combination with API tracing, are
 enough for more advanced frameworks to be developed independently.
 
-There are two type of instrumentation available:
+There are two types of instrumentation available:
 
 1. Inter-Function Instrumentation - intercepting and redirecting function calls
 2. Intra-Function Instrumentation - injecting new instructions within a function
@@ -659,8 +660,8 @@ Program Debug
 Introduction
 ------------
 
-The program debug APIs provide tools a basic framework for debugging
-device code.
+The program debug APIs provide a basic framework for debugging
+device code for tools.
 
 The APIs operate on a single device.  When debugging a multi-device
 system, the tool would debug each device independently.  The APIs further
