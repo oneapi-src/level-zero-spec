@@ -67,7 +67,7 @@ The callbacks are defined as a collection of per-API function pointers, with the
 * params : a structure capturing pointers to the input and output parameters of the current instance
 * result : the current value of the return value
 * pTracerUserData : the user's pointer for the tracer's data
-* ppTracerInstanceUserData : a per-tracer, per-instance storage location; typically used for passing data from the prologue to the epilogue
+* ppTracerInstanceUserData : a per-tracer, per-instance thread-local storage location; typically used for passing data from the prologue to the epilogue
 
 Note: since the creation of a tracer requires a device, on first glance
 it appears that ::${x}Init, ::${x}DriverGet and ::${x}DeviceGet are not
@@ -78,7 +78,7 @@ Enabling/Disabling and Destruction
 ----------------------------------
 
 The tracer is created in a disabled state and must be explicitly enabled
-by calling ::${t}TracerSetEnabled. The implementation guaranteed that
+by calling ::${t}TracerSetEnabled. The implementation guarantees that
 prologues and epilogues will always be executed in pairs; i.e.
 
 * if the prologue was called then the epilogue is guaranteed to be called, even if another thread disabled the tracer between execution
@@ -322,8 +322,7 @@ for data collection.
 Programming restrictions:
 
 - Any combination of metric groups can be configured simultaneously provided that all of them have different ::${t}_metric_group_properties_t.domain.
-- MetricGroup must be active until ::${t}MetricQueryGetData and ::${t}MetricTracerClose.
-- Conflicting Groups cannot be activated, in such case the call to ::${t}DeviceActivateMetricGroups would fail.
+- MetricGroup must be active until ::${t}MetricTracerClose and the last ::${t}CommandListAppendMetricQueryEnd completes.
 
 Collection
 ----------
@@ -331,17 +330,17 @@ Collection
 There are two modes of metrics collection supported: time-based and event-based.
 
 - Time-based collection is using a timer as well as other events to store data samples. A metric tracer interface is the software interface for configuration and collection.
-- Event-based metrics collection is based on a pair of Begin/End events appended to command lists. A metric query interface is the software interface for configuration and collection.
+- Event-based collection is based on a pair of Begin/End events appended to command lists. A metric query interface is the software interface for configuration and collection.
 
 .. _Time-based:
 
 Metric Tracer
 ~~~~~~~~~~~~~
 
-Time-based collection uses a simple Open, Wait, Read, Close scheme:
+Time-based collection uses a simple Open, Read, Close scheme:
+
 - ::${t}MetricTracerOpen opens the tracer.
-- ::${x}EventHostSynchronize and ::${x}EventQueryStatus can be used to wait for data.
-- ::${t}MetricTracerReadData reads the data to be later processed by ::${t}MetricGroupCalculateMetricValues.
+- ::${t}MetricTracerReadData reads the raw data to be later processed by ::${t}MetricGroupCalculateMetricValues.
 - ::${t}MetricTracerClose closes the tracer.
 
 .. image:: ../images/tools_metric_tracer.png
@@ -498,7 +497,8 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
 Calculation
 -----------
 
-Both MetricTracer and MetricQueryPool collect the data in device specific, raw form that is not suitable for application processing. To calculate metric values use ::${t}MetricGroupCalculateMetricValues.
+Both MetricTracer and MetricQuery collect the data in device specific, raw form that is not suitable for application processing. 
+To calculate metric values use ::${t}MetricGroupCalculateMetricValues.
 
 The following pseudo-code demonstrates a basic sequence for metric calculation and interpretation:
 

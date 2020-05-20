@@ -282,18 +282,26 @@ desc: "Activates metric groups."
 class: $tDevice
 name: ActivateMetricGroups
 details:
-    - "MetricGroup must be active until MetricQueryGetDeta and $tMetricTracerClose."
-    - "Conflicting metric groups cannot be activated, in such case tha call would fail."
+    - "Immediately reconfigures the device to activate only those metric groups provided."
+    - "Any metric groups previously activated but not provided will be deactivated."
+    - "Deactivating metric groups that are still in-use will result in undefined behavior."
+    - "All metric groups must have different domains, see $t_metric_group_properties_t."
+    - "The application must **not** call this function from simultaneous threads with the same device handle."
 params:
     - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
     - type: uint32_t
       name: count
-      desc: "[in] metric group count to activate. 0 to deactivate."
+      desc: "[in] metric group count to activate; must be 0 if `nullptr == phMetricGroups`"
     - type: "$t_metric_group_handle_t*"
       name: phMetricGroups
-      desc: "[in][optional][range(0, count)] handles of the metric groups to activate. NULL to deactivate."
+      desc: "[in][optional][range(0, count)] handles of the metric groups to activate. nullptr to deactivate all."
+returns:
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phMetricGroups) && (0 < count)`"
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "Multiple metric groups share the same domain"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric tracer descriptor"
