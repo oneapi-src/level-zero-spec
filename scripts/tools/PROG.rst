@@ -16,14 +16,10 @@
 Initialization
 ==============
 
-The driver must be initialized by calling ::${x}Init
-and before calling any other experimental function. Simultaneous calls
-to ::${x}Init are thread-safe.
-
 Environment Variables
 ---------------------
 
-The following environment variables are required to be enabled during initialization for the respective feature.
+The following environment variables are required to be enabled during ::${x}Init for the respective feature.
 
 ## --validate=off
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
