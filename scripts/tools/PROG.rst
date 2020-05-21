@@ -735,7 +735,7 @@ When attached to a sub-device, writes to the code segment will not be broadcast 
 even though they may share the same address space range.
 This allows breakpoints to be contained within one sub-device.
 
-If a tool is attached to a sub-device, any attempt to attach to an parent device results in ::${X]_RESULT_ERROR_NOT_AVAILABLE.
+If a tool is attached to a sub-device, any attempt to attach to an parent device results in ::${X}_RESULT_ERROR_NOT_AVAILABLE.
 
 Implementations that share code segments across sub-devices will only allow attaching to devices.
 Any attempt to attach to a sub-device results in ::${X}_RESULT_ERROR_NOT_AVAILABLE.
