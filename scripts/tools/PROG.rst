@@ -569,11 +569,10 @@ Program Instrumentation
 Introduction
 ------------
 
-The program instrumentation APIs provide a basic framework for
-low-level profiling of device programs for tools, by allowing direct
-instrumentation of those programs. These capabilities, in combination
-with those already provided, in combination with API tracing, are
-enough for more advanced frameworks to be developed independently.
+The program instrumentation APIs provide tools a basic framework for low-level profiling of device kernels, 
+by allowing direct instrumentation of those programs. 
+These capabilities, in combination with those already provided, and in combination with API tracing, 
+are sufficient for more advanced frameworks to be developed.
 
 There are two types of instrumentation available:
 
@@ -583,8 +582,7 @@ There are two types of instrumentation available:
 Inter-Function Instrumentation
 ------------------------------
 
-The following capabilities allow for a tool to intercept and redirect
-function calls:
+The following capabilities allow for a tool to intercept and redirect function calls:
 
 * Inter-module function calls - the ability to call functions between different modules; e.g., the application's module and a tool's module
 * API-Tracing_
@@ -603,50 +601,41 @@ The following capabilities allow for a tool to inject instructions within a kern
 
 * ::${t}ModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
 * ::${t}KernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
-* ::${x}ModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
+* ::${x}ModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the instrumented version
 * API-Tracing_ - same usage as Inter-Function Instrumentation above
 
 Compilation
 ~~~~~~~~~~~
 
-A module must be compiled with foreknowledge that instrumentation will
-be performed in for the compiler to generate the proper profiling
-meta-data. Therefore, when the instrumentation layer is enabled, a new
+A module must be compiled with foreknowledge that instrumentation will be performed in for the compiler to generate the proper profiling meta-data.
+Therefore, when the instrumentation layer is enabled, a new
 ## --validate=off
-build flag is supported: "-${t}-profile-flags", where "" must be a
+build flag is supported: "-${t}-profile-flags \<value\>", where \<value\> must be a
 ## --validate=on
 combination of ::${t}_profile_flag_t, in hexidecimal.
 
-As an example, a tool could use API Tracing to inject this build flag on
-each ::${x}ModuleCreate call that the tool wishes to instrument. In
-another example, a tool could recompile a Module using the build flag
-and use API Tracing to replace the application's Module handle with it's
-own.
+As an example, a tool could use API Tracing to inject this build flag on each ::${x}ModuleCreate call that the tool wishes to instrument.
+In another example, a tool could recompile a Module using the build flag and use API Tracing to replace the application's Module handle with it's own.
 
 Instrumentation
 ~~~~~~~~~~~~~~~
 
-Once the module has been compiled with instrumentation enabled, a tool
-may use ::${t}ModuleGetDebugInfo and ::${t}KernelGetProfileInfo in order
-to decode the application's instructions and register usage for each
-function in the module.
+Once the module has been compiled with instrumentation enabled, a tool may use ::${t}ModuleGetDebugInfo and ::${t}KernelGetProfileInfo 
+in order to decode the application's instructions and register usage for each function in the module.
 
-If a tool requires additional functions to be used, it may create other
-module(s) and use ::${x}ModuleGetFunctionPointer to call functions between
-the application and tool modules. A tool may use ::${x}ModuleGetFunctionPointer
-to retrieve the Host and device address of each function in the module.
+If a tool requires additional functions to be used, it may create other module(s) and use ::${x}ModuleGetFunctionPointer 
+to call functions between the application and tool modules.
+A tool may use ::${x}ModuleGetFunctionPointer to retrieve the Host and device address of each function in the module.
 
-There are no APIs provided for the actual instrumentation. Instead this
-is left up to the tool itself to decode the application module's native
-binary and inject native instructions. This model prevents the
-instrumentation from being manipulated by the compiler.
+There are no APIs provided for the actual instrumentation. 
+Instead this is left up to the tool itself to decode the application module's native binary and inject native instructions.
+This model prevents the instrumentation from being manipulated by the compiler.
 
 Execution
 ~~~~~~~~~
 
-If a tool requires changing the address of an application's function,
-then it should use API Tracing; for example, ::${x}ModuleGetFunctionPointer
-and all flavors of ::${x}CommandListAppendLaunchKernel.
+If a tool requires changing the address of an application's function, then it should use API Tracing.
+For example, ::${x}ModuleGetFunctionPointer and all flavors of ::${x}CommandListAppendLaunchKernel.
 
 Program Debug
 =============
@@ -656,22 +645,21 @@ Program Debug
 Introduction
 ------------
 
-The program debug APIs provide a basic framework for debugging
-device code for tools.
+The program debug APIs provide tools a basic framework for debugging device code.
 
-The APIs operate on a single device.  When debugging a multi-device
-system, the tool would debug each device independently.  The APIs further
-operate in the context of a single host process.  When debugging multiple
-host processes at the same time, the tool would debug device code
+The debug APIs only operate on a single device.
+When debugging a multi-device system, the tool must debug each device independently.  
+
+The debug APIs only operate in the context of a single host process.
+When debugging multiple host processes at the same time, the tool must debug device code
 submitted by each host process independently.
 
 
 Attach and Detach
 -----------------
 
-In order to use most of the program debug APIs, a tool needs to attach to
-a device by calling ::${t}DebugAttach.  As arguments it passes the
-::${x}_device_handle_t and a pointer to a ::${t}_debug_config_t object
+To start a debug session, a tool needs to attach to a device by calling ::${t}DebugAttach. 
+As arguments it passes the ::${x}_device_handle_t and a pointer to a ::${t}_debug_config_t object
 that contains the following fields:
 
   * the requested program debug API version.  Version numbers start at one
@@ -683,9 +671,8 @@ that contains the following fields:
       * the host process identifier.
 
 
-If the requested API version is not supported,
-::ZE_RESULT_ERROR_UNSUPPORTED_VERSION is returned.  If the tool supports
-different API versions it may try to request a different version.
+If the requested API version is not supported, ::${X}_RESULT_ERROR_UNSUPPORTED_VERSION is returned.
+If the tool supports different API versions it may try to request a different version.
 
 If the requested API version is supported the following properties are
 checked:
@@ -705,11 +692,11 @@ checked:
   * device debug must be enabled on this system.
 
 
-If permission is granted, a ::${t}_debug_session_handle_t is provided,
-which can be used in other program debug APIs until the tool detaches
-again.  The requested API version will be used for all API functions.
+If permission is granted, a ::${t}_debug_session_handle_t is provided.
+The session handle can be used in other program debug APIs until the tool detaches again.
+The requested API version will be used for all API functions.
 
-To detach a debug session, a tool calls ::${t}DebugDetach passing the
+To end a debug session, a tool calls ::${t}DebugDetach passing the
 ::${t}_debug_session_handle_t that had been provided on the corresponding
 ::${t}DebugAttach call.
 
@@ -739,82 +726,67 @@ The following sample code demonstrates attaching and detaching:
 Devices and Sub-Devices
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-A tool may attach to any device and will implicitly be attached to all
-sub-devices below that device.
+A tool may attach to any device and will implicitly be attached to all sub-devices of that device.
 
-Implementations that use separate code segments per sub-device may further
-allow attaching to sub-devices individually.  In that case, a tool may
-choose to either attach to the device or to one or more sub-devices.
+Implementations that use separate code segments per sub-device may further allow attaching to sub-devices individually.
+In that case, a tool may choose to either attach to the device or to one or more sub-devices.
 
-When attached to a sub-device, writes to the code segment will not be
-broadcast to sibling sub-devices, even though they may share the same
-address space range.  This allows breakpoints to be contained within one
-sub-device.
+When attached to a sub-device, writes to the code segment will not be broadcast to other sub-devices,
+even though they may share the same address space range.
+This allows breakpoints to be contained within one sub-device.
 
-Once a tool is attached to a sub-device, any attempt to attach to an
-ancestor device results in ::ZE_RESULT_ERROR_NOT_AVAILABLE.
+If a tool is attached to a sub-device, any attempt to attach to an parent device results in ::${X]_RESULT_ERROR_NOT_AVAILABLE.
 
-Implementations that share code segments across sub-devices will only
-allow attaching to devices.  Any attempt to attach to a sub-device results
-in ::ZE_RESULT_ERROR_NOT_AVAILABLE.
+Implementations that share code segments across sub-devices will only allow attaching to devices.
+Any attempt to attach to a sub-device results in ::${X}_RESULT_ERROR_NOT_AVAILABLE.
 
 Device Thread Identification and Resource Restriction
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Device threads are identified by their ordinal number starting from one
-until the maximum number of threads on that device.  Device thread
-identifiers are unique within the same debug session.
+Device threads are identified by their ordinal number,
+starting from one until the maximum number of threads on that device.
+Device thread identifiers are unique within the same debug session.
 
-If a tool attached to a device, device threads are enumerated for all
-sub-devices below that device.
+If a tool attached to a device, device threads are enumerated for all sub-devices within that device.
 
 Implementations that allow restricting the number of device threads may
 enumerate less than the total number of threads supported by the device.
-They may enumerate more threads than had been requested based on hardware
-limitations and to allow for oversubmission.  Not all enumerated threads
-may be available.
+An implementation may enumerate more threads than had been requested based on hardware
+limitations and to allow for oversubmission.
+However, Not all enumerated threads may be available.
 
-The number of device threads can be queried for each debug session using
-the ::${t}DebugGetNumThreads call.
+The number of device threads can be queried for each debug session using ::${t}DebugGetNumThreads.
 
 Thread Availability
 ~~~~~~~~~~~~~~~~~~~
 
-For some devices not all threads may be available at all times.  Some
-threads may even not be available at any time.  This may have various
-reasons, including:
+For some devices, not all threads may be available at all times.
+Some threads may even not be available at any time.
+This may have various reasons, including:
 
-  * the thread may be idle
+* the thread may be idle
+* the thread may be assigned to a different process
+* the thread may be part of an unused oversubmission buffer
 
-  * the thread may be assigned to a different process
+For the purpose of this debug tool API, threads may be in one of three states:
 
-  * the thread may be part of an unused oversubmission buffer
-
-
-For the purpose of this debug tool API, threads may be in one of three
-states:
-
-  * running
-
-  * stopped
-
-  * unavailable
-
+* running
+* stopped
+* unavailable
 
 Most API functions require the thread they operate on to be stopped.
 
 Debug Events
 ------------
 
-As long as the tool is attached, it will receive debug events from the
-device.  To read the topmost event, the tool passes a pointer to a buffer
-and its size in bytes.  The size of an event object is defined by the API
-version requested on attach.
+As soon as the debug session has been started, it will receive debug events from the device.
+To read the topmost event in the FIFO, the tool passes a pointer to a buffer and its size in bytes.
+The size of an event object is defined by the API version requested on attach.
 
-It also passes a timeout in milliseconds.  A timeout of zero does not wait
-and immediately returns if no events are available.  A timeout of
-::${T}_DEBUG_TIMEOUT_INFINITE waits indefinitely.  If the timeout expires,
-::ZE_RESULT_NOT_READY is returned.
+It also passes a timeout in milliseconds.
+A timeout of zero does not wait and immediately returns if no events are available.
+A timeout of ::${T}_DEBUG_TIMEOUT_INFINITE waits indefinitely.
+If the timeout expires, ::${X}_RESULT_NOT_READY is returned.
 
 On success, the topmost event is copied into the buffer.
 
@@ -836,115 +808,89 @@ A debug event is described by the ::${t}_debug_event_t structure, which contains
 
   * The thread that reported the event.
 
-    This is either the ordinal number of the thread on the device or one
-    of the following special thread identifiers:
+    This is either the ordinal number of the thread on the device or one of the following special thread identifiers:
 
       * ::${T}_DEBUG_THREAD_NONE indicates no threads on the device.
 
       * ::${T}_DEBUG_THREAD_ALL indicates all threads on the device.
 
-  * A bit-vector of ::${t}_debug_event_flags_t, which can be one of the
-    following:
+  * A bit-vector of ::${t}_debug_event_flags_t, which can be one of the following:
 
-    * ::${T}_DEBUG_EVENT_FLAGS_STOPPED indicates that the thread that
-      reported the event is stopped and needs to be resumed in order to
-      proceed.
+    * ::${T}_DEBUG_EVENT_FLAGS_STOPPED indicates that the thread that reported the event is stopped
+      and needs to be resumed in order to proceed.
 
-      If the event was reported by ::${T}_DEBUG_THREAD_ALL, all threads
-      have stopped and the tool may resume ::${T}_DEBUG_THREAD_ALL.  The
-      tool may also resume individual threads.
+      If the event was reported by ::${T}_DEBUG_THREAD_ALL
+      all threads have stopped and the tool may resume ::${T}_DEBUG_THREAD_ALL.
+      The tool may also resume individual threads.
 
-      If the event was reported by ::${T}_DEBUG_THREAD_NONE, the event
-      occured outside the context of any device thread, yet still blocks
-      progress.  The tool needs to resume ::${T}_DEBUG_THREAD_NONE in
-      order to acknowledge the event and unblock progress.
+      If the event was reported by ::${T}_DEBUG_THREAD_NONE,
+      the event occured outside the context of any device thread, yet still blocks progress.
+      The tool needs to resume ::${T}_DEBUG_THREAD_NONE in order to acknowledge the event and unblock progress.
 
-      Note that progress may not necessarily be blocked on the device on
-      which the event occured.
+      Note that progress may not necessarily be blocked on the device on which the event occured.
 
 
-Following the common fields, the event object contains event-specific
-fields depending on the event type.  Not all events have event-specific
-fields.
+Following the common fields, the event object contains event-specific fields depending on the event type.
+Not all events have event-specific fields.
 
   * ::${T}_DEBUG_EVENT_TYPE_DETACHED: the tool was detached.
 
-    * The detach reason as ::${t}_debug_detach_reason_t.  This can be one
-      of the following reasons:
+    * The detach reason as ::${t}_debug_detach_reason_t. This can be one of the following reasons:
 
-        * ::${T}_DEBUG_DETACH_REASON_HOST_EXIT indicates that the host process
-          exited.
+        * ::${T}_DEBUG_DETACH_REASON_HOST_EXIT indicates that the host process exited.
 
-  * ::${T}_DEBUG_EVENT_TYPE_PROCESS_ENTRY: the host process created one or more
-    command queues on the device.
+  * ::${T}_DEBUG_EVENT_TYPE_PROCESS_ENTRY: the host process created one or more command queues on the device.
 
-  * ::${T}_DEBUG_EVENT_TYPE_PROCESS_EXIT: the host process destroyed all
-    command queues on the device.
+  * ::${T}_DEBUG_EVENT_TYPE_PROCESS_EXIT: the host process destroyed all command queues on the device.
 
-  * ::${T}_DEBUG_EVENT_TYPE_MODULE_LOAD: an in-memory module was loaded onto
-    the device.
+  * ::${T}_DEBUG_EVENT_TYPE_MODULE_LOAD: an in-memory module was loaded onto the device.
 
-    The event is generated in the ::${x}ModuleCreate() flow with thread ==
-    ::${T}_DEBUG_THREAD_NONE.  If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is set,
-    the event blocks the ::${x}ModuleCreate() call until the debugger
-    acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
+    The event is generated in the ::${x}ModuleCreate() flow with thread == ::${T}_DEBUG_THREAD_NONE.
+    If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is set, the event blocks the ::${x}ModuleCreate() call until
+    the debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
 
-    * The begin and end address of the in-memory module.  On all devices
-      supported today, the module is an ELF file with optional DWARF debug
-      information.
+    * The begin and end address of the in-memory module.
+      On all devices supported today, the module is an ELF file with optional DWARF debug information.
 
     * The load address of the module.
 
   * ::${T}_DEBUG_EVENT_TYPE_MODULE_UNLOAD: an in-memory module is about to get
     unloaded from the device.
 
-    The event is generated in the ::${x}ModuleDestroy() flow with thread
-    == ::${T}_DEBUG_THREAD_NONE.  If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is
-    set, the event blocks the ::${x}ModuleDestroy() call until the
-    debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
+    The event is generated in the ::${x}ModuleDestroy() flow with thread == ::${T}_DEBUG_THREAD_NONE.
+    If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is set, 
+    the event blocks the ::${x}ModuleDestroy() call until the debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
 
-    * The begin and end address of the in-memory module.  On all devices
-      supported today, the module is an ELF file with optional DWARF debug
-      information.
+    * The begin and end address of the in-memory module.
+      On all devices supported today, the module is an ELF file with optional DWARF debug information.
 
     * The load address of the module.
 
-  * ::${T}_DEBUG_EVENT_TYPE_EXCEPTION: the thread stopped due to a device
-    exception.
+  * ::${T}_DEBUG_EVENT_TYPE_EXCEPTION: the thread stopped due to a device exception.
 
 Run Control
 -----------
 
-The tool may interrupt and resume individual device threads or an entire
-debug session.
+The tool may interrupt and resume individual device threads or an entire debug session.
 
-To interrupt an individual thread or an entire debug session, call
-::${t}DebugInterrupt with the number of the thread to interrupt or
-::${T}_DEBUG_THREAD_ALL to interrupt an entire debug session.
+To interrupt an individual thread or an entire debug session,
+call ::${t}DebugInterrupt with the number of the thread to interrupt or ::${T}_DEBUG_THREAD_ALL to interrupt an entire debug session.
 
-When interrupting an entire debug session, threads that are already
-stopped as well as threads that are not available will be ignored.  After
-threads have been interrupted, a ::${T}_DEBUG_EVENT_TYPE_EXCEPTION event with
-thread == ::${T}_DEBUG_THREAD_ALL is created.
+When interrupting an entire debug session, threads that are already stopped as well as threads that are not available will be ignored.
+After threads have been interrupted, a ::${T}_DEBUG_EVENT_TYPE_EXCEPTION event with thread == ::${T}_DEBUG_THREAD_ALL is created.
 
-To resume an individual thread or an entire debug session, call
-::${t}DebugResume with the number of the thread to resume or
+To resume an individual thread or an entire debug session, call ::${t}DebugResume with the number of the thread to resume or
 ::${T}_DEBUG_THREAD_ALL to resume an entire debug session.
 
-Whereas interrupting and resuming an entire debug session will
-transparently handle unavailable threads, interrupting and resuming a
-single unavailable thread will result in
-::ZE_RESULT_ERROR_INVALID_ARGUMENT.
+Whereas interrupting and resuming an entire debug session will transparently handle unavailable threads,
+interrupting and resuming a single unavailable thread will result in ::${X}_RESULT_ERROR_INVALID_ARGUMENT.
 
-Threads that had been unavailable when interrupting a debug session will
-be prevented from entering until the debug session is resumed.
+Threads that had been unavailable when interrupting a debug session will be prevented from entering until the debug session is resumed.
 
-The tool does not know whether any individual thread is available until it
-tries to interact with that thread.  Only stopped threads may be resumed
-individually.
+The tool does not know whether any individual thread is available until it tries to interact with that thread.
+Only stopped threads may be resumed individually.
 
-The following sample code demonstrates how to interrupt and resume a debug
-session:
+The following sample code demonstrates how to interrupt and resume a debug session:
 
 .. parsed-literal::
 
@@ -962,11 +908,9 @@ session:
         return errcode;
 
 
-After interrupting one or all threads, the tool needs to wait for the
-corresponding ::${T}_DEBUG_EVENT_TYPE_EXCEPTION event.  Note that there may be
-other events preceding that event.  There may further be exception events
-for individual threads preceding or succeeding a debug session exception
-event.
+After interrupting one or all threads, the tool needs to wait for the corresponding ::${T}_DEBUG_EVENT_TYPE_EXCEPTION event.
+Note that there may be other events preceding that event.
+There may further be exception events for individual threads preceding or succeeding a debug session exception event.
 
 
 Memory Access
@@ -975,8 +919,9 @@ Memory Access
 A tool may read and write memory in the context of a stopped device thread
 as if that thread had read or written the memory.
 
-Memory may be partitioned into device-specific memory spaces.  Intel
-graphics devices, for example, use the following memory spaces defined in
+Memory may be partitioned into device-specific memory spaces.
+
+Intel graphics devices, for example, use the following memory spaces defined in
 ::${t}_debug_memory_space_igfx_t:
 
   * 0: default memory space
@@ -985,9 +930,8 @@ graphics devices, for example, use the following memory spaces defined in
 The default memory space may also be accessed in the context of the
 special ::${T}_DEBUG_THREAD_NONE thread.
 
-To read and write memory, call the ::${t}DebugReadMemory and
-::${t}DebugWriteMemory function, respectively.  The functions take a
-::${t}_debug_session_handle_t, a thread handle, a memory space selector,
+To read and write memory, call the ::${t}DebugReadMemory and ::${t}DebugWriteMemory function, respectively.
+The functions take a ::${t}_debug_session_handle_t, a thread handle, a memory space selector,
 the virtual address of the memory to access, the size of the access, and
 an input or output buffer.
 
@@ -1018,18 +962,17 @@ Register State Access
 ---------------------
 
 A tool may read and write the register state of a stopped device thread.
-The register state is represented as a randomly accessible range of
-memory.  It starts with a description of the memory layout followed by the
-actual register state content.  The layout is fixed per device thread.
+The register state is represented as a randomly accessible range of memory.
+It starts with a description of the memory layout followed by the actual register state content.
+The layout is fixed per device thread.
 
 To read and write the register state, use the ::${t}DebugReadState and
-::${t}DebugWriteState function, respectively.  They take a
-::${t}_debug_session_handle_t, a thread handle, an offset into the
+::${t}DebugWriteState function, respectively.
+They take a ::${t}_debug_session_handle_t, a thread handle, an offset into the
 register state area, an access size in bytes, and an input or output
 buffer.
 
-The register state area starts with a ::${t}_debug_state_t descriptor
-containing the following fields:
+The register state area starts with a ::${t}_debug_state_t descriptor containing the following fields:
 
   * the size of the register state object in bytes
 

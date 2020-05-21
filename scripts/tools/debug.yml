@@ -216,7 +216,7 @@ members:
     - type: "uint64_t"
       name: thread
       desc: "[out] the thread reporting the event"
-    - type: "uint64_t"
+    - type: $t_debug_event_flags_t
       name: flags
       desc: "[out] a bit-vector of $t_debug_event_flags_t"
     - type: $t_debug_event_info_t
