@@ -992,7 +992,7 @@ via the following fields:
 
   * the register file type
 
-    This is a device-specific enumeration.  See below for examples.
+    This is a device-specific enumeration.
 
   * the register file version
 
@@ -1038,32 +1038,6 @@ The following sample code demonstrates iterating over register files:
         ...
     }
 
-Intel graphics devices, for example, provide:
-
-  * ::${T}_DEBUG_STATE_IGFX_GRF, the general register file.
-
-    In version one, this register file consists of a homogeneous array of
-    256 bit wide registers starting at `r0`.
-
-  * ::${T}_DEBUG_STATE_IGFX_ACC, the accumulator register file.
-
-    In version one, this register file consists of a homogeneous array of
-    256 bit wide registers starting at `acc0`.
-
-  * ::${T}_DEBUG_STATE_IGFX_ADDR, the address register file.
-
-    In version one, this register file consists of a homogeneous array of
-    256 bit wide registers starting at `a0`.  Each register is split into
-    16 elements, each 16 bit wide.
-
-  * ::${T}_DEBUG_STATE_IGFX_FLAG, the flags register file.
-
-    In version one, this register file consists of a homogeneous array of
-    32 bit wide registers starting at `flag0`.  Each register is split
-    into 2 elements, each 16 bit wide.
-
-
-(to be continued...)
 
 .. |Metrics| image:: ../images/tools_metric_hierarchy.png?raw=true
 .. |MetricTracer| image:: ../images/tools_metric_tracer.png?raw=true
