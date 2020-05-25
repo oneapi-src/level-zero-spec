@@ -352,36 +352,36 @@ returns:
         - "the memory cannot be accessed from the supplied thread"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Register file types for Intel Graphics devices."
+desc: "Register set types for Intel Graphics devices."
 class: $tDebug
-name: $t_debug_state_igfx_t
+name: $t_debug_regset_igfx_t
 etors:
-    - name: $T_DEBUG_STATE_IGFX_INVALID
-      desc: "An invalid register file"
+    - name: $T_DEBUG_REGSET_IGFX_INVALID
+      desc: "An invalid register set"
       value: "0"
-    - name: $T_DEBUG_STATE_IGFX_GRF
-      desc: "The general register file"
-    - name: $T_DEBUG_STATE_IGFX_ACC
-      desc: "The accumulator register file"
-    - name: $T_DEBUG_STATE_IGFX_ADDR
-      desc: "The address register file"
-    - name: $T_DEBUG_STATE_IGFX_FLAG
-      desc: "The flags register file"
+    - name: $T_DEBUG_REGSET_IGFX_GRF
+      desc: "The general register set"
+    - name: $T_DEBUG_REGSET_IGFX_ACC
+      desc: "The accumulator register set"
+    - name: $T_DEBUG_REGSET_IGFX_ADDR
+      desc: "The address register set"
+    - name: $T_DEBUG_REGSET_IGFX_FLAG
+      desc: "The flags register set"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "A register file descriptor."
+desc: "A register set descriptor."
 class: $tDebug
-name: $t_debug_state_section_t
+name: $t_debug_regset_desc_t
 members:
     - type: "uint16_t"
       name: type
-      desc: "[out] the register file type type"
+      desc: "[out] the register set type type"
     - type: "uint16_t"
       name: version
-      desc: "[out] the register file version"
+      desc: "[out] the register set version"
     - type: "uint32_t"
       name: size
-      desc: "[out] the size of the register file in bytes"
+      desc: "[out] the size of the register set in bytes"
     - type: "uint64_t"
       name: offset
       desc: "[out] the offset into the register state area"
@@ -389,7 +389,7 @@ members:
 type: struct
 desc: "A register state descriptor."
 class: $tDebug
-name: $t_debug_state_t
+name: $t_debug_regstate_t
 members:
     - type: "uint32_t"
       name: size
@@ -399,15 +399,15 @@ members:
       desc: "[out] the size of the register state descriptor in bytes"
     - type: "uint8_t"
       name: secSize
-      desc: "[out] the size of the register file descriptors in bytes"
+      desc: "[out] the size of register set descriptors in bytes"
     - type: "uint16_t"
       name: numSec
-      desc: "[out] the number of register file descriptors"
+      desc: "[out] the number of register set descriptors"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read register state."
 class: $tDebug
-name: ReadState
+name: ReadRegisters
 params:
     - type: $t_debug_session_handle_t
       name: hDebug
@@ -433,7 +433,7 @@ returns:
 type: function
 desc: "Write register state."
 class: $tDebug
-name: WriteState
+name: WriteRegisters
 params:
     - type: $t_debug_session_handle_t
       name: hDebug
