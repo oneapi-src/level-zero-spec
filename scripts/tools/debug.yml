@@ -178,6 +178,9 @@ desc: "Event information for $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
 class: $tDebug
 name: $t_debug_event_info_module_t
 members:
+    - type: $t_module_debug_info_format_t
+      name: format
+      desc: "[out] the module format"
     - type: "uint64_t"
       name: moduleBegin
       desc: "[out] the begin address of the in-memory module"

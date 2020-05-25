@@ -849,8 +849,9 @@ Not all events have event-specific fields.
     If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is set, the event blocks the ::${x}ModuleCreate() call until
     the debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
 
+    * The module format.
+
     * The begin and end address of the in-memory module.
-      On all devices supported today, the module is an ELF file with optional DWARF debug information.
 
     * The load address of the module.
 
@@ -861,8 +862,9 @@ Not all events have event-specific fields.
     If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is set, 
     the event blocks the ::${x}ModuleDestroy() call until the debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
 
+    * The module format.
+
     * The begin and end address of the in-memory module.
-      On all devices supported today, the module is an ELF file with optional DWARF debug information.
 
     * The load address of the module.
 
