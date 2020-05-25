@@ -110,11 +110,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid debug handle has been supplied"
 --- #--------------------------------------------------------------------------
-type: macro
-desc: "An infinite timeout."
-name: $T_DEBUG_TIMEOUT_INFINITE
-value: "0xffffffffffffffffull"
---- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug event flags."
 class: $tDebug
@@ -233,7 +228,7 @@ params:
       desc: "[in] debug session handle"
     - type: "uint64_t"
       name: timeout
-      desc: "[in] timeout in milliseconds (or $T_DEBUG_TIMEOUT_INFINITE)"
+      desc: "[in] timeout in milliseconds (or UINT64_MAX for infinite)"
     - type: "size_t"
       name: size
       desc: "[in] the size of the buffer in bytes"

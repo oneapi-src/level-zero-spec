@@ -785,7 +785,7 @@ The size of an event object is defined by the API version requested on attach.
 
 It also passes a timeout in milliseconds.
 A timeout of zero does not wait and immediately returns if no events are available.
-A timeout of ::${T}_DEBUG_TIMEOUT_INFINITE waits indefinitely.
+A timeout of UINT64_MAX waits indefinitely.
 If the timeout expires, ::${X}_RESULT_NOT_READY is returned.
 
 On success, the topmost event is copied into the buffer.
@@ -798,7 +798,7 @@ The following sample code demonstrates reading an event:
     ::${t}_debug_event_t event;
     ::${x}_result_t errcode;
 
-    errcode = ::${t}DebugReadEvent(session, ::${T}_DEBUG_TIMEOUT_INFINITE, sizeof(event), &event);
+    errcode = ::${t}DebugReadEvent(session, UINT64_MAX, sizeof(event), &event);
     if (errcode)
         return errcode;
 
