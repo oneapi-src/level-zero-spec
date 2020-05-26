@@ -525,9 +525,30 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Maximum device name string size"
+desc: "Maximum kernel name string size"
 name: $X_MAX_KERNEL_NAME
 value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum kernel universal unique id (UUID) size in bytes"
+name: $X_MAX_KERNEL_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum module universal unique id (UUID) size in bytes"
+name: $X_MAX_MODULE_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Kernel universal unique id (UUID)"
+name: "$x_kernel_uuid_t"
+members:
+    - type: uint8_t
+      name: "kid[$X_MAX_KERNEL_UUID_SIZE]"
+      desc: "[out] opaque data representing a kernel UUID"
+    - type: uint8_t
+      name: "mid[$X_MAX_MODULE_UUID_SIZE]"
+      desc: "[out] opaque data representing the kernel's module UUID"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel properties"
@@ -535,9 +556,6 @@ class: $xKernel
 name: $x_kernel_properties_t
 base: $x_base_properties_t
 members:
-    - type: char
-      name: "name[$X_MAX_KERNEL_NAME]"
-      desc: "[out] Kernel name"
     - type: "uint32_t"
       name: numKernelArgs
       desc: "[out] number of kernel arguments."
@@ -581,6 +599,12 @@ members:
     - type: "uint32_t"
       name: spillMemSize
       desc: "[out] spill memory size allocated by compiler"
+    - type: $x_kernel_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier."
+    - type: char
+      name: "name[$X_MAX_KERNEL_NAME]"
+      desc: "[out] kernel name"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve kernel properties."

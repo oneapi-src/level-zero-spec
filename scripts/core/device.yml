@@ -105,9 +105,6 @@ members:
     - type: uint32_t
       name: deviceId
       desc: "[out] device id from PCI configuration" 
-    - type: $x_device_uuid_t
-      name: uuid
-      desc: "[out] universal unique identifier."
     - type: $x_bool_t
       name: isSubdevice
       desc: "[out] If the device handle used for query represents a sub-device."
@@ -156,6 +153,9 @@ members:
     - type: uint32_t
       name: kernelTimestampValidBits
       desc: "[out] Returns the number of valid bits in the kernel timestamp values"
+    - type: $x_device_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier."
     - type: char
       name: "name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
@@ -288,9 +288,9 @@ etors:
       desc: "Uses software implementation for basic floating-point operations."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device properties queried using $xDeviceGetKernelProperties"
+desc: "Device module properties queried using $xDeviceGetModuleProperties"
 class: $xDevice
-name: $x_device_kernel_properties_t
+name: $x_device_module_properties_t
 base: $x_base_properties_t
 members:
     - type: uint32_t
@@ -299,13 +299,6 @@ members:
             [out] Maximum supported SPIR-V version.
             Returns zero if SPIR-V is not supported.
             Contains major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION.
-    - type: $x_native_kernel_uuid_t
-      name: nativeKernelSupported
-      desc: |
-            [out] Compatibility UUID of supported native kernel.
-            UUID may or may not be the same across driver release, devices, or operating systems.
-            Application is responsible for ensuring UUID matches before creating module using
-            previously created native kernel.
     - type: $x_bool_t
       name: fp16Supported
       desc: "[out] Supports 16-bit floating-point operations"
@@ -333,11 +326,18 @@ members:
     - type: uint32_t
       name: printfBufferSize
       desc: "[out] Maximum size of internal buffer that holds output of printf calls from kernel."
+    - type: $x_native_kernel_uuid_t
+      name: nativeKernelSupported
+      desc: |
+            [out] Compatibility UUID of supported native kernel.
+            UUID may or may not be the same across driver release, devices, or operating systems.
+            Application is responsible for ensuring UUID matches before creating module using
+            previously created native kernel.
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves kernel properties of the device"
+desc: "Retrieves module properties of the device"
 class: $xDevice
-name: GetKernelProperties
+name: GetModuleProperties
 ordinal: "1"
 details:
     - "The application may call this function from simultaneous threads."
@@ -346,9 +346,9 @@ params:
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
-    - type: "$x_device_kernel_properties_t*"
-      name: pKernelProperties
-      desc: "[in,out] query result for kernel properties"
+    - type: "$x_device_module_properties_t*"
+      name: pModuleProperties
+      desc: "[in,out] query result for module properties"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command queue group properties queried using $xDeviceGetCommandQueueGroupProperties"
