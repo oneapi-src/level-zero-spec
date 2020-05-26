@@ -785,7 +785,7 @@ The size of an event object is defined by the API version requested on attach.
 
 It also passes a timeout in milliseconds.
 A timeout of zero does not wait and immediately returns if no events are available.
-A timeout of ::${T}_DEBUG_TIMEOUT_INFINITE waits indefinitely.
+A timeout of UINT64_MAX waits indefinitely.
 If the timeout expires, ::${X}_RESULT_NOT_READY is returned.
 
 On success, the topmost event is copied into the buffer.
@@ -798,7 +798,7 @@ The following sample code demonstrates reading an event:
     ::${t}_debug_event_t event;
     ::${x}_result_t errcode;
 
-    errcode = ::${t}DebugReadEvent(session, ::${T}_DEBUG_TIMEOUT_INFINITE, sizeof(event), &event);
+    errcode = ::${t}DebugReadEvent(session, UINT64_MAX, sizeof(event), &event);
     if (errcode)
         return errcode;
 
@@ -849,8 +849,9 @@ Not all events have event-specific fields.
     If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is set, the event blocks the ::${x}ModuleCreate() call until
     the debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
 
+    * The module format.
+
     * The begin and end address of the in-memory module.
-      On all devices supported today, the module is an ELF file with optional DWARF debug information.
 
     * The load address of the module.
 
@@ -861,8 +862,9 @@ Not all events have event-specific fields.
     If ::${T}_DEBUG_EVENT_FLAGS_STOPPED is set, 
     the event blocks the ::${x}ModuleDestroy() call until the debugger acknowledges the event by resuming ::${T}_DEBUG_THREAD_NONE.
 
+    * The module format.
+
     * The begin and end address of the in-memory module.
-      On all devices supported today, the module is an ELF file with optional DWARF debug information.
 
     * The load address of the module.
 
@@ -966,104 +968,78 @@ The register state is represented as a randomly accessible range of memory.
 It starts with a description of the memory layout followed by the actual register state content.
 The layout is fixed per device thread.
 
-To read and write the register state, use the ::${t}DebugReadState and
-::${t}DebugWriteState function, respectively.
+To read and write the register state, use the ::${t}DebugReadRegisters and
+::${t}DebugWriteRegisters function, respectively.
 They take a ::${t}_debug_session_handle_t, a thread handle, an offset into the
 register state area, an access size in bytes, and an input or output
 buffer.
 
-The register state area starts with a ::${t}_debug_state_t descriptor containing the following fields:
+The register state area starts with a ::${t}_debug_regstate_t descriptor containing the following fields:
 
   * the size of the register state object in bytes
 
-  * the size of the state descriptor in bytes.
+  * the size of the register state descriptor in bytes.
 
-    This also defines the offset of the register file descriptor array.
+    This also defines the offset of the register set descriptor array.
 
-  * the size of each register file descriptor in bytes.
+  * the size of each register set descriptor in bytes.
 
-  * the number of register files contained in this state object.
+  * the number of register set contained in this state object.
 
 
-The state descriptor is followed by an array of register file descriptors
-starting at offset ::${t}_debug_state_t.headerSize of the register state
-object.  Each describes one register file contained in the state object
+The register state descriptor is followed by an array of register set descriptors
+starting at offset ::${t}_debug_regstate_t.headerSize of the register state
+object.  Each describes one register set contained in the register state object
 via the following fields:
 
-  * the register file type
+  * the register set type
 
-    This is a device-specific enumeration.  See below for examples.
+    This is a device-specific enumeration.
 
-  * the register file version
+  * the register set version
 
-    This defines variations of the same basic register file as it evolves
+    This defines variations of the same basic register set as it evolves
     over time.
 
     Version numbers start at one with zero reserved to denote an invalid
-    or unsupported version of this register file.
+    or unsupported version of this register set.
 
-    New registers are typically added to the end of a register file
+    New registers are typically added to the end of a register set
     allowing tools to skip unknown portions while still providing limited
     support for that device.
 
-  * The size of the register file in the register state object in bytes.
+  * The size of the register set in the register state object in bytes.
 
-  * The offset of the register file in the register state object.
+  * The offset of the register set in the register state object.
 
 
-The following sample code demonstrates iterating over register files:
+The following sample code demonstrates iterating over register sets:
 
 .. parsed-literal::
 
     ${t}_debug_session_handle_t session = ...;
     uint64_t threadid = ...;
-    ::${t}_debug_state_t state;
+    ::${t}_debug_regstate_t state;
     ::${x}_result_t errcode;
     uint16_t sec;
 
-    errcode = ::${t}DebugReadState(session, threadid, 0ull, sizeof(state), &state);
+    errcode = ::${t}DebugReadRegisters(session, threadid, 0ull, sizeof(state), &state);
     if (errcode)
         return errcode;
 
     for (sec = 0; sec < state.numSec; ++i) {
-        ::${t}_debug_state_section_t section;
+        ::${t}_debug_regset_t regset;
         uint64_t offset;
 
         offset = state.headerSize + (state.secSize * sec);
 
-        errcode = ::${t}DebugReadState(session, threadid, offset, sizeof(section), &section);
+        errcode = ::${t}DebugReadState(session, threadid, offset, sizeof(regset), &regset);
         if (errcode)
             return errcode;
 
         ...
     }
 
-Intel graphics devices, for example, provide:
-
-  * ::${T}_DEBUG_STATE_IGFX_GRF, the general register file.
-
-    In version one, this register file consists of a homogeneous array of
-    256 bit wide registers starting at `r0`.
-
-  * ::${T}_DEBUG_STATE_IGFX_ACC, the accumulator register file.
-
-    In version one, this register file consists of a homogeneous array of
-    256 bit wide registers starting at `acc0`.
-
-  * ::${T}_DEBUG_STATE_IGFX_ADDR, the address register file.
-
-    In version one, this register file consists of a homogeneous array of
-    256 bit wide registers starting at `a0`.  Each register is split into
-    16 elements, each 16 bit wide.
-
-  * ::${T}_DEBUG_STATE_IGFX_FLAG, the flags register file.
-
-    In version one, this register file consists of a homogeneous array of
-    32 bit wide registers starting at `flag0`.  Each register is split
-    into 2 elements, each 16 bit wide.
-
-
-(to be continued...)
 
 .. |Metrics| image:: ../images/tools_metric_hierarchy.png?raw=true
 .. |MetricTracer| image:: ../images/tools_metric_tracer.png?raw=true
