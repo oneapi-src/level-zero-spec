@@ -25,6 +25,9 @@ RE_CODE_BLOCK_BEGIN = r"\s*..\sparsed-literal::"
 RE_EXTRACT_NAME     = r"\$\{\w\}\w+"
 RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
 
+RE_VERSION_BEGIN    = r"\%if\s+(ver\s+[\<\=\>]+\s+[-+]?\d*\.\d+|\d+).*"
+RE_VERSION_END      = r"\%endif\s+#\s+.*"
+
 
 """
     determines if the symbol is known
@@ -82,6 +85,7 @@ def _make_ref(symbol, symbol_type, meta):
     generate a valid reStructuredText file
 """
 def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
+    ver=float(ver)
     enable = True
     code_block = False
 
@@ -89,16 +93,21 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
 
     outlines = []
     for iline, line in enumerate(util.textRead(fin)):
-    
+
         if re.match(RE_ENABLE, line) or re.match(RE_PYCODE_BLOCK_END, line):
             enable = True
         elif re.match(RE_DISABLE, line) or re.match(RE_PYCODE_BLOCK_BEGIN, line):
             enable = False
+
         elif re.match(RE_CODE_BLOCK_BEGIN, line):
             code_block = True
-        # code is always indented
-        elif re.match(r'^\w', line) and code_block:
+        elif re.match(r'^\w', line) and code_block: # code is always indented
             code_block = False
+
+        elif re.match(RE_VERSION_BEGIN, line):
+            enable = eval(re.sub(RE_VERSION_BEGIN, r"\1", line))
+        elif re.match(RE_VERSION_END, line):
+            enable = True
 
         if not enable:
             outlines.append(line)
@@ -148,7 +157,7 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
 
     return util.makoWrite(os.path.abspath(fout), fout,
                           tags=tags,
-                          ver=float(ver))
+                          ver=ver)
 
 """
 Entry-point:

@@ -637,6 +637,7 @@ Execution
 If a tool requires changing the address of an application's function, then it should use API Tracing.
 For example, ::${x}ModuleGetFunctionPointer and all flavors of ::${x}CommandListAppendLaunchKernel.
 
+%if ver >= 1.1:
 Program Debug
 =============
 
@@ -1039,7 +1040,7 @@ The following sample code demonstrates iterating over register sets:
 
         ...
     }
-
+%endif # ver >= 1.1
 
 .. |Metrics| image:: ../images/tools_metric_hierarchy.png?raw=true
 .. |MetricTracer| image:: ../images/tools_metric_tracer.png?raw=true

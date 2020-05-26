@@ -8,57 +8,21 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Debug"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "The API version."
-name: $T_DEBUG_API_VERSION
-value: "1"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Debug session handle"
-class: $tDebug
-name: $t_debug_session_handle_t
---- #--------------------------------------------------------------------------
-type: class
-desc: "C++ wrapper for Debug API"
-name: $tDebug
-members:
-    - type: "$t_debug_session_handle_t"
-      name: handle
-      desc: "[in] debug session handle"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Debug configuration: version 1"
-class: $tDebug
-name: $t_debug_config_v1_t
-members:
-    - type: "int"
-      name: pid
-      desc: "[in] the host process identifier"
---- #--------------------------------------------------------------------------
-type: union
-desc: "Debug configuration: version-dependent fields"
-class: $tDebug
-name: $t_debug_config_variants_t
-members:
-    - type: $t_debug_config_v1_t
-      name: v1
-      desc: "[in] version 1"
+version: "1.1"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Debug configuration"
+version: "1.1"
 class: $tDebug
 name: $t_debug_config_t
 members:
-    - type: "uint16_t"
-      name: version
-      desc: "[in] the requested program debug API version"
-    - type: $t_debug_config_variants_t
-      name: variant
-      desc: "[in] version-specific fields"
+    - type: "uint32_t"
+      name: pid
+      desc: "[in] the host process identifier"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Attach to a device."
+version: "1.1"
 class: $tDebug
 name: Attach
 decl: static
@@ -85,6 +49,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Close a debug session."
+version: "1.1"
 class: $tDebug
 name: Detach
 params:
@@ -97,6 +62,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query the number of device threads for a debug session."
+version: "1.1"
 class: $tDebug
 name: GetNumThreads
 params:
@@ -112,6 +78,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug event flags."
+version: "1.1"
 class: $tDebug
 name: $t_debug_event_flags_t
 etors:
@@ -124,6 +91,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug event types."
+version: "1.1"
 class: $tDebug
 name: $t_debug_event_type_t
 etors:
@@ -145,6 +113,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug detach reason."
+version: "1.1"
 class: $tDebug
 name: $t_debug_detach_reason_t
 etors:
@@ -156,6 +125,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "No thread on the device."
+version: "1.1"
 name: $T_DEBUG_THREAD_NONE
 value: "0xffffffffffffffffull"
 --- #--------------------------------------------------------------------------
@@ -166,6 +136,7 @@ value: "0xfffffffffffffffeull"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event information for $T_DEBUG_EVENT_DETACHED"
+version: "1.1"
 class: $tDebug
 name: $t_debug_event_info_detached_t
 members:
@@ -175,6 +146,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event information for $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
+version: "1.1"
 class: $tDebug
 name: $t_debug_event_info_module_t
 members:
@@ -193,6 +165,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: union
 desc: "Event type specific information"
+version: "1.1"
 class: $tDebug
 name: $t_debug_event_info_t
 members:
@@ -205,6 +178,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "A debug event on the device."
+version: "1.1"
 class: $tDebug
 name: $t_debug_event_t
 members:
@@ -223,6 +197,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read the topmost debug event."
+version: "1.1"
 class: $tDebug
 name: ReadEvent
 params:
@@ -248,6 +223,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Interrupt device threads."
+version: "1.1"
 class: $tDebug
 name: Interrupt
 params:
@@ -264,6 +240,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Resume device threads."
+version: "1.1"
 class: $tDebug
 name: Resume
 params:
@@ -280,6 +257,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory spaces for Intel Graphics devices."
+version: "1.1"
 class: $tDebug
 name: $t_debug_memory_space_igfx_t
 etors:
@@ -291,6 +269,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read memory."
+version: "1.1"
 class: $tDebug
 name: ReadMemory
 params:
@@ -322,6 +301,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Write memory."
+version: "1.1"
 class: $tDebug
 name: WriteMemory
 params:
@@ -353,6 +333,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Register set types for Intel Graphics devices."
+version: "1.1"
 class: $tDebug
 name: $t_debug_regset_igfx_t
 etors:
@@ -370,6 +351,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "A register set descriptor."
+version: "1.1"
 class: $tDebug
 name: $t_debug_regset_desc_t
 members:
@@ -388,6 +370,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "A register state descriptor."
+version: "1.1"
 class: $tDebug
 name: $t_debug_regstate_t
 members:
@@ -406,6 +389,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read register state."
+version: "1.1"
 class: $tDebug
 name: ReadRegisters
 params:
@@ -432,6 +416,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Write register state."
+version: "1.1"
 class: $tDebug
 name: WriteRegisters
 params:
@@ -455,3 +440,12 @@ returns:
         - "an invalid debug handle or thread identifier has been supplied"
         - "the thread is running or unavailable"
         - "an invalid offset or size has been supplied"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for Debug API"
+version: "1.1"
+name: $tDebug
+members:
+    - type: "$t_debug_session_handle_t"
+      name: handle
+      desc: "[in] debug session handle"
