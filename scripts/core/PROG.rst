@@ -438,6 +438,11 @@ Execution
   is undefined.
 - Command lists can only be executed on a command queue with an identical command queue group ordinal,
   see more details below.
+- If a device contains multiple sub-devices, then command lists submitted to a device-level command queue
+  may be optimized by the driver to fully exploit the concurrency of the sub-devices by distributing command lists across sub-devices.
+  If the application prefers to opt-out of these optimizations, such as when the application plans to perform this distribution itself,
+  then it should use ::${X}_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY. Only command lists created using ::${X}_COMMAND_LIST_FLAG_EXPLICIT_ONLY
+  can be executed on a command queue created using ::${X}_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY.
 
 Destruction
 ~~~~~~~~~~~

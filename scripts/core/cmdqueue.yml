@@ -21,6 +21,12 @@ etors:
     - name: $X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY
       value: "$X_BIT(0)"
       desc: "command queue reserves and cannot comsume more than a single slice."
+    - name: $x_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY
+      value: "$X_BIT(1)"
+      desc: |
+        command queue should be optimized for submission to a single device engine.
+        driver **must** disable any implicit optimizations for distributing work across multiple engines.
+        this flag should be used when applications want full control over multi-engine submission and scheduling.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
@@ -63,7 +69,9 @@ members:
       desc: "[in] command queue group ordinal"
     - type: uint32_t
       name: index
-      desc: "[in] command queue index within the group"
+      desc: |
+        [in] command queue index within the group;
+        must be zero if $X_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY is set
     - type: $x_command_queue_flag_t
       name: flags
       desc: "[in] usage flags"
