@@ -87,5 +87,5 @@ out/
 # VS CMake settings
 /CMakeSettings.json
 
-# Binary files
-*.vsdx
+# Temporary files
+*.~vsdx
