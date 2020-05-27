@@ -318,49 +318,49 @@ for data collection.
 Programming restrictions:
 
 - Any combination of metric groups can be configured simultaneously provided that all of them have different ::${t}_metric_group_properties_t.domain.
-- MetricGroup must be active until ::${t}MetricTracerClose and the last ::${t}CommandListAppendMetricQueryEnd completes.
+- MetricGroup must be active until ::${t}MetricStreamerClose and the last ::${t}CommandListAppendMetricQueryEnd completes.
 
 Collection
 ----------
 
 There are two modes of metrics collection supported: time-based and event-based.
 
-- Time-based collection is using a timer as well as other events to store data samples. A metric tracer interface is the software interface for configuration and collection.
+- Time-based collection is using a timer as well as other events to store data samples. A metric streamer interface is the software interface for configuration and collection.
 - Event-based collection is based on a pair of Begin/End events appended to command lists. A metric query interface is the software interface for configuration and collection.
 
 .. _Time-based:
 
-Metric Tracer
-~~~~~~~~~~~~~
+Metric Streamer
+~~~~~~~~~~~~~~~
 
 Time-based collection uses a simple Open, Read, Close scheme:
 
-- ::${t}MetricTracerOpen opens the tracer.
-- ::${t}MetricTracerReadData reads the raw data to be later processed by ::${t}MetricGroupCalculateMetricValues.
-- ::${t}MetricTracerClose closes the tracer.
+- ::${t}MetricStreamerOpen opens the streamer.
+- ::${t}MetricStreamerReadData reads the raw data to be later processed by ::${t}MetricGroupCalculateMetricValues.
+- ::${t}MetricStreamerClose closes the streamer.
 
-.. image:: ../images/tools_metric_tracer.png
+.. image:: ../images/tools_metric_streamer.png
 
-The following pseudo-code demonstrates a basic sequence for tracer-based collection:
+The following pseudo-code demonstrates a basic sequence for time-based collection:
 
 .. parsed-literal::
 
        ::${x}_result_t TimeBasedUsageExample( ${x}_driver_handle_t hDriver,
                                             ${x}_device_handle_t hDevice )
        {
-           ${t}_metric_group_handle_t     hMetricGroup           = nullptr;
-           ${x}_event_handle_t            hNotificationEvent     = nullptr;
-           ${x}_event_pool_handle_t       hEventPool             = nullptr;
+           ::${t}_metric_group_handle_t     hMetricGroup           = nullptr;
+           ::${x}_event_handle_t            hNotificationEvent     = nullptr;
+           ::${x}_event_pool_handle_t       hEventPool             = nullptr;
            ::${x}_event_pool_desc_t         eventPoolDesc          = {::${X}_STRUCTURE_TYPE_EVENT_POOL_DESC, nullptr, ::${X}_EVENT_POOL_FLAG_DEFAULT , 1};
            ::${x}_event_desc_t              eventDesc              = {::${X}_STRUCTURE_TYPE_EVENT_DESC};
-           ${t}_metric_tracer_handle_t    hMetricTracer          = nullptr;
-           ::${t}_metric_tracer_desc_t      metricTracerDescriptor = {::${T}_STRUCTURE_TYPE_METRIC_TRACER_DESC}; 
+           ::${t}_metric_streamer_handle_t  hMetricStreamer        = nullptr;
+           ::${t}_metric_streamer_desc_t    metricStreamerDesc     = {::${T}_STRUCTURE_TYPE_METRIC_STREAMER_DESC}; 
 
            // Find a "ComputeBasic" metric group suitable for Time Based collection
            FindMetricGroup( hDevice, "ComputeBasic", ::${T}_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
 
            // Configure the HW
-           ::${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
+           ::${t}DeviceActivateMetricGroups( hDevice, /* count= */ 1, &hMetricGroup );
 
            // Create notification event
            ::${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
@@ -369,15 +369,15 @@ The following pseudo-code demonstrates a basic sequence for tracer-based collect
            eventDesc.wait   = ::${X}_EVENT_SCOPE_FLAG_HOST; 
            ::${x}EventCreate( hEventPool, &eventDesc, &hNotificationEvent );
            
-           // Open metric tracer
-           metricTracerDescriptor.samplingPeriod       = 1000;
-           metricTracerDescriptor.notifyEveryNReports  = 32768;
-           ::${t}MetricTracerOpen( hDevice, hMetricGroup, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
+           // Open metric streamer
+           metricStreamerDesc.samplingPeriod       = 1000;
+           metricStreamerDesc.notifyEveryNReports  = 32768;
+           ::${t}MetricStreamerOpen( hDevice, hMetricGroup, &metricStreamerDesc, hNotificationEvent, &hMetricStreamer );
 
            // Run your workload, in this example we assume the data for the whole experiment fits in the device buffer
            Workload(hDevice);
            // Optionally insert markers during workload execution
-           //${t}CommandListAppendMetricTracerMarker( hCommandList, hMetricTracer, tool_marker_value ); 
+           //${t}CommandListAppendMetricStreamerMarker( hCommandList, hMetricStreamer, tool_marker_value ); 
 
            // Wait for data, optional in this example since the whole workload has already been executed by now
            //::${x}EventHostSynchronize( hNotificationEvent, 1000 /*timeout*/ );
@@ -385,12 +385,12 @@ The following pseudo-code demonstrates a basic sequence for tracer-based collect
 
            // Read raw data
            size_t rawSize = 0;
-           ::${t}MetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, nullptr );
+           ::${t}MetricStreamerReadData( hMetricStreamer, UINT32_MAX, &rawSize, nullptr );
            uint8_t* rawData = malloc(rawSize); 
-           ::${t}MetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, rawData );
+           ::${t}MetricStreamerReadData( hMetricStreamer, UINT32_MAX, &rawSize, rawData );
 
-           // Close metric tracer
-           ::${t}MetricTracerClose( hMetricTracer );   
+           // Close metric streamer
+           ::${t}MetricStreamerClose( hMetricStreamer );   
            ::${x}EventDestroy( hNotificationEvent );
            ::${x}EventPoolDestroy( hEventPool );
 
@@ -493,7 +493,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
 Calculation
 -----------
 
-Both MetricTracer and MetricQuery collect the data in device specific, raw form that is not suitable for application processing. 
+Both MetricStreamer and MetricQuery collect the data in device specific, raw form that is not suitable for application processing. 
 To calculate metric values use ::${t}MetricGroupCalculateMetricValues.
 
 The following pseudo-code demonstrates a basic sequence for metric calculation and interpretation:
@@ -1043,6 +1043,6 @@ The following sample code demonstrates iterating over register sets:
 %endif # ver >= 1.1
 
 .. |Metrics| image:: ../images/tools_metric_hierarchy.png?raw=true
-.. |MetricTracer| image:: ../images/tools_metric_tracer.png?raw=true
+.. |MetricStreamer| image:: ../images/tools_metric_streamer.png?raw=true
 .. |MetricQuery| image:: ../images/tools_metric_query.png?raw=true
 

@@ -51,9 +51,9 @@ class: $tMetric
 name: "$t_metric_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle of metric tracer's object"
-class: $tMetricTracer
-name: "$t_metric_tracer_handle_t"
+desc: "Handle of metric streamer's object"
+class: $tMetricStreamer
+name: "$t_metric_streamer_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of metric query pool's object"
@@ -85,8 +85,8 @@ etors:
       value: "0x1"
     - name: $T_STRUCTURE_TYPE_METRIC_PROPERTIES
       desc: $t_metric_properties_t
-    - name: $T_STRUCTURE_TYPE_METRIC_TRACER_DESC
-      desc: $t_metric_tracer_desc_t
+    - name: $T_STRUCTURE_TYPE_METRIC_STREAMER_DESC
+      desc: $t_metric_streamer_desc_t
     - name: $T_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC
       desc: $t_metric_query_pool_desc_t
     - name: $T_STRUCTURE_TYPE_PROFILE_PROPERTIES

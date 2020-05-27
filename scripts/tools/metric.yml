@@ -74,7 +74,7 @@ members:
     - type: uint32_t
       name: "maxCommandQueueGroupOrdinal"
       desc: |
-            [out] tracers and queries of this metric group cannot be submitted to a command queue group with a larger ordinal value.
+            [out] streamers and queries of this metric group cannot be submitted to a command queue group with a larger ordinal value.
             See $x_command_queue_desc_t for more information on how to specify the command queue's group ordinal.
     - type: uint32_t
       name: "metricCount"
@@ -304,9 +304,9 @@ returns:
         - "Multiple metric groups share the same domain"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Metric tracer descriptor"
-class: $tMetricTracer
-name: $t_metric_tracer_desc_t
+desc: "Metric streamer descriptor"
+class: $tMetricStreamer
+name: $t_metric_streamer_desc_t
 base: $t_base_desc_t
 members:
     - type: uint32_t
@@ -314,11 +314,11 @@ members:
       desc: "[in,out] number of collected reports after which notification event will be signalled"
     - type: uint32_t
       name: "samplingPeriod"
-      desc: "[in,out] tracer sampling period in nanoseconds"
+      desc: "[in,out] streamer sampling period in nanoseconds"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Opens metric tracer for a device."
-class: $tMetricTracer
+desc: "Opens metric streamer for a device."
+class: $tMetricStreamer
 name: Open
 decl: static
 details:
@@ -332,56 +332,56 @@ params:
     - type: "$t_metric_group_handle_t"
       name: "hMetricGroup"
       desc: "[in] handle of the metric group"
-    - type: "$t_metric_tracer_desc_t*"
+    - type: "$t_metric_streamer_desc_t*"
       name: desc
-      desc: "[in,out] metric tracer descriptor"
+      desc: "[in,out] metric streamer descriptor"
     - type: "$x_event_handle_t"
       name: hNotificationEvent
       desc: "[in][optional] event used for report availability notification"
-    - type: "$t_metric_tracer_handle_t*"
-      name: phMetricTracer
-      desc: "[out] handle of metric tracer"
+    - type: "$t_metric_streamer_handle_t*"
+      name: phMetricStreamer
+      desc: "[out] handle of metric streamer"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Append metric tracer marker into a command list."
+desc: "Append metric streamer marker into a command list."
 class: $tCommandList
-name: AppendMetricTracerMarker
+name: AppendMetricStreamerMarker
 details:
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$t_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
-    - type: "$t_metric_tracer_handle_t"
-      name: hMetricTracer
-      desc: "[in] handle of the metric tracer"
+    - type: "$t_metric_streamer_handle_t"
+      name: hMetricStreamer
+      desc: "[in] handle of the metric streamer"
     - type: "uint32_t"
       name: value
-      desc: "[in] tracer marker value"
+      desc: "[in] streamer marker value"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Closes metric tracer."
-class: $tMetricTracer
+desc: "Closes metric streamer."
+class: $tMetricStreamer
 name: Close
 details:
-    - "The application must **not** call this function from simultaneous threads with the same metric tracer handle."
+    - "The application must **not** call this function from simultaneous threads with the same metric streamer handle."
 params:
-    - type: "$t_metric_tracer_handle_t"
-      name: hMetricTracer
-      desc: "[in][release] handle of the metric tracer"
+    - type: "$t_metric_streamer_handle_t"
+      name: hMetricStreamer
+      desc: "[in][release] handle of the metric streamer"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reads data from metric tracer."
-class: $tMetricTracer
+desc: "Reads data from metric streamer."
+class: $tMetricStreamer
 name: ReadData
 details:
     - "The application may call this function from simultaneous threads."
 params:
-    - type: "$t_metric_tracer_handle_t"
-      name: hMetricTracer
-      desc: "[in] handle of the metric tracer"
+    - type: "$t_metric_streamer_handle_t"
+      name: hMetricStreamer
+      desc: "[in] handle of the metric streamer"
     - type: uint32_t
       name: maxReportCount
       desc: |
@@ -396,7 +396,7 @@ params:
             if size is larger than size needed for all reports, then driver will update the value with the actual size needed.
     - type: uint8_t*
       name: pRawData
-      desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing tracer reports in raw format"
+      desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing streamer reports in raw format"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric query pool types"
@@ -606,19 +606,19 @@ members:
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for metric tracer"
-name: $tMetricTracer
+desc: "C++ wrapper for metric streamer"
+name: $tMetricStreamer
 owner: $tDevice
 members:
-    - type: $t_metric_tracer_handle_t
+    - type: $t_metric_streamer_handle_t
       name: handle
-      desc: "[in] handle of metric tracer object" 
+      desc: "[in] handle of metric streamer object" 
     - type: $tDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
-    - type: $t_metric_tracer_desc_t
+    - type: $t_metric_streamer_desc_t
       name: desc
-      desc: "[in] descriptor of the metric tracer"
+      desc: "[in] descriptor of the metric streamer"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for metric query pool"
