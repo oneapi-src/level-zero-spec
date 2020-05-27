@@ -322,3 +322,23 @@ members:
       name: pNext
       desc: "[in][optional] pointer to extension-specific structure"
       init: nullptr
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Forces driver to only report devices (and sub-devices) as specified by mask value"
+name: $X_AFFINITY_MASK
+category: "Device"
+values: "Hex String"
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Forces driver to report devices from lowest to highest PCI bus ID"
+name: $X_ENABLE_PCI_ID_DEVICE_ORDER
+category: "Device"
+default: "0"
+values: "0, 1"
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Forces all shared allocations into device memory"
+name: $X_SHARED_FORCE_DEVICE_ALLOC
+category: "Memory"
+default: "0"
+values: "0, 1"

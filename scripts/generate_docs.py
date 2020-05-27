@@ -117,7 +117,6 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
             print("%s(%s) : error : invalid %s tag used"%(fin, iline+1, re.sub(RE_INVALID_TAG_FORMAT, r"\1", line)))
 
         if re.match(RE_PROPER_TAG_FORMAT, line):
-            link_found = False
             words = re.findall(RE_EXTRACT_NAME, line)
             for word in words:
                 symbol = re.sub(RE_EXTRACT_TAG_NAME, r"$\1", word)
@@ -144,12 +143,12 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
                             # reStructuredText requires an escape character after references that are not followed by whitespace.
                             line += "\\"
                         line += tuple[2]
-
-                        link_found = True
-
-            if not code_block and not link_found:
-                 if not re.match(RE_DOXY_LINK, line):
-                    print("%s(%s) : warning : doxygen link not used"%(fin, iline+1, ))
+                    else:
+                        # ignore reference links for specific types that have no API documentation for them.
+                        if not re.match(r"env|handle|typedef|macro", symbol_type):
+                            print("%s(%s) : warning : reference link %s (type=%s) not used."%(fin, iline+1, symbol, symbol_type))
+                else:
+                    print("%s(%s) : warning : reference link %s not used."%(fin, iline+1, word))
 
         outlines.append(line)
 

@@ -1287,7 +1287,6 @@ Environment Variables
 
 The following table documents the supported knobs for overriding default functional behavior.
 
-## --validate=off
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
@@ -1297,7 +1296,6 @@ The following table documents the supported knobs for overriding default functio
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                  |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-## --validate=on
 
 Affinity Mask
 ~~~~~~~~~~~~~
@@ -1308,10 +1306,7 @@ The affinity mask is specified via an environment variable as a string of hexade
 The value is specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
 The value is specific to the order in which devices are reported by the driver; i.e., the first device maps to bit 0, the second device to bit 1, and so forth.
 
-The order of the devices reported by the ::${x}DeviceGet can be forced to be consistent by setting the
-## --validate=off
-`${X}_ENABLE_PCI_ID_DEVICE_ORDER` environment variable.
-## --validate=on
+The order of the devices reported by the ::${x}DeviceGet can be forced to be consistent by setting the ${X}_ENABLE_PCI_ID_DEVICE_ORDER environment variable.
 
 The following examples demonstrate proper usage:
 
