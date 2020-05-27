@@ -477,7 +477,7 @@ Appending
    the same command list simultaneously.
 -  By default, commands are started in the same order in which they are appended.
    However, an application may allow the driver to optimize the ordering by using
-   ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING. Reordering is guaranteed to be only occur
+   ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING. Reordering is guaranteed to only occur
    between barriers and synchronization primitives.
 -  By default, commands submitted to a command list are optimized for execution by
    balancing both device throughput and Host latency. 
@@ -646,7 +646,7 @@ The following pseudo-code demonstrates a sequence for creation, submission and q
        ::${x}FenceReset(hFence);
        ...
 
-The primary usage model(s) for fences are to notify the Host when a command list has finished execution to allow:
+The primary usage model for fences is to notify the Host when a command list has finished execution to allow:
 
 - Recycling of memory and images
 - Recycling of command lists
@@ -687,7 +687,7 @@ An event is used to communicate fine-grain host-to-device, device-to-host or dev
 An event pool is used for creation of individual events:
 
 - An event pool reduces the cost of creating multiple events by allowing underlying device allocations to be shared by events with the same properties
-- An event pool can be shared via IPC; allowing sharing blocks of events rather than sharing each individual event
+- An event pool can be shared via :ref:`inter-process-communication`; allowing sharing blocks of events rather than sharing each individual event
 
 The following pseudo-code demonstrates a sequence for creation and submission of an event:
 
@@ -819,7 +819,7 @@ The following pseudo-code demonstrates a sequence for submission of a brute-forc
 Execution Barriers
 ------------------
 
-Commands executed on a command list are only guaranteed to start in the same order in which they are submitted; i.e.?there is no implicit definition of the order of completion.
+Commands executed on a command list are only guaranteed to start in the same order in which they are submitted; i.e. there is no implicit definition of the order of completion.
 
 - Fences provide implicit, coarse-grain control to indicate that all previous commands must complete prior to the fence being signaled.
 - Events provide explicit, fine-grain control over execution dependencies between commands; allowing more opportunities for concurrent execution and higher device utilization.
@@ -1068,7 +1068,7 @@ interface.
 Kernels
 -------
 
-A Kernel is a reference to a kernel within a module. The Kernel object supports both explicit and implicit kernel
+A Kernel is a reference to a kernel within a module and it supports both explicit and implicit kernel
 arguments along with data needed for launch.
 
 The following pseudo-code demonstrates a sequence for creating a kernel from a module:
@@ -1088,7 +1088,7 @@ The following pseudo-code demonstrates a sequence for creating a kernel from a m
 Kernel Attributes and Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use ::${x}KernelSetAttribute to set attributes for a kernel object.
+Use ::${x}KernelSetAttribute to set attributes for a Kernel.
 
 .. parsed-literal::
 
@@ -1097,7 +1097,7 @@ Use ::${x}KernelSetAttribute to set attributes for a kernel object.
     ::${x}KernelSetAttribute(hKernel, ::${X}_KERNEL_ATTRIBUTE_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
     ...
 
-Use ::${x}KernelSetAttribute to get attributes for a kernel object.
+Use ::${x}KernelSetAttribute to get attributes for a Kernel.
 
 .. parsed-literal::
 
@@ -1113,7 +1113,7 @@ Use ::${x}KernelSetAttribute to get attributes for a kernel object.
 
 See ::${x}_kernel_attribute_t for more information on the "set" and "get" attributes.
 
-Use ::${x}KernelGetProperties to query invariant properties from a kernel object.
+Use ::${x}KernelGetProperties to query invariant properties from a Kernel object.
 
 .. parsed-literal::
 
@@ -1162,13 +1162,13 @@ group size that was set on the kernel using ::${x}KernelSetGroupSize.
 Kernel Arguments
 ~~~~~~~~~~~~~~~~
 
-Kernel arguments represent only the explicit kernel arguments that are within ?brackets? e.g.?func(arg1, arg2, ?).
+Kernel arguments represent only the explicit kernel arguments that are within brackets e.g. func(arg1, arg2, ...).
 
 - Use ::${x}KernelSetArgumentValue to setup arguments for a kernel launch.
-- The ::${x}CommandListAppendLaunchKernel et al functions will make a copy the kernel arguments to send to the device.
+- The ::${x}CommandListAppendLaunchKernel et al. functions will make a copy of the kernel arguments to send to the device.
 - Kernel arguments can be updated at any time and used across multiple append calls.
 
-The following pseudo-code demonstrates a sequence for setting kernel args and launching the kernel:
+The following pseudo-code demonstrates a sequence for setting kernel arguments and launching the kernel:
 
 .. parsed-literal::
 
@@ -1245,7 +1245,7 @@ kernels. The ::${x}SamplerCreate function takes a sampler descriptor (::${x}_sam
 | Sampler Field                     | Description                             |
 +===================================+=========================================+
 | Address Mode                      | Determines how out-of-bounds            |
-|                                   | accessse are handled. See               |
+|                                   | accesses are handled. See               |
 |                                   | ::${x}_sampler_address_mode_t.      |
 +-----------------------------------+-----------------------------------------+
 | Filter Mode                       | Specifies which filtering mode to       |
@@ -1257,7 +1257,7 @@ kernels. The ::${x}SamplerCreate function takes a sampler descriptor (::${x}_sam
 |                                   | [0,1] or not.                           |
 +-----------------------------------+-----------------------------------------+
 
-The following is sample for code creating a sampler object and passing it as a kernel argument:
+The following pseudo-code demonstrates the creation of a sampler object and passing it as a kernel argument:
 
 .. parsed-literal::
 
@@ -1302,19 +1302,18 @@ The following table documents the supported knobs for overriding default functio
 Affinity Mask
 ~~~~~~~~~~~~~
 
-The affinity mask allows an application or tool to restrict which devices (and sub-devices) are visible to 3rd-party libraries or applications in another process, respectively. 
+The affinity mask allows an application or tool to restrict which devices, and sub-devices, are visible to 3rd-party libraries or applications in another process, respectively. 
 The affinity mask affects the number of handles returned from ::${x}DeviceGet and ::${x}DeviceGetSubDevices.
 The affinity mask is specified via an environment variable as a string of hexadecimal values.
 The value is specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
 The value is specific to the order in which devices are reported by the driver; i.e., the first device maps to bit 0, the second device to bit 1, and so forth.
 
+The order of the devices reported by the ::${x}DeviceGet can be forced to be consistent by setting the
 ## --validate=off
-The order of the devices reported by the ::${x}DeviceGet can be forced to be consistent by setting the `${X}_ENABLE_PCI_ID_DEVICE_ORDER` environment variable.
+`${X}_ENABLE_PCI_ID_DEVICE_ORDER` environment variable.
 ## --validate=on
 
-## --validate=off
 The following examples demonstrate proper usage:
-## --validate=on
 
 - "" (empty string) = disabled; i.e. all devices and sub-devices are reported. This is the default value.
 - Two devices, each with four sub-devices
@@ -1335,8 +1334,8 @@ Sub-Device Support
 
 The API allows support for sub-devices which can enable finer grained
 control of scheduling and memory allocation to a sub-partition of the device.
-There are functions to query and obtain a sub-device but outside of these
-functions there are no distinction between sub-devices and devices.
+There are functions to query and obtain a sub-device, but outside of these
+functions there are no distinctions between sub-devices and devices.
 
 Use ::${x}DeviceGetSubDevices to confirm sub-devices are supported and to
 obtain a sub-device handle. There are additional device properties in
@@ -1344,10 +1343,8 @@ obtain a sub-device handle. There are additional device properties in
 sub-device and to query the sub-device id. This is useful when needing
 to pass a sub-device handle to another library.
 
-To allocate memory and dispatch tasks to a specific sub-device then
-obtain the sub-device handle and use this with memory and command
-queue/lists APIs. Local memory allocation will be placed in the local
-memory that is attached to the sub-device. An out-of-memory error
+When using a sub-device handle, device memory allocation will be placed
+in the local memory that is attached to the sub-device. An out-of-memory error
 indicates that there is not enough local sub-device memory for the
 allocation. The driver will not try and spill sub-device allocations
 over to another sub-device's local memory. However, the application can
@@ -1535,6 +1532,8 @@ implementation dependent. The performance of sharing command queues will
 be no worse than an application submitting work to OpenCL, calling
 clFinish followed by submitting a Level-Zero command list. In most
 cases, command queue sharing may be much more efficient.
+
+.. _inter-process-communication:
 
 Inter-Process Communication
 ---------------------------
