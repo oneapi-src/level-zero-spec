@@ -21,7 +21,7 @@ etors:
     - name: $X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY
       value: "$X_BIT(0)"
       desc: "command queue reserves and cannot comsume more than a single slice."
-    - name: $x_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY
+    - name: $X_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY
       value: "$X_BIT(1)"
       desc: |
         command queue should be optimized for submission to a single device engine.
