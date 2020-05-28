@@ -592,10 +592,6 @@ There are two types of synchronization primitives:
 1. Fences_ - used to communicate to the host that command queue execution has completed.
 2. Events_ - used as fine-grain host-to-device, device-to-host or device-to-device execution and memory dependencies.
 
-The following diagram illustrates the relationship of capabilities of these types of synchronization primitives:
-
-.. image:: ../images/core_sync.png
-
 The following are the motivations for separating the different types of synchronization primitives:
 
 - Allows device-specific optimizations for certain types of primitives:

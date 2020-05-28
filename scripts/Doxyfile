@@ -1788,11 +1788,9 @@ LATEX_EXTRA_FILES      = ../docs/source/images/core_device.png \
                          ../docs/source/images/core_module.png \
                          ../docs/source/images/core_queue.png \
                          ../docs/source/images/core_subdevice.png \
-                         ../docs/source/images/core_sync.png \
                          ../docs/source/images/intel-logo.png \
                          ../docs/source/images/tools_metric_hierarchy.png \
                          ../docs/source/images/tools_metric_query.png \
-                         ../docs/source/images/tools_metric_tracer.png \
                          ../docs/source/images/tools_sysman_fabric.png \
                          ../docs/source/images/tools_sysman_fan_flow.png \
                          ../docs/source/images/tools_sysman_freq_flow.png \
