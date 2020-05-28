@@ -719,7 +719,7 @@ The following pseudo-code demonstrates a sequence for creation and submission of
        ${x}EventHostSynchronize(hEvent, 0);
        ...
 
-The following diagram illustrates an event being signaled between kernels within a command list:
+The following diagram illustrates a dependency between command lists using events:
 
 .. image:: ../images/core_event.png
 
