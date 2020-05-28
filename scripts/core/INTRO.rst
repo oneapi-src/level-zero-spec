@@ -103,7 +103,7 @@ The following coding conventions must be followed:
   - All descriptor structures must be derived from `${x}_base_desc_t`
   - All property structures must be derived from `${x}_base_properties_t`
   - All function input parameters must precede output parameters
-  - All functions must return ::${x}_result_t
+  - All functions must return ${x}_result_t
 
 Versioning
 ----------
@@ -117,14 +117,14 @@ There are multiple versions that should be used by the application to determine 
   - The value is encoded with 16-bit Major and 16-bit Minor parts
   - Major version increment consist of modified functionality, including deprecate features, and may break backwards-compatibility
   - Minor version increment consist of additional functionality, including promoted extensions, and must retain backwards-compatibility
-  - The value is determined from calling ::${x}DriverGetApiVersion
-  - The value returned will be the minimum of the ::${x}_api_version_t supported by the device and known by the driver
+  - The value is determined from calling ${x}DriverGetApiVersion
+  - The value returned will be the minimum of the ${x}_api_version_t supported by the device and known by the driver
 
 **Driver Version** - this is the version of the driver installed in the system.
 
   - This is typically used to mitigate driver implementation issues for a feature
   - The value encoding is vendor-specific but must be monotonically increasing
-  - The value is determined from calling ::${x}DriverGetProperties
+  - The value is determined from calling ${x}DriverGetProperties
 
 Error Handling
 --------------
@@ -150,7 +150,7 @@ The following design philosophies are adopted in order to reduce Host-side overh
     + Unless otherwise specified, the driver behavior is undefined when APIs are improperly used
     + For debug purposes, API validation can be enabled via the loader's validation layer(s)
 
-  - All API functions return ::${x}_result_t
+  - All API functions return ${x}_result_t
 
     + This enumeration contains error codes for the Level-Zero APIs and validation layers
     + This allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled
@@ -200,7 +200,7 @@ Extension Support
 -----------------
 
 Features which are device- or vendor-specific can be exposed as extensions.
-The list of extensions supported by the driver implementation can be queried using ::${x}DriverGetExtensionProperties.
+The list of extensions supported by the driver implementation can be queried using ${x}DriverGetExtensionProperties.
 
 ## --validate=off
   - All extension functions must be postfixed with `Ext`
