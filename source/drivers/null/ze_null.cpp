@@ -298,8 +298,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        zetDdiTable.MetricTracer.pfnReadData = [](
-            zet_metric_tracer_handle_t,
+        zetDdiTable.MetricStreamer.pfnReadData = [](
+            zet_metric_streamer_handle_t,
             uint32_t,
             size_t* pRawDataSize,
             uint8_t* pRawData )
