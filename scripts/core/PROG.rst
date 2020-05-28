@@ -600,10 +600,10 @@ The following are the motivations for separating the different types of synchron
 
 - Allows device-specific optimizations for certain types of primitives:
 
-       + fences may share device memory with all other fences within the same command queue.
-       + events may be implemented using pipelined operations as part of the program execution.
-       + fences are implicit, coarse-grain execution and memory barriers.
-       + events optionally cause fine-grain execution and memory barriers.
+    + Fences may share device memory with all other fences within the same command queue.
+    + Events may be implemented using pipelined operations as part of the program execution.
+    + Fences are implicit, coarse-grain execution and memory barriers.
+    + Events optionally cause fine-grain execution and memory barriers.
 
 - Allows distinction on which type of primitive may be shared across devices.
 
@@ -666,9 +666,9 @@ An event is used to communicate fine-grain host-to-device, device-to-host or dev
 
 - An event can be:
 
-       + signaled from within a device's command list and waited upon within the same command list
-       + signaled from within a device's command list and waited upon from the host, another command queue or another device
-       + signaled from the host, and waited upon from within a device's command list.
+    + Signaled from within a device's command list and waited upon within the same command list
+    + Signaled from within a device's command list and waited upon from the host, another command queue or another device
+    + Signaled from the host, and waited upon from within a device's command list.
 
 - An event only has two states: not signaled and signaled.
 - An event doesn't implicitly reset. Signaling a signaled event (or resetting an unsignaled event) is valid and has no effect on the state of the event.
@@ -678,11 +678,11 @@ An event is used to communicate fine-grain host-to-device, device-to-host or dev
 - An event can invoke an execution and/or memory barrier; which should be used sparingly to avoid device underutilization.
 - There are no protections against events causing deadlocks, such as circular waits scenarios.
 
-       + These problems are left to the application to avoid.
+    + These problems are left to the application to avoid.
 
 - An event intended to be signaled by the host, another command queue or another device after command list submission to a command queue may prevent subsequent forward progress within the command queue itself.
 
-       + This can create bubbles in the pipeline or deadlock situations if not correctly scheduled.
+    + This can create bubbles in the pipeline or deadlock situations if not correctly scheduled.
 
 An event pool is used for creation of individual events:
 
@@ -1398,16 +1398,21 @@ as multiple levels of indirection, there are two methods available:
 
 1. The application may set the ::${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 
-       + in addition, the application should indicate the type of allocations that will be indirectly accessed using ::${x}_kernel_attribute_t (::${X}_KERNEL_ATTRIBUTE_INDIRECT_HOST_ACCESS, DEVICE_ACCESS, or SHARED_ACCESS).
-       + if the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueExecuteCommandLists will return ::${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    + The application should specify which allocations will be indirectly accessed, using ::${x}KernelSetAttribute and the following, to optimize which allocations are made resident.
+           
+        * ::${X}_KERNEL_ATTRIBUTE_INDIRECT_HOST_ACCESS
+        * ::${X}_KERNEL_ATTRIBUTE_INDIRECT_DEVICE_ACCESS
+        * ::${X}_KERNEL_ATTRIBUTE_INDIRECT_SHARED_ACCESS
+
+    + If the driver is unable to make all allocations resident, then the call to ::${x}CommandQueueExecuteCommandLists will return ::${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
 2. Explcit ::${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
 
-       + if the application over-commits device memory, then a call to ::${x}DeviceMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    + If the application over-commits device memory, then a call to ::${x}DeviceMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
 
-The following pseudo-code demonstrate a sequence for using coarse-grain residency control for indirect arguments:
+The following pseudo-code demonstrates a sequence for using coarse-grain residency control for indirect arguments:
 
 .. parsed-literal::
 
@@ -1430,7 +1435,7 @@ The following pseudo-code demonstrate a sequence for using coarse-grain residenc
        ::${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
        ...
 
-The following pseudo-code demonstrate a sequence for using fine-grain residency control for indirect arguments:
+The following pseudo-code demonstrates a sequence for using fine-grain residency control for indirect arguments:
 
 .. parsed-literal::
 
@@ -1502,7 +1507,7 @@ ensure the cl_program is compiled and linked.
 cl_command_queue
 ~~~~~~~~~~~~~~~~
 
-Sharing OpenCL command queues provide opportunities to minimize
+Sharing OpenCL command queues provides opportunities to minimize
 transition costs when submitting work from an OpenCL queue followed by
 submitting work to Level-Zero command queue and vice-versa. Enqueuing
 Level-Zero command lists to Level-Zero command queues are immediately
@@ -1542,8 +1547,8 @@ makes it easier to share the memory objects with ease.
 There are two types of Inter-Process Communication (IPC) APIs for using
 Level-Zero allocations across processes:
 
-1. Memory
-2. Events
+1. :ref:`Memory<memory-1>`
+2. :ref:`Events<events-1>`
 
 .. _memory-1:
 
