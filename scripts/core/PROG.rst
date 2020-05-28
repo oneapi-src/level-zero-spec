@@ -615,7 +615,7 @@ However, this generality comes with some cost in memory overhead and efficiency.
 Fences
 ------
 
-A fence is a heavyweight synchronization primitive used to communicate to the host that command list execution within a command queue has completed.
+A fence is a heavyweight synchronization primitive used to communicate to the host that command list execution has completed.
 
 - A fence is associated with a single command queue.
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists) and can only be waited upon from the host.
@@ -662,7 +662,7 @@ The following diagram illustrates fences signaled after command lists on executi
 Events
 ------
 
-An event is used to communicate fine-grain host-to-device, device-to-host or device-to-device dependencies from within a command list.
+An event is used to communicate fine-grain host-to-device, device-to-host or device-to-device dependencies have completed.
 
 - An event can be:
 
