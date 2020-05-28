@@ -208,7 +208,7 @@ Sampling Types
 Sampling types are a software representation of device capabilities in
 terms of reading metric values. Each Metric Group provides information
 on which sampling types it supports. There are separate sets of APIs
-supporting both of the sampling types Time-based_ and Event-based_.
+supporting each of the sampling types Time-based_ and Event-based_.
 
 All available sampling types are defined in ${t}_metric_group_sampling_type_t.
 
