@@ -79,10 +79,9 @@ Main entry:
     Do everything...
 """
 def main():
-    # parse cmdline arguments
+    # phase 0: parse cmdline arguments
     configParser = util.configRead("config.ini")
 
-    # define cmdline arguments
     parser = argparse.ArgumentParser()
     for section in configParser.sections():
         add_argument(parser, section, "generation of C/C++ '%s' files."%section, True)
@@ -104,75 +103,78 @@ def main():
 
     start = time.time()
 
+    # phase 1: extract configuration info from ini file
+    input = {
+        'configs': [],
+        'specs'  : [],
+        'meta'   : {},
+        'ref'    : {}
+        }
+
+    for section in configParser.sections():
+        input['configs'].append({
+            'name'     : section,
+            'namespace': configParser.get(section,'namespace'),
+            'tags'     : {'$'+key : configParser.get(section,key) for key in configParser.get(section,'tags').split(",")},
+            })
+
+    # phase 2: parse specs
+    for config in input['configs']:
+        specs, input['meta'], input['ref'] = parse_specs.parse(config['name'], args['ver'], config['tags'], input['meta'], input['ref'])
+        input['specs'].append(specs)
+
+    if args['debug']:
+        util.jsonWrite("input.json", input)
+
+    # phase 3: generate files
     if args['clean']:
         clean()
 
-    specs = None
-
+    incpath = os.path.join("../include/")
     srcpath = os.path.join("../source/")
     docpath = os.path.join("../docs/")
 
     generate_docs.prepare(docpath, args['rst'], args['html'], args['ver'])
+    generate_docs.generate_ref(docpath, input['ref'])
 
-    # generate code
-    for idx, section in enumerate(configParser.sections()):
-        namespace = configParser.get(section,'namespace')
-        tags={}
-        for key in configParser.get(section,'tags').split(","):
-            tags['$'+key] = configParser.get(section,key)
+    for idx, specs in enumerate(input['specs']):
+        config = input['configs'][idx]
+        if args[config['name']]:
 
-        ymlpath = os.path.join("./", section)
-        incpath = os.path.join("../include/")
-        rstpath = os.path.join(docpath, "source", section)
+            generate_code.generate_api(incpath, config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
-        if args[section] and util.exists(ymlpath):
-            if specs:
-                specs = parse_specs.parse(ymlpath, args['ver'], tags, specs[1], specs[2])
-            else:
-                specs = parse_specs.parse(ymlpath, args['ver'], tags)
+            if args['lib']:
+                generate_code.generate_lib(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
-            if len(specs) > 0:
-                if args['debug']:
-                    util.jsonWrite(os.path.join(ymlpath, "specs.json"), specs[0])
-                    util.jsonWrite(os.path.join(ymlpath, "meta.json"), specs[1])
+            if args['loader']:
+                generate_code.generate_loader(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
-                generate_code.generate_api(incpath, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
+            if args['layers']:
+                generate_code.generate_layers(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
-                if args['lib']:
-                    generate_code.generate_lib(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
+            if args['drivers']:
+                generate_code.generate_drivers(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
-                if args['loader']:
-                    generate_code.generate_loader(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
-
-                if args['layers']:
-                    generate_code.generate_layers(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
-
-                if args['drivers']:
-                    generate_code.generate_drivers(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
-
-                if args['wrapper']:
-                    generate_code.generate_wrapper(srcpath, section, namespace, tags, args['ver'], args['rev'], specs[0], specs[1])
+            if args['wrapper']:
+                generate_code.generate_wrapper(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
             if args['rst']:
-                generate_docs.generate_rst(ymlpath, rstpath, tags, args['ver'], args['rev'], specs[1], specs[0])
+                generate_docs.generate_rst(docpath, config['name'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
-    if util.makeErrorCount():
-        print("\n%s Errors found during generation, stopping execution!"%util.makeErrorCount())
-        return
+        if util.makeErrorCount():
+            print("\n%s Errors found during generation, stopping execution!"%util.makeErrorCount())
+            return
 
     if args['debug']:
         util.makoFileListWrite("generated.json")
 
-    if specs:
-        generate_docs.generate_ref(docpath, specs[2])
-
-    # build code
+    # phase 4: build code
     if args['build']:
         if not build():
             print("\nBuild failed, stopping execution!")
             return
 
-    # generate documentation
+    # phase 5: publish documentation
     if args['html']:
         generate_docs.generate_html(docpath, configParser.sections(), args['ver'], args['rev'])
 

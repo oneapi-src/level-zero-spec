@@ -369,8 +369,16 @@ def _generate_meta(d, ordinal, meta):
     type = d['type']
     name = re.sub(r"(\w+)\(.*\)", r"\1", d['name']) # removes '()' part of macros
 
+    # create dict if typename is not already known...
+    if type not in meta:
+        meta[type] = {}
+
+    if 'class' not in meta:
+        meta['class'] = {}
+
     if 'class' in d:
         c = d['class']
+
         # create dict if class name is not already known...
         if c not in meta['class']:
             meta['class'][c] = {}
@@ -389,10 +397,6 @@ def _generate_meta(d, ordinal, meta):
             raise
 
     if 'class' != type:
-        # create dict if typename is not already known...
-        if type not in meta:
-            meta[type] = {}
-
         # create list if name is not already known for type...
         if 'function' == type and 'class' in d:
             name = d['class']+name
@@ -635,7 +639,8 @@ Entry-point:
     Reads each YML file and extracts data
     Returns list of data per file
 """
-def parse(path, version, tags, meta = {'class':{}}, ref = {}):
+def parse(section, version, tags, meta, ref):
+    path = os.path.join("./", section)
     specs = []
     for f in util.findFiles(path, "*.yml"):
         print("Parsing %s..."%f)
@@ -677,4 +682,5 @@ def parse(path, version, tags, meta = {'class':{}}, ref = {}):
     print("Parsed %s files and found:"%len(specs))
     for key in meta:
         print(" - %s %s(s)"%(len(meta[key]),key))
+    print("")
     return specs, meta, ref

@@ -162,7 +162,10 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
 Entry-point:
     generate restructuredtext documents from templates
 """
-def generate_rst(srcpath, dstpath, tags, ver, rev, meta, specs):
+def generate_rst(docpath, section, tags, ver, rev, specs, meta):
+    srcpath = os.path.join("./", section)
+    dstpath = os.path.join(docpath, "source", section)
+
     loc = 0
     util.makePath(dstpath)
     util.removeFiles(dstpath, "*.rst")
@@ -183,7 +186,7 @@ def generate_rst(srcpath, dstpath, tags, ver, rev, meta, specs):
             tags=tags,
             meta=meta,
             specs=specs)
-        
+
 
 """
 Entry-point:
