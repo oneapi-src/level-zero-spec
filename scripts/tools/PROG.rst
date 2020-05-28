@@ -207,8 +207,8 @@ Sampling Types
 
 Sampling types are a software representation of device capabilities in
 terms of reading metric values. Each Metric Group provides information
-which sampling types it supports. There are separate sets of APIs
-supporting each of the sampling types Time-based_ and Event-based_.
+on which sampling types it supports. There are separate sets of APIs
+supporting both of the sampling types Time-based_ and Event-based_.
 
 All available sampling types are defined in ${t}_metric_group_sampling_type_t.
 
@@ -237,17 +237,17 @@ All available metrics are organized into Metric Groups.
 
 The following APIs provide all the information needed for identification and usage.
 
-- Metric Group properties are accessed through function ${t}MetricGroupGetProperties, returning ${t}_metric_group_properties_t.
-- Metric properties are accessed through function ${t}MetricGetProperties, returning ${t}_metric_properties_t.
+- Metric Group properties are accessed through the function ${t}MetricGroupGetProperties which returns ${t}_metric_group_properties_t.
+- Metric properties are accessed through the function ${t}MetricGetProperties which returns ${t}_metric_properties_t.
 
 A common tool flow is to enumerate metrics looking for a specific Metric
 Group. Depending on the metrics required for a specific scenario a tool
 may choose to run the workload multiple times, recording different set
 of Metric Groups each time. Usually care must be taken to ensure
 run-to-run stability and result repeatability if metrics from different
-runs are meant to be used together. When enumerating Metric tree to find
+runs are meant to be used together. When enumerating metrics to find
 a desired Metric Group, it's important to know in advance which sampling
-type it will be used.
+type will be used.
 
 To enumerate through the Metric tree:
 
@@ -255,7 +255,7 @@ To enumerate through the Metric tree:
 2. Call ${t}MetricGroupGet to obtain all Metric Groups.
 3. Iterate over all available Metric Groups.
 
-    - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
+    - At this point it's possible to check Metric Group name, domain or sampling type.
     - Metric Group names may not be unique.
 
 4. Obtain the metric count for each Metric Group by calling ${t}MetricGroupGetProperties with Metric Group handle (${t}_metric_group_handle_t) and checking ${t}_metric_group_properties_t.metricCount.
@@ -317,13 +317,13 @@ for data collection.
 
 Programming restrictions:
 
-- Any combination of metric groups can be configured simultaneously provided that all of them have different ${t}_metric_group_properties_t.domain.
+- Any combination of metric groups can be configured simultaneously provided that all of them have a different ${t}_metric_group_properties_t.domain.
 - MetricGroup must be active until ${t}MetricStreamerClose and the last ${t}CommandListAppendMetricQueryEnd completes.
 
 Collection
 ----------
 
-There are two modes of metrics collection supported: time-based and event-based.
+There are two modes of metrics collection supported: :ref:`time-based<time-based>` and :ref:`event-based<event-based>`.
 
 - Time-based collection is using a timer as well as other events to store data samples. A metric streamer interface is the software interface for configuration and collection.
 - Event-based collection is based on a pair of Begin/End events appended to command lists. A metric query interface is the software interface for configuration and collection.
@@ -600,14 +600,14 @@ Intra-Function Instrumentation
 The following capabilities allow for a tool to inject instructions within a kernel:
 
 * ${t}ModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
-* ${t}KernelGetProfileInfo - allows a tool query detailed information on aspects of a kernel
+* ${t}KernelGetProfileInfo - allows a tool to query detailed information on aspects of a kernel
 * ${x}ModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the instrumented version
 * API-Tracing_ - same usage as Inter-Function Instrumentation above
 
 Compilation
 ~~~~~~~~~~~
 
-A module must be compiled with foreknowledge that instrumentation will be performed in for the compiler to generate the proper profiling meta-data.
+A module must be compiled with foreknowledge that instrumentation will be performed for the compiler to generate the proper profiling meta-data.
 Therefore, when the instrumentation layer is enabled, a new
 ## --validate=off
 build flag is supported: "-${t}-profile-flags \<value\>", where \<value\> must be a
@@ -748,7 +748,7 @@ Device threads are identified by their ordinal number,
 starting from one until the maximum number of threads on that device.
 Device thread identifiers are unique within the same debug session.
 
-If a tool attached to a device, device threads are enumerated for all sub-devices within that device.
+If a tool is attached to a device, device threads are enumerated for all sub-devices within that device.
 
 Implementations that allow restricting the number of device threads may
 enumerate less than the total number of threads supported by the device.
@@ -761,8 +761,7 @@ The number of device threads can be queried for each debug session using ${t}Deb
 Thread Availability
 ~~~~~~~~~~~~~~~~~~~
 
-For some devices, not all threads may be available at all times.
-Some threads may even not be available at any time.
+For some devices, not all threads may be available at all times and some threads may not be available at any time.
 This may have various reasons, including:
 
 * the thread may be idle
@@ -815,7 +814,7 @@ A debug event is described by the ${t}_debug_event_t structure, which contains:
 
       * ${T}_DEBUG_THREAD_ALL indicates all threads on the device.
 
-  * A bit-vector of ${t}_debug_event_flags_t, which can be one of the following:
+  * A bit-vector of ${t}_debug_event_flags_t, which can be:
 
     * ${T}_DEBUG_EVENT_FLAGS_STOPPED indicates that the thread that reported the event is stopped
       and needs to be resumed in order to proceed.
@@ -826,7 +825,7 @@ A debug event is described by the ${t}_debug_event_t structure, which contains:
 
       If the event was reported by ${T}_DEBUG_THREAD_NONE,
       the event occured outside the context of any device thread, yet still blocks progress.
-      The tool needs to resume ${T}_DEBUG_THREAD_NONE in order to acknowledge the event and unblock progress.
+      The tool needs to resume with ${T}_DEBUG_THREAD_NONE in order to acknowledge the event and unblock progress.
 
       Note that progress may not necessarily be blocked on the device on which the event occured.
 
@@ -836,7 +835,7 @@ Not all events have event-specific fields.
 
   * ${T}_DEBUG_EVENT_TYPE_DETACHED: the tool was detached.
 
-    * The detach reason as ${t}_debug_detach_reason_t. This can be one of the following reasons:
+    * The detach reason as ${t}_debug_detach_reason_t. This can be:
 
         * ${T}_DEBUG_DETACH_REASON_HOST_EXIT indicates that the host process exited.
 
