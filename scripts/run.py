@@ -65,7 +65,9 @@ def revision():
 
     items = result.stdout.decode().strip().split('-')
     tag = items[0][1:] # remove 'v'
-    count = int(items[1])
+    count = 0
+    if items[1].isdigit():
+       count = int(items[1])
 
     # Bump count if any local files are dirty.  
     # Keeps the count the same after doing a commit (assuming all dirty files are committed)
