@@ -249,7 +249,7 @@ params:
       desc: "[out] pointer to image properties"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a image object on the device."
+desc: "Creates an image object on the device."
 class: $xImage
 name: Create
 decl: static
@@ -277,7 +277,7 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Deletes a image object."
+desc: "Deletes an image object."
 class: $xImage
 name: Destroy
 decl: static

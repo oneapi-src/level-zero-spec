@@ -21,7 +21,7 @@ etors:
     - name: $X_COMMAND_LIST_FLAG_RELAXED_ORDERING
       value: "$X_BIT(0)"
       desc: |
-            driver may reorder programs and copys between barriers and synchronization primitives.
+            driver may reorder programs and copies between barriers and synchronization primitives.
             using this flag may increase Host overhead of $xCommandListClose.
             therefore, this flag should **not** be set for low-latency usage-models.
     - name: $X_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT
