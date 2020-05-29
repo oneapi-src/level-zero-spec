@@ -173,7 +173,7 @@ returns:
         - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies a image."
+desc: "Copies an image."
 class: $xCommandList
 name: AppendImageCopy
 analogue:
@@ -232,7 +232,7 @@ members:
       desc: "[in] The region depth relative to origin. For 1D or 2D images, set this to 1."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies a region of a image to another image."
+desc: "Copies a region of an image to another image."
 class: $xCommandList
 name: AppendImageCopyRegion
 details:
@@ -274,7 +274,7 @@ returns:
         - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies from a image to device or shared memory."
+desc: "Copies from an image to device or shared memory."
 class: $xCommandList
 name: AppendImageCopyToMemory
 analogue:
@@ -313,7 +313,7 @@ returns:
         - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Copies to a image from device or shared memory."
+desc: "Copies to an image from device or shared memory."
 class: $xCommandList
 name: AppendImageCopyFromMemory
 analogue:

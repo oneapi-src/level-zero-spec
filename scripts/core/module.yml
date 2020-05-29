@@ -401,7 +401,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_GLOBAL_WIDTH_DIMENSION
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Query a suggested max group count a cooperative kernel."
+desc: "Query a suggested max group count for a cooperative kernel."
 class: $xKernel
 name: SuggestMaxCooperativeGroupCount
 details:

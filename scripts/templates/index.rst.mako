@@ -17,3 +17,4 @@
    sysman/PROG.rst
    core/SPIRV.rst
    api.rst
+   versions.rst
