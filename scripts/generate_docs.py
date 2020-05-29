@@ -212,7 +212,7 @@ def generate_html(dstpath, sections, ver, rev):
 
     # Generate sphinx configuration file with version.
     loc = 0
-    for fn in ["conf.py", "index.rst", "api.rst"]:
+    for fn in ["conf.py", "index.rst", "api.rst", "versions.rst"]:
         loc += util.makoWrite(
             "./templates/%s.mako" % fn,
             os.path.join(sourcepath, fn),
