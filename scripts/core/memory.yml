@@ -12,16 +12,11 @@ desc: "Intel $OneApi Level-Zero APIs for Memory"
 type: enum
 desc: "Supported memory allocation flags"
 class: $xDriver
-name: $x_device_mem_alloc_flag_t
+name: $x_device_mem_alloc_flags_t
 etors:
-    - name: $X_DEVICE_MEM_ALLOC_FLAG_DEFAULT
-      value: "0"
-      desc: "implicit default behavior; uses driver-based heuristics"
-    - name: $X_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED
-      value: "$X_BIT( 0 )"
+    - name: BIAS_CACHED
       desc: "device should cache allocation"
-    - name: $X_DEVICE_MEM_ALLOC_FLAG_BIAS_UNCACHED
-      value: "$X_BIT( 1 )"
+    - name: BIAS_UNCACHED
       desc: "device should not cache allocation (UC)"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -30,33 +25,30 @@ class: $xDriver
 name: $x_device_mem_alloc_desc_t
 base: $x_base_desc_t
 members:
-    - type: "$x_device_mem_alloc_flag_t"
+    - type: "$x_device_mem_alloc_flags_t"
       name: flags
-      desc: "[in] flags specifying additional allocation controls"
-      init: "$X_DEVICE_MEM_ALLOC_FLAG_DEFAULT"
+      desc: |
+            [in] flags specifying additional allocation controls.
+            must be 0 (default) or a valid combination of $x_device_mem_alloc_flag_bits_t;
+            default behavior may use implicit driver-based heuristics.
+      init: "0"
     - type: uint32_t
       name: ordinal
       desc: |
-            [in] ordinal of the device's local memory to allocate from;
-            must be less than the count returned from $xDeviceGetMemoryProperties
+            [in] ordinal of the device's local memory to allocate from.
+            must be less than the count returned from $xDeviceGetMemoryProperties.
       init: "0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported host memory allocation flags"
 class: $xDriver
-name: $x_host_mem_alloc_flag_t
+name: $x_host_mem_alloc_flags_t
 etors:
-    - name: $X_HOST_MEM_ALLOC_FLAG_DEFAULT
-      value: "0"
-      desc: "implicit default behavior; uses driver-based heuristics"
-    - name: $X_HOST_MEM_ALLOC_FLAG_BIAS_CACHED
-      value: "$X_BIT( 0 )"
+    - name: BIAS_CACHED
       desc: "host should cache allocation"
-    - name: $X_HOST_MEM_ALLOC_FLAG_BIAS_UNCACHED
-      value: "$X_BIT( 1 )"
+    - name: BIAS_UNCACHED
       desc: "host should not cache allocation (UC)"
-    - name: $X_HOST_MEM_ALLOC_FLAG_BIAS_WRITE_COMBINED
-      value: "$X_BIT( 2 )"
+    - name: BIAS_WRITE_COMBINED
       desc: "host memory should be allocated write-combined (WC)"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -65,10 +57,13 @@ class: $xDriver
 name: $x_host_mem_alloc_desc_t
 base: $x_base_desc_t
 members:
-    - type: "$x_host_mem_alloc_flag_t"
+    - type: "$x_host_mem_alloc_flags_t"
       name: flags
-      desc: "[in] flags specifying additional allocation controls"
-      init: "$X_HOST_MEM_ALLOC_FLAG_DEFAULT"
+      desc: |
+            [in] flags specifying additional allocation controls.
+            must be 0 (default) or a valid combination of $x_host_mem_alloc_flag_bits_t;
+            default behavior may use implicit driver-based heuristics.
+      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates memory that is shared between the host and one or more devices"
@@ -206,14 +201,14 @@ desc: "Memory allocation type"
 class: $xDriver
 name: $x_memory_type_t
 etors:
-    - name: $X_MEMORY_TYPE_UNKNOWN
+    - name: UNKNOWN
       value: "0"
       desc: "the memory pointed to is of unknown type"
-    - name: $X_MEMORY_TYPE_HOST
+    - name: HOST
       desc: "the memory pointed to is a host allocation"
-    - name: $X_MEMORY_TYPE_DEVICE
+    - name: DEVICE
       desc: "the memory pointed to is a device allocation"
-    - name: $X_MEMORY_TYPE_SHARED
+    - name: SHARED
       desc: "the memory pointed to is a shared ownership allocation"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -290,11 +285,10 @@ params:
 type: enum
 desc: "Supported IPC memory flags"
 class: $xDriver
-name: $x_ipc_memory_flag_t
+name: $x_ipc_memory_flags_t
 etors:
-    - name: $X_IPC_MEMORY_FLAG_NONE
-      value: "0"
-      desc: "No special flags"
+    - name: TBD
+      desc: "reserved for future use"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Opens an IPC memory handle to retrieve a device pointer"
@@ -314,9 +308,12 @@ params:
     - type: $x_ipc_mem_handle_t
       name: handle
       desc: "[in] IPC memory handle"
-    - type: $x_ipc_memory_flag_t
+    - type: $x_ipc_memory_flags_t
       name: flags
-      desc: "[in] flags controlling the operation"
+      desc: |
+            [in] flags controlling the operation.
+            must be 0 (default) or a valid combination of $x_ipc_memory_flag_bits_t.
+      init: "0"
     - type: "void**"
       name: pptr
       desc: "[out] pointer to device allocation in this process"

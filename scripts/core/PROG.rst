@@ -60,7 +60,7 @@ The following pseudo-code demonstrates a basic initialization and device discove
 .. parsed-literal::
 
        // Initialize the driver
-       ${x}Init(${X}_INIT_FLAG_NONE);
+       ${x}Init(0);
 
        // Discover all the driver instances
        uint32_t driverCount = 0;
@@ -210,10 +210,10 @@ In summary:
 
 Devices may support different capabilities for each type of allocation. Supported capabilities are:
 
-* ${X}_MEMORY_ACCESS_CAPS_RW - if a device supports access (read or write) to allocations of the specified type.
-* ${X}_MEMORY_ACCESS_CAPS_ATOMIC - if a device support atomic operations on allocations of the specified type. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
-* ${X}_MEMORY_ACCESS_CAPS_CONCURRENT - if a device supports concurrent access to allocations of the specified type. Concurrent access may be from another device that supports concurrent access, or from the host. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
-* ${X}_MEMORY_ACCESS_CAPS_CONCURRENT_ATOMIC - if a device supports concurrent atomic operations on allocations of the specified type. Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host. Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.
+* ${X}_MEMORY_ACCESS_CAP_FLAG_RW - if a device supports access (read or write) to allocations of the specified type.
+* ${X}_MEMORY_ACCESS_CAP_FLAG_ATOMIC - if a device support atomic operations on allocations of the specified type. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
+* ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT - if a device supports concurrent access to allocations of the specified type. Concurrent access may be from another device that supports concurrent access, or from the host. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
+* ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC - if a device supports concurrent atomic operations on allocations of the specified type. Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host. Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.
 
 Some devices may *oversubscribe* some **shared** allocations. When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.
 
@@ -277,7 +277,7 @@ these details in the API in a backwards compatible fashion.
        ${x}_image_desc_t imageDesc = {
            ${X}_STRUCTURE_TYPE_IMAGE_DESC,
            nullptr,
-           ${X}_IMAGE_FLAG_PROGRAM_READ,
+           0, // read-only
            ${X}_IMAGE_TYPE_2D,
            formatDesc,
            128, 128, 0, 0, 0
@@ -348,8 +348,8 @@ configuration:
 
        // Large SLM for Intermediate and Last Level cache.
        // Note: The intermediate cache setting is applied to each kernel. Last level is applied for the device.
-       ${x}KernelSetIntermediateCacheConfig(hKernel, ${X}_CACHE_CONFIG_LARGE_SLM);
-       ${x}DeviceSetLastLevelCacheConfig(hDevice, ${X}_CACHE_CONFIG_LARGE_SLM);
+       ${x}KernelSetIntermediateCacheConfig(hKernel, ${X}_CACHE_CONFIG_FLAG_LARGE_SLM);
+       ${x}DeviceSetLastLevelCacheConfig(hDevice, ${X}_CACHE_CONFIG_FLAG_LARGE_SLM);
        ...
 
 Command Queues and Command Lists
@@ -418,11 +418,10 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
         ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
         nullptr,
         computeQueueGroupOrdinal,
-        0,
-        ${X}_COMMAND_QUEUE_FLAG_NONE,
+        0, // index
+        0, // flags
         ${X}_COMMAND_QUEUE_MODE_DEFAULT,
-        ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
-        0
+        ${X}_COMMAND_QUEUE_PRIORITY_NORMAL
     };
     ${x}_command_queue_handle_t hCommandQueue;
     ${x}CommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
@@ -500,7 +499,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
            ${X}_STRUCTURE_TYPE_COMMAND_LIST_DESC,
            nullptr,
            computeQueueGroupOrdinal,
-           ${X}_COMMAND_LIST_FLAG_NONE
+           0 // flags
        };
        ${x}_command_list_handle_t hCommandList;
        ${x}CommandListCreate(hDevice, &commandListDesc, &hCommandList);
@@ -572,10 +571,10 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
            ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_DESC,
            nullptr,
            computeQueueGroupOrdinal,
-           ${X}_COMMAND_QUEUE_FLAG_NONE,
+           0, // index
+           0, // flags
            ${X}_COMMAND_QUEUE_MODE_DEFAULT,
-           ${X}_COMMAND_QUEUE_PRIORITY_NORMAL,
-           0
+           ${X}_COMMAND_QUEUE_PRIORITY_NORMAL
        };
        ${x}_command_list_handle_t hCommandList;
        ${x}CommandListCreateImmediate(hDevice, &commandQueueDesc, &hCommandList);
@@ -629,7 +628,7 @@ The following pseudo-code demonstrates a sequence for creation, submission and q
        ${x}_fence_desc_t fenceDesc = {
            ${X}_STRUCTURE_TYPE_FENCE_DESC,
            nullptr,
-           ${X}_FENCE_FLAG_NONE
+           0 // flags
        };
        ${x}_fence_handle_t hFence;
        ${x}FenceCreate(hCommandQueue, &fenceDesc, &hFence);
@@ -694,7 +693,7 @@ The following pseudo-code demonstrates a sequence for creation and submission of
            ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
            nullptr,
            ${X}_EVENT_POOL_FLAG_HOST_VISIBLE, // all events in pool are visible to Host
-           1
+           1 // count
        };
        ${x}_event_pool_handle_t hEventPool;
        ${x}EventPoolCreate(hDriver, &eventPoolDesc, 0, nullptr, &hEventPool);
@@ -702,8 +701,8 @@ The following pseudo-code demonstrates a sequence for creation and submission of
        ${x}_event_desc_t eventDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
-           0,
-           ${X}_EVENT_SCOPE_FLAG_NONE,
+           0, // index
+           0, // no memory/cache coherency required on signal
            ${X}_EVENT_SCOPE_FLAG_HOST  // ensure memory coherency across device and Host after event completes
        };
        ${x}_event_handle_t hEvent;
@@ -744,7 +743,7 @@ A kernel timestamp event is a special type of event that records device timestam
            ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
            nullptr,
            ${X}_EVENT_POOL_FLAG_KERNEL_TIMESTAMP, // all events in pool are kernel timestamps
-           1
+           1 // count
        };
        ${x}_event_pool_handle_t hTSEventPool;
        ${x}EventPoolCreate(hDriver, &tsEventPoolDesc, 0, nullptr, &hTSEventPool);
@@ -752,9 +751,9 @@ A kernel timestamp event is a special type of event that records device timestam
        ${x}_event_desc_t tsEventDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
-           0,
-           ${X}_EVENT_SCOPE_FLAG_NONE,
-           ${X}_EVENT_SCOPE_FLAG_NONE
+           0, // index
+           0, // no memory/cache coherency required on signal
+           0  // no memory/cache coherency required on wait
        };
        ${x}_event_handle_t hTSEvent;
        ${x}EventCreate(hEventPool, &tsEventDesc, &hTSEvent);
@@ -763,8 +762,8 @@ A kernel timestamp event is a special type of event that records device timestam
        ${x}_device_mem_alloc_desc_t tsResultDesc = {
            ${X}_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC,
            nullptr,
-           ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
-           0
+           0, // flags
+           0  // ordinal
        };
        ${x}_kernel_timestamp_result_t* tsResult = nullptr;
        ${x}DriverAllocDeviceMem(hDriver, &tsResultDesc, sizeof(${x}_kernel_timestamp_result_t), sizeof(uint32_t), hDevice, &tsResult);
@@ -827,9 +826,9 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
        ${x}_event_desc_t event1Desc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
-           0,
-           ${X}_EVENT_SCOPE_FLAG_NONE, // no memory/cache coherency required on signal
-           ${X}_EVENT_SCOPE_FLAG_NONE  // no memory/cache coherency required on wait
+           0, // index
+           0, // no memory/cache coherency required on signal
+           0  // no memory/cache coherency required on wait
        };
        ${x}_event_handle_t hEvent1;
        ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
@@ -857,9 +856,9 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
        ${x}_event_desc_t event1Desc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
-           0,
+           0, // index
            ${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signaled
-           ${X}_EVENT_SCOPE_FLAG_NONE
+           0  // no memory/cache coherency required on wait
        };
        ${x}_event_handle_t hEvent1;
        ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
@@ -1074,7 +1073,7 @@ The following pseudo-code demonstrates a sequence for creating a kernel from a m
        ${x}_kernel_desc_t kernelDesc = {
            ${X}_STRUCTURE_TYPE_KERNEL_DESC,
            nullptr,
-           ${X}_KERNEL_FLAG_NONE,
+           0, // flags
            "image_scaling"
        };
        ${x}_kernel_handle_t hKernel;
@@ -1577,7 +1576,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
        hIPC = receive_from_sending_process();
 
        void* dptr = nullptr;
-       ${x}DriverOpenMemIpcHandle(hDriver, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
+       ${x}DriverOpenMemIpcHandle(hDriver, hDevice, hIPC, 0, &dptr);
 
 3. Each process may now refer to the same device memory allocation via its ``dptr``.
    Note, there is no guaranteed address equivalence for the values of ``dptr`` in each process.
@@ -1610,7 +1609,7 @@ The following code examples demonstrate how to use the event IPC APIs:
            ${X}_STRUCTURE_TYPE_EVENT_POOL_DESC,
            nullptr,
            ${X}_EVENT_POOL_FLAG_IPC | ${X}_EVENT_POOL_FLAG_HOST_VISIBLE,
-           10
+           10 // count
        };
        ${x}_event_pool_handle_t hEventPool;
        ${x}EventPoolCreate(hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool);
@@ -1642,8 +1641,8 @@ The following code examples demonstrate how to use the event IPC APIs:
        ${x}_event_desc_t eventDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
-           5,
-           ${X}_EVENT_SCOPE_FLAG_NONE,
+           5, // index
+           0, // no memory/cache coherency required on signal
            ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
        ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
@@ -1662,7 +1661,7 @@ The following code examples demonstrate how to use the event IPC APIs:
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            5,
-           ${X}_EVENT_SCOPE_FLAG_NONE,
+           0, // no memory/cache coherency required on signal
            ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
        ${x}EventCreate(hEventPool, &eventDesc, &hEvent);

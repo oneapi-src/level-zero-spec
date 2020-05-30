@@ -95,7 +95,7 @@ The following naming conventions must be followed:
   - All handle types must end with `handle_t`
   - All descriptor structures must end with `desc_t`
   - All property structures must end with `properties_t`
-  - All flag enumerations must end with `flag_t`
+  - All flag enumerations must end with `flags_t`
 ## --validate=on
 
 The following coding conventions must be followed:
@@ -210,7 +210,7 @@ The list of extensions supported by the driver implementation can be queried usi
   - All handle types must end with `ext_handle_t`
   - All descriptor structures must end with `ext_desc_t`
   - All property structures must end with `ext_properties_t`
-  - All flag enumerations must end with `ext_flag_t`
+  - All flag enumerations must end with `ext_flags_t`
 ## --validate=on
 
 "Experimental" extensions require additional experimentation and feedback from application vendors
@@ -227,7 +227,7 @@ before ratification, therefore applications should not rely on experimental exte
   - All handle types must end with `exp_handle_t`
   - All descriptor structures must end with `exp_desc_t`
   - All property structures must end with `exp_properties_t`
-  - All flag enumerations must end with `exp_flag_t`
+  - All flag enumerations must end with `exp_flags_t`
 ## --validate=on
 
 Application Binary Interface

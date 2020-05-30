@@ -26,11 +26,10 @@ type: enum
 desc: "Supported command graph creation flags"
 version: "2.0"
 class: $xCommandGraphExp
-name: $x_command_graph_exp_flag_t
+name: $x_command_graph_exp_flags_t
 etors:
-    - name: $X_COMMAND_GRAPH_EXP_FLAG_NONE
-      value: "0"
-      desc: "default behavior"
+    - name: TBD
+      desc: "reserved for future use"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "CommandGraph descriptor"
@@ -41,8 +40,11 @@ base: $x_base_desc_t
 members:
     - type: $x_command_graph_exp_flag_t
       name: flags
-      desc: "[in] creation flags"
-      init: $X_COMMAND_GRAPH_EXP_FLAG_NONE
+      desc: |
+            [in] creation flags.
+            must be 0 (default) or a valid combination of $x_command_graph_exp_flag_bits_t;
+            default behavior may use implicit driver-based heuristics to balance latency and throughput.
+      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command graph on the device for submitting commands to any command queue."

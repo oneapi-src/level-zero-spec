@@ -159,142 +159,142 @@ type: enum
 desc: "Defines Return/Error codes"
 name: $x_result_t
 etors:
-    - name: $X_RESULT_SUCCESS
+    - name: SUCCESS
       value: "0"
       desc: "[Core] success"
-    - name: $X_RESULT_NOT_READY
+    - name: NOT_READY
       value: "1"
       desc: "[Core] synchronization primitive not signaled"
-    - name: $X_RESULT_ERROR_DEVICE_LOST
+    - name: ERROR_DEVICE_LOST
       value: "0x70000001"
       desc: "[Core] device hung, reset, was removed, or driver update occurred"
-    - name: $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - name: ERROR_OUT_OF_HOST_MEMORY
       desc: "[Core] insufficient host memory to satisfy call"
-    - name: $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    - name: ERROR_OUT_OF_DEVICE_MEMORY
       desc: "[Core] insufficient device memory to satisfy call"
-    - name: $X_RESULT_ERROR_MODULE_BUILD_FAILURE
+    - name: ERROR_MODULE_BUILD_FAILURE
       desc: "[Core] error occurred when building module, see build log for details"
-    - name: $X_RESULT_ERROR_MODULE_LINK_FAILURE
+    - name: ERROR_MODULE_LINK_FAILURE
       desc: "[Core] error occurred when linking modules, see build log for details"
-    - name: $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS
+    - name: ERROR_INSUFFICIENT_PERMISSIONS
       value: "0x70010000"
       desc: "[Sysman] access denied due to permission level"
-    - name: $X_RESULT_ERROR_NOT_AVAILABLE
+    - name: ERROR_NOT_AVAILABLE
       desc: "[Sysman] resource already in use and simultaneous access not allowed"
-    - name: $X_RESULT_ERROR_DEPENDENCY_UNAVAILABLE
+    - name: ERROR_DEPENDENCY_UNAVAILABLE
       value: "0x70020000"
       desc: "[Tools] external required dependency is unavailable or missing"
-    - name: $X_RESULT_ERROR_UNINITIALIZED
+    - name: ERROR_UNINITIALIZED
       value: "0x78000001"
       desc: "[Validation] driver is not initialized"
-    - name: $X_RESULT_ERROR_UNSUPPORTED_VERSION
+    - name: ERROR_UNSUPPORTED_VERSION
       desc: "[Validation] generic error code for unsupported versions"
-    - name: $X_RESULT_ERROR_UNSUPPORTED_FEATURE
+    - name: ERROR_UNSUPPORTED_FEATURE
       desc: "[Validation] generic error code for unsupported features"
-    - name: $X_RESULT_ERROR_INVALID_ARGUMENT
+    - name: ERROR_INVALID_ARGUMENT
       desc: "[Validation] generic error code for invalid arguments"
-    - name: $X_RESULT_ERROR_INVALID_NULL_HANDLE
+    - name: ERROR_INVALID_NULL_HANDLE
       desc: "[Validation] handle argument is not valid"
-    - name: $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+    - name: ERROR_HANDLE_OBJECT_IN_USE
       desc: "[Validation] object pointed to by handle still in-use by device"
-    - name: $X_RESULT_ERROR_INVALID_NULL_POINTER
+    - name: ERROR_INVALID_NULL_POINTER
       desc: "[Validation] pointer argument may not be nullptr"
-    - name: $X_RESULT_ERROR_INVALID_SIZE
+    - name: ERROR_INVALID_SIZE
       desc: "[Validation] size argument is invalid (e.g., must not be zero)"
-    - name: $X_RESULT_ERROR_UNSUPPORTED_SIZE
+    - name: ERROR_UNSUPPORTED_SIZE
       desc: "[Validation] size argument is not supported by the device (e.g., too large)"
-    - name: $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+    - name: ERROR_UNSUPPORTED_ALIGNMENT
       desc: "[Validation] alignment argument is not supported by the device (e.g., too small)"
-    - name: $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - name: ERROR_INVALID_SYNCHRONIZATION_OBJECT
       desc: "[Validation] synchronization object in invalid state"
-    - name: $X_RESULT_ERROR_INVALID_ENUMERATION
+    - name: ERROR_INVALID_ENUMERATION
       desc: "[Validation] enumerator argument is not valid"
-    - name: $X_RESULT_ERROR_UNSUPPORTED_ENUMERATION
+    - name: ERROR_UNSUPPORTED_ENUMERATION
       desc: "[Validation] enumerator argument is not supported by the device"
-    - name: $X_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT
+    - name: ERROR_UNSUPPORTED_IMAGE_FORMAT
       desc: "[Validation] image format is not supported by the device"
-    - name: $X_RESULT_ERROR_INVALID_NATIVE_BINARY
+    - name: ERROR_INVALID_NATIVE_BINARY
       desc: "[Validation] native binary is not supported by the device"
-    - name: $X_RESULT_ERROR_INVALID_GLOBAL_NAME
+    - name: ERROR_INVALID_GLOBAL_NAME
       desc: "[Validation] global variable is not found in the module"
-    - name: $X_RESULT_ERROR_INVALID_KERNEL_NAME
+    - name: ERROR_INVALID_KERNEL_NAME
       desc: "[Validation] kernel name is not found in the module"
-    - name: $X_RESULT_ERROR_INVALID_FUNCTION_NAME
+    - name: ERROR_INVALID_FUNCTION_NAME
       desc: "[Validation] function name is not found in the module"
-    - name: $X_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION
+    - name: ERROR_INVALID_GROUP_SIZE_DIMENSION
       desc: "[Validation] group size dimension is not valid for the kernel or device"
-    - name: $X_RESULT_ERROR_INVALID_GLOBAL_WIDTH_DIMENSION
+    - name: ERROR_INVALID_GLOBAL_WIDTH_DIMENSION
       desc: "[Validation] global width dimension is not valid for the kernel or device"
-    - name: $X_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_INDEX
+    - name: ERROR_INVALID_KERNEL_ARGUMENT_INDEX
       desc: "[Validation] kernel argument index is not valid for kernel"
-    - name: $X_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_SIZE
+    - name: ERROR_INVALID_KERNEL_ARGUMENT_SIZE
       desc: "[Validation] kernel argument size does not match kernel"
-    - name: $X_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
+    - name: ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
       desc: "[Validation] value of kernel attribute is not valid for the kernel or device"
-    - name: $X_RESULT_ERROR_INVALID_COMMAND_LIST_TYPE
+    - name: ERROR_INVALID_COMMAND_LIST_TYPE
       desc: "[Validation] command list type does not match command queue type"
-    - name: $X_RESULT_ERROR_OVERLAPPING_REGIONS
+    - name: ERROR_OVERLAPPING_REGIONS
       desc: "[Validation] copy operations do not support overlapping regions of memory"
-    - name: $X_RESULT_ERROR_UNKNOWN
-      value: "0x7fffffff"
+    - name: ERROR_UNKNOWN
+      value: "0x7ffffffe"
       desc: "[Core] unknown or internal error"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Defines structure types"
 name: $x_structure_type_t
 etors:
-    - name: $X_STRUCTURE_TYPE_DRIVER_PROPERTIES
+    - name: DRIVER_PROPERTIES
       desc: $x_driver_properties_t
       value: "0x1"
-    - name: $X_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIES
+    - name: DRIVER_IPC_PROPERTIES
       desc: $x_driver_ipc_properties_t
-    - name: $X_STRUCTURE_TYPE_DEVICE_PROPERTIES
+    - name: DEVICE_PROPERTIES
       desc: $x_device_properties_t
-    - name: $X_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIES
+    - name: DEVICE_COMPUTE_PROPERTIES
       desc: $x_device_compute_properties_t
-    - name: $X_STRUCTURE_TYPE_DEVICE_MODULE_PROPERTIES
+    - name: DEVICE_MODULE_PROPERTIES
       desc: $x_device_module_properties_t
-    - name: $X_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES
+    - name: COMMAND_QUEUE_GROUP_PROPERTIES
       desc: $x_command_queue_group_properties_t
-    - name: $X_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIES
+    - name: DEVICE_MEMORY_PROPERTIES
       desc: $x_device_memory_properties_t
-    - name: $X_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIES
+    - name: DEVICE_MEMORY_ACCESS_PROPERTIES
       desc: $x_device_memory_access_properties_t
-    - name: $X_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIES
+    - name: DEVICE_CACHE_PROPERTIES
       desc: $x_device_cache_properties_t
-    - name: $X_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIES
+    - name: DEVICE_IMAGE_PROPERTIES
       desc: $x_device_image_properties_t
-    - name: $X_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES
+    - name: DEVICE_P2P_PROPERTIES
       desc: $x_device_p2p_properties_t
-    - name: $X_STRUCTURE_TYPE_COMMAND_QUEUE_DESC
+    - name: COMMAND_QUEUE_DESC
       desc: $x_command_queue_desc_t
-    - name: $X_STRUCTURE_TYPE_COMMAND_LIST_DESC
+    - name: COMMAND_LIST_DESC
       desc: $x_command_list_desc_t
-    - name: $X_STRUCTURE_TYPE_EVENT_POOL_DESC
+    - name: EVENT_POOL_DESC
       desc: $x_event_pool_desc_t
-    - name: $X_STRUCTURE_TYPE_EVENT_DESC
+    - name: EVENT_DESC
       desc: $x_event_desc_t
-    - name: $X_STRUCTURE_TYPE_FENCE_DESC
+    - name: FENCE_DESC
       desc: $x_fence_desc_t
-    - name: $X_STRUCTURE_TYPE_IMAGE_DESC
+    - name: IMAGE_DESC
       desc: $x_image_desc_t
-    - name: $X_STRUCTURE_TYPE_IMAGE_PROPERTIES
+    - name: IMAGE_PROPERTIES
       desc: $x_image_properties_t
-    - name: $X_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC
+    - name: DEVICE_MEM_ALLOC_DESC
       desc: $x_device_mem_alloc_desc_t
-    - name: $X_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESC
+    - name: HOST_MEM_ALLOC_DESC
       desc: $x_host_mem_alloc_desc_t
-    - name: $X_STRUCTURE_TYPE_MEMORY_ALLOCATION_PROPERTIES
+    - name: MEMORY_ALLOCATION_PROPERTIES
       desc: $x_memory_allocation_properties_t
-    - name: $X_STRUCTURE_TYPE_MODULE_DESC
+    - name: MODULE_DESC
       desc: $x_module_desc_t
-    - name: $X_STRUCTURE_TYPE_KERNEL_DESC
+    - name: KERNEL_DESC
       desc: $x_kernel_desc_t
-    - name: $X_STRUCTURE_TYPE_KERNEL_PROPERTIES
+    - name: KERNEL_PROPERTIES
       desc: $x_kernel_properties_t
-    - name: $X_STRUCTURE_TYPE_SAMPLER_DESC
+    - name: SAMPLER_DESC
       desc: $x_sampler_desc_t
-    - name: $X_STRUCTURE_TYPE_COMMAND_GRAPH_EXP_DESC
+    - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       value: "0x00010001"
       version: "2.0"

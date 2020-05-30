@@ -12,13 +12,11 @@ desc: "Intel $OneApi Level-Zero Tool APIs for Program Instrumentation (PIN)"
 type: enum
 desc: "Supportted profile features"
 class: $tKernel
-name: $t_profile_flag_t
+name: $t_profile_flags_t
 etors:
-    - name: $T_PROFILE_FLAG_REGISTER_REALLOCATION
-      value: "$X_BIT(0)"
+    - name: REGISTER_REALLOCATION
       desc: "request the compiler attempt to minimize register usage as much as possible to allow for instrumentation"
-    - name: $T_PROFILE_FLAG_FREE_REGISTER_INFO
-      value: "$X_BIT(1)"
+    - name: FREE_REGISTER_INFO
       desc: "request the compiler generate free register info"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -27,9 +25,11 @@ class: $tKernel
 name: $t_profile_properties_t
 base: $t_base_properties_t
 members:
-    - type: $t_profile_flag_t
+    - type: $t_profile_flags_t
       name: flags
-      desc: "[out] indicates which flags were enabled during compilation"
+      desc: |
+            [out] indicates which flags were enabled during compilation.
+            returns 0 (none) or a combination of $t_profile_flag_bits_t
     - type: uint32_t
       name: numTokens
       desc: "[out] number of tokens immediately following this structure"
@@ -39,7 +39,7 @@ desc: "Supported profile token types"
 class: $tKernel
 name: $t_profile_token_type_t
 etors:
-    - name: $T_PROFILE_TOKEN_TYPE_FREE_REGISTER
+    - name: FREE_REGISTER
       desc: "GRF info"
 --- #--------------------------------------------------------------------------
 type: struct

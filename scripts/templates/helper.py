@@ -68,7 +68,7 @@ class type_traits:
     RE_POINTER  = r"(.*\w+)\*+"
     RE_DESC     = r"(.*)desc_t.*"
     RE_PROPS    = r"(.*)properties_t.*"
-    RE_FLAG     = r"(.*)flag_t"
+    RE_FLAGS    = r"(.*)flags_t"
 
     @staticmethod
     def base(name):
@@ -118,9 +118,9 @@ class type_traits:
             return False
 
     @classmethod
-    def is_flag(cls, name):
+    def is_flags(cls, name):
         try:
-            return True if re.match(cls.RE_FLAG, name) else False
+            return True if re.match(cls.RE_FLAGS, name) else False
         except:
             return False
 
@@ -160,9 +160,32 @@ class type_traits:
     Extracts traits from a value name
 """
 class value_traits:
+    RE_VERSION  = r"\$X_MAKE_VERSION\(\s*(\d+)\s*\,\s*(\d+)\s*\)"
     RE_BIT      = r".*BIT\(\s*(.*)\s*\)"
+    RE_HEX      = r"0x\w+"
     RE_MACRO    = r"(\$\w+)\(.*\)"
     RE_ARRAY    = r"(.*)\[(.*)\]"
+
+    @classmethod
+    def is_ver(cls, name):
+        try:
+            return True if re.match(cls.RE_VERSION, name) else False
+        except:
+            return False
+
+    @classmethod
+    def get_major_ver(cls, name):
+        try:
+            return int(re.sub(cls.RE_VERSION, r"\1", name))
+        except:
+            return 0
+
+    @classmethod
+    def get_minor_ver(cls, name):
+        try:
+            return int(re.sub(cls.RE_VERSION, r"\2", name))
+        except:
+            return 0
 
     @classmethod
     def is_bit(cls, name):
@@ -174,9 +197,16 @@ class value_traits:
     @classmethod
     def get_bit_count(cls, name):
         try:
-            return re.sub(cls.RE_BIT, r"\1", name)
+            return int(re.sub(cls.RE_BIT, r"\1", name))
         except:
-            return name
+            return 0
+
+    @classmethod
+    def is_hex(cls, name):
+        try:
+            return True if re.match(cls.RE_HEX, name) else False
+        except:
+            return False
 
     @classmethod
     def is_macro(cls, name, meta):
@@ -472,9 +502,12 @@ Private:
     removes class name from type
     e.g., "const cls_type*" -> "const type*"
 """
-def _remove_class(name, cname):
+def _remove_class(name, cname, upper_case=False):
     if cname:
-        RE_CLS = r"(.*)(%s_)(\w+)"%_camel_to_snake(cname) # remove "cls_" part
+        cname = _camel_to_snake(cname)
+        if upper_case:
+            cname = cname.upper()
+        RE_CLS = r"(.*)(%s_)(\w+)"%cname # remove "cls_" part
         if re.match(RE_CLS, name):
             name = re.sub(RE_CLS, r"\1\3", name)
     return name
@@ -505,17 +538,34 @@ def make_type_name(namespace, tags, obj, cpp=False):
 
 """
 Public:
+    returns c/c++ name of enums...
+"""
+def make_enum_name(namespace, tags, obj, cpp=False):
+    name = make_type_name(namespace, tags, obj, cpp)
+    if type_traits.is_flags(obj['name']):
+        name = re.sub(r"flags", r"flag", name)
+    return name
+
+"""
+Public:
     returns c/c++ name of etor
 """
-def make_etor_name(namespace, tags, enum, etor, cpp=False):
+def make_etor_name(namespace, tags, enum, etor, cpp=False, meta=None):
     if cpp:
         # if c++, remove the verbose enum part of the etor
-        # e.g., "ENUM_NAME_ETOR_NAME" -> "ETOR_NAME"
-        prefix = re.sub(r"(\w+)_t", r"\1", subt(namespace, tags, enum, cpp=cpp)).upper()
-        name = re.sub(r"%s_(\w+)"%prefix, r"\1", subt(namespace, tags, etor, cpp=cpp))
-        name = re.sub(r"^(\d+\w*)", r"_\1", name)
+        if type_traits.is_flags(enum):
+            # e.g., "CLS_ENUM_NAME_ETOR_NAME" -> "ENUM_NAME_ETOR_NAME"
+            cname = type_traits.find_class_name(enum, meta)
+            cname = subt(namespace, tags, cname, cpp=cpp)
+            name = subt(namespace, tags, etor, cpp=cpp)
+            name = _remove_class(name, cname, upper_case=True)
+        else:
+            # e.g., "ENUM_NAME_ETOR_NAME" -> "ETOR_NAME"
+            prefix = re.sub(r"(\w+)_t", r"\1", subt(namespace, tags, enum, cpp=cpp)).upper()
+            name = re.sub(r"%s_(\w+)"%prefix, r"\1", subt(namespace, tags, etor, cpp=cpp))
+            name = re.sub(r"^(\d+\w*)", r"_\1", name)
     else:
-        name = subt(namespace, tags, etor)
+        name = subt(namespace, tags, etor, cpp=cpp)
     return name
 
 """
@@ -542,9 +592,9 @@ def _get_value_name(namespace, tags, value, cpp, meta, is_array_size=False, cbas
                     else:
                         enum = "%s::%s"%(cname, enum)
                 if is_array_size:
-                    value = "static_cast<int>(%s::%s)"%(enum, make_etor_name(namespace, tags, name, value, cpp))
+                    value = "static_cast<int>(%s::%s)"%(enum, make_etor_name(namespace, tags, name, value, cpp, meta))
                 else:
-                    value = "%s::%s"%(enum, make_etor_name(namespace, tags, name, value, cpp))
+                    value = "%s::%s"%(enum, make_etor_name(namespace, tags, name, value, cpp, meta))
             else:
                 value = subt(namespace, tags, value, cpp=cpp)
     else:
@@ -560,7 +610,7 @@ Public:
 def make_etor_lines(namespace, tags, obj, cpp=False, py=False, meta=None):
     lines = []
     for item in obj['etors']:
-        name = make_etor_name(namespace, tags, obj['name'], item['name'], cpp or py)
+        name = make_etor_name(namespace, tags, obj['name'], item['name'], cpp or py, meta)
 
         if 'value' in item:
             delim = "," if not py else ""
@@ -575,6 +625,12 @@ def make_etor_lines(namespace, tags, obj, cpp=False, py=False, meta=None):
         for line in split_line(subt(namespace, tags, item['desc'], True, cpp), 70):
             lines.append("%s%s %s"%(append_ws(prologue, 48), comment_style, line))
             prologue = ""
+
+    if cpp and not type_traits.is_flags(obj['name']):
+        lines.append("FORCE_UINT32 = 0x7fffffff")
+    else:
+        lines.append("%sFORCE_UINT32 = 0x7fffffff"%make_enum_name(namespace, tags, obj, cpp)[:-1].upper())
+
     return lines
 
 """

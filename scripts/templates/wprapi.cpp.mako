@@ -272,13 +272,16 @@ namespace ${n}
         const auto bits = static_cast<uint32_t>( val );
 
         std::string str;
+
+        if( 0 == bits )
+            str += "0 | ";
         %for i, item in enumerate(obj['etors']):
         <%
-            ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
+            ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True, meta=meta)
         %>
-        %if i == 0 and ('value' not in item or "0" == item['value']):
-        if( 0 == bits )
-            str += "${ename}   ";
+        %if th.type_traits.is_flags(tname):
+        if( static_cast<uint32_t>(${ename}) & bits )
+            str += "${ename} | ";
         %else:
         if( static_cast<uint32_t>(${tname}::${ename}) & bits )
             str += "${ename} | ";
@@ -286,8 +289,13 @@ namespace ${n}
         %endfor
 
         return ( str.size() > 3 ) 
+        %if th.type_traits.is_flags(tname):
+            ? "{ " + str.substr(0, str.size() - 3) + " }"
+            : "{ ? }";
+        %else:
             ? "${tname}::{ " + str.substr(0, str.size() - 3) + " }"
             : "${tname}::{ ? }";
+        %endif
         %else:
         std::string str;
 
@@ -296,7 +304,7 @@ namespace ${n}
         %for item in obj['etors']:
         %if not item['name'].endswith("CURRENT"):
         <%
-            ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
+            ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True, meta=meta)
         %>case ${tname}::${ename}:
             str = "${tname}::${ename}";
             break;
@@ -357,7 +365,8 @@ namespace ${n}
     ## ENUM #######################################################################
     %for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
     <%
-        tname = "%s::%s"%(th.make_class_name(n, tags, obj), th.make_type_name(n, tags, e, cpp=True))
+        cname = th.make_class_name(n, tags, obj)
+        tname = "%s::%s"%(cname, th.make_type_name(n, tags, e, cpp=True))
     %>///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts ${tname} to std::string
     %if 'condition' in e:
@@ -369,13 +378,16 @@ namespace ${n}
         const auto bits = static_cast<uint32_t>( val );
 
         std::string str;
+
+        if( 0 == bits )
+            str += "0 | ";
         %for i, item in enumerate(e['etors']):
         <%
-            ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
+            ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True, meta=meta)
         %>
-        %if i == 0 and ('value' not in item or "0" == item['value']):
-        if( 0 == bits )
-            str += "${ename}   ";
+        %if th.type_traits.is_flags(tname):
+        if( static_cast<uint32_t>(${cname}::${ename}) & bits )
+            str += "${ename} | ";
         %else:
         if( static_cast<uint32_t>(${tname}::${ename}) & bits )
             str += "${ename} | ";
@@ -383,8 +395,13 @@ namespace ${n}
         %endfor
 
         return ( str.size() > 3 ) 
+        %if th.type_traits.is_flags(tname):
+            ? "${cname}::{ " + str.substr(0, str.size() - 3) + " }"
+            : "${cname}::{ ? }";
+        %else:
             ? "${tname}::{ " + str.substr(0, str.size() - 3) + " }"
             : "${tname}::{ ? }";
+        %endif
         %else:
         std::string str;
 
@@ -393,7 +410,7 @@ namespace ${n}
         %for item in e['etors']:
         %if not item['name'].endswith("CURRENT"):
         <%
-            ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
+            ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True, meta=meta)
         %>case ${tname}::${ename}:
             str = "${tname}::${ename}";
             break;

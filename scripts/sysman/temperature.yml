@@ -14,12 +14,12 @@ desc: "Temperature sensors"
 class: $sTemperature
 name: $s_temp_sensors_t
 etors:
-    - name: $S_TEMP_SENSORS_GLOBAL
+    - name: GLOBAL
       value: "0"
       desc: "The maximum temperature across all device sensors"
-    - name: $S_TEMP_SENSORS_GPU
+    - name: GPU
       desc: "The maximum temperature across all sensors in the GPU"
-    - name: $S_TEMP_SENSORS_MEMORY
+    - name: MEMORY
       desc: "The maximum temperature across all sensors in the local memory"
 --- #--------------------------------------------------------------------------
 type: struct

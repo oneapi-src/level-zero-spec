@@ -80,18 +80,18 @@ type: enum
 desc: "Defines structure types"
 name: $t_structure_type_t
 etors:
-    - name: $T_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES
+    - name: METRIC_GROUP_PROPERTIES
       desc: $t_metric_group_properties_t
       value: "0x1"
-    - name: $T_STRUCTURE_TYPE_METRIC_PROPERTIES
+    - name: METRIC_PROPERTIES
       desc: $t_metric_properties_t
-    - name: $T_STRUCTURE_TYPE_METRIC_STREAMER_DESC
+    - name: METRIC_STREAMER_DESC
       desc: $t_metric_streamer_desc_t
-    - name: $T_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC
+    - name: METRIC_QUERY_POOL_DESC
       desc: $t_metric_query_pool_desc_t
-    - name: $T_STRUCTURE_TYPE_PROFILE_PROPERTIES
+    - name: PROFILE_PROPERTIES
       desc: $t_profile_properties_t
-    - name: $T_STRUCTURE_TYPE_TRACER_DESC
+    - name: TRACER_DESC
       desc: $t_tracer_desc_t
 --- #--------------------------------------------------------------------------
 type: struct

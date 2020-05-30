@@ -15,6 +15,29 @@ from templates.helper import param_traits, type_traits, value_traits
 default_version = "1.0"
 
 """
+    preprocess object
+"""
+def _preprocess(d):
+    if 'enum' == d['type']:
+        use_hex = False
+        next = 0
+        for etor in d['etors']:
+            if type_traits.is_flags(d['name']):
+                etor['name'] = "%s_%s"%(d['name'][:-3].upper(), etor['name'])
+                etor['value'] = etor.get('value',"$X_BIT(%s)"%next)
+                next = int(value_traits.get_bit_count(etor['value']))+1
+            else:
+                etor['name'] = d['name'][:-1].upper() + etor['name']
+                use_hex = use_hex or value_traits.is_hex(etor.get('value'))
+                if use_hex:
+                    etor['value'] = etor.get('value',"%s"%hex(next))
+                    next = int(etor['value'], 16)+1
+                elif not value_traits.is_ver(etor.get('value')):
+                    etor['value'] = etor.get('value',"%s"%next)
+                    next = int(etor['value'])+1
+    return d
+
+"""
     substitute tags
 """
 def _subt(name, tags):
@@ -33,6 +56,22 @@ def _get_line_nums(f):
         if re.match(r"^\-\-\-.*", line):
             nums.append(line_num+2)
     return nums
+
+"""
+    convert etor to int
+"""
+def _get_etor_value(value, prev):
+    if value:
+        if value_traits.is_ver(value):
+            return (value_traits.get_major_ver(value) << 16) + value_traits.get_minor_ver(value)
+        elif value_traits.is_bit(value):
+            return 1 << value_traits.get_bit_count(value)
+        elif value_traits.is_hex(value):
+            return int(value, 16)
+        else:
+            return int(value)
+    else:
+        return prev+1
 
 """
     validate documents meet some basic (easily detectable) requirements of code generation
@@ -137,6 +176,7 @@ def _validate_doc(f, d, tags, line_num):
         if not isinstance(d['etors'], list):
             raise Exception("'etors' must be a sequence: '%s'"%type(d['etors']))
 
+        value = -1
         max_ver = float(default_version)
         for i, item in enumerate(d['etors']):
             prefix="'etors'[%s] "%i
@@ -147,8 +187,10 @@ def _validate_doc(f, d, tags, line_num):
                 raise Exception(prefix+"requires the following scalar fields: {`desc`, `name`}")
 
             __validate_name(item, 'name', tags, case='upper', prefix=prefix)
-            if not item['name'].startswith(d['name'][:-2].upper()):
-                raise Exception(prefix+"'name' must start with enum 'name': %s"%item['name'])
+
+            value = _get_etor_value(item.get('value'), value)
+            if value >= 0x7fffffff:
+                raise Exception(prefix+"'value' must be less than 0x7fffffff: %s"%value)
 
             ver = __validate_version(item, prefix=prefix)
             if ver < max_ver:
@@ -406,25 +448,15 @@ def _generate_meta(d, ordinal, meta):
 
         # add values to list
         if 'enum' == type:
+            value = -1
             max_value = -1
             for idx, etor in enumerate(d['etors']):
                 meta[type][name]['types'].append(etor['name'])
-                if 'value' in etor:
-                    ver = re.match(r"\$X_MAKE_VERSION\(\s*(\d+)\s*\,\s*(\d+)\s*\)", etor['value'])
-                    if ver:
-                        value = (int(ver.group(1)) << 16) + int(ver.group(2))
-                    elif value_traits.is_bit(etor['value']):
-                        value = 1 << int(value_traits.get_bit_count(etor['value']))
-                    elif re.match(r"0x\w+", etor['value']):
-                        value = int(etor['value'], 16)
-                    else:
-                        value = int(etor['value'])
-                else:
-                    value = max_value+1
+                value = _get_etor_value(etor.get('value'), value)
                 if value > max_value:
                     max_value = value
                     max_index = idx
-            if type_traits.is_flag(name):
+            if type_traits.is_flags(name):
                 meta[type][name]['max'] = hex((max_value << 1)-1) if max_value else '0'
             else:
                 meta[type][name]['max'] = d['etors'][idx]['name']
@@ -651,6 +683,7 @@ def parse(section, version, tags, meta, ref):
         objects = []
 
         for i, d in enumerate(docs):
+            d = _preprocess(d)
             if not _validate_doc(f, d, tags, line_nums[i]):
                 continue
 

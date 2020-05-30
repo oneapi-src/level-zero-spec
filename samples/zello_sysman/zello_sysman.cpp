@@ -71,7 +71,7 @@ void ShowRasErrors(zes_device_handle_t hSysmanDevice)
                     == ZE_RESULT_SUCCESS)
                 {
                     uint64_t numErrors = 0;
-                    for (int i = 0; i < ZES_RAS_ERROR_CAT_MAX; i++)
+                    for (int i = 0; i < ZES_MAX_RAS_ERROR_CATEGORY_COUNT; i++)
                     {
                         numErrors += errorDetails.category[i];
                     }
@@ -190,7 +190,7 @@ void WaitForExcessTemperatureEvent(zes_driver_handle_t hDriver, double tempLimit
         if (numConfiguredTempSensors)
         {
             zes_event_config_t eventConfig;
-            eventConfig.registered = ZES_EVENT_TYPE_TEMP_CRITICAL | ZES_EVENT_TYPE_TEMP_THRESHOLD1;
+            eventConfig.registered = ZES_EVENT_TYPE_FLAG_TEMP_CRITICAL | ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD1;
             if (zesEventSetConfig(phEvents[d], &eventConfig) == ZE_RESULT_SUCCESS)
             {
                 phListenEvents[numEventHandles] = phEvents[d];
@@ -205,7 +205,7 @@ void WaitForExcessTemperatureEvent(zes_driver_handle_t hDriver, double tempLimit
     {
         uint32_t events;
         // Block until we receive events
-        if (zesEventListen(hDriver, ZES_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events) == ZE_RESULT_SUCCESS)
+        if (zesEventListen(hDriver, UINT32_MAX, deviceCount, phListenEvents, &events) == ZE_RESULT_SUCCESS)
         {
             for (uint32_t e = 0; e < numEventHandles; e++)
             {
@@ -213,11 +213,11 @@ void WaitForExcessTemperatureEvent(zes_driver_handle_t hDriver, double tempLimit
                 {
                     continue;
                 }
-                if (events & ZES_EVENT_TYPE_TEMP_CRITICAL)
+                if (events & ZES_EVENT_TYPE_FLAG_TEMP_CRITICAL)
                 {
                     fprintf(stdout, "Device %u: Went above the critical temperature.\n", pListenDeviceIndex[e]);
                 }
-                else if (events & ZES_EVENT_TYPE_TEMP_THRESHOLD1)
+                else if (events & ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD1)
                 {
                     fprintf(stdout, "Device %u: Went above the temperature threshold %f.\n", pListenDeviceIndex[e], tempLimit);
                 }
@@ -719,14 +719,14 @@ void ShowDeviceInfo(zes_device_handle_t hSysmanDevice)
     if (zesDeviceGetState(hSysmanDevice, &devState) == ZE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    Was repaired:   %s\n", (devState.repaired == ZES_REPAIR_STATUS_PERFORMED) ? "yes" : "no");
-        if (devState.reset != ZES_RESET_REASONS_NONE)
+        if (devState.reset != 0)
         {
             fprintf(stdout, "DEVICE RESET REQUIRED:\n");
-            if (devState.reset & ZES_RESET_REASONS_WEDGED)
+            if (devState.reset & ZES_RESET_REASON_FLAG_WEDGED)
             {
                 fprintf(stdout, "- Hardware is wedged\n");
             }
-            if (devState.reset & ZES_RESET_REASONS_REPAIR)
+            if (devState.reset & ZES_RESET_REASON_FLAG_REPAIR)
             {
                 fprintf(stdout, "- Hardware needs to complete repairs\n");
             }
@@ -810,7 +810,7 @@ int gNumDevices = 0;    // Global
 int main( int argc, char *argv[] )
 {
     int ret = -1;
-    if ( zeInit(ZE_INIT_FLAG_NONE) != ZE_RESULT_SUCCESS )
+    if ( zeInit(0) != ZE_RESULT_SUCCESS )
     {
         fprintf(stderr, "Can't initialize the API.\n");
         ret = 1;

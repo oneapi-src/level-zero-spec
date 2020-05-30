@@ -14,10 +14,10 @@ desc: "Frequency domains."
 class: $sDevice
 name: $s_freq_domain_t
 etors:
-    - name: $S_FREQ_DOMAIN_GPU
+    - name: GPU
       value: "0"
       desc: "GPU Core Domain."
-    - name: $S_FREQ_DOMAIN_MEMORY
+    - name: MEMORY
       desc: "Local Memory Domain."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -69,31 +69,21 @@ members:
 type: enum
 desc: "Frequency throttle reasons"
 class: $sFrequency
-name: $s_freq_throttle_reasons_t
+name: $s_freq_throttle_reason_flags_t
 etors:
-    - name: $S_FREQ_THROTTLE_REASONS_NONE
-      value: "0"
-      desc: "frequency not throttled"
-    - name: $S_FREQ_THROTTLE_REASONS_AVE_PWR_CAP
-      value: "$X_BIT( 0 )"
+    - name: AVE_PWR_CAP
       desc: "frequency throttled due to average power excursion (PL1)"
-    - name: $S_FREQ_THROTTLE_REASONS_BURST_PWR_CAP
-      value: "$X_BIT( 1 )"
+    - name: BURST_PWR_CAP
       desc: "frequency throttled due to burst power excursion (PL2)"
-    - name: $S_FREQ_THROTTLE_REASONS_CURRENT_LIMIT
-      value: "$X_BIT( 2 )"
+    - name: CURRENT_LIMIT
       desc: "frequency throttled due to current excursion (PL4)"
-    - name: $S_FREQ_THROTTLE_REASONS_THERMAL_LIMIT
-      value: "$X_BIT( 3 )"
+    - name: THERMAL_LIMIT
       desc: "frequency throttled due to thermal excursion (T > TjMax)"
-    - name: $S_FREQ_THROTTLE_REASONS_PSU_ALERT
-      value: "$X_BIT( 4 )"
+    - name: PSU_ALERT
       desc: "frequency throttled due to power supply assertion"
-    - name: $S_FREQ_THROTTLE_REASONS_SW_RANGE
-      value: "$X_BIT( 5 )"
+    - name: SW_RANGE
       desc: "frequency throttled due to software supplied frequency range"
-    - name: $S_FREQ_THROTTLE_REASONS_HW_RANGE
-      value: "$X_BIT( 6 )"
+    - name: HW_RANGE
       desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -113,9 +103,11 @@ members:
     - type: double
       name: "actual"
       desc: "[out] The resolved frequency in MHz"
-    - type: uint32_t
+    - type: $s_freq_throttle_reason_flags_t
       name: "throttleReasons"
-      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of $s_freq_throttle_reasons_t)."
+      desc: |
+            [out] The reasons that the frequency is being limited by the hardware.
+            Returns 0 (frequency not throttled) or a combination of $s_freq_throttle_reason_flag_bits_t.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency throttle time snapshot"
@@ -140,12 +132,12 @@ desc: "Overclocking modes"
 class: $sFrequency
 name: $s_oc_mode_t
 etors:
-    - name: $S_OC_MODE_OFF
+    - name: "OFF"
       value: "0"
       desc: "Overclocking if off - hardware is running using factory default voltages/frequencies."
-    - name: $S_OC_MODE_OVERRIDE
+    - name: OVERRIDE
       desc: "Overclock override mode - In this mode, a fixed user-supplied voltage is applied independent of the frequency request. The maximum permitted frequency can also be increased."
-    - name: $S_OC_MODE_INTERPOLATIVE
+    - name: INTERPOLATIVE
       desc: "Overclock interpolative mode - In this mode, the voltage/frequency curve can be extended with a new voltage/frequency point that will be interpolated. The existing voltage/frequency points can also be offset (up or down) by a fixed voltage."
 --- #--------------------------------------------------------------------------
 type: struct

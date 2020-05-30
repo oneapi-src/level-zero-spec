@@ -56,7 +56,7 @@ system and create Sysman handles for them:
 .. parsed-literal::
 
    function main( ... )
-       if (${x}Init(${X}_INIT_FLAG_NONE) != ${X}_RESULT_SUCCESS)
+       if (${x}Init(0) != ${X}_RESULT_SUCCESS)
            output("Can't initialize the API")
        else
            # Discover all the drivers
@@ -443,12 +443,12 @@ device:
           output("    model:          %s", devProps.modelName)
       if (${s}DeviceGetState(hSysmanDevice, &devState) == ${X}_RESULT_SUCCESS)
           output("    Was repaired:   %s", (devState.repaired == ${S}_REPAIR_STATUS_PERFORMED) ? "yes" : "no")
-          if (devState.reset != ${S}_RESET_REASONS_NONE)
+          if (devState.reset != 0)
         {
             output("DEVICE RESET REQUIRED:")
-            if (devState.reset & ${S}_RESET_REASONS_WEDGED)
+            if (devState.reset & ${S}_RESET_REASON_FLAG_WEDGED)
                 output("- Hardware is wedged")
-            if (devState.reset & ${S}_RESET_REASONS_REPAIR)
+            if (devState.reset & ${S}_RESET_REASON_FLAG_REPAIR)
                 output("- Hardware needs to complete repairs")
         }
     }
@@ -756,7 +756,7 @@ running significant workloads:
    utilization of the device continues.
 
 Some power domains support requesting the event
-${S}_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED be generated when the
+${S}_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED be generated when the
 energy consumption exceeds some value. This can be a useful technique to
 suspend an application until the GPU becomes busy. The technique
 involves calling ${s}PowerSetEnergyThreshold() with some delta
@@ -793,7 +793,7 @@ The following functions are provided to manage the power of the device:
 |                                      |                                                                          |
 +--------------------------------------+--------------------------------------------------------------------------+
 | ${s}PowerSetEnergyThreshold() | Set the energy threshold. Event                                          |
-|                                      | ${S}_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED        |
+|                                      | ${S}_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED        |
 |                                      |                                                                          |
 |                                      | will be generated when the energy                                        |
 |                                      | consumed since calling this                                              |
@@ -922,7 +922,7 @@ ${s}_freq_state_t.throttleReasons will provide the reasons why the
 frequency is being limited by the Punit.
 
 When a frequency domain starts being throttled, the event
-${S}_EVENT_TYPE_FREQ_THROTTLED is triggered if this is supported
+${S}_EVENT_TYPE_FLAG_FREQ_THROTTLED is triggered if this is supported
 (check ${s}_freq_properties_t.isThrottleEventSupported).
 
 Frequency/Voltage overclocking
@@ -1185,7 +1185,7 @@ also provides a health metric which can take one of the following values
 +-------------------------------------------------------------+-----------------------------------------------------------+
 
 When the health state of a memory module changes, the event
-${S}_EVENT_TYPE_MEM_HEALTH is triggered.
+${S}_EVENT_TYPE_FLAG_MEM_HEALTH is triggered.
 
 The following functions provide access to information about the device
 memory modules:
@@ -1271,7 +1271,7 @@ observed. If the port is in a red state, the API provides additional
 information about the causes of the instability.
 
 When a port's health state changes, the event
-${S}_EVENT_TYPE_FABRIC_PORT_HEALTH is triggered.
+${S}_EVENT_TYPE_FLAG_FABRIC_PORT_HEALTH is triggered.
 
 The API provides the current transmit and receive bitrate of each port.
 It also permits measuring the receive and transmit bandwidth flowing
@@ -1957,9 +1957,9 @@ should perform the following actions:
 
 Finally, the application calls ${s}EventListen() with a list of
 event handles that it wishes to listen for events on. A wait timeout is
-used to request non-blocking operations (timeout =
-${S}_EVENT_WAIT_NONE) or blocking operations (timeout =
-${S}_EVENT_WAIT_INFINITE) or to return after a specified amount of time
+used to request non-blocking operations (timeout = 0)
+or blocking operations (timeout = UINT32_MAX)
+or to return after a specified amount of time
 even if no events have been received.
 
 Once events have occurred, the application can call
@@ -2112,7 +2112,7 @@ when the critical temperature is reached.
            if (numConfiguredTempSensors)
                ${s}_event_config_t eventConfig
                eventConfig.registered =
-                   ${S}_EVENT_TYPE_TEMP_CRITICAL | ${S}_EVENT_TYPE_TEMP_THRESHOLD1
+                   ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL | ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD1
                if (${s}EventSetConfig(phEvents[devIndex], &eventConfig) == ${X}_RESULT_SUCCESS)
                    phListenEvents[numEventHandles] = phEvents[devIndex]
                    pListenDeviceIndex[numEventHandles] = devIndex
@@ -2122,16 +2122,16 @@ when the critical temperature is reached.
        if (numEventHandles)
            # Block until we receive events
            uint32_t events
-           if (${s}EventListen(hDriver, ${S}_EVENT_WAIT_INFINITE, deviceCount, phListenEvents, &events)
+           if (${s}EventListen(hDriver, UINT32_MAX, deviceCount, phListenEvents, &events)
                == ${X}_RESULT_SUCCESS)
                    for (evtIndex .. numEventHandles)
                        if (${s}EventGetState(phListenEvents[evtIndex], true, &events)
                            != ${X}_RESULT_SUCCESS)
                                next_loop(evtIndex)
-                       if (events & ${S}_EVENT_TYPE_TEMP_CRITICAL)
+                       if (events & ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL)
                            output("Device %u: Went above the critical temperature.",
                                pListenDeviceIndex[evtIndex])
-                       else if (events & ${S}_EVENT_TYPE_TEMP_THRESHOLD1)
+                       else if (events & ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD1)
                            output("Device %u: Went above the temperature threshold %f.",
                                pListenDeviceIndex[evtIndex], tempLimit)
 

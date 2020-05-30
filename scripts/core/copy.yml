@@ -386,26 +386,26 @@ desc: "Supported memory advice hints"
 class: $xCommandList
 name: $x_memory_advice_t
 etors:
-    - name: $X_MEMORY_ADVICE_SET_READ_MOSTLY
+    - name: SET_READ_MOSTLY
       value: "0"
       desc: "hint that memory will be read from frequently and written to rarely"
-    - name: $X_MEMORY_ADVICE_CLEAR_READ_MOSTLY
+    - name: CLEAR_READ_MOSTLY
       desc: "removes the affect of $X_MEMORY_ADVICE_SET_READ_MOSTLY"
-    - name: $X_MEMORY_ADVICE_SET_PREFERRED_LOCATION
+    - name: SET_PREFERRED_LOCATION
       desc: "hint that the preferred memory location is the specified device"
-    - name: $X_MEMORY_ADVICE_CLEAR_PREFERRED_LOCATION
+    - name: CLEAR_PREFERRED_LOCATION
       desc: "removes the affect of $X_MEMORY_ADVICE_SET_PREFERRED_LOCATION"
-    - name: $X_MEMORY_ADVICE_SET_ACCESSED_BY
+    - name: SET_ACCESSED_BY
       desc: "hint that memory will be accessed by the specified device"
-    - name: $X_MEMORY_ADVICE_CLEAR_ACCESSED_BY
+    - name: CLEAR_ACCESSED_BY
       desc: "removes the affect of $X_MEMORY_ADVICE_SET_ACCESSED_BY"
-    - name: $X_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY
+    - name: SET_NON_ATOMIC_MOSTLY
       desc: "hints that memory will mostly be accessed non-atomically"
-    - name: $X_MEMORY_ADVICE_CLEAR_NON_ATOMIC_MOSTLY
+    - name: CLEAR_NON_ATOMIC_MOSTLY
       desc: "removes the affect of $X_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY"
-    - name: $X_MEMORY_ADVICE_BIAS_CACHED
+    - name: BIAS_CACHED
       desc: "hints that memory should be cached"
-    - name: $X_MEMORY_ADVICE_BIAS_UNCACHED
+    - name: BIAS_UNCACHED
       desc: "hints that memory should be not be cached"
 --- #--------------------------------------------------------------------------
 type: function

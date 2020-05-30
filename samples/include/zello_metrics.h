@@ -10,7 +10,7 @@
 //////////////////////////////////////////////////////////////////////////
 inline zet::MetricGroup* findMetricGroup(
     zet::Device* pDevice,
-    const zet::MetricGroup::sampling_type_t type,
+    const zet::MetricGroup::sampling_type_flags_t type,
     const char* name = "" )
 {
     uint32_t groupCount = 0;

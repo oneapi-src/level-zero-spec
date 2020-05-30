@@ -44,14 +44,12 @@ value: "256"
 type: enum
 desc: "Metric group sampling type"
 class: $tMetricGroup
-name: $t_metric_group_sampling_type_t
+name: $t_metric_group_sampling_type_flags_t
 etors:
-    - name: $T_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED
+    - name: EVENT_BASED
       desc: "Event based sampling"
-      value: "$X_BIT(0)"
-    - name: $T_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED
+    - name: TIME_BASED
       desc: "Time based sampling"
-      value: "$X_BIT(1)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric group properties queried using $tMetricGroupGetProperties"
@@ -65,9 +63,11 @@ members:
     - type: char
       name: "description[$T_MAX_METRIC_GROUP_DESCRIPTION]"
       desc: "[out] metric group description"
-    - type: "$t_metric_group_sampling_type_t"
+    - type: "$t_metric_group_sampling_type_flags_t"
       name: "samplingType"
-      desc: "[out] metric group sampling type"
+      desc: |
+            [out] metric group sampling type.
+            returns a combination of $t_metric_group_sampling_type_flag_bits_t.
     - type: uint32_t
       name: "domain"
       desc: "[out] metric group domain number. Cannot use simultaneous metric groups from different domains."
@@ -99,21 +99,21 @@ desc: "Metric types"
 class: $tMetric
 name: $t_metric_type_t
 etors:
-    - name: $T_METRIC_TYPE_DURATION
+    - name: DURATION
       desc: "Metric type: duration"
-    - name: $T_METRIC_TYPE_EVENT
+    - name: EVENT
       desc: "Metric type: event"
-    - name: $T_METRIC_TYPE_EVENT_WITH_RANGE
+    - name: EVENT_WITH_RANGE
       desc: "Metric type: event with range"
-    - name: $T_METRIC_TYPE_THROUGHPUT
+    - name: THROUGHPUT
       desc: "Metric type: throughput"
-    - name: $T_METRIC_TYPE_TIMESTAMP
+    - name: TIMESTAMP
       desc: "Metric type: timestamp"
-    - name: $T_METRIC_TYPE_FLAG
+    - name: FLAG
       desc: "Metric type: flag"
-    - name: $T_METRIC_TYPE_RATIO
+    - name: RATIO
       desc: "Metric type: ratio"
-    - name: $T_METRIC_TYPE_RAW
+    - name: RAW
       desc: "Metric type: raw"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -121,15 +121,15 @@ desc: "Supported value types"
 class: $t
 name: $t_value_type_t
 etors:
-    - name: $T_VALUE_TYPE_UINT32
+    - name: UINT32
       desc: "32-bit unsigned-integer"
-    - name: $T_VALUE_TYPE_UINT64
+    - name: UINT64
       desc: "64-bit unsigned-integer"
-    - name: $T_VALUE_TYPE_FLOAT32
+    - name: FLOAT32
       desc: "32-bit floating-point"
-    - name: $T_VALUE_TYPE_FLOAT64
+    - name: FLOAT64
       desc: "64-bit floating-point"
-    - name: $T_VALUE_TYPE_BOOL8
+    - name: BOOL8
       desc: "8-bit boolean"
 --- #--------------------------------------------------------------------------
 type: union
@@ -401,11 +401,11 @@ params:
 type: enum
 desc: "Metric query pool types"
 class: $tMetricQueryPool
-name: $t_metric_query_pool_flag_t
+name: $t_metric_query_pool_type_t
 etors:
-    - name: $T_METRIC_QUERY_POOL_FLAG_PERFORMANCE
+    - name: PERFORMANCE
       desc: "Performance metric query pool."
-    - name: $T_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION
+    - name: EXECUTION
       desc: "Skips workload execution between begin/end calls."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -414,10 +414,10 @@ class: $tMetricQueryPool
 name: $t_metric_query_pool_desc_t
 base: $t_base_desc_t
 members:
-    - type: $t_metric_query_pool_flag_t
-      name: flags
+    - type: $t_metric_query_pool_type_t
+      name: type
       desc: "[in] Query pool type."
-      init: $T_METRIC_QUERY_POOL_FLAG_PERFORMANCE
+      init: $T_METRIC_QUERY_POOL_TYPE_PERFORMANCE
     - type: uint32_t
       name: "count"
       desc: "[in] Internal slots count within query pool object."

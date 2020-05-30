@@ -31,7 +31,7 @@ inline bool init_ze( void )
     try
     {
         // Initialize the driver
-        ze::Init( ze::init_flag_t::NONE );
+        ze::Init( 0 );
         std::cout << "Driver initialized.\n";
     }
     catch( const ze::exception_t& e )

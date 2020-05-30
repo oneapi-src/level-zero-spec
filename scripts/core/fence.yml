@@ -12,11 +12,10 @@ desc: "Intel $OneApi Level-Zero APIs for Fence"
 type: enum
 desc: "Supported fence creation flags"
 class: $xFence
-name: $x_fence_flag_t
+name: $x_fence_flags_t
 etors:
-    - name: $X_FENCE_FLAG_NONE
-      value: "0"
-      desc: "default behavior"
+    - name: SIGNALED
+      desc: "fence is created in the signaled state, otherwise not signaled."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fence descriptor"
@@ -24,10 +23,12 @@ class: $xFence
 name: $x_fence_desc_t
 base: $x_base_desc_t
 members:
-    - type: $x_fence_flag_t
+    - type: $x_fence_flags_t
       name: flags
-      desc: "[in] creation flags"
-      init: $X_FENCE_FLAG_NONE
+      desc: |
+            [in] creation flags.
+            must be 0 (default) or a valid combination of $x_fence_flag_bits_t.
+      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a fence object on the device's command queue."

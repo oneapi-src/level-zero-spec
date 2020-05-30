@@ -14,20 +14,20 @@ desc: "Memory module types"
 class: $sMemory
 name: $s_mem_type_t
 etors:
-    - name: $S_MEM_TYPE_HBM
+    - name: HBM
       value: "0"
       desc: "HBM memory"
-    - name: $S_MEM_TYPE_DDR
+    - name: DDR
       desc: "DDR memory"
-    - name: $S_MEM_TYPE_SRAM
+    - name: SRAM
       desc: "SRAM memory"
-    - name: $S_MEM_TYPE_L1
+    - name: L1
       desc: "L1 cache"
-    - name: $S_MEM_TYPE_L3
+    - name: L3
       desc: "L3 cache"
-    - name: $S_MEM_TYPE_GRF
+    - name: GRF
       desc: "Execution unit register file"
-    - name: $S_MEM_TYPE_SLM
+    - name: SLM
       desc: "Execution unit shared local memory"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -35,14 +35,14 @@ desc: "Memory health"
 class: $sMemory
 name: $s_mem_health_t
 etors:
-    - name: $S_MEM_HEALTH_OK
+    - name: OK
       value: "0"
       desc: "All memory channels are healthy"
-    - name: $S_MEM_HEALTH_DEGRADED
+    - name: DEGRADED
       desc: "Excessive correctable errors have been detected on one or more channels. Device should be reset."
-    - name: $S_MEM_HEALTH_CRITICAL
+    - name: CRITICAL
       desc: "Operating with reduced memory to cover banks with too many uncorrectable errors."
-    - name: $S_MEM_HEALTH_REPLACE
+    - name: REPLACE
       desc: "Device should be replaced due to excessive uncorrectable errors."
 --- #--------------------------------------------------------------------------
 type: struct

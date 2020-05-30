@@ -71,13 +71,16 @@ extern "C" {
 typedef ${th.subt(n, tags, obj['value'])} ${th.make_type_name(n, tags, obj)};
 ## ENUM #######################################################################
 %elif re.match(r"enum", obj['type']):
-typedef enum _${th.make_type_name(n, tags, obj)}
+%if th.type_traits.is_flags(obj['name']):
+typedef uint32_t ${th.make_type_name(n, tags, obj)};
+%endif
+typedef enum _${th.make_enum_name(n, tags, obj)}
 {
     %for line in th.make_etor_lines(n, tags, obj):
     ${line}
     %endfor
 
-} ${th.make_type_name(n, tags, obj)};
+} ${th.make_enum_name(n, tags, obj)};
 ## STRUCT/UNION ###############################################################
 %elif re.match(r"struct|union", obj['type']):
 typedef ${obj['type']} _${th.make_type_name(n, tags, obj)}

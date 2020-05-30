@@ -14,12 +14,12 @@ desc: "Fan resource speed mode"
 class: $sFan
 name: $s_fan_speed_mode_t
 etors:
-    - name: $S_FAN_SPEED_MODE_DEFAULT
+    - name: DEFAULT
       value: "0"
       desc: "The fan speed is operating using the hardware default settings"
-    - name: $S_FAN_SPEED_MODE_FIXED
+    - name: FIXED
       desc: "The fan speed is currently set to a fixed value"
-    - name: $S_FAN_SPEED_MODE_TABLE
+    - name: TABLE
       desc: "The fan speed is currently controlled dynamically by hardware based on a temp/speed table"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -27,10 +27,10 @@ desc: "Fan speed units"
 class: $sFan
 name: $s_fan_speed_units_t
 etors:
-    - name: $S_FAN_SPEED_UNITS_RPM
+    - name: RPM
       value: "0"
       desc: "The fan speed is in units of revolutions per minute (rpm)"
-    - name: $S_FAN_SPEED_UNITS_PERCENT
+    - name: PERCENT
       desc: "The fan speed is a percentage of the maximum speed of the fan"
 --- #--------------------------------------------------------------------------
 type: struct

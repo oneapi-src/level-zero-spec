@@ -82,12 +82,8 @@ version: "1.1"
 class: $tDebug
 name: $t_debug_event_flags_t
 etors:
-    - name: $T_DEBUG_EVENT_FLAGS_NONE
-      desc: "No event flags"
-      value: "0"
-    - name: $T_DEBUG_EVENT_FLAGS_STOPPED
+    - name: STOPPED
       desc: "The reporting thread stopped"
-      value: "$X_BIT(0)"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug event types."
@@ -95,20 +91,20 @@ version: "1.1"
 class: $tDebug
 name: $t_debug_event_type_t
 etors:
-    - name: $T_DEBUG_EVENT_TYPE_INVALID
+    - name: INVALID
       desc: "The event is invalid"
       value: "0"
-    - name: $T_DEBUG_EVENT_TYPE_DETACHED
+    - name: DETACHED
       desc: "The tool was detached"
-    - name: $T_DEBUG_EVENT_TYPE_PROCESS_ENTRY
+    - name: PROCESS_ENTRY
       desc: "The debuggee process created command queues on the device"
-    - name: $T_DEBUG_EVENT_TYPE_PROCESS_EXIT
+    - name: PROCESS_EXIT
       desc: "The debuggee process destroyed all command queues on the device"
-    - name: $T_DEBUG_EVENT_TYPE_MODULE_LOAD
+    - name: MODULE_LOAD
       desc: "An in-memory module was loaded onto the device"
-    - name: $T_DEBUG_EVENT_TYPE_MODULE_UNLOAD
+    - name: MODULE_UNLOAD
       desc: "An in-memory module is about to get unloaded from the device"
-    - name: $T_DEBUG_EVENT_TYPE_EXCEPTION
+    - name: EXCEPTION
       desc: "The thread stopped due to a device exception"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -117,10 +113,10 @@ version: "1.1"
 class: $tDebug
 name: $t_debug_detach_reason_t
 etors:
-    - name: $T_DEBUG_DETACH_REASON_INVALID
+    - name: INVALID
       desc: "The detach reason is not valid"
       value: "0"
-    - name: $T_DEBUG_DETACH_REASON_HOST_EXIT
+    - name: HOST_EXIT
       desc: "The host process exited"
 --- #--------------------------------------------------------------------------
 type: macro
@@ -190,7 +186,7 @@ members:
       desc: "[out] the thread reporting the event"
     - type: $t_debug_event_flags_t
       name: flags
-      desc: "[out] a bit-vector of $t_debug_event_flags_t"
+      desc: "[out] returns 0 (none) or a combination of $t_debug_event_flag_bits_t"
     - type: $t_debug_event_info_t
       name: info
       desc: "[out] event type specific information"
@@ -261,10 +257,10 @@ version: "1.1"
 class: $tDebug
 name: $t_debug_memory_space_igfx_t
 etors:
-    - name: $T_DEBUG_MEMORY_SPACE_IGFX_DEFAULT
+    - name: DEFAULT
       desc: "default memory space (attribute may be omitted)"
       value: "0"
-    - name: $T_DEBUG_MEMORY_SPACE_IGFX_SLM
+    - name: SLM
       desc: "shared local memory space"
 --- #--------------------------------------------------------------------------
 type: function
@@ -337,16 +333,16 @@ version: "1.1"
 class: $tDebug
 name: $t_debug_regset_igfx_t
 etors:
-    - name: $T_DEBUG_REGSET_IGFX_INVALID
+    - name: INVALID
       desc: "An invalid register set"
       value: "0"
-    - name: $T_DEBUG_REGSET_IGFX_GRF
+    - name: GRF
       desc: "The general register set"
-    - name: $T_DEBUG_REGSET_IGFX_ACC
+    - name: ACC
       desc: "The accumulator register set"
-    - name: $T_DEBUG_REGSET_IGFX_ADDR
+    - name: ADDR
       desc: "The address register set"
-    - name: $T_DEBUG_REGSET_IGFX_FLAG
+    - name: FLAG
       desc: "The flags register set"
 --- #--------------------------------------------------------------------------
 type: struct

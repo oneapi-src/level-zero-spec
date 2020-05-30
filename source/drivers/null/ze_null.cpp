@@ -238,8 +238,9 @@ namespace driver
             zet_metric_group_properties_t metricGroupProperties = {};
             metricGroupProperties.stype = ZET_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES;
             metricGroupProperties.metricCount = 1;
-            metricGroupProperties.samplingType = static_cast<zet_metric_group_sampling_type_t>(
-                ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED | ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED );
+            metricGroupProperties.samplingType = 
+                ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_EVENT_BASED |
+                ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASED;
             strcpy( metricGroupProperties.name, "Null Metric Group" );
 
             *pProperties = metricGroupProperties;

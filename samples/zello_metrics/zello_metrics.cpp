@@ -44,7 +44,7 @@ int main( int argc, char *argv[] )
         return -1;
 
     // Find an event-based metric group
-    auto pMetricGroup = findMetricGroup( pDevice, zet::MetricGroup::sampling_type_t::EVENT_BASED );
+    auto pMetricGroup = findMetricGroup( pDevice, zet::MetricGroup::SAMPLING_TYPE_FLAG_EVENT_BASED );
     if( !pMetricGroup )
         return -1;
 
@@ -62,14 +62,14 @@ int main( int argc, char *argv[] )
         // Create an event to be signaled by the device
         uint32_t numSamples = 1;
         ze::EventPool::desc_t pool_desc;
-        pool_desc.flags = ze::EventPool::flag_t::HOST_VISIBLE;
+        pool_desc.flags = ze::EventPool::FLAG_HOST_VISIBLE;
         pool_desc.count = numSamples;
         auto pEventPool = std::shared_ptr<ze::EventPool>(
             ze::EventPool::Create( pDriver, &pool_desc, 0, nullptr ),
             []( ze::EventPool* p ){ ze::EventPool::Destroy( p ); } );
 
         ze::Event::desc_t event_desc;
-        event_desc.signal = ze::Event::scope_flag_t::HOST;
+        event_desc.signal = ze::Event::SCOPE_FLAG_HOST;
         event_desc.index = 0;
         auto pEvent = std::shared_ptr<ze::Event>(
             ze::Event::Create( pEventPool.get(), &event_desc ),

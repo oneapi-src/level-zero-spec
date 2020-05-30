@@ -14,7 +14,7 @@ desc: "Standby hardware components"
 class: $sStandby
 name: $s_standby_type_t
 etors:
-    - name: $S_STANDBY_TYPE_GLOBAL
+    - name: GLOBAL
       value: "0"
       desc: "Control the overall standby policy of the device/sub-device"
 --- #--------------------------------------------------------------------------
@@ -38,10 +38,10 @@ desc: "Standby promotion modes"
 class: $sStandby
 name: $s_standby_promo_mode_t
 etors:
-    - name: $S_STANDBY_PROMO_MODE_DEFAULT
+    - name: DEFAULT
       value: "0"
       desc: "Best compromise between performance and energy savings."
-    - name: $S_STANDBY_PROMO_MODE_NEVER
+    - name: NEVER
       desc: "The device/component will never shutdown. This can improve performance but uses more energy."
 --- #--------------------------------------------------------------------------
 type: function

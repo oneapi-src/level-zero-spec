@@ -14,14 +14,14 @@ desc: "Scheduler mode"
 class: $sDevice
 name: $s_sched_mode_t
 etors:
-    - name: $S_SCHED_MODE_TIMEOUT
+    - name: TIMEOUT
       value: "0"
       desc: "Multiple applications or contexts are submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work."
-    - name: $S_SCHED_MODE_TIMESLICE
+    - name: TIMESLICE
       desc: "The scheduler attempts to fairly timeslice hardware execution time between multiple contexts submitting work to the hardware concurrently."
-    - name: $S_SCHED_MODE_EXCLUSIVE
+    - name: EXCLUSIVE
       desc: "Any application or context can run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
-    - name: $S_SCHED_MODE_COMPUTE_UNIT_DEBUG
+    - name: COMPUTE_UNIT_DEBUG
       desc: "Scheduler ensures that submission of workloads to the hardware is optimized for compute unit debugging."
 --- #--------------------------------------------------------------------------
 type: struct

@@ -14,14 +14,14 @@ desc: "Accelerator engine groups"
 class: $sEngine
 name: $s_engine_group_t
 etors:
-    - name: $S_ENGINE_GROUP_ALL
+    - name: ALL
       value: "0"
       desc: "Access information about all engines combined."
-    - name: $S_ENGINE_GROUP_COMPUTE_ALL
+    - name: COMPUTE_ALL
       desc: "Access information about all compute engines combined."
-    - name: $S_ENGINE_GROUP_MEDIA_ALL
+    - name: MEDIA_ALL
       desc: "Access information about all media engines combined."
-    - name: $S_ENGINE_GROUP_COPY_ALL
+    - name: COPY_ALL
       desc: "Access information about all copy (blitter) engines combined."
 --- #--------------------------------------------------------------------------
 type: struct

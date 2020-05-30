@@ -282,7 +282,7 @@ class ze_name_handle_t(c_void_p):
 * An enum requires the following sequence of mappings: {`etors`}
   - An etor requires the following scalar fields: {`name`, `desc`}
     + `desc` will be used as the etors's description comment
-    + `name` must be a unique ISO-C standard identifier, start with `$` tag and the enum name (without `_T`), and be all caps
+    + `name` must be a unique ISO-C standard identifier, and be all caps
   - An etor may take the following optional scalar field: {`value`, `version`}
     + `value` must be an ISO-C standard identifier
     + `version` will be used to define the minimum API version in which the etor will appear; `default="1.0"` This will also affect the order in which the etor appears within the enum.
@@ -299,10 +299,10 @@ desc: "A brief description..."
 name: $x_name_t
 class: $xClsName
 etors:
-    - name: $X_NAME_VALUE_0
+    - name: VALUE_0
       value: "0"
       desc: "brief description"
-    - name: $X_NAME_VALUE_1
+    - name: VALUE_1
       desc: "brief description"
 ```
 </td>
@@ -338,6 +338,61 @@ namespace ze {
 class ze_name_v(IntEnum):
     VALUE_0 = 0,        ## brief description
     VALUE_1 = auto()    ## brief description
+
+```
+</td></tr>
+<tr><td>
+
+```yml
+type: enum
+desc: "A brief description..."
+name: $x_name_flags_t
+class: $xClsName
+etors:
+    - name: VALUE_0
+      desc: "brief description"
+    - name: VALUE_1
+      desc: "brief description"
+```
+</td>
+<td>
+
+```c
+/// @brief A brief description...
+typedef uint32_t ze_name_flags_t;
+typedef enum _ze_name_flag_t
+{
+    ZE_NAME_FLAG_VALUE_0 = ZE_BIT(0), ///< brief description
+    ZE_NAME_FLAG_VALUE_1 = ZE_BIT(1)  ///< brief description
+} ze_name_flag_bits_t;
+```
+</td>
+<td>
+
+```cpp
+namespace ze {
+  class ClsName
+  {
+    /// @brief A brief description...
+    struct name_flags_t
+    {
+        uint32_t value;
+    };
+
+    enum name_flag_t
+    {
+        NAME_FLAG_VALUE_0 = ZE_BIT(0), ///< brief description
+        NAME_FLAG_VALUE_1 = ZE_BIT(1)  ///< brief description
+    };
+```
+</td>
+<td>
+
+```python
+## @brief A brief description...
+class ze_name_flags_v(IntEnum):
+    VALUE_0 = 1h,   ## brief description
+    VALUE_1 = 2h    ## brief description
 
 ```
 </td></tr>

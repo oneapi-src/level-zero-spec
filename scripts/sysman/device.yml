@@ -10,15 +10,6 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Device management"
 ordinal: "2"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "API version of Sysman"
-class: $sDevice
-name: $s_version_t
-etors:
-    - name: $S_VERSION_1_0
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum number of characters in string properties."
 name: $S_STRING_PROPERTY_SIZE
@@ -29,16 +20,16 @@ desc: "Types of accelerator engines"
 class: $sDevice
 name: $s_engine_type_t
 etors:
-    - name: $S_ENGINE_TYPE_OTHER
+    - name: OTHER
       value: "0"
       desc: "Undefined types of accelerators."
-    - name: $S_ENGINE_TYPE_COMPUTE
+    - name: COMPUTE
       desc: "Engines that process compute kernels."
-    - name: $S_ENGINE_TYPE_3D
+    - name: 3D
       desc: "Engines that process 3D content"
-    - name: $S_ENGINE_TYPE_MEDIA
+    - name: MEDIA
       desc: "Engines that process media workloads"
-    - name: $S_ENGINE_TYPE_DMA
+    - name: DMA
       desc: "Engines that copy blocks of data"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -46,27 +37,22 @@ desc: "Device repair status"
 class: $sDevice
 name: $s_repair_status_t
 etors:
-    - name: $S_REPAIR_STATUS_UNSUPPORTED
+    - name: UNSUPPORTED
       value: "0"
       desc: "The device does not support in-field repairs."
-    - name: $S_REPAIR_STATUS_NOT_PERFORMED
+    - name: NOT_PERFORMED
       desc: "The device has never been repaired."
-    - name: $S_REPAIR_STATUS_PERFORMED
+    - name: PERFORMED
       desc: "The device has been repaired."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Device reset reasons"
 class: $sDevice
-name: $s_reset_reasons_t
+name: $s_reset_reason_flags_t
 etors:
-    - name: $S_RESET_REASONS_NONE
-      value: "0"
-      desc: "The device does not need to be reset"
-    - name: $S_RESET_REASONS_WEDGED
-      value: "$X_BIT( 0 )"
+    - name: WEDGED
       desc: "The device needs to be reset because one or more parts of the hardware is wedged"
-    - name: $S_RESET_REASONS_REPAIR
-      value: "$X_BIT( 1 )"
+    - name: REPAIR
       desc: "The device needs to be reset in order to complete in-field repairs"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -74,9 +60,11 @@ desc: "Device state"
 class: $sDevice
 name: $s_device_state_t
 members:
-    - type: uint32_t
+    - type: $s_reset_reason_flags_t
       name: reset
-      desc: "[out] Indicates if the device needs to be reset and for what reasons (bitfield of $s_reset_reasons_t)"
+      desc: |
+            [out] Indicates if the device needs to be reset and for what reasons.
+            returns 0 (none) or combination of $s_reset_reason_flag_bits_t
     - type: $s_repair_status_t
       name: repaired
       desc: "[out] Indicates if the device has been repaired"
@@ -260,39 +248,30 @@ desc: "PCI link status"
 class: $sDevice
 name: $s_pci_link_status_t
 etors:
-    - name: $S_PCI_LINK_STATUS_GREEN
+    - name: GREEN
       value: "0"
       desc: "The link is up and operating as expected"
-    - name: $S_PCI_LINK_STATUS_YELLOW
+    - name: YELLOW
       desc: "The link is up but has quality and/or bandwidth degradation"
-    - name: $S_PCI_LINK_STATUS_RED
+    - name: RED
       desc: "The link has stability issues and preventing workloads making forward progress"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI link quality degradation reasons"
 class: $sDevice
-name: $s_pci_link_qual_issues_t
+name: $s_pci_link_qual_issue_flags_t
 etors:
-    - name: $S_PCI_LINK_QUAL_ISSUES_NONE
-      value: "0"
-      desc: "There are no quality issues with the link at this time"
-    - name: $S_PCI_LINK_QUAL_ISSUES_REPLAYS
-      value: "$X_BIT( 0 )"
+    - name: REPLAYS
       desc: "An significant number of replays are occurring"
-    - name: $S_PCI_LINK_QUAL_ISSUES_SPEED
-      value: "$X_BIT( 1 )"
+    - name: SPEED
       desc: "There is a degradation in the maximum bandwidth of the link"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI link stability issues"
 class: $sDevice
-name: $s_pci_link_stab_issues_t
+name: $s_pci_link_stab_issue_flags_t
 etors:
-    - name: $S_PCI_LINK_STAB_ISSUES_NONE
-      value: "0"
-      desc: "There are no connection stability issues at this time"
-    - name: $S_PCI_LINK_STAB_ISSUES_RETRAINING
-      value: "$X_BIT( 0 )"
+    - name: RETRAINING
       desc: "Link retraining has occurred to deal with quality issues"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -303,12 +282,18 @@ members:
     - type: $s_pci_link_status_t
       name: "status"
       desc: "[out] The current status of the port"
-    - type: $s_pci_link_qual_issues_t
+    - type: $s_pci_link_qual_issue_flags_t
       name: "qualityIssues"
-      desc: "[out] If status is $S_PCI_LINK_STATUS_YELLOW, this gives a bitfield of quality issues that have been detected"
-    - type: $s_pci_link_stab_issues_t
+      desc: |
+            [out] If status is $S_PCI_LINK_STATUS_YELLOW, 
+            then this gives a combination of $s_pci_link_qual_issue_flag_bits_t for quality issues that have been detected;
+            otherwise, 0 indicates there are no quality issues with the link at this time."
+    - type: $s_pci_link_stab_issue_flags_t
       name: "stabilityIssues"
-      desc: "[out] If status is $S_PCI_LINK_STATUS_RED, this gives a bitfield of reasons for the connection instability"
+      desc: |
+            [out] If status is $S_PCI_LINK_STATUS_RED, 
+            then this gives a combination of $s_pci_link_stab_issue_flag_bits_t for reasons for the connection instability;
+            otherwise, 0 indicates there are no connection stability issues at this time."
     - type: $s_pci_speed_t
       name: "speed"
       desc: "[out] The current port configure speed"
@@ -318,12 +303,12 @@ desc: "PCI bar types"
 class: $sDevice
 name: $s_pci_bar_type_t
 etors:
-    - name: $S_PCI_BAR_TYPE_MMIO
+    - name: MMIO
       value: "0"
       desc: "MMIO registers"
-    - name: $S_PCI_BAR_TYPE_ROM
+    - name: ROM
       desc: "ROM aperture"
-    - name: $S_PCI_BAR_TYPE_MEM
+    - name: MEM
       desc: "Device memory"
 --- #--------------------------------------------------------------------------
 type: struct

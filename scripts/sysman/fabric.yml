@@ -24,47 +24,36 @@ desc: "Fabric port status"
 class: $sFabricPort
 name: $s_fabric_port_status_t
 etors:
-    - name: $S_FABRIC_PORT_STATUS_GREEN
+    - name: GREEN
       value: "0"
       desc: "The port is up and operating as expected"
-    - name: $S_FABRIC_PORT_STATUS_YELLOW
+    - name: YELLOW
       desc: "The port is up but has quality and/or speed degradation"
-    - name: $S_FABRIC_PORT_STATUS_RED
+    - name: RED
       desc: "Port connection instabilities are preventing workloads making forward progress"
-    - name: $S_FABRIC_PORT_STATUS_BLACK
+    - name: BLACK
       desc: "The port is configured down"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fabric port quality degradation reasons"
 class: $sFabricPort
-name: $s_fabric_port_qual_issues_t
+name: $s_fabric_port_qual_issue_flags_t
 etors:
-    - name: $S_FABRIC_PORT_QUAL_ISSUES_NONE
-      value: "0"
-      desc: "There are no quality issues with the link at this time"
-    - name: $S_FABRIC_PORT_QUAL_ISSUES_LINK_ERRORS
-      value: "$X_BIT( 0 )"
+    - name: LINK_ERRORS
       desc: "Excessive link errors are occurring"
-    - name: $S_FABRIC_PORT_QUAL_ISSUES_SPEED
-      value: "$X_BIT( 1 )"
+    - name: SPEED
       desc: "There is a degradation in the bitrate and/or width of the link"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fabric port stability issues"
 class: $sFabricPort
-name: $s_fabric_port_stab_issues_t
+name: $s_fabric_port_stab_issue_flags_t
 etors:
-    - name: $S_FABRIC_PORT_STAB_ISSUES_NONE
-      value: "0"
-      desc: "There are no connection stability issues at this time"
-    - name: $S_FABRIC_PORT_STAB_ISSUES_FAILED
-      value: "$X_BIT( 0 )"
+    - name: FAILED
       desc: "A previously operating link has failed. Hardware will automatically retrain this port. This state will persist until either the physical connection is removed or the link trains successfully."
-    - name: $S_FABRIC_PORT_STAB_ISSUES_TRAINING_TIMEOUT
-      value: "$X_BIT( 1 )"
+    - name: TRAINING_TIMEOUT
       desc: "A connection has not been established within an expected time. Hardware will continue to attempt port training. This status will persist until either the physical connection is removed or the link successfully trains."
-    - name: $S_FABRIC_PORT_STAB_ISSUES_FLAPPING
-      value: "$X_BIT( 2 )"
+    - name: FLAPPING
       desc: "Port has excessively trained and then transitioned down for some period of time. Driver will allow port to continue to train, but will not enable the port for use until the port has been disabled and subsequently re-enabled using $sFabricPortSetConfig()."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -150,12 +139,18 @@ members:
     - type: $s_fabric_port_status_t
       name: "status"
       desc: "[out] The current status of the port"
-    - type: $s_fabric_port_qual_issues_t
+    - type: $s_fabric_port_qual_issue_flags_t
       name: "qualityIssues"
-      desc: "[out] If status is $S_FABRIC_PORT_STATUS_YELLOW, this gives a bitfield of quality issues that have been detected"
-    - type: $s_fabric_port_stab_issues_t
+      desc: |
+            [out] If status is $S_FABRIC_PORT_STATUS_YELLOW, 
+            then this gives a combination of $s_fabric_port_qual_issue_flag_bits_t for quality issues that have been detected;
+            otherwise, 0 indicates there are no quality issues with the link at this time.
+    - type: $s_fabric_port_stab_issue_flags_t
       name: "stabilityIssues"
-      desc: "[out] If status is $S_FABRIC_PORT_STATUS_RED, this gives a bitfield of reasons for the connection instability"
+      desc: |
+            [out] If status is $S_FABRIC_PORT_STATUS_RED,
+            then this gives a combination of $s_fabric_port_stab_issue_flag_bits_t for reasons for the connection instability;
+            otherwise, 0 indicates there are no connection stability issues at this time.
     - type: $s_fabric_port_id_t
       name: "remotePortId"
       desc: "[out] The unique port identifier for the remote connection point"

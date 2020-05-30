@@ -14,12 +14,12 @@ desc: "PSU voltage status"
 class: $sPsu
 name: $s_psu_voltage_status_t
 etors:
-    - name: $S_PSU_VOLTAGE_STATUS_NORMAL
+    - name: NORMAL
       value: "0"
       desc: "No unusual voltages have been detected"
-    - name: $S_PSU_VOLTAGE_STATUS_OVER
+    - name: OVER
       desc: "Over-voltage has occurred"
-    - name: $S_PSU_VOLTAGE_STATUS_UNDER
+    - name: UNDER
       desc: "Under-voltage has occurred"
 --- #--------------------------------------------------------------------------
 type: struct

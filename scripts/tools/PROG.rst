@@ -210,7 +210,7 @@ terms of reading metric values. Each Metric Group provides information
 on which sampling types it supports. There are separate sets of APIs
 supporting each of the sampling types Time-based_ and Event-based_.
 
-All available sampling types are defined in ${t}_metric_group_sampling_type_t.
+All available sampling types are defined in ${t}_metric_group_sampling_type_flags_t.
 
 - Information about supported sampling types for a given Metric Group is provided in ${t}_metric_group_properties_t.samplingType.
 - It's possible that a device provides multiple Metric Groups with the same names but different sampling types.
@@ -351,13 +351,13 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
            ${t}_metric_group_handle_t     hMetricGroup           = nullptr;
            ${x}_event_handle_t            hNotificationEvent     = nullptr;
            ${x}_event_pool_handle_t       hEventPool             = nullptr;
-           ${x}_event_pool_desc_t         eventPoolDesc          = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC, nullptr, ${X}_EVENT_POOL_FLAG_DEFAULT , 1};
+           ${x}_event_pool_desc_t         eventPoolDesc          = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC, nullptr, 0, 1};
            ${x}_event_desc_t              eventDesc              = {${X}_STRUCTURE_TYPE_EVENT_DESC};
            ${t}_metric_streamer_handle_t  hMetricStreamer        = nullptr;
            ${t}_metric_streamer_desc_t    metricStreamerDesc     = {${T}_STRUCTURE_TYPE_METRIC_STREAMER_DESC}; 
 
            // Find a "ComputeBasic" metric group suitable for Time Based collection
-           FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
+           FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASED, &hMetricGroup );
 
            // Configure the HW
            ${t}DeviceActivateMetricGroups( hDevice, /* count= */ 1, &hMetricGroup );
@@ -439,16 +439,16 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            ${t}_metric_query_pool_desc_t   queryPoolDesc         = {${T}_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC};
        
            // Find a "ComputeBasic" metric group suitable for Event Based collection
-           FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
+           FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_EVENT_BASED, &hMetricGroup );
 
            // Configure HW
            ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
            // Create metric query pool & completion event
-           queryPoolDesc.flags        = ${T}_METRIC_QUERY_POOL_FLAG_PERFORMANCE;
+           queryPoolDesc.type         = ${T}_METRIC_QUERY_POOL_TYPE_PERFORMANCE;
            queryPoolDesc.count        = 1000;
            ${t}MetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
-           eventPoolDesc.flags = ${X}_EVENT_POOL_FLAG_DEFAULT;
+           eventPoolDesc.flags = 0;
            eventPoolDesc.count = 1000;
            ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
@@ -612,7 +612,7 @@ Therefore, when the instrumentation layer is enabled, a new
 ## --validate=off
 build flag is supported: "-${t}-profile-flags \<value\>", where \<value\> must be a
 ## --validate=on
-combination of ${t}_profile_flag_t, in hexidecimal.
+combination of ${t}_profile_flags_t, in hexidecimal.
 
 As an example, a tool could use API Tracing to inject this build flag on each ${x}ModuleCreate call that the tool wishes to instrument.
 In another example, a tool could recompile a Module using the build flag and use API Tracing to replace the application's Module handle with it's own.
@@ -816,7 +816,7 @@ A debug event is described by the ${t}_debug_event_t structure, which contains:
 
   * A bit-vector of ${t}_debug_event_flags_t, which can be:
 
-    * ${T}_DEBUG_EVENT_FLAGS_STOPPED indicates that the thread that reported the event is stopped
+    * ${T}_DEBUG_EVENT_FLAG_STOPPED indicates that the thread that reported the event is stopped
       and needs to be resumed in order to proceed.
 
       If the event was reported by ${T}_DEBUG_THREAD_ALL
@@ -846,7 +846,7 @@ Not all events have event-specific fields.
   * ${T}_DEBUG_EVENT_TYPE_MODULE_LOAD: an in-memory module was loaded onto the device.
 
     The event is generated in the ${x}ModuleCreate() flow with thread == ${T}_DEBUG_THREAD_NONE.
-    If ${T}_DEBUG_EVENT_FLAGS_STOPPED is set, the event blocks the ${x}ModuleCreate() call until
+    If ${T}_DEBUG_EVENT_FLAG_STOPPED is set, the event blocks the ${x}ModuleCreate() call until
     the debugger acknowledges the event by resuming ${T}_DEBUG_THREAD_NONE.
 
     * The module format.
@@ -859,7 +859,7 @@ Not all events have event-specific fields.
     unloaded from the device.
 
     The event is generated in the ${x}ModuleDestroy() flow with thread == ${T}_DEBUG_THREAD_NONE.
-    If ${T}_DEBUG_EVENT_FLAGS_STOPPED is set, 
+    If ${T}_DEBUG_EVENT_FLAG_STOPPED is set, 
     the event blocks the ${x}ModuleDestroy() call until the debugger acknowledges the event by resuming ${T}_DEBUG_THREAD_NONE.
 
     * The module format.

@@ -14,10 +14,10 @@ desc: "Supported module creation input formats"
 class: $xModule
 name: $x_module_format_t
 etors:
-    - name: $X_MODULE_FORMAT_IL_SPIRV
+    - name: IL_SPIRV
       value: "0"
       desc: "Format is SPIRV IL format"
-    - name: $X_MODULE_FORMAT_NATIVE
+    - name: NATIVE
       desc: "Format is device native format"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -256,13 +256,14 @@ params:
 type: enum
 desc: "Supported kernel creation flags"
 class: $xKernel
-name: $x_kernel_flag_t
+name: $x_kernel_flags_t
 etors:
-    - name: $X_KERNEL_FLAG_NONE
-      value: "0"
-      desc: "default driver behavior"
-    - name: $X_KERNEL_FLAG_FORCE_RESIDENCY
+    - name: FORCE_RESIDENCY
       desc: "force all device allocations to be resident during execution"
+    - name: EXPLICIT_RESIDENCY
+      desc: |
+            application is responsible for all residency of device allocations.
+            driver may disable implicit residency management.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel descriptor"
@@ -270,10 +271,13 @@ class: $xKernel
 name: $x_kernel_desc_t
 base: $x_base_desc_t
 members:
-    - type: "$x_kernel_flag_t"
+    - type: "$x_kernel_flags_t"
       name: flags
-      desc: "[in] creation flags"
-      init: $X_KERNEL_FLAG_NONE
+      desc: |
+            [in] creation flags.
+            must be 0 (default) or a valid combination of $x_kernel_flag_bits_t;
+            default behavior may use driver-based residency.
+      init: "0"
     - type: "const char*"
       name: pKernelName
       desc: "[in] null-terminated name of kernel in module"
@@ -447,14 +451,14 @@ name: $x_kernel_attribute_t
 analogue:
     - "**cl_kernel_exec_info**"
 etors:
-    - name: $X_KERNEL_ATTRIBUTE_INDIRECT_HOST_ACCESS
+    - name: INDIRECT_HOST_ACCESS
       value: "0"
       desc: "Indicates that the function accesses host allocations indirectly (default: false, type: bool_t)"
-    - name: $X_KERNEL_ATTRIBUTE_INDIRECT_DEVICE_ACCESS
+    - name: INDIRECT_DEVICE_ACCESS
       desc: "Indicates that the function accesses device allocations indirectly (default: false, type: bool_t)"
-    - name: $X_KERNEL_ATTRIBUTE_INDIRECT_SHARED_ACCESS
+    - name: INDIRECT_SHARED_ACCESS
       desc: "Indicates that the function accesses shared allocations indirectly (default: false, type: bool_t)"
-    - name: $X_KERNEL_ATTRIBUTE_SOURCE_ATTRIBUTE
+    - name: SOURCE_ATTRIBUTE
       desc: "Declared kernel attributes (i.e. can be specified with __attribute__ in runtime language). (type: char[]) Returned as a null-terminated string and each attribute is separated by a space. $xKernelSetAttribute is not supported for this."
 --- #--------------------------------------------------------------------------
 type: function
@@ -518,9 +522,11 @@ params:
     - type: "$x_kernel_handle_t"
       name: hKernel
       desc: "[in] handle of the kernel object" 
-    - type: "$x_cache_config_t"
-      name: CacheConfig
-      desc: "[in] CacheConfig"
+    - type: "$x_cache_config_flags_t"
+      name: flags
+      desc: |
+            [in] cache configuration. 
+            must be 0 (default configuration) or a valid combination of $x_cache_config_flag_bits_t.
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
 --- #--------------------------------------------------------------------------

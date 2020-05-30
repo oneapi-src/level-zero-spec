@@ -109,7 +109,19 @@ namespace ${n}
     using ${th.make_type_name(n, tags, obj, cpp=True)} = ${th.get_type_name(n, tags, obj, obj['value'], cpp=True, meta=meta, handle_to_class=True)};
     ## ENUM #######################################################################
     %elif re.match(r"enum", obj['type']):
-    enum class ${th.make_type_name(n, tags, obj, cpp=True)} : uint32_t
+    %if th.type_traits.is_flags(obj['name']):
+    struct ${th.make_type_name(n, tags, obj, cpp=True)}
+    {
+        uint32_t value;
+        ${th.make_type_name(n, tags, obj, cpp=True)}() : value(0) {}
+        ${th.make_type_name(n, tags, obj, cpp=True)}( const uint32_t v ) : value(v) {}
+        operator uint32_t() const { return value; }
+    };
+
+    enum ${th.make_enum_name(n, tags, obj, cpp=True)}
+    %else:
+    enum class ${th.make_enum_name(n, tags, obj, cpp=True)} : uint32_t
+    %endif
     {
         %for line in th.make_etor_lines(n, tags, obj, cpp=True, meta=meta):
         ${line}
@@ -182,7 +194,19 @@ namespace ${n}
         %for line in th.make_details_lines(n, tags, e, cpp=True):
         /// ${line}
         %endfor
+        %if th.type_traits.is_flags(e['name']):
+        struct ${th.make_type_name(n, tags, e, cpp=True)}
+        {
+            uint32_t value;
+            ${th.make_type_name(n, tags, e, cpp=True)}() : value(0) {}
+            ${th.make_type_name(n, tags, e, cpp=True)}( const uint32_t v ) : value(v) {}
+            operator uint32_t() const { return value; }
+        };
+
+        enum ${th.make_enum_name(n, tags, e, cpp=True)}
+        %else:
         enum class ${th.make_type_name(n, tags, e, cpp=True)} : uint32_t
+        %endif
         {
             %for line in th.make_etor_lines(n, tags, e, cpp=True, meta=meta):
             ${line}

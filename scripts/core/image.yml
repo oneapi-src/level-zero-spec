@@ -12,19 +12,11 @@ desc: "Intel $OneApi Level-Zero APIs for Images"
 type: enum
 desc: "Supported image creation flags"
 class: $xImage
-name: $x_image_flag_t
+name: $x_image_flags_t
 etors:
-    - name: $X_IMAGE_FLAG_PROGRAM_READ
-      value: "$X_BIT( 0 )"
-      desc: "programs will read contents"
-    - name: $X_IMAGE_FLAG_PROGRAM_WRITE
-      value: "$X_BIT( 1 )"
-      desc: "programs will write contents"
-    - name: $X_IMAGE_FLAG_BIAS_CACHED
-      value: "$X_BIT( 2 )"
-      desc: "device should cache contents"
-    - name: $X_IMAGE_FLAG_BIAS_UNCACHED
-      value: "$X_BIT( 3 )"
+    - name: KERNEL_WRITE
+      desc: "kernels will write contents"
+    - name: BIAS_UNCACHED
       desc: "device should not cache contents"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -32,17 +24,17 @@ desc: "Supported image types"
 class: $xImage
 name: $x_image_type_t
 etors:
-    - name: $X_IMAGE_TYPE_1D
+    - name: 1D
       desc: "1D"
-    - name: $X_IMAGE_TYPE_1DARRAY
+    - name: 1DARRAY
       desc: "1D array"
-    - name: $X_IMAGE_TYPE_2D
+    - name: 2D
       desc: "2D"
-    - name: $X_IMAGE_TYPE_2DARRAY
+    - name: 2DARRAY
       desc: "2D array"
-    - name: $X_IMAGE_TYPE_3D
+    - name: 3D
       desc: "3D"
-    - name: $X_IMAGE_TYPE_BUFFER
+    - name: BUFFER
       desc: "Buffer"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -50,61 +42,61 @@ desc: "Supported image format layouts"
 class: $xImage
 name: $x_image_format_layout_t
 etors:
-    - name: $X_IMAGE_FORMAT_LAYOUT_8
+    - name: "8"
       desc: "8-bit single component layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_16
+    - name: "16"
       desc: "16-bit single component layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_32
+    - name: "32"
       desc: "32-bit single component layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_8_8
+    - name: "8_8"
       desc: "2-component 8-bit layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_8_8_8_8
+    - name: "8_8_8_8"
       desc: "4-component 8-bit layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_16_16
+    - name: "16_16"
       desc: "2-component 16-bit layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_16_16_16_16
+    - name: "16_16_16_16"
       desc: "4-component 16-bit layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_32_32
+    - name: "32_32"
       desc: "2-component 32-bit layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_32_32_32_32
+    - name: "32_32_32_32"
       desc: "4-component 32-bit layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_10_10_10_2
+    - name: "10_10_10_2"
       desc: "4-component 10_10_10_2 layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_11_11_10
+    - name: "11_11_10"
       desc: "3-component 11_11_10 layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_5_6_5
+    - name: "5_6_5"
       desc: "3-component 5_6_5 layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_5_5_5_1
+    - name: "5_5_5_1"
       desc: "4-component 5_5_5_1 layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_4_4_4_4
+    - name: "4_4_4_4"
       desc: "4-component 4_4_4_4 layout"
-    - name: $X_IMAGE_FORMAT_LAYOUT_Y8
+    - name: Y8
       desc: "Media Format: Y8. Format type and swizzle is ignored for this."     
-    - name: $X_IMAGE_FORMAT_LAYOUT_NV12
+    - name: NV12
       desc: "Media Format: NV12. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_YUYV
+    - name: YUYV
       desc: "Media Format: YUYV. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_VYUY
+    - name: VYUY
       desc: "Media Format: VYUY. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_YVYU
+    - name: YVYU
       desc: "Media Format: YVYU. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_UYVY
+    - name: UYVY
       desc: "Media Format: UYVY. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_AYUV
+    - name: AYUV
       desc: "Media Format: AYUV. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_P010
+    - name: P010
       desc: "Media Format: P010. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_Y410
+    - name: Y410
       desc: "Media Format: Y410. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_P012
+    - name: P012
       desc: "Media Format: P012. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_Y16
+    - name: Y16
       desc: "Media Format: Y16. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_P016
+    - name: P016
       desc: "Media Format: P016. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_Y216
+    - name: Y216
       desc: "Media Format: Y216. Format type and swizzle is ignored for this."
-    - name: $X_IMAGE_FORMAT_LAYOUT_P216
+    - name: P216
       desc: "Media Format: P216. Format type and swizzle is ignored for this."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -112,15 +104,15 @@ desc: "Supported image format types"
 class: $xImage
 name: $x_image_format_type_t
 etors:
-    - name: $X_IMAGE_FORMAT_TYPE_UINT
+    - name: UINT
       desc: "Unsigned integer"
-    - name: $X_IMAGE_FORMAT_TYPE_SINT
+    - name: SINT
       desc: "Signed integer"
-    - name: $X_IMAGE_FORMAT_TYPE_UNORM
+    - name: UNORM
       desc: "Unsigned normalized integer"
-    - name: $X_IMAGE_FORMAT_TYPE_SNORM
+    - name: SNORM
       desc: "Signed normalized integer"
-    - name: $X_IMAGE_FORMAT_TYPE_FLOAT
+    - name: FLOAT
       desc: "Float"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -128,19 +120,19 @@ desc: "Supported image format component swizzle into channel"
 class: $xImage
 name: $x_image_format_swizzle_t
 etors:
-    - name: $X_IMAGE_FORMAT_SWIZZLE_R
+    - name: R
       desc: "Red component"
-    - name: $X_IMAGE_FORMAT_SWIZZLE_G
+    - name: G
       desc: "Green component"
-    - name: $X_IMAGE_FORMAT_SWIZZLE_B
+    - name: B
       desc: "Blue component"
-    - name: $X_IMAGE_FORMAT_SWIZZLE_A
+    - name: A
       desc: "Alpha component"
-    - name: $X_IMAGE_FORMAT_SWIZZLE_0
+    - name: "0"
       desc: "Zero"
-    - name: $X_IMAGE_FORMAT_SWIZZLE_1
+    - name: "1"
       desc: "One"
-    - name: $X_IMAGE_FORMAT_SWIZZLE_X
+    - name: X
       desc: "Don't care"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -173,9 +165,12 @@ class: $xImage
 name: $x_image_desc_t
 base: $x_base_desc_t
 members:
-    - type: $x_image_flag_t
+    - type: $x_image_flags_t
       name: flags
-      desc: "[in] creation flags"
+      desc: |
+            [in] creation flags.
+            must be 0 (default) or a valid combination of $x_image_flag_bits_t;
+            default is read-only, cached access.
     - type: $x_image_type_t
       name: type
       desc: "[in] image type"
@@ -184,19 +179,34 @@ members:
       desc: "[in] image format"
     - type: uint64_t
       name: width
-      desc: "[in] width in pixels for $x_image_type_t::1D/2D/3D and bytes for Buffer, see $x_device_image_properties_t::maxImageDims1D/2D/3D and maxImageBufferSize."
+      desc: |
+            [in] width dimension.
+            $X_IMAGE_TYPE_BUFFER: size in bytes; see $x_device_image_properties_t::maxImageBufferSize for limits.
+            $X_IMAGE_TYPE_1D, $X_IMAGE_TYPE_1DARRAY: width in pixels; see $x_device_image_properties_t::maxImageDims1D for limits.
+            $X_IMAGE_TYPE_2D, $X_IMAGE_TYPE_2DARRAY: width in pixels; see $x_device_image_properties_t::maxImageDims2D for limits.
+            $X_IMAGE_TYPE_3D: width in pixels; see $x_device_image_properties_t::maxImageDims3D for limits.
       init: "0"
     - type: uint32_t
       name: height
-      desc: "[in] height in pixels (2D or 3D only), see $x_device_image_properties_t::maxImageDims2D/3D"
+      desc: |
+            [in] height dimension.
+            $X_IMAGE_TYPE_2D, $X_IMAGE_TYPE_2DARRAY: height in pixels; see $x_device_image_properties_t::maxImageDims2D for limits.
+            $X_IMAGE_TYPE_3D: height in pixels; see $x_device_image_properties_t::maxImageDims3D for limits.
+            other: ignored.
       init: "0"
     - type: uint32_t
       name: depth
-      desc: "[in] depth in pixels (3D only), see $x_device_image_properties_t::maxImageDims3D"
+      desc: |
+            [in] depth dimension.
+            $X_IMAGE_TYPE_3D: depth in pixels; see $x_device_image_properties_t::maxImageDims3D for limits.
+            other: ignored.
       init: "0"
     - type: uint32_t
       name: arraylevels
-      desc: "[in] array levels (array types only), see $x_device_image_properties_t::maxImageArraySlices"
+      desc: |
+            [in] array levels.
+            $X_IMAGE_TYPE_1DARRAY, $X_IMAGE_TYPE_2DARRAY: see $x_device_image_properties_t::maxImageArraySlices for limits.
+            other: ignored.
       init: "1"
     - type: uint32_t
       name: miplevels
@@ -208,14 +218,9 @@ desc: "Supported sampler filtering flags"
 class: $xImage
 name: $x_image_sampler_filter_flags_t
 etors:
-    - name: $X_IMAGE_SAMPLER_FILTER_FLAGS_NONE
-      value: "0"
-      desc: "device does not support filtering"
-    - name: $X_IMAGE_SAMPLER_FILTER_FLAGS_POINT
-      value: "$X_BIT(0)"
+    - name: POINT
       desc: "device supports point filtering"
-    - name: $X_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR
-      value: "$X_BIT(1)"
+    - name: LINEAR
       desc: "device supports linear filtering"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -226,7 +231,9 @@ base: $x_base_desc_t
 members:
     - type: $x_image_sampler_filter_flags_t
       name: samplerFilterFlags
-      desc: "[out] supported sampler filtering"
+      desc: |
+            [out] supported sampler filtering.
+            returns 0 (unsupported) or a combination of $x_image_sampler_filter_flag_bits_t.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves supported properties of an image."

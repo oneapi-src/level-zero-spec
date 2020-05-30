@@ -13,13 +13,9 @@ ordinal: "1"
 type: enum
 desc: "Supported initialization flags"
 class: $x
-name: $x_init_flag_t
+name: $x_init_flags_t
 etors:
-    - name: $X_INIT_FLAG_NONE
-      value: "0"
-      desc: "default behavior"
-    - name: $X_INIT_FLAG_GPU_ONLY
-      value: "$X_BIT(0)"
+    - name: GPU_ONLY
       desc: "only initialize GPU drivers"
 --- #--------------------------------------------------------------------------
 type: function
@@ -34,9 +30,12 @@ details:
     - "Only one instance of each driver will be initialized per process."
     - "This function is thread-safe for scenarios where multiple libraries may initialize the driver(s) simultaneously."
 params:
-    - type: $x_init_flag_t
+    - type: $x_init_flags_t
       name: flags
-      desc: "[in] initialization flags"
+      desc: |
+            [in] initialization flags.
+            must be 0 (default) or a combination of $x_init_flag_bits_t.
+      init: "0"
 returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 --- #--------------------------------------------------------------------------
@@ -72,9 +71,9 @@ name: $x_api_version_t
 details:
     - "API versions contain major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION"
 etors:
-    - name: $X_API_VERSION_1_0
+    - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "1.0"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the API version supported by the specified driver"

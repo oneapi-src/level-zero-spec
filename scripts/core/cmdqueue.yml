@@ -13,49 +13,44 @@ ordinal: "3"
 type: enum
 desc: "Supported command queue flags"
 class: $xCommandQueue
-name: $x_command_queue_flag_t
+name: $x_command_queue_flags_t
 etors:
-    - name: $X_COMMAND_QUEUE_FLAG_NONE
-      value: "0"
-      desc: "default behavior"
-    - name: $X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY
-      value: "$X_BIT(0)"
-      desc: "command queue reserves and cannot comsume more than a single slice."
-    - name: $X_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY
-      value: "$X_BIT(1)"
+    - name: SINGLE_SLICE_ONLY
+      desc: "command queue reserves and cannot consume more than a single slice."
+    - name: EXPLICIT_ONLY
       desc: |
-        command queue should be optimized for submission to a single device engine.
-        driver **must** disable any implicit optimizations for distributing work across multiple engines.
-        this flag should be used when applications want full control over multi-engine submission and scheduling.
+            command queue should be optimized for submission to a single device engine.
+            driver **must** disable any implicit optimizations for distributing work across multiple engines.
+            this flag should be used when applications want full control over multi-engine submission and scheduling.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
 class: $xCommandQueue
 name: $x_command_queue_mode_t
 etors:
-    - name: $X_COMMAND_QUEUE_MODE_DEFAULT
+    - name: DEFAULT
       value: "0"
       desc: "implicit default behavior; uses driver-based heuristics"
-    - name: $X_COMMAND_QUEUE_MODE_SYNCHRONOUS
+    - name: SYNCHRONOUS
       desc: |
-        Device execution always completes immediately on execute;
-        Host thread is blocked using wait on implicit synchronization object
-    - name: $X_COMMAND_QUEUE_MODE_ASYNCHRONOUS
+            Device execution always completes immediately on execute;
+            Host thread is blocked using wait on implicit synchronization object
+    - name: ASYNCHRONOUS
       desc: |
-        Device execution is scheduled and will complete in future;
-        explicit synchronization object must be used to determine completeness
+            Device execution is scheduled and will complete in future;
+            explicit synchronization object must be used to determine completeness
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue priorities"
 class: $xCommandQueue
 name: $x_command_queue_priority_t
 etors:
-    - name: $X_COMMAND_QUEUE_PRIORITY_NORMAL
+    - name: NORMAL
       value: "0"
       desc: "[default] normal priority"
-    - name: $X_COMMAND_QUEUE_PRIORITY_LOW
+    - name: PRIORITY_LOW
       desc: "lower priority than normal"
-    - name: $X_COMMAND_QUEUE_PRIORITY_HIGH
+    - name: PRIORITY_HIGH
       desc: "higher priority than normal"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -70,11 +65,15 @@ members:
     - type: uint32_t
       name: index
       desc: |
-        [in] command queue index within the group;
-        must be zero if $X_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY is set
-    - type: $x_command_queue_flag_t
+            [in] command queue index within the group;
+            must be zero if $X_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY is set
+    - type: $x_command_queue_flags_t
       name: flags
-      desc: "[in] usage flags"
+      desc: |
+            [in] usage flags.
+            must be 0 (default) or a valid combination of $x_command_queue_flag_bits_t;
+            default behavior may use implicit driver-based heuristics to balance latency and throughput.
+      init: "0"
     - type: $x_command_queue_mode_t
       name: mode
       desc: "[in] operation mode"

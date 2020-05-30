@@ -13,25 +13,19 @@ ordinal: "4"
 type: enum
 desc: "Supported command list creation flags"
 class: $xCommandList
-name: $x_command_list_flag_t
+name: $x_command_list_flags_t
 etors:
-    - name: $X_COMMAND_LIST_FLAG_NONE
-      value: "0"
-      desc: "default behavior"
-    - name: $X_COMMAND_LIST_FLAG_RELAXED_ORDERING
-      value: "$X_BIT(0)"
+    - name: RELAXED_ORDERING
       desc: |
-            driver may reorder programs and copies between barriers and synchronization primitives.
+            driver may reorder commands (e.g., kernels, copies) between barriers and synchronization primitives.
             using this flag may increase Host overhead of $xCommandListClose.
             therefore, this flag should **not** be set for low-latency usage-models.
-    - name: $X_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT
-      value: "$X_BIT(1)"
+    - name: MAXIMIZE_THROUGHPUT
       desc: |
-            driver may perform additional optimizations that increase dexecution throughput. 
+            driver may perform additional optimizations that increase execution throughput. 
             using this flag may increase Host overhead of $xCommandListClose and $xCommandQueueExecuteCommandLists.
             therefore, this flag should **not** be set for low-latency usage-models.
-    - name: $X_COMMAND_LIST_FLAG_EXPLICIT_ONLY
-      value: "$X_BIT(2)"
+    - name: EXPLICIT_ONLY
       desc: |
             command list should be optimized for submission to a single command queue and device engine.
             driver **must** disable any implicit optimizations for distributing work across multiple engines.
@@ -46,10 +40,13 @@ members:
     - type: uint32_t
       name: commandQueueGroupOrdinal
       desc: "[in] command queue group ordinal to which this command list will be submitted"
-    - type: $x_command_list_flag_t
+    - type: $x_command_list_flags_t
       name: flags
-      desc: "[in] creation flags"
-      init: $X_COMMAND_LIST_FLAG_NONE
+      desc: |
+            [in] usage flags.
+            must be 0 (default) or a valid combination of $x_command_list_flag_bits_t;
+            default behavior may use implicit driver-based heuristics to balance latency and throughput.
+      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a command list on the device for submitting commands to any command queue."

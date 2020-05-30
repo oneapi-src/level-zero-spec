@@ -66,10 +66,10 @@ desc: "Supported device types"
 class: $xDevice
 name: $x_device_type_t
 etors:
-    - name: $X_DEVICE_TYPE_GPU
+    - name: GPU
       value: "1"
       desc: "Graphics Processing Unit"
-    - name: $X_DEVICE_TYPE_FPGA
+    - name: FPGA
       desc: "Field Programmable Gate Array"
 --- #--------------------------------------------------------------------------
 type: macro
@@ -253,38 +253,27 @@ members:
       desc: "[out] opaque data representing a native kernel UUID"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Floating-Point capabilities"
+desc: "Floating-Point capability flags"
 class: $xDevice
-name: $x_fp_caps_t
+name: $x_fp_cap_flags_t
 details:
     - "floating-point capabilities of the device."
 etors:
-    - name: $X_FP_CAPS_NONE
-      value: "0"
-      desc: "None"
-    - name: $X_FP_CAPS_DENORM
-      value: "$X_BIT( 0 )"
+    - name: DENORM
       desc: "Supports denorms"
-    - name: $X_FP_CAPS_INF_NAN
-      value: "$X_BIT( 1 )"
+    - name: INF_NAN
       desc: "Supports INF and quiet NaNs"
-    - name: $X_FP_CAPS_ROUND_TO_NEAREST
-      value: "$X_BIT( 2 )"
+    - name: ROUND_TO_NEAREST
       desc: "Supports rounding to nearest even rounding mode"
-    - name: $X_FP_CAPS_ROUND_TO_ZERO
-      value: "$X_BIT( 3 )"
+    - name: ROUND_TO_ZERO
       desc: "Supports rounding to zero."
-    - name: $X_FP_CAPS_ROUND_TO_INF
-      value: "$X_BIT( 4 )"
+    - name: ROUND_TO_INF
       desc: "Supports rounding to both positive and negative INF."
-    - name: $X_FP_CAPS_FMA
-      value: "$X_BIT( 5 )"
+    - name: FMA
       desc: "Supports IEEE754-2008 fused multiply-add."
-    - name: $X_FP_CAPS_ROUNDED_DIVIDE_SQRT
-      value: "$X_BIT( 6 )"
+    - name: ROUNDED_DIVIDE_SQRT
       desc: "Supports rounding as defined by IEEE754 for divide and sqrt operations."
-    - name: $X_FP_CAPS_SOFT_FLOAT
-      value: "$X_BIT( 7 )"
+    - name: SOFT_FLOAT
       desc: "Uses software implementation for basic floating-point operations."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -311,15 +300,21 @@ members:
     - type: $x_bool_t
       name: dp4aSupported
       desc: "[out] Supports four component dot product and accumulate operations"
-    - type: $x_fp_caps_t
+    - type: $x_fp_cap_flags_t
       name: fp16Capabilities
-      desc: "[out] Capabilities for half-precision floating-point operations."
-    - type: $x_fp_caps_t
+      desc: |
+            [out] Capabilities for half-precision floating-point operations.
+            returns 0 (if fp16Supported == false) or a combination of $x_fp_cap_flag_bits_t.
+    - type: $x_fp_cap_flags_t
       name: fp32Capabilities
-      desc: "[out] Capabilities for single-precision floating-point operations."
-    - type: $x_fp_caps_t
+      desc: |
+            [out] Capabilities for single-precision floating-point operations.
+            returns a combination of $x_fp_cap_flag_bits_t.
+    - type: $x_fp_cap_flags_t
       name: fp64Capabilities
-      desc: "[out] Capabilities for double-precision floating-point operations."
+      desc: |
+            [out] Capabilities for double-precision floating-point operations.
+            returns 0 (if fp64Supported == false) or a combination of $x_fp_cap_flag_bits_t.
     - type: uint32_t
       name: maxArgumentsSize
       desc: "[out] Maximum kernel argument size that is supported."
@@ -364,13 +359,19 @@ members:
       desc: "[out] command queue group supports enqueing copy commands."
     - type: $x_bool_t
       name: singleSliceSupported
-      desc: "[out] command queue group supports reserving a single slice. 'slice' size is reported by $x_device_properties_t."
+      desc: |
+            [out] command queue group supports reserving a single slice.
+            'slice' size is reported by $x_device_properties_t."
     - type: $x_bool_t
       name: cooperativeKernelsSupported
-      desc: "[out] command queue group supports cooperative kernels. See $xCommandListAppendLaunchCooperativeKernel for more details."
+      desc: |
+            [out] command queue group supports cooperative kernels.
+            See $xCommandListAppendLaunchCooperativeKernel for more details.
     - type: $x_bool_t
       name: maxMemoryFillPatternSize
-      desc: "[out] maximum `pattern_size` supported by command queue group. See $xCommandListAppendMemoryFill for more details."
+      desc: |
+            [out] maximum `pattern_size` supported by command queue group.
+            See $xCommandListAppendMemoryFill for more details.
     - type: uint32_t
       name: numQueues
       desc: "[out] the number of physical command queues within the group."
@@ -444,26 +445,19 @@ params:
       desc: "[in,out][optional][range(0, *pCount)] array of query results for memory properties"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Memory access capabilities"
+desc: "Memory access capability flags"
 class: $xDevice
-name: $x_memory_access_caps_t
+name: $x_memory_access_cap_flags_t
 details:
     - "Supported access capabilities for different types of memory allocations"
 etors:
-    - name: $X_MEMORY_ACCESS_CAPS_NONE
-      value: "0"
-      desc: "Access not supported"
-    - name: $X_MEMORY_ACCESS_CAPS_RW
-      value: "$X_BIT( 0 )"
+    - name: RW
       desc: "Supports load/store access"
-    - name: $X_MEMORY_ACCESS_CAPS_ATOMIC
-      value: "$X_BIT( 1 )"
+    - name: ATOMIC
       desc: "Supports atomic access"
-    - name: $X_MEMORY_ACCESS_CAPS_CONCURRENT
-      value: "$X_BIT( 2 )"
+    - name: CONCURRENT
       desc: "Supports concurrent access"
-    - name: $X_MEMORY_ACCESS_CAPS_CONCURRENT_ATOMIC
-      value: "$X_BIT( 3 )"
+    - name: CONCURRENT_ATOMIC
       desc: "Supports concurrent atomic access"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -472,21 +466,31 @@ class: $xDevice
 name: $x_device_memory_access_properties_t
 base: $x_base_properties_t
 members:
-    - type: $x_memory_access_caps_t
+    - type: $x_memory_access_cap_flags_t
       name: hostAllocCapabilities
-      desc: "[out] Bitfield describing host memory capabilities"
-    - type: $x_memory_access_caps_t
+      desc: |
+            [out] host memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
+    - type: $x_memory_access_cap_flags_t
       name: deviceAllocCapabilities
-      desc: "[out] Bitfield describing device memory capabilities"
-    - type: $x_memory_access_caps_t
+      desc: |
+            [out] device memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
+    - type: $x_memory_access_cap_flags_t
       name: sharedSingleDeviceAllocCapabilities
-      desc: "[out] Bitfield describing shared (single-device) memory capabilities"
-    - type: $x_memory_access_caps_t
+      desc: |
+            [out] shared, single-device memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
+    - type: $x_memory_access_cap_flags_t
       name: sharedCrossDeviceAllocCapabilities
-      desc: "[out] Bitfield describing shared (cross-device) memory capabilities"
-    - type: $x_memory_access_caps_t
+      desc: |
+            [out] shared, cross-device memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
+    - type: $x_memory_access_cap_flags_t
       name: sharedSystemAllocCapabilities
-      desc: "[out] Bitfield describing shared (system) memory capabilities"
+      desc: |
+            [out] shared, system memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves memory access properties of the device."
@@ -658,20 +662,13 @@ params:
       desc: "[out] returned access capability"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported Cache Config"
+desc: "Supported Cache Config flags"
 class: $xDevice
-name: $x_cache_config_t
-details:
-    - "Supported Cache Config (Default, Large SLM, Large Data Cache)"
+name: $x_cache_config_flags_t
 etors:
-    - name: $X_CACHE_CONFIG_DEFAULT
-      value: "$X_BIT( 0 )"
-      desc: "Default Config"
-    - name: $X_CACHE_CONFIG_LARGE_SLM
-      value: "$X_BIT( 1 )"
+    - name: LARGE_SLM
       desc: "Large SLM size"
-    - name: $X_CACHE_CONFIG_LARGE_DATA
-      value: "$X_BIT( 2 )"
+    - name: LARGE_DATA
       desc: "Large General Data size"
 --- #--------------------------------------------------------------------------
 type: function
@@ -685,9 +682,11 @@ params:
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device "
-    - type: "$x_cache_config_t"
-      name: CacheConfig
-      desc: "[in] CacheConfig"
+    - type: "$x_cache_config_flags_t"
+      name: flags
+      desc: |
+            [in] cache configuration. 
+            must be 0 (default configuration) or a valid combination of $x_cache_config_flag_bits_t.
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
 --- #--------------------------------------------------------------------------

@@ -12,19 +12,13 @@ desc: "Intel $OneApi Level-Zero APIs for Event"
 type: enum
 desc: "Supported event pool creation flags"
 class: $xEventPool
-name: $x_event_pool_flag_t
+name: $x_event_pool_flags_t
 etors:
-    - name: $X_EVENT_POOL_FLAG_DEFAULT
-      value: "0"
-      desc: "signals and waits visible to the entire device and peer devices"
-    - name: $X_EVENT_POOL_FLAG_HOST_VISIBLE
-      value: "$X_BIT(0)"
+    - name: HOST_VISIBLE
       desc: "signals and waits are also visible to host"
-    - name: $X_EVENT_POOL_FLAG_IPC
-      value: "$X_BIT(1)"
+    - name: IPC
       desc: "signals and waits may be shared across processes"
-    - name: $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP
-      value: "$X_BIT(2)"
+    - name: KERNEL_TIMESTAMP
       desc: "Indicates all events in pool will contain kernel timestamps; cannot be combined with $X_EVENT_POOL_FLAG_IPC"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -33,13 +27,16 @@ class: $xEventPool
 name: $x_event_pool_desc_t
 base: $x_base_desc_t
 members:
-    - type: $x_event_pool_flag_t
+    - type: $x_event_pool_flags_t
       name: flags
-      desc: "[in] creation flags"
-      init: $X_EVENT_POOL_FLAG_DEFAULT
+      desc: |
+            [in] creation flags.
+            must be 0 (default) or a valid combination of $x_event_pool_flag_bits_t;
+            default behavior is signals and waits are visible to the entire device and peer devices.
+      init: "0"
     - type: uint32_t
       name: count
-      desc: "[in] number of events within the pool"
+      desc: "[in] number of events within the pool; must be greater than 0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a pool for a set of event(s) for the driver"
@@ -72,6 +69,7 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_INVALID_SIZE:
+        - "0 < desc->count"
         - "`(nullptr == phDevices) && (0 < numDevices)`"
 --- #--------------------------------------------------------------------------
 type: function
@@ -96,18 +94,15 @@ returns:
 type: enum
 desc: "Supported event scope flags"
 class: $xEvent
-name: $x_event_scope_flag_t
+name: $x_event_scope_flags_t
 etors:
-    - name: $X_EVENT_SCOPE_FLAG_NONE
-      value: "0"
-      desc: "execution synchronization only; no cache hierarchies are flushed or invalidated"
-    - name: $X_EVENT_SCOPE_FLAG_SUBDEVICE
+    - name: SUBDEVICE
       value: "$X_BIT(0)"
       desc: "cache hierarchies are flushed or invalidated sufficient for local sub-device access"
-    - name: $X_EVENT_SCOPE_FLAG_DEVICE
+    - name: DEVICE
       value: "$X_BIT(1)"
       desc: "cache hierarchies are flushed or invalidated sufficient for global device access and peer device access"
-    - name: $X_EVENT_SCOPE_FLAG_HOST
+    - name: HOST
       value: "$X_BIT(2)"
       desc: "cache hierarchies are flushed or invalidated sufficient for device and host access"
 --- #--------------------------------------------------------------------------
@@ -120,14 +115,20 @@ members:
     - type: uint32_t
       name: index
       desc: "[in] index of the event within the pool; must be less-than the count specified during pool creation"
-    - type: $x_event_scope_flag_t
+    - type: $x_event_scope_flags_t
       name: signal
-      desc: "[in] defines the scope of relevant cache hierarchies to flush on a signal action before the event is triggered"
-      init: $X_EVENT_SCOPE_FLAG_NONE
-    - type: $x_event_scope_flag_t
+      desc: |
+            [in] defines the scope of relevant cache hierarchies to flush on a signal action before the event is triggered.
+            must be 0 (default) or a valid combination of $x_event_scope_flag_bits_t;
+            default behavior is execution synchronization only, no cache hierarchies are flushed.
+      init: "0"
+    - type: $x_event_scope_flags_t
       name: wait
-      desc: "[in] defines the scope of relevant cache hierarchies to invalidate on a wait action after the event is complete"
-      init: $X_EVENT_SCOPE_FLAG_NONE
+      desc: |
+            [in] defines the scope of relevant cache hierarchies to invalidate on a wait action after the event is complete.
+            must be 0 (default) or a valid combination of $x_event_scope_flag_bits_t;
+            default behavior is execution synchronization only, no cache hierarchies are invalidated.
+      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event on the device."
