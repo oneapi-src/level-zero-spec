@@ -18,8 +18,6 @@ RE_INVALID_TAG_FORMAT  = r".*(\$\w).*"
 RE_EXTRACT_TAG_NAME    = r"\$\{(\w)\}"
 RE_PROPER_TAG_FORMAT   = r".*"+RE_EXTRACT_TAG_NAME+r".*"
 
-RE_DOXY_LINK    = r".*\:\:\$\{\w\}.*"
-
 RE_CODE_BLOCK_BEGIN = r"\s*..\sparsed-literal::"
 
 RE_EXTRACT_NAME     = r"\$\{\w\}\w+"
