@@ -27,7 +27,7 @@ members:
       name: flags
       desc: |
             [in] creation flags.
-            must be 0 (default) or a valid combination of $x_fence_flag_bits_t.
+            must be 0 (default) or a valid combination of $x_fence_flag_t.
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function

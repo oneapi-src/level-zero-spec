@@ -43,7 +43,7 @@ members:
       desc: "[out] Indicates if software can control the frequency of this domain assuming the user has permissions"
     - type: $x_bool_t
       name: isThrottleEventSupported
-      desc: "[out] Indicates if software can register to receive event $S_EVENT_TYPE_FREQ_THROTTLED"
+      desc: "[out] Indicates if software can register to receive event $S_EVENT_TYPE_FLAG_FREQ_THROTTLED"
     - type: double
       name: min
       desc: "[out] The minimum hardware clock frequency in units of MHz"
@@ -107,7 +107,7 @@ members:
       name: "throttleReasons"
       desc: |
             [out] The reasons that the frequency is being limited by the hardware.
-            Returns 0 (frequency not throttled) or a combination of $s_freq_throttle_reason_flag_bits_t.
+            Returns 0 (frequency not throttled) or a combination of $s_freq_throttle_reason_flag_t.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency throttle time snapshot"

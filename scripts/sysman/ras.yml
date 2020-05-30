@@ -71,7 +71,7 @@ members:
       desc: "[in][out] Breakdown of error by category"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "RAS error configuration - thresholds used for triggering RAS events ($S_EVENT_TYPE_RAS_CORRECTABLE_ERRORS, $S_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS)"
+desc: "RAS error configuration - thresholds used for triggering RAS events ($S_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS, $S_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS)"
 class: $sRas
 name: $s_ras_config_t
 details:
@@ -135,8 +135,8 @@ class: $sRas
 name: GetConfig
 details:
     - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
-    - "When a particular RAS correctable error counter exceeds the configured threshold, the event $S_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be triggered."
-    - "When a particular RAS uncorrectable error counter exceeds the configured threshold, the event $S_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be triggered."
+    - "When a particular RAS correctable error counter exceeds the configured threshold, the event $S_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS will be triggered."
+    - "When a particular RAS uncorrectable error counter exceeds the configured threshold, the event $S_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS will be triggered."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -153,8 +153,8 @@ class: $sRas
 name: SetConfig
 details:
     - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
-    - "When a particular RAS correctable error counter exceeds the specified threshold, the event $S_EVENT_TYPE_RAS_CORRECTABLE_ERRORS will be generated."
-    - "When a particular RAS uncorrectable error counter exceeds the specified threshold, the event $S_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS will be generated."
+    - "When a particular RAS correctable error counter exceeds the specified threshold, the event $S_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS will be generated."
+    - "When a particular RAS uncorrectable error counter exceeds the specified threshold, the event $S_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS will be generated."
     - "Call $sRasGetState() and set the clear flag to true to restart event generation once counters have exceeded thresholds."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

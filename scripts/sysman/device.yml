@@ -64,7 +64,7 @@ members:
       name: reset
       desc: |
             [out] Indicates if the device needs to be reset and for what reasons.
-            returns 0 (none) or combination of $s_reset_reason_flag_bits_t
+            returns 0 (none) or combination of $s_reset_reason_flag_t
     - type: $s_repair_status_t
       name: repaired
       desc: "[out] Indicates if the device has been repaired"
@@ -286,13 +286,13 @@ members:
       name: "qualityIssues"
       desc: |
             [out] If status is $S_PCI_LINK_STATUS_YELLOW, 
-            then this gives a combination of $s_pci_link_qual_issue_flag_bits_t for quality issues that have been detected;
+            then this gives a combination of $s_pci_link_qual_issue_flag_t for quality issues that have been detected;
             otherwise, 0 indicates there are no quality issues with the link at this time."
     - type: $s_pci_link_stab_issue_flags_t
       name: "stabilityIssues"
       desc: |
             [out] If status is $S_PCI_LINK_STATUS_RED, 
-            then this gives a combination of $s_pci_link_stab_issue_flag_bits_t for reasons for the connection instability;
+            then this gives a combination of $s_pci_link_stab_issue_flag_t for reasons for the connection instability;
             otherwise, 0 indicates there are no connection stability issues at this time."
     - type: $s_pci_speed_t
       name: "speed"

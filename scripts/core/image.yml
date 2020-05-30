@@ -169,7 +169,7 @@ members:
       name: flags
       desc: |
             [in] creation flags.
-            must be 0 (default) or a valid combination of $x_image_flag_bits_t;
+            must be 0 (default) or a valid combination of $x_image_flag_t;
             default is read-only, cached access.
     - type: $x_image_type_t
       name: type
@@ -233,7 +233,7 @@ members:
       name: samplerFilterFlags
       desc: |
             [out] supported sampler filtering.
-            returns 0 (unsupported) or a combination of $x_image_sampler_filter_flag_bits_t.
+            returns 0 (unsupported) or a combination of $x_image_sampler_filter_flag_t.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves supported properties of an image."

@@ -25,7 +25,7 @@ members:
       desc: "[out] Software can change the power limits of this domain assuming the user has permissions."
     - type: $x_bool_t
       name: "isEnergyThresholdSupported"
-      desc: "[out] Indicates if this power domain supports the energy threshold event ($S_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED)."
+      desc: "[out] Indicates if this power domain supports the energy threshold event ($S_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED)."
     - type: uint32_t
       name: "defaultLimit"
       desc: "[out] The factory default TDP power limit of the part in milliwatts."  
@@ -241,7 +241,7 @@ desc: "Set energy threshold"
 class: $sPower
 name: SetEnergyThreshold
 details:
-    - "An event $S_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function $sEventSetConfig() to start receiving the event."
+    - "An event $S_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function $sEventSetConfig() to start receiving the event."
     - "Only one running process can control the energy threshold at a given time. If another process attempts to change the energy threshold, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $sPowerGetEnergyThreshold() to determine the process ID currently controlling this setting."
     - "Calling this function will remove any pending energy thresholds and start counting from the time of this call."
     - "Once the energy threshold has been reached and the event generated, the threshold is automatically removed. It is up to the application to request a new threshold."

@@ -275,7 +275,7 @@ members:
       name: flags
       desc: |
             [in] creation flags.
-            must be 0 (default) or a valid combination of $x_kernel_flag_bits_t;
+            must be 0 (default) or a valid combination of $x_kernel_flag_t;
             default behavior may use driver-based residency.
       init: "0"
     - type: "const char*"
@@ -526,7 +526,7 @@ params:
       name: flags
       desc: |
             [in] cache configuration. 
-            must be 0 (default configuration) or a valid combination of $x_cache_config_flag_bits_t.
+            must be 0 (default configuration) or a valid combination of $x_cache_config_flag_t.
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
 --- #--------------------------------------------------------------------------

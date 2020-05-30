@@ -143,13 +143,13 @@ members:
       name: "qualityIssues"
       desc: |
             [out] If status is $S_FABRIC_PORT_STATUS_YELLOW, 
-            then this gives a combination of $s_fabric_port_qual_issue_flag_bits_t for quality issues that have been detected;
+            then this gives a combination of $s_fabric_port_qual_issue_flag_t for quality issues that have been detected;
             otherwise, 0 indicates there are no quality issues with the link at this time.
     - type: $s_fabric_port_stab_issue_flags_t
       name: "stabilityIssues"
       desc: |
             [out] If status is $S_FABRIC_PORT_STATUS_RED,
-            then this gives a combination of $s_fabric_port_stab_issue_flag_bits_t for reasons for the connection instability;
+            then this gives a combination of $s_fabric_port_stab_issue_flag_t for reasons for the connection instability;
             otherwise, 0 indicates there are no connection stability issues at this time.
     - type: $s_fabric_port_id_t
       name: "remotePortId"

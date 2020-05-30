@@ -29,7 +29,7 @@ members:
       name: flags
       desc: |
             [out] indicates which flags were enabled during compilation.
-            returns 0 (none) or a combination of $t_profile_flag_bits_t
+            returns 0 (none) or a combination of $t_profile_flag_t
     - type: uint32_t
       name: numTokens
       desc: "[out] number of tokens immediately following this structure"

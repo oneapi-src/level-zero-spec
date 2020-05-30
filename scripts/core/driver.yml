@@ -34,7 +34,7 @@ params:
       name: flags
       desc: |
             [in] initialization flags.
-            must be 0 (default) or a combination of $x_init_flag_bits_t.
+            must be 0 (default) or a combination of $x_init_flag_t.
       init: "0"
 returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY

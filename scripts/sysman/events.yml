@@ -52,7 +52,7 @@ members:
       name: "registered"
       desc: |
             [in,out] List of registered events.
-            Must be 0 (none) or a valid combination of $s_event_type_flag_bits_t.
+            Must be 0 (none) or a valid combination of $s_event_type_flag_t.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the event handle for the specified device"
@@ -116,7 +116,7 @@ params:
       desc: "[in] Indicates if the event list for this device should be cleared."
     - type: "$s_event_type_flags_t*"
       name: pEvents
-      desc: "[in,out] Events (combination of $s_event_type_flag_bits_t) that have been triggered by this device."
+      desc: "[in,out] Events (combination of $s_event_type_flag_t) that have been triggered by this device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Wait for the specified list of event handles to receive any registered events"
@@ -146,7 +146,7 @@ params:
     - type: "$s_event_type_flags_t*"
       name: pEvents
       desc: |
-            [in,out] Events (combination of $s_event_type_flag_bits_t) that have been triggered by any of the supplied event handles.
+            [in,out] Events (combination of $s_event_type_flag_t) that have been triggered by any of the supplied event handles.
             If timeout is not UINT32_MAX and this value is 0, then a timeout has occurred.
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:

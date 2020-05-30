@@ -186,7 +186,7 @@ members:
       desc: "[out] the thread reporting the event"
     - type: $t_debug_event_flags_t
       name: flags
-      desc: "[out] returns 0 (none) or a combination of $t_debug_event_flag_bits_t"
+      desc: "[out] returns 0 (none) or a combination of $t_debug_event_flag_t"
     - type: $t_debug_event_info_t
       name: info
       desc: "[out] event type specific information"

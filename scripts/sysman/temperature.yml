@@ -38,13 +38,13 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: $x_bool_t
       name: "isCriticalTempSupported"
-      desc: "[out] Indicates if the critical temperature event $S_EVENT_TYPE_TEMP_CRITICAL is supported"
+      desc: "[out] Indicates if the critical temperature event $S_EVENT_TYPE_FLAG_TEMP_CRITICAL is supported"
     - type: $x_bool_t
       name: "isThreshold1Supported"
-      desc: "[out] Indicates if the temperature threshold 1 event $S_EVENT_TYPE_TEMP_THRESHOLD1 is supported"
+      desc: "[out] Indicates if the temperature threshold 1 event $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD1 is supported"
     - type: $x_bool_t
       name: "isThreshold2Supported"
-      desc: "[out] Indicates if the temperature threshold 2 event $S_EVENT_TYPE_TEMP_THRESHOLD2 is supported"
+      desc: "[out] Indicates if the temperature threshold 2 event $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD2 is supported"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor threshold"
@@ -68,13 +68,13 @@ name: $s_temp_config_t
 members:
     - type: $x_bool_t
       name: "enableCritical"
-      desc: "[in,out] Indicates if event $S_EVENT_TYPE_TEMP_CRITICAL should be triggered by the driver."
+      desc: "[in,out] Indicates if event $S_EVENT_TYPE_FLAG_TEMP_CRITICAL should be triggered by the driver."
     - type: $s_temp_threshold_t
       name: "threshold1"
-      desc: "[in,out] Configuration controlling if and when event $S_EVENT_TYPE_TEMP_THRESHOLD1 should be triggered by the driver."
+      desc: "[in,out] Configuration controlling if and when event $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD1 should be triggered by the driver."
     - type: $s_temp_threshold_t
       name: "threshold2"
-      desc: "[in,out] Configuration controlling if and when event $S_EVENT_TYPE_TEMP_THRESHOLD2 should be triggered by the driver."
+      desc: "[in,out] Configuration controlling if and when event $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD2 should be triggered by the driver."
     - type: uint32_t
       name: "processId"
       desc: "[out] Host processId that set this configuration (ignored when setting the configuration)."
@@ -142,8 +142,8 @@ desc: "Set temperature configuration for this sensor - indicates which events ar
 class: $sTemperature
 name: SetConfig
 details:
-    - "Events $S_EVENT_TYPE_TEMP_CRITICAL will be triggered when temperature reaches the critical range. Use the function $sEventSetConfig() to start receiving this event."
-    - "Events $S_EVENT_TYPE_TEMP_THRESHOLD1 and $S_EVENT_TYPE_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $sEventSetConfig() to start receiving these events."
+    - "Events $S_EVENT_TYPE_FLAG_TEMP_CRITICAL will be triggered when temperature reaches the critical range. Use the function $sEventSetConfig() to start receiving this event."
+    - "Events $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD1 and $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $sEventSetConfig() to start receiving these events."
     - "Only one running process can set the temperature configuration at a time. If another process attempts to change the configuration, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $sTemperatureGetConfig() will return the process ID currently controlling these settings."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

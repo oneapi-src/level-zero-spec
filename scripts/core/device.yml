@@ -304,17 +304,17 @@ members:
       name: fp16Capabilities
       desc: |
             [out] Capabilities for half-precision floating-point operations.
-            returns 0 (if fp16Supported == false) or a combination of $x_fp_cap_flag_bits_t.
+            returns 0 (if fp16Supported == false) or a combination of $x_fp_cap_flag_t.
     - type: $x_fp_cap_flags_t
       name: fp32Capabilities
       desc: |
             [out] Capabilities for single-precision floating-point operations.
-            returns a combination of $x_fp_cap_flag_bits_t.
+            returns a combination of $x_fp_cap_flag_t.
     - type: $x_fp_cap_flags_t
       name: fp64Capabilities
       desc: |
             [out] Capabilities for double-precision floating-point operations.
-            returns 0 (if fp64Supported == false) or a combination of $x_fp_cap_flag_bits_t.
+            returns 0 (if fp64Supported == false) or a combination of $x_fp_cap_flag_t.
     - type: uint32_t
       name: maxArgumentsSize
       desc: "[out] Maximum kernel argument size that is supported."
@@ -470,27 +470,27 @@ members:
       name: hostAllocCapabilities
       desc: |
             [out] host memory capabilities.
-            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
     - type: $x_memory_access_cap_flags_t
       name: deviceAllocCapabilities
       desc: |
             [out] device memory capabilities.
-            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
     - type: $x_memory_access_cap_flags_t
       name: sharedSingleDeviceAllocCapabilities
       desc: |
             [out] shared, single-device memory capabilities.
-            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
     - type: $x_memory_access_cap_flags_t
       name: sharedCrossDeviceAllocCapabilities
       desc: |
             [out] shared, cross-device memory capabilities.
-            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
     - type: $x_memory_access_cap_flags_t
       name: sharedSystemAllocCapabilities
       desc: |
             [out] shared, system memory capabilities.
-            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_bits_t.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves memory access properties of the device."
@@ -686,7 +686,7 @@ params:
       name: flags
       desc: |
             [in] cache configuration. 
-            must be 0 (default configuration) or a valid combination of $x_cache_config_flag_bits_t.
+            must be 0 (default configuration) or a valid combination of $x_cache_config_flag_t.
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
 --- #--------------------------------------------------------------------------

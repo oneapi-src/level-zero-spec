@@ -189,6 +189,9 @@ def _validate_doc(f, d, tags, line_num):
             __validate_name(item, 'name', tags, case='upper', prefix=prefix)
 
             value = _get_etor_value(item.get('value'), value)
+            if type_traits.is_flags(d['name']) and 0 == value:
+                raise Exception(prefix+"'value' must be greater than 0: %s"%value)
+
             if value >= 0x7fffffff:
                 raise Exception(prefix+"'value' must be less than 0x7fffffff: %s"%value)
 
@@ -228,6 +231,9 @@ def _validate_doc(f, d, tags, line_num):
             if type_traits.is_handle(item['type']):
                 raise Exception(prefix+"'type' must not be '*_handle_t': %s"%item['type'])
 
+            if item['type'].endswith("flag_t"):
+                raise Exception(prefix+"'type' must not be '*_flag_t': %s"%item['type'])
+
             ver = __validate_version(item, prefix=prefix)
             if ver < max_ver:
                 raise Exception(prefix+"'version' must be increasing: %s"%item['version'])
@@ -261,6 +267,9 @@ def _validate_doc(f, d, tags, line_num):
                 raise Exception(prefix+"'%s' must come before '[out]'"%annotation)
 
             # todo: if not static or singleton, then first must be handle_t
+
+            if item['type'].endswith("flag_t"):
+                raise Exception(prefix+"'type' must not be '*_flag_t': %s"%item['type'])
 
             ver = __validate_version(item, prefix=prefix)
             if ver < max_ver:

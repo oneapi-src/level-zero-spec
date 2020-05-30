@@ -364,7 +364,7 @@ typedef enum _ze_name_flag_t
 {
     ZE_NAME_FLAG_VALUE_0 = ZE_BIT(0), ///< brief description
     ZE_NAME_FLAG_VALUE_1 = ZE_BIT(1)  ///< brief description
-} ze_name_flag_bits_t;
+} ze_name_flag_t;
 ```
 </td>
 <td>
