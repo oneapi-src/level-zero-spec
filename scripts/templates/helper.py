@@ -550,10 +550,10 @@ def make_enum_name(namespace, tags, obj, cpp=False):
 Public:
     returns c/c++ name of etor
 """
-def make_etor_name(namespace, tags, enum, etor, cpp=False, meta=None):
-    if cpp:
+def make_etor_name(namespace, tags, enum, etor, cpp=False, py=False, meta=None):
+    if cpp or py:
         # if c++, remove the verbose enum part of the etor
-        if type_traits.is_flags(enum):
+        if type_traits.is_flags(enum) and not py:
             # e.g., "CLS_ENUM_NAME_ETOR_NAME" -> "ENUM_NAME_ETOR_NAME"
             cname = type_traits.find_class_name(enum, meta)
             cname = subt(namespace, tags, cname, cpp=cpp)
@@ -561,7 +561,10 @@ def make_etor_name(namespace, tags, enum, etor, cpp=False, meta=None):
             name = _remove_class(name, cname, upper_case=True)
         else:
             # e.g., "ENUM_NAME_ETOR_NAME" -> "ETOR_NAME"
-            prefix = re.sub(r"(\w+)_t", r"\1", subt(namespace, tags, enum, cpp=cpp)).upper()
+            if type_traits.is_flags(enum):
+                prefix = re.sub(r"(\w+)_flags_t", r"\1_flag", subt(namespace, tags, enum, cpp=cpp)).upper()
+            else:
+                prefix = re.sub(r"(\w+)_t", r"\1", subt(namespace, tags, enum, cpp=cpp)).upper()
             name = re.sub(r"%s_(\w+)"%prefix, r"\1", subt(namespace, tags, etor, cpp=cpp))
             name = re.sub(r"^(\d+\w*)", r"_\1", name)
     else:
@@ -592,9 +595,9 @@ def _get_value_name(namespace, tags, value, cpp, meta, is_array_size=False, cbas
                     else:
                         enum = "%s::%s"%(cname, enum)
                 if is_array_size:
-                    value = "static_cast<int>(%s::%s)"%(enum, make_etor_name(namespace, tags, name, value, cpp, meta))
+                    value = "static_cast<int>(%s::%s)"%(enum, make_etor_name(namespace, tags, name, value, cpp=cpp, meta=meta))
                 else:
-                    value = "%s::%s"%(enum, make_etor_name(namespace, tags, name, value, cpp, meta))
+                    value = "%s::%s"%(enum, make_etor_name(namespace, tags, name, value, cpp=cpp, meta=meta))
             else:
                 value = subt(namespace, tags, value, cpp=cpp)
     else:
@@ -610,7 +613,7 @@ Public:
 def make_etor_lines(namespace, tags, obj, cpp=False, py=False, meta=None):
     lines = []
     for item in obj['etors']:
-        name = make_etor_name(namespace, tags, obj['name'], item['name'], cpp or py, meta)
+        name = make_etor_name(namespace, tags, obj['name'], item['name'], cpp, py, meta)
 
         if 'value' in item:
             delim = "," if not py else ""
@@ -628,7 +631,7 @@ def make_etor_lines(namespace, tags, obj, cpp=False, py=False, meta=None):
 
     if cpp and not type_traits.is_flags(obj['name']):
         lines.append("FORCE_UINT32 = 0x7fffffff")
-    else:
+    elif not py:
         lines.append("%sFORCE_UINT32 = 0x7fffffff"%make_enum_name(namespace, tags, obj, cpp)[:-1].upper())
 
     return lines
@@ -696,6 +699,7 @@ def get_ctype_name(namespace, tags, item):
     name = subt(namespace, tags, item['type'])
     name = _remove_const(name)
     name = re.sub(r"void\*", "c_void_p", name)
+    name = re.sub(r"char\*", "c_char_p", name)
     name = re.sub(r"uint8_t", "c_ubyte", name)
     name = re.sub(r"uint16_t", "c_ushort", name)
     name = re.sub(r"uint32_t", "c_ulong", name)
@@ -703,8 +707,8 @@ def get_ctype_name(namespace, tags, item):
     name = re.sub(r"size_t", "c_size_t", name)
     name = re.sub(r"float", "c_float", name)
     name = re.sub(r"double", "c_double", name)
-    name = re.sub(r"char", "c_char", name)
-    name = re.sub(r"int", "c_int", name)
+    name = re.sub(r"\bchar", "c_char", name)
+    name = re.sub(r"\bint", "c_int", name)
 
     if type_traits.is_pointer(name):
         name = _remove_ptr(name)

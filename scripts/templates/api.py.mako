@@ -38,7 +38,7 @@ ${"##"} ${line}
 %if re.match(r".*\(.*\)", obj['name']):
 def ${th.make_macro_name(n, tags, obj)}:
     return ${th.subt(n, tags, obj['value'])}
-%elif 'altvalue' not in obj:
+%elif 'altvalue' not in obj and not obj['value'].startswith("__"):
 ${th.make_macro_name(n, tags, obj)} = ${th.subt(n, tags, obj['value'])}
 %else:
 # ${th.make_macro_name(n, tags, obj)} not required for python
@@ -140,7 +140,7 @@ ${"#############################################################################
 ${"##"} @brief ${n} device-driver interfaces
 class ${N}_DDI:
     def __init__(self, version : ${x}_api_version_t):
-        # load the xe_loader library
+        # load the ze_loader library
         if "Windows" == platform.uname()[0]:
             self.__dll = WinDLL("${x}_loader.dll")
         else:
