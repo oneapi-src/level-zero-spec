@@ -543,9 +543,9 @@ class ze_name_t(Structure):
 * A function requires the following scalar fields: {`desc`, `name`}
   - `desc` will be used as the function's description comment
   - `name` must be a unique ISO-C standard identifier, and be PascalCase
-* A function may take the following optional scalar fields: {`class`, 'decl', `condition`, `ordinal`, `version`}
+* A function may take the following optional scalar fields: {`class`, `decl`, `condition`, `ordinal`, `version`}
   - `class` will be used to scope the function declaration within the specified C++ class
-  - `decl` will be used to specify the function's linkage as one of the following: {'static'}
+  - `decl` will be used to specify the function's linkage as one of the following: {`static`}
   - `condition` will be used as a C/C++ preprocessor `#if` conditional expression
   - `ordinal` will be used to override the default order (in which they appear) the function appears within its section; `default="1000"`
   - `version` will be used to define the minimum API version in which the function will appear; `default="1.0"` This will also affect the order in which the function appears within its section and class.
