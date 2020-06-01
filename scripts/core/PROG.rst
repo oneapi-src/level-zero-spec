@@ -258,13 +258,13 @@ appended into command lists.
 Images
 ------
 
-An image is used to store multi-dimensional and format-defined memory
-for optimal device access. An image's contents can be copied to and from
-other images, as well as host-accessible memory allocations. This is the
-only method for host access to the contents of an image. This
-methodology allows for device-specific encoding of image contents (e.g.,
-tile swizzle patterns, lossless compression, etc.) and avoids exposing
-these details in the API in a backwards compatible fashion.
+An image is used to store multi-dimensional and format-defined memory. 
+An image's contents may be stored in an implementation-specific encoding 
+and layout in memory for optimal device access
+(e.g., tile swizzle patterns, lossless compression, etc.).
+There is no support for direct Host access to an image's content.
+However, when an image is copied to a Host-accessible memory allocation,
+its contents will be implicitly decoded to be implementation-independent.
 
 .. parsed-literal::
 
