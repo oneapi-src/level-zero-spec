@@ -269,7 +269,7 @@ these details in the API in a backwards compatible fashion.
 .. parsed-literal::
 
        // Specify single component FLOAT32 format
-       ${x}_image_format_desc_t formatDesc = {
+       ${x}_image_format_t format = {
            ${X}_IMAGE_FORMAT_LAYOUT_32, ${X}_IMAGE_FORMAT_TYPE_FLOAT,
            ${X}_IMAGE_FORMAT_SWIZZLE_R, ${X}_IMAGE_FORMAT_SWIZZLE_0, ${X}_IMAGE_FORMAT_SWIZZLE_0, ${X}_IMAGE_FORMAT_SWIZZLE_1
        };
@@ -279,7 +279,7 @@ these details in the API in a backwards compatible fashion.
            nullptr,
            0, // read-only
            ${X}_IMAGE_TYPE_2D,
-           formatDesc,
+           format,
            128, 128, 0, 0, 0
        };
        ${x}_image_handle_t hImage;

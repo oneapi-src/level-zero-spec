@@ -136,9 +136,9 @@ etors:
       desc: "Don't care"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Image format descriptor"
+desc: "Image format "
 class: $xImage
-name: $x_image_format_desc_t
+name: $x_image_format_t
 members:
     - type: $x_image_format_layout_t
       name: layout
@@ -174,7 +174,7 @@ members:
     - type: $x_image_type_t
       name: type
       desc: "[in] image type"
-    - type: $x_image_format_desc_t
+    - type: $x_image_format_t
       name: format
       desc: "[in] image format"
     - type: uint64_t
@@ -227,7 +227,7 @@ type: struct
 desc: "Image properties"
 class: $xImage
 name: $x_image_properties_t
-base: $x_base_desc_t
+base: $x_base_properties_t
 members:
     - type: $x_image_sampler_filter_flags_t
       name: samplerFilterFlags
