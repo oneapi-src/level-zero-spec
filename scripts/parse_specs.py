@@ -204,11 +204,17 @@ def _validate_doc(f, d, tags, line_num):
 
     def __validate_base(d):
         namespace = re.sub(r"(\$[a-z])\w+", r"\1", d['name'])
-        if type_traits.is_descriptor(d['type']) and not d.get('base', "").endswith("base_desc_t"):
-            raise Exception(prefix+"'base' must be '%s_base_desc_t': %s"%(namespace, item['type']))
+        valid_names = [
+            "%s_base_desc_t"%namespace,
+            "%s_base_properties_t"%namespace,
+            "%s_driver_extension_properties_t"%namespace
+            ]
+        if d['name'] not in valid_names:
+            if type_traits.is_descriptor(d['name']) and not d.get('base', "").endswith("base_desc_t"):
+                raise Exception("'base' must be '%s_base_desc_t': %s"%(namespace, d['name']))
 
-        elif type_traits.is_properties(d['type']) and not d.get('base', "").endswith("base_properties_t"):
-            raise Exception(prefix+"'base' must be '%s_base_properties_t': %s"%(namespace, item['type']))
+            elif type_traits.is_properties(d['name']) and not d.get('base', "").endswith("base_properties_t"):
+                raise Exception("'base' must be '%s_base_properties_t': %s"%(namespace, d['name']))
 
     def __validate_members(d, tags):
         if 'members' not in d:
