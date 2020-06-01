@@ -637,7 +637,6 @@ Execution
 If a tool requires changing the address of an application's function, then it should use API Tracing.
 For example, ${x}ModuleGetFunctionPointer and all flavors of ${x}CommandListAppendLaunchKernel.
 
-%if ver >= 1.1:
 Program Debug
 =============
 
@@ -711,8 +710,7 @@ The following sample code demonstrates attaching and detaching:
     ${x}_result_t errcode;
 
     memset(&config, 0, sizeof(config));
-    config.version = ${T}_DEBUG_API_VERSION;
-    config.variant.v1.pid = ...;
+    config.variant.pid = ...;
 
     errcode = ${t}DebugAttach(device, &config, &session);
     if (errcode)
@@ -1028,18 +1026,17 @@ The following sample code demonstrates iterating over register sets:
         return errcode;
 
     for (sec = 0; sec < state.numSec; ++i) {
-        ${t}_debug_regset_t regset;
+        ${t}_debug_regstate_t regset;
         uint64_t offset;
 
         offset = state.headerSize + (state.secSize * sec);
 
-        errcode = ${t}DebugReadState(session, threadid, offset, sizeof(regset), &regset);
+        errcode = ${t}DebugReadRegisters(session, threadid, offset, sizeof(regset), &regset);
         if (errcode)
             return errcode;
 
         ...
     }
-%endif # ver >= 1.1
 
 .. |Metrics| image:: ../images/tools_metric_hierarchy.png?raw=true
 .. |MetricStreamer| image:: ../images/tools_metric_streamer.png?raw=true
