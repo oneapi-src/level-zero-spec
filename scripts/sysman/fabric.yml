@@ -90,6 +90,7 @@ type: struct
 desc: "Fabric port properties"
 class: $sFabricPort
 name: $s_fabric_port_properties_t
+base: $s_base_properties_t
 members:
     - type: char
       name: "model[$S_MAX_FABRIC_PORT_MODEL_SIZE]"

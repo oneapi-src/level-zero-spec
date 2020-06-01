@@ -13,6 +13,7 @@ type: struct
 desc: "LED properties"
 class: $sLed
 name: $s_led_properties_t
+base: $s_base_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"

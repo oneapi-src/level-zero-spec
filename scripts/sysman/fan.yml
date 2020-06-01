@@ -57,6 +57,7 @@ type: struct
 desc: "Fan properties"
 class: $sFan
 name: $s_fan_properties_t
+base: $s_base_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"

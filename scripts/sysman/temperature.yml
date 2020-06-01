@@ -26,6 +26,7 @@ type: struct
 desc: "Temperature sensor properties"
 class: $sTemperature
 name: $s_temp_properties_t
+base: $s_base_properties_t
 members:
     - type: $s_temp_sensors_t
       name: "type"

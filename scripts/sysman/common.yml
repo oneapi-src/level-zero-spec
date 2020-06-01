@@ -101,3 +101,73 @@ type: handle
 desc: "Handle for a Sysman device event"
 class: $sEvent
 name: "$s_event_handle_t"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Defines structure types"
+name: $s_structure_type_t
+etors:
+    - name: DEVICE_PROPERTIES
+      desc: $s_device_properties_t
+      value: "0x1"
+    - name: PCI_PROPERTIES
+      desc: $s_pci_properties_t
+    - name: PCI_BAR_PROPERTIES
+      desc: $s_pci_bar_properties_t
+    - name: DIAG_PROPERTIES
+      desc: $s_diag_properties_t
+    - name: ENGINE_PROPERTIES
+      desc: $s_engine_properties_t
+    - name: FABRIC_PORT_PROPERTIES
+      desc: $s_fabric_port_properties_t
+    - name: FAN_PROPERTIES
+      desc: $s_fan_properties_t
+    - name: FIRMWARE_PROPERTIES
+      desc: $s_firmware_properties_t
+    - name: FREQ_PROPERTIES
+      desc: $s_freq_properties_t
+    - name: LED_PROPERTIES
+      desc: $s_led_properties_t
+    - name: MEM_PROPERTIES
+      desc: $s_mem_properties_t
+    - name: PERF_PROPERTIES
+      desc: $s_perf_properties_t
+    - name: POWER_PROPERTIES
+      desc: $s_power_properties_t
+    - name: PSU_PROPERTIES
+      desc: $s_psu_properties_t
+    - name: RAS_PROPERTIES
+      desc: $s_ras_properties_t
+    - name: SCHED_PROPERTIES
+      desc: $s_sched_properties_t
+    - name: SCHED_TIMEOUT_PROPERTIES
+      desc: $s_sched_timeout_properties_t
+    - name: SCHED_TIMESLICE_PROPERTIES
+      desc: $s_sched_timeslice_properties_t
+    - name: STANDBY_PROPERTIES
+      desc: $s_standby_properties_t
+    - name: TEMP_PROPERTIES
+      desc: $s_temp_properties_t
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all properties types"
+name: $s_base_properties_t
+members:
+    - type: $s_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "void*"
+      name: pNext
+      desc: "[in,out][optional] pointer to extension-specific structure"
+      init: nullptr
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all descriptor types"
+name: $s_base_desc_t
+members:
+    - type: $s_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr

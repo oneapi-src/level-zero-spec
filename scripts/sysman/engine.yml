@@ -28,6 +28,7 @@ type: struct
 desc: "Engine group properties"
 class: $sEngine
 name: $s_engine_properties_t
+base: $s_base_properties_t
 members:
     - type: $s_engine_group_t
       name: "type"

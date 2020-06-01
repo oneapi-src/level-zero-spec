@@ -28,6 +28,7 @@ type: struct
 desc: "Properties related to scheduler component"
 class: $sScheduler
 name: $s_sched_properties_t
+base: $s_base_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
@@ -54,6 +55,7 @@ type: struct
 desc: "Configuration for timeout scheduler mode ($S_SCHED_MODE_TIMEOUT)"
 class: $sDevice
 name: $s_sched_timeout_properties_t
+base: $s_base_properties_t
 members:
     - type: uint64_t
       name: "watchdogTimeout"
@@ -67,6 +69,7 @@ type: struct
 desc: "Configuration for timeslice scheduler mode ($S_SCHED_MODE_TIMESLICE)"
 class: $sDevice
 name: $s_sched_timeslice_properties_t
+base: $s_base_properties_t
 members:
     - type: uint64_t
       name: "interval"

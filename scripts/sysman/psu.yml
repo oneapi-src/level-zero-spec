@@ -26,6 +26,7 @@ type: struct
 desc: "Static properties of the power supply"
 class: $sPsu
 name: $s_psu_properties_t
+base: $s_base_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"

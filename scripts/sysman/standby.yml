@@ -22,6 +22,7 @@ type: struct
 desc: "Standby hardware component properties"
 class: $sStandby
 name: $s_standby_properties_t
+base: $s_base_properties_t
 members:
     - type: $s_standby_type_t
       name: "type"

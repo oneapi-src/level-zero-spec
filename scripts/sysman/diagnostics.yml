@@ -61,6 +61,7 @@ type: struct
 desc: "Diagnostics test suite properties"
 class: $sDiagnostics
 name: $s_diag_properties_t
+base: $s_base_properties_t
 members:
     - type: $s_diag_type_t
       name: "type"

@@ -24,6 +24,7 @@ type: struct
 desc: "Frequency properties"
 class: $sFrequency
 name: $s_freq_properties_t
+base: $s_base_properties_t
 details:
     - "Indicates if this frequency domain can be overclocked (if true, functions such as $sFrequencyOcSetConfig() are supported)."
     - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $sFrequencyOcGetConfig() to determine the maximum frequency that can be requested."

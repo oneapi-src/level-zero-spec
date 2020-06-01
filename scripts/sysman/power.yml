@@ -13,6 +13,7 @@ type: struct
 desc: "Properties related to device power settings"
 class: $sPower
 name: $s_power_properties_t
+base: $s_base_properties_t
 members:
     - type: $x_bool_t
       name: "onSubdevice"
