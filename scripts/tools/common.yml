@@ -72,7 +72,6 @@ name: "$t_tracer_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Debug session handle"
-version: "1.1"
 class: $tDebug
 name: $t_debug_session_handle_t
 --- #--------------------------------------------------------------------------
@@ -95,7 +94,6 @@ etors:
       desc: $t_tracer_desc_t
     - name: DEBUG_REGSET_DESC
       desc: $t_debug_regset_desc_t
-      version: "1.1"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
