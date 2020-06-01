@@ -93,6 +93,9 @@ etors:
       desc: $t_profile_properties_t
     - name: TRACER_DESC
       desc: $t_tracer_desc_t
+    - name: DEBUG_REGSET_DESC
+      desc: $t_debug_regset_desc_t
+      version: "1.1"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
