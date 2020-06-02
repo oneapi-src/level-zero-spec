@@ -123,6 +123,9 @@ members:
     - type: $x_bool_t
       name: onDemandPageFaultsSupported
       desc: "[out] Supports on-demand page-faulting."
+    - type: uint64_t
+      name: maxMemAllocSize
+      desc: "[out] Maximum memory allocation size."
     - type: uint32_t
       name: maxHardwareContexts
       desc: "[out] Maximum number of logical hardware contexts."

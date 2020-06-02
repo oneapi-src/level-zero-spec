@@ -20,7 +20,7 @@ etors:
       desc: "device should not cache allocation (UC)"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device mem alloc descriptor"
+desc: "Device memory allocation descriptor"
 class: $xDriver
 name: $x_device_mem_alloc_desc_t
 base: $x_base_desc_t
@@ -52,7 +52,7 @@ etors:
       desc: "host memory should be allocated write-combined (WC)"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Host mem alloc descriptor"
+desc: "Host memory allocation descriptor"
 class: $xDriver
 name: $x_host_mem_alloc_desc_t
 base: $x_base_desc_t
@@ -85,16 +85,16 @@ params:
       desc: "[in] handle of the driver instance"
     - type: "const $x_device_mem_alloc_desc_t*"
       name: device_desc
-      desc: "[in] pointer to device mem alloc descriptor"
+      desc: "[in] pointer to device memory allocation descriptor"
     - type: "const $x_host_mem_alloc_desc_t*"
       name: host_desc
-      desc: "[in] pointer to host mem alloc descriptor"
+      desc: "[in] pointer to host memory allocation descriptor"
     - type: size_t
       name: size
-      desc: "[in] size in bytes to allocate"
+      desc: "[in] size in bytes to allocate; must be less-than $x_device_properties_t.maxMemAllocSize."
     - type: size_t
       name: alignment
-      desc: "[in] minimum alignment in bytes for the allocation"
+      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two."
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in][optional] device handle to associate with"
@@ -124,13 +124,13 @@ params:
       desc: "[in] handle of the driver instance"
     - type: "const $x_device_mem_alloc_desc_t*"
       name: device_desc
-      desc: "[in] pointer to device mem alloc descriptor"
+      desc: "[in] pointer to device memory allocation descriptor"
     - type: size_t
       name: size
-      desc: "[in] size in bytes to allocate"
+      desc: "[in] size in bytes to allocate; must be less-than $x_device_properties_t.maxMemAllocSize."
     - type: size_t
       name: alignment
-      desc: "[in] minimum alignment in bytes for the allocation"
+      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two."
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -161,13 +161,13 @@ params:
       desc: "[in] handle of the driver instance"
     - type: "const $x_host_mem_alloc_desc_t*"
       name: host_desc
-      desc: "[in] pointer to host mem alloc descriptor"
+      desc: "[in] pointer to host memory allocation descriptor"
     - type: size_t
       name: size
-      desc: "[in] size in bytes to allocate"
+      desc: "[in] size in bytes to allocate; must be less-than $x_device_properties_t.maxMemAllocSize."
     - type: size_t
       name: alignment
-      desc: "[in] minimum alignment in bytes for the allocation"
+      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two."
     - type: "void**"
       name: pptr
       desc: "[out] pointer to host allocation"
