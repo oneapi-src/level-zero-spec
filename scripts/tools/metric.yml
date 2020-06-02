@@ -165,6 +165,16 @@ members:
       name: "value"
       desc: "[out] value"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Metric group calculation type"
+class: $tMetricGroup
+name: $t_metric_group_calculation_type_t
+etors:
+    - name: METRIC_VALUES
+      desc: "Calculated metric values from raw data."
+    - name: MAX_METRIC_VALUES
+      desc: "Maximum metric values."
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Calculates metric values from raw data."
 class: $tMetricGroup
@@ -176,6 +186,9 @@ params:
     - type: "$t_metric_group_handle_t"
       name: hMetricGroup
       desc: "[in] handle of the metric group"
+    - type: "$t_metric_group_calculation_type_t"
+      name: calculation type
+      desc: "[in] calculation type to be applied on raw data"
     - type: size_t
       name: rawDataSize
       desc: "[in] size in bytes of raw data buffer"
@@ -296,7 +309,11 @@ params:
       desc: "[in] metric group count to activate; must be 0 if `nullptr == phMetricGroups`"
     - type: "$t_metric_group_handle_t*"
       name: phMetricGroups
-      desc: "[in][optional][range(0, count)] handles of the metric groups to activate. nullptr to deactivate all."
+      desc: |
+            [in][optional][range(0, count)] handles of the metric groups to activate.
+            nullptr deactivates all previously used metric groups.
+            all metrics groups must come from a different domains.
+            metric query and metric stream must use activated metric groups.
 returns:
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "`(nullptr == phMetricGroups) && (0 < count)`"
@@ -350,6 +367,7 @@ class: $tCommandList
 name: AppendMetricStreamerMarker
 details:
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
+    - "Allow to associate metric stream time based metrics with executed workload."
 params:
     - type: "$t_command_list_handle_t"
       name: hCommandList
