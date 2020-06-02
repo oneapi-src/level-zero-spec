@@ -57,7 +57,7 @@ ${title}
 
 <%isempty = False%>
 %endif
-    * :ref:`${th.make_type_name(n, tags, obj).replace("_", "-")}`
+    * :ref:`${th.make_enum_name(n, tags, obj).replace("_", "-")}`
 %endif
 %endfor # obj in objects
 
@@ -121,12 +121,12 @@ ${title} Enums
 <%isempty = False%>
 %endif
 
-.. _${th.make_type_name(n, tags, obj).replace("_", "-")}:
+.. _${th.make_enum_name(n, tags, obj).replace("_", "-")}:
 
 ${th.make_type_name(n, tags, obj)}
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. doxygenenum:: ${th.make_type_name(n, tags, obj)}
+.. doxygenenum:: ${th.make_enum_name(n, tags, obj)}
     :project: LevelZero
 
 %endif
