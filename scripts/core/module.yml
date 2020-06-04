@@ -290,6 +290,7 @@ name: Create
 decl: static
 ordinal: "0"
 details:
+    - "Modules that have unresolved imports need to be dynamically linked before a kernel can be created from them. (See $xModuleDynamicLink)"
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -306,6 +307,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_NULL_POINTER:
         - "`nullptr == desc->pKernelName`"
     - $X_RESULT_ERROR_INVALID_KERNEL_NAME
+    - $X_RESULT_ERROR_INVALID_MODULE_UNLINKED
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a kernel object"

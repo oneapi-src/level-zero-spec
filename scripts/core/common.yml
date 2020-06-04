@@ -231,6 +231,8 @@ etors:
       desc: "[Validation] kernel argument size does not match kernel"
     - name: ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
       desc: "[Validation] value of kernel attribute is not valid for the kernel or device"
+    - name: ERROR_INVALID_MODULE_UNLINKED
+      desc: "[Validation] module with imports needs to be linked before kernels can be created from it."
     - name: ERROR_INVALID_COMMAND_LIST_TYPE
       desc: "[Validation] command list type does not match command queue type"
     - name: ERROR_OVERLAPPING_REGIONS
