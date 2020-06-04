@@ -768,38 +768,38 @@ the event is triggered, and the application is woken up.
 
 The following functions are provided to manage the power of the device:
 
-+--------------------------------------+--------------------------------------------------------------------------+
-| Function                             | Description                                                              |
-+======================================+==========================================================================+
-| ${s}DeviceEnumPowerDomains()  | Enumerate the power domains.                                             |
-+--------------------------------------+--------------------------------------------------------------------------+
-| ${s}PowerGetProperties()      | Get the minimum/maximum power limit that can be                          |
-|                                      | specified when changing the power limits of a                            |
-|                                      | specific power domain. Also read the factory                             |
-|                                      | default sustained power limit of the part.                               |
-+--------------------------------------+--------------------------------------------------------------------------+
-| ${s}PowerGetEnergyCounter()   | Read the energy consumption of                                           |
-|                                      | the specific domain.                                                     |
-+--------------------------------------+--------------------------------------------------------------------------+
-| ${s}PowerGetLimits()          | Get the sustained/burst/peak                                             |
-|                                      | power limits for the specific                                            |
-|                                      | power domain.                                                            |
-+--------------------------------------+--------------------------------------------------------------------------+
-| ${s}PowerSetLimits()          | Set the sustained/burst/peak                                             |
-|                                      | power limits for the specific                                            |
-|                                      | power domain.                                                            |
-+--------------------------------------+--------------------------------------------------------------------------+
-| ${s}PowerGetEnergyThreshold() | Get the current energy threshold.                                        |
-|                                      |                                                                          |
-+--------------------------------------+--------------------------------------------------------------------------+
-| ${s}PowerSetEnergyThreshold() | Set the energy threshold. Event                                          |
++--------------------------------------+-------------------------------------------------------------------------------------+
+| Function                             | Description                                                                         |
++======================================+=====================================================================================+
+| ${s}DeviceEnumPowerDomains()  | Enumerate the power domains.                                                        |
++--------------------------------------+-------------------------------------------------------------------------------------+
+| ${s}PowerGetProperties()      | Get the minimum/maximum power limit that can be                                     |
+|                                      | specified when changing the power limits of a                                       |
+|                                      | specific power domain. Also read the factory                                        |
+|                                      | default sustained power limit of the part.                                          |
++--------------------------------------+-------------------------------------------------------------------------------------+
+| ${s}PowerGetEnergyCounter()   | Read the energy consumption of                                                      |
+|                                      | the specific domain.                                                                |
++--------------------------------------+-------------------------------------------------------------------------------------+
+| ${s}PowerGetLimits()          | Get the sustained/burst/peak                                                        |
+|                                      | power limits for the specific                                                       |
+|                                      | power domain.                                                                       |
++--------------------------------------+-------------------------------------------------------------------------------------+
+| ${s}PowerSetLimits()          | Set the sustained/burst/peak                                                        |
+|                                      | power limits for the specific                                                       |
+|                                      | power domain.                                                                       |
++--------------------------------------+-------------------------------------------------------------------------------------+
+| ${s}PowerGetEnergyThreshold() | Get the current energy threshold.                                                   |
+|                                      |                                                                                     |
++--------------------------------------+-------------------------------------------------------------------------------------+
+| ${s}PowerSetEnergyThreshold() | Set the energy threshold. Event                                                     |
 |                                      | ${S}_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED        |
-|                                      |                                                                          |
-|                                      | will be generated when the energy                                        |
-|                                      | consumed since calling this                                              |
-|                                      | function exceeds the specified                                           |
-|                                      | threshold.                                                               |
-+--------------------------------------+--------------------------------------------------------------------------+
+|                                      |                                                                                     |
+|                                      | will be generated when the energy                                                   |
+|                                      | consumed since calling this                                                         |
+|                                      | function exceeds the specified                                                      |
+|                                      | threshold.                                                                          |
++--------------------------------------+-------------------------------------------------------------------------------------+
 
 The pseudo code below shows how to output information about each power
 domain on a device:
@@ -1414,37 +1414,37 @@ general, temperature events are only supported on the temperature sensor
 of type ${S}_TEMP_SENSORS_GLOBAL. The list below describes the list of
 temperature events:
 
-+-----------------------------------------+--------------------------+-----------------------+
-| Event                                   | Check support             | Description          |
-+=========================================+==========================+=======================+
++-------------------------------------------------------------------------+---------------------------------+-----------------------+
+| Event                                                                   | Check support                   | Description           |
++=========================================================================+=================================+=======================+
 | ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL       | ${s}_temp_properties_t    | The event is          |
-|                                         | .isCriticalTempSupported | triggered when the    |
-|                                         |                          | temperature crosses   |
-|                                         |                          | into the critical     |
-|                                         |                          | zone where severe     |
-|                                         |                          | frequency throttling  |
-|                                         |                          | will be taking place. |
-+-----------------------------------------+--------------------------+-----------------------+
+|                                                                         | .isCriticalTempSupported        | triggered when the    |
+|                                                                         |                                 | temperature crosses   |
+|                                                                         |                                 | into the critical     |
+|                                                                         |                                 | zone where severe     |
+|                                                                         |                                 | frequency throttling  |
+|                                                                         |                                 | will be taking place. |
++-------------------------------------------------------------------------+---------------------------------+-----------------------+
 | ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD1     | ${s}_temp_properties_t    | The event is          |
-|                                         | .isThreshold1Supported   | triggered when the    |
-|                                         |                          | temperature crosses   |
-|                                         |                          | the custom threshold  |
-|                                         |                          | 1. Flags can be set   |
-|                                         |                          | to limit the trigger  |
-|                                         |                          | to when crossing from |
-|                                         |                          | high to low or low to |
-|                                         |                          | high.                 |
-+-----------------------------------------+--------------------------+-----------------------+
+|                                                                         | .isThreshold1Supported          | triggered when the    |
+|                                                                         |                                 | temperature crosses   |
+|                                                                         |                                 | the custom threshold  |
+|                                                                         |                                 | 1. Flags can be set   |
+|                                                                         |                                 | to limit the trigger  |
+|                                                                         |                                 | to when crossing from |
+|                                                                         |                                 | high to low or low to |
+|                                                                         |                                 | high.                 |
++-------------------------------------------------------------------------+---------------------------------+-----------------------+
 | ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD2     | ${s}_temp_properties_t    | The event is          |
-| PE_TEMP_THRESHOLD2                      | .isThreshold2Supported   | triggered when the    |
-|                                         |                          | temperature crosses   |
-|                                         |                          | the custom threshold  |
-|                                         |                          | 2. Flags can be set   |
-|                                         |                          | to limit the trigger  |
-|                                         |                          | to when crossing from |
-|                                         |                          | high to low or low to |
-|                                         |                          | high.                 |
-+-----------------------------------------+--------------------------+-----------------------+
+|                                                                         | .isThreshold2Supported          | triggered when the    |
+|                                                                         |                                 | temperature crosses   |
+|                                                                         |                                 | the custom threshold  |
+|                                                                         |                                 | 2. Flags can be set   |
+|                                                                         |                                 | to limit the trigger  |
+|                                                                         |                                 | to when crossing from |
+|                                                                         |                                 | high to low or low to |
+|                                                                         |                                 | high.                 |
++-------------------------------------------------------------------------+---------------------------------+-----------------------+
 
 The following function can be used to manage temperature sensors:
 
@@ -1740,13 +1740,13 @@ thresholds to be 0 which means that no events are generated. Thresholds
 can be set on the total RAS error counter or on each of the detailed
 error counters.
 
-+------------------------------------+-------------------------------------------------+
-| RAS error Type                     | Event                                           |
-+====================================+=================================================+
++------------------------------------------------------------------+--------------------------------------------------------------------------------+
+| RAS error Type                                                   | Event                                                                          |
++==================================================================+================================================================================+
 | ${S}_RAS_ERROR_TYPE_UNCORRECTABLE   | ${S}_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS   |
-+------------------------------------+-------------------------------------------------+
++------------------------------------------------------------------+--------------------------------------------------------------------------------+
 | ${S}_RAS_ERROR_TYPE_CORRECTABLE     | ${S}_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS     |
-+------------------------------------+-------------------------------------------------+
++------------------------------------------------------------------+--------------------------------------------------------------------------------+
 
 The table below summaries all the RAS management functions:
 
@@ -1970,49 +1970,49 @@ configuration function is not shown, the event is generated
 automatically; where a configuration function is shown, it must be
 called to enable the event and/or provide threshold conditions.
 
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| Event                                             | Trigger                     | Configuration function                | State function                    |
-+===================================================+=============================+=======================================+===================================+
-| ${S}_EVENT_TYPE_FLAG_DEVICE_RESET                  | Device is about to be reset |                                       |                                   |
-|                                                   | by the driver               |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_DEVICE_SLEEP_STATE_ENTER      | Device is about to enter a  |                                       |                                   |
-|                                                   | deep sleep state            |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_DEVICE_SLEEP_STATE_EXIT       | Device is exiting a deep    |                                       |                                   |
-|                                                   | sleep state                 |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_FREQ_THROTTLED                | Frequency starts being      |                                       | ${s}FrequencyGetState()            |
-|                                                   | throttled                   |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| Event                                                                             | Trigger                     | Configuration function                        | State function                    |
++===================================================================================+=============================+===============================================+===================================+
+| ${S}_EVENT_TYPE_FLAG_DEVICE_RESET                  | Device is about to be reset |                                               |                                   |
+|                                                                                   | by the driver               |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_DEVICE_SLEEP_STATE_ENTER      | Device is about to enter a  |                                               |                                   |
+|                                                                                   | deep sleep state            |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_DEVICE_SLEEP_STATE_EXIT       | Device is exiting a deep    |                                               |                                   |
+|                                                                                   | sleep state                 |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_FREQ_THROTTLED                | Frequency starts being      |                                               | ${s}FrequencyGetState()    |
+|                                                                                   | throttled                   |                                               |                                   |
++------------------------------------------------------------------------------- ---+-----------------------------+-----------------------------------------------+-----------------------------------+
 | ${S}_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED      | Energy consumption          | ${s}PowerSetEnergyThreshold()          |                                   |
-|                                                   | threshold is reached        |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL                 | Critical temperature is     | ${s}TemperatureSetConfig()             | ${s}TemperatureGetState()          |
-|                                                   | reached                     |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD1               | Temperature crosses         | ${s}TemperatureSetConfig()             | ${s}TemperatureGetState()          |
-|                                                   | threshold 1                 |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD2               | Temperature crosses         | ${s}TemperatureSetConfig()             | ${s}TemperatureGetState()          |
-|                                                   | threshold 2                 |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_MEM_HEALTH                    | Health of device memory     |                                       | ${s}MemoryGetState()               |
-|                                                   | changes                     |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_FABRIC_PORT_HEALTH            | Health of fabric ports      |                                       | ${s}FabricPortGetState()           |
-|                                                   | change                      |                                       | )                                 |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS        | RAS correctable errors      | ${s}RasSetConfig()                     | ${s}RasGetState()                  |
-|                                                   | cross thresholds            |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS      | RAS uncorrectable errors    | ${s}RasSetConfig()                     | ${s}RasGetState()                  |
-|                                                   | cross thresholds            |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_DEVICE_RESET_REQUIRED         | Driver has determined that  |                                       | ${s}DeviceGetState()               |
-|                                                   | an immediate reset is       |                                       |                                   |
-|                                                   | required                    |                                       |                                   |
-+---------------------------------------------------+-----------------------------+---------------------------------------+-----------------------------------+
+|                                                                                   | threshold is reached        |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL                 | Critical temperature is     | ${s}TemperatureSetConfig()             | ${s}TemperatureGetState()  |
+|                                                                                   | reached                     |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD1               | Temperature crosses         | ${s}TemperatureSetConfig()             | ${s}TemperatureGetState()  |
+|                                                                                   | threshold 1                 |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD2               | Temperature crosses         | ${s}TemperatureSetConfig()             | ${s}TemperatureGetState()  |
+|                                                                                   | threshold 2                 |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_MEM_HEALTH                    | Health of device memory     |                                               | ${s}MemoryGetState()       |
+|                                                                                   | changes                     |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_FABRIC_PORT_HEALTH            | Health of fabric ports      |                                               | ${s}FabricPortGetState()   |
+|                                                                                   | change                      |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS        | RAS correctable errors      | ${s}RasSetConfig()                     | ${s}RasGetState()          |
+|                                                                                   | cross thresholds            |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS      | RAS uncorrectable errors    | ${s}RasSetConfig()                     | ${s}RasGetState()          |
+|                                                                                   | cross thresholds            |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_DEVICE_RESET_REQUIRED         | Driver has determined that  |                                               | ${s}DeviceGetState()       |
+|                                                                                   | an immediate reset is       |                                               |                                   |
+|                                                                                   | required                    |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
 
 The call to ${s}EventListen() requires the driver handle. The
 list of event handles must only be for devices that have been enumerated
