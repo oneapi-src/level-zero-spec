@@ -169,6 +169,9 @@ members:
       name: "memSize"
       desc: "[out] Device memory size in bytes allocated by this process (may not necessarily be resident on the device at the time of reading)."
     - type: uint64_t
+      name: "sharedSize"
+      desc: "[out] The size of shared device memory mapped into this process (may not necessarily be resident on the device at the time of reading)."
+    - type: uint64_t
       name: "engines"
       desc: "[out] Bitfield of accelerator engines being used by this process (or 1<<$s_engine_type_t together)."
 --- #--------------------------------------------------------------------------
