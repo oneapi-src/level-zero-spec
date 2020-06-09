@@ -28,7 +28,6 @@ base: $s_base_properties_t
 details:
     - "Indicates if this frequency domain can be overclocked (if true, functions such as $sFrequencyOcSetConfig() are supported)."
     - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $sFrequencyOcGetConfig() to determine the maximum frequency that can be requested."
-    - "If step is non-zero, the available frequencies are (min, min + step, min + 2xstep, ..., max). Otherwise, call $sFrequencyGetAvailableClocks() to get the list of frequencies that can be requested."
 members:
     - type: $s_freq_domain_t
       name: "type"
@@ -51,9 +50,6 @@ members:
     - type: double
       name: max
       desc: "[out] The maximum non-overclock hardware clock frequency in units of MHz."
-    - type: double
-      name: step
-      desc: "[out] The minimum step-size for clock frequencies in units of MHz. The hardware will clamp intermediate frequencies to lowest multiplier of this number."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency range between which the hardware can operate."
