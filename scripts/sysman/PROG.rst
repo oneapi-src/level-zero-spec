@@ -1863,12 +1863,12 @@ function, software can use the diagnostics return code
 The function ${s}DeviceGetState() can be used to determine if
 the device has been repaired.
 
-There are multiple diagnostic test suites that can be run and these are
-defined in the enumerator ${s}_diag_type_t. The function
+There are multiple diagnostic test suites that can be run.
+The function
 ${s}DeviceEnumDiagnosticTestSuites() will enumerate each available test suite and
 the function ${s}DiagnosticsGetProperties() can be used to
-determine the type and name of each test suite
-(${s}_diag_properties_t.type and ${s}_diag_properties_t.type).
+determine the name of each test suite
+(${s}_diag_properties_t.name).
 
 Each test suite contains one or more diagnostic tests. On some systems,
 it is possible to run only a subset of the tests. Use the function
