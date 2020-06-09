@@ -95,7 +95,6 @@ information and control aspects of the entire device:
 -  Get device UUID, deviceID, number of sub-devices
 -  Get Brand/model/vendor name
 -  Query the information about processes using this device
--  Get/set scheduler mode and properties
 -  Reset device
 -  Query if the device has been repaired
 -  Query if the device needs to be reset and for what reasons (wedged, initiate repair)
@@ -164,6 +163,10 @@ provided for all components in each class.
 |                       | Sub-device 1: Media engines     |                                           |
 |                       |                                 |                                           |
 |                       | Sub-device 1: Copy engines      |                                           |
++-----------------------+---------------------------------+-------------------------------------------+
+| Scheduler_            | Sub-device 0: All engines       | Get scheduler mode and properties         |
+|                       |                                 |                                           |
+|                       | Sub-device 1: All engines       | Get scheduler mode and properties         |
 +-----------------------+---------------------------------+-------------------------------------------+
 | Firmware_             | Sub-device 0: Enumerates each   | Get firmware name and version             |
 |                       | firmware                        |                                           |
@@ -254,6 +257,10 @@ provided for all components in each class.
 |                        | Sub-device 1: GPU frequency     |                                           |
 |                        |                                 |                                           |
 |                        | Sub-device 1: Memory frequency  |                                           |
++------------------------+---------------------------------+-------------------------------------------+
+| Scheduler_             | Sub-device 0: All engines       | Set scheduler mode                        |
+|                        |                                 |                                           |
+|                        | Sub-device 1: All engines       | Set scheduler mode                        |
 +------------------------+---------------------------------+-------------------------------------------+
 | Performance-Factor_    | Sub-device 0: Compute           | Tune workload performance                 |
 |                        |                                 |                                           |
@@ -471,156 +478,6 @@ are using the device:
 
 Using the process ID, an application can determine the owner and the
 path to the executable - this information is not returned by the API.
-
-Scheduler operations
-~~~~~~~~~~~~~~~~~~~~
-
-Scheduler components control how workloads are executed on accelerator
-engines and how to share the hardware resources when multiple workloads are
-submitted concurrently. This policy is referred to as a scheduler mode.
-
-The available scheduler operating modes are given by the enum
-${s}_sched_mode_t and summarized in the table below:
-
-+-------------------------------------------------------------+-------------------------------------------+
-| Scheduler mode                                              | Description                               |
-+=============================================================+===========================================+
-| ${S}_SCHED_MODE_TIMEOUT            | This mode is optimized for                |
-|                                                             | multiple applications or contexts         |
-|                                                             | submitting work to the hardware.          |
-|                                                             | When higher priority work                 |
-|                                                             | arrives, the scheduler attempts           |
-|                                                             | to pause the current executing            |
-|                                                             | work within some timeout                  |
-|                                                             | interval, then submits the other          |
-|                                                             | work. It is possible to configure         |
-|                                                             | (${s}_sched_timeout_properties_t)  |
-|                                                             | the watchdog timeout which                |
-|                                                             | controls the maximum time the             |
-|                                                             | scheduler will wait for a                 |
-|                                                             | workload to complete a batch of           |
-|                                                             | work or yield to other                    |
-|                                                             | applications before it is                 |
-|                                                             | terminated. If the watchdog               |
-|                                                             | timeout is set to                         |
-|                                                             | ${S}_SCHED_WATCHDOG_DISABLE, the           |
-|                                                             | scheduler enforces no fairness.           |
-|                                                             | This means that if there is other         |
-|                                                             | work to execute, the scheduler            |
-|                                                             | will try to submit it but will            |
-|                                                             | not terminate an executing                |
-|                                                             | process that does not complete            |
-|                                                             | quickly.                                  |
-+-------------------------------------------------------------+-------------------------------------------+
-| ${S}_SCHED_MODE_TIMESLICE          | This mode is optimized to provide         |
-|                                                             | fair sharing of hardware                  |
-|                                                             | execution time between multiple           |
-|                                                             | contexts submitting work to the           |
-|                                                             | hardware concurrently. It is              |
-|                                                             | possible to configure                     |
-|                                                             | (${s}_sched_timeslice_properties_t)|
-|                                                             |                                           |
-|                                                             | the timeslice interval and the            |
-|                                                             | amount of time the scheduler will         |
-|                                                             | wait for work to yield to another         |
-|                                                             | application before it is                  |
-|                                                             | terminated.                               |
-+-------------------------------------------------------------+-------------------------------------------+
-| ${S}_SCHED_MODE_EXCLUSIVE          | This mode is optimized for single         |
-|                                                             | application/context use-cases. It         |
-|                                                             | permits a context to run                  |
-|                                                             | indefinitely on the hardware              |
-|                                                             | without being preempted or                |
-|                                                             | terminated. All pending work for          |
-|                                                             | other contexts must wait until            |
-|                                                             | the running context completes             |
-|                                                             | with no further submitted work.           |
-+-------------------------------------------------------------+-------------------------------------------+
-| ${S}_SCHED_MODE_COMPUTE_UNIT_DEBUG | This mode is optimized for                |
-|                                                             | application debug. It ensures             |
-|                                                             | that only one command queue can           |
-|                                                             | execute work on the hardware at a         |
-|                                                             | given time. Work is permitted to          |
-|                                                             | run as long as needed without             |
-|                                                             | enforcing any scheduler fairness          |
-|                                                             | policies.                                 |
-+-------------------------------------------------------------+-------------------------------------------+
-
-A device can have multiple scheduler components. Each scheduler component controls
-the workload execution behavior on one or more accelerator engines
-(${s}_engine_type_t). The following functions are available for changing
-the scheduler mode for each scheduler component:
-
-+--------------------------------------------------+-----------------------------------+
-| Function                                         | Description                       |
-+==================================================+===================================+
-| ${s}DeviceEnumSchedulers()                | Get handles to each scheduler     |
-|                                                  | component.                        |
-+--------------------------------------------------+-----------------------------------+
-| ${s}SchedulerGetProperties()              | Get properties of a scheduler     |
-|                                                  | component (sub-device, engines    |
-|                                                  | linked to this scheduler,         |
-|                                                  | supported scheduler modes.        |
-+--------------------------------------------------+-----------------------------------+
-| ${s}SchedulerGetCurrentMode()             | Get the current scheduler mode    |
-|                                                  | (timeout, timeslice, exclusive,   |
-|                                                  | single command queue)             |
-+--------------------------------------------------+-----------------------------------+
-| ${s}SchedulerGetTimeoutModeProperties()   | Get the settings for the timeout  |
-|                                                  | scheduler mode                    |
-+--------------------------------------------------+-----------------------------------+
-| ${s}SchedulerGetTimesliceModeProperties() | Get the settings for the          |
-|                                                  | timeslice scheduler mode          |
-+--------------------------------------------------+-----------------------------------+
-| ${s}SchedulerSetTimeoutMode()             | Change to timeout scheduler mode  |
-|                                                  | and/or change properties          |
-+--------------------------------------------------+-----------------------------------+
-| ${s}SchedulerSetTimesliceMode()           | Change to timeslice scheduler     |
-|                                                  | mode and/or change properties     |
-+--------------------------------------------------+-----------------------------------+
-| ${s}SchedulerSetExclusiveMode()           | Change to exclusive scheduler     |
-|                                                  | mode and/or change properties     |
-+--------------------------------------------------+-----------------------------------+
-| ${s}SchedulerSetComputeUnitDebugMode()    | Change to compute unit debug      |
-|                                                  | scheduler mode and/or change      |
-|                                                  | properties                        |
-+--------------------------------------------------+-----------------------------------+
-
-The pseudo code below shows how to stop the scheduler enforcing fairness
-while permitting other work to attempt to run:
-
-.. parsed-literal::
-
-   function DisableSchedulerWatchdog(${s}_device_handle_t hSysmanDevice)
-       uint32_t numSched
-       if ((${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, NULL) == ${X}_RESULT_SUCCESS))
-           ${s}_sched_handle_t* pSchedHandles =
-               allocate_memory(numSched * sizeof(${s}_sched_handle_t))
-           if (${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, pSchedHandles) == ${X}_RESULT_SUCCESS)
-               for (index = 0 .. numSched-1)
-                   ${x}_result_t res
-                   ${s}_sched_mode_t currentMode
-                   res = ${s}SchedulerGetCurrentMode(pSchedHandles[index], &currentMode)
-                   if (res == ${X}_RESULT_SUCCESS)
-                       ${x}_bool_t requireReload
-                       ${s}_sched_timeout_properties_t props
-                       props.watchdogTimeout = ${S}_SCHED_WATCHDOG_DISABLE
-                       res = ${s}SchedulerSetTimeoutMode(pSchedHandles[index], &props, &requireReload)
-                       if (res == ${X}_RESULT_SUCCESS)
-                           if (requireReload)
-                               output("WARNING: Reload the driver to complete desired configuration.")
-                           else
-                               output("Schedule mode changed successfully.")
-                       else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
-                           output("ERROR: The timeout scheduler mode is not supported on this device.")
-                       else if(res == ${X}_RESULT_ERROR_INSUFFICIENT_PERMISSIONS)
-                           output("ERROR: Don't have permissions to change the scheduler mode.")
-                       else
-                           output("ERROR: Problem calling the API to change the scheduler mode.")
-                   else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
-                       output("ERROR: Scheduler modes are not supported on this device.")
-                   else
-                       output("ERROR: Problem calling the API.")
 
 Device reset
 ~~~~~~~~~~~~
@@ -1003,6 +860,158 @@ The following functions are provided to handle overclocking:
 Overclocking can be turned off by calling
 ${s}FrequencyOcSetConfig() with mode ${S}_OC_MODE_OFF and by
 calling ${s}FrequencyOcGetIccMax() and ${s}FrequencyOcSetTjMax() with values of 0.0.
+
+.. _Scheduler:
+
+Scheduler operations
+~~~~~~~~~~~~~~~~~~~~
+
+Scheduler components control how workloads are executed on accelerator
+engines and how to share the hardware resources when multiple workloads are
+submitted concurrently. This policy is referred to as a scheduler mode.
+
+The available scheduler operating modes are given by the enum
+${s}_sched_mode_t and summarized in the table below:
+
++-------------------------------------------------------------+-------------------------------------------+
+| Scheduler mode                                              | Description                               |
++=============================================================+===========================================+
+| ${S}_SCHED_MODE_TIMEOUT            | This mode is optimized for                |
+|                                                             | multiple applications or contexts         |
+|                                                             | submitting work to the hardware.          |
+|                                                             | When higher priority work                 |
+|                                                             | arrives, the scheduler attempts           |
+|                                                             | to pause the current executing            |
+|                                                             | work within some timeout                  |
+|                                                             | interval, then submits the other          |
+|                                                             | work. It is possible to configure         |
+|                                                             | (${s}_sched_timeout_properties_t)  |
+|                                                             | the watchdog timeout which                |
+|                                                             | controls the maximum time the             |
+|                                                             | scheduler will wait for a                 |
+|                                                             | workload to complete a batch of           |
+|                                                             | work or yield to other                    |
+|                                                             | applications before it is                 |
+|                                                             | terminated. If the watchdog               |
+|                                                             | timeout is set to                         |
+|                                                             | ${S}_SCHED_WATCHDOG_DISABLE, the           |
+|                                                             | scheduler enforces no fairness.           |
+|                                                             | This means that if there is other         |
+|                                                             | work to execute, the scheduler            |
+|                                                             | will try to submit it but will            |
+|                                                             | not terminate an executing                |
+|                                                             | process that does not complete            |
+|                                                             | quickly.                                  |
++-------------------------------------------------------------+-------------------------------------------+
+| ${S}_SCHED_MODE_TIMESLICE          | This mode is optimized to provide         |
+|                                                             | fair sharing of hardware                  |
+|                                                             | execution time between multiple           |
+|                                                             | contexts submitting work to the           |
+|                                                             | hardware concurrently. It is              |
+|                                                             | possible to configure                     |
+|                                                             | (${s}_sched_timeslice_properties_t)|
+|                                                             |                                           |
+|                                                             | the timeslice interval and the            |
+|                                                             | amount of time the scheduler will         |
+|                                                             | wait for work to yield to another         |
+|                                                             | application before it is                  |
+|                                                             | terminated.                               |
++-------------------------------------------------------------+-------------------------------------------+
+| ${S}_SCHED_MODE_EXCLUSIVE          | This mode is optimized for single         |
+|                                                             | application/context use-cases. It         |
+|                                                             | permits a context to run                  |
+|                                                             | indefinitely on the hardware              |
+|                                                             | without being preempted or                |
+|                                                             | terminated. All pending work for          |
+|                                                             | other contexts must wait until            |
+|                                                             | the running context completes             |
+|                                                             | with no further submitted work.           |
++-------------------------------------------------------------+-------------------------------------------+
+| ${S}_SCHED_MODE_COMPUTE_UNIT_DEBUG | This mode is optimized for                |
+|                                                             | application debug. It ensures             |
+|                                                             | that only one command queue can           |
+|                                                             | execute work on the hardware at a         |
+|                                                             | given time. Work is permitted to          |
+|                                                             | run as long as needed without             |
+|                                                             | enforcing any scheduler fairness          |
+|                                                             | policies.                                 |
++-------------------------------------------------------------+-------------------------------------------+
+
+A device can have multiple scheduler components. Each scheduler component controls
+the workload execution behavior on one or more accelerator engines
+(${s}_engine_type_t). The following functions are available for changing
+the scheduler mode for each scheduler component:
+
++--------------------------------------------------+-----------------------------------+
+| Function                                         | Description                       |
++==================================================+===================================+
+| ${s}DeviceEnumSchedulers()                | Get handles to each scheduler     |
+|                                                  | component.                        |
++--------------------------------------------------+-----------------------------------+
+| ${s}SchedulerGetProperties()              | Get properties of a scheduler     |
+|                                                  | component (sub-device, engines    |
+|                                                  | linked to this scheduler,         |
+|                                                  | supported scheduler modes.        |
++--------------------------------------------------+-----------------------------------+
+| ${s}SchedulerGetCurrentMode()             | Get the current scheduler mode    |
+|                                                  | (timeout, timeslice, exclusive,   |
+|                                                  | single command queue)             |
++--------------------------------------------------+-----------------------------------+
+| ${s}SchedulerGetTimeoutModeProperties()   | Get the settings for the timeout  |
+|                                                  | scheduler mode                    |
++--------------------------------------------------+-----------------------------------+
+| ${s}SchedulerGetTimesliceModeProperties() | Get the settings for the          |
+|                                                  | timeslice scheduler mode          |
++--------------------------------------------------+-----------------------------------+
+| ${s}SchedulerSetTimeoutMode()             | Change to timeout scheduler mode  |
+|                                                  | and/or change properties          |
++--------------------------------------------------+-----------------------------------+
+| ${s}SchedulerSetTimesliceMode()           | Change to timeslice scheduler     |
+|                                                  | mode and/or change properties     |
++--------------------------------------------------+-----------------------------------+
+| ${s}SchedulerSetExclusiveMode()           | Change to exclusive scheduler     |
+|                                                  | mode and/or change properties     |
++--------------------------------------------------+-----------------------------------+
+| ${s}SchedulerSetComputeUnitDebugMode()    | Change to compute unit debug      |
+|                                                  | scheduler mode and/or change      |
+|                                                  | properties                        |
++--------------------------------------------------+-----------------------------------+
+
+The pseudo code below shows how to stop the scheduler enforcing fairness
+while permitting other work to attempt to run:
+
+.. parsed-literal::
+
+   function DisableSchedulerWatchdog(${s}_device_handle_t hSysmanDevice)
+       uint32_t numSched
+       if ((${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, NULL) == ${X}_RESULT_SUCCESS))
+           ${s}_sched_handle_t* pSchedHandles =
+               allocate_memory(numSched * sizeof(${s}_sched_handle_t))
+           if (${s}DeviceEnumSchedulers(hSysmanDevice, &numSched, pSchedHandles) == ${X}_RESULT_SUCCESS)
+               for (index = 0 .. numSched-1)
+                   ${x}_result_t res
+                   ${s}_sched_mode_t currentMode
+                   res = ${s}SchedulerGetCurrentMode(pSchedHandles[index], &currentMode)
+                   if (res == ${X}_RESULT_SUCCESS)
+                       ${x}_bool_t requireReload
+                       ${s}_sched_timeout_properties_t props
+                       props.watchdogTimeout = ${S}_SCHED_WATCHDOG_DISABLE
+                       res = ${s}SchedulerSetTimeoutMode(pSchedHandles[index], &props, &requireReload)
+                       if (res == ${X}_RESULT_SUCCESS)
+                           if (requireReload)
+                               output("WARNING: Reload the driver to complete desired configuration.")
+                           else
+                               output("Schedule mode changed successfully.")
+                       else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
+                           output("ERROR: The timeout scheduler mode is not supported on this device.")
+                       else if(res == ${X}_RESULT_ERROR_INSUFFICIENT_PERMISSIONS)
+                           output("ERROR: Don't have permissions to change the scheduler mode.")
+                       else
+                           output("ERROR: Problem calling the API to change the scheduler mode.")
+                   else if(res == ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE)
+                       output("ERROR: Scheduler modes are not supported on this device.")
+                   else
+                       output("ERROR: Problem calling the API.")
 
 .. _Performance-Factor:
 
