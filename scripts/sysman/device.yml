@@ -347,9 +347,9 @@ members:
       name: "timestamp"
       desc: |
             [out] Monotonic timestamp counter in microseconds when the measurement was made.
-            No assumption should be made about the absolute value of the timestamp.
-            It should only be used to calculate delta time between two snapshots of the same structure.
-            Never take the delta of this timestamp with the timestamp from a different structure.
+            This timestamp should only be used to calculate delta time between snapshots of this structure.
+            Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base.
+            The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
     - type: uint64_t
       name: "replayCounter"
       desc: "[out] Monotonic counter for the number of replay packets"

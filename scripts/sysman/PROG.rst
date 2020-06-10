@@ -410,6 +410,29 @@ The following events are provided:
 The full list of available functions for handling events is described
 `below <#evd>`__.
 
+Telemetry and timestamps
+------------------------
+
+Many of the API calls return underlying hardware telemetry (counters).
+These counters are typically monotonic and wrap around at the their
+bit width boundaires. An application will typically want to take the
+delta between two samples. Many times, the rate of change of a counter
+is required. For example, sampling a counter for bytes transmitted through
+a link and dividing by the delta time between the samples will yield
+average bandwidth.
+
+When returning telemetry, the API will include a timestamp when the
+underlying hardware counter was sampled. Each timestamp is only relevant
+to the telemetry that it accompanies. Each timestamp associated with
+a piece of telemetry can have it's own absolute base that can be
+different from timestamps return with other telemetry. As a result,
+no calculation should be made based on timestamps returned from
+different telemetry.
+
+The timestamps are not guaranteed to have the same base between
+applications. They should only be used within the execution of a single
+application.
+
 Interface details
 =================
 
