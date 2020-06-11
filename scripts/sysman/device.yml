@@ -180,7 +180,7 @@ desc: "Get information about host processes using the device"
 class: $sDevice
 name: ProcessesGetState
 details:
-    - "The number of processes connected to the device is dynamic. This means that between a call to determine the correct value of pCount and the subsequent call, the number of processes may have increased. It is recommended that a large array be passed in so as to avoid receiving the error $X_RESULT_ERROR_INVALID_SIZE."
+    - "The number of processes connected to the device is dynamic. This means that between a call to determine the value of pCount and the subsequent call, the number of processes may have increased or decreased. It is recommended that a large array be passed in so as to avoid receiving the error $X_RESULT_ERROR_INVALID_SIZE. Also, always check the returned value in pCount since it may be less than the earlier call to get the required array size."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
