@@ -180,7 +180,7 @@ etors:
       value: "0x70010000"
       desc: "[Sysman] access denied due to permission level"
     - name: ERROR_NOT_AVAILABLE
-      desc: "[Sysman] resource already in use and simultaneous access not allowed"
+      desc: "[Sysman] resource already in use and simultaneous access not allowed or resource was removed"
     - name: ERROR_DEPENDENCY_UNAVAILABLE
       value: "0x70020000"
       desc: "[Tools] external required dependency is unavailable or missing"
