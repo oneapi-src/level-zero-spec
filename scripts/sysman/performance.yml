@@ -21,9 +21,9 @@ members:
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
-    - type: uint64_t
+    - type: $s_engine_type_flags_t
       name: "engines"
-      desc: "[out] Bitfield of accelerator engines that are affected by this Performance Factor (bitfield of 1<<$s_engine_type_t)."
+      desc: "[out] Bitfield of accelerator engine types that are affected by this Performance Factor."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handles to accelerator domains whose performance can be optimized via a Performance Factor"

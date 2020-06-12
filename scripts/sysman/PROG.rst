@@ -962,7 +962,7 @@ ${s}_sched_mode_t and summarized in the table below:
 
 A device can have multiple scheduler components. Each scheduler component controls
 the workload execution behavior on one or more accelerator engines
-(${s}_engine_type_t). The following functions are available for changing
+(${s}_engine_type_flags_t). The following functions are available for changing
 the scheduler mode for each scheduler component:
 
 +--------------------------------------------------+-----------------------------------+

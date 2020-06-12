@@ -18,10 +18,9 @@ value: "64"
 type: enum
 desc: "Types of accelerator engines"
 class: $sDevice
-name: $s_engine_type_t
+name: $s_engine_type_flags_t
 etors:
     - name: OTHER
-      value: "0"
       desc: "Undefined types of accelerators."
     - name: COMPUTE
       desc: "Engines that process compute kernels."
@@ -171,9 +170,9 @@ members:
     - type: uint64_t
       name: "sharedSize"
       desc: "[out] The size of shared device memory mapped into this process (may not necessarily be resident on the device at the time of reading)."
-    - type: uint64_t
+    - type: $s_engine_type_flags_t
       name: "engines"
-      desc: "[out] Bitfield of accelerator engines being used by this process (or 1<<$s_engine_type_t together)."
+      desc: "[out] Bitfield of accelerator engine types being used by this process."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get information about host processes using the device"

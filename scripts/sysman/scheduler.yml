@@ -39,9 +39,9 @@ members:
     - type: $x_bool_t
       name: "canControl"
       desc: "[out] Software can change the scheduler component configuration assuming the user has permissions."
-    - type: uint64_t
+    - type: $s_engine_type_flags_t
       name: "engines"
-      desc: "[out] Bitfield of accelerator engines that are controlled by this scheduler component (bitfield of 1<<$s_engine_type_t)."
+      desc: "[out] Bitfield of accelerator engine types that are controlled by this scheduler component."
     - type: uint32_t
       name: "supportedModes"
       desc: "[out] Bitfield of scheduler modes that can be configured for this scheduler component (bitfield of 1<<$s_sched_mode_t)."
