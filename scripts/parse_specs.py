@@ -436,21 +436,20 @@ def _generate_meta(d, ordinal, meta):
     if 'class' not in meta:
         meta['class'] = {}
 
-    if 'class' in d:
-        c = d['class']
-
+    cls = d.get('class')
+    if cls:
         # create dict if class name is not already known...
-        if c not in meta['class']:
-            meta['class'][c] = {}
-            meta['class'][c]['ordinal'] = 0
+        if cls not in meta['class']:
+            meta['class'][cls] = {}
+            meta['class'][cls]['ordinal'] = 0
 
         # create list if object-type is not already known for class...
-        if type not in meta['class'][c]:
-            meta['class'][c][type] = []
+        if type not in meta['class'][cls]:
+            meta['class'][cls][type] = []
 
         # append if object-name is not already known for object-type in class...
-        if name not in meta['class'][c][type]:
-            meta['class'][c][type].append(name)
+        if name not in meta['class'][cls][type]:
+            meta['class'][cls][type].append(name)
 
         else:
             print("Error - duplicate entries for %s found!"%name)
@@ -458,18 +457,19 @@ def _generate_meta(d, ordinal, meta):
 
     if 'class' != type:
         # create list if name is not already known for type...
-        if 'function' == type and 'class' in d:
-            name = d['class']+name
+        if 'function' == type and cls:
+            name = cls+name
 
         if name not in meta[type]:
-            meta[type][name] = {'types': [], 'names': [], 'desc': [], 'init': [], 'class': ""}
+            meta[type][name] = {'class': ""}
 
         # add values to list
         if 'enum' == type:
             value = -1
             max_value = -1
+            meta[type][name]['etors'] = []
             for idx, etor in enumerate(d['etors']):
-                meta[type][name]['types'].append(etor['name'])
+                meta[type][name]['etors'].append(etor['name'])
                 value = _get_etor_value(etor.get('value'), value)
                 if value > max_value:
                     max_value = value
@@ -480,25 +480,32 @@ def _generate_meta(d, ordinal, meta):
                 meta[type][name]['max'] = d['etors'][idx]['name']
 
         elif 'macro' == type:
+            meta[type][name]['values'] = []
             if 'value' in d:
-                meta[type][name]['types'].append(d['value'])
+                meta[type][name]['values'].append(d['value'])
 
             if 'altvalue' in d:
-                meta[type][name]['types'].append(d['altvalue'])
+                meta[type][name]['values'].append(d['altvalue'])
 
         elif 'function' == type:
+            meta[type][name]['params'] = []
             for p in d['params']:
-                meta[type][name]['types'].append(p['type'])
+                meta[type][name]['params'].append({
+                    'type':p['type']
+                    })
 
         elif 'struct' == type or 'union' == type:
+            meta[type][name]['members'] = []
             for m in d['members']:
-                meta[type][name]['types'].append(m['type'])
-                meta[type][name]['names'].append(m['name'])
-                meta[type][name]['desc'].append(m['desc'])
-                meta[type][name]['init'].append(m.get('init'))
+                meta[type][name]['members'].append({
+                    'type': m['type'],
+                    'name': m['name'],
+                    'desc': m['desc'],
+                    'init': m.get('init')
+                    })
 
-        if 'class' in d:
-            meta[type][name]['class'] = d['class']
+        if cls:
+            meta[type][name]['class'] = cls
 
     else:
         if name not in meta['class']:
@@ -506,12 +513,18 @@ def _generate_meta(d, ordinal, meta):
 
         meta['class'][name]['ordinal'] = ordinal
 
-        if'base' in d:
+        if 'base' in d:
             base = d['base']
             if 'child' not in meta['class'][base]:
                 meta['class'][base]['child'] = []
 
             meta['class'][base]['child'].append(name)
+
+            if 'handle' not in meta['class'][name]:
+                meta['class'][name]['handle'] = []
+
+            if name[:2] == base[:2]:
+                meta['class'][name]['handle'].extend(meta['class'][base]['handle'])
 
         if 'members' in d:
             meta['class'][name]['members'] = []
@@ -558,16 +571,7 @@ def _inline_base(obj, meta):
     if re.match(r"struct|union", obj['type']):
         base = obj.get('base')
         if base in meta['struct']:
-            for i in range(len(meta['struct'][base]['types'])):
-                m = {
-                    'type': meta['struct'][base]['types'][i],
-                    'name': meta['struct'][base]['names'][i],
-                    'desc': meta['struct'][base]['desc'][i]
-                    }
-
-                if meta['struct'][base]['init'][i]:
-                    m['init'] = meta['struct'][base]['init'][i]
-
+            for i, m in enumerate(meta['struct'][base]['members']):
                 if m['name'] == "stype":
                     m['init'] = re.sub(r"(\$[a-z]+)(\w+)_t", r"\1_STRUCTURE_TYPE\2", obj['name']).upper()
 
@@ -610,23 +614,23 @@ def _generate_returns(obj, meta):
 
                 if type_traits.is_descriptor(item['type']):
                     # walk each entry in the desc for pointers and enums
-                    for i, mtype in enumerate(meta['struct'][typename]['types']):
-                        mtypename = type_traits.base(mtype)
+                    for i, m in enumerate(meta['struct'][typename]['members']):
+                        mtypename = type_traits.base(m['type'])
 
-                        if type_traits.is_pointer(mtype) and not param_traits.is_optional({'desc': meta['struct'][typename]['desc'][i]}):
-                            _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s->%s`"%(item['name'], meta['struct'][typename]['names'][i]))
+                        if type_traits.is_pointer(m['type']) and not param_traits.is_optional({'desc': m['desc']}):
+                            _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s->%s`"%(item['name'], m['name']))
 
-                        elif type_traits.is_enum(mtype, meta):
-                            if re.match(r"stype", meta['struct'][typename]['names'][i]):
+                        elif type_traits.is_enum(m['type'], meta):
+                            if re.match(r"stype", m['name']):
                                 _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
                             else:
-                                _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], meta['struct'][typename]['names'][i]))
+                                _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], m['name']))
 
                 elif type_traits.is_properties(item['type']):
                     # walk each entry in the properties
-                    for i, mtype in enumerate(meta['struct'][typename]['types']):
-                        if type_traits.is_enum(mtype, meta):
-                            if re.match(r"stype", meta['struct'][typename]['names'][i]):
+                    for i, m in enumerate(meta['struct'][typename]['members']):
+                        if type_traits.is_enum(m['type'], meta):
+                            if re.match(r"stype", m['name']):
                                 _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
 
         # finally, append all user entries

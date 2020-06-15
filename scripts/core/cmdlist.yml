@@ -8,7 +8,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero APIs for Command List"
-ordinal: "4"
+ordinal: "5"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command list creation flags"
@@ -49,16 +49,17 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a command list on the device for submitting commands to any command queue."
+desc: "Creates a command list on the active context."
 class: $xCommandList
 name: Create
 decl: static
 ordinal: "0"
 details:
-    - "The command list can only be used on the device on which it was created."
+    - "A command list represents a sequence of commands for execution on a command queue."
+    - "The command list can only be used on the device for which it was created."
     - "The command list is created in the 'open' state."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -74,16 +75,18 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a command list on the device with an implicit command queue for immediate submission of commands."
+desc: "Creates an immediate command list on the active context."
 class: $xCommandList
 name: CreateImmediate
 decl: static
 ordinal: "0"
 details:
-    - "The command list can only be used on the device on which it was created."
+    - "An immediate command list is used for low-latency submission of commands."
+    - "An immediate command list creates an implicit command queue."
+    - "The command list can only be used on the device for which it was created."
     - "The command list is created in the 'open' state and never needs to be closed."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -105,10 +108,11 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must ensure the device is not currently referencing the command list before it is deleted"
+    - "The application must call this function using the same active context on which the command list was created."
+    - "The application must ensure the device is not currently referencing the command list before it is deleted."
     - "The implementation of this function may immediately free all Host and Device allocations associated with this command list."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList

@@ -1,0 +1,189 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs for Context"
+ordinal: "3"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates a context for the driver."
+class: $xContext
+name: Create
+decl: static
+ordinal: "0"
+details:
+    - "The context can only be used on the driver on which it was created."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver object"
+    - type: $x_context_handle_t*
+      name: phContext
+      desc: "[out] pointer to handle of context object created"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys a context."
+class: $xContext
+name: Destroy
+decl: static
+ordinal: "0"
+details:
+    - "The application is responsible for ensuring the context is not pushed on any driver's thread-local stacks."
+    - "The application must ensure the device is not currently referencing the context before it is deleted."
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this context."
+    - "The application must **not** call this function from simultaneous threads with the same context handle."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in][release] handle of context object to destroy"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns current status of the context."
+class: $xContext
+name: GetStatus
+details:
+    - "The application may call this function from simultaneous threads with the same context handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
+returns:
+    - $X_RESULT_SUCCESS:
+        - "Context is available for use."
+    - $X_RESULT_ERROR_DEVICE_LOST:
+        - "Context is invalid, due to device lost or reset and must be reset for use."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Push and activate a context."
+class: $xContext
+name: Push
+decl: static
+details:
+    - "Pushes the context onto the driver's thread-local stack."
+    - "The context is made active on the current Host thread."
+    - "The application may call this function from simultaneous threads with the same driver handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver object"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object to push"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Pop a context."
+class: $xContext
+name: Pop
+decl: static
+details:
+    - "Pops the context off top of the driver's thread-local stack."
+    - "The previous context on the stack is made active on the current Host thread."
+    - "If there is no previous context on the stack, then the driver's default context will be made active."
+    - "If the driver's thread-local stack is empty, then has no effect."
+    - "The application may call this function from simultaneous threads with the same driver handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the current context."
+class: $xContext
+name: Top
+decl: static
+details:
+    - "Gets the context on the top of the driver's thread-local stack."
+    - "If the driver's thread-local stack is empty, then the driver's default context will be returned."
+    - "This function does not affect the current active context."
+    - "The application may call this function from simultaneous threads with the same driver handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver object"
+    - type: $x_context_handle_t*
+      name: phContext
+      desc: "[out] pointer to handle of context object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for context"
+name: $xContext
+owner: $xDriver
+members:
+    - type: $x_context_handle_t
+      name: handle
+      desc: "[in] handle of context object"
+    - type: $xDriver*
+      name: pDriver
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the driver's default context."
+class: $xDefaultContext
+name: Get
+decl: static
+ordinal: "0"
+details:
+    - "This function does not affect the current active context."
+    - "The application may call this function from simultaneous threads with the same driver handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver object"
+    - type: $x_context_handle_t*
+      name: phContext
+      desc: "[out] pointer to handle of context object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Releases the default context."
+class: $xDefaultContext
+name: Release
+decl: static
+ordinal: "0"
+details:
+    - "This function will free all memory allocations and destroy all objects on the default context; including other contexts."
+    - "After calling this function, all functions will return $X_RESULT_ERROR_UNINITIALIZED until/unless $xInit is called."
+    - "The application must **not** call this function from simultaneous threads with the same context handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Resets the default context to initial state."
+class: $xDefaultContext
+name: Reset
+decl: static
+details:
+    - "This function will free all memory allocations and destroy all objects on the default context; including other contexts."
+    - "If any device associated with the driver is lost, then the default context may be reset."
+    - "The application must **not** call this function from simultaneous threads with the same context handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for default context"
+name: $xDefaultContext
+base: $xContext
+attribute: singleton

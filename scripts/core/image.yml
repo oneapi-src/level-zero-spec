@@ -256,7 +256,7 @@ params:
       desc: "[out] pointer to image properties"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates an image object on the device."
+desc: "Creates an image on the active context."
 class: $xImage
 name: Create
 decl: static
@@ -264,10 +264,10 @@ ordinal: "0"
 analogue:
     - clCreateImage
 details:
-    - "The image is only visible to the device on which it was created."
+    - "The image is only visible to the device for which it was created."
     - "The image can be copied to another device using the ::$xCommandListAppendImageCopy functions."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -290,10 +290,11 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must ensure the device is not currently referencing the image before it is deleted"
-    - "The implementation of this function may immediately free all Host and Device allocations associated with this image"
+    - "The application must call this function using the same active context on which the image was created."
+    - "The application must ensure the device is not currently referencing the image before it is deleted."
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this image."
     - "The application must **not** call this function from simultaneous threads with the same image handle."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_image_handle_t
       name: hImage

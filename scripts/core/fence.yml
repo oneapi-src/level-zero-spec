@@ -31,7 +31,7 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a fence object on the device's command queue."
+desc: "Creates a fence on the active context."
 class: $xFence
 name: Create
 decl: static
@@ -39,8 +39,9 @@ ordinal: "0"
 analogue:
     - "**vkCreateFence**"
 details:
+    - "A fence is a heavyweight synchronization primitive used to communicate to the host that command list execution has completed."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
@@ -62,10 +63,11 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must ensure the device is not currently referencing the fence before it is deleted"
-    - "The implementation of this function may immediately free all Host and Device allocations associated with this fence"
+    - "The application must call this function using the same active context on which the fence was created."
+    - "The application must ensure the device is not currently referencing the fence before it is deleted."
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this fence."
     - "The application must **not** call this function from simultaneous threads with the same fence handle."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 analogue:
     - "**vkDestroyFence**"
 params:

@@ -62,14 +62,14 @@ members:
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates module object from an input IL or native binary."
+desc: "Creates a module on the active context."
 class: $xModule
 name: Create
 decl: static
 ordinal: "0"
 details:
     - "Compiles the module for execution on the device."
-    - "The module can only be used on the device on which it was created."
+    - "The module can only be used on the device for which it was created."
     - "The module can be copied to other devices within the same driver instance by using $xModuleGetNativeBinary."
     - "The following build options are supported:":
         - "\"-$x-opt-disable\" - Disable optimizations"
@@ -78,7 +78,7 @@ details:
     - "A build log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
     - "The module descriptor constants are only supported for SPIR-V specialization constants."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -107,11 +107,12 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must destroy all kernel and build log handles created from the module before destroying the module itself"
-    - "The application must ensure the device is not currently referencing the module before it is deleted"
-    - "The implementation of this function may immediately free all Host and Device allocations associated with this module"
+    - "The application must call this function using the same active context on which the module was created."
+    - "The application must destroy all kernel and build log handles created from the module before destroying the module itself."
+    - "The application must ensure the device is not currently referencing the module before it is deleted."
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this module."
     - "The application must **not** call this function from simultaneous threads with the same module handle."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: "$x_module_handle_t"
       name: hModule
@@ -158,7 +159,8 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The implementation of this function may immediately free all Host allocations associated with this object"
+    - "The application must call this function using the same active context on which the build log was created."
+    - "The implementation of this function may immediately free all Host allocations associated with this object."
     - "The application must **not** call this function from simultaneous threads with the same build log handle."
     - "The implementation of this function should be lock-free."
     - "This function can be called before or after $xModuleDestroy for the associated module."
@@ -284,7 +286,7 @@ members:
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Create a kernel object from a module by name"
+desc: "Create a kernel on the active context."
 class: $xKernel
 name: Create
 decl: static
@@ -292,7 +294,7 @@ ordinal: "0"
 details:
     - "Modules that have unresolved imports need to be dynamically linked before a kernel can be created from them. (See $xModuleDynamicLink)"
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: "$x_module_handle_t"
       name: hModule
@@ -316,10 +318,11 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must ensure the device is not currently referencing the kernel before it is deleted"
-    - "The implementation of this function may immediately free all Host and Device allocations associated with this kernel"
+    - "The application must call this function using the same active context on which the kernel was created."
+    - "The application must ensure the device is not currently referencing the kernel before it is deleted."
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this kernel."
     - "The application must **not** call this function from simultaneous threads with the same kernel handle."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
@@ -350,13 +353,14 @@ returns:
     - $X_RESULT_ERROR_INVALID_FUNCTION_NAME
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set group size for a kernel"
+desc: "Set group size for a kernel on the current Host thread."
 class: $xKernel
 name: SetGroupSize
 details:
-    - "The application must **not** call this function from simultaneous threads with the same kernel handle."
+    - "The implementation will maintain the group size in thread-local storage."
+    - "The group size will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
+    - "The application may call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
-    - "The implementation will copy the group size information into a command list when the function is appended."
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
@@ -422,13 +426,14 @@ params:
       desc: "[out] recommended total group count."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set kernel argument used on kernel launch."
+desc: "Set kernel argument for a kernel on the current Host thread."
 class: $xKernel
 name: SetArgumentValue
 details:
-    - "This function may **not** be called from simultaneous threads with the same function handle."
+    - "The implementation will maintain the argument values in thread-local storage."
+    - "The argument values will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
+    - "The application may call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
-    - "The implementation will copy the arguments into a command list when the function is appended."
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
@@ -514,12 +519,15 @@ returns:
     - $X_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Sets the preferred Intermediate cache configuration for a kernel."
+desc: "Sets the preferred intermediate cache configuration for a kernel on the current Host thread."
 class: $xKernel
 name: SetIntermediateCacheConfig
 ordinal: "2"
 details:
-    - "The application must **not** call this function from simultaneous threads with the same kernel handle."
+    - "The implementation will maintain the intermediate cache configuration in thread-local storage."
+    - "The intermediate cache configuration will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
+    - "The application may call this function from simultaneous threads with the same kernel handle."
+    - "The implementation of this function should be lock-free."
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel

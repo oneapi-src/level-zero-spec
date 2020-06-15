@@ -49,6 +49,7 @@ analogue:
     - clGetPlatformIDs
 details:
     - "A driver represents a collection of physical devices."
+    - "Multiple calls to this function will return identical driver handles, in the same order."
     - "The application may pass nullptr for pDrivers when only querying the number of drivers."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

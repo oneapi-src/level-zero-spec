@@ -60,7 +60,7 @@ def removePath(path):
     removes all files in list
 """
 def removeFile(lst):
-    for f in lst:
+    for f in lst or []:
         try:
             os.remove(f)
         except:

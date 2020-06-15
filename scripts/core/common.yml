@@ -74,6 +74,11 @@ class: $xDevice
 name: "$x_device_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of driver's context object"
+class: $xContext
+name: "$x_context_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of driver's command queue object"
 class: $xCommandQueue
 name: "$x_command_queue_handle_t"

@@ -17,6 +17,7 @@ name: Get
 decl: static
 ordinal: "0"
 details:
+    - "Multiple calls to this function will return identical device handles, in the same order."
     - "The number and order of handles returned from this function is affected by the $X_AFFINITY_MASK and $X_ENABLE_PCI_ID_DEVICE_ORDER environment variables."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -43,6 +44,7 @@ ordinal: "1"
 analogue:
     - clCreateSubDevices
 details:
+    - "Multiple calls to this function will return identical device handles, in the same order."
     - "The number of handles returned from this function is affected by the $X_AFFINITY_MASK environment variable."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -388,6 +390,8 @@ analogue:
     - "**vkGetPhysicalDeviceQueueFamilyProperties**"
 details:
     - "Properties are reported for each physical command queue type supported by the device."
+    - "Multiple calls to this function will return properties in the same order."
+    - "The order in which the properties are returned defines the command queue group's ordinal."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -430,6 +434,8 @@ analogue:
     - clGetDeviceInfo
 details:
     - "Properties are reported for each physical memory type supported by the device."
+    - "Multiple calls to this function will return properties in the same order."
+    - "The order in which the properties are returned defines the device's local memory ordinal."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

@@ -39,14 +39,15 @@ members:
       desc: "[in] number of events within the pool; must be greater than 0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a pool for a set of event(s) for the driver"
+desc: "Creates a pool of events on the active context."
 class: $xEventPool
 name: Create
 decl: static
 ordinal: "0"
 details:
+    - "Events within the pool can only be used on the device(s) for which it was created."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_driver_handle_t
       name: hDriver
@@ -79,11 +80,12 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must destroy all event handles created from the pool before destroying the pool itself"
-    - "The application must ensure the device is not currently referencing the any event within the pool before it is deleted"
-    - "The implementation of this function may immediately free all Host and Device allocations associated with this event pool"
+    - "The application must call this function using the same active context on which the pool was created."
+    - "The application must destroy all event handles created from the pool before destroying the pool itself."
+    - "The application must ensure the device is not currently referencing the any event within the pool before it is deleted."
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this event pool."
     - "The application must **not** call this function from simultaneous threads with the same event pool handle."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_event_pool_handle_t
       name: hEventPool
@@ -131,7 +133,7 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates an event on the device."
+desc: "Creates an event on the active context."
 class: $xEvent
 name: Create
 decl: static
@@ -140,6 +142,7 @@ analogue:
     - "**clCreateUserEvent**"
     - vkCreateEvent
 details:
+    - "An event is used to communicate fine-grain host-to-device, device-to-host or device-to-device dependencies have completed."
     - "Multiple events cannot be created using the same location within the same pool."
     - "The application must **not** call this function from simultaneous threads with the same event pool handle."
     - "The implementation of this function should be lock-free."
@@ -163,8 +166,9 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must ensure the device is not currently referencing the event before it is deleted"
-    - "The implementation of this function may immediately free all Host and Device allocations associated with this event"
+    - "The application must call this function using the same active context on which the event was created."
+    - "The application must ensure the device is not currently referencing the event before it is deleted."
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this event."
     - "The application must **not** call this function from simultaneous threads with the same event handle."
     - "The implementation of this function should be lock-free."
 analogue:
