@@ -68,6 +68,7 @@ type: struct
 desc: "Memory state - health, allocated"
 class: $sMemory
 name: $s_mem_state_t
+base: $s_base_state_t
 details:
     - "Percent allocation is given by 100 * allocatedSize / maxSize."
     - "Percent free is given by 100 * (maxSize - allocatedSize) / maxSize."

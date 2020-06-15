@@ -87,6 +87,7 @@ type: struct
 desc: "Frequency state"
 class: $sFrequency
 name: $s_freq_state_t
+base: $s_base_state_t
 members:
     - type: double
       name: "request"
@@ -141,6 +142,7 @@ type: struct
 desc: "Overclocking properties"
 class: $sFrequency
 name: $s_oc_capabilities_t
+base: $s_base_capability_t
 details:
     - "Provides all the overclocking capabilities and properties supported by the device for the frequency domain."
 members:
@@ -182,6 +184,7 @@ type: struct
 desc: "Overclocking configuration"
 class: $sFrequency
 name: $s_oc_config_t
+base: $s_base_config_t
 details:
     - "Overclock settings"
 members:

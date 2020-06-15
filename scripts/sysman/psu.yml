@@ -45,6 +45,7 @@ type: struct
 desc: "Dynamic state of the power supply"
 class: $sPsu
 name: $s_psu_state_t
+base: $s_base_state_t
 members:
     - type: $s_psu_voltage_status_t
       name: "voltStatus"

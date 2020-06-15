@@ -58,6 +58,7 @@ type: struct
 desc: "Device state"
 class: $sDevice
 name: $s_device_state_t
+base: $s_base_state_t
 members:
     - type: $s_reset_reason_flags_t
       name: reset
@@ -158,6 +159,7 @@ type: struct
 desc: "Contains information about a process that has an open connection with this device"
 class: $sDevice
 name: $s_process_state_t
+base: $s_base_state_t
 details:
     - "The application can use the process ID to query the OS for the owner and the path to the executable."
 members:
@@ -282,6 +284,7 @@ type: struct
 desc: "Dynamic PCI state"
 class: $sDevice
 name: $s_pci_state_t
+base: $s_base_state_t
 members:
     - type: $s_pci_link_status_t
       name: "status"

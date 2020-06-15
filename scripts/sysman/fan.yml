@@ -79,6 +79,7 @@ type: struct
 desc: "Fan configuration"
 class: $sFan
 name: $s_fan_config_t
+base: $s_base_config_t
 members:
     - type: $s_fan_speed_mode_t
       name: "mode"

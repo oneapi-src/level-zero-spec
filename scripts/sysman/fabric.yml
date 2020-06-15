@@ -124,6 +124,7 @@ type: struct
 desc: "Fabric port configuration"
 class: $sFabricPort
 name: $s_fabric_port_config_t
+base: $s_base_config_t
 members:
     - type: $x_bool_t
       name: "enabled"
@@ -136,6 +137,7 @@ type: struct
 desc: "Fabric port state"
 class: $sFabricPort
 name: $s_fabric_port_state_t
+base: $s_base_state_t
 members:
     - type: $s_fabric_port_status_t
       name: "status"

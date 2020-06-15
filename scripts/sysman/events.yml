@@ -47,6 +47,7 @@ type: struct
 desc: "Event configuration for a device"
 class: $sEvent
 name: $s_event_config_t
+base: $s_base_config_t
 members:
     - type: $s_event_type_flags_t
       name: "registered"

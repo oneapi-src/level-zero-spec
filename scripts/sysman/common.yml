@@ -147,6 +147,40 @@ etors:
       desc: $s_standby_properties_t
     - name: TEMP_PROPERTIES
       desc: $s_temp_properties_t
+    - name: DEVICE_STATE
+      desc: $s_device_state_t
+    - name: PROCESS_STATE
+      desc: $s_process_state_t
+    - name: PCI_STATE
+      desc: $s_pci_state_t
+    - name: EVENT_CONFIG
+      desc: $s_event_config_t
+    - name: FABRIC_PORT_CONFIG
+      desc: $s_fabric_port_config_t
+    - name: FABRIC_PORT_STATE
+      desc: $s_fabric_port_state_t
+    - name: FAN_CONFIG
+      desc: $s_fan_config_t
+    - name: FREQ_STATE
+      desc: $s_freq_state_t
+    - name: OC_CAPABILITIES
+      desc: $s_oc_capabilities_t
+    - name: OC_CONFIG
+      desc: $s_oc_config_t
+    - name: LED_STATE
+      desc: $s_led_state_t
+    - name: MEM_STATE
+      desc: $s_mem_state_t
+    - name: PSU_STATE
+      desc: $s_psu_state_t
+    - name: BASE_STATE
+      desc: $s_base_state_t
+    - name: RAS_CONFIG
+      desc: $s_ras_config_t
+    - name: RAS_STATE
+      desc: $s_ras_state_t
+    - name: TEMP_CONFIG
+      desc: $s_temp_config_t
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
@@ -163,6 +197,42 @@ members:
 type: struct
 desc: "Base for all descriptor types"
 name: $s_base_desc_t
+members:
+    - type: $s_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all state types"
+name: $s_base_state_t
+members:
+    - type: $s_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all config types"
+name: $s_base_config_t
+members:
+    - type: $s_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] pointer to extension-specific structure"
+      init: nullptr
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all capability types"
+name: $s_base_capability_t
 members:
     - type: $s_structure_type_t
       name: stype

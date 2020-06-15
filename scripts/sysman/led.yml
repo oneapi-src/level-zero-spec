@@ -32,6 +32,7 @@ type: struct
 desc: "LED state"
 class: $sLed
 name: $s_led_state_t
+base: $s_base_state_t
 members:
     - type: $x_bool_t
       name: isOn

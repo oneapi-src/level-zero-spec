@@ -66,6 +66,7 @@ type: struct
 desc: "Temperature configuration - which events should be triggered and the trigger conditions."
 class: $sTemperature
 name: $s_temp_config_t
+base: $s_base_config_t
 members:
     - type: $x_bool_t
       name: "enableCritical"
