@@ -232,7 +232,7 @@ members:
       desc: "[out] The number of lanes"
     - type: uint64_t
       name: "maxBandwidth"
-      desc: "[out] The maximum bandwidth in bytes/sec"
+      desc: "[out] The maximum bandwidth in bytes/sec (sum of all lanes)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Static PCI properties"
@@ -245,7 +245,7 @@ members:
       desc: "[out] The BDF address"
     - type: $s_pci_speed_t
       name: "maxSpeed"
-      desc: "[out] Fastest port configuration supported by the device."
+      desc: "[out] Fastest port configuration supported by the device (sum of all lanes)"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI link status"
@@ -351,19 +351,19 @@ members:
             The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
     - type: uint64_t
       name: "replayCounter"
-      desc: "[out] Monotonic counter for the number of replay packets"
+      desc: "[out] Monotonic counter for the number of replay packets (sum of all lanes)"
     - type: uint64_t
       name: "packetCounter"
-      desc: "[out] Monotonic counter for the number of packets"
+      desc: "[out] Monotonic counter for the number of packets (sum of all lanes)"
     - type: uint64_t
       name: "rxCounter"
-      desc: "[out] Monotonic counter for the number of bytes received"
+      desc: "[out] Monotonic counter for the number of bytes received (sum of all lanes)"
     - type: uint64_t
       name: "txCounter"
-      desc: "[out] Monotonic counter for the number of bytes transmitted (including replays)"
+      desc: "[out] Monotonic counter for the number of bytes transmitted (including replays) (sum of all lanes)"
     - type: $s_pci_speed_t
       name: "speed"
-      desc: "[out] The current speed of the link"
+      desc: "[out] The current speed of the link (sum of all lanes)"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get PCI properties - address, max speed"

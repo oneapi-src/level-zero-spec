@@ -106,10 +106,10 @@ members:
       desc: "[out] The unique port identifier"
     - type: $s_fabric_port_speed_t
       name: "maxRxSpeed"
-      desc: "[out] Maximum speed supported by the receive side of the port"
+      desc: "[out] Maximum speed supported by the receive side of the port (sum of all lanes)"
     - type: $s_fabric_port_speed_t
       name: "maxTxSpeed"
-      desc: "[out] Maximum speed supported by the transmit side of the port"
+      desc: "[out] Maximum speed supported by the transmit side of the port (sum of all lanes)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Provides information about the fabric link attached to a port"
@@ -157,10 +157,10 @@ members:
       desc: "[out] The unique port identifier for the remote connection point"
     - type: $s_fabric_port_speed_t
       name: "rxSpeed"
-      desc: "[out] Current maximum receive speed"
+      desc: "[out] Current maximum receive speed (sum of all lanes)"
     - type: $s_fabric_port_speed_t
       name: "txSpeed"
-      desc: "[out] Current maximum transmit speed"
+      desc: "[out] Current maximum transmit speed (sum of all lanes)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port throughput."
@@ -176,10 +176,10 @@ members:
             The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
     - type: uint64_t
       name: "rxCounter"
-      desc: "[out] Monotonic counter for the number of bytes received. This includes all protocol overhead, not only the GPU traffic."
+      desc: "[out] Monotonic counter for the number of bytes received (sum of all lanes). This includes all protocol overhead, not only the GPU traffic."
     - type: uint64_t
       name: "txCounter"
-      desc: "[out] Monotonic counter for the number of bytes transmitted. This includes all protocol overhead, not only the GPU traffic."
+      desc: "[out] Monotonic counter for the number of bytes transmitted (sum of all lanes). This includes all protocol overhead, not only the GPU traffic."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of Fabric ports in a device"
