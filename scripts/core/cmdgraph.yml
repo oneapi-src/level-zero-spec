@@ -47,14 +47,16 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a command graph on the device for submitting commands to any command queue."
+desc: "Creates a command graph on the active context."
 version: "2.0"
 class: $xCommandGraphExp
 name: Create
 decl: static
 details:
+    - "A command graph is used for submitting commands to any command queue."
+    - "The command graph can only be used on the device for which it was created."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -76,9 +78,10 @@ class: $xCommandGraphExp
 name: Destroy
 decl: static
 details:
+    - "The application must call this function using the same active context on which the command graph was created."
     - "The implementation of this function may immediately free all Host allocations associated with this command graph."
     - "The application must **not** call this function from simultaneous threads with the same command graph handle."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_command_graph_exp_handle_t
       name: hCommandGraph

@@ -28,7 +28,7 @@ members:
       desc: "[in] pointer passed to every tracer's callbacks"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a tracer for the specified driver."
+desc: "Creates a tracer on the active context."
 class: $tTracer
 name: Create
 decl: static
@@ -37,7 +37,7 @@ details:
     - "The tracer can only be used on the driver on which it was created."
     - "The tracer is created in the disabled state."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $t_driver_handle_t
       name: hDriver
@@ -58,7 +58,9 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
+    - "The application must call this function using the same active context on which the tracer was created."
     - "The application must **not** call this function from simultaneous threads with the same tracer handle."
+    - "The implementation of this function must be thread-safe."
     - "The implementation of this function will stall and wait on any outstanding threads executing callbacks before freeing any Host allocations associated with this tracer."
 params:
     - type: $t_tracer_handle_t

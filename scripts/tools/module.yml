@@ -8,7 +8,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Module"
-ordinal: "4"
+ordinal: "6"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported module debug info formats."

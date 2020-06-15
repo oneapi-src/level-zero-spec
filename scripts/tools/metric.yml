@@ -423,12 +423,13 @@ members:
       desc: "[in] Internal slots count within query pool object."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a pool of metric queries."
+desc: "Creates a pool of metric queries on the active context."
 class: $tMetricQueryPool
 name: Create
 decl: static
 details:
     - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: "$t_device_handle_t"
       name: hDevice
@@ -449,9 +450,11 @@ class: $tMetricQueryPool
 name: Destroy
 decl: static
 details:
-    - "The application must destroy all query handles created from the pool before destroying the pool itself"
-    - "The application must ensure the device is not currently referencing the any query within the pool before it is deleted"
+    - "The application must call this function using the same active context on which the pool was created."
+    - "The application must destroy all query handles created from the pool before destroying the pool itself."
+    - "The application must ensure the device is not currently referencing the any query within the pool before it is deleted."
     - "The application must **not** call this function from simultaneous threads with the same query pool handle."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: "$t_metric_query_pool_handle_t"
       name: hMetricQueryPool
@@ -460,12 +463,13 @@ returns:
     - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates metric query object."
+desc: "Creates metric query on the active context."
 class: $tMetricQuery
 name: Create
 decl: static
 details:
     - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: "$t_metric_query_pool_handle_t"
       name: hMetricQueryPool
@@ -483,8 +487,10 @@ class: $tMetricQuery
 name: Destroy
 decl: static
 details:
-    - "The application must ensure the device is not currently referencing the query before it is deleted"
+    - "The application must call this function using the same active context on which the query was created."
+    - "The application must ensure the device is not currently referencing the query before it is deleted."
     - "The application must **not** call this function from simultaneous threads with the same query handle."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: "$t_metric_query_handle_t"
       name: hMetricQuery

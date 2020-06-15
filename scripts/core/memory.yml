@@ -66,7 +66,7 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Allocates memory that is shared between the host and one or more devices"
+desc: "Allocates shared memory on the active context."
 class: $xDriver
 name: AllocSharedMem
 details:
@@ -79,6 +79,7 @@ details:
       Passing nullptr as the device handle does not associate the shared allocation with any device.
       For allocations with no associated device, ownership of the allocation is shared between the host and all devices supporting cross-device shared access capabilities.
     - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_driver_handle_t
       name: hDriver
@@ -111,13 +112,14 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Allocates memory specific to a device"
+desc: "Allocates device memory on the active context."
 class: $xDriver
 name: AllocDeviceMem
 details:
-    - "A device allocation is owned by a specific device."
+    - "Device allocations are owned by a specific device."
     - "In general, a device allocation may only be accessed by the device that owns it."
     - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_driver_handle_t
       name: hDriver
@@ -147,14 +149,15 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Allocates host memory"
+desc: "Allocates host memory on the active context."
 class: $xDriver
 name: AllocHostMem
 details:
-    - "A host allocation is owned by the host process."
-    - "Host allocations are accessible by the host and all devices within the driver driver."
+    - "Host allocations are owned by the host process."
+    - "Host allocations are accessible by the host and all devices within the driver's context."
     - "Host allocations are frequently used as staging areas to transfer data to or from devices."
     - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_driver_handle_t
       name: hDriver
@@ -181,13 +184,15 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Frees allocated host memory, device memory, or shared memory"
+desc: "Frees allocated host memory, device memory, or shared memory on the active context."
 class: $xDriver
 name: FreeMem
 details:
+    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application must ensure the device is not currently referencing the memory before it is freed"
     - "The implementation of this function may immediately free all Host and Device allocations associated with this memory"
     - "The application must **not** call this function from simultaneous threads with the same pointer."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_driver_handle_t
       name: hDriver
@@ -229,6 +234,7 @@ desc: "Retrieves attributes of a memory allocation"
 class: $xDriver
 name: GetMemAllocProperties
 details:
+    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
 params:
     - type: $x_driver_handle_t
@@ -249,6 +255,7 @@ desc: "Retrieves the base address and/or size of an allocation"
 class: $xDriver
 name: GetMemAddressRange
 details:
+    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
 params:
     - type: $x_driver_handle_t
@@ -269,8 +276,11 @@ desc: "Creates an IPC memory handle for the specified allocation"
 class: $xDriver
 name: GetMemIpcHandle
 details:
-    - "Takes a pointer to the base of a device memory allocation and exports it for use in another process."
+    - "Takes a pointer to a device memory allocation and creates an IPC memory handle for exporting it for use in another process."
+    - "The pointer must be base pointer of the device memory allocation; i.e. the value returned from $xDriverAllocDeviceMem."
+    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_driver_handle_t
       name: hDriver
@@ -291,13 +301,14 @@ etors:
       desc: "reserved for future use"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Opens an IPC memory handle to retrieve a device pointer"
+desc: "Opens an IPC memory handle to retrieve a device pointer on the active context."
 class: $xDriver
 name: OpenMemIpcHandle
 details:
     - "Takes an IPC memory handle from a remote process and associates it with a device pointer usable in this process."
     - "The device pointer in this process should not be freed with $xDriverFreeMem, but rather with $xDriverCloseMemIpcHandle."
     - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_driver_handle_t
       name: hDriver
@@ -324,7 +335,9 @@ class: $xDriver
 name: CloseMemIpcHandle
 details:
     - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xDriverOpenMemIpcHandle."
+    - "The application must call this function using the same active context on which the memory was openned."
     - "The application must **not** call this function from simultaneous threads with the same pointer."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_driver_handle_t
       name: hDriver

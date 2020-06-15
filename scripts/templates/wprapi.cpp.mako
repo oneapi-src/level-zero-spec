@@ -36,6 +36,7 @@ def define_dbg(obj, tags):
 namespace ${n}
 {
 %for s in specs:
+#pragma region ${s['name']}
 ## EXCEPTION ##############################################################
 %if re.match(r"common", s['name']) and (n == x):
     ///////////////////////////////////////////////////////////////////////////////
@@ -69,6 +70,10 @@ namespace ${n}
     %endfor
     {
     }
+
+    %endif
+    %if th.class_traits.is_singleton(obj):
+    static singleton_factory_t<${th.make_class_name(n, tags, obj)}, ${th.subt(n, tags, th.class_traits.get_handle(obj, meta), cpp=True)}> g_${th.make_class_name(n, tags, obj)}Factory;
 
     %endif
 %endfor
@@ -159,10 +164,6 @@ namespace ${n}
 
         try
         {
-            %if item['ctor']['factory']:
-            static singleton_factory_t<${item['class']}, ${item['cpptype']}> ${item['ctor']['factory']};
-
-            %endif
             %if 'range' in item:
             %if item['optional']:
             for( uint32_t i = ${item['range'][0]}; ( ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
@@ -246,6 +247,7 @@ namespace ${n}
 %endif
 
 %endfor
+#pragma endregion
 %endfor
 } // namespace ${n}
 
@@ -253,6 +255,7 @@ namespace ${n}
 namespace ${n}
 {
     %for s in specs:
+#pragma region ${s['name']}
     %for obj in s['objects']:
     %if define_dbg(obj, tags):
     %if re.match(r"enum", obj['type']) or re.match(r"struct|union", obj['type']):
@@ -487,5 +490,6 @@ namespace ${n}
     %endif  ## class
     %endif  ## define_dbg
     %endfor ## obj in s['objects']
+#pragma endregion
     %endfor ## s in specs
 } // namespace ${n}

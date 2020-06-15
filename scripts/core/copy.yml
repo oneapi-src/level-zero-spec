@@ -173,6 +173,46 @@ returns:
         - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Copies host, device, or shared memory from another context."
+class: $xCommandList
+name: AppendMemoryCopyFromContext
+details:
+    - "The current active and source context must be from the same driver."
+    - "The memory pointed to by both srcptr and dstptr must be accessible by the device on which the command list is created."
+    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list"
+    - type: "void*"
+      name: dstptr
+      desc: "[in] pointer to destination memory to copy to"
+    - type: $x_context_handle_t
+      name: hContextSrc
+      desc: "[in] handle of source context object"
+    - type: "const void*"
+      name: srcptr
+      desc: "[in] pointer to source memory to copy from"
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to copy"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Copies an image."
 class: $xCommandList
 name: AppendImageCopy

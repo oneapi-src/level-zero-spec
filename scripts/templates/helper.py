@@ -58,6 +58,12 @@ class class_traits:
         except:
             return False
 
+    @staticmethod
+    def get_handle(item, meta):
+        try:
+            return meta['class'][item['name']]['handle'][0]
+        except:
+            return ""
 
 """
     Extracts traits from a type name
@@ -251,7 +257,7 @@ class value_traits:
             name = cls.get_array_name(name)
             # if the value is an etor, return the name of the enum
             for e in meta['enum']:
-                if name in meta['enum'][e]['types']:
+                if name in meta['enum'][e]['etors']:
                     return e
             return None
         except:
@@ -1019,8 +1025,6 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
             range_end   = param_traits.range_end(item)
             if type_traits.is_class_handle(item['type'], meta):
                 if param_traits.is_output(item) or param_traits.is_inoutput(item):
-                    cobj = next(iter(filter_items(extract_objs(specs, 'class'), 'name', type_traits.find_class_name(item['type'], meta))), None)
-                    fty_name = "%sFactory"%(_remove_ptr(cpp_cname[0].lower() + cpp_cname[1:], False))
                     if param_traits.is_optional(item):
                         params.append({
                             'local': local_name,
@@ -1030,10 +1034,7 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
                             'optional': True,
                             'arg': "%s.data()"%(local_name),
                             'class': _remove_ptr(cpp_cname, False),
-                            'ctor': {
-                                'params': _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta),
-                                'factory': fty_name if class_traits.is_singleton(cobj) else ""
-                            },
+                            'ctor': _make_ctor(namespace, tags, item, obj, meta, specs),
                             'name': cpp_name
                         })
                     else:
@@ -1045,10 +1046,7 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
                             'optional': False,
                             'arg': "%s.data()"%(local_name),
                             'class': _remove_ptr(cpp_cname, False),
-                            'ctor': {
-                                'params': _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta),
-                                'factory': "%sFactory"%(_remove_ptr(cpp_cname, False)) if class_traits.is_singleton(cobj) else ""
-                            },
+                            'ctor': _make_ctor(namespace, tags, item, obj, meta, specs),
                             'name': cpp_name
                         })
                         if param_traits.is_output(item):
@@ -1100,8 +1098,6 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
             if type_traits.is_class_handle(item['type'], meta):
                 is_this_handle = type_traits.find_class_name(item['type'], meta) == obj_traits.class_name(obj)
                 if param_traits.is_output(item):
-                    cobj = next(iter(filter_items(extract_objs(specs, 'class'), 'name', type_traits.find_class_name(item['type'], meta))), None)
-                    fty_name = "%sFactory"%(_remove_ptr(cpp_cname[0].lower() + cpp_cname[1:], False))
                     if param_traits.is_optional(item):
                         params.append({
                             'local': local_name,
@@ -1111,10 +1107,7 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
                             'arg': "( %s ) ? &%s : nullptr"%(cpp_name, local_name),
                             'release': False,
                             'class': _remove_ptr(cpp_cname, False),
-                            'ctor': {
-                                'params': _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta),
-                                'factory': fty_name if class_traits.is_singleton(cobj) else ""
-                            },
+                            'ctor': _make_ctor(namespace, tags, item, obj, meta, specs),
                             'name': cpp_name
                         })
                     else:
@@ -1126,10 +1119,7 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
                             'arg': "&%s"%(local_name),
                             'release': False,
                             'class': _remove_ptr(cpp_cname, False),
-                            'ctor': {
-                                'params': _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta),
-                                'factory': fty_name if class_traits.is_singleton(cobj) else ""
-                            },
+                            'ctor': _make_ctor(namespace, tags, item, obj, meta, specs),
                             'name': cpp_name
                         })
                         returns.append(cpp_name)
@@ -1202,6 +1192,25 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
         rvalue = "%s"%returns[0]
 
     return params, rvalue
+
+"""
+Private:
+    returns a ctor dict in c++ wrapper
+"""
+def _make_ctor(namespace, tags, item, obj, meta, specs):
+    cobj = next(iter(filter_items(extract_objs(specs, 'class'), 'name', type_traits.find_class_name(item['type'], meta))), None)
+    is_singleton = class_traits.is_singleton(cobj)
+    fty_name = "g_%sFactory"%make_class_name(namespace, tags, cobj)
+
+    if obj_traits.class_name(obj) in meta['class'][cobj['name']].get('child',[]):
+        cobj2 = next(iter(filter_items(extract_objs(specs, 'class'), 'name', obj_traits.class_name(obj))), None)
+        is_singleton = class_traits.is_singleton(cobj2)
+        fty_name = "g_%sFactory"%make_class_name(namespace, tags, cobj2)
+
+    return {
+        'params': _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta),
+        'factory': fty_name if is_singleton else ""
+        }
 
 """
 Private:
@@ -1460,7 +1469,7 @@ Public:
 """
 def make_baseclass_ctor(namespace, tags, obj):
     base = subt(namespace, tags, obj['base'], cpp=True)
-    ctor = make_class_name(namespace, tags, obj)
+    ctor = base.split("::")[-1]
     return "%s::%s"%(base, ctor)
 
 """

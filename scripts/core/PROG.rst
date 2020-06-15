@@ -102,6 +102,49 @@ The following pseudo-code demonstrates a basic initialization and device discove
 
        ...
 
+Contexts
+========
+
+A context is a logical object used by the driver for managing all memory, command queues/lists, modules, synchronization objects, etc.
+
+On ${x}Init, each driver will create its own per-process default context.
+The default context is initially active on all Host threads.
+The default context is destroyed on ${x}DefaultContextRelease or when the driver is unloaded from the process.
+Once the default context is released, the driver cannot be used again unless/until ${x}Init is called again.
+
+An application may optionally create and activate additional contexts.
+The primary usage-model for multiple contexts is isolation of memory and objects for multiple libraries within the same process.
+The driver maintains a stack of contexts per-Host thread.
+When a context is on top of the stack, it is considered to be the active context for that Host thread.
+The same context may be active on multiple Host threads simultaneously.
+If no application contexts are on the stack, then the default context is active.
+
+The following pseudo-code demonstrates a basic context creation and activation sequence:
+
+.. parsed-literal::
+
+        // Create context(s)
+        ${x}ContextCreate(hDriver, &hContextA);
+        ${x}ContextCreate(hDriver, &hContextB);
+
+        // Activate Context A
+        ${x}ContextPush(hDriver, hContextA);
+        ${x}DriverAllocHostMem(hDriver, &desc, 80, 0, &ptrA);
+
+        // Activate Context B
+        ${x}ContextPush(hDriver, hContextB);
+        ${x}DriverAllocHostMem(hDriver, &desc, 88, 0, &ptrB);
+        ${x}ContextPop(hDriver);
+
+        // Context A is active
+        memcpy(ptrA, ptrB, 0xe); // ok
+        ${x}DriverFreeMem(hDriver, ptrB); // illegal: Context A has no knowledge of ptrB
+
+
+If a device was reset then all APIs will return ${X}_RESULT_ERROR_DEVICE_LOST when any context associated with that device is active.
+In order to recover, the application must call ${x}DefaultContextReset to reset the default context associated with that device.
+After the default context is reset, all pointers to memory allocations and handles to objects (including other contexts) created on the default context prior to reset will be invalid.
+
 Memory and Images
 =================
 
@@ -379,9 +422,8 @@ Creation
 -  The number and properties of physical command queues is queried by using ${x}DeviceGetCommandQueueGroupProperties.
 -  Multiple logical command queues may be created that use the same physical command queue. For example,
    an application may create a logical command queue per Host thread with different scheduling priorities.
--  However, since each logical command queue may allocate a logical hardware context, an application 
-   should avoid creating multiple logical command queues for the same physical command queue with the
-   same priority, due to possible performance penalties with hardware context switching.
+-  Multiple logical command queues created for the same physical command queue on the same context,
+   also share the same physcial hardware context.
 -  The maximum number of logical command queues an application can create is limited by device-specific
    resources; e.g., the maximum number of logical hardware contexts supported by the device. 
    This can be queried from ${x}_device_properties_t.maxHardwareContexts.

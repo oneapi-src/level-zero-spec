@@ -57,15 +57,15 @@ members:
       init: "true"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates sampler object."
+desc: "Creates sampler on the active context."
 class: $xSampler
 name: Create
 decl: static
 ordinal: "0"
 details:
-    - "The sampler can only be used on the device on which it was created."
+    - "The sampler can only be used on the device for which it was created."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: $x_device_handle_t
       name: hDevice
@@ -86,10 +86,11 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must ensure the device is not currently referencing the sampler before it is deleted"
-    - "The implementation of this function may immediately free all Host and Device allocations associated with this module"
+    - "The application must call this function using the same active context on which the sampler was created."
+    - "The application must ensure the device is not currently referencing the sampler before it is deleted."
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this sampler."
     - "The application must **not** call this function from simultaneous threads with the same sampler handle."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function must be thread-safe."
 params:
     - type: "$x_sampler_handle_t"
       name: hSampler

@@ -37,7 +37,7 @@ def _find_symbol_type(name, meta):
 
     if name.isupper():
         for enum in meta['enum']:
-            if name in meta['enum'][enum]['types']:
+            if name in meta['enum'][enum]['etors']:
                 return 'etor'
 
     return None
@@ -53,7 +53,7 @@ def _fixup_tag(name):
 """
 def _find_enum_from_etor(etor, meta):
     for name in meta['enum']:
-        if etor in meta['enum'][name]['types']:
+        if etor in meta['enum'][name]['etors']:
             return _fixup_tag(name)
 
     return None
@@ -127,8 +127,8 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
                     if code_block and 'function' == symbol_type:
                         words = re.sub(RE_EXTRACT_PARAMS, r"\1", line)
                         words = line.split(",")
-                        if len(words) != len(meta['function'][symbol]['types']):
-                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, len(words), len(meta['function'][symbol]['types'])))
+                        if len(words) != len(meta['function'][symbol]['params']):
+                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, len(words), len(meta['function'][symbol]['params'])))
                             print("line = %s"%line)
                             for word in words:
                                 print("word = %s"%word)
