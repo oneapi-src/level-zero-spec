@@ -274,6 +274,7 @@ class ze_name_handle_t(c_void_p):
 * An enum requires the following scalar fields: {`desc`, `name`}
   - `desc` will be used as the enum's description comment
   - `name` must be a unique ISO-C standard identifier, start with `$` tag, be snake_case and end with `_t`
+  - `name` that endswith `_flags_t` will be used to create bitfields
 * An enum may take the following optional scalar fields: {`class`, `condition`, `ordinal`, `version`}
   - `class` will be used to scope the enum declaration within the specified C++ class
   - `condition` will be used as a C/C++ preprocessor `#if` conditional expression
@@ -668,8 +669,9 @@ _zeClsNameFnName_t = CFUNCTYPE( ze_result_t, ze_cls_handle_t, c_ulong, POINTER(c
 * A class requires the following scalar fields: {`desc`, `name`}
   - `desc` will be used as the class's description comment
   - `name` must be a unique ISO-C standard identifier, start with `$` tag, and be PascalCase
-* A class may take the following optional scalar fields: {`attribute`, `owner`, `condition`, `ordinal`, `version`}
+* A class may take the following optional scalar fields: {`attribute`, `base`, `owner`, `condition`, `ordinal`, `version`}
   - `attribute` will be used to specify whether the class is a special-type: {`singleton`}
+  - `base` will be used to specify the base type of the class
   - `owner` will be used to specify which other class creates this class
   - `condition` will be used as a C/C++ preprocessor `#if` conditional expression
   - `ordinal` will be used to override the default order (in which they appear) the class appears within its section; `default="1000"`
@@ -723,6 +725,34 @@ namespace ze {
         void operator=( ClsName&& other ) = delete;
 
         auto getHandle( void ) const { return m_handle; }
+    };
+```
+</td></tr>
+<tr><td>
+
+```yml
+type: class
+desc: "A brief description..."
+name: $xClsName2
+base: $xClsName
+```
+</td>
+<td>
+
+```cpp
+namespace ze {
+    class ClsName2 : public ClsName
+    {
+    public:
+        using ClsName::ClsName;
+
+        ~ClsName2( void ) = default;
+
+        ClsName2( ClsName2 const& other ) = delete;
+        void operator=( ClsName2 const& other ) = delete;
+
+        ClsName2( ClsName2&& other ) = delete;
+        void operator=( ClsName2&& other ) = delete;
     };
 ```
 </td></tr>
