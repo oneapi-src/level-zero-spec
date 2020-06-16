@@ -83,22 +83,22 @@ members:
       desc: "[out] Number of sub-devices"
     - type: char
       name: "serialNumber[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Manufacturing serial number (NULL terminated string value)"
+      desc: "[out] Manufacturing serial number (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
     - type: char
       name: "boardNumber[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Manufacturing board number (NULL terminated string value)"
+      desc: "[out] Manufacturing board number (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
     - type: char
       name: "brandName[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Brand name of the device (NULL terminated string value)"
+      desc: "[out] Brand name of the device (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
     - type: char
       name: "modelName[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Model name of the device (NULL terminated string value)"
+      desc: "[out] Model name of the device (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
     - type: char
       name: "vendorName[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Vendor name of the device (NULL terminated string value)"
+      desc: "[out] Vendor name of the device (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
     - type: char
       name: "driverVersion[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Installed driver version (NULL terminated string value)"
+      desc: "[out] Installed driver version (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties about the device"
