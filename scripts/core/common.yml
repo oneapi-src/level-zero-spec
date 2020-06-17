@@ -301,9 +301,13 @@ etors:
       desc: $x_kernel_properties_t
     - name: SAMPLER_DESC
       desc: $x_sampler_desc_t
+    - name: RAYTRACING_MEM_ALLOC_DESC
+      desc: $x_raytracing_mem_alloc_desc_t
+      value: "0x00010001"
+      version: "1.1"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
-      value: "0x00010001"
+      value: "0x00020001"
       version: "2.0"
 --- #--------------------------------------------------------------------------
 type: struct
