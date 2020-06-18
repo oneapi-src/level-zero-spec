@@ -372,7 +372,7 @@ members:
       desc: |
             [out] command queue group supports cooperative kernels.
             See $xCommandListAppendLaunchCooperativeKernel for more details.
-    - type: $x_bool_t
+    - type: size_t
       name: maxMemoryFillPatternSize
       desc: |
             [out] maximum `pattern_size` supported by command queue group.
