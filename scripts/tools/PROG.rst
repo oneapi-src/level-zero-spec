@@ -360,7 +360,7 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
            FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASED, &hMetricGroup );
 
            // Configure the HW
-           ${t}DeviceActivateMetricGroups( hDevice, /* count= */ 1, &hMetricGroup );
+           ${t}DeviceActivateMetricGroups( hDevice, /\* count= \*/ 1, &hMetricGroup );
 
            // Create notification event
            ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
@@ -380,7 +380,7 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
            //${t}CommandListAppendMetricStreamerMarker( hCommandList, hMetricStreamer, tool_marker_value ); 
 
            // Wait for data, optional in this example since the whole workload has already been executed by now
-           //${x}EventHostSynchronize( hNotificationEvent, 1000 /*timeout*/ );
+           //${x}EventHostSynchronize( hNotificationEvent, 1000 /\*timeout\*/ );
            // reset the event if it fired
 
            // Read raw data
@@ -442,7 +442,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_EVENT_BASED, &hMetricGroup );
 
            // Configure HW
-           ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
+           ${t}DeviceActivateMetricGroups( hDevice, 1 /\* count \*/, &hMetricGroup );
 
            // Create metric query pool & completion event
            queryPoolDesc.type         = ${T}_METRIC_QUERY_POOL_TYPE_PERFORMANCE;
@@ -453,7 +453,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
            // Write BEGIN metric query to command list 
-           ${t}MetricQueryCreate( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );
+           ${t}MetricQueryCreate( hMetricQueryPool, 0 /\*slot\*/, &hMetricQuery );
            ${t}CommandListAppendMetricQueryBegin( hCommandList, hMetricQuery );
 
            // build your command list
@@ -469,7 +469,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            // use ${x}CommandQueueExecuteCommandLists( , , , ) to submit your workload to the device
       
            // Wait for data
-           ${x}EventHostSynchronize( hCompletionEvent, 1000 /*timeout*/ );
+           ${x}EventHostSynchronize( hCompletionEvent, 1000 /\*timeout\*/ );
 
            // Read raw data
            size_t rawSize = 0;
