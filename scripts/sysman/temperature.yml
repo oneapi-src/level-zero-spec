@@ -37,6 +37,9 @@ members:
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: double
+      name: "MaxTemperature"
+      desc: "[out] Will contain the maximum temperature for the specific device in degrees Celsius."
     - type: $x_bool_t
       name: "isCriticalTempSupported"
       desc: "[out] Indicates if the critical temperature event $S_EVENT_TYPE_FLAG_TEMP_CRITICAL is supported"

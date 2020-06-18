@@ -26,8 +26,8 @@ class: $sFrequency
 name: $s_freq_properties_t
 base: $s_base_properties_t
 details:
-    - "Indicates if this frequency domain can be overclocked (if true, functions such as $sFrequencyOcSetConfig() are supported)."
-    - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $sFrequencyOcGetConfig() to determine the maximum frequency that can be requested."
+    - "Indicates if this frequency domain can be overclocked (if true, functions such as $sFrequencyOcSetFrequencyTarget() are supported)."
+    - "The min/max hardware frequencies are specified for non-overclock configurations. For overclock configurations, use $sFrequencyOcGetFrequencyTarget() to determine the maximum frequency that can be requested."
 members:
     - type: $s_freq_domain_t
       name: "type"
@@ -90,6 +90,9 @@ name: $s_freq_state_t
 base: $s_base_state_t
 members:
     - type: double
+      name: "currentVoltage"
+      desc: "[out] Current voltage in Volts."
+    - type: double
       name: "request"
       desc: "[out] The current frequency request in MHz."
     - type: double
@@ -134,9 +137,11 @@ etors:
       value: "0"
       desc: "Overclocking if off - hardware is running using factory default voltages/frequencies."
     - name: OVERRIDE
-      desc: "Overclock override mode - In this mode, a fixed user-supplied voltage is applied independent of the frequency request. The maximum permitted frequency can also be increased."
+      desc: "Overclock override mode - In this mode, a fixed user-supplied voltage is applied independent of the frequency request. The maximum permitted frequency can also be increased. This mode disables INTERPOLATIVE and FIXED modes."
     - name: INTERPOLATIVE
-      desc: "Overclock interpolative mode - In this mode, the voltage/frequency curve can be extended with a new voltage/frequency point that will be interpolated. The existing voltage/frequency points can also be offset (up or down) by a fixed voltage."
+      desc: "Overclock interpolative mode - In this mode, the voltage/frequency curve can be extended with a new voltage/frequency point that will be interpolated. The existing voltage/frequency points can also be offset (up or down) by a fixed voltage. This mode disables FIXED and OVERRIDE modes."
+    - name: FIXED
+      desc: "Overclocking fixed Mode - In this mode, hardware will disable most frequency throttling and lock the frequency and voltage at the specified overclock values. This mode disables OVERRIDE and INTERPOLATIVE modes. This mode can damage the part, most of the protections are disabled on this mode."  
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Overclocking properties"
@@ -179,27 +184,12 @@ members:
     - type: $x_bool_t
       name: isHighVoltModeEnabled
       desc: "[out] Indicates if very high voltages are permitted on this frequency domain."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Overclocking configuration"
-class: $sFrequency
-name: $s_oc_config_t
-base: $s_base_config_t
-details:
-    - "Overclock settings"
-members:
-    - type: $s_oc_mode_t
-      name: mode
-      desc: "[in,out] Overclock Mode $s_oc_mode_t."
-    - type: double
-      name: frequency
-      desc: "[in,out] Overclocking Frequency in MHz. This cannot be greater than $s_oc_capabilities_t.maxOcFrequency."
-    - type: double
-      name: voltageTarget
-      desc: "[in,out] Overclock voltage in Volts. This cannot be greater than $s_oc_capabilities_t.maxOcVoltage."
-    - type: double
-      name: voltageOffset
-      desc: "[in,out] This voltage offset is applied to all points on the voltage/frequency curve, include the new overclock voltageTarget. It can be in the range ($s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+    - type: $x_bool_t
+      name: isExtendedModeSupported
+      desc: "[out] Indicates if the extended overclocking features are supported. If this is supported, increments are on 1 Mhz basis."
+    - type: $x_bool_t
+      name: isFixedModeSupported
+      desc: "[out] Indicates if the fixed mode is supported. In this mode, hardware will disable most frequency throttling and lock the frequency and voltage at the specified overclock values."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of frequency domains"
@@ -310,6 +300,21 @@ params:
       desc: "[in,out] Frequency state for the specified domain."
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Get the current voltage of the device."
+class: $sFrequency
+name: GetCurrentVoltage
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: double*
+      name: pCurrentVoltage
+      desc: "[out] Current voltage in Volts."
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Get frequency throttle time"
 class: $sFrequency
 name: GetThrottleTime
@@ -340,9 +345,9 @@ params:
       desc: "[in,out] Pointer to the capabilities structure $s_oc_capabilities_t."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the current overclocking configuration."
+desc: "Get the current overclocking frequency target, if extended moded is supported, will returned in 1 Mhz granularity."
 class: $sFrequency
-name: OcGetConfig
+name: OcGetFrequencyTarget
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -350,31 +355,9 @@ params:
     - type: $s_freq_handle_t
       name: hFrequency
       desc: "[in] Handle for the component."
-    - type: $s_oc_config_t*
-      name: pOcConfiguration
-      desc: "[in,out] Pointer to the configuration structure $s_oc_config_t."
-returns:
-    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Change the overclocking configuration."
-class: $sFrequency
-name: OcSetConfig
-details:
-    - "If $s_oc_config_t.mode is set to $S_OC_MODE_OFF, overclocking will be turned off and the hardware returned to run with factory voltages/frequencies. Call $sFrequencyOcSetIccMax() and $sFrequencyOcSetTjMax() separately with 0.0 to return those settings to factory defaults."
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: $s_oc_config_t*
-      name: pOcConfiguration
-      desc: "[in] Pointer to the configuration structure $s_oc_config_t."
-    - type: $x_bool_t*
-      name: pDeviceRestart
-      desc: "[in,out] This will be set to true if the device needs to be restarted in order to enable the new overclock settings."
+    - type: double*
+      name: pCurrentOcFrequency
+      desc: "[out] Overclocking Frequency in MHz, if extended moded is supported, will returned in 1 Mhz granularity, else, in multiples of 50 Mhz. This cannot be greater than $s_oc_capabilities_t.maxOcFrequency."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
@@ -384,6 +367,132 @@ returns:
         - "Overclocking feature is locked on this frequency domain"
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the current overclocking frequency target, if extended moded is supported, can be set in 1 Mhz granularity."
+class: $sFrequency
+name: OcSetFrequencyTarget
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: double
+      name: CurrentOcFrequency
+      desc: "[in] Overclocking Frequency in MHz, if extended moded is supported, it could be set in 1 Mhz granularity, else, in multiples of 50 Mhz. This cannot be greater than $s_oc_capabilities_t.maxOcFrequency."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "Overclocking feature is locked on this frequency domain"
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."      
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the current overclocking voltage settings."
+class: $sFrequency
+name: OcGetVoltageTarget
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: double*
+      name: pCurrentVoltageTarget
+      desc: "[out] Overclock voltage in Volts. This cannot be greater than $s_oc_capabilities_t.maxOcVoltage."
+    - type: double*
+      name: pCurrentVoltageOffset
+      desc: "[out] This voltage offset is applied to all points on the voltage/frequency curve, include the new overclock voltageTarget. It can be in the range ($s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "Overclocking feature is locked on this frequency domain"
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."      
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the current overclocking voltage settings."
+class: $sFrequency
+name: OcSetVoltageTarget
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: double
+      name: CurrentVoltageTarget
+      desc: "[in] Overclock voltage in Volts. This cannot be greater than $s_oc_capabilities_t.maxOcVoltage."
+    - type: double
+      name: CurrentVoltageOffset
+      desc: "[in] This voltage offset is applied to all points on the voltage/frequency curve, include the new overclock voltageTarget. It can be in the range ($s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "Overclocking feature is locked on this frequency domain"
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."      
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the current overclocking mode."
+class: $sFrequency
+name: OcSetMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $s_oc_mode_t
+      name: CurrentOcMode
+      desc: "[in] Current Overclocking Mode $s_oc_mode_t."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "Overclocking feature is locked on this frequency domain"
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."       
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the current overclocking mode."
+class: $sFrequency
+name: OcGetMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_freq_handle_t
+      name: hFrequency
+      desc: "[in] Handle for the component."
+    - type: $s_oc_mode_t*
+      name: pCurrentOcMode
+      desc: "[out] Current Overclocking Mode $s_oc_mode_t."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "Overclocking feature is locked on this frequency domain"
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."      
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the maximum current limit setting."

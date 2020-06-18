@@ -15,7 +15,9 @@ class: $sDevice
 name: $s_event_type_flags_t
 etors:
     - name: DEVICE_RESET
-      desc: "Event is triggered when the driver is going to reset the device"
+      desc: "Event is triggered when the driver is going to reset the device."
+    - name: DEVICE_RESET_COMPLETE
+      desc: "Event is triggered after the driver returned from the reset device."
     - name: DEVICE_SLEEP_STATE_ENTER
       desc: "Event is triggered when the driver is about to put the device into a deep sleep state"
     - name: DEVICE_SLEEP_STATE_EXIT

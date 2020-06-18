@@ -165,8 +165,6 @@ etors:
       desc: $s_freq_state_t
     - name: OC_CAPABILITIES
       desc: $s_oc_capabilities_t
-    - name: OC_CONFIG
-      desc: $s_oc_config_t
     - name: LED_STATE
       desc: $s_led_state_t
     - name: MEM_STATE

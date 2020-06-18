@@ -835,17 +835,17 @@ full circuitry of the device, the following modifications can be made:
 
 -  Decrease the voltage
 
-Frequency/voltage overclocking is accomplished by calling ${s}FrequencyOcSetConfig()
-with a new overclock configuration ${s}_oc_config_t. There are two modes that control the
-way voltage is handled when overclocking the frequency:
+Frequency overclocking is accomplished by calling ${s}FrequencyOcSetFrequencyTarget() with the desired Frequency
+Target and the Voltage setting by calling ${s}FrequencyOcSetVoltageTarget() with the new voltage and the voltrage offset.
+There are three modes that control the way voltage and frequency are handled when overclocking:
 
 +--------------------------------------------------------+------------------------------------------------+
-| Voltage overclock mode                                 | Description                                    |
+| Overclock mode                                         | Description                                    |
 +========================================================+================================================+
 | ${S}_OC_MODE_OVERRIDE            | In this mode, a fixed                          |
 |                                                        | user-supplied voltage                          |
-|                                                        | (${s}_oc_config_t.voltageTarget +       |
-|                                                        | ${s}_oc_config_t.voltageOffset)         |
+|                                                        | VoltageTarget plus                             |
+|                                                        | VoltageOffset                                  |
 |                                                        | is applied at all times,                       |
 |                                                        | independent of the frequency                   |
 |                                                        | request. This is not efficient but             |
@@ -853,35 +853,61 @@ way voltage is handled when overclocking the frequency:
 |                                                        | power-supply voltage changes as the            |
 |                                                        | frequency changes.                             |
 +--------------------------------------------------------+------------------------------------------------+
+| ${S}_OC_MODE_INTERPOLATIVE       | In this mode, In this mode, the                |
+|                                                        | voltage/frequency curve can be extended        |
+|                                                        | with a new voltage/frequency point that will   |
+|                                                        | be interpolated. The existing                  |
+|                                                        | voltage/frequency points can also be offset    |
+|                                                        | (up or down) by a fixed voltage. This mode     |
+|                                                        | disables FIXED and OVERRIDE modes.             |
++--------------------------------------------------------+------------------------------------------------+
+| ${S}_OC_MODE_FIXED               | In this mode, In this mode, hardware will      |
+|                                                        | disable most frequency throttling and lock     |
+|                                                        | the frequency and voltage at the specified     |
+|                                                        | overclock values. This mode disables           |
+|                                                        | OVERRIDE and INTERPOLATIVE modes. This mode    |
+|                                                        | can damage the part, most of the protections   |
+|                                                        | are disabled on this mode.                     |
++--------------------------------------------------------+------------------------------------------------+
 
 The following functions are provided to handle overclocking:
 
-+-----------------------------------------+-----------------------------------+
-| Function                                | Description                       |
-+=========================================+===================================+
-| ${s}FrequencyOcGetCapabilities() | Determine the overclock           |
-|                                         | capabilities of the device.       |
-+-----------------------------------------+-----------------------------------+
-| ${s}FrequencyOcGetConfig()       | Get the overclock configuration   |
-|                                         | in effect.                        |
-+-----------------------------------------+-----------------------------------+
-| ${s}FrequencyOcSetConfig()       | Set a new overclock               |
-|                                         | configuration.                    |
-+-----------------------------------------+-----------------------------------+
-| ${s}FrequencyOcGetIccMax()       | Get the maximum current limit in  |
-|                                         | effect.                           |
-+-----------------------------------------+-----------------------------------+
-| ${s}FrequencyOcSetIccMax()       | Set a new maximum current limit.  |
-+-----------------------------------------+-----------------------------------+
-| ${s}FrequencyOcGetTjMax()        | Get the maximum temperature limit |
-|                                         | in effect.                        |
-+-----------------------------------------+-----------------------------------+
-| ${s}FrequencyOcSetTjMax()        | Set a new maximum temperature     |
-|                                         | limit.                            |
-+-----------------------------------------+-----------------------------------+
++-------------------------------------------------+-----------------------------------+
+| Function                                        | Description                       |
++=================================================+===================================+
+| ${s}FrequencyOcGetCapabilities()         | Determine the overclock           |
+|                                                 | capabilities of the device.       |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcGetFrequencyTarget()      | Get current overclock target      |
+|                                                 | frequency set.                    |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcSetFrequencyTarget()      | Set the new overclock target      |
+|                                                 | frequency                         |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcGetVoltageTarget()        | Get current overclock target      |
+|                                                 | voltage set.                      |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcSetVoltageTarget()        | Set the new overclock target      |
+|                                                 | voltage and offset.               |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcSetMode()                 | Sets the desired overclock mode.  |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcGetMode()                 | Gets the current overclock mode.  |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcGetIccMax()               | Get the maximum current limit in  |
+|                                                 | effect.                           |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcSetIccMax()               | Set a new maximum current limit.  |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcGetTjMax()                | Get the maximum temperature limit |
+|                                                 | in effect.                        |
++-------------------------------------------------+-----------------------------------+
+| ${s}FrequencyOcSetTjMax()                | Set a new maximum temperature     |
+|                                                 | limit.                            |
++-------------------------------------------------+-----------------------------------+
 
 Overclocking can be turned off by calling
-${s}FrequencyOcSetConfig() with mode ${S}_OC_MODE_OFF and by
+${s}FrequencyOcSetMode() with mode ${S}_OC_MODE_OFF and by
 calling ${s}FrequencyOcGetIccMax() and ${s}FrequencyOcSetTjMax() with values of 0.0.
 
 .. _Scheduler:
@@ -2006,6 +2032,9 @@ called to enable the event and/or provide threshold conditions.
 | Event                                                                             | Trigger                     | Configuration function                        | State function                    |
 +===================================================================================+=============================+===============================================+===================================+
 | ${S}_EVENT_TYPE_FLAG_DEVICE_RESET                  | Device is about to be reset |                                               |                                   |
+|                                                                                   | by the driver               |                                               |                                   |
++-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
+| ${S}_EVENT_TYPE_FLAG_DEVICE_RESET_COMPLETE         | Device completed the reset  |                                               |                                   |
 |                                                                                   | by the driver               |                                               |                                   |
 +-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
 | ${S}_EVENT_TYPE_FLAG_DEVICE_SLEEP_STATE_ENTER      | Device is about to enter a  |                                               |                                   |
