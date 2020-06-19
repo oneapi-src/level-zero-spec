@@ -758,3 +758,11 @@ namespace ze {
 </td></tr>
 </table>
 
+## Extensions
+* Each extensions must be defined in a unique `.yml` file
+* The extension file must be added to the section being extended; i.e. extensions to core APIs must be added to the `core` folder, etc.
+* The extension file must contain a macro that defines the extension name
+* The extension file must contain a enum that defines the extension version(s)
+* The extension must following the naming convention described in the programming guide
+* The extension can add any document type allowed (macro, enum, structure, function, class, etc.)
+

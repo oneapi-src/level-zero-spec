@@ -16,5 +16,6 @@
    tools/PROG.rst
    sysman/PROG.rst
    core/SPIRV.rst
+   core/EXT.rst
    api.rst
    versions.rst
