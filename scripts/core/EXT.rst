@@ -82,7 +82,7 @@ The extension must document the specific structures and functions that may be ex
 List of Standard Extensions
 ===========================
 %for name in meta['macro']:
-%if re.match(r"\w+_EXT_NAME", name):
+%if name.endswith("EXT_NAME"):
 - ${th.subt(namespace, tags, meta['macro'][name]['values'][0])}
 %endif
 %endfor
@@ -91,7 +91,7 @@ List of Standard Extensions
 List of Experimental Extensions
 ===============================
 %for name in meta['macro']:
-%if re.match(r"\w+_EXP_NAME", name):
+%if name.endswith("EXP_NAME"):
 - ${th.subt(namespace, tags, meta['macro'][name]['values'][0])}
 %endif
 %endfor

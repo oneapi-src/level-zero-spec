@@ -82,7 +82,7 @@ def _make_ref(symbol, symbol_type, meta):
 """
     generate a valid reStructuredText file
 """
-def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
+def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
     ver=float(ver)
     enable = True
     code_block = False
@@ -153,14 +153,16 @@ def _generate_valid_rst(fin, fout, tags, ver, rev, meta):
     util.writelines(os.path.abspath(fout), outlines)
 
     return util.makoWrite(os.path.abspath(fout), fout,
+                          ver=ver,
+                          namespace=namespace,
                           tags=tags,
-                          ver=ver)
+                          meta=meta)
 
 """
 Entry-point:
     generate restructuredtext documents from templates
 """
-def generate_rst(docpath, section, tags, ver, rev, specs, meta):
+def generate_rst(docpath, section, namespace, tags, ver, rev, specs, meta):
     srcpath = os.path.join("./", section)
     dstpath = os.path.join(docpath, "source", section)
 
@@ -169,7 +171,7 @@ def generate_rst(docpath, section, tags, ver, rev, specs, meta):
     util.removeFiles(dstpath, "*.rst")
     for fin in util.findFiles(srcpath, "*.rst"):
         fout = os.path.join(dstpath, os.path.basename(fin))
-        loc += _generate_valid_rst(os.path.abspath(fin), fout, tags, ver, rev, meta)
+        loc += _generate_valid_rst(os.path.abspath(fin), fout, namespace, tags, ver, rev, meta)
 
     print("Generated %s lines of reStructuredText (rst).\n"%loc)
 

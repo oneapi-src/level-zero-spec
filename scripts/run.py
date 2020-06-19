@@ -161,7 +161,7 @@ def main():
                 generate_code.generate_wrapper(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
             if args['rst']:
-                generate_docs.generate_rst(docpath, config['name'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
+                generate_docs.generate_rst(docpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
         if util.makeErrorCount():
             print("\n%s Errors found during generation, stopping execution!"%util.makeErrorCount())
