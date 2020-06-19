@@ -340,6 +340,30 @@ void ShowFabricPorts(zes_device_handle_t hSysmanDevice)
     }
 }
 
+void PrintOcErrors(ze_result_t status) 
+{
+    if (status == ZE_RESULT_ERROR_UNSUPPORTED_FEATURE)
+    {
+        fprintf(stderr, "ERROR: Overclocking not supported.\n");
+    }
+    else if (status == ZE_RESULT_ERROR_NOT_AVAILABLE)
+    {
+        fprintf(stderr, "ERROR: Overclocking locked by the BIOS.\n");
+    }
+    else if (status == ZE_RESULT_ERROR_INVALID_ARGUMENT)
+    {
+        fprintf(stderr, "ERROR: The overclock frequency or voltage is too high.\n");
+    }
+    else if (status == ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS)
+    {
+        fprintf(stderr, "ERROR: You don't have permission to overclock.\n");
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: Problem requesting overclock.\n");
+    }
+}
+
 // Try to overclock frequency 5% above the factory default with 10% increase in voltage
 bool SetOverclock(zes_freq_handle_t hFreqDomain)
 {
@@ -352,42 +376,42 @@ bool SetOverclock(zes_freq_handle_t hFreqDomain)
         if (CurrentMaxFrequencyMhz <= oc_caps.maxOcFrequency)
         {
             ze_result_t status;
-            zes_oc_config_t config;
-            ze_bool_t reset;
-            config.mode = zes_oc_mode_t::ZES_OC_MODE_INTERPOLATIVE;
-            config.frequency = CurrentMaxFrequencyMhz;
-            config.voltageTarget = oc_caps.maxFactoryDefaultVoltage * 1.1;
-            config.voltageOffset = 0.0;
+            double frequency = CurrentMaxFrequencyMhz;
+            double voltageTarget = oc_caps.maxFactoryDefaultVoltage * 1.1;
+            double voltageOffset = 0.0;
 
-            status = zesFrequencyOcSetConfig(hFreqDomain, &config, &reset);
+            status = zesFrequencyOcSetMode(hFreqDomain, zes_oc_mode_t::ZES_OC_MODE_INTERPOLATIVE);
+
+            if (status == ZE_RESULT_SUCCESS) 
+            {
+                fprintf(stdout, "Successfully changed mode\n");
+            }
+            else 
+            {
+                PrintOcErrors(status);
+            }
+
+            status = zesFrequencyOcSetVoltageTarget(hFreqDomain, voltageTarget, voltageOffset);
+
             if (status == ZE_RESULT_SUCCESS)
             {
-                fprintf(stdout, "Successfully overclocked to %.3f Mhz\n", CurrentMaxFrequencyMhz);
-                if (reset)
-                {
-                    fprintf(stderr, "Please reset the device for the new overclock settings to take effect.\n");
-                }
-                ret = true;
-            }
-            else if (status == ZE_RESULT_ERROR_UNSUPPORTED_FEATURE)
-            {
-                fprintf(stderr, "ERROR: Overclocking not supported.\n");
-            }
-            else if (status == ZE_RESULT_ERROR_NOT_AVAILABLE)
-            {
-                fprintf(stderr, "ERROR: Overclocking locked by the BIOS.\n");
-            }
-            else if (status == ZE_RESULT_ERROR_INVALID_ARGUMENT)
-            {
-                fprintf(stderr, "ERROR: The overclock frequency or voltage is too high.\n");
-            }
-            else if (status == ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS )
-            {
-                fprintf(stderr, "ERROR: You don't have permission to overclock.\n");
+                fprintf(stdout, "Successfully changed voltage to %.3f V\n", (voltageTarget+ voltageOffset));
             }
             else
             {
-                fprintf(stderr, "ERROR: Problem requesting overclock.\n");
+                PrintOcErrors(status);
+            }
+
+            status = zesFrequencyOcSetFrequencyTarget(hFreqDomain, CurrentMaxFrequencyMhz);
+
+            if (status == ZE_RESULT_SUCCESS)
+            {
+                fprintf(stdout, "Successfully overclocked to %.3f Mhz\n", CurrentMaxFrequencyMhz);
+                ret = true;
+            }
+            else
+            {
+                PrintOcErrors(status);
             }
         }
     }
