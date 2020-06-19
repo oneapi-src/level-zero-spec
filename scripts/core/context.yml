@@ -17,7 +17,7 @@ name: Create
 decl: static
 ordinal: "0"
 details:
-    - "The context can only be used on the driver on which it was created."
+    - "The application must only use the context on the driver for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -75,6 +75,7 @@ decl: static
 details:
     - "Pushes the context onto the driver's thread-local stack."
     - "The context is made active on the current Host thread."
+    - "The application must call this function using the same driver on which the context was created, or using the driver's default context."
     - "The application may call this function from simultaneous threads with the same driver handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -95,6 +96,7 @@ details:
     - "The previous context on the stack is made active on the current Host thread."
     - "If there is no previous context on the stack, then the driver's default context will be made active."
     - "If the driver's thread-local stack is empty, then has no effect."
+    - "The application must call this function using the same driver on which the context was created, or using the driver's default context."
     - "The application may call this function from simultaneous threads with the same driver handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -111,6 +113,7 @@ details:
     - "Gets the context on the top of the driver's thread-local stack."
     - "If the driver's thread-local stack is empty, then the driver's default context will be returned."
     - "This function does not affect the current active context."
+    - "The application must call this function using the same driver on which the context was created, or using the driver's default context."
     - "The application may call this function from simultaneous threads with the same driver handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -141,6 +144,7 @@ decl: static
 ordinal: "0"
 details:
     - "This function does not affect the current active context."
+    - "The application must only use the default context on the driver for which it was retrieved."
     - "The application may call this function from simultaneous threads with the same driver handle."
     - "The implementation of this function should be lock-free."
 params:

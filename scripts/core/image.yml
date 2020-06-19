@@ -264,8 +264,7 @@ ordinal: "0"
 analogue:
     - clCreateImage
 details:
-    - "The image is only visible to the device for which it was created."
-    - "The image can be copied to another device using the ::$xCommandListAppendImageCopy functions."
+    - "The application must only use the image on the device for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

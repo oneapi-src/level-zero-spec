@@ -15,6 +15,7 @@ class: $xDevice
 name: MakeMemoryResident
 details:
     - "The application must ensure the memory is resident before being referenced by the device"
+    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -38,6 +39,7 @@ name: EvictMemory
 details:
     - "The application must ensure the device is not currently referencing the memory before it is evicted"
     - "The application may free the memory without evicting; the memory is implicitly evicted when freed."
+    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -60,6 +62,7 @@ class: $xDevice
 name: MakeImageResident
 details:
     - "The application must ensure the image is resident before being referenced by the device"
+    - "The application must call this function using the same active context on which the image was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -80,6 +83,7 @@ name: EvictImage
 details:
     - "The application must ensure the device is not currently referencing the image before it is evicted"
     - "The application may destroy the image without evicting; the image is implicitly evicted when destroyed."
+    - "The application must call this function using the same active context on which the image was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

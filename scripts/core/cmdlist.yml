@@ -56,8 +56,8 @@ decl: static
 ordinal: "0"
 details:
     - "A command list represents a sequence of commands for execution on a command queue."
-    - "The command list can only be used on the device for which it was created."
     - "The command list is created in the 'open' state."
+    - "The application must only use the command list on the device for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -83,8 +83,8 @@ ordinal: "0"
 details:
     - "An immediate command list is used for low-latency submission of commands."
     - "An immediate command list creates an implicit command queue."
-    - "The command list can only be used on the device for which it was created."
     - "The command list is created in the 'open' state and never needs to be closed."
+    - "The application must only use the command list on the device for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -126,6 +126,7 @@ class: $xCommandList
 name: Close
 ordinal: "1"
 details:
+    - "The application must call this function using the same active context on which the command list was created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -139,6 +140,7 @@ class: $xCommandList
 name: Reset
 ordinal: "1"
 details:
+    - "The application must call this function using the same active context on which the command list was created."
     - "The application must ensure the device is not currently referencing the command list before it is reset"
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -152,9 +154,10 @@ desc: "Appends a memory write of the device's global timestamp value into a comm
 class: $xCommandList
 name: AppendWriteGlobalTimestamp
 details:
-    - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
     - "The timestamp frequency can be queried from ::$x_device_properties_t.timerResolution."
     - "The number of valid bits in the timestamp value can be queried from ::$x_device_properties_t.timestampValidBits."
+    - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
+    - "The application must call this function using the same active context on which the command list and events were created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:

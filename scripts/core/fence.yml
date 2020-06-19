@@ -40,6 +40,7 @@ analogue:
     - "**vkCreateFence**"
 details:
     - "A fence is a heavyweight synchronization primitive used to communicate to the host that command list execution has completed."
+    - "The application must only use the fence on the command queue for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -84,6 +85,7 @@ name: HostSynchronize
 analogue:
     - "**vkWaitForFences**"
 details:
+    - "The application must call this function using the same active context on which the fence was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -109,6 +111,7 @@ name: QueryStatus
 analogue:
     - "**vkGetFenceStatus**"
 details:
+    - "The application must call this function using the same active context on which the fence was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -127,6 +130,7 @@ name: Reset
 analogue:
     - "**vkResetFences**"
 details:
+    - "The application must call this function using the same active context on which the fence was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

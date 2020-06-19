@@ -20,7 +20,8 @@ details:
     - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
     - "If numWaitEvents is non-zero, then then all phWaitEvents must be signaled prior to the execution of the barrier."
     - "This command blocks all following commands from beginning until the execution of the barrier completes."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list and events were created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -49,7 +50,8 @@ details:
     - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
     - "If numWaitEvents is non-zero, then then all phWaitEvents must be signaled prior to the execution of the barrier."
     - "This command blocks all following commands from beginning until the execution of the barrier completes."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list and events were created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -84,7 +86,10 @@ desc: "Ensures in-bound writes to the device are globally observable."
 class: $xDevice
 name: SystemBarrier
 details:
-    - "This is a special-case system level barrier that can be used to ensure global observability of writes; typically needed after a producer (e.g., NIC) performs direct writes to the device's memory (e.g., Direct RDMA writes).  This is typically required when the memory corresponding to the writes is subsequently accessed from a remote device."
+    - |
+      This is a special-case system level barrier that can be used to ensure global observability of writes; 
+      typically needed after a producer (e.g., NIC) performs direct writes to the device's memory (e.g., Direct RDMA writes).
+      This is typically required when the memory corresponding to the writes is subsequently accessed from a remote device.
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

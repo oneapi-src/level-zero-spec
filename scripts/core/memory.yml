@@ -78,6 +78,7 @@ details:
     - |
       Passing nullptr as the device handle does not associate the shared allocation with any device.
       For allocations with no associated device, ownership of the allocation is shared between the host and all devices supporting cross-device shared access capabilities.
+    - "The application must only use the memory allocation on the driver for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -118,6 +119,7 @@ name: AllocDeviceMem
 details:
     - "Device allocations are owned by a specific device."
     - "In general, a device allocation may only be accessed by the device that owns it."
+    - "The application must only use the memory allocation on the driver for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -156,6 +158,7 @@ details:
     - "Host allocations are owned by the host process."
     - "Host allocations are accessible by the host and all devices within the driver's context."
     - "Host allocations are frequently used as staging areas to transfer data to or from devices."
+    - "The application must only use the memory allocation on the driver for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -307,6 +310,7 @@ name: OpenMemIpcHandle
 details:
     - "Takes an IPC memory handle from a remote process and associates it with a device pointer usable in this process."
     - "The device pointer in this process should not be freed with $xDriverFreeMem, but rather with $xDriverCloseMemIpcHandle."
+    - "Multiple calls to this function with the same IPC handle will return unique pointers."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

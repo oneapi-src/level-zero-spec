@@ -45,7 +45,7 @@ name: Create
 decl: static
 ordinal: "0"
 details:
-    - "Events within the pool can only be used on the device(s) for which it was created."
+    - "The application must only use events within the pool on the device(s) for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -143,7 +143,8 @@ analogue:
     - vkCreateEvent
 details:
     - "An event is used to communicate fine-grain host-to-device, device-to-host or device-to-device dependencies have completed."
-    - "Multiple events cannot be created using the same location within the same pool."
+    - "The application must ensure multiple events do not use the same location within the same pool."
+    - "The application must call this function using the same active context on which the pool was created."
     - "The application must **not** call this function from simultaneous threads with the same event pool handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -187,6 +188,7 @@ class: $xEventPool
 name: GetIpcHandle
 details:
     - "Event pool must have been created with $X_EVENT_POOL_FLAG_IPC."
+    - "The application must call this function using the same active context on which the pool was created."
     - "The application may call this function from simultaneous threads."
 params:
     - type: $x_event_pool_handle_t
@@ -204,6 +206,7 @@ class: $xEventPool
 name: OpenIpcHandle
 decl: static
 details:
+    - "Multiple calls to this function with the same IPC handle will return unique event pool handles."
     - "The event handle in this process should not be freed with $xEventPoolDestroy, but rather with $xEventPoolCloseIpcHandle."
     - "The application may call this function from simultaneous threads."
 params:
@@ -212,7 +215,7 @@ params:
       desc: "[in] handle of the driver to associate with the IPC event pool handle"
     - type: $x_ipc_event_pool_handle_t
       name: hIpc
-      desc: "[in] IPC event handle"
+      desc: "[in] IPC event pool handle"
     - type: "$x_event_pool_handle_t*"
       name: phEventPool
       desc: "[out] pointer handle of event pool object created"
@@ -223,6 +226,7 @@ class: $xEventPool
 name: CloseIpcHandle
 details:
     - "Closes an IPC event handle by destroying events that were opened in this process using $xEventPoolOpenIpcHandle."
+    - "The application must call this function using the same active context on which the pool was openned."
     - "The application must **not** call this function from simultaneous threads with the same event pool handle."
 params:
     - type: $x_event_pool_handle_t
@@ -237,7 +241,8 @@ analogue:
     - "**clSetUserEventStatus**"
     - vkCmdSetEvent
 details:
-    - "The event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list and events were created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -255,6 +260,7 @@ desc: "Appends wait on event(s) on the device into a command list."
 class: $xCommandList
 name: AppendWaitOnEvents
 details:
+    - "The application must call this function using the same active context on which the command list and events were created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -277,7 +283,8 @@ name: HostSignal
 analogue:
     - clSetUserEventStatus
 details:
-    - "The event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the event was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -294,6 +301,7 @@ name: HostSynchronize
 analogue:
     - clWaitForEvents
 details:
+    - "The application must call this function using the same active context on which the event was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -320,6 +328,7 @@ analogue:
     - "**clGetEventInfo**"
     - vkGetEventStatus
 details:
+    - "The application must call this function using the same active context on which the event was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -338,6 +347,7 @@ name: AppendEventReset
 analogue:
     - vkResetEvent
 details:
+    - "The application must call this function using the same active context on which the command list and events were created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -357,6 +367,7 @@ name: HostReset
 analogue:
     - vkResetEvent
 details:
+    - "The application must call this function using the same active context on which the event was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -398,8 +409,9 @@ desc: "Queries an event's timestamp value on the host."
 class: $xEvent
 name: QueryKernelTimestamp
 details:
-    - "The event must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The destination memory will be unmodified if the event has not been signaled."
+    - "The application must call this function using the same active context on which the event was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -419,10 +431,11 @@ desc: "Appends a query of an events' timestamp value(s) into a command list."
 class: $xCommandList
 name: AppendQueryKernelTimestamps
 details:
-    - "The events must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "The memory pointed to by both dstptr and pOffsets must be accessible by the device on which the command list is created."
+    - "The application must ensure the events were created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the memory pointed to by both dstptr and pOffsets is accessible by the device on which the command list was created."
     - "The value(s) written to the destination buffer are undefined if any timestamp event has not been signaled."
     - "If pOffsets is nullptr, then multiple results will be appended sequentially into memory in the same order as phEvents."
+    - "The application must call this function using the same active context on which the command list and events were created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:

@@ -529,7 +529,7 @@ desc: "Appends metric query end into a command list."
 class: $tCommandList
 name: AppendMetricQueryEnd
 details:
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$t_command_list_handle_t"

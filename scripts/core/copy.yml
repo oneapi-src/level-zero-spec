@@ -14,8 +14,9 @@ desc: "Copies host, device, or shared memory."
 class: $xCommandList
 name: AppendMemoryCopy
 details:
-    - "The memory pointed to by both srcptr and dstptr must be accessible by the device on which the command list is created."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the memory pointed to by dstptr and srcptr is accessible by the device on which the command list was created."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list and events were created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
@@ -55,10 +56,11 @@ desc: "Initializes host, device, or shared memory."
 class: $xCommandList
 name: AppendMemoryFill
 details:
-    - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
+    - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
     - "The value to initialize memory to is described by the pattern and the pattern size."
-    - "The pattern size must be a power of two."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The pattern size must be a power-of-two and less than $x_command_queue_group_properties_t::maxMemoryFillPatternSize."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list and events were created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
@@ -123,10 +125,11 @@ desc: "Copies a region from a 2D or 3D array of host, device, or shared memory."
 class: $xCommandList
 name: AppendMemoryCopyRegion
 details:
-    - "The memory pointed to by both srcptr and dstptr must be accessible by the device on which the command list is created."
+    - "The application must ensure the memory pointed to by dstptr and srcptr is accessible by the device on which the command list was created."
     - "The region width, height, and depth for both src and dst must be same. The origins can be different."
     - "The src and dst regions cannot be overlapping."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list and events were created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -178,8 +181,9 @@ class: $xCommandList
 name: AppendMemoryCopyFromContext
 details:
     - "The current active and source context must be from the same driver."
-    - "The memory pointed to by both srcptr and dstptr must be accessible by the device on which the command list is created."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the memory pointed to by dstptr and srcptr is accessible by the device on which the command list was created."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list and events were created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -219,8 +223,9 @@ name: AppendImageCopy
 analogue:
     - "**clEnqueueCopyImage**"
 details:
-    - "Images format descriptors for both source and destination images must be the same."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the image format descriptors for both source and destination images are the same."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list, images and events were created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -278,8 +283,9 @@ name: AppendImageCopyRegion
 details:
     - "The region width and height for both src and dst must be same. The origins can be different."
     - "The src and dst regions cannot be overlapping."
-    - "Images format descriptors for both source and destination images must be the same."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the image format descriptors for both source and destination images are the same."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list, images and events were created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -320,9 +326,10 @@ name: AppendImageCopyToMemory
 analogue:
     - clEnqueueReadImage
 details:
-    - "The memory pointed to by dstptr must be accessible by the device on which the command list is created."
-    - "Media formats are not supported for this function."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
+    - "The application must ensure the image format descriptor for the source image is not a media format."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list, image and events were created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -359,9 +366,10 @@ name: AppendImageCopyFromMemory
 analogue:
     - clEnqueueWriteImage
 details:
-    - "The memory pointed to by srcptr must be accessible by the device on which the command list is created."
-    - "Media formats are not supported for this function."
-    - "The signal event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the memory pointed to by srcptr is accessible by the device on which the command list was created."
+    - "The application must ensure the image format descriptor for the destination image is not a media format."
+    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must call this function using the same active context on which the command list, image and events were created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -406,6 +414,8 @@ details:
     - |
       Prefetching may only be supported at a device-specific granularity, such as at a page boundary.
       In this case, the memory range may be expanded such that the start and end of the range satisfy granularity requirements.
+    - "The application must ensure the memory pointed to by ptr is accessible by the device on which the command list was created."
+    - "The application must call this function using the same active context on which the command list was created, and the memory was allocated."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
@@ -461,7 +471,9 @@ details:
     - |
       Memory advice may only be supported at a device-specific granularity, such as at a page boundary.
       In this case, the memory range may be expanded such that the start and end of the range satisfy granularity requirements.
-    - "The application must **not** call this function from simultaneous threads with the same command list handle."
+    - "The application must ensure the memory pointed to by ptr is accessible by the device on which the command list was created."
+    - "The application must call this function using the same active context on which the command list was created."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle, and the memory was allocated."
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_command_list_handle_t

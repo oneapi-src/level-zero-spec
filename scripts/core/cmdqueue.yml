@@ -93,7 +93,7 @@ analogue:
     - "**clCreateCommandQueue**"
 details:
     - "A command queue represents a logical input stream to the device, tied to a physical input stream."
-    - "The command queue can only be used on the device for which it was created."
+    - "The application must only use the command queue on the device for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -140,6 +140,9 @@ ordinal: "1"
 analogue:
     - vkQueueSubmit
 details:
+    - "The application must only execute command lists created with an identical command queue group ordinal to the command queue."
+    - "The application must call this function using the same active context on which the command queue and fence were created."
+    - "The application must use a fence created using the same command queue."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -167,6 +170,7 @@ class: $xCommandQueue
 name: Synchronize
 ordinal: "1"
 details:
+    - "The application must call this function using the same active context on which the command queue was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

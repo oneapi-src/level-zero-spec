@@ -57,7 +57,7 @@ name: Create
 decl: static
 details:
     - "A command graph is used for submitting commands to any command queue."
-    - "The command graph can only be used on the device for which it was created."
+    - "The application must only use the command graph on the device for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -99,7 +99,8 @@ class: $xCommandGraphExp
 name: Close
 details:
     - "The command graph will optimize the execution order of the command lists."
-    - "A command list may **not** be reset after the command graph is closed."
+    - "The application must not reset the command list after the command graph is closed."
+    - "The application must call this function using the same active context on which the command graph was created."
     - "The application must **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
 params:
