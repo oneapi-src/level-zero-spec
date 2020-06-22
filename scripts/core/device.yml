@@ -73,8 +73,8 @@ etors:
       desc: "Graphics Processing Unit"
     - name: FPGA
       desc: "Field Programmable Gate Array"
-    - name: COPY
-      desc: "Data Copy Accelerator"
+    - name: MCA
+      desc: "Memory Copy Accelerator"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device universal unique id (UUID) size in bytes"
