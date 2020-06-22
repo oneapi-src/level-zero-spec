@@ -50,7 +50,7 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a command graph on the active context."
+desc: "Creates a command graph on the context."
 version: "2.0"
 class: $xCommandGraphExp
 name: Create
@@ -61,6 +61,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device object"
@@ -81,7 +84,6 @@ class: $xCommandGraphExp
 name: Destroy
 decl: static
 details:
-    - "The application must call this function using the same active context on which the command graph was created."
     - "The implementation of this function may immediately free all Host allocations associated with this command graph."
     - "The application must **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function must be thread-safe."
@@ -100,7 +102,6 @@ name: Close
 details:
     - "The command graph will optimize the execution order of the command lists."
     - "The application must not reset the command list after the command graph is closed."
-    - "The application must call this function using the same active context on which the command graph was created."
     - "The application must **not** call this function from simultaneous threads with the same command graph handle."
     - "The implementation of this function should be lock-free."
 params:

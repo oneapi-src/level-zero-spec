@@ -12,9 +12,12 @@ desc: "Intel $OneApi Level-Zero APIs for OpenCL Interoperability"
 type: function
 desc: "Registers OpenCL memory with $OneApi"
 condition: "$X_ENABLE_OCL_INTEROP"
-class: $xDevice
+class: $xContext
 name: RegisterCLMemory
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle to the device"
@@ -34,9 +37,12 @@ returns:
 type: function
 desc: "Registers OpenCL program with $OneApi"
 condition: "$X_ENABLE_OCL_INTEROP"
-class: $xDevice
+class: $xContext
 name: RegisterCLProgram
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle to the device"
@@ -56,9 +62,12 @@ returns:
 type: function
 desc: "Registers OpenCL command queue with $OneApi"
 condition: "$X_ENABLE_OCL_INTEROP"
-class: $xDevice
+class: $xContext
 name: RegisterCLCommandQueue
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle to the device"

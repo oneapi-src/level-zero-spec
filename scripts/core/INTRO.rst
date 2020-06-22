@@ -160,15 +160,15 @@ Multithreading and Concurrency
 
 The following design philosophies are adopted in order to maximize Host thread concurrency:
 
-  - APIs are free-threaded when the driver object handle is different.
+  - APIs are free-threaded when the driver's object handle is different.
 
     + the driver should avoid thread-locks for these API calls
 
-  - APIs are not thread-safe when the driver object handle is the same, except when explicitly noted.
+  - APIs are not thread-safe when the driver's object handle is the same, except when explicitly noted.
 
     + the application must ensure multiple threads do not enter an API when the handle is the same
 
-  - APIs are not thread-safe with other APIs that use the same driver object handle
+  - APIs are not thread-safe with other APIs that use the same driver's object handle
 
     + the application must ensure multiple threads do not enter these APIs when the handle is the same
 

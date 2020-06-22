@@ -58,10 +58,16 @@ int main( int argc, char *argv[] )
 
     try
     {
+        // Create the context
+        ze::Context::desc_t context_desc;
+        auto pContext = std::shared_ptr<ze::Context>(
+            ze::Context::Create(pDriver, &context_desc),
+            []( ze::Context* p ) { ze::Context::Destroy( p ); } );
+
         // Create an immediate command list for direct submission
         ze::CommandQueue::desc_t queue_desc;
         auto pCommandList = std::shared_ptr<ze::CommandList>(
-            ze::CommandList::CreateImmediate( pDevice, &queue_desc ),
+            ze::CommandList::CreateImmediate( pContext.get(), pDevice, &queue_desc ),
             []( ze::CommandList* p ){ ze::CommandList::Destroy( p ); } );
 
         // Create an event to be signaled by the device
@@ -69,7 +75,7 @@ int main( int argc, char *argv[] )
         pool_desc.flags = ze::EventPool::FLAG_HOST_VISIBLE;
         pool_desc.count = 1;
         auto pEventPool = std::shared_ptr<ze::EventPool>(
-            ze::EventPool::Create( pDriver, &pool_desc, 0, nullptr ),
+            ze::EventPool::Create( pContext.get(), &pool_desc, 0, nullptr ),
             []( ze::EventPool* p ){ ze::EventPool::Destroy( p ); } );
 
         ze::Event::desc_t event_desc;

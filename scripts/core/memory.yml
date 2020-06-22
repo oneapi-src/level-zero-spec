@@ -11,7 +11,7 @@ desc: "Intel $OneApi Level-Zero APIs for Memory"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported memory allocation flags"
-class: $xDriver
+class: $xContext
 name: $x_device_mem_alloc_flags_t
 etors:
     - name: BIAS_CACHED
@@ -21,7 +21,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device memory allocation descriptor"
-class: $xDriver
+class: $xContext
 name: $x_device_mem_alloc_desc_t
 base: $x_base_desc_t
 members:
@@ -41,7 +41,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported host memory allocation flags"
-class: $xDriver
+class: $xContext
 name: $x_host_mem_alloc_flags_t
 etors:
     - name: BIAS_CACHED
@@ -53,7 +53,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Host memory allocation descriptor"
-class: $xDriver
+class: $xContext
 name: $x_host_mem_alloc_desc_t
 base: $x_base_desc_t
 members:
@@ -66,8 +66,8 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Allocates shared memory on the active context."
-class: $xDriver
+desc: "Allocates shared memory on the context."
+class: $xContext
 name: AllocSharedMem
 details:
     - "Shared allocations share ownership between the host and one or more devices."
@@ -82,9 +82,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "const $x_device_mem_alloc_desc_t*"
       name: device_desc
       desc: "[in] pointer to device memory allocation descriptor"
@@ -113,8 +113,8 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Allocates device memory on the active context."
-class: $xDriver
+desc: "Allocates device memory on the context."
+class: $xContext
 name: AllocDeviceMem
 details:
     - "Device allocations are owned by a specific device."
@@ -123,9 +123,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "const $x_device_mem_alloc_desc_t*"
       name: device_desc
       desc: "[in] pointer to device memory allocation descriptor"
@@ -151,8 +151,8 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Allocates host memory on the active context."
-class: $xDriver
+desc: "Allocates host memory on the context."
+class: $xContext
 name: AllocHostMem
 details:
     - "Host allocations are owned by the host process."
@@ -162,9 +162,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "const $x_host_mem_alloc_desc_t*"
       name: host_desc
       desc: "[in] pointer to host memory allocation descriptor"
@@ -187,26 +187,25 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Frees allocated host memory, device memory, or shared memory on the active context."
-class: $xDriver
+desc: "Frees allocated host memory, device memory, or shared memory on the context."
+class: $xContext
 name: FreeMem
 details:
-    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application must ensure the device is not currently referencing the memory before it is freed"
     - "The implementation of this function may immediately free all Host and Device allocations associated with this memory"
     - "The application must **not** call this function from simultaneous threads with the same pointer."
     - "The implementation of this function must be thread-safe."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "void*"
       name: ptr
       desc: "[in][release] pointer to memory to free"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory allocation type"
-class: $xDriver
+class: $xContext
 name: $x_memory_type_t
 etors:
     - name: UNKNOWN
@@ -221,7 +220,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory allocation properties queried using $xDriverGetMemAllocProperties"
-class: $xDriver
+class: $xContext
 name: $x_memory_allocation_properties_t
 base: $x_base_properties_t
 members:
@@ -234,15 +233,14 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves attributes of a memory allocation"
-class: $xDriver
+class: $xContext
 name: GetMemAllocProperties
 details:
-    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "const void*"
       name: ptr
       desc: "[in] memory pointer to query"
@@ -255,15 +253,14 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves the base address and/or size of an allocation"
-class: $xDriver
+class: $xContext
 name: GetMemAddressRange
 details:
-    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "const void*"
       name: ptr
       desc: "[in] memory pointer to query"
@@ -276,18 +273,17 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an IPC memory handle for the specified allocation"
-class: $xDriver
+class: $xContext
 name: GetMemIpcHandle
 details:
     - "Takes a pointer to a device memory allocation and creates an IPC memory handle for exporting it for use in another process."
     - "The pointer must be base pointer of the device memory allocation; i.e. the value returned from $xDriverAllocDeviceMem."
-    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "const void*"
       name: ptr
       desc: "[in] pointer to the device memory allocation"
@@ -297,15 +293,15 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported IPC memory flags"
-class: $xDriver
+class: $xContext
 name: $x_ipc_memory_flags_t
 etors:
     - name: TBD
       desc: "reserved for future use"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Opens an IPC memory handle to retrieve a device pointer on the active context."
-class: $xDriver
+desc: "Opens an IPC memory handle to retrieve a device pointer on the context."
+class: $xContext
 name: OpenMemIpcHandle
 details:
     - "Takes an IPC memory handle from a remote process and associates it with a device pointer usable in this process."
@@ -314,9 +310,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device to associate with the IPC memory handle"
@@ -335,17 +331,16 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes an IPC memory handle"
-class: $xDriver
+class: $xContext
 name: CloseMemIpcHandle
 details:
     - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xDriverOpenMemIpcHandle."
-    - "The application must call this function using the same active context on which the memory was openned."
     - "The application must **not** call this function from simultaneous threads with the same pointer."
     - "The implementation of this function must be thread-safe."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "const void*"
       name: ptr
       desc: "[in][release] pointer to device allocation in this process"

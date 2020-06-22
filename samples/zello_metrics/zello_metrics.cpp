@@ -50,13 +50,19 @@ int main( int argc, char *argv[] )
 
     try
     {
+        // Create the context
+        ze::Context::desc_t context_desc;
+        auto pContext = std::shared_ptr<zet::Context>(
+            reinterpret_cast<zet::Context*>( ze::Context::Create( pDriver, &context_desc ) ),
+            []( zet::Context* p ){ ze::Context::Destroy( reinterpret_cast<ze::Context*>( p ) ); } );
+
         // Active the metric group on the device
-        pDevice->ActivateMetricGroups( 1, &pMetricGroup );
+        pContext->ActivateMetricGroups( pDevice, 1, &pMetricGroup );
 
         // Create an immediate command list for direct submission
         ze::CommandQueue::desc_t queue_desc;
         auto pCommandList = std::shared_ptr<zet::CommandList>(
-            reinterpret_cast<zet::CommandList*>( ze::CommandList::CreateImmediate( pDevice, &queue_desc ) ),
+            reinterpret_cast<zet::CommandList*>( ze::CommandList::CreateImmediate( pContext.get(), pDevice, &queue_desc ) ),
             []( zet::CommandList* p ){ ze::CommandList::Destroy( reinterpret_cast<ze::CommandList*>( p ) ); } );
 
         // Create an event to be signaled by the device
@@ -65,7 +71,7 @@ int main( int argc, char *argv[] )
         pool_desc.flags = ze::EventPool::FLAG_HOST_VISIBLE;
         pool_desc.count = numSamples;
         auto pEventPool = std::shared_ptr<ze::EventPool>(
-            ze::EventPool::Create( pDriver, &pool_desc, 0, nullptr ),
+            ze::EventPool::Create( pContext.get(), &pool_desc, 0, nullptr ),
             []( ze::EventPool* p ){ ze::EventPool::Destroy( p ); } );
 
         ze::Event::desc_t event_desc;
@@ -79,7 +85,7 @@ int main( int argc, char *argv[] )
         zet::MetricQueryPool::desc_t query_pool_desc;
         query_pool_desc.count = numSamples;
         auto pQueryPool = std::shared_ptr<zet::MetricQueryPool>(
-            zet::MetricQueryPool::Create( pDevice, pMetricGroup, &query_pool_desc ),
+            zet::MetricQueryPool::Create( pContext.get(), pDevice, pMetricGroup, &query_pool_desc ),
             []( zet::MetricQueryPool* p ){ zet::MetricQueryPool::Destroy( p ); } );
 
         auto pQuery = std::shared_ptr<zet::MetricQuery>(

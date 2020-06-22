@@ -49,7 +49,7 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a command list on the active context."
+desc: "Creates a command list on the context."
 class: $xCommandList
 name: Create
 decl: static
@@ -61,6 +61,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device object"
@@ -75,7 +78,7 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates an immediate command list on the active context."
+desc: "Creates an immediate command list on the context."
 class: $xCommandList
 name: CreateImmediate
 decl: static
@@ -88,6 +91,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device object"
@@ -108,7 +114,6 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function using the same active context on which the command list was created."
     - "The application must ensure the device is not currently referencing the command list before it is deleted."
     - "The implementation of this function may immediately free all Host and Device allocations associated with this command list."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
@@ -126,7 +131,6 @@ class: $xCommandList
 name: Close
 ordinal: "1"
 details:
-    - "The application must call this function using the same active context on which the command list was created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -140,7 +144,6 @@ class: $xCommandList
 name: Reset
 ordinal: "1"
 details:
-    - "The application must call this function using the same active context on which the command list was created."
     - "The application must ensure the device is not currently referencing the command list before it is reset"
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -157,7 +160,7 @@ details:
     - "The timestamp frequency can be queried from ::$x_device_properties_t.timerResolution."
     - "The number of valid bits in the timestamp value can be queried from ::$x_device_properties_t.timestampValidBits."
     - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
-    - "The application must call this function using the same active context on which the command list and events were created, and the memory was allocated."
+    - "The application must ensure the command list and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:

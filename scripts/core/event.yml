@@ -39,7 +39,7 @@ members:
       desc: "[in] number of events within the pool; must be greater than 0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a pool of events on the active context."
+desc: "Creates a pool of events on the context."
 class: $xEventPool
 name: Create
 decl: static
@@ -49,9 +49,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
-    - type: $x_driver_handle_t
-      name: hDriver
-      desc: "[in] handle of the driver instance"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "const $x_event_pool_desc_t*"
       name: desc
       desc: "[in] pointer to event pool descriptor"
@@ -80,7 +80,6 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function using the same active context on which the pool was created."
     - "The application must destroy all event handles created from the pool before destroying the pool itself."
     - "The application must ensure the device is not currently referencing the any event within the pool before it is deleted."
     - "The implementation of this function may immediately free all Host and Device allocations associated with this event pool."
@@ -133,7 +132,7 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates an event on the active context."
+desc: "Creates an event from the pool."
 class: $xEvent
 name: Create
 decl: static
@@ -144,7 +143,6 @@ analogue:
 details:
     - "An event is used to communicate fine-grain host-to-device, device-to-host or device-to-device dependencies have completed."
     - "The application must ensure multiple events do not use the same location within the same pool."
-    - "The application must call this function using the same active context on which the pool was created."
     - "The application must **not** call this function from simultaneous threads with the same event pool handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -167,7 +165,6 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function using the same active context on which the event was created."
     - "The application must ensure the device is not currently referencing the event before it is deleted."
     - "The implementation of this function may immediately free all Host and Device allocations associated with this event."
     - "The application must **not** call this function from simultaneous threads with the same event handle."
@@ -188,7 +185,6 @@ class: $xEventPool
 name: GetIpcHandle
 details:
     - "Event pool must have been created with $X_EVENT_POOL_FLAG_IPC."
-    - "The application must call this function using the same active context on which the pool was created."
     - "The application may call this function from simultaneous threads."
 params:
     - type: $x_event_pool_handle_t
@@ -226,7 +222,6 @@ class: $xEventPool
 name: CloseIpcHandle
 details:
     - "Closes an IPC event handle by destroying events that were opened in this process using $xEventPoolOpenIpcHandle."
-    - "The application must call this function using the same active context on which the pool was openned."
     - "The application must **not** call this function from simultaneous threads with the same event pool handle."
 params:
     - type: $x_event_pool_handle_t
@@ -242,7 +237,7 @@ analogue:
     - vkCmdSetEvent
 details:
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "The application must call this function using the same active context on which the command list and events were created."
+    - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -260,7 +255,7 @@ desc: "Appends wait on event(s) on the device into a command list."
 class: $xCommandList
 name: AppendWaitOnEvents
 details:
-    - "The application must call this function using the same active context on which the command list and events were created."
+    - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -284,7 +279,7 @@ analogue:
     - clSetUserEventStatus
 details:
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "The application must call this function using the same active context on which the event was created."
+    - "The application must ensure the event was created on the same context."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -301,7 +296,6 @@ name: HostSynchronize
 analogue:
     - clWaitForEvents
 details:
-    - "The application must call this function using the same active context on which the event was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -328,7 +322,6 @@ analogue:
     - "**clGetEventInfo**"
     - vkGetEventStatus
 details:
-    - "The application must call this function using the same active context on which the event was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -347,7 +340,7 @@ name: AppendEventReset
 analogue:
     - vkResetEvent
 details:
-    - "The application must call this function using the same active context on which the command list and events were created."
+    - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -367,7 +360,6 @@ name: HostReset
 analogue:
     - vkResetEvent
 details:
-    - "The application must call this function using the same active context on which the event was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -411,7 +403,6 @@ name: QueryKernelTimestamp
 details:
     - "The application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The destination memory will be unmodified if the event has not been signaled."
-    - "The application must call this function using the same active context on which the event was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -435,7 +426,7 @@ details:
     - "The application must ensure the memory pointed to by both dstptr and pOffsets is accessible by the device on which the command list was created."
     - "The value(s) written to the destination buffer are undefined if any timestamp event has not been signaled."
     - "If pOffsets is nullptr, then multiple results will be appended sequentially into memory in the same order as phEvents."
-    - "The application must call this function using the same active context on which the command list and events were created, and the memory was allocated."
+    - "The application must ensure the command list and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:

@@ -66,8 +66,8 @@ namespace driver
         //pfnGetIPCProperties
         
         //////////////////////////////////////////////////////////////////////////
-        zeDdiTable.Driver.pfnAllocSharedMem = [](
-            ze_driver_handle_t,
+        zeDdiTable.Context.pfnAllocSharedMem = [](
+            ze_context_handle_t,
             const ze_device_mem_alloc_desc_t*,
             const ze_host_mem_alloc_desc_t*,
             size_t size,
@@ -80,8 +80,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        zeDdiTable.Driver.pfnAllocDeviceMem = [](
-            ze_driver_handle_t,
+        zeDdiTable.Context.pfnAllocDeviceMem = [](
+            ze_context_handle_t,
             const ze_device_mem_alloc_desc_t*,
             size_t size,
             size_t alignment,
@@ -93,8 +93,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        zeDdiTable.Driver.pfnAllocHostMem = [](
-            ze_driver_handle_t,
+        zeDdiTable.Context.pfnAllocHostMem = [](
+            ze_context_handle_t,
             const ze_host_mem_alloc_desc_t*,
             size_t size,
             size_t alignment,
@@ -105,8 +105,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        zeDdiTable.Driver.pfnFreeMem = [](
-            ze_driver_handle_t,
+        zeDdiTable.Context.pfnFreeMem = [](
+            ze_context_handle_t,
             void* ptr)
         {
             free(ptr);
@@ -328,7 +328,7 @@ namespace instrumented
 
             //////////////////////////////////////////////////////////////////////////
             driver::context.zetDdiTable.Tracer.pfnCreate = [](
-                zet_driver_handle_t,
+                zet_context_handle_t,
                 const zet_tracer_desc_t* desc,
                 zet_tracer_handle_t* phTracer )
             {

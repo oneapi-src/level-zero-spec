@@ -28,7 +28,7 @@ etors:
 type: enum
 desc: "Supported raytracing memory allocation flags"
 version: "1.1"
-class: $xDriver
+class: $xContext
 name: $x_raytracing_mem_alloc_ext_flags_t
 etors:
     - name: TBD
@@ -37,7 +37,7 @@ etors:
 type: struct
 desc: "Raytracing memory allocation descriptor"
 version: "1.1"
-class: $xDriver
+class: $xContext
 name: $x_raytracing_mem_alloc_ext_desc_t
 base: $x_base_desc_t
 members:
@@ -49,4 +49,4 @@ members:
             default behavior may use implicit driver-based heuristics.
       init: "0"
 details:
-    - "This structure must be passed to $xDriverAllocSharedMem or $xDriverAllocDeviceMem, via `pNext` member of $x_device_mem_alloc_desc_t, for any memory allocation that is to be accessed by raytracing fixed-function of the device."
+    - "This structure must be passed to $xContextAllocSharedMem or $xContextAllocDeviceMem, via `pNext` member of $x_device_mem_alloc_desc_t, for any memory allocation that is to be accessed by raytracing fixed-function of the device."

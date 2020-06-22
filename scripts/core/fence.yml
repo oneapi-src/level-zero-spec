@@ -31,7 +31,7 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a fence on the active context."
+desc: "Creates a fence for the command queue."
 class: $xFence
 name: Create
 decl: static
@@ -64,7 +64,6 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function using the same active context on which the fence was created."
     - "The application must ensure the device is not currently referencing the fence before it is deleted."
     - "The implementation of this function may immediately free all Host and Device allocations associated with this fence."
     - "The application must **not** call this function from simultaneous threads with the same fence handle."
@@ -85,7 +84,6 @@ name: HostSynchronize
 analogue:
     - "**vkWaitForFences**"
 details:
-    - "The application must call this function using the same active context on which the fence was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -111,7 +109,6 @@ name: QueryStatus
 analogue:
     - "**vkGetFenceStatus**"
 details:
-    - "The application must call this function using the same active context on which the fence was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -130,7 +127,6 @@ name: Reset
 analogue:
     - "**vkResetFences**"
 details:
-    - "The application must call this function using the same active context on which the fence was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

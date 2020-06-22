@@ -447,7 +447,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            // Create metric query pool & completion event
            queryPoolDesc.type         = ${T}_METRIC_QUERY_POOL_TYPE_PERFORMANCE;
            queryPoolDesc.count        = 1000;
-           ${t}MetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
+           ${t}MetricQueryPoolCreate( hContext, hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
            eventPoolDesc.flags = 0;
            eventPoolDesc.count = 1000;
            ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );

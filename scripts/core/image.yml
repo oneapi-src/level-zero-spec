@@ -256,7 +256,7 @@ params:
       desc: "[out] pointer to image properties"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates an image on the active context."
+desc: "Creates an image on the context."
 class: $xImage
 name: Create
 decl: static
@@ -268,6 +268,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
@@ -289,7 +292,6 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function using the same active context on which the image was created."
     - "The application must ensure the device is not currently referencing the image before it is deleted."
     - "The implementation of this function may immediately free all Host and Device allocations associated with this image."
     - "The application must **not** call this function from simultaneous threads with the same image handle."
