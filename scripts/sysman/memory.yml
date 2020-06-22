@@ -19,6 +19,20 @@ etors:
       desc: "HBM memory"
     - name: DDR
       desc: "DDR memory"
+    - name: DDR3
+      desc: "DDR3 memory"
+    - name: DDR4
+      desc: "DDR4 memory"
+    - name: DDR5
+      desc: "DDR5 memory"
+    - name: LPDDR
+      desc: "LPDDR memory"
+    - name: LPDDR3
+      desc: "LPDDR3 memory"
+    - name: LPDDR4
+      desc: "LPDDR4 memory"
+    - name: LPDDR5
+      desc: "LPDDR5 memory"
     - name: SRAM
       desc: "SRAM memory"
     - name: L1
@@ -35,9 +49,11 @@ desc: "Memory health"
 class: $sMemory
 name: $s_mem_health_t
 etors:
-    - name: OK
+    - name: UNKNOWN
       value: "0"
-      desc: "All memory channels are healthy"
+      desc: "The memory health cannot be determined."
+    - name: OK
+      desc: "All memory channels are healthy."
     - name: DEGRADED
       desc: "Excessive correctable errors have been detected on one or more channels. Device should be reset."
     - name: CRITICAL

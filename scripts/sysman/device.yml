@@ -80,7 +80,7 @@ members:
       desc: "[out] Core device properties"
     - type: uint32_t
       name: "numSubdevices"
-      desc: "[out] Number of sub-devices"
+      desc: "[out] Number of sub-devices. A value of 0 indicates that this device doesn't have sub-devices."
     - type: char
       name: "serialNumber[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Manufacturing serial number (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
@@ -226,15 +226,15 @@ desc: "PCI speed"
 class: $sDevice
 name: $s_pci_speed_t
 members:
-    - type: uint32_t
+    - type: int32_t
       name: "gen"
-      desc: "[out] The link generation"
-    - type: uint32_t
+      desc: "[out] The link generation. A value of -1 means that this property is unknown."
+    - type: int32_t
       name: "width"
-      desc: "[out] The number of lanes"
-    - type: uint64_t
+      desc: "[out] The number of lanes. A value of -1 means that this property is unknown."
+    - type: int64_t
       name: "maxBandwidth"
-      desc: "[out] The maximum bandwidth in bytes/sec (sum of all lanes)"
+      desc: "[out] The maximum bandwidth in bytes/sec (sum of all lanes). A value of -1 means that this property is unknown."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Static PCI properties"
@@ -248,18 +248,29 @@ members:
     - type: $s_pci_speed_t
       name: "maxSpeed"
       desc: "[out] Fastest port configuration supported by the device (sum of all lanes)"
+    - type: $x_bool_t
+      name: "haveBandwidthCounters"
+      desc: "[out] Indicates if $s_pci_stats_t.rxCounter and $s_pci_stats_t.txCounter will have valid values"
+    - type: $x_bool_t
+      name: "havePacketCounters"
+      desc: "[out] Indicates if $s_pci_stats_t.packetCounter will have valid values"
+    - type: $x_bool_t
+      name: "haveReplayCounters"
+      desc: "[out] Indicates if $s_pci_stats_t.replayCounter will have valid values"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI link status"
 class: $sDevice
 name: $s_pci_link_status_t
 etors:
-    - name: GREEN
+    - name: UNKNOWN
       value: "0"
+      desc: "The link status could not be determined"
+    - name: GOOD
       desc: "The link is up and operating as expected"
-    - name: YELLOW
+    - name: QUALITY_ISSUES
       desc: "The link is up but has quality and/or bandwidth degradation"
-    - name: RED
+    - name: STABILITY_ISSUES
       desc: "The link has stability issues and preventing workloads making forward progress"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -268,7 +279,7 @@ class: $sDevice
 name: $s_pci_link_qual_issue_flags_t
 etors:
     - name: REPLAYS
-      desc: "An significant number of replays are occurring"
+      desc: "A significant number of replays are occurring"
     - name: SPEED
       desc: "There is a degradation in the maximum bandwidth of the link"
 --- #--------------------------------------------------------------------------
@@ -292,13 +303,13 @@ members:
     - type: $s_pci_link_qual_issue_flags_t
       name: "qualityIssues"
       desc: |
-            [out] If status is $S_PCI_LINK_STATUS_YELLOW, 
+            [out] If status is $S_PCI_LINK_STATUS_QUALITY_ISSUES, 
             then this gives a combination of $s_pci_link_qual_issue_flag_t for quality issues that have been detected;
             otherwise, 0 indicates there are no quality issues with the link at this time."
     - type: $s_pci_link_stab_issue_flags_t
       name: "stabilityIssues"
       desc: |
-            [out] If status is $S_PCI_LINK_STATUS_RED, 
+            [out] If status is $S_PCI_LINK_STATUS_STABILITY_ISSUES, 
             then this gives a combination of $s_pci_link_stab_issue_flag_t for reasons for the connection instability;
             otherwise, 0 indicates there are no connection stability issues at this time."
     - type: $s_pci_speed_t
@@ -342,8 +353,8 @@ desc: "PCI stats counters"
 class: $sDevice
 name: $s_pci_stats_t
 details:
-    - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) + (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
     - "Percent replays is calculated by taking two snapshots (s1, s2) and using the equation: %replay = 10^6 * (s2.replayCounter - s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
+    - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) + (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
 members:
     - type: uint64_t
       name: "timestamp"
@@ -354,16 +365,16 @@ members:
             The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
     - type: uint64_t
       name: "replayCounter"
-      desc: "[out] Monotonic counter for the number of replay packets (sum of all lanes)"
+      desc: "[out] Monotonic counter for the number of replay packets (sum of all lanes). Will always be 0 if $s_pci_properties_t.haveReplayCounters is FALSE."
     - type: uint64_t
       name: "packetCounter"
-      desc: "[out] Monotonic counter for the number of packets (sum of all lanes)"
+      desc: "[out] Monotonic counter for the number of packets (sum of all lanes). Will always be 0 if $s_pci_properties_t.havePacketCounters is FALSE."
     - type: uint64_t
       name: "rxCounter"
-      desc: "[out] Monotonic counter for the number of bytes received (sum of all lanes)"
+      desc: "[out] Monotonic counter for the number of bytes received (sum of all lanes). Will always be 0 if $s_pci_properties_t.haveBandwidthCounters is FALSE."
     - type: uint64_t
       name: "txCounter"
-      desc: "[out] Monotonic counter for the number of bytes transmitted (including replays) (sum of all lanes)"
+      desc: "[out] Monotonic counter for the number of bytes transmitted (including replays) (sum of all lanes). Will always be 0 if $s_pci_properties_t.haveBandwidthCounters is FALSE."
     - type: $s_pci_speed_t
       name: "speed"
       desc: "[out] The current speed of the link (sum of all lanes)"

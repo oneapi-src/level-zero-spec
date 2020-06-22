@@ -29,6 +29,21 @@ members:
       desc: "[out] Indicates if the LED is RGB capable"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "LED color"
+class: $sLed
+name: $s_led_color_t
+members:
+    - type: double
+      name: "red"
+      desc: "[in,out][range(0.0, 1.0)] The LED red value. On output, a value less than 0.0 indicates that the color is not known."
+    - type: double
+      name: "green"
+      desc: "[in,out][range(0.0, 1.0)] The LED green value. On output, a value less than 0.0 indicates that the color is not known."
+    - type: double
+      name: "blue"
+      desc: "[in,out][range(0.0, 1.0)] The LED blue value. On output, a value less than 0.0 indicates that the color is not known."
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "LED state"
 class: $sLed
 name: $s_led_state_t
@@ -36,16 +51,10 @@ base: $s_base_state_t
 members:
     - type: $x_bool_t
       name: isOn
-      desc: "[in,out] Indicates if the LED is on or off"
-    - type: uint8_t
-      name: "red"
-      desc: "[in,out][range(0, 255)] The LED red value"
-    - type: uint8_t
-      name: "green"
-      desc: "[in,out][range(0, 255)] The LED green value"
-    - type: uint8_t
-      name: "blue"
-      desc: "[in,out][range(0, 255)] The LED blue value"
+      desc: "[out] Indicates if the LED is on or off"
+    - type: $s_led_color_t
+      name: color
+      desc: "[out] Color of the LED"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of LEDs"
@@ -100,7 +109,7 @@ params:
       desc: "[in,out] Will contain the current state of the LED."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set state of a LED - on/off, color"
+desc: "Turn the LED on/off"
 class: $sLed
 name: SetState
 details:
@@ -110,12 +119,32 @@ params:
     - type: $s_led_handle_t
       name: hLed
       desc: "[in] Handle for the component."
-    - type: const $s_led_state_t*
-      name: pState
-      desc: "[in] New state of the LED."
+    - type: $x_bool_t
+      name: enable
+      desc: "[in] Set to TRUE to turn the LED on, FALSE to turn off."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the color of the LED"
+class: $sLed
+name: SetColor
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_led_handle_t
+      name: hLed
+      desc: "[in] Handle for the component."
+    - type: const $s_led_color_t*
+      name: pColor
+      desc: "[in] New color of the LED."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "This LED doesn't not support color changes. See $s_led_properties_t.haveRGB."
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device LED"

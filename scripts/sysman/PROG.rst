@@ -1583,8 +1583,14 @@ The following functions are available:
 | ${s}FanGetConfig()         | Get the current configuration     |
 |                                   | (speed) of a fan.                 |
 +-----------------------------------+-----------------------------------+
-| ${s}FanSetConfig()         | Change the configuration (speed)  |
-|                                   | of a fan.                         |
+| ${s}FanSetDefaultMode()    | Return fan control to factory     |
+|                                   | default.                          |
++-----------------------------------+-----------------------------------+
+| ${s}FanSetFixedSpeedMode() | Configure the fan to rotate       |
+|                                   | at a fixed speed.                 |
++-----------------------------------+-----------------------------------+
+| ${s}FanSetSpeedTableMode() | Configure fan speed to depend     |
+|                                   | on temperature.                   |
 +-----------------------------------+-----------------------------------+
 | ${s}FanGetState()          | Get the current speed of a fan.   |
 +-----------------------------------+-----------------------------------+
@@ -1601,10 +1607,10 @@ The pseudo code below shows how to output the fan speed of all fans:
             if (${s}DeviceEnumFans(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
                 output("    Fans")
                 for (fanIndex = 0 .. numFans-1)
-                    uint32_t speed
+                    int32_t speed
                     if (${s}FanGetState(phFans[fanIndex], ${S}_FAN_SPEED_UNITS_RPM, &speed)
                         == ${X}_RESULT_SUCCESS)
-                            output("        Fan %u: %u RPM", fanIndex, speed)
+                            output("        Fan %u: %d RPM", fanIndex, speed)
         free_memory(...)
     }
 
@@ -1620,15 +1626,14 @@ value in RPM, but only if control is permitted:
            ${s}_fan_handle_t* phFans =
                allocate_memory(numFans * sizeof(${s}_fan_handle_t))
            if (${s}DeviceEnumFans(hSysmanDevice, &numFans, phFans) == ${X}_RESULT_SUCCESS)
-               ${s}_fan_config_t config
-               config.mode = ${S}_FAN_SPEED_MODE_FIXED
-               config.speed = SpeedRpm
-               config.speedUnits = ${S}_FAN_SPEED_UNITS_RPM
+               ${s}_fan_speed_t speedRequest
+               speedRequest.speed = SpeedRpm
+               speedRequest.speedUnits = ${S}_FAN_SPEED_UNITS_RPM
                for (fanIndex = 0 .. numFans-1)
                    ${s}_fan_properties_t fanprops
                    if (${s}FanGetProperties(phFans[fanIndex], &fanprops) == ${X}_RESULT_SUCCESS)
                        if (fanprops.canControl)
-                           ${s}FanSetConfig(phFans[fanIndex], &config)
+                           ${s}FanSetFixedSpeedMode(phFans[fanIndex], &speedRequest)
                        else
                            output("ERROR: Can't control fan %u.\n", fanIndex)
        free_memory(...)

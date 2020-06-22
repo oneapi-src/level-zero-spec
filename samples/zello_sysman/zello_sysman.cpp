@@ -577,10 +577,9 @@ void SetFanSpeed(zes_device_handle_t hSysmanDevice, uint32_t SpeedRpm)
             (zes_fan_handle_t*)malloc(numFans * sizeof(zes_fan_handle_t));
         if (zesDeviceEnumFans(hSysmanDevice, &numFans, phFans) == ZE_RESULT_SUCCESS)
         {
-            zes_fan_config_t config;
-            config.mode = ZES_FAN_SPEED_MODE_FIXED;
-            config.speed = SpeedRpm;
-            config.speedUnits = ZES_FAN_SPEED_UNITS_RPM;
+            zes_fan_speed_t speedRequest;
+            speedRequest.speed = SpeedRpm;
+            speedRequest.units = ZES_FAN_SPEED_UNITS_RPM;
             for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
                 zes_fan_properties_t fanprops;
@@ -588,7 +587,7 @@ void SetFanSpeed(zes_device_handle_t hSysmanDevice, uint32_t SpeedRpm)
                 {
                     if (fanprops.canControl)
                     {
-                        zesFanSetConfig(phFans[fanIndex], &config);
+                        zesFanSetFixedSpeedMode(phFans[fanIndex], &speedRequest);
                     }
                     else
                     {
@@ -613,11 +612,11 @@ void ShowFans(zes_device_handle_t hSysmanDevice)
             fprintf(stdout, "    Fans\n");
             for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
-                uint32_t speed;
+                int32_t speed;
                 if (zesFanGetState(phFans[fanIndex], ZES_FAN_SPEED_UNITS_RPM, &speed)
                     == ZE_RESULT_SUCCESS)
                 {
-                    fprintf(stdout, "        Fan %u: %u RPM\n", fanIndex, speed);
+                    fprintf(stdout, "        Fan %u: %d RPM\n", fanIndex, speed);
                 }
             }
         }

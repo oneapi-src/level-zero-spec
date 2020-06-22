@@ -14,8 +14,10 @@ desc: "PSU voltage status"
 class: $sPsu
 name: $s_psu_voltage_status_t
 etors:
-    - name: NORMAL
+    - name: UNKNOWN
       value: "0"
+      desc: "The status of the power supply voltage controllers cannot be determined"
+    - name: NORMAL
       desc: "No unusual voltages have been detected"
     - name: OVER
       desc: "Over-voltage has occurred"
@@ -37,9 +39,9 @@ members:
     - type: $x_bool_t
       name: "haveFan"
       desc: "[out] True if the power supply has a fan"
-    - type: uint32_t
+    - type: int32_t
       name: "ampLimit"
-      desc: "[out] The maximum electrical current in amperes that can be drawn"
+      desc: "[out] The maximum electrical current in milliamperes that can be drawn. A value of -1 indicates that this property cannot be determined."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Dynamic state of the power supply"
@@ -53,12 +55,12 @@ members:
     - type: $x_bool_t
       name: "fanFailed"
       desc: "[out] Indicates if the fan has failed"
-    - type: uint32_t
+    - type: int32_t
       name: "temperature"
-      desc: "[out] Read the current heatsink temperature in degrees Celsius."
-    - type: uint32_t
+      desc: "[out] Read the current heatsink temperature in degrees Celsius. A value of -1 indicates that this property cannot be determined."
+    - type: int32_t
       name: "current"
-      desc: "[out] The amps being drawn in amperes"
+      desc: "[out] The amps being drawn in milliamperes. A value of -1 indicates that this property cannot be determined."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of power supplies"
