@@ -11,14 +11,16 @@ desc: "Intel $OneApi Level-Zero APIs for Memory Residency"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Makes memory resident for the device."
-class: $xDevice
+class: $xContext
 name: MakeMemoryResident
 details:
     - "The application must ensure the memory is resident before being referenced by the device"
-    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
@@ -34,15 +36,17 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allows memory to be evicted from the device."
-class: $xDevice
+class: $xContext
 name: EvictMemory
 details:
     - "The application must ensure the device is not currently referencing the memory before it is evicted"
     - "The application may free the memory without evicting; the memory is implicitly evicted when freed."
-    - "The application must call this function using the same active context on which the memory was allocated."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
@@ -58,14 +62,16 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Makes image resident for the device."
-class: $xDevice
+class: $xContext
 name: MakeImageResident
 details:
     - "The application must ensure the image is resident before being referenced by the device"
-    - "The application must call this function using the same active context on which the image was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
@@ -78,15 +84,17 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allows image to be evicted from the device."
-class: $xDevice
+class: $xContext
 name: EvictImage
 details:
     - "The application must ensure the device is not currently referencing the image before it is evicted"
     - "The application may destroy the image without evicting; the image is implicitly evicted when destroyed."
-    - "The application must call this function using the same active context on which the image was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"

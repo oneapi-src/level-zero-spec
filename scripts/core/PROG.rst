@@ -30,8 +30,7 @@ A driver object represents a collection of physical devices in the system access
 - The application may query the number of Level-Zero drivers installed on the system, and their respective handles, using ${x}DriverGet.
 - More than one driver may be available in the system. For example, one driver may support two GPUs from one vendor, another driver supports a GPU from a different vendor, and finally a different driver may support an FPGA.
 - Driver objects are read-only, global constructs. i.e. Multiple calls to ${x}DriverGet will return identical driver handles.
-- A driver handle is primarily used during creation and management of resources that may be used by multiple devices.
-- For example, memory is not implicitly shared across all devices supported by a driver. However, it is available to be explicitly shared.
+- A driver handle is primarily used during device discovery and during creation and management of contexts.
 
 Device
 ------
@@ -107,46 +106,46 @@ Contexts
 
 A context is a logical object used by the driver for managing all memory, command queues/lists, modules, synchronization objects, etc.
 
-On ${x}Init, each driver will create its own per-process default context.
-The default context is initially active on all Host threads.
-An application can use ${x}DefaultContextGet to retrieve a handle to the driver's default context.
-The default context is destroyed on ${x}DefaultContextRelease or when the driver is unloaded from the process.
-Once the default context is released, the driver cannot be used again unless/until ${x}Init is called again.
+- A context handle is primarily used during creation and management of resources that may be used by multiple devices.
+- For example, memory is not implicitly shared across all devices supported by a driver. However, it is available to be explicitly shared.
 
-An application may optionally create additional contexts using ${x}ContextCreate.
-The primary usage-model for multiple contexts is isolation of memory and objects for multiple libraries within the same process.
-A context can be activated on the current Host thread using ${x}ContextPush.
-The same context may be active on multiple Host threads simultaneously.
-The active context on the current Host thread can be queried using ${x}ContextTop.
-A context can be deactivated on the current Host thread using ${x}ContextPop.
-If no application contexts are active, then the default context will be active.
+The following pseudo-code demonstrates a basic context creation:
+
+.. parsed-literal::
+
+        // Create context
+        ${x}_context_desc_t ctxtDesc = {
+           ${X}_STRUCTURE_TYPE_CONTEXT_DESC,
+           nullptr,
+           0
+        };
+        ${x}ContextCreate(hDriver, &ctxtDesc, &hContext);
+
+
+An application may optionally create multiple contexts using ${x}ContextCreate.
+
+- The primary usage-model for multiple contexts is isolation of memory and objects for multiple libraries within the same process.
+- The same context may be used simultaneously on multiple Host threads.
 
 The following pseudo-code demonstrates a basic context creation and activation sequence:
 
 .. parsed-literal::
 
         // Create context(s)
-        ${x}ContextCreate(hDriver, &hContextA);
-        ${x}ContextCreate(hDriver, &hContextB);
+        ${x}ContextCreate(hDriver, &ctxtDesc, &hContextA);
+        ${x}ContextCreate(hDriver, &ctxtDesc, &hContextB);
 
-        // Activate Context A
-        ${x}ContextPush(hDriver, hContextA);
-        ${x}DriverAllocHostMem(hDriver, &desc, 80, 0, &ptrA);
+        ${x}ContextAllocHostMem(hContextA, &desc, 80, 0, &ptrA);
+        ${x}ContextAllocHostMem(hContextB, &desc, 88, 0, &ptrB);
 
-        // Activate Context B
-        ${x}ContextPush(hDriver, hContextB);
-        ${x}DriverAllocHostMem(hDriver, &desc, 88, 0, &ptrB);
-        ${x}ContextPop(hDriver);
-
-        // Context A is active
         memcpy(ptrA, ptrB, 0xe); // ok
-        ${x}DriverFreeMem(hDriver, ptrB); // illegal: Context A has no knowledge of ptrB
+        ${x}ContextGetMemAllocProperties(hContextA, ptrB, &props, &hDevice); // illegal: Context A has no knowledge of ptrB
 
 
-If a device was reset then all APIs will return ${X}_RESULT_ERROR_DEVICE_LOST when any context associated with that device is active.
-An application can also use ${x}ContextGetStatus to check the status of a context at any time.
-In order to recover, the application must call ${x}DefaultContextReset to reset the default context associated with that device.
-After the default context is reset, all pointers to memory allocations and handles to objects (including other contexts) created on the default context prior to reset will be invalid.
+If a device is hung or was reset, then all APIs will return ${X}_RESULT_ERROR_DEVICE_LOST when any object associated with that device is used.
+An application can also use ${x}ContextGetStatus at any time to check the status of the context.
+In order to recover, the application must destroy then recreate the context object.
+After the context is destroyed using ${x}ContextDestroy, all pointers to memory allocations and handles to objects (including other contexts) created on the context will be invalid.
 
 Memory and Images
 =================
@@ -329,7 +328,7 @@ its contents will be implicitly decoded to be implementation-independent.
            128, 128, 0, 0, 0
        };
        ${x}_image_handle_t hImage;
-       ${x}ImageCreate(hDevice, &imageDesc, &hImage);
+       ${x}ImageCreate(hContext, hDevice, &imageDesc, &hImage);
 
        // upload contents from host pointer
        ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr, 0, nullptr);
@@ -469,7 +468,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
         ${X}_COMMAND_QUEUE_PRIORITY_NORMAL
     };
     ${x}_command_queue_handle_t hCommandQueue;
-    ${x}CommandQueueCreate(hDevice, &commandQueueDesc, &hCommandQueue);
+    ${x}CommandQueueCreate(hContext, hDevice, &commandQueueDesc, &hCommandQueue);
     ...
 
 Execution
@@ -547,7 +546,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
            0 // flags
        };
        ${x}_command_list_handle_t hCommandList;
-       ${x}CommandListCreate(hDevice, &commandListDesc, &hCommandList);
+       ${x}CommandListCreate(hContext, hDevice, &commandListDesc, &hCommandList);
        ...
 
 Submission
@@ -622,7 +621,7 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
            ${X}_COMMAND_QUEUE_PRIORITY_NORMAL
        };
        ${x}_command_list_handle_t hCommandList;
-       ${x}CommandListCreateImmediate(hDevice, &commandQueueDesc, &hCommandList);
+       ${x}CommandListCreateImmediate(hContext, hDevice, &commandQueueDesc, &hCommandList);
 
        // Immediately submit a kernel to the device
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
@@ -741,7 +740,7 @@ The following pseudo-code demonstrates a sequence for creation and submission of
            1 // count
        };
        ${x}_event_pool_handle_t hEventPool;
-       ${x}EventPoolCreate(hDriver, &eventPoolDesc, 0, nullptr, &hEventPool);
+       ${x}EventPoolCreate(hContext, &eventPoolDesc, 0, nullptr, &hEventPool);
 
        ${x}_event_desc_t eventDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
@@ -791,7 +790,7 @@ A kernel timestamp event is a special type of event that records device timestam
            1 // count
        };
        ${x}_event_pool_handle_t hTSEventPool;
-       ${x}EventPoolCreate(hDriver, &tsEventPoolDesc, 0, nullptr, &hTSEventPool);
+       ${x}EventPoolCreate(hContext, &tsEventPoolDesc, 0, nullptr, &hTSEventPool);
 
        ${x}_event_desc_t tsEventDesc = {
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
@@ -811,7 +810,7 @@ A kernel timestamp event is a special type of event that records device timestam
            0  // ordinal
        };
        ${x}_kernel_timestamp_result_t* tsResult = nullptr;
-       ${x}DriverAllocDeviceMem(hDriver, &tsResultDesc, sizeof(${x}_kernel_timestamp_result_t), sizeof(uint32_t), hDevice, &tsResult);
+       ${x}ContextAllocDeviceMem(hContext, &tsResultDesc, sizeof(${x}_kernel_timestamp_result_t), sizeof(uint32_t), hDevice, &tsResult);
 
        // Append a signal of a timestamp event into the command list after the kernel executes
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hTSEvent, 0, nullptr);
@@ -987,7 +986,7 @@ The following pseudo-code demonstrates a sequence for creating a module from an 
            nullptr
        };
        ${x}_module_handle_t hModule;
-       ${x}ModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
+       ${x}ModuleCreate(hContext, hDevice, &moduleDesc, &hModule, nullptr);
        ...
 
 Module Build Options
@@ -1034,7 +1033,7 @@ corresponding identifiers to be passed in to override the constants in the SPIR-
            &specConstants
        };
        ${x}_module_handle_t hModule;
-       ${x}ModuleCreate(hDevice, &moduleDesc, &hModule, nullptr);
+       ${x}ModuleCreate(hContext, hDevice, &moduleDesc, &hModule, nullptr);
        ...
 
 Note: Specialization constants are only handled at module create time and therefore if
@@ -1049,7 +1048,7 @@ The ${x}ModuleCreate function can optionally generate a build log object ${x}_mo
 
        ...
        ${x}_module_build_log_handle_t buildlog;
-       ${x}_result_t result = ${x}ModuleCreate(hDevice, &desc, &module, &buildlog);
+       ${x}_result_t result = ${x}ModuleCreate(hContext, hDevice, &desc, &module, &buildlog);
 
        // Only save build logs for module creation errors.
        if (result != ${X}_RESULT_SUCCESS)
@@ -1260,7 +1259,7 @@ device to generate the parameters.
        ${x}_group_count_t* pIndirectArgs;
        
        ...
-       ${x}DriverAllocDeviceMem(hDriver, &desc, sizeof(${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
+       ${x}ContextAllocDeviceMem(hContext, &desc, sizeof(${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
 
        // Append launch kernel - indirect
        ${x}CommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
@@ -1310,7 +1309,7 @@ The following pseudo-code demonstrates the creation of a sampler object and pass
            false
            };
        ${x}_sampler_handle_t sampler;
-       ${x}SamplerCreate(hDevice, &desc, &sampler);
+       ${x}SamplerCreate(hContext, hDevice, &desc, &sampler);
        ...
        
        // The sampler can be passed as a kernel argument.
@@ -1418,7 +1417,7 @@ or sub-device using ${x}DeviceGetProperties.
        assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
        void* pMemForSubDevice2;
-       ${x}DriverAllocDeviceMem(hDriver, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
+       ${x}ContextAllocDeviceMem(hContext, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
        ...
 
 Device Residency
@@ -1446,9 +1445,9 @@ as multiple levels of indirection, there are two methods available:
 
     + If the driver is unable to make all allocations resident, then the call to ${x}CommandQueueExecuteCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
-2. Explcit ${x}DeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
+2. Explcit ${x}ContextMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
 
-    + If the application over-commits device memory, then a call to ${x}DeviceMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    + If the application over-commits device memory, then a call to ${x}ContextMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
 If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.
 
@@ -1460,9 +1459,9 @@ The following pseudo-code demonstrates a sequence for using coarse-grain residen
            node* next;
        };
        node* begin = nullptr;
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
+       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin);
+       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin->next);
+       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin->next->next);
 
        // 'begin' is passed as kernel argument and appended into command list
        bool hasIndirectHostAccess = true;
@@ -1483,9 +1482,9 @@ The following pseudo-code demonstrates a sequence for using fine-grain residency
            node* next;
        };
        node* begin = nullptr;
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin);
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next);
-       ${x}DriverAllocHostMem(hDriver, &desc, sizeof(node), 1, &begin->next->next);
+       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin);
+       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin->next);
+       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin->next->next);
 
        // 'begin' is passed as kernel argument and appended into command list
        ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
@@ -1493,8 +1492,8 @@ The following pseudo-code demonstrates a sequence for using fine-grain residency
        ...
 
        // Make indirect allocations resident before enqueuing
-       ${x}DeviceMakeMemoryResident(hDevice, begin->next, sizeof(node));
-       ${x}DeviceMakeMemoryResident(hDevice, begin->next->next, sizeof(node));
+       ${x}ContextMakeMemoryResident(hContext, hDevice, begin->next, sizeof(node));
+       ${x}ContextMakeMemoryResident(hContext, hDevice, begin->next->next, sizeof(node));
 
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
@@ -1502,8 +1501,8 @@ The following pseudo-code demonstrates a sequence for using fine-grain residency
        ${x}FenceHostSynchronize(hFence, UINT32_MAX);
 
        // Finally, evict to free device resources
-       ${x}DeviceEvictMemory(hDevice, begin->next, sizeof(node));
-       ${x}DeviceEvictMemory(hDevice, begin->next->next, sizeof(node));
+       ${x}ContextEvictMemory(hContext, hDevice, begin->next, sizeof(node));
+       ${x}ContextEvictMemory(hContext, hDevice, begin->next->next, sizeof(node));
        ...
 
 OpenCL Interoperability
@@ -1603,10 +1602,10 @@ The following code examples demonstrate how to use the memory IPC APIs:
 .. parsed-literal::
 
        void* dptr = nullptr;
-       ${x}DriverAllocDeviceMem(hDriver, &desc, size, alignment, hDevice, &dptr);
+       ${x}ContextAllocDeviceMem(hContext, &desc, size, alignment, hDevice, &dptr);
 
        ${x}_ipc_mem_handle_t hIPC;
-       ${x}DriverGetMemIpcHandle(hDriver, dptr, &hIPC);
+       ${x}ContextGetMemIpcHandle(hContext, dptr, &hIPC);
 
        // Method of sending to receiving process is not defined by Level-Zero:
        send_to_receiving_process(hIPC);
@@ -1621,7 +1620,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
        hIPC = receive_from_sending_process();
 
        void* dptr = nullptr;
-       ${x}DriverOpenMemIpcHandle(hDriver, hDevice, hIPC, 0, &dptr);
+       ${x}ContextOpenMemIpcHandle(hContext, hDevice, hIPC, 0, &dptr);
 
 3. Each process may now refer to the same device memory allocation via its ``dptr``.
    Note, there is no guaranteed address equivalence for the values of ``dptr`` in each process.
@@ -1630,13 +1629,13 @@ The following code examples demonstrate how to use the memory IPC APIs:
 
 .. parsed-literal::
 
-       ${x}DriverCloseMemIpcHandle(hDriver, dptr);
+       ${x}ContextCloseMemIpcHandle(hContext, dptr);
 
 5. Finally, free the device pointer in the sending process:
 
 .. parsed-literal::
 
-       ${x}DriverFreeMem(hDriver, dptr);
+       ${x}ContextFreeMem(hContext, dptr);
 
 .. _events-1:
 
@@ -1657,7 +1656,7 @@ The following code examples demonstrate how to use the event IPC APIs:
            10 // count
        };
        ${x}_event_pool_handle_t hEventPool;
-       ${x}EventPoolCreate(hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool);
+       ${x}EventPoolCreate(hContext, &eventPoolDesc, 1, &hDevice, &hEventPool);
     
        // get IPC handle and send to another process
        ${x}_ipc_event_pool_handle_t hIpcEvent;
@@ -1674,7 +1673,7 @@ The following code examples demonstrate how to use the event IPC APIs:
 
        // open event pool
        ${x}_event_pool_handle_t hEventPool;
-       ${x}EventPoolOpenIpcHandle(hDriver, hIpcEventPool, &hEventPool);
+       ${x}EventPoolOpenIpcHandle(hContext, hIpcEventPool, &hEventPool);
 
 3. Each process may now refer to the same device event allocation via its handle:
 
@@ -1760,4 +1759,4 @@ The following Peer-to-Peer functionalities are provided through the API:
 .. |Graph| image:: ../images/core_sync.png?raw=true
 .. |Fence| image:: ../images/core_fence.png?raw=true
 .. |Event| image:: ../images/core_event.png?raw=true
-.. |Driver| image:: ../images/core_module.png?raw=true
+.. |Module| image:: ../images/core_module.png?raw=true

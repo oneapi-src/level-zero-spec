@@ -21,7 +21,6 @@ details:
     - "If numWaitEvents is non-zero, then then all phWaitEvents must be signaled prior to the execution of the barrier."
     - "This command blocks all following commands from beginning until the execution of the barrier completes."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "The application must call this function using the same active context on which the command list and events were created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -51,7 +50,6 @@ details:
     - "If numWaitEvents is non-zero, then then all phWaitEvents must be signaled prior to the execution of the barrier."
     - "This command blocks all following commands from beginning until the execution of the barrier completes."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "The application must call this function using the same active context on which the command list and events were created."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -83,7 +81,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Ensures in-bound writes to the device are globally observable."
-class: $xDevice
+class: $xContext
 name: SystemBarrier
 details:
     - |
@@ -93,6 +91,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"

@@ -84,7 +84,7 @@ members:
       init: $X_COMMAND_QUEUE_PRIORITY_NORMAL
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a command queue on the active context."
+desc: "Creates a command queue on the context."
 class: $xCommandQueue
 name: Create
 decl: static
@@ -97,6 +97,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device object"
@@ -119,7 +122,6 @@ ordinal: "0"
 analogue:
     - "**clReleaseCommandQueue**"
 details:
-    - "The application must call this function using the same active context on which the command queue was created."
     - "The application must destroy all fence handles created from the command queue before destroying the command queue itself"
     - "The application must ensure the device is not currently referencing the command queue before it is deleted"
     - "The implementation of this function may immediately free all Host and Device allocations associated with this command queue"
@@ -141,7 +143,6 @@ analogue:
     - vkQueueSubmit
 details:
     - "The application must only execute command lists created with an identical command queue group ordinal to the command queue."
-    - "The application must call this function using the same active context on which the command queue and fence were created."
     - "The application must use a fence created using the same command queue."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -170,7 +171,6 @@ class: $xCommandQueue
 name: Synchronize
 ordinal: "1"
 details:
-    - "The application must call this function using the same active context on which the command queue was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

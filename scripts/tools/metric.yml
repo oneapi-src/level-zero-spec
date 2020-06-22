@@ -279,7 +279,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Activates metric groups."
-class: $tDevice
+class: $tContext
 name: ActivateMetricGroups
 details:
     - "Immediately reconfigures the device to activate only those metric groups provided."
@@ -288,6 +288,9 @@ details:
     - "All metric groups must have different domains, see $t_metric_group_properties_t."
     - "The application must **not** call this function from simultaneous threads with the same device handle."
 params:
+    - type: $t_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -326,6 +329,9 @@ details:
     - "The notification event must **not** have been created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must **not** call this function from simultaneous threads with the same device handle."
 params:
+    - type: $t_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -423,7 +429,7 @@ members:
       desc: "[in] Internal slots count within query pool object."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a pool of metric queries on the active context."
+desc: "Creates a pool of metric queries on the context."
 class: $tMetricQueryPool
 name: Create
 decl: static
@@ -431,6 +437,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
+    - type: $t_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -450,7 +459,6 @@ class: $tMetricQueryPool
 name: Destroy
 decl: static
 details:
-    - "The application must call this function using the same active context on which the pool was created."
     - "The application must destroy all query handles created from the pool before destroying the pool itself."
     - "The application must ensure the device is not currently referencing the any query within the pool before it is deleted."
     - "The application must **not** call this function from simultaneous threads with the same query pool handle."
@@ -463,7 +471,7 @@ returns:
     - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates metric query on the active context."
+desc: "Creates metric query from the pool."
 class: $tMetricQuery
 name: Create
 decl: static
@@ -487,7 +495,6 @@ class: $tMetricQuery
 name: Destroy
 decl: static
 details:
-    - "The application must call this function using the same active context on which the query was created."
     - "The application must ensure the device is not currently referencing the query before it is deleted."
     - "The application must **not** call this function from simultaneous threads with the same query handle."
     - "The implementation of this function must be thread-safe."

@@ -273,6 +273,8 @@ etors:
       desc: $x_device_image_properties_t
     - name: DEVICE_P2P_PROPERTIES
       desc: $x_device_p2p_properties_t
+    - name: CONTEXT_DESC
+      desc: $x_context_desc_t
     - name: COMMAND_QUEUE_DESC
       desc: $x_command_queue_desc_t
     - name: COMMAND_LIST_DESC

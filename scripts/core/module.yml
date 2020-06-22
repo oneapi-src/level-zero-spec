@@ -62,7 +62,7 @@ members:
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a module on the active context."
+desc: "Creates a module on the context."
 class: $xModule
 name: Create
 decl: static
@@ -80,6 +80,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
@@ -107,7 +110,6 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function using the same active context on which the module was created."
     - "The application must destroy all kernel and build log handles created from the module before destroying the module itself."
     - "The application must ensure the device is not currently referencing the module before it is deleted."
     - "The implementation of this function may immediately free all Host and Device allocations associated with this module."
@@ -137,7 +139,6 @@ details:
     - "ModuleGetNativeBinary can be called on any module regardless of whether it is linked or not."
     - "A link log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
     - "See SPIR-V specification for linkage details."
-    - "The application must call this function using the same active context on which the modules were created."
     - "The application may call this function from simultaneous threads as long as the import modules being linked are not the same."
     - "The implementation of this function should be lock-free."
 params:
@@ -160,7 +161,6 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function using the same active context on which the build log was created."
     - "The implementation of this function may immediately free all Host allocations associated with this object."
     - "The application must **not** call this function from simultaneous threads with the same build log handle."
     - "The implementation of this function should be lock-free."
@@ -179,7 +179,6 @@ name: GetString
 details:
     - "The caller can pass nullptr for pBuildLog when querying only for size."
     - "The caller must provide memory for build log."
-    - "The application must call this function using the same active context on which the build log was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -202,7 +201,6 @@ details:
     - "The native binary will retain debugging information that is associated with a module."
     - "The caller can pass nullptr for pModuleNativeBinary when querying only for size."
     - "The implementation will copy the native binary into a buffer supplied by the caller."
-    - "The application must call this function using the same active context on which the module was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -221,7 +219,6 @@ desc: "Retrieve global variable pointer from Module."
 class: $xModule
 name: GetGlobalPointer
 details:
-    - "The application must call this function using the same active context on which the module was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -242,7 +239,6 @@ desc: "Retrieve all kernel names in the module."
 class: $xModule
 name: GetKernelNames
 details:
-    - "The application must call this function using the same active context on which the module was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -291,13 +287,12 @@ members:
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Create a kernel on the active context."
+desc: "Create a kernel from the module."
 class: $xKernel
 name: Create
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function using the same active context on which the module was created."
     - "Modules that have unresolved imports need to be dynamically linked before a kernel can be created from them. (See $xModuleDynamicLink)"
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
@@ -324,7 +319,6 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function using the same active context on which the kernel was created."
     - "The application must ensure the device is not currently referencing the kernel before it is deleted."
     - "The implementation of this function may immediately free all Host and Device allocations associated with this kernel."
     - "The application must **not** call this function from simultaneous threads with the same kernel handle."
@@ -343,7 +337,6 @@ name: GetFunctionPointer
 details:
     - "The function pointer is unique for the device on which the module was created."
     - "The function pointer is no longer valid if module is destroyed."
-    - "The application must call this function using the same active context on which the module was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -366,7 +359,6 @@ name: SetGroupSize
 details:
     - "The implementation will maintain the group size in thread-local storage."
     - "The group size will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
-    - "The application must call this function using the same active context on which the kernel was created."
     - "The application may call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -391,7 +383,6 @@ class: $xKernel
 name: SuggestGroupSize
 details:
     - "This function ignores the group size that is set using $xKernelSetGroupSize."
-    - "The application must call this function using the same active context on which the kernel was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -424,7 +415,6 @@ desc: "Query a suggested max group count for a cooperative kernel."
 class: $xKernel
 name: SuggestMaxCooperativeGroupCount
 details:
-    - "The application must call this function using the same active context on which the kernel was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -442,7 +432,6 @@ name: SetArgumentValue
 details:
     - "The implementation will maintain the argument values in thread-local storage."
     - "The argument values will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
-    - "The application must call this function using the same active context on which the kernel was created."
     - "The application may call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -486,7 +475,6 @@ name: SetAttribute
 analogue:
     - "**clSetKernelExecInfo**"
 details:
-    - "The application must call this function using the same active context on which the kernel was created."
     - "This function may **not** be called from simultaneous threads with the same function handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -512,7 +500,6 @@ name: GetAttribute
 details:
     - "The caller sets pValue to nullptr when querying only for size."
     - "The caller must provide memory for pValue querying when querying size."
-    - "The application must call this function using the same active context on which the kernel was created."
     - "This function may be called from simultaneous threads with the same function handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -539,7 +526,6 @@ ordinal: "2"
 details:
     - "The implementation will maintain the intermediate cache configuration in thread-local storage."
     - "The intermediate cache configuration will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
-    - "The application must call this function using the same active context on which the kernel was created."
     - "The application may call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -641,7 +627,6 @@ desc: "Retrieve kernel properties."
 class: $xKernel
 name: GetProperties
 details:
-    - "The application must call this function using the same active context on which the kernel was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -676,7 +661,7 @@ class: $xCommandList
 name: AppendLaunchKernel
 details:
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
-    - "The application must call this function using the same active context on which the command list, kernel and events were created."
+    - "The application must ensure the command list, kernel and events were created on the same context."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -710,7 +695,7 @@ name: AppendLaunchCooperativeKernel
 details:
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
     - "This may only be used for a command list that are submitted to command queue with cooperative flag set."
-    - "The application must call this function using the same active context on which the command list, kernel and events were created."
+    - "The application must ensure the command list, kernel and events were created on the same context."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
     - "Use $xKernelSuggestMaxCooperativeGroupCount to recommend max group count for device for cooperative functions that device supports."
@@ -746,7 +731,7 @@ details:
     - "The application must ensure the launch arguments are visible to the device on which the command list was created."
     - "The implementation must not access the contents of the launch arguments as they a free to be modified by either the Host or device up until execution."
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
-    - "The application must call this function using the same active context on which the command list, kernel and events were created, and the memory was allocated."
+    - "The application must ensure the command list, kernel and events were created, and the memory was allocated, on the same context."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -781,7 +766,7 @@ details:
     - "The application must ensure the array of launch arguments and count buffer are visible to the device on which the command list was created."
     - "The implementation must not access the contents of the array of launch arguments or count buffer as they a free to be modified by either the Host or device up until execution."
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
-    - "The application must call this function using the same active context on which the command list, kernel and events were created, and the memory was allocated."
+    - "The application must enusre the command list, kernel and events were created, and the memory was allocated, on the same context."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:

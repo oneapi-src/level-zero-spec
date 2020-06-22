@@ -23,6 +23,12 @@ name: "$t_device_handle_t"
 alias: "$x_device_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of context object"
+class: $tContext
+name: "$t_context_handle_t"
+alias: "$x_context_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of command list object"
 class: $tCommandList
 name: "$t_command_list_handle_t"
