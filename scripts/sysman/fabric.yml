@@ -27,13 +27,13 @@ etors:
     - name: UNKNOWN
       value: "0"
       desc: "The port status cannot be determined"
-    - name: GREEN
+    - name: HEALTHY
       desc: "The port is up and operating as expected"
-    - name: YELLOW
+    - name: DEGRADED
       desc: "The port is up but has quality and/or speed degradation"
-    - name: RED
+    - name: FAILED
       desc: "Port connection instabilities are preventing workloads making forward progress"
-    - name: BLACK
+    - name: DISABLED
       desc: "The port is configured down"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -47,9 +47,9 @@ etors:
       desc: "There is a degradation in the bitrate and/or width of the link"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Fabric port stability issues"
+desc: "Fabric port failure reasons"
 class: $sFabricPort
-name: $s_fabric_port_stab_issue_flags_t
+name: $s_fabric_port_failure_flags_t
 etors:
     - name: FAILED
       desc: "A previously operating link has failed. Hardware will automatically retrain this port. This state will persist until either the physical connection is removed or the link trains successfully."
@@ -147,18 +147,18 @@ members:
     - type: $s_fabric_port_qual_issue_flags_t
       name: "qualityIssues"
       desc: |
-            [out] If status is $S_FABRIC_PORT_STATUS_YELLOW, 
+            [out] If status is $S_FABRIC_PORT_STATUS_DEGRADED, 
             then this gives a combination of $s_fabric_port_qual_issue_flag_t for quality issues that have been detected;
             otherwise, 0 indicates there are no quality issues with the link at this time.
-    - type: $s_fabric_port_stab_issue_flags_t
-      name: "stabilityIssues"
+    - type: $s_fabric_port_failure_flags_t
+      name: "failureReasons"
       desc: |
-            [out] If status is $S_FABRIC_PORT_STATUS_RED,
-            then this gives a combination of $s_fabric_port_stab_issue_flag_t for reasons for the connection instability;
+            [out] If status is $S_FABRIC_PORT_STATUS_FAILED,
+            then this gives a combination of $s_fabric_port_failure_flag_t for reasons for the connection instability;
             otherwise, 0 indicates there are no connection stability issues at this time.
     - type: $s_fabric_port_id_t
       name: "remotePortId"
-      desc: "[out] The unique port identifier for the remote connection point if status is $S_FABRIC_PORT_STATUS_GREEN, $S_FABRIC_PORT_STATUS_YELLOW or $S_FABRIC_PORT_STATUS_RED"
+      desc: "[out] The unique port identifier for the remote connection point if status is $S_FABRIC_PORT_STATUS_HEALTHY, $S_FABRIC_PORT_STATUS_DEGRADED or $S_FABRIC_PORT_STATUS_FAILED"
     - type: $s_fabric_port_speed_t
       name: "rxSpeed"
       desc: "[out] Current maximum receive speed (sum of all lanes)"
@@ -271,7 +271,7 @@ returns:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get Fabric port state - status (green/yellow/red/black), reasons for link degradation or instability, current rx/tx speed"
+desc: "Get Fabric port state - status (health/degraded/failed/disabled), reasons for link degradation or instability, current rx/tx speed"
 class: $sFabricPort
 name: GetState
 details:
