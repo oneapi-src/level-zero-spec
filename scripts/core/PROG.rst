@@ -150,9 +150,8 @@ After the context is destroyed using ${x}ContextDestroy, all pointers to memory 
 Memory and Images
 =================
 
-Memory is visible to the upper-level software stack as unified memory
-with a single virtual address space covering both the Host and a
-specific device.
+Memory is visible to the upper-level software stack as unified memory with a single virtual address space
+covering both the Host and a specific device.
 
 For GPUs, the API exposes two levels of the device memory hierarchy:
 
@@ -162,16 +161,14 @@ For GPUs, the API exposes two levels of the device memory hierarchy:
     + Last Level Cache (L3) can be controlled through memory allocation APIs.
     + Low Level Cache (L1) can be controlled through program language intrinsics.
 
-The API allows allocation of buffers and images at device and sub device
-granularity with full cacheablity hints.
+The API allows allocation of buffers and images at device and sub device granularity with full cacheablity hints.
 
 - Buffers are transparent memory accessed through virtual address pointers
 - Images are opaque objects accessed through handles
 
-The memory APIs provide allocation methods to allocate either device,
-host or shared memory. The APIs enable both implicit and explicit
-management of the resources by the application or runtimes. The
-interface also provides query capabilities for all memory objects.
+The memory APIs provide allocation methods to allocate either device, host or shared memory.
+The APIs enable both implicit and explicit management of the resources by the application or runtimes.
+The interface also provides query capabilities for all memory objects.
 
 There are two types of allocations:
 
@@ -183,49 +180,40 @@ There are two types of allocations:
 Memory
 ------
 
-Linear, unformatted memory allocations are represented as pointers in
-the host application. A pointer on the host has the same size as a
-pointer on the device.
+Linear, unformatted memory allocations are represented as pointers in the host application.
+A pointer on the Host has the same size as a pointer on the device.
 
 Types
 ~~~~~
 
-Three types of allocations are supported. The type of allocation
-describes the *ownership* of the allocation:
+Three types of allocations are supported.
+The type of allocation describes the *ownership* of the allocation:
 
-1. **Host** allocations are
-owned by the host and are intended to be allocated out of system memory.
-Host allocations are accessible by the host and one or more devices. The
-same pointer to a host allocation may be used on the host and all
-supported devices; they have *address equivalence*. Host allocations are
-not expected to migrate between system memory and device local memory.
-Host allocations trade off wide accessibility and transfer benefits for
-potentially higher per-access costs, such as over PCI express.
+1. **Host** allocations are owned by the host and are intended to be allocated out of system memory.
 
-2. **Device** allocations are owned by a specific device and are intended
-to be allocated out of device local memory, if present. Device
-allocations generally trade off access limitations for higher
-performance. With very few exceptions, device allocations may only be
-accessed by the specific device that they are allocated on, or copied to
-a host or another device allocation. The same pointer to a device
-allocation may be used on any supported device.
+    + Host allocations are accessible by the host and one or more devices.
+    + The same pointer to a host allocation may be used on the host and all supported devices; they have *address equivalence*.
+    + Host allocations are not expected to migrate between system memory and device local memory.
+    + Host allocations trade off wide accessibility and transfer benefits for potentially higher per-access costs, such as over PCI express.
 
-3. **Shared**
-allocations share ownership and are intended to migrate between the host
-and one or more devices. Shared allocations are accessible by at least
-the host and an associated device. Shared allocations may be accessed by
-other devices in some cases. Shared allocations trade off transfer costs
-for per-access benefits. The same pointer to a shared allocation may be
-used on the host and all supported devices.
+2. **Device** allocations are owned by a specific device and are intended to be allocated out of device local memory, if present.
 
-A **Shared System** allocation is a sub-class of a **Shared**
-allocation, where the memory is allocated by a *system allocator* - such
-as ``malloc`` or ``new`` - rather than by an allocation API. Shared
-system allocations have no associated device - they are inherently
-cross-device. Like other shared allocations, shared system allocations
-are intended to migrate between the host and supported devices, and the
-same pointer to a shared system allocation may be used on the host and
-all supported devices.
+    + Device allocations generally trade off access limitations for higher performance.
+    + With very few exceptions, device allocations may only be accessed by the specific device that they are allocated on, 
+      or copied to another device or Host allocation.
+    + The same pointer to a device allocation may be used on any supported device.
+
+3. **Shared** allocations share ownership and are intended to migrate between the host and one or more devices.
+    + Shared allocations are accessible by at least the host and an associated device.
+    + Shared allocations may be accessed by other devices in some cases.
+    + Shared allocations trade off transfer costs for per-access benefits.
+    + The same pointer to a shared allocation may be used on the host and all supported devices.
+
+A **Shared System** allocation is a sub-class of a **Shared** allocation,
+where the memory is allocated by a *system allocator* - such as ``malloc`` or ``new`` - rather than by an allocation API.
+Shared system allocations have no associated device - they are inherently cross-device.
+Like other shared allocations, shared system allocations are intended to migrate between the host and supported devices,
+and the same pointer to a shared system allocation may be used on the host and all supported devices.
 
 In summary:
 
@@ -281,22 +269,16 @@ The required matrix of capabilities are:
 Cache Hints, Prefetch, and Memory Advice
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cacheability hints may be provided via separate host and device
-allocation flags when memory is allocated.
+Cacheability hints may be provided via separate host and device allocation flags when memory is allocated.
 
-**Shared** allocations may be prefetched to a supporting device via the
-${x}CommandListAppendMemoryPrefetch API. Prefetching may allow memory
-transfers to be scheduled concurrently with other computations and may
-improve performance.
+**Shared** allocations may be prefetched to a supporting device via the ${x}CommandListAppendMemoryPrefetch API.
+Prefetching may allow memory transfers to be scheduled concurrently with other computations and may improve performance.
 
-Additionally, an application may provide memory advice for a **shared**
-allocation via the ${x}CommandListAppendMemAdvise API, to override
-driver heuristics or migration policies. Memory advice may avoid
-unnecessary or unprofitable memory transfers and may improve
-performance.
+Additionally, an application may provide memory advice for a **shared** allocation via the ${x}CommandListAppendMemAdvise API,
+to override driver heuristics or migration policies.
+Memory advice may avoid unnecessary or unprofitable memory transfers and may improve performance.
 
-Both prefetch and memory advice are asynchronous operations that are
-appended into command lists.
+Both prefetch and memory advice are asynchronous operations that are appended into command lists.
 
 .. _Images:
 

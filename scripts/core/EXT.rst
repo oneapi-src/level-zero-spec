@@ -17,6 +17,7 @@ Features which are device- or vendor-specific can be exposed as extensions.
 The list of extensions supported by the driver implementation can be queried using ${x}DriverGetExtensionProperties.
 
 There are two types of extensions:
+
 1. **Standard** - extensions ratified for inclusion into the current and all future versions of the specification.
 2. **Experimental** - extensions require additional experimentation and feedback from application vendors
    before ratification, therefore applications should not rely on experimental extensions in production.
@@ -24,6 +25,7 @@ There are two types of extensions:
 
 Requirements
 ============
+
 - Extensions must use globally unique names for macros, enums, structures and functions
 - Extensions must have globally unique extension names reported from ${x}DriverGetExtensionProperties
 - All extensions must be defined in this specification
@@ -81,6 +83,7 @@ The extension must document the specific structures and functions that may be ex
 
 List of Standard Extensions
 ===========================
+
 %for name in meta['macro']:
 %if name.endswith("EXT_NAME"):
 - ${th.subt(namespace, tags, meta['macro'][name]['values'][0])}
@@ -90,6 +93,7 @@ List of Standard Extensions
 
 List of Experimental Extensions
 ===============================
+
 %for name in meta['macro']:
 %if name.endswith("EXP_NAME"):
 - ${th.subt(namespace, tags, meta['macro'][name]['values'][0])}
