@@ -219,7 +219,7 @@ etors:
       desc: "the memory pointed to is a shared ownership allocation"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Memory allocation properties queried using $xDriverGetMemAllocProperties"
+desc: "Memory allocation properties queried using $xContextGetMemAllocProperties"
 class: $xContext
 name: $x_memory_allocation_properties_t
 base: $x_base_properties_t
@@ -277,7 +277,7 @@ class: $xContext
 name: GetMemIpcHandle
 details:
     - "Takes a pointer to a device memory allocation and creates an IPC memory handle for exporting it for use in another process."
-    - "The pointer must be base pointer of the device memory allocation; i.e. the value returned from $xDriverAllocDeviceMem."
+    - "The pointer must be base pointer of the device memory allocation; i.e. the value returned from $xContextAllocDeviceMem."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -305,7 +305,7 @@ class: $xContext
 name: OpenMemIpcHandle
 details:
     - "Takes an IPC memory handle from a remote process and associates it with a device pointer usable in this process."
-    - "The device pointer in this process should not be freed with $xDriverFreeMem, but rather with $xDriverCloseMemIpcHandle."
+    - "The device pointer in this process should not be freed with $xContextFreeMem, but rather with $xContextCloseMemIpcHandle."
     - "Multiple calls to this function with the same IPC handle will return unique pointers."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
@@ -334,7 +334,7 @@ desc: "Closes an IPC memory handle"
 class: $xContext
 name: CloseMemIpcHandle
 details:
-    - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xDriverOpenMemIpcHandle."
+    - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xContextOpenMemIpcHandle."
     - "The application must **not** call this function from simultaneous threads with the same pointer."
     - "The implementation of this function must be thread-safe."
 params:

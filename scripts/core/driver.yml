@@ -146,10 +146,10 @@ base: $x_base_properties_t
 members:
     - type: $x_bool_t
       name: memsSupported
-      desc: "[out] Supports passing memory allocations between processes. See ::$xDriverGetMemIpcHandle."
+      desc: "[out] Supports passing memory allocations between processes. See $xContextGetMemIpcHandle."
     - type: $x_bool_t
       name: eventsSupported
-      desc: "[out] Supports passing events between processes. See ::$xEventPoolGetIpcHandle."
+      desc: "[out] Supports passing events between processes. See $xEventPoolGetIpcHandle."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves IPC attributes of the driver"
