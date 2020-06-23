@@ -71,6 +71,8 @@ etors:
     - name: GPU
       value: "1"
       desc: "Graphics Processing Unit"
+    - name: CPU
+      desc: "Central Processing Unit"
     - name: FPGA
       desc: "Field Programmable Gate Array"
     - name: MCA
@@ -109,6 +111,9 @@ members:
     - type: uint32_t
       name: deviceId
       desc: "[out] device id from PCI configuration" 
+    - type: $x_bool_t
+      name: isIntegrated
+      desc: "[out] Is the device integrated with the Host."
     - type: $x_bool_t
       name: isSubdevice
       desc: "[out] If the device handle used for query represents a sub-device."
