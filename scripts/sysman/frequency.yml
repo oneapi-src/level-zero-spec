@@ -46,22 +46,22 @@ members:
       desc: "[out] Indicates if software can register to receive event $S_EVENT_TYPE_FLAG_FREQ_THROTTLED"
     - type: double
       name: min
-      desc: "[out] The minimum hardware clock frequency in units of MHz"
+      desc: "[out] The minimum hardware clock frequency in units of MHz."
     - type: double
       name: max
       desc: "[out] The maximum non-overclock hardware clock frequency in units of MHz."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Frequency range between which the hardware can operate."
+desc: "Frequency range between which the hardware can operate. The limits can be above or below the hardware limits - the hardware will clamp appropriately."
 class: $sFrequency
 name: $s_freq_range_t
 members:
     - type: double
       name: "min"
-      desc: "[in,out] The min frequency in MHz below which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
+      desc: "[in,out] The min frequency in MHz below which hardware frequency management will not request frequencies. On input, setting to 0 will permit the frequency to go down to the hardware minimum. On output, a negative value indicates that no external minimum frequency limit is in effect."
     - type: double
       name: "max"
-      desc: "[in,out] The max frequency in MHz above which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
+      desc: "[in,out] The max frequency in MHz above which hardware frequency management will not request frequencies. On input, setting to 0 or a very big number will permit the frequency to go all the way up to the hardware maximum. On output, a negative number indicates that no external maximum frequency limit is in effect."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency throttle reasons"
@@ -91,19 +91,19 @@ base: $s_base_state_t
 members:
     - type: double
       name: "currentVoltage"
-      desc: "[out] Current voltage in Volts."
+      desc: "[out] Current voltage in Volts. A negative value indicates that this property is not known."
     - type: double
       name: "request"
-      desc: "[out] The current frequency request in MHz."
+      desc: "[out] The current frequency request in MHz. A negative value indicates that this property is not known."
     - type: double
       name: "tdp"
-      desc: "[out] The maximum frequency in MHz supported under the current TDP conditions"
+      desc: "[out] The maximum frequency in MHz supported under the current TDP conditions. This fluctuates dynamically based on the power and thermal limits of the part. A negative value indicates that this property is not known."
     - type: double
       name: "efficient"
-      desc: "[out] The efficient minimum frequency in MHz"
+      desc: "[out] The efficient minimum frequency in MHz. A negative value indicates that this property is not known."
     - type: double
       name: "actual"
-      desc: "[out] The resolved frequency in MHz"
+      desc: "[out] The resolved frequency in MHz. A negative value indicates that this property is not known."
     - type: $s_freq_throttle_reason_flags_t
       name: "throttleReasons"
       desc: |
@@ -298,21 +298,6 @@ params:
     - type: $s_freq_state_t*
       name: pState
       desc: "[in,out] Frequency state for the specified domain."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get the current voltage of the device."
-class: $sFrequency
-name: GetCurrentVoltage
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_freq_handle_t
-      name: hFrequency
-      desc: "[in] Handle for the component."
-    - type: double*
-      name: pCurrentVoltage
-      desc: "[out] Current voltage in Volts."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get frequency throttle time"

@@ -24,8 +24,10 @@ desc: "Fabric port status"
 class: $sFabricPort
 name: $s_fabric_port_status_t
 etors:
-    - name: GREEN
+    - name: UNKNOWN
       value: "0"
+      desc: "The port status cannot be determined"
+    - name: GREEN
       desc: "The port is up and operating as expected"
     - name: YELLOW
       desc: "The port is up but has quality and/or speed degradation"
@@ -79,12 +81,12 @@ desc: "Fabric port speed in one direction"
 class: $sFabricPort
 name: $s_fabric_port_speed_t
 members:
-    - type: uint64_t
+    - type: int64_t
       name: "bitRate"
-      desc: "[out] Bits/sec that the link is operating at"
-    - type: uint32_t
+      desc: "[out] Bits/sec that the link is operating at. A value of -1 means that this property is unknown."
+    - type: int32_t
       name: "width"
-      desc: "[out] The number of lanes"
+      desc: "[out] The number of lanes. A value of -1 means that this property is unknown."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port properties"
@@ -156,7 +158,7 @@ members:
             otherwise, 0 indicates there are no connection stability issues at this time.
     - type: $s_fabric_port_id_t
       name: "remotePortId"
-      desc: "[out] The unique port identifier for the remote connection point"
+      desc: "[out] The unique port identifier for the remote connection point if status is $S_FABRIC_PORT_STATUS_GREEN, $S_FABRIC_PORT_STATUS_YELLOW or $S_FABRIC_PORT_STATUS_RED"
     - type: $s_fabric_port_speed_t
       name: "rxSpeed"
       desc: "[out] Current maximum receive speed (sum of all lanes)"

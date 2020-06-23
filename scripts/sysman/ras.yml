@@ -87,9 +87,6 @@ members:
     - type: $s_ras_state_t
       name: detailedThresholds
       desc: "[in,out] If the RAS errors for each category exceed the threshold for that category, the event will be triggered. A value of 0ULL will disable an event being triggered for that category."
-    - type: uint32_t
-      name: "processId"
-      desc: "[out] Host processId that set this configuration (ignored when setting the configuration)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of all RAS error sets on a device"

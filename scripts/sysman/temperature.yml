@@ -38,7 +38,7 @@ members:
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
     - type: double
-      name: "MaxTemperature"
+      name: "maxTemperature"
       desc: "[out] Will contain the maximum temperature for the specific device in degrees Celsius."
     - type: $x_bool_t
       name: "isCriticalTempSupported"
@@ -80,9 +80,6 @@ members:
     - type: $s_temp_threshold_t
       name: "threshold2"
       desc: "[in,out] Configuration controlling if and when event $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD2 should be triggered by the driver."
-    - type: uint32_t
-      name: "processId"
-      desc: "[out] Host processId that set this configuration (ignored when setting the configuration)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of temperature sensors"

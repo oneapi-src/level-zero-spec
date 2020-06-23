@@ -27,13 +27,13 @@ members:
     - type: $x_bool_t
       name: "isEnergyThresholdSupported"
       desc: "[out] Indicates if this power domain supports the energy threshold event ($S_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED)."
-    - type: uint32_t
+    - type: int32_t
       name: "defaultLimit"
-      desc: "[out] The factory default TDP power limit of the part in milliwatts."  
-    - type: uint32_t
+      desc: "[out] The factory default TDP power limit of the part in milliwatts. A value of -1 means that this is not known."  
+    - type: int32_t
       name: "minLimit"
       desc: "[out] The minimum power limit in milliwatts that can be requested."  
-    - type: uint32_t
+    - type: int32_t
       name: "maxLimit"
       desc: "[out] The maximum power limit in milliwatts that can be requested."  
 --- #--------------------------------------------------------------------------
@@ -65,10 +65,10 @@ members:
     - type: $x_bool_t
       name: enabled
       desc: "[in,out] indicates if the limit is enabled (true) or ignored (false)"
-    - type: uint32_t
+    - type: int32_t
       name: power
       desc: "[in,out] power limit in milliwatts"
-    - type: uint32_t
+    - type: int32_t
       name: interval
       desc: "[in,out] power averaging window (Tau) in milliseconds"
 --- #--------------------------------------------------------------------------
@@ -82,7 +82,7 @@ members:
     - type: $x_bool_t
       name: enabled
       desc: "[in,out] indicates if the limit is enabled (true) or ignored (false)"
-    - type: uint32_t
+    - type: int32_t
       name: power
       desc: "[in,out] power limit in milliwatts"
 --- #--------------------------------------------------------------------------
@@ -94,12 +94,12 @@ details:
     - "The power controller (Punit) will preemptively throttle the operating frequency of the device when the instantaneous power exceeds this limit. The limit is known as PL4. It expresses the maximum power that can be drawn from the power supply."
     - "If this power limit is removed or set too high, the power supply will generate an interrupt when it detects an overcurrent condition and the power controller will throttle the device frequencies down to min. It is thus better to tune the PL4 value in order to avoid such excursions."
 members:
-    - type: uint32_t
+    - type: int32_t
       name: powerAC
       desc: "[in,out] power limit in milliwatts for the AC power source."
-    - type: uint32_t
+    - type: int32_t
       name: powerDC
-      desc: "[in,out] power limit in milliwatts for the DC power source. This is ignored if the product does not have a battery."
+      desc: "[in,out] power limit in milliwatts for the DC power source. On input, this is ignored if the product does not have a battery. On output, this will be -1 if the product does not have a battery."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Energy threshold"
@@ -183,13 +183,13 @@ params:
       desc: "[in] Handle for the component."
     - type: $s_power_sustained_limit_t*
       name: pSustained
-      desc: "[in,out][optional] The sustained power limit."
+      desc: "[in,out][optional] The sustained power limit. If this is null, the current sustained power limits will not be returned."
     - type: $s_power_burst_limit_t*
       name: pBurst
-      desc: "[in,out][optional] The burst power limit."
+      desc: "[in,out][optional] The burst power limit. If this is null, the current peak power limits will not be returned."
     - type: $s_power_peak_limit_t*
       name: pPeak
-      desc: "[in,out][optional] The peak power limit."
+      desc: "[in,out][optional] The peak power limit. If this is null, the peak power limits will not be returned."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set power limits"
@@ -204,13 +204,13 @@ params:
       desc: "[in] Handle for the component."
     - type: const $s_power_sustained_limit_t*
       name: pSustained
-      desc: "[in][optional] The sustained power limit."
+      desc: "[in][optional] The sustained power limit. If this is null, no changes will be made to the sustained power limits."
     - type: const $s_power_burst_limit_t*
       name: pBurst
-      desc: "[in][optional] The burst power limit."
+      desc: "[in][optional] The burst power limit. If this is null, no changes will be made to the burst power limits."
     - type: const $s_power_peak_limit_t*
       name: pPeak
-      desc: "[in][optional] The peak power limit."
+      desc: "[in][optional] The peak power limit. If this is null, no changes will be made to the peak power limits."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
