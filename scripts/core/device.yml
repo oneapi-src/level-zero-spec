@@ -128,6 +128,9 @@ members:
       name: onDemandPageFaultsSupported
       desc: "[out] Supports on-demand page-faulting."
     - type: uint64_t
+      name: minMemPageSize
+      desc: "[out] Minimum memory page size."
+    - type: uint64_t
       name: maxMemAllocSize
       desc: "[out] Maximum memory allocation size."
     - type: uint32_t

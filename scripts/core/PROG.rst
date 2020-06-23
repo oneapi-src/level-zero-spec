@@ -204,14 +204,15 @@ The type of allocation describes the *ownership* of the allocation:
     + The same pointer to a device allocation may be used on any supported device.
 
 3. **Shared** allocations share ownership and are intended to migrate between the host and one or more devices.
+
     + Shared allocations are accessible by at least the host and an associated device.
     + Shared allocations may be accessed by other devices in some cases.
     + Shared allocations trade off transfer costs for per-access benefits.
     + The same pointer to a shared allocation may be used on the host and all supported devices.
 
 A **Shared System** allocation is a sub-class of a **Shared** allocation,
-where the memory is allocated by a *system allocator* - such as ``malloc`` or ``new`` - rather than by an allocation API.
-Shared system allocations have no associated device - they are inherently cross-device.
+where the memory is allocated by a *system allocator* (such as ``malloc`` or ``new``) rather than by an allocation API.
+Shared system allocations have no associated device; they are inherently cross-device.
 Like other shared allocations, shared system allocations are intended to migrate between the host and supported devices,
 and the same pointer to a shared system allocation may be used on the host and all supported devices.
 
@@ -248,7 +249,13 @@ Devices may support different capabilities for each type of allocation. Supporte
 * ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT - if a device supports concurrent access to allocations of the specified type. Concurrent access may be from another device that supports concurrent access, or from the host. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
 * ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC - if a device supports concurrent atomic operations on allocations of the specified type. Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host. Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.
 
-Some devices may *oversubscribe* some **shared** allocations. When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.
+At a minimum, drivers will assign unique physical pages for each allocation.
+However, it is undefined behavior for an application to attempt to access memory outside of the allocation size requested.
+The minimum page size for the device can be queried from ${x}_device_properties_t::minMemPageSize.
+Applications should implement usage-specific allocators from device memory pools (e.g., small and/or fixed-sized allocations, lock-free, etc.).
+
+Furthermore, drivers may *oversubscribe* some **shared** allocations. 
+When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.
 
 The required matrix of capabilities are:
 
