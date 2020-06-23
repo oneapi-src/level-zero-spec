@@ -1329,7 +1329,7 @@ The following table documents the supported knobs for overriding default functio
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
-| Device          | ${X}_AFFINITY_MASK                    | Hex String | Forces driver to only report devices (and sub-devices) as specified by mask value |
+| Device          | ${X}_AFFINITY_MASK                    | list       | Forces driver to only report devices (and sub-devices) as specified by values     |
 +                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
 |                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER       | {**0**, 1} | Forces driver to report devices from lowest to highest PCI bus ID                 |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
@@ -1341,27 +1341,22 @@ Affinity Mask
 
 The affinity mask allows an application or tool to restrict which devices, and sub-devices, are visible to 3rd-party libraries or applications in another process, respectively. 
 The affinity mask affects the number of handles returned from ${x}DeviceGet and ${x}DeviceGetSubDevices.
-The affinity mask is specified via an environment variable as a string of hexadecimal values.
-The value is specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
-The value is specific to the order in which devices are reported by the driver; i.e., the first device maps to bit 0, the second device to bit 1, and so forth.
+The affinity mask is specified via an environment variable as a comma-seperated list of device and/or subdevice ordinals.
+The values are specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
+The values are specific to the order in which devices are reported by the driver; i.e., the first device maps to ordinal 0, the second device to ordinal 1, and so forth.
+If the affinity mask is not set, then all devices and sub-devices are reported; as is the default behavior.
 
+The order of the devices reported by the ${x}DeviceGet is implementation-specific and not affected by the order of devices in the affinity mask.
 The order of the devices reported by the ${x}DeviceGet can be forced to be consistent by setting the ${X}_ENABLE_PCI_ID_DEVICE_ORDER environment variable.
 
-The following examples demonstrate proper usage:
+The following examples demonstrate proper usage for a system configuration of two devices, each with four sub-devices:
 
-- "" (empty string) = disabled; i.e. all devices and sub-devices are reported. This is the default value.
-- Two devices, each with four sub-devices
-
-    + "FF" = all devices and sub-devices are reported (same as default)
-    + "0F" = only device 0 (with all its sub-devices) is reported
-    + "F0" = only device 1 (with all its sub-devices) is reported as device 0'
-    + "AA" = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1
-
-- Two devices, device 0 with one sub-device and device 1 with two sub-devices
-
-    + "07" = all devices and sub-devices are reported (same as default) + "01" = only device 0 (with all its sub-devices) is reported
-    + "06" = only device 1 (with all its sub-devices) is reported as device 0
-    + "05" = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
+- `0, 1`: all devices and sub-devices are reported (same as default)
+- `0`: only device 0 is reported;with all its sub-devices
+- `1`: only device 1 is reported as device 0; with all its sub-devices
+- `0.0`: only device 0, sub-device 0 is reported as device 0
+- `1.1, 1.2`: only device 1 is reported as device 0; with its sub-devices 1 and 2 reported as sub-devices 0 and 1, respectively
+- `0.2, 1.3, 1.0, 0.3`: both device 0 and 1 are reported; device 0 reports sub-devices 2 and 3 as sub-devices 0 and 1, respectively; device 1 reports sub-devices 0 and 3 as sub-devices 0 and 1, respectively; the order is unchanged.
 
 Sub-Device Support
 ------------------

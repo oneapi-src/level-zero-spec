@@ -337,7 +337,7 @@ members:
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: env
-desc: "Forces driver to only report devices (and sub-devices) as specified by mask value"
+desc: "Forces driver to only report devices (and sub-devices) as specified by values"
 name: $X_AFFINITY_MASK
 category: "Device"
 values: "Hex String"
