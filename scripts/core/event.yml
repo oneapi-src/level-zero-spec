@@ -206,9 +206,9 @@ details:
     - "The event handle in this process should not be freed with $xEventPoolDestroy, but rather with $xEventPoolCloseIpcHandle."
     - "The application may call this function from simultaneous threads."
 params:
-    - type: "$x_driver_handle_t"
-      name: hDriver
-      desc: "[in] handle of the driver to associate with the IPC event pool handle"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object to associate with the IPC event pool handle"
     - type: $x_ipc_event_pool_handle_t
       name: hIpc
       desc: "[in] IPC event pool handle"

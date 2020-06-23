@@ -70,7 +70,7 @@ ordinal: "0"
 details:
     - "Compiles the module for execution on the device."
     - "The application must only use the module on the device for which it was created."
-    - "The module can be copied to other devices within the same driver instance by using $xModuleGetNativeBinary."
+    - "The module can be copied to other devices and contexts within the same driver instance by using $xModuleGetNativeBinary."
     - "The following build options are supported:":
         - "\"-$x-opt-disable\" - Disable optimizations"
         - "\"-$x-opt-greater-than-4GB-buffer-required\" - Use 64-bit offset calculations for buffers."
