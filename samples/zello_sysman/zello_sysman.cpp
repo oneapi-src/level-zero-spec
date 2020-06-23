@@ -281,17 +281,17 @@ void ShowFabricPortInfo(zes_fabric_port_handle_t hPort)
                             "        Config:                UP\n");
                         switch (state.status)
                         {
-                        case ZES_FABRIC_PORT_STATUS_GREEN:
-                            status = "GREEN - The port is up and operating as expected";
+                        case ZES_FABRIC_PORT_STATUS_HEALTHY:
+                            status = "HEALTHY - The port is up and operating as expected";
                             break;
-                        case ZES_FABRIC_PORT_STATUS_YELLOW:
-                            status = "YELLOW - The port is up but has quality and/or bandwidth degradation";
+                        case ZES_FABRIC_PORT_STATUS_DEGRADED:
+                            status = "DEGRADED - The port is up but has quality and/or bandwidth degradation";
                             break;
-                        case ZES_FABRIC_PORT_STATUS_RED:
-                            status = "RED - Port connection instabilities";
+                        case ZES_FABRIC_PORT_STATUS_FAILED:
+                            status = "FAILED - Port connection instabilities";
                             break;
-                        case ZES_FABRIC_PORT_STATUS_BLACK:
-                            status = "BLACK - The port is configured down";
+                        case ZES_FABRIC_PORT_STATUS_DISABLED:
+                            status = "DISABLED - The port is configured down";
                             break;
                         default:
                             status = "UNKNOWN";
