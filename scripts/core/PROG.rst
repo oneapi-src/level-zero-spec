@@ -383,7 +383,7 @@ configuration:
        // Large SLM for Intermediate and Last Level cache.
        // Note: The intermediate cache setting is applied to each kernel. Last level is applied for the device.
        ${x}KernelSetIntermediateCacheConfig(hKernel, ${X}_CACHE_CONFIG_FLAG_LARGE_SLM);
-       ${x}DeviceSetLastLevelCacheConfig(hDevice, ${X}_CACHE_CONFIG_FLAG_LARGE_SLM);
+       ${x}ContextSetLastLevelCacheConfig(hContext, hDevice, ${X}_CACHE_CONFIG_FLAG_LARGE_SLM);
        ...
 
 Command Queues and Command Lists

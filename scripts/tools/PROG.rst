@@ -309,11 +309,11 @@ measurements.
 Configuration
 -------------
 
-Use the ${t}DeviceActivateMetricGroups API call to configure the device
+Use the ${t}ContextActivateMetricGroups API call to configure the device
 for data collection.
 
 - Subsequent calls to the function will disable device programming for the metric groups not selected for activation.
-- To avoid undefined results only call the ${t}DeviceActivateMetricGroups between experiments i.e. while not collecting data.
+- To avoid undefined results only call the ${t}ContextActivateMetricGroups between experiments i.e. while not collecting data.
 
 Programming restrictions:
 
@@ -345,7 +345,7 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
 
 .. parsed-literal::
 
-       ${x}_result_t TimeBasedUsageExample( ${x}_driver_handle_t hDriver,
+       ${x}_result_t TimeBasedUsageExample( ${x}_context_handle_t hContext,
                                             ${x}_device_handle_t hDevice )
        {
            ${t}_metric_group_handle_t     hMetricGroup           = nullptr;
@@ -360,10 +360,10 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
            FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASED, &hMetricGroup );
 
            // Configure the HW
-           ${t}DeviceActivateMetricGroups( hDevice, /\* count= \*/ 1, &hMetricGroup );
+           ${t}ContextActivateMetricGroups( hContext, hDevice, /\* count= \*/ 1, &hMetricGroup );
 
            // Create notification event
-           ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
+           ${x}EventPoolCreate( hContext, &eventPoolDesc, 1, &hDevice, &hEventPool );
            eventDesc.index  = 0;
            eventDesc.signal = ${X}_EVENT_SCOPE_FLAG_HOST;
            eventDesc.wait   = ${X}_EVENT_SCOPE_FLAG_HOST; 
@@ -372,7 +372,7 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
            // Open metric streamer
            metricStreamerDesc.samplingPeriod       = 1000;
            metricStreamerDesc.notifyEveryNReports  = 32768;
-           ${t}MetricStreamerOpen( hDevice, hMetricGroup, &metricStreamerDesc, hNotificationEvent, &hMetricStreamer );
+           ${t}MetricStreamerOpen( hContext, hDevice, hMetricGroup, &metricStreamerDesc, hNotificationEvent, &hMetricStreamer );
 
            // Run your workload, in this example we assume the data for the whole experiment fits in the device buffer
            Workload(hDevice);
@@ -395,7 +395,7 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
            ${x}EventPoolDestroy( hEventPool );
 
            // Deconfigure the device
-           ${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
+           ${t}ContextActivateMetricGroups( hContext, hDevice, 0, nullptr );
 
            // Calculate metric data
            CalculateMetricsExample( hMetricGroup, rawSize, rawData );
@@ -426,7 +426,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
 
 .. parsed-literal::
 
-       ${x}_result_t MetricQueryUsageExample( ${x}_driver_handle_t hDriver,
+       ${x}_result_t MetricQueryUsageExample( ${x}_context_handle_t hContext,
                                               ${x}_device_handle_t hDevice )
        {
            ${t}_metric_group_handle_t      hMetricGroup          = nullptr;
@@ -442,7 +442,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_EVENT_BASED, &hMetricGroup );
 
            // Configure HW
-           ${t}DeviceActivateMetricGroups( hDevice, 1 /\* count \*/, &hMetricGroup );
+           ${t}ContextActivateMetricGroups( hContext, hDevice, 1 /\* count \*/, &hMetricGroup );
 
            // Create metric query pool & completion event
            queryPoolDesc.type         = ${T}_METRIC_QUERY_POOL_TYPE_PERFORMANCE;
@@ -450,7 +450,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            ${t}MetricQueryPoolCreate( hContext, hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
            eventPoolDesc.flags = 0;
            eventPoolDesc.count = 1000;
-           ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
+           ${x}EventPoolCreate( hContext, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
            // Write BEGIN metric query to command list 
            ${t}MetricQueryCreate( hMetricQueryPool, 0 /\*slot\*/, &hMetricQuery );
@@ -483,7 +483,7 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
            ${t}MetricQueryPoolDestroy( hMetricQueryPool );
 
            // Deconfigure HW
-           ${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
+           ${t}ContextActivateMetricGroups( hContext, hDevice, 0, nullptr );
 
            // Calculate metric data
            CalculateMetricsExample( hMetricGroup, rawSize, rawData );
