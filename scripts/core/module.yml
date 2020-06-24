@@ -734,7 +734,7 @@ class: $xCommandList
 name: AppendLaunchKernelIndirect
 details:
     - "The application must ensure the launch arguments are visible to the device on which the command list was created."
-    - "The implementation must not access the contents of the launch arguments as they a free to be modified by either the Host or device up until execution."
+    - "The implementation must not access the contents of the launch arguments as they are free to be modified by either the Host or device up until execution."
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
     - "The application must ensure the command list, kernel and events were created, and the memory was allocated, on the same context."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
@@ -769,7 +769,7 @@ class: $xCommandList
 name: AppendLaunchMultipleKernelsIndirect
 details:
     - "The application must ensure the array of launch arguments and count buffer are visible to the device on which the command list was created."
-    - "The implementation must not access the contents of the array of launch arguments or count buffer as they a free to be modified by either the Host or device up until execution."
+    - "The implementation must not access the contents of the array of launch arguments or count buffer as they are free to be modified by either the Host or device up until execution."
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
     - "The application must enusre the command list, kernel and events were created, and the memory was allocated, on the same context."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
