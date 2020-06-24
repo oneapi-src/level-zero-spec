@@ -250,7 +250,7 @@ Devices may support different capabilities for each type of allocation. Supporte
 * ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC - if a device supports concurrent atomic operations on allocations of the specified type. Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host. Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.
 
 At a minimum, drivers will assign unique physical pages for each allocation.
-However, it is undefined behavior for an application to attempt to access memory outside of the allocation size requested.
+However, it is undefined behavior for an application to access memory outside of the allocation size requested.
 The minimum page size for the device can be queried from ${x}_device_properties_t::minMemPageSize.
 Applications should implement usage-specific allocators from device memory pools (e.g., small and/or fixed-sized allocations, lock-free, etc.).
 
