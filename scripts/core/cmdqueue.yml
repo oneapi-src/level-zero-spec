@@ -93,7 +93,7 @@ analogue:
     - "**clCreateCommandQueue**"
 details:
     - "A command queue represents a logical input stream to the device, tied to a physical input stream."
-    - "The application must only use the command queue on the device, including its sub-devices, for which it was created."
+    - "The application must only use the command queue for the device, or its sub-devices, which was provided during creation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

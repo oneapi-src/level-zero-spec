@@ -57,7 +57,7 @@ ordinal: "0"
 details:
     - "A command list represents a sequence of commands for execution on a command queue."
     - "The command list is created in the 'open' state."
-    - "The application must only use the command list on the device, including its sub-devices, for which it was created."
+    - "The application must only use the command list for the device, or its sub-devices, which was provided during creation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -87,7 +87,7 @@ details:
     - "An immediate command list is used for low-latency submission of commands."
     - "An immediate command list creates an implicit command queue."
     - "The command list is created in the 'open' state and never needs to be closed."
-    - "The application must only use the command list on the device, including its sub-devices, for which it was created."
+    - "The application must only use the command list for the device, or its sub-devices, which was provided during creation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

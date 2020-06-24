@@ -39,7 +39,7 @@ name: Create
 decl: static
 ordinal: "0"
 details:
-    - "The application must only use the context on the driver, including its sub-devices, for which it was created."
+    - "The application must only use the context for the driver which was provided during creation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

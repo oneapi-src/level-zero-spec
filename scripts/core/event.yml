@@ -45,7 +45,7 @@ name: Create
 decl: static
 ordinal: "0"
 details:
-    - "The application must only use events within the pool on the device(s), including their sub-devices, for which it was created."
+    - "The application must only use events within the pool for the device(s), or their sub-devices, which were provided during creation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

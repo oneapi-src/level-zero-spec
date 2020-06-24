@@ -57,7 +57,7 @@ name: Create
 decl: static
 details:
     - "A command graph is used for submitting commands to any command queue."
-    - "The application must only use the command graph on the device, including its sub-devices, for which it was created."
+    - "The application must only use the command graph for the device, or its sub-devices, which was provided during creation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

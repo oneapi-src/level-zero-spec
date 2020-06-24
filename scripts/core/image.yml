@@ -264,7 +264,7 @@ ordinal: "0"
 analogue:
     - clCreateImage
 details:
-    - "The application must only use the image on the device, including its sub-devices, for which it was created."
+    - "The application must only use the image for the device, or its sub-devices, which was provided during creation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

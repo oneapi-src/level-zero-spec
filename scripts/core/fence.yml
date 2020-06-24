@@ -40,7 +40,7 @@ analogue:
     - "**vkCreateFence**"
 details:
     - "A fence is a heavyweight synchronization primitive used to communicate to the host that command list execution has completed."
-    - "The application must only use the fence on the command queue for which it was created."
+    - "The application must only use the fence for the command queue which was provided during creation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

@@ -1355,27 +1355,19 @@ control of scheduling and memory allocation to a sub-partition of the device.
 There are functions to query and obtain a sub-device, but outside of these
 functions there are no distinctions between sub-devices and devices.
 
-Use ${x}DeviceGetSubDevices to confirm sub-devices are supported and to
-obtain a sub-device handle. There are additional device properties in
-${x}_device_properties_t for sub-devices to confirm a device is a
-sub-device and to query the sub-device id. This is useful when needing
-to pass a sub-device handle to another library.
+Use ${x}DeviceGetSubDevices to confirm sub-devices are supported and to obtain a sub-device handle.
+There are additional device properties in ${x}_device_properties_t for sub-devices.
+These can be used to confirm a device is a sub-device and to query the sub-device id.
+This may be used by libraries to determine if an input device handle reprresents a device or sub-device.
 
-When using a sub-device handle, device memory allocation will be placed
-in the local memory that is attached to the sub-device. An out-of-memory error
-indicates that there is not enough local sub-device memory for the
-allocation. The driver will not try and spill sub-device allocations
-over to another sub-device's local memory. However, the application can
-retry using the parent device and the driver will decide where to place
-the allocation.
+A driver is required to make device memory allocations on the parent device visible to its sub-devices.
+However, when using a sub-device handle, the driver will attempt to place any device memory allocations in the local memory that is attached to the sub-device.
+These allocations are only visible to the sub-device, its sub-devices, and so forth.
+If the API call returns ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY, then the application may attempt to retry using the parent device.
 
-One thing to note is that the ordinal that is used when creating a
-command queue is relative to the sub-device. This ordinal specifies
-which physical compute queue on the device or sub-device to map the
-logical queue to. The application needs to query
-${x}_command_queue_group_properties_t from the sub-device to
-determine how to set this ordinal. See ${x}_command_queue_desc_t for
-more details.
+When creating command queues for a sub-device,
+the application must determine the ordinal from calling ${x}DeviceGetCommandQueueGroupProperties using the sub-device handle.
+See ${x}_command_queue_desc_t for more details.
 
 A 16-byte unique device identifier (uuid) can be obtained for a device
 or sub-device using ${x}DeviceGetProperties.

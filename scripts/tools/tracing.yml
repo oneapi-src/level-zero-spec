@@ -34,7 +34,7 @@ name: Create
 decl: static
 ordinal: "0"
 details:
-    - "The tracer can only be used on the context on which it was created."
+    - "The application must only use the tracer for the context which was provided during creation."
     - "The tracer is created in the disabled state."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
