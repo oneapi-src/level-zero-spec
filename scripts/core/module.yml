@@ -219,6 +219,8 @@ desc: "Retrieve global variable pointer from Module."
 class: $xModule
 name: GetGlobalPointer
 details:
+    - "The application may query global pointer from any module that either exports or imports it."
+    - "The application must dynamically link a module that imports a global before the global pointer can be queried from it."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -228,9 +230,12 @@ params:
     - type: "const char*"
       name: pGlobalName
       desc: "[in] name of global variable in module"
+    - type: "size_t*"
+      name: pSize
+      desc: "[in,out][optional] size of global variable"
     - type: "void**"
       name: pptr
-      desc: "[out] device visible pointer"
+      desc: "[in,out][optional] device visible pointer"
 returns:
     - $X_RESULT_ERROR_INVALID_GLOBAL_NAME
 --- #--------------------------------------------------------------------------
