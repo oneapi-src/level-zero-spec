@@ -17,6 +17,7 @@ analogue:
     - "**vkCmdPipelineBarrier**"
     - clEnqueueBarrierWithWaitList
 details:
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
     - "If numWaitEvents is non-zero, then then all phWaitEvents must be signaled prior to the execution of the barrier."
     - "This command blocks all following commands from beginning until the execution of the barrier completes."
@@ -46,6 +47,7 @@ desc: "Appends a global memory ranges barrier into a command list."
 class: $xCommandList
 name: AppendMemoryRangesBarrier
 details:
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the barrier."
     - "If numWaitEvents is non-zero, then then all phWaitEvents must be signaled prior to the execution of the barrier."
     - "This command blocks all following commands from beginning until the execution of the barrier completes."

@@ -45,7 +45,7 @@ name: Create
 decl: static
 ordinal: "0"
 details:
-    - "The application must only use events within the pool on the device(s) for which it was created."
+    - "The application must only use events within the pool on the device(s), including their sub-devices, for which it was created."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -236,6 +236,7 @@ analogue:
     - "**clSetUserEventStatus**"
     - vkCmdSetEvent
 details:
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
@@ -255,6 +256,7 @@ desc: "Appends wait on event(s) on the device into a command list."
 class: $xCommandList
 name: AppendWaitOnEvents
 details:
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -279,7 +281,6 @@ analogue:
     - clSetUserEventStatus
 details:
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "The application must ensure the event was created on the same context."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -340,6 +341,7 @@ name: AppendEventReset
 analogue:
     - vkResetEvent
 details:
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -422,6 +424,7 @@ desc: "Appends a query of an events' timestamp value(s) into a command list."
 class: $xCommandList
 name: AppendQueryKernelTimestamps
 details:
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the events were created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must ensure the memory pointed to by both dstptr and pOffsets is accessible by the device on which the command list was created."
     - "The value(s) written to the destination buffer are undefined if any timestamp event has not been signaled."

@@ -69,7 +69,7 @@ decl: static
 ordinal: "0"
 details:
     - "Compiles the module for execution on the device."
-    - "The application must only use the module on the device for which it was created."
+    - "The application must only use the module on the device, including its sub-devices, for which it was created."
     - "The module can be copied to other devices and contexts within the same driver instance by using $xModuleGetNativeBinary."
     - "The following build options are supported:":
         - "\"-$x-opt-disable\" - Disable optimizations"
@@ -665,6 +665,7 @@ desc: "Launch kernel over one or more work groups."
 class: $xCommandList
 name: AppendLaunchKernel
 details:
+    - "The application must ensure the kernel and events are accessible by the device on which the command list was created."
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
     - "The application must ensure the command list, kernel and events were created on the same context."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
@@ -698,6 +699,7 @@ desc: "Launch kernel cooperatively over one or more work groups."
 class: $xCommandList
 name: AppendLaunchCooperativeKernel
 details:
+    - "The application must ensure the kernel and events are accessible by the device on which the command list was created."
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
     - "This may only be used for a command list that are submitted to command queue with cooperative flag set."
     - "The application must ensure the command list, kernel and events were created on the same context."
@@ -733,6 +735,7 @@ desc: "Launch kernel over one or more work groups using indirect arguments."
 class: $xCommandList
 name: AppendLaunchKernelIndirect
 details:
+    - "The application must ensure the kernel and events are accessible by the device on which the command list was created."
     - "The application must ensure the launch arguments are visible to the device on which the command list was created."
     - "The implementation must not access the contents of the launch arguments as they are free to be modified by either the Host or device up until execution."
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
@@ -768,6 +771,7 @@ desc: "Launch multiple kernels over one or more work groups using an array of in
 class: $xCommandList
 name: AppendLaunchMultipleKernelsIndirect
 details:
+    - "The application must ensure the kernel and events are accessible by the device on which the command list was created."
     - "The application must ensure the array of launch arguments and count buffer are visible to the device on which the command list was created."
     - "The implementation must not access the contents of the array of launch arguments or count buffer as they are free to be modified by either the Host or device up until execution."
     - "This may **only** be called for a command list created with command queue group ordinal that supports compute."

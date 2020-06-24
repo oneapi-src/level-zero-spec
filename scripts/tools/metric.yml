@@ -355,6 +355,8 @@ desc: "Append metric streamer marker into a command list."
 class: $tCommandList
 name: AppendMetricStreamerMarker
 details:
+    - "The application must ensure the metric streamer is accessible by the device on which the command list was created."
+    - "The application must ensure the command list and metric streamer were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$t_command_list_handle_t"
@@ -522,6 +524,8 @@ desc: "Appends metric query begin into a command list."
 class: $tCommandList
 name: AppendMetricQueryBegin
 details:
+    - "The application must ensure the metric query is accessible by the device on which the command list was created."
+    - "The application must ensure the command list and metric query were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:
     - type: "$t_command_list_handle_t"
@@ -536,6 +540,8 @@ desc: "Appends metric query end into a command list."
 class: $tCommandList
 name: AppendMetricQueryEnd
 details:
+    - "The application must ensure the metric query and events are accessible by the device on which the command list was created."
+    - "The application must ensure the command list, events and metric query were created on the same context."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:

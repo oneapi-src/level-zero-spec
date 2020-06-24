@@ -16,6 +16,7 @@ name: AppendMemoryCopy
 details:
     - "The application must ensure the memory pointed to by dstptr and srcptr is accessible by the device on which the command list was created."
     - "The implementation must not access the memory pointed to by dstptr and srcptr as they are free to be modified by either the Host or device up until execution."
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must ensure the command list and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
@@ -61,6 +62,7 @@ details:
     - "The implementation must not access the memory pointed to by dstptr as it is free to be modified by either the Host or device up until execution."
     - "The value to initialize memory to is described by the pattern and the pattern size."
     - "The pattern size must be a power-of-two and less than $x_command_queue_group_properties_t::maxMemoryFillPatternSize."
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must enusre the command list and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
@@ -131,6 +133,7 @@ details:
     - "The implementation must not access the memory pointed to by dstptr and srcptr as they are free to be modified by either the Host or device up until execution."
     - "The region width, height, and depth for both src and dst must be same. The origins can be different."
     - "The src and dst regions cannot be overlapping."
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must ensure the command list and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
@@ -186,6 +189,7 @@ details:
     - "The current active and source context must be from the same driver."
     - "The application must ensure the memory pointed to by dstptr and srcptr is accessible by the device on which the command list was created."
     - "The implementation must not access the memory pointed to by dstptr and srcptr as they are free to be modified by either the Host or device up until execution."
+    - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must ensure the command list and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
@@ -227,6 +231,7 @@ name: AppendImageCopy
 analogue:
     - "**clEnqueueCopyImage**"
 details:
+    - "The application must ensure the image and events are accessible by the device on which the command list was created."
     - "The application must ensure the image format descriptors for both source and destination images are the same."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must ensure the command list, images and events were created on the same context."
@@ -285,6 +290,7 @@ desc: "Copies a region of an image to another image."
 class: $xCommandList
 name: AppendImageCopyRegion
 details:
+    - "The application must ensure the image and events are accessible by the device on which the command list was created."
     - "The region width and height for both src and dst must be same. The origins can be different."
     - "The src and dst regions cannot be overlapping."
     - "The application must ensure the image format descriptors for both source and destination images are the same."
@@ -332,6 +338,7 @@ analogue:
 details:
     - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
     - "The implementation must not access the memory pointed to by dstptr as it is free to be modified by either the Host or device up until execution."
+    - "The application must ensure the image and events are accessible by the device on which the command list was created."
     - "The application must ensure the image format descriptor for the source image is not a media format."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must ensure the command list, image and events were created, and the memory was allocated, on the same context."
@@ -373,6 +380,7 @@ analogue:
 details:
     - "The application must ensure the memory pointed to by srcptr is accessible by the device on which the command list was created."
     - "The implementation must not access the memory pointed to by srcptr as it is free to be modified by either the Host or device up until execution."
+    - "The application must ensure the image and events are accessible by the device on which the command list was created."
     - "The application must ensure the image format descriptor for the destination image is not a media format."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must ensure the command list, image and events were created, and the memory was allocated, on the same context."
