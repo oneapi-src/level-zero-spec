@@ -58,9 +58,9 @@ inline void calculateResults( zet::MetricGroup* pMetricGroup, zet::MetricQuery* 
 
     // Calculate results
     uint32_t numMetricValues = 0;
-    zet::MetricGroup::CalculateMetricValues( pMetricGroup, rawDataSize, rawData.data(), &numMetricValues );
+    zet::MetricGroup::CalculateMetricValues( pMetricGroup, zet::MetricGroup::calculation_type_t::METRIC_VALUES, rawDataSize, rawData.data(), &numMetricValues );
     std::vector<zet::typed_value_t> metricValues( numMetricValues );
-    zet::MetricGroup::CalculateMetricValues( pMetricGroup, rawDataSize, rawData.data(), &numMetricValues, metricValues.data() );
+    zet::MetricGroup::CalculateMetricValues( pMetricGroup, zet::MetricGroup::calculation_type_t::METRIC_VALUES, rawDataSize, rawData.data(), &numMetricValues, metricValues.data() );
 
     // get metric info
     uint32_t metricCount = 0;
