@@ -291,6 +291,49 @@ Memory advice may avoid unnecessary or unprofitable memory transfers and may imp
 
 Both prefetch and memory advice are asynchronous operations that are appended into command lists.
 
+Reserved Device Allocations
+---------------------------
+If an application needs finer grained control of physical memory consumption for device allocations then it
+can reserve a range of the virtual address space and map this to physical memory as needed. This provides
+flexibility for applications to manage large dynamic data structures which can grow and shrink over time
+while maintaining optimal physical memory usage.
+
+Reserving Virtual Address Space
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following pseudo-code demonstrates a basic sequence for reserving virtual memory:
+
+.. parsed-literal::
+
+        // Reserve 1GB of virtual address space to manage.
+        size_t reserveSize = align(1048576000, deviceProperties.pageSize);
+
+        void* pPtr = nullptr;
+        ${x}ContextVirtualReserve(hContext, nullptr, reserveSize, &pPtr);
+
+Physical Memory
+~~~~~~~~~~~~~~~
+
+Physical memory is explicitly represented in the API as physical memory objects
+that are reservations of physical pages. The application will use ${x}DevicePhysicalCreate
+to create a physical memory object and can map virtual memory pages into this physical
+memory.
+
+The following pseudo-code demonstrates a basic sequence for creating a physical memory object
+and mapping virtual address pages into it:
+
+.. parsed-literal::
+
+        // Create 5MB physical memory object
+        ${x}_physical_memory_handle_t hPhysicalAlloc;
+        size_t physicalSize = align(5242880, deviceProperties.pageSize);
+
+        ${x}DevicePhysicalCreate(hContext, hDevice, physicalSize, &hPhysicalAlloc);
+
+        // Map entire 5MB physical allocation
+        ${x}ContextVirtualMap(hContext, pPtr, physicalSize, hPhyiscalAlloc, 0,
+            ${X}_MEMORY_ACCESS_ATTRIBUTE_MEMORY_ACCESS_READWRITE);
+
 .. _Images:
 
 Images

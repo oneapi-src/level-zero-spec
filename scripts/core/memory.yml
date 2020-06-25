@@ -344,3 +344,230 @@ params:
     - type: "const void*"
       name: ptr
       desc: "[in][release] pointer to device allocation in this process"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Virtual memory page access attributes"
+class: $xDriver
+name: $x_memory_access_attribute_t
+etors:
+    - name: MEMORY_ACCESS_NONE
+      value: "0"
+      desc: "Indicates the memory page is inaccessible."
+    - name: MEMORY_ACCESS_READWRITE
+      desc: "Indicates the memory page supports read write access."
+    - name: MEMORY_ACCESS_READONLY
+      desc: "Indicates the memory page supports read-only access."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reserves pages in virtual address space."
+class: $xContext
+name: VirtualReserve
+details:
+    - "The application must only use the memory allocation on the context for which it was created."
+    - "The application may call this function from simultaneous threads."
+    - "The access attributes will default to none to indicate reservation is inaccessible."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: pStartAddress
+      desc: "[in] pointer to start of region to reserve. If nullptr then implementation will choose a start address."
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to reserve; must be page aligned."
+    - type: "void**"
+      name: pptr
+      desc: "[out] pointer to virtual reservation."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Free pages in virtual address space."
+class: $xContext
+name: VirtualFree
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: pPtr
+      desc: "[in] pointer to start of region to free."
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to free; must be page aligned."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates a physical memory object on the device."
+class: $xDevice
+name: PhysicalCreate
+details:
+    - "The application must only use the physical memory object on the context for which it was created."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to reserve; must be page aligned."
+    - type: "$x_physical_memory_handle_t*"
+      name: phPhysicalMemory
+      desc: "[out] pointer to handle of physical memory object created"
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys a physical memory object."
+class: $xDevice
+name: PhysicalDestroy
+decl: static
+ordinal: "0"
+details:
+    - "The application must ensure the device is not currently referencing the physical memory object before it is deleted"
+    - "The application must **not** call this function from simultaneous threads with the same physical memory handle."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_physical_memory_handle_t
+      name: hPhysicalMemory
+      desc: "[in][release] handle of physical memory object to destroy"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Maps pages in virtual address space to pages from physical memory object."
+class: $xContext
+name: VirtualMap
+details:
+    - "The virtual address range must have been reserved using $xContextVirtualReserve."
+    - "The application must only use the mapped memory allocation on the context for which it was created."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: pPtr
+      desc: "[in] pointer to start of virtual address range to map."
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes of virtual address range to map; must be page aligned."
+    - type: $x_physical_memory_handle_t
+      name: hPhysicalMemory
+      desc: "[in] handle to physical memory object."
+    - type: size_t
+      name: offset
+      desc: "[in] offset into physical memory allocation object; must be page aligned."
+    - type: $x_memory_access_attribute_t
+      name: access
+      desc: "[in] specifies page access attributes to apply to the virtual address range."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Unmaps pages in virtual address space from pages from a physical memory object."
+class: $xContext
+name: VirtualUnmap
+details:
+    - "The page access attributes for virtual address range will revert back to none."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: pPtr
+      desc: "[in] pointer to start of region to unmap."
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to unmap; must be page aligned."
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+        - "Address must be page aligned"
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+        - "Size must be page aligned"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set memory access attributes for a virtual address range."
+class: $xContext
+name: SetMemAccessAttribute
+details:
+    - "This function may be called from simultaneous threads with the same function handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: pPtr
+      desc: "[in] pointer to start of region to unmap."
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes; must be page aligned."
+    - type: $x_memory_access_attribute_t
+      name: access
+      desc: "[in] specifies page access attributes to apply to the virtual address range."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+        - "Address must be page aligned"
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+        - "Size must be page aligned"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory access attribute for a virtual address range."
+class: $xContext
+name: GetMemAccessAttribute
+details:
+    - "If size and outSize are equal then the pages in the specified virtual address range have the same access attributes."
+    - "This function may be called from simultaneous threads with the same function handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: pPtr
+      desc: "[in] pointer to start of virtual address region for query."
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes; must be page aligned."
+    - type: $x_memory_access_attribute_t*
+      name: access
+      desc: "[in,out] query result for page access attribute."
+    - type: size_t*
+      name: outSize
+      desc: "[in,out] query result for size of virtual address range, starting at pPtr, that shares same access attribute."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+        - "Address must be page aligned"
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+        - "Size must be page aligned"
