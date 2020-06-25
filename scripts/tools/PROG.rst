@@ -505,9 +505,10 @@ The following pseudo-code demonstrates a basic sequence for metric calculation a
        {
            // Calculate metric data
            uint32_t numMetricValues = 0;
-           ${t}MetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, nullptr );
+           ${t}_metric_group_calculation_type_t calculationType = ${T}_METRIC_GROUP_CALCULATION_TYPE_METRIC_VALUES;
+           ${t}MetricGroupCalculateMetricValues( hMetricGroup, calculationType, rawSize, rawData, &numMetricValues, nullptr );
            ${t}_typed_value_t* metricValues = malloc( numMetricValues * sizeof(${t}_typed_value_t) );
-           ${t}MetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, metricValues );
+           ${t}MetricGroupCalculateMetricValues( hMetricGroup, calculationType, rawSize, rawData, &numMetricValues, metricValues );
 
            // Obtain available metrics for the specific metric group
            uint32_t metricCount = 0;
