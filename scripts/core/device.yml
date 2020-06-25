@@ -680,6 +680,24 @@ params:
       name: value
       desc: "[out] returned access capability"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Returns current status of the device."
+class: $xDevice
+name: GetStatus
+details:
+    - "Once a device is reset, this call will update the OS handle attached to the device handle."
+    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+returns:
+    - $X_RESULT_SUCCESS:
+        - "Device is available for use."
+    - $X_RESULT_ERROR_DEVICE_LOST:
+        - "Device is lost; must be reset for use."
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a device"
 name: $xDevice

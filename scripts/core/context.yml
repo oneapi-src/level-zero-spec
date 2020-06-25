@@ -89,7 +89,7 @@ returns:
     - $X_RESULT_SUCCESS:
         - "Context is available for use."
     - $X_RESULT_ERROR_DEVICE_LOST:
-        - "Context is invalid, due to device lost or reset and must be reset for use."
+        - "Context is invalid; due to device lost or reset."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported Cache Config flags"

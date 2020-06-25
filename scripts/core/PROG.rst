@@ -142,10 +142,14 @@ The following pseudo-code demonstrates a basic context creation and activation s
         ${x}ContextGetMemAllocProperties(hContextA, ptrB, &props, &hDevice); // illegal: Context A has no knowledge of ptrB
 
 
-If a device is hung or was reset, then all APIs will return ${X}_RESULT_ERROR_DEVICE_LOST when any object associated with that device is used.
-An application can also use ${x}ContextGetStatus at any time to check the status of the context.
-In order to recover, the application must destroy then recreate the context object.
-After the context is destroyed using ${x}ContextDestroy, all pointers to memory allocations and handles to objects (including other contexts) created on the context will be invalid.
+If a device was hung or reset, then the context is no longer valid and all APIs will return ${X}_RESULT_ERROR_DEVICE_LOST when any object associated with that context is used.
+All pointers to memory allocations and handles to objects (including other contexts) created on the context will be invalid and should no longer be used.
+An application can use ${x}ContextGetStatus at any time to check the status of a context.
+
+In order to recover, the context must be destroyed using ${x}ContextDestroy.
+After the device is reset, the application can create a new context and continue operation.
+An application must call ${x}DeviceGetStatus to confirm the device has been reset and update the OS handle attached to the device handle.
+Otherwise, even after the device has been reset, the call to ${x}ContextCreate will fail.
 
 Memory and Images
 =================
