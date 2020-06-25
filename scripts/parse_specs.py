@@ -717,6 +717,8 @@ def parse(section, version, tags, meta, ref):
             if re.match(r"header", d['type']):
                 header = d
                 header['ordinal'] = int(int(header.get('ordinal',"1000")) * float(header.get('version',"1.0")))
+                header['ordinal'] *= 1000 if re.match(r"extension", header.get('desc',"").lower()) else 1
+                header['ordinal'] *= 1000 if re.match(r"experimental", header.get('desc',"").lower()) else 1
 
             elif header:
                 objects.append(d)
