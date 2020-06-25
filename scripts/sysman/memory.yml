@@ -79,6 +79,12 @@ members:
     - type: uint64_t
       name: physicalSize
       desc: "[out] Physical memory size in bytes"
+    - type: int32_t
+      name: busWidth
+      desc: "[out] Width of the memory bus. A value of -1 means that this property is unknown."
+    - type: int32_t
+      name: numChannels
+      desc: "[out] The number of memory channels. A value of -1 means that this property is unknown."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory state - health, allocated"
