@@ -129,6 +129,11 @@ class: $xSampler
 name: "$x_sampler_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of physical memory object"
+class: $xDevice
+name: "$x_physical_memory_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of driver's command graph object"
 version: "2.0"
 class: $xCommandGraphExp
