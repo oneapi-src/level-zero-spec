@@ -465,13 +465,15 @@ analogue:
 etors:
     - name: INDIRECT_HOST_ACCESS
       value: "0"
-      desc: "Indicates that the function accesses host allocations indirectly (default: false, type: bool_t)"
+      desc: "Indicates that the kernel accesses host allocations indirectly (default: false, type: bool_t)"
     - name: INDIRECT_DEVICE_ACCESS
-      desc: "Indicates that the function accesses device allocations indirectly (default: false, type: bool_t)"
+      desc: "Indicates that the kernel accesses device allocations indirectly (default: false, type: bool_t)"
     - name: INDIRECT_SHARED_ACCESS
-      desc: "Indicates that the function accesses shared allocations indirectly (default: false, type: bool_t)"
+      desc: "Indicates that the kernel accesses shared allocations indirectly (default: false, type: bool_t)"
     - name: SOURCE_ATTRIBUTE
       desc: "Declared kernel attributes (i.e. can be specified with __attribute__ in runtime language). (type: char[]) Returned as a null-terminated string and each attribute is separated by a space. $xKernelSetAttribute is not supported for this."
+    - name: INTERMEDIATE_CACHE_CONFIG
+      desc: "Preferred intermediate cache configuration for the kernel on the current Host thread. (default: 0, type: $x_cache_config_flags_t)"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets a kernel attribute"
@@ -527,33 +529,14 @@ type: enum
 desc: "Supported Cache Config flags"
 class: $xKernel
 name: $x_cache_config_flags_t
+details:
+    - "The implementation will maintain the intermediate cache configuration in thread-local storage."
+    - "The intermediate cache configuration will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
 etors:
     - name: LARGE_SLM
       desc: "Large SLM size"
     - name: LARGE_DATA
       desc: "Large General Data size"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Sets the preferred intermediate cache configuration for a kernel on the current Host thread."
-class: $xKernel
-name: SetIntermediateCacheConfig
-ordinal: "2"
-details:
-    - "The implementation will maintain the intermediate cache configuration in thread-local storage."
-    - "The intermediate cache configuration will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
-    - "The application may call this function from simultaneous threads with the same kernel handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: "$x_kernel_handle_t"
-      name: hKernel
-      desc: "[in] handle of the kernel object" 
-    - type: "$x_cache_config_flags_t"
-      name: flags
-      desc: |
-            [in] cache configuration. 
-            must be 0 (default configuration) or a valid combination of $x_cache_config_flag_t.
-returns:
-    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum kernel name string size"
