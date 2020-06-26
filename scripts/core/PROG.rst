@@ -416,7 +416,7 @@ Device Cache Settings
 
 There are two methods for device and kernel cache control:
 
-1. Cache Size Configuration: Ability to configure larger size for SLM vs Data globally for Device or per Kernel instance.
+1. Cache Size Configuration: Ability to configure larger size for SLM vs Data per Kernel instance.
 2. Runtime Hint/preference for application to allow access to be Cached or not in Device Caches. For GPU device this is provided via two ways:
 
        - During Image creation via Flag
@@ -428,9 +428,8 @@ configuration:
 .. parsed-literal::
 
        // Large SLM for Intermediate and Last Level cache.
-       // Note: The intermediate cache setting is applied to each kernel. Last level is applied for the device.
+       // Note: The intermediate cache setting is applied to each kernel.
        ${x}KernelSetIntermediateCacheConfig(hKernel, ${X}_CACHE_CONFIG_FLAG_LARGE_SLM);
-       ${x}ContextSetLastLevelCacheConfig(hContext, hDevice, ${X}_CACHE_CONFIG_FLAG_LARGE_SLM);
        ...
 
 Command Queues and Command Lists

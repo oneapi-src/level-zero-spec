@@ -91,38 +91,6 @@ returns:
     - $X_RESULT_ERROR_DEVICE_LOST:
         - "Context is invalid; due to device lost or reset."
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported Cache Config flags"
-class: $xContext
-name: $x_cache_config_flags_t
-etors:
-    - name: LARGE_SLM
-      desc: "Large SLM size"
-    - name: LARGE_DATA
-      desc: "Large General Data size"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Sets the preferred Last Level cache configuration for a device."
-class: $xContext
-name: SetLastLevelCacheConfig
-ordinal: "2"
-details:
-    - "The application must **not** call this function from simultaneous threads with the same device handle."
-params:
-    - type: $x_context_handle_t
-      name: hContext
-      desc: "[in] handle of context object"
-    - type: "$x_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device "
-    - type: "$x_cache_config_flags_t"
-      name: flags
-      desc: |
-            [in] cache configuration. 
-            must be 0 (default configuration) or a valid combination of $x_cache_config_flag_t.
-returns:
-    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
---- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for context"
 name: $xContext

@@ -523,6 +523,16 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported Cache Config flags"
+class: $xKernel
+name: $x_cache_config_flags_t
+etors:
+    - name: LARGE_SLM
+      desc: "Large SLM size"
+    - name: LARGE_DATA
+      desc: "Large General Data size"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the preferred intermediate cache configuration for a kernel on the current Host thread."
 class: $xKernel
