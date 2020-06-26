@@ -315,7 +315,7 @@ Physical Memory
 ~~~~~~~~~~~~~~~
 
 Physical memory is explicitly represented in the API as physical memory objects
-that are reservations of physical pages. The application will use ${x}DevicePhysicalCreate
+that are reservations of physical pages. The application will use ${x}ContextPhysicalCreate
 to create a physical memory object and can map virtual memory pages into this physical
 memory.
 
@@ -328,11 +328,11 @@ and mapping virtual address pages into it:
         ${x}_physical_memory_handle_t hPhysicalAlloc;
         size_t physicalSize = align(5242880, deviceProperties.pageSize);
 
-        ${x}DevicePhysicalCreate(hContext, hDevice, physicalSize, &hPhysicalAlloc);
+        ${x}ContextPhysicalCreate(hContext, hDevice, physicalSize, &hPhysicalAlloc);
 
         // Map entire 5MB physical allocation
         ${x}ContextVirtualMap(hContext, pPtr, physicalSize, hPhyiscalAlloc, 0,
-            ${X}_MEMORY_ACCESS_ATTRIBUTE_MEMORY_ACCESS_READWRITE);
+            ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
 
 .. _Images:
 

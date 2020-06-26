@@ -347,15 +347,15 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Virtual memory page access attributes"
-class: $xDriver
+class: $xContext
 name: $x_memory_access_attribute_t
 etors:
-    - name: MEMORY_ACCESS_NONE
+    - name: NONE
       value: "0"
       desc: "Indicates the memory page is inaccessible."
-    - name: MEMORY_ACCESS_READWRITE
+    - name: READWRITE
       desc: "Indicates the memory page supports read write access."
-    - name: MEMORY_ACCESS_READONLY
+    - name: READONLY
       desc: "Indicates the memory page supports read-only access."
 --- #--------------------------------------------------------------------------
 type: function
@@ -412,7 +412,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries preferred page to use for aligning virtual memory reservations and physical memory allocations."
-class: $xDevice
+class: $xContext
 name: QueryPreferredPageSize
 details:
     - "The application may call this function from simultaneous threads."
@@ -436,7 +436,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a physical memory object on the device."
-class: $xDevice
+class: $xContext
 name: PhysicalCreate
 details:
     - "The application must only use the physical memory object on the context for which it was created."
@@ -465,15 +465,20 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a physical memory object."
-class: $xDevice
+class: $xContext
 name: PhysicalDestroy
-decl: static
 ordinal: "0"
 details:
     - "The application must ensure the device is not currently referencing the physical memory object before it is deleted"
     - "The application must **not** call this function from simultaneous threads with the same physical memory handle."
     - "The implementation of this function must be thread-safe."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
     - type: $x_physical_memory_handle_t
       name: hPhysicalMemory
       desc: "[in][release] handle of physical memory object to destroy"
@@ -496,7 +501,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of virtual address range to map."
     - type: size_t
       name: size
@@ -530,7 +535,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of region to unmap."
     - type: size_t
       name: size
@@ -556,7 +561,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of region to unmap."
     - type: size_t
       name: size
@@ -584,17 +589,17 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of virtual address region for query."
     - type: size_t
       name: size
       desc: "[in] size in bytes; must be page aligned."
     - type: $x_memory_access_attribute_t*
       name: access
-      desc: "[in,out] query result for page access attribute."
+      desc: "[out] query result for page access attribute."
     - type: size_t*
       name: outSize
-      desc: "[in,out] query result for size of virtual address range, starting at pPtr, that shares same access attribute."
+      desc: "[out] query result for size of virtual address range, starting at pPtr, that shares same access attribute."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
         - "Address must be page aligned"
