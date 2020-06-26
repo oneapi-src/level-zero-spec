@@ -364,6 +364,8 @@ class: $xContext
 name: VirtualReserve
 details:
     - "The application must only use the memory allocation on the context for which it was created."
+    - "The starting address and size must be at least aligned to ${x}_device_properties_t.minMemPageSize."
+    - "The application can query and use preferred page size using ${x}DeviceQueryPreferredPageSize."
     - "The application may call this function from simultaneous threads."
     - "The access attributes will default to none to indicate reservation is inaccessible."
     - "The implementation of this function must be thread-safe."
@@ -378,7 +380,7 @@ params:
       name: size
       desc: "[in] size in bytes to reserve; must be page aligned."
     - type: "void**"
-      name: pptr
+      name: pPtr
       desc: "[out] pointer to virtual reservation."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
@@ -409,11 +411,37 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Queries preferred page to use for aligning virtual memory reservations and physical memory allocations."
+class: $xDevice
+name: QueryPreferredPageSize
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: size_t
+      name: size
+      desc: "[in] unaligned allocation size in bytes"
+    - type: "size_t*"
+      name: pagesize
+      desc: "[out] pointer to preferred page size."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Creates a physical memory object on the device."
 class: $xDevice
 name: PhysicalCreate
 details:
     - "The application must only use the physical memory object on the context for which it was created."
+    - "The size must be at least aligned to ${x}_device_properties_t.minMemPageSize."
+    - "The application can query and use preferred page size using ${x}DeviceQueryPreferredPageSize."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -459,6 +487,8 @@ name: VirtualMap
 details:
     - "The virtual address range must have been reserved using $xContextVirtualReserve."
     - "The application must only use the mapped memory allocation on the context for which it was created."
+    - "The virtual start address and size must be at least aligned to ${x}_device_properties_t.minMemPageSize."
+    - "The application should use, for the starting address and size, the same size alignment used for the physical allocation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
