@@ -75,6 +75,8 @@ details:
         - "\"-$x-opt-disable\" - Disable optimizations"
         - "\"-$x-opt-greater-than-4GB-buffer-required\" - Use 64-bit offset calculations for buffers."
         - "\"-$x-opt-large-register-file\" - Increase number of registers available to threads."
+        - "\"-$x-opt-has-buffer-offset-arg\" - Extend stateless to stateful optimization to more cases with the use of additional offset (e.g. 64-bit pointer to binding table with 32-bit offset)."
+        - "\"-g\" - Include debugging information."
     - "A build log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
     - "The module descriptor constants are only supported for SPIR-V specialization constants."
     - "The application may call this function from simultaneous threads."
