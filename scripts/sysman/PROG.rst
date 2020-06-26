@@ -170,7 +170,7 @@ provided for all components in each class.
 +-----------------------+---------------------------------+-------------------------------------------+
 | Firmware_             | Sub-device 0: Enumerates each   | Get firmware name and version             |
 |                       | firmware                        |                                           |
-|                       |                                 | Verify firmware checksum                  |
+|                       |                                 |                                           |
 |                       | Sub-device 1: Enumerates each   |                                           |
 |                       | firmware                        |                                           |
 +-----------------------+---------------------------------+-------------------------------------------+
@@ -1209,9 +1209,6 @@ The following functions are provided to manage firmwares on the device:
 +------------------------------------+-----------------------------------+
 | ${s}FirmwareGetProperties() | Find out the name and version of  |
 |                                    | a firmware.                       |
-+------------------------------------+-----------------------------------+
-| ${s}FirmwareGetChecksum()   | Get the checksum for an installed |
-|                                    | firmware.                         |
 +------------------------------------+-----------------------------------+
 | ${s}FirmwareFlash()         | Flash a new firmware image.       |
 +------------------------------------+-----------------------------------+
