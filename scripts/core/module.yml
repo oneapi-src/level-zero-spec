@@ -54,7 +54,7 @@ members:
       init: nullptr
     - type: "const char*"
       name: pBuildFlags
-      desc: "[in][optional] string containing compiler flags. See programming guide for build flags."
+      desc: "[in][optional] string containing compiler flags. See $xModuleCreate for build flag details."
       init: nullptr
     - type: "const $x_module_constants_t*"
       name: pConstants
