@@ -263,6 +263,31 @@ params:
       name: pNames
       desc: "[in,out][optional][range(0, *pCount)] array of names of functions"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Module properties"
+class: $xModule
+name: $x_module_properties_t
+base: $x_base_properties_t
+members:
+    - type: "$x_bool_t"
+      name: hasImports
+      desc: "[out] Module has imports (i.e. imported global variables and/or kernels). See ${x}ModuleDynamicLink."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve module properties."
+class: $xModule
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_module_handle_t
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: "$x_module_properties_t*"
+      name: pModuleProperties
+      desc: "[in,out] query result for module properties."
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported kernel creation flags"
 class: $xKernel
