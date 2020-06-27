@@ -54,7 +54,20 @@ members:
       init: nullptr
     - type: "const char*"
       name: pBuildFlags
-      desc: "[in][optional] string containing compiler flags. See $xModuleCreate for build flag details."
+      desc: |
+            [in][optional] string containing compiler flags.
+              - "-$x-opt-disable"
+                   - Disable optimizations
+              - "-$x-opt-greater-than-4GB-buffer-required"
+                   - Use 64-bit offset calculations for buffers.
+              - "-$x-opt-large-register-file"
+                   - Increase number of registers available to threads.
+              - "-$x-opt-has-buffer-offset-arg"
+                   - Extend stateless to stateful optimization to more
+                     cases with the use of additional offset (e.g. 64-bit
+                     pointer to binding table with 32-bit offset).
+              - "-g"
+                   - Include debugging information.
       init: nullptr
     - type: "const $x_module_constants_t*"
       name: pConstants
