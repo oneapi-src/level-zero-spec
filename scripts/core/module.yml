@@ -541,11 +541,6 @@ etors:
       desc: "Large General Data size"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Maximum kernel name string size"
-name: $X_MAX_KERNEL_NAME
-value: "256"
---- #--------------------------------------------------------------------------
-type: macro
 desc: "Maximum kernel universal unique id (UUID) size in bytes"
 name: $X_MAX_KERNEL_UUID_SIZE
 value: "16"
@@ -618,9 +613,6 @@ members:
     - type: $x_kernel_uuid_t
       name: uuid
       desc: "[out] universal unique identifier."
-    - type: char
-      name: "name[$X_MAX_KERNEL_NAME]"
-      desc: "[out] kernel name"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve kernel properties."
@@ -636,6 +628,26 @@ params:
     - type: "$x_kernel_properties_t*"
       name: pKernelProperties
       desc: "[in,out] query result for kernel properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve kernel name from Kernel."
+class: $xKernel
+name: GetName
+details:
+    - "The caller can pass nullptr for pName when querying only for size."
+    - "The implementation will copy the kernel name into a buffer supplied by the caller."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
+    - type: "size_t*"
+      name: pSize
+      desc: "[in,out] size of kernel name string, including null terminator, in bytes."
+    - type: "char*"
+      name: pName
+      desc: "[in,out][optional] char pointer to kernel name."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel dispatch group count."
