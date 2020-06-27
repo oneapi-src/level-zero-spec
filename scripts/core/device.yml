@@ -124,9 +124,6 @@ members:
       name: coreClockRate
       desc: "[out] Clock rate for device core."
     - type: $x_bool_t
-      name: unifiedMemorySupported
-      desc: "[out] Supports unified physical memory between Host and device."
-    - type: $x_bool_t
       name: eccMemorySupported
       desc: "[out] Supports error correction memory access."
     - type: $x_bool_t
