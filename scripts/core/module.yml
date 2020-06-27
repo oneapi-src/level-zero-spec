@@ -55,7 +55,7 @@ members:
     - type: "const char*"
       name: pBuildFlags
       desc: |
-            [in][optional] string containing compiler flags.
+            [in][optional] string containing compiler flags. Following options are supported.
               - "-$x-opt-disable"
                    - Disable optimizations
               - "-$x-opt-greater-than-4GB-buffer-required"
@@ -84,12 +84,6 @@ details:
     - "Compiles the module for execution on the device."
     - "The application must only use the module for the device, or its sub-devices, which was provided during creation."
     - "The module can be copied to other devices and contexts within the same driver instance by using $xModuleGetNativeBinary."
-    - "The following build options are supported:":
-        - "\"-$x-opt-disable\" - Disable optimizations"
-        - "\"-$x-opt-greater-than-4GB-buffer-required\" - Use 64-bit offset calculations for buffers."
-        - "\"-$x-opt-large-register-file\" - Increase number of registers available to threads."
-        - "\"-$x-opt-has-buffer-offset-arg\" - Extend stateless to stateful optimization to more cases with the use of additional offset (e.g. 64-bit pointer to binding table with 32-bit offset)."
-        - "\"-g\" - Include debugging information."
     - "A build log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
     - "The module descriptor constants are only supported for SPIR-V specialization constants."
     - "The application may call this function from simultaneous threads."
