@@ -459,10 +459,6 @@ etors:
       desc: "hint that the preferred memory location is the specified device"
     - name: CLEAR_PREFERRED_LOCATION
       desc: "removes the affect of $X_MEMORY_ADVICE_SET_PREFERRED_LOCATION"
-    - name: SET_ACCESSED_BY
-      desc: "hint that memory will be accessed by the specified device"
-    - name: CLEAR_ACCESSED_BY
-      desc: "removes the affect of $X_MEMORY_ADVICE_SET_ACCESSED_BY"
     - name: SET_NON_ATOMIC_MOSTLY
       desc: "hints that memory will mostly be accessed non-atomically"
     - name: CLEAR_NON_ATOMIC_MOSTLY
