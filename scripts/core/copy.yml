@@ -61,7 +61,7 @@ details:
     - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
     - "The implementation must not access the memory pointed to by dstptr as it is free to be modified by either the Host or device up until execution."
     - "The value to initialize memory to is described by the pattern and the pattern size."
-    - "The pattern size must be a power-of-two and less than $x_command_queue_group_properties_t::maxMemoryFillPatternSize."
+    - "The pattern size must be a power-of-two and less than $x_command_queue_group_properties_t.maxMemoryFillPatternSize."
     - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
     - "The application must enusre the command list and events were created, and the memory was allocated, on the same context."
@@ -153,7 +153,7 @@ params:
       desc: "[in] destination pitch in bytes"
     - type: "uint32_t"
       name: dstSlicePitch
-      desc: "[in] destination slice pitch in bytes. This is required for 3D region copies where $x_copy_region_t::depth is not 0, otherwise it's ignored."
+      desc: "[in] destination slice pitch in bytes. This is required for 3D region copies where $x_copy_region_t.depth is not 0, otherwise it's ignored."
     - type: "const void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
@@ -165,7 +165,7 @@ params:
       desc: "[in] source pitch in bytes"
     - type: "uint32_t"
       name: srcSlicePitch
-      desc: "[in] source slice pitch in bytes. This is required for 3D region copies where $x_copy_region_t::depth is not 0, otherwise it's ignored."
+      desc: "[in] source slice pitch in bytes. This is required for 3D region copies where $x_copy_region_t.depth is not 0, otherwise it's ignored."
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"

@@ -255,7 +255,7 @@ Devices may support different capabilities for each type of allocation. Supporte
 
 At a minimum, drivers will assign unique physical pages for each allocation.
 However, it is undefined behavior for an application to access memory outside of the allocation size requested.
-The minimum page size for the device can be queried from ${x}_device_properties_t::minMemPageSize.
+The minimum page size for the device can be queried from ${x}_device_properties_t.minMemPageSize.
 Applications should implement usage-specific allocators from device memory pools (e.g., small and/or fixed-sized allocations, lock-free, etc.).
 
 Furthermore, drivers may *oversubscribe* some **shared** allocations. 

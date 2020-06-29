@@ -580,7 +580,7 @@ base: $x_base_properties_t
 members:
     - type: $x_bool_t
       name: supported
-      desc: "[out] Supports reading and writing of images. See ::$xImageGetProperties for format-specific capabilities."
+      desc: "[out] Supports reading and writing of images. See $xImageGetProperties for format-specific capabilities."
     - type: uint32_t
       name: maxImageDims1D
       desc: "[out] Maximum image dimensions for 1D resources."
