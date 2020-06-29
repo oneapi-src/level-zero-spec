@@ -45,6 +45,17 @@ etors:
       desc: "Execution unit shared local memory"
 --- #--------------------------------------------------------------------------
 type: enum
+desc: "Memory module location"
+class: $sMemory
+name: $s_mem_loc_t
+etors:
+    - name: SYSTEM
+      value: "0"
+      desc: "System memory"
+    - name: DEVICE
+      desc: "On board local device memory"
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "Memory health"
 class: $sMemory
 name: $s_mem_health_t
@@ -76,6 +87,9 @@ members:
     - type: uint32_t
       name: "subdeviceId"
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $s_mem_loc_t
+      name: location
+      desc: "[out] Location of this memory (system, device)"
     - type: uint64_t
       name: physicalSize
       desc: "[out] Physical memory size in bytes"
