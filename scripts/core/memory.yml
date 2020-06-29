@@ -365,6 +365,7 @@ name: VirtualReserve
 details:
     - "The application must only use the memory allocation on the context for which it was created."
     - "The starting address and size must be at least aligned to ${x}_device_properties_t.minMemPageSize."
+    - "If pStart is not null then implementation will attempt to reserve starting from that address. If not available then will find another suitable starting address."
     - "The application can query and use preferred page size using ${x}DeviceQueryPreferredPageSize."
     - "The application may call this function from simultaneous threads."
     - "The access attributes will default to none to indicate reservation is inaccessible."
@@ -374,13 +375,13 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pStartAddress
+      name: pStart
       desc: "[in] pointer to start of region to reserve. If nullptr then implementation will choose a start address."
     - type: size_t
       name: size
       desc: "[in] size in bytes to reserve; must be page aligned."
     - type: "void**"
-      name: pPtr
+      name: pptr
       desc: "[out] pointer to virtual reservation."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
@@ -400,7 +401,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of region to free."
     - type: size_t
       name: size
@@ -599,7 +600,7 @@ params:
       desc: "[out] query result for page access attribute."
     - type: size_t*
       name: outSize
-      desc: "[out] query result for size of virtual address range, starting at pPtr, that shares same access attribute."
+      desc: "[out] query result for size of virtual address range, starting at ptr, that shares same access attribute."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
         - "Address must be page aligned"
