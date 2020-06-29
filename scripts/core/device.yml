@@ -427,7 +427,7 @@ members:
       desc: "[out] Maximum bus width between device and memory."
     - type: uint64_t
       name: totalSize
-      desc: "[out] Total memory size in bytes."
+      desc: "[out] Total memory size in bytes that is available to the device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves local memory properties of the device."
