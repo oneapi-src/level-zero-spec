@@ -1720,8 +1720,8 @@ in the structure ${s}_ras_state_t. The table below describes the categories:
 +-------------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
 | Error category                                                    | ${S}_RAS_ERROR_TYPE_CORRECTABLE | ${S}_RAS_ERROR_TYPE_UNCORRECTABLE |
 +===================================================================+==============================================================+================================================================+
-| ${S}_RAS_ERROR_CAT_RESET              | Always zero.                                                 | Number of device resets that have                              |
-|                                                                   |                                                              | taken place.                                                   |
+| ${S}_RAS_ERROR_CAT_RESET              | Always zero.                                                 | Number of accelerator engine resets                            |
+|                                                                   |                                                              | attempted by the driver.                                       |
 +-------------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
 | ${S}_RAS_ERROR_CAT_PROGRAMMING_ERRORS | Always zero.                                                 | Number of hardware                                             |
 |                                                                   |                                                              | exceptions generated                                           |
