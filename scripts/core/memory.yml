@@ -393,10 +393,12 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Free pages in virtual address space."
+desc: "Free pages in a reserved virtual address range."
 class: $xContext
 name: VirtualFree
 details:
+    - "Any existing virtual mappings for the range will be unmapped."
+    - "Physical allocations objects that were mapped to this range will not be destroyed. These need to be destroyed explicitly."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -415,9 +417,9 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Queries preferred page to use for aligning virtual memory reservations and physical memory allocations."
+desc: "Queries page size to use for aligning virtual memory reservations and physical memory allocations."
 class: $xContext
-name: QueryPreferredPageSize
+name: VirtualQueryPageSize
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
