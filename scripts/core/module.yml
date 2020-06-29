@@ -30,10 +30,10 @@ members:
       desc: "[in] Number of specialization constants."
     - type: "const uint32_t*"
       name: pConstantIds
-      desc: "[in] Pointer to array of IDs that is sized to numConstants."
-    - type: "const uint64_t*"
+      desc: "[in] Array of IDs that is sized to numConstants."
+    - type: "const void**"
       name: pConstantValues
-      desc: "[in] Pointer to array of values that is sized to numConstants."
+      desc: "[in] Array of pointers to values that is sized to numConstants."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Module descriptor"
