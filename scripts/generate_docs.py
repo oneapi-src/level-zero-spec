@@ -229,7 +229,7 @@ def generate_html(dstpath, sections, ver, rev):
     os.system(cmdline)
 
     print("Generating HTML...")
-    cmdline = "sphinx-build -M html %s ..\docs"%sourcepath
+    cmdline = "sphinx-build -M html %s ../docs"%sourcepath
     print(cmdline)
     os.system(cmdline)
 

@@ -64,11 +64,7 @@ source/wrapper/*_wprapi.cpp
 source/wrapper/include/
 
 # Generated docs
-html/
-latex/
 docs/
-public/
-.public/
 
 # Build files
 /build*/
