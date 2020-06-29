@@ -642,7 +642,7 @@ energy consumption exceeds some value. This can be a useful technique to
 suspend an application until the GPU becomes busy. The technique
 involves calling ${s}PowerSetEnergyThreshold() with some delta
 energy threshold, registering to receive the event using the function
-${s}EventSetConfig() and then calling ${s}EventListen() to
+${s}DeviceEventRegister() and then calling ${s}DriverEventListen() to
 block until the event is triggered. When the energy consumed by the
 power domain from the time the call is made exceeds the specified delta,
 the event is triggered, and the application is woken up.
@@ -1981,25 +1981,25 @@ received.
 For every device on which the application wants to receive events, it
 should perform the following actions:
 
-1. Use ${s}DeviceCreateEvents() to get an event handler from the Sysman
-   handle for the device.
-2. Use ${s}EventSetConfig() to indicate which events it wants to
+1. Use ${s}DeviceEventRegister() to indicate which events it wants to
    listen to.
-3. For each event, call the appropriate function to set conditions that
-   will trigger the event.
+2. For each event, where appropriate, call the device component functions
+   to set conditions that will trigger the event.
 
-Finally, the application calls ${s}EventListen() with a list of
-event handles that it wishes to listen for events on. A wait timeout is
+Finally, the application calls ${s}DriverEventListen() with a list of
+device handles that it wishes to listen for events on. A wait timeout is
 used to request non-blocking operations (timeout = 0)
 or blocking operations (timeout = UINT32_MAX)
 or to return after a specified amount of time
 even if no events have been received.
 
-Once events have occurred, the application can call
-${s}EventGetState() to determine the list of events that have
-been received for each event handle. If events have been received, the
-application can use the function relevant to the event to determine the
-actual state.
+When events are received, they are returned when the call to function
+${s}DriverEventListen() completes. This will indicate which devices has
+generated events and the list of event types for each device. It is then
+up to the application to use the relevant device component functions to
+determine the state that has changed. For example, if the RAS error
+event has triggered for a device, then use the function ${s}RasGetState()
+to get the list of RAS error counters.
 
 The list of events is given in the table below. For each event, the
 corresponding configuration and state functions are shown. Where a
@@ -2054,9 +2054,9 @@ called to enable the event and/or provide threshold conditions.
 |                                                                                   | required                    |                                               |                                   |
 +-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
 
-The call to ${s}EventListen() requires the driver handle. The
-list of event handles must only be for devices that have been enumerated
-from that driver, otherwise an error will be returned. If the
+The call to ${s}DriverEventListen() requires the driver handle and a list
+of device handles. THe device handles must have been enumerated from that
+driver, otherwise an error will be returned. If the
 application is managing devices from multiple drivers, it will need to
 call this function separately for each driver.
 
@@ -2065,23 +2065,12 @@ The table below summarizes all the event management functions:
 +-----------------------------------+-----------------------------------+
 | Function                          | Description                       |
 +===================================+===================================+
-| ${s}DeviceCreateEvents()   | Get the event handle for a        |
-|                                   | specific Sysman device.           |
-+-----------------------------------+-----------------------------------+
-| ${s}EventGetConfig()       | Get the current list of events    |
-|                                   | for a given event handle that     |
-|                                   | have been registered.             |
-+-----------------------------------+-----------------------------------+
-| ${s}EventSetConfig()       | Set the events that should be     |
+| ${s}DeviceEventRegister()  | Set the events that should be     |
 |                                   | registered on a given event       |
 |                                   | handle.                           |
 +-----------------------------------+-----------------------------------+
-| ${s}EventGetState()        | Get the list of events that have  |
-|                                   | been received for a given event   |
-|                                   | handle.                           |
-+-----------------------------------+-----------------------------------+
-| ${s}EventListen()          | Wait for events to arrive for a   |
-|                                   | given list of event handles.      |
+| ${s}DriverEventListen()    | Wait for events to arrive for a   |
+|                                   | given list of devices.            |
 +-----------------------------------+-----------------------------------+
 
 The pseudo code below shows how to configure all temperature sensors to
@@ -2092,22 +2081,23 @@ when the critical temperature is reached.
 
    function WaitForExcessTemperatureEvent(${s}_driver_handle_t hDriver, double tempLimit)
    {
-       # This will contain the number of event handles (devices) that we will listen for events from
-       var numEventHandles = 0
-
+       # This will contain the number of devices that we will listen for events from
+       var numListenDevices = 0
+       
        # Get list of all devices under this driver
        uint32_t deviceCount = 0
        ${x}DeviceGet(hDriver, &deviceCount, nullptr)
        # Allocate memory for all device handles
        ${x}_device_handle_t* phDevices =
            allocate_memory(deviceCount * sizeof(${x}_device_handle_t))
-       # Allocate memory for the event handle for each device
-       ${s}_event_handle_t* phEvents =
-           allocate_memory(deviceCount * sizeof(${s}_event_handle_t))
-       # Allocate memory for the event handles that we will actually listen to
-       ${s}_event_handle_t* phListenEvents =
-           allocate_memory(deviceCount * sizeof(${s}_event_handle_t))
-       # Allocate memory so that we can map an event handle in phListenEvent to the device handle
+           
+       # Allocate memory for the devices from which we will listen to temperature events
+       ${s}_device_handle_t* phListenDevices =
+           allocate_memory(deviceCount * sizeof(${s}_device_handle_t))
+       # Allocate memory for the events that have been received from each device in phListenDevices
+       ${s}_event_type_flags_t* pDeviceEvents =
+           allocate_memory(deviceCount * sizeof(${s}_event_type_flags_t))
+       # Allocate memory so that we can map device handle in phListenDevices to the device index
        uint32_t* pListenDeviceIndex = allocate_memory(deviceCount * sizeof(uint32_t))
 
        # Get all device handles
@@ -2115,10 +2105,6 @@ when the critical temperature is reached.
        for(devIndex = 0 .. deviceCount-1)
            # Get Sysman handle for the device
            ${s}_device_handle_t hSysmanDevice = (${s}_device_handle_t)phDevices[devIndex]
-
-           # Get event handle for this device
-           if (${s}DeviceCreateEvents(hSysmanDevice, &phEvents[devIndex]) != ${X}_RESULT_SUCCESS)
-               next_loop(devIndex)
 
            # Get handles to all temperature sensors
            uint32_t numTempSensors = 0
@@ -2144,28 +2130,25 @@ when the critical temperature is reached.
 
            # If we configured any sensors to generate events, we can now register to receive on this device
            if (numConfiguredTempSensors)
-               ${s}_event_config_t eventConfig
-               eventConfig.registered =
-                   ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL | ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD1
-               if (${s}EventSetConfig(phEvents[devIndex], &eventConfig) == ${X}_RESULT_SUCCESS)
-                   phListenEvents[numEventHandles] = phEvents[devIndex]
-                   pListenDeviceIndex[numEventHandles] = devIndex
-                   numEventHandles++
+               if (${s}DeviceEventRegister(phDevices[devIndex],
+                       ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL | ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD1)
+                       == ${X}_RESULT_SUCCESS)
+                   phListenDevices[numListenDevices] = hSysmanDevice
+                   pListenDeviceIndex[numListenDevices] = devIndex
+                   numListenDevices++
 
        # If we registered to receive events on any devices, start listening now
-       if (numEventHandles)
+       if (numListenDevices)
            # Block until we receive events
-           uint32_t events
-           if (${s}EventListen(hDriver, UINT32_MAX, deviceCount, phListenEvents, &events)
+           uint32_t numEvents
+           if (${s}DriverEventListen(hDriver, UINT32_MAX, numListenDevices, phListenDevices, &numEvents, pDeviceEvents)
                == ${X}_RESULT_SUCCESS)
-                   for (evtIndex .. numEventHandles)
-                       if (${s}EventGetState(phListenEvents[evtIndex], true, &events)
-                           != ${X}_RESULT_SUCCESS)
-                               next_loop(evtIndex)
-                       if (events & ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL)
+               if (numEvents)    
+                   for (evtIndex .. numListenDevices)
+                       if (pDeviceEvents[evtIndex] & ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL)
                            output("Device %u: Went above the critical temperature.",
                                pListenDeviceIndex[evtIndex])
-                       else if (events & ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD1)
+                       else if (pDeviceEvents[evtIndex] & ${S}_EVENT_TYPE_FLAG_TEMP_THRESHOLD1)
                            output("Device %u: Went above the temperature threshold %f.",
                                pListenDeviceIndex[evtIndex], tempLimit)
 

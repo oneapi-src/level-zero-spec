@@ -144,8 +144,8 @@ desc: "Set temperature configuration for this sensor - indicates which events ar
 class: $sTemperature
 name: SetConfig
 details:
-    - "Events $S_EVENT_TYPE_FLAG_TEMP_CRITICAL will be triggered when temperature reaches the critical range. Use the function $sEventSetConfig() to start receiving this event."
-    - "Events $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD1 and $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $sEventSetConfig() to start receiving these events."
+    - "Events $S_EVENT_TYPE_FLAG_TEMP_CRITICAL will be triggered when temperature reaches the critical range. Use the function $sDeviceEventRegister() to start receiving this event."
+    - "Events $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD1 and $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $sDeviceEventRegister() to start receiving these events."
     - "Only one running process can set the temperature configuration at a time. If another process attempts to change the configuration, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $sTemperatureGetConfig() will return the process ID currently controlling these settings."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

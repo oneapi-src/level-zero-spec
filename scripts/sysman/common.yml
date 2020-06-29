@@ -97,11 +97,6 @@ desc: "Handle for a Sysman device diagnostics test suite"
 class: $sDiagnostics
 name: "$s_diag_handle_t"
 --- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle for a Sysman device event"
-class: $sEvent
-name: "$s_event_handle_t"
---- #--------------------------------------------------------------------------
 type: enum
 desc: "Defines structure types"
 name: $s_structure_type_t
@@ -153,8 +148,6 @@ etors:
       desc: $s_process_state_t
     - name: PCI_STATE
       desc: $s_pci_state_t
-    - name: EVENT_CONFIG
-      desc: $s_event_config_t
     - name: FABRIC_PORT_CONFIG
       desc: $s_fabric_port_config_t
     - name: FABRIC_PORT_STATE

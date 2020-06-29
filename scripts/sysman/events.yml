@@ -7,11 +7,11 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Firmware management"
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Event management"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Event types"
-class: $sDevice
+class: $sDriver
 name: $s_event_type_flags_t
 etors:
     - name: DEVICE_DETACH
@@ -45,89 +45,27 @@ etors:
     - name: DEVICE_RESET_REQUIRED
       desc: "Event is triggered when the device needs to be reset (use $sDeviceGetState() to determine the reasons for the reset)."
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Event configuration for a device"
-class: $sEvent
-name: $s_event_config_t
-base: $s_base_config_t
-members:
-    - type: $s_event_type_flags_t
-      name: "registered"
-      desc: |
-            [in,out] List of registered events.
-            Must be 0 (none) or a valid combination of $s_event_type_flag_t.
---- #--------------------------------------------------------------------------
 type: function
-desc: "Get the event handle for the specified device"
+desc: "Specify the list of events to listen to for a given device"
 class: $sDevice
-name: CreateEvents
+name: EventRegister
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $s_device_handle_t
       name: hDevice
-      desc: "[in] Sysman handle for the device"
-    - type: "$s_event_handle_t*"
-      name: phEvent
-      desc: "[out] The event handle for the specified device."
+      desc: "[in] The device handle."
+    - type: $s_event_type_flags_t
+      name: events
+      desc: "[in] List of events to listen to."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Find out which events are currently registered on the specified device event handler"
-class: $sEvent
-name: GetConfig
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_event_handle_t
-      name: hEvent
-      desc: "[in] The event handle for the device"
-    - type: "$s_event_config_t*"
-      name: pConfig
-      desc: "[in,out] Will contain the current event configuration (list of registered events)."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set a new event configuration (list of registered events) on the specified device event handler"
-class: $sEvent
-name: SetConfig
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_event_handle_t
-      name: hEvent
-      desc: "[in] The event handle for the device"
-    - type: "const $s_event_config_t*"
-      name: pConfig
-      desc: "[in] New event configuration (list of registered events)."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get events that have been triggered for a specific device"
-class: $sEvent
-name: GetState
-details:
-    - "If events have occurred on the specified device event handle, they are returned and the corresponding event status is cleared if the argument clear = true."
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_event_handle_t
-      name: hEvent
-      desc: "[in] The event handle for the device."
-    - type: $x_bool_t
-      name: clear
-      desc: "[in] Indicates if the event list for this device should be cleared."
-    - type: "$s_event_type_flags_t*"
-      name: pEvents
-      desc: "[in,out] Events (combination of $s_event_type_flag_t) that have been triggered by this device."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Wait for the specified list of event handles to receive any registered events"
-class: $sEvent
+desc: "Wait for events to be received from a one or more devices."
+class: $sDriver
 decl: static
-name: Listen
+name: EventListen
 details:
-    - "If previous events arrived and were not cleared using $sEventGetState(), this call will return immediately."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -139,33 +77,24 @@ params:
       desc: |
             [in] if non-zero, then indicates the maximum time (in milliseconds) to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then will check status and return immediately;
-            if UINT32_MAX, then function will not return until events arrive or device is lost.
+            if UINT32_MAX, then function will not return until events arrive.
     - type: uint32_t
       name: count
-      desc: "[in] Number of handles in phEvents"
-    - type: "$s_event_handle_t*"
-      name: phEvents
-      desc: "[in][range(0, count)] Handle of events that should be listened to"
+      desc: "[in] Number of device handles in phDevices."
+    - type: "$s_device_handle_t*"
+      name: phDevices
+      desc: "[in][range(0, count)] Device handles to listen to for events. Only devices from the provided driver handle can be specified in this list."
+    - type: uint32_t*
+      name: pNumDeviceEvents
+      desc: "[in,out] Will contain the actual number of devices in phDevices that generated events. If non-zero, check pEvents to determine the devices and events that were received."
     - type: "$s_event_type_flags_t*"
       name: pEvents
       desc: |
-            [in,out] Events (combination of $s_event_type_flag_t) that have been triggered by any of the supplied event handles.
-            If timeout is not UINT32_MAX and this value is 0, then a timeout has occurred.
+            [in,out] An array that will continue the list of events for each device listened in phDevices.
+            This array must be at least as big as count.
+            For every device handle in phDevices, this will provide the events that occurred for that device at the same position in this array. If no event was received for a given device, the corresponding array entry will be zero.
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to listen to events."
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "One or more of the supplied event handles are for devices that belong to a different driver handle."
---- #--------------------------------------------------------------------------
-type: class
-desc: "C++ wrapper for a Sysman device event"
-name: $sEvent
-owner: $sDevice
-members:
-    - type: $s_event_handle_t
-      name: handle
-      desc: "[in] handle of Sysman object" 
-      init: nullptr
-    - type: $sDevice*
-      name: pDevice
-      desc: "[in] pointer to owner object"
+        - "One or more of the supplied device handles belongs to a different driver."
