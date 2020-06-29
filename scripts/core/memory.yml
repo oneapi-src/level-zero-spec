@@ -347,15 +347,15 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Virtual memory page access attributes"
-class: $xDriver
+class: $xContext
 name: $x_memory_access_attribute_t
 etors:
-    - name: MEMORY_ACCESS_NONE
+    - name: NONE
       value: "0"
       desc: "Indicates the memory page is inaccessible."
-    - name: MEMORY_ACCESS_READWRITE
+    - name: READWRITE
       desc: "Indicates the memory page supports read write access."
-    - name: MEMORY_ACCESS_READONLY
+    - name: READONLY
       desc: "Indicates the memory page supports read-only access."
 --- #--------------------------------------------------------------------------
 type: function
@@ -364,6 +364,9 @@ class: $xContext
 name: VirtualReserve
 details:
     - "The application must only use the memory allocation on the context for which it was created."
+    - "The starting address and size must be at least aligned to ${x}_device_properties_t.minMemPageSize."
+    - "If pStart is not null then implementation will attempt to reserve starting from that address. If not available then will find another suitable starting address."
+    - "The application can query and use preferred page size using ${x}DeviceQueryPreferredPageSize."
     - "The application may call this function from simultaneous threads."
     - "The access attributes will default to none to indicate reservation is inaccessible."
     - "The implementation of this function must be thread-safe."
@@ -372,7 +375,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pStartAddress
+      name: pStart
       desc: "[in] pointer to start of region to reserve. If nullptr then implementation will choose a start address."
     - type: size_t
       name: size
@@ -398,7 +401,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of region to free."
     - type: size_t
       name: size
@@ -409,11 +412,37 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Queries preferred page to use for aligning virtual memory reservations and physical memory allocations."
+class: $xContext
+name: QueryPreferredPageSize
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: size_t
+      name: size
+      desc: "[in] unaligned allocation size in bytes"
+    - type: "size_t*"
+      name: pagesize
+      desc: "[out] pointer to preferred page size."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Creates a physical memory object on the device."
-class: $xDevice
+class: $xContext
 name: PhysicalCreate
 details:
     - "The application must only use the physical memory object on the context for which it was created."
+    - "The size must be at least aligned to ${x}_device_properties_t.minMemPageSize."
+    - "The application can query and use preferred page size using ${x}DeviceQueryPreferredPageSize."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -437,15 +466,20 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a physical memory object."
-class: $xDevice
+class: $xContext
 name: PhysicalDestroy
-decl: static
 ordinal: "0"
 details:
     - "The application must ensure the device is not currently referencing the physical memory object before it is deleted"
     - "The application must **not** call this function from simultaneous threads with the same physical memory handle."
     - "The implementation of this function must be thread-safe."
 params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
     - type: $x_physical_memory_handle_t
       name: hPhysicalMemory
       desc: "[in][release] handle of physical memory object to destroy"
@@ -459,6 +493,8 @@ name: VirtualMap
 details:
     - "The virtual address range must have been reserved using $xContextVirtualReserve."
     - "The application must only use the mapped memory allocation on the context for which it was created."
+    - "The virtual start address and size must be at least aligned to ${x}_device_properties_t.minMemPageSize."
+    - "The application should use, for the starting address and size, the same size alignment used for the physical allocation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -466,7 +502,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of virtual address range to map."
     - type: size_t
       name: size
@@ -500,7 +536,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of region to unmap."
     - type: size_t
       name: size
@@ -526,7 +562,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of region to unmap."
     - type: size_t
       name: size
@@ -554,17 +590,17 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const void*"
-      name: pPtr
+      name: ptr
       desc: "[in] pointer to start of virtual address region for query."
     - type: size_t
       name: size
       desc: "[in] size in bytes; must be page aligned."
     - type: $x_memory_access_attribute_t*
       name: access
-      desc: "[in,out] query result for page access attribute."
+      desc: "[out] query result for page access attribute."
     - type: size_t*
       name: outSize
-      desc: "[in,out] query result for size of virtual address range, starting at pPtr, that shares same access attribute."
+      desc: "[out] query result for size of virtual address range, starting at ptr, that shares same access attribute."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
         - "Address must be page aligned"

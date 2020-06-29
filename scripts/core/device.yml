@@ -124,9 +124,6 @@ members:
       name: coreClockRate
       desc: "[out] Clock rate for device core."
     - type: $x_bool_t
-      name: unifiedMemorySupported
-      desc: "[out] Supports unified physical memory between Host and device."
-    - type: $x_bool_t
       name: eccMemorySupported
       desc: "[out] Supports error correction memory access."
     - type: $x_bool_t
@@ -170,7 +167,7 @@ members:
       desc: "[out] Returns the number of valid bits in the kernel timestamp values"
     - type: $x_device_uuid_t
       name: uuid
-      desc: "[out] universal unique identifier."
+      desc: "[out] universal unique identifier. Note: Subdevices will have their own uuid."
     - type: char
       name: "name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
@@ -206,7 +203,7 @@ base: $x_base_properties_t
 members:
     - type: uint32_t
       name: maxTotalGroupSize
-      desc: "[out] Maximum items per compute group. (maxGroupSizeX * maxGroupSizeY * maxGroupSizeZ) <= maxTotalGroupSize"
+      desc: "[out] Maximum items per compute group. (groupSizeX * groupSizeY * groupSizeZ) <= maxTotalGroupSize"
     - type: uint32_t
       name: maxGroupSizeX
       desc: "[out] Maximum items for X dimension in group"

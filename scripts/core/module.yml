@@ -54,7 +54,20 @@ members:
       init: nullptr
     - type: "const char*"
       name: pBuildFlags
-      desc: "[in][optional] string containing compiler flags. See programming guide for build flags."
+      desc: |
+            [in][optional] string containing compiler flags. Following options are supported.
+              - "-$x-opt-disable"
+                   - Disable optimizations
+              - "-$x-opt-greater-than-4GB-buffer-required"
+                   - Use 64-bit offset calculations for buffers.
+              - "-$x-opt-large-register-file"
+                   - Increase number of registers available to threads.
+              - "-$x-opt-has-buffer-offset-arg"
+                   - Extend stateless to stateful optimization to more
+                     cases with the use of additional offset (e.g. 64-bit
+                     pointer to binding table with 32-bit offset).
+              - "-g"
+                   - Include debugging information.
       init: nullptr
     - type: "const $x_module_constants_t*"
       name: pConstants
@@ -71,10 +84,6 @@ details:
     - "Compiles the module for execution on the device."
     - "The application must only use the module for the device, or its sub-devices, which was provided during creation."
     - "The module can be copied to other devices and contexts within the same driver instance by using $xModuleGetNativeBinary."
-    - "The following build options are supported:":
-        - "\"-$x-opt-disable\" - Disable optimizations"
-        - "\"-$x-opt-greater-than-4GB-buffer-required\" - Use 64-bit offset calculations for buffers."
-        - "\"-$x-opt-large-register-file\" - Increase number of registers available to threads."
     - "A build log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
     - "The module descriptor constants are only supported for SPIR-V specialization constants."
     - "The application may call this function from simultaneous threads."
@@ -260,6 +269,31 @@ params:
     - type: "const char**"
       name: pNames
       desc: "[in,out][optional][range(0, *pCount)] array of names of functions"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Module properties"
+class: $xModule
+name: $x_module_properties_t
+base: $x_base_properties_t
+members:
+    - type: "$x_bool_t"
+      name: hasImports
+      desc: "[out] Module has imports (i.e. imported global variables and/or kernels). See ${x}ModuleDynamicLink."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve module properties."
+class: $xModule
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_module_handle_t
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: "$x_module_properties_t*"
+      name: pModuleProperties
+      desc: "[in,out] query result for module properties."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported kernel creation flags"
@@ -465,13 +499,15 @@ analogue:
 etors:
     - name: INDIRECT_HOST_ACCESS
       value: "0"
-      desc: "Indicates that the function accesses host allocations indirectly (default: false, type: bool_t)"
+      desc: "Indicates that the kernel accesses host allocations indirectly (default: false, type: bool_t)"
     - name: INDIRECT_DEVICE_ACCESS
-      desc: "Indicates that the function accesses device allocations indirectly (default: false, type: bool_t)"
+      desc: "Indicates that the kernel accesses device allocations indirectly (default: false, type: bool_t)"
     - name: INDIRECT_SHARED_ACCESS
-      desc: "Indicates that the function accesses shared allocations indirectly (default: false, type: bool_t)"
+      desc: "Indicates that the kernel accesses shared allocations indirectly (default: false, type: bool_t)"
     - name: SOURCE_ATTRIBUTE
       desc: "Declared kernel attributes (i.e. can be specified with __attribute__ in runtime language). (type: char[]) Returned as a null-terminated string and each attribute is separated by a space. $xKernelSetAttribute is not supported for this."
+    - name: INTERMEDIATE_CACHE_CONFIG
+      desc: "Preferred intermediate cache configuration for the kernel on the current Host thread. (default: 0, type: $x_cache_config_flags_t)"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets a kernel attribute"
@@ -523,32 +559,18 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Sets the preferred intermediate cache configuration for a kernel on the current Host thread."
+type: enum
+desc: "Supported Cache Config flags"
 class: $xKernel
-name: SetIntermediateCacheConfig
-ordinal: "2"
+name: $x_cache_config_flags_t
 details:
     - "The implementation will maintain the intermediate cache configuration in thread-local storage."
     - "The intermediate cache configuration will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
-    - "The application may call this function from simultaneous threads with the same kernel handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: "$x_kernel_handle_t"
-      name: hKernel
-      desc: "[in] handle of the kernel object" 
-    - type: "$x_cache_config_flags_t"
-      name: flags
-      desc: |
-            [in] cache configuration. 
-            must be 0 (default configuration) or a valid combination of $x_cache_config_flag_t.
-returns:
-    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum kernel name string size"
-name: $X_MAX_KERNEL_NAME
-value: "256"
+etors:
+    - name: LARGE_SLM
+      desc: "Large SLM size"
+    - name: LARGE_DATA
+      desc: "Large General Data size"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum kernel universal unique id (UUID) size in bytes"
@@ -623,9 +645,6 @@ members:
     - type: $x_kernel_uuid_t
       name: uuid
       desc: "[out] universal unique identifier."
-    - type: char
-      name: "name[$X_MAX_KERNEL_NAME]"
-      desc: "[out] kernel name"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve kernel properties."
@@ -641,6 +660,26 @@ params:
     - type: "$x_kernel_properties_t*"
       name: pKernelProperties
       desc: "[in,out] query result for kernel properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve kernel name from Kernel."
+class: $xKernel
+name: GetName
+details:
+    - "The caller can pass nullptr for pName when querying only for size."
+    - "The implementation will copy the kernel name into a buffer supplied by the caller."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
+    - type: "size_t*"
+      name: pSize
+      desc: "[in,out] size of kernel name string, including null terminator, in bytes."
+    - type: "char*"
+      name: pName
+      desc: "[in,out][optional] char pointer to kernel name."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel dispatch group count."

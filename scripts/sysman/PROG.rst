@@ -170,7 +170,7 @@ provided for all components in each class.
 +-----------------------+---------------------------------+-------------------------------------------+
 | Firmware_             | Sub-device 0: Enumerates each   | Get firmware name and version             |
 |                       | firmware                        |                                           |
-|                       |                                 | Verify firmware checksum                  |
+|                       |                                 |                                           |
 |                       | Sub-device 1: Enumerates each   |                                           |
 |                       | firmware                        |                                           |
 +-----------------------+---------------------------------+-------------------------------------------+
@@ -1210,9 +1210,6 @@ The following functions are provided to manage firmwares on the device:
 | ${s}FirmwareGetProperties() | Find out the name and version of  |
 |                                    | a firmware.                       |
 +------------------------------------+-----------------------------------+
-| ${s}FirmwareGetChecksum()   | Get the checksum for an installed |
-|                                    | firmware.                         |
-+------------------------------------+-----------------------------------+
 | ${s}FirmwareFlash()         | Flash a new firmware image.       |
 +------------------------------------+-----------------------------------+
 
@@ -2013,10 +2010,10 @@ called to enable the event and/or provide threshold conditions.
 +-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
 | Event                                                                             | Trigger                     | Configuration function                        | State function                    |
 +===================================================================================+=============================+===============================================+===================================+
-| ${S}_EVENT_TYPE_FLAG_DEVICE_RESET                  | Device is about to be reset |                                               |                                   |
+| ${S}_EVENT_TYPE_FLAG_DEVICE_DETACH                 | Device is about to be reset |                                               |                                   |
 |                                                                                   | by the driver               |                                               |                                   |
 +-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
-| ${S}_EVENT_TYPE_FLAG_DEVICE_RESET_COMPLETE         | Device completed the reset  |                                               |                                   |
+| ${S}_EVENT_TYPE_FLAG_DEVICE_ATTACH                 | Device completed the reset  |                                               |                                   |
 |                                                                                   | by the driver               |                                               |                                   |
 +-----------------------------------------------------------------------------------+-----------------------------+-----------------------------------------------+-----------------------------------+
 | ${S}_EVENT_TYPE_FLAG_DEVICE_SLEEP_STATE_ENTER      | Device is about to enter a  |                                               |                                   |
