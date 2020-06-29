@@ -230,6 +230,9 @@ members:
     - type: uint64_t
       name: id
       desc: "[out] identifier for this allocation"
+    - type: uint64_t
+      name: pageSize
+      desc: "[out] page size used for allocation"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves attributes of a memory allocation"

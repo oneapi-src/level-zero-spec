@@ -253,9 +253,9 @@ Devices may support different capabilities for each type of allocation. Supporte
 * ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT - if a device supports concurrent access to allocations of the specified type. Concurrent access may be from another device that supports concurrent access, or from the host. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
 * ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC - if a device supports concurrent atomic operations on allocations of the specified type. Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host. Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.
 
-At a minimum, drivers will assign unique physical pages for each allocation.
+At a minimum, drivers will assign unique physical pages for each device and shared memory allocation.
 However, it is undefined behavior for an application to access memory outside of the allocation size requested.
-The minimum page size for the device can be queried from ${x}_device_properties_t.minMemPageSize.
+The actual page size used for an allocation can be queried from ${x}_memory_allocation_properties_t.pageSize using ${x}ContextGetMemAllocProperties.
 Applications should implement usage-specific allocators from device memory pools (e.g., small and/or fixed-sized allocations, lock-free, etc.).
 
 Furthermore, drivers may *oversubscribe* some **shared** allocations. 
