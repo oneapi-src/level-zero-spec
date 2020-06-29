@@ -240,6 +240,9 @@ class: $xContext
 name: GetMemAllocProperties
 details:
     - "The application may call this function from simultaneous threads."
+    - |
+      The application may query attributes of a memory allocation unrelated to the context.
+      When this occurs, the returned allocation type will be $X_MEMORY_TYPE_UNKNOWN, and the returned identifier and associated device is unspecified.
 params:
     - type: $x_context_handle_t
       name: hContext
