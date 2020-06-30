@@ -25,7 +25,7 @@ The following environment variables are required to be enabled during ${x}Init f
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
-| Tools           | ${T}_ENABLE_API_TRACING              | {**0**, 1} | Enables driver instrumentation for API tracing                                    |
+| Tools           | ${T}_ENABLE_API_TRACING_EXP          | {**0**, 1} | Enables driver instrumentation for API tracing                                    |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
 |                 | ${T}_ENABLE_METRICS                  | {**0**, 1} | Enables driver instrumentation and dependencies for device metrics                |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
@@ -39,6 +39,8 @@ The following environment variables are required to be enabled during ${x}Init f
 
 API Tracing
 ===========
+
+**Experimental Extension** - this feature will be removed post-1.0 and replaced with custom loader layers.
 
 Introduction
 ------------
@@ -54,8 +56,8 @@ Registration
 
 Tools may independently register for enter and exit callbacks for individual API calls, per driver instance.
 
-* ${t}TracerSetPrologues is used to specify all the enter callbacks
-* ${t}TracerSetEpilogues is used to specify all the exit callbacks
+* ${t}TracerExpSetPrologues is used to specify all the enter callbacks
+* ${t}TracerExpSetEpilogues is used to specify all the exit callbacks
 * If the value of a callback is nullptr, then it will be ignored.
 
 The callbacks are defined as a collection of per-API function pointers, with the following parameters:
@@ -74,7 +76,7 @@ Enabling/Disabling and Destruction
 ----------------------------------
 
 The tracer is created in a disabled state and must be explicitly enabled
-by calling ${t}TracerSetEnabled. The implementation guarantees that
+by calling ${t}TracerExpSetEnabled. The implementation guarantees that
 prologues and epilogues will always be executed in pairs; i.e.
 
 * if the prologue was called then the epilogue is guaranteed to be called, even if another thread disabled the tracer between execution
@@ -86,7 +88,7 @@ that callbacks will continue to execute even after the tracer is
 disabled; specifically, due to the pairing rules above. Due to the
 complexity involved in ensuring no threads are still or will be
 executing a callback even after its been disabled, the implementation
-will stall and wait for any outstanding threads during ${t}TracerDestroy.
+will stall and wait for any outstanding threads during ${t}TracerExpDestroy.
 
 The following pseudo-code demonstrates a basic usage of API tracing:
 
@@ -137,11 +139,11 @@ The following pseudo-code demonstrates a basic usage of API tracing:
        void TracingExample( ... )
        {
            my_tracer_data_t tracer_data = {};
-           ${t}_tracer_desc_t tracer_desc;
-           tracer_desc.stype = ${T}_STRUCTURE_TYPE_TRACER_DESC;
+           ${t}_tracer_exp_desc_t tracer_desc;
+           tracer_desc.stype = ${T}_STRUCTURE_TYPE_TRACER_EXP_DESC;
            tracer_desc.pUserData = &tracer_data;
-           ${t}_tracer_handle_t hTracer;
-           ${t}TracerCreate(hDevice, &tracer_desc, &hTracer);
+           ${t}_tracer_exp_handle_t hTracer;
+           ${t}TracerExpCreate(hDevice, &tracer_desc, &hTracer);
 
            // Set all callbacks
            ${t}_core_callbacks_t prologCbs = {};
@@ -149,17 +151,17 @@ The following pseudo-code demonstrates a basic usage of API tracing:
            prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchKernel;
            epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchKernel;
 
-           ${t}TracerSetPrologues(hTracer, &prologCbs);
-           ${t}TracerSetEpilogues(hTracer, &epilogCbs);
+           ${t}TracerExpSetPrologues(hTracer, &prologCbs);
+           ${t}TracerExpSetEpilogues(hTracer, &epilogCbs);
 
-           ${t}TracerSetEnabled(hTracer, true);
+           ${t}TracerExpSetEnabled(hTracer, true);
 
            ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
            ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
            ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
-           ${t}TracerSetEnabled(hTracer, false);
-           ${t}TracerDestroy(hTracer);
+           ${t}TracerExpSetEnabled(hTracer, false);
+           ${t}TracerExpDestroy(hTracer);
        }
 
 Metrics
@@ -572,7 +574,7 @@ Introduction
 
 The program instrumentation APIs provide tools a basic framework for low-level profiling of device kernels, 
 by allowing direct instrumentation of those programs. 
-These capabilities, in combination with those already provided, and in combination with API tracing, 
+These capabilities, in combination with those already provided, and in combination with a custom loader layer, 
 are sufficient for more advanced frameworks to be developed.
 
 There are two types of instrumentation available:
@@ -586,9 +588,9 @@ Inter-Function Instrumentation
 The following capabilities allow for a tool to intercept and redirect function calls:
 
 * Inter-module function calls - the ability to call functions between different modules; e.g., the application's module and a tool's module
-* API-Tracing_
+* Custom loader layer - the ability to intercept and inject API calls
 
-For example, a tool may use API Tracing in any of the following ways:
+For example, a tool may use a custom loader layer in any of the following ways:
 
 * ${x}ModuleCreate - replace a module handle with instrumented module handle for all functions
 * ${x}KernelCreate - replace a kernel handle with instrumented kernel handle for all call sites
@@ -603,7 +605,7 @@ The following capabilities allow for a tool to inject instructions within a kern
 * ${t}ModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
 * ${t}KernelGetProfileInfo - allows a tool to query detailed information on aspects of a kernel
 * ${x}ModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the instrumented version
-* API-Tracing_ - same usage as Inter-Function Instrumentation above
+* Custom loader layer - same usage as Inter-Function Instrumentation above
 
 Compilation
 ~~~~~~~~~~~
@@ -615,8 +617,8 @@ build flag is supported: "-${t}-profile-flags \<value\>", where \<value\> must b
 ## --validate=on
 combination of ${t}_profile_flags_t, in hexidecimal.
 
-As an example, a tool could use API Tracing to inject this build flag on each ${x}ModuleCreate call that the tool wishes to instrument.
-In another example, a tool could recompile a Module using the build flag and use API Tracing to replace the application's Module handle with it's own.
+As an example, a tool could use a custom loader layer to inject this build flag on each ${x}ModuleCreate call that the tool wishes to instrument.
+In another example, a tool could recompile a Module using the build flag and use a custom loader layer to replace the application's Module handle with it's own.
 
 Instrumentation
 ~~~~~~~~~~~~~~~
@@ -635,7 +637,8 @@ This model prevents the instrumentation from being manipulated by the compiler.
 Execution
 ~~~~~~~~~
 
-If a tool requires changing the address of an application's function, then it should use API Tracing.
+If a tool requires changing the address of an application's function,
+then it should use a custom loader layer to intercept API calls dealing with function pointers.
 For example, ${x}ModuleGetFunctionPointer and all flavors of ${x}CommandListAppendLaunchKernel.
 
 Program Debug

@@ -220,6 +220,25 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
+        zeDdiTable.Driver.pfnGetExtensionProperties = [](
+            ze_driver_handle_t,
+            uint32_t* pCount,
+            ze_driver_extension_properties_t* pExtensionProperties )
+        {
+            if( nullptr != pExtensionProperties )
+            {
+                ze_driver_extension_properties_t driverExtensionProperties = {};
+                strcpy( driverExtensionProperties.name, ZET_API_TRACING_EXP_NAME );
+                driverExtensionProperties.version = ZET_API_TRACING_EXP_VERSION_1_0;
+
+                *pExtensionProperties = driverExtensionProperties;
+            }
+            *pCount = 1;
+
+            return ZE_RESULT_SUCCESS;
+        };
+
+        //////////////////////////////////////////////////////////////////////////
         zetDdiTable.MetricGroup.pfnGet = [](
             zet_device_handle_t,
             uint32_t* pCount,
@@ -328,10 +347,10 @@ namespace instrumented
             tracerData.emplace_back(); // reserve index 0
 
             //////////////////////////////////////////////////////////////////////////
-            driver::context.zetDdiTable.Tracer.pfnCreate = [](
+            driver::context.zetDdiTable.TracerExp.pfnCreate = [](
                 zet_context_handle_t,
-                const zet_tracer_desc_t* desc,
-                zet_tracer_handle_t* phTracer )
+                const zet_tracer_exp_desc_t* desc,
+                zet_tracer_exp_handle_t* phTracer )
             {
                 context.tracerData.emplace_back();
                 auto index = context.tracerData.size() - 1;
@@ -342,8 +361,8 @@ namespace instrumented
             };
 
             //////////////////////////////////////////////////////////////////////////
-            driver::context.zetDdiTable.Tracer.pfnSetPrologues = [](
-                zet_tracer_handle_t hTracer,
+            driver::context.zetDdiTable.TracerExp.pfnSetPrologues = [](
+                zet_tracer_exp_handle_t hTracer,
                 zet_core_callbacks_t* pCoreCbs)
             {
                 auto index = reinterpret_cast<size_t>( hTracer );
@@ -353,8 +372,8 @@ namespace instrumented
             };
 
             //////////////////////////////////////////////////////////////////////////
-            driver::context.zetDdiTable.Tracer.pfnSetEpilogues = [](
-                zet_tracer_handle_t hTracer,
+            driver::context.zetDdiTable.TracerExp.pfnSetEpilogues = [](
+                zet_tracer_exp_handle_t hTracer,
                 zet_core_callbacks_t* pCoreCbs)
             {
                 auto index = reinterpret_cast<size_t>( hTracer );
@@ -364,8 +383,8 @@ namespace instrumented
             };
 
             //////////////////////////////////////////////////////////////////////////
-            driver::context.zetDdiTable.Tracer.pfnSetEnabled = [](
-                zet_tracer_handle_t hTracer,
+            driver::context.zetDdiTable.TracerExp.pfnSetEnabled = [](
+                zet_tracer_exp_handle_t hTracer,
                 ze_bool_t enable )
             {
                 auto index = reinterpret_cast<size_t>( hTracer );

@@ -73,8 +73,8 @@ name: "$t_metric_query_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of tracer object"
-class: $tTracer
-name: "$t_tracer_handle_t"
+class: $tTracerExp
+name: "$t_tracer_exp_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Debug session handle"
@@ -96,10 +96,11 @@ etors:
       desc: $t_metric_query_pool_desc_t
     - name: PROFILE_PROPERTIES
       desc: $t_profile_properties_t
-    - name: TRACER_DESC
-      desc: $t_tracer_desc_t
     - name: DEBUG_REGSET_DESC
       desc: $t_debug_regset_desc_t
+    - name: TRACER_EXP_DESC
+      desc: $t_tracer_exp_desc_t
+      value: "0x00010001"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
