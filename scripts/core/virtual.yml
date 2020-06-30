@@ -168,7 +168,7 @@ name: Map
 decl: static
 ordinal: "0"
 details:
-    - "The virtual address range must have been reserved using $xContextVirtualReserve."
+    - "The virtual address range must have been reserved using $xVirtualReserve."
     - "The application must only use the mapped memory allocation on the context for which it was created."
     - "The virtual start address and size must be at least aligned to ${x}_device_properties_t.minMemPageSize."
     - "The application should use, for the starting address and size, the same size alignment used for the physical allocation."
