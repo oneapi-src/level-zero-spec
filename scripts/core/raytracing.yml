@@ -49,4 +49,4 @@ members:
             default behavior may use implicit driver-based heuristics.
       init: "0"
 details:
-    - "This structure must be passed to $xContextAllocSharedMem or $xContextAllocDeviceMem, via `pNext` member of $x_device_mem_alloc_desc_t, for any memory allocation that is to be accessed by raytracing fixed-function of the device."
+    - "This structure must be passed to $xMemAllocShared or $xMemAllocDevice, via `pNext` member of $x_device_mem_alloc_desc_t, for any memory allocation that is to be accessed by raytracing fixed-function of the device."

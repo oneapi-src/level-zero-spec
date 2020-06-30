@@ -11,7 +11,7 @@ desc: "Intel $OneApi Level-Zero APIs for Memory"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported memory allocation flags"
-class: $xContext
+class: $xMem
 name: $x_device_mem_alloc_flags_t
 etors:
     - name: BIAS_CACHED
@@ -21,7 +21,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device memory allocation descriptor"
-class: $xContext
+class: $xMem
 name: $x_device_mem_alloc_desc_t
 base: $x_base_desc_t
 members:
@@ -41,7 +41,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported host memory allocation flags"
-class: $xContext
+class: $xMem
 name: $x_host_mem_alloc_flags_t
 etors:
     - name: BIAS_CACHED
@@ -53,7 +53,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Host memory allocation descriptor"
-class: $xContext
+class: $xMem
 name: $x_host_mem_alloc_desc_t
 base: $x_base_desc_t
 members:
@@ -67,8 +67,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates shared memory on the context."
-class: $xContext
-name: AllocSharedMem
+class: $xMem
+name: AllocShared
+decl: static
 details:
     - "Shared allocations share ownership between the host and one or more devices."
     - "Shared allocations may optionally be associated with a device by passing a handle to the device."
@@ -114,8 +115,9 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates device memory on the context."
-class: $xContext
-name: AllocDeviceMem
+class: $xMem
+name: AllocDevice
+decl: static
 details:
     - "Device allocations are owned by a specific device."
     - "In general, a device allocation may only be accessed by the device that owns it."
@@ -152,8 +154,9 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates host memory on the context."
-class: $xContext
-name: AllocHostMem
+class: $xMem
+name: AllocHost
+decl: static
 details:
     - "Host allocations are owned by the host process."
     - "Host allocations are accessible by the host and all devices within the driver's context."
@@ -188,8 +191,9 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Frees allocated host memory, device memory, or shared memory on the context."
-class: $xContext
-name: FreeMem
+class: $xMem
+name: Free
+decl: static
 details:
     - "The application must ensure the device is not currently referencing the memory before it is freed"
     - "The implementation of this function may immediately free all Host and Device allocations associated with this memory"
@@ -205,7 +209,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory allocation type"
-class: $xContext
+class: $xMem
 name: $x_memory_type_t
 etors:
     - name: UNKNOWN
@@ -219,8 +223,8 @@ etors:
       desc: "the memory pointed to is a shared ownership allocation"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Memory allocation properties queried using $xContextGetMemAllocProperties"
-class: $xContext
+desc: "Memory allocation properties queried using $xMemGetAllocProperties"
+class: $xMem
 name: $x_memory_allocation_properties_t
 base: $x_base_properties_t
 members:
@@ -236,8 +240,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves attributes of a memory allocation"
-class: $xContext
-name: GetMemAllocProperties
+class: $xMem
+name: GetAllocProperties
+decl: static
 details:
     - "The application may call this function from simultaneous threads."
     - |
@@ -259,8 +264,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves the base address and/or size of an allocation"
-class: $xContext
-name: GetMemAddressRange
+class: $xMem
+name: GetAddressRange
+decl: static
 details:
     - "The application may call this function from simultaneous threads."
 params:
@@ -279,11 +285,12 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an IPC memory handle for the specified allocation"
-class: $xContext
-name: GetMemIpcHandle
+class: $xMem
+name: GetIpcHandle
+decl: static
 details:
     - "Takes a pointer to a device memory allocation and creates an IPC memory handle for exporting it for use in another process."
-    - "The pointer must be base pointer of the device memory allocation; i.e. the value returned from $xContextAllocDeviceMem."
+    - "The pointer must be base pointer of the device memory allocation; i.e. the value returned from $xMemAllocDevice."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -299,7 +306,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported IPC memory flags"
-class: $xContext
+class: $xMem
 name: $x_ipc_memory_flags_t
 etors:
     - name: TBD
@@ -307,11 +314,12 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Opens an IPC memory handle to retrieve a device pointer on the context."
-class: $xContext
-name: OpenMemIpcHandle
+class: $xMem
+name: OpenIpcHandle
+decl: static
 details:
     - "Takes an IPC memory handle from a remote process and associates it with a device pointer usable in this process."
-    - "The device pointer in this process should not be freed with $xContextFreeMem, but rather with $xContextCloseMemIpcHandle."
+    - "The device pointer in this process should not be freed with $xMemFree, but rather with $xMemCloseIpcHandle."
     - "Multiple calls to this function with the same IPC handle will return unique pointers."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
@@ -337,10 +345,11 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes an IPC memory handle"
-class: $xContext
-name: CloseMemIpcHandle
+class: $xMem
+name: CloseIpcHandle
+decl: static
 details:
-    - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xContextOpenMemIpcHandle."
+    - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xMemOpenIpcHandle."
     - "The application must **not** call this function from simultaneous threads with the same pointer."
     - "The implementation of this function must be thread-safe."
 params:
@@ -350,3 +359,8 @@ params:
     - type: "const void*"
       name: ptr
       desc: "[in][release] pointer to device allocation in this process"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for memory allocation"
+name: $xMem
+owner: $xContext

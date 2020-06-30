@@ -135,11 +135,11 @@ The following pseudo-code demonstrates a basic context creation and activation s
         ${x}ContextCreate(hDriver, &ctxtDesc, &hContextA);
         ${x}ContextCreate(hDriver, &ctxtDesc, &hContextB);
 
-        ${x}ContextAllocHostMem(hContextA, &desc, 80, 0, &ptrA);
-        ${x}ContextAllocHostMem(hContextB, &desc, 88, 0, &ptrB);
+        ${x}MemAllocHost(hContextA, &desc, 80, 0, &ptrA);
+        ${x}MemAllocHost(hContextB, &desc, 88, 0, &ptrB);
 
         memcpy(ptrA, ptrB, 0xe); // ok
-        ${x}ContextGetMemAllocProperties(hContextA, ptrB, &props, &hDevice); // illegal: Context A has no knowledge of ptrB
+        ${x}MemGetAllocProperties(hContextA, ptrB, &props, &hDevice); // illegal: Context A has no knowledge of ptrB
 
 
 If a device was hung or reset, then the context is no longer valid and all APIs will return ${X}_RESULT_ERROR_DEVICE_LOST when any object associated with that context is used.
@@ -255,7 +255,7 @@ Devices may support different capabilities for each type of allocation. Supporte
 
 At a minimum, drivers will assign unique physical pages for each device and shared memory allocation.
 However, it is undefined behavior for an application to access memory outside of the allocation size requested.
-The actual page size used for an allocation can be queried from ${x}_memory_allocation_properties_t.pageSize using ${x}ContextGetMemAllocProperties.
+The actual page size used for an allocation can be queried from ${x}_memory_allocation_properties_t.pageSize using ${x}MemGetAllocProperties.
 Applications should implement usage-specific allocators from device memory pools (e.g., small and/or fixed-sized allocations, lock-free, etc.).
 
 Furthermore, drivers may *oversubscribe* some **shared** allocations. 
@@ -991,7 +991,7 @@ A kernel timestamp event is a special type of event that records device timestam
            0  // ordinal
        };
        ${x}_kernel_timestamp_result_t* tsResult = nullptr;
-       ${x}ContextAllocDeviceMem(hContext, &tsResultDesc, sizeof(${x}_kernel_timestamp_result_t), sizeof(uint32_t), hDevice, &tsResult);
+       ${x}MemAllocDevice(hContext, &tsResultDesc, sizeof(${x}_kernel_timestamp_result_t), sizeof(uint32_t), hDevice, &tsResult);
 
        // Append a signal of a timestamp event into the command list after the kernel executes
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel1, &launchArgs, hTSEvent, 0, nullptr);
@@ -1445,7 +1445,7 @@ device to generate the parameters.
        ${x}_group_count_t* pIndirectArgs;
        
        ...
-       ${x}ContextAllocDeviceMem(hContext, &desc, sizeof(${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
+       ${x}MemAllocDevice(hContext, &desc, sizeof(${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
 
        // Append launch kernel - indirect
        ${x}CommandListAppendLaunchKernelIndirect(hCommandList, hKernel, &pIndirectArgs, nullptr, 0, nullptr);
@@ -1590,7 +1590,7 @@ or sub-device using ${x}DeviceGetProperties.
        assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
        void* pMemForSubDevice2;
-       ${x}ContextAllocDeviceMem(hContext, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
+       ${x}MemAllocDevice(hContext, &desc, memSize, sizeof(uint32_t), hSubdevice, &pMemForSubDevice2);
        ...
 
 Device Residency
@@ -1632,9 +1632,9 @@ The following pseudo-code demonstrates a sequence for using coarse-grain residen
            node* next;
        };
        node* begin = nullptr;
-       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin);
-       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin->next);
-       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin->next->next);
+       ${x}MemAllocHost(hContext, &desc, sizeof(node), 1, &begin);
+       ${x}MemAllocHost(hContext, &desc, sizeof(node), 1, &begin->next);
+       ${x}MemAllocHost(hContext, &desc, sizeof(node), 1, &begin->next->next);
 
        // 'begin' is passed as kernel argument and appended into command list
        bool hasIndirectHostAccess = true;
@@ -1655,9 +1655,9 @@ The following pseudo-code demonstrates a sequence for using fine-grain residency
            node* next;
        };
        node* begin = nullptr;
-       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin);
-       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin->next);
-       ${x}ContextAllocHostMem(hContext, &desc, sizeof(node), 1, &begin->next->next);
+       ${x}MemAllocHost(hContext, &desc, sizeof(node), 1, &begin);
+       ${x}MemAllocHost(hContext, &desc, sizeof(node), 1, &begin->next);
+       ${x}MemAllocHost(hContext, &desc, sizeof(node), 1, &begin->next->next);
 
        // 'begin' is passed as kernel argument and appended into command list
        ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
@@ -1775,10 +1775,10 @@ The following code examples demonstrate how to use the memory IPC APIs:
 .. parsed-literal::
 
        void* dptr = nullptr;
-       ${x}ContextAllocDeviceMem(hContext, &desc, size, alignment, hDevice, &dptr);
+       ${x}MemAllocDevice(hContext, &desc, size, alignment, hDevice, &dptr);
 
        ${x}_ipc_mem_handle_t hIPC;
-       ${x}ContextGetMemIpcHandle(hContext, dptr, &hIPC);
+       ${x}MemGetIpcHandle(hContext, dptr, &hIPC);
 
        // Method of sending to receiving process is not defined by Level-Zero:
        send_to_receiving_process(hIPC);
@@ -1793,7 +1793,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
        hIPC = receive_from_sending_process();
 
        void* dptr = nullptr;
-       ${x}ContextOpenMemIpcHandle(hContext, hDevice, hIPC, 0, &dptr);
+       ${x}MemOpenIpcHandle(hContext, hDevice, hIPC, 0, &dptr);
 
 3. Each process may now refer to the same device memory allocation via its ``dptr``.
    Note, there is no guaranteed address equivalence for the values of ``dptr`` in each process.
@@ -1802,13 +1802,13 @@ The following code examples demonstrate how to use the memory IPC APIs:
 
 .. parsed-literal::
 
-       ${x}ContextCloseMemIpcHandle(hContext, dptr);
+       ${x}MemCloseIpcHandle(hContext, dptr);
 
 5. Finally, free the device pointer in the sending process:
 
 .. parsed-literal::
 
-       ${x}ContextFreeMem(hContext, dptr);
+       ${x}MemFree(hContext, dptr);
 
 .. _events-1:
 
