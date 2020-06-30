@@ -255,7 +255,9 @@ namespace ${n}
         ///////////////////////////////////////////////////////////////////////////////
         %if 'base' in obj:
         using ${th.make_baseclass_ctor(n, tags, obj)};
-        %else:
+        ~${th.make_class_name(n, tags, obj)}( void ) = default;
+
+        %elif 'members' in obj:
         %if th.has_ctor_params(obj):
         ${th.make_class_name(n, tags, obj)}( void ) = delete;
         %endif
@@ -264,10 +266,14 @@ namespace ${n}
             ${line}
         %endfor
             );
-        %endif
 
         ~${th.make_class_name(n, tags, obj)}( void ) = default;
 
+        %else:
+        ${th.make_class_name(n, tags, obj)}( void ) = delete;
+        ~${th.make_class_name(n, tags, obj)}( void ) = delete;
+
+        %endif
         ${th.make_class_name(n, tags, obj)}( ${th.make_class_name(n, tags, obj)} const& other ) = delete;
         void operator=( ${th.make_class_name(n, tags, obj)} const& other ) = delete;
 

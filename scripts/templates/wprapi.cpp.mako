@@ -58,7 +58,7 @@ namespace ${n}
 %endif
 ## CLASS ################################################################
 %for obj in th.filter_items(s['objects'], 'type', 'class'):
-    %if 'base' not in obj:
+    %if 'base' not in obj and 'members' in obj:
     ///////////////////////////////////////////////////////////////////////////////
     ${th.make_class_name(n, tags, obj)}::${th.make_class_name(n, tags, obj)}( 
     %for line in th.make_ctor_param_lines(n, tags, obj, meta=meta):

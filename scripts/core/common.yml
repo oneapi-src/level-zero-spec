@@ -130,7 +130,8 @@ name: "$x_sampler_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of physical memory object"
-name: "$x_physical_memory_handle_t"
+class: $xPhysicalMem
+name: "$x_physical_mem_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's command graph object"
@@ -301,12 +302,16 @@ etors:
       desc: $x_memory_allocation_properties_t
     - name: MODULE_DESC
       desc: $x_module_desc_t
+    - name: MODULE_PROPERTIES
+      desc: $x_module_properties_t
     - name: KERNEL_DESC
       desc: $x_kernel_desc_t
     - name: KERNEL_PROPERTIES
       desc: $x_kernel_properties_t
     - name: SAMPLER_DESC
       desc: $x_sampler_desc_t
+    - name: PHYSICAL_MEM_DESC
+      desc: $x_physical_mem_desc_t
     - name: RAYTRACING_MEM_ALLOC_EXT_DESC
       desc: $x_raytracing_mem_alloc_ext_desc_t
       value: "0x00010001"

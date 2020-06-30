@@ -465,13 +465,13 @@ returns:
 type: class
 desc: "C++ wrapper for event pool"
 name: $xEventPool
-owner: $xDriver
+owner: $xContext
 members:
     - type: $x_event_pool_handle_t
       name: handle
       desc: "[in] handle of event pool object"
-    - type: $xDriver*
-      name: pDriver
+    - type: $xContext*
+      name: pContext
       desc: "[in] pointer to owner object"
     - type: $x_event_pool_desc_t
       name: desc

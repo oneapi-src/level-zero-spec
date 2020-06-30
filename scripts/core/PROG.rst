@@ -302,9 +302,9 @@ while maintaining optimal physical memory usage.
 Reserving Virtual Address Space
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Virtual memory can be reserved using ${x}VirtualReserve. The reservation starting address
+Virtual memory can be reserved using ${x}VirtualMemReserve. The reservation starting address
 and size must be page aligned. Applications should query the page size for the allocation
-using ${x}VirtualQueryPageSize.
+using ${x}VirtualMemQueryPageSize.
 
 The following pseudo-code demonstrates a basic sequence for reserving virtual memory:
 
@@ -313,13 +313,13 @@ The following pseudo-code demonstrates a basic sequence for reserving virtual me
         // Query page size for our 1MB allocation.
         size_t pageSize;
         size_t allocationSize = 1048576;
-        ${x}VirtualQueryPageSize(hContext, hDevice, allocationSize, &pageSize);
+        ${x}VirtualMemQueryPageSize(hContext, hDevice, allocationSize, &pageSize);
 
         // Reserve 1MB of virtual address space.
         size_t reserveSize = align(allocationSize, pageSize);
 
         void* ptr = nullptr;
-        ${x}VirtualReserve(hContext, nullptr, reserveSize, &ptr);
+        ${x}VirtualMemReserve(hContext, nullptr, reserveSize, &ptr);
 
 Growing Virtual Address Reservations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -329,7 +329,7 @@ This may be useful when there is a need to grow a reservation. However, if the
 implementation is not able to reserve the new allocation at the requested starting address
 then it will find a new suitable range with a different starting address. If the application
 requires a specific starting address then the application should ensure that the return
-address from ${x}VirtualReserve matches the starting address it wants. If they
+address from ${x}VirtualMemReserve matches the starting address it wants. If they
 are different then the application may want to create a new larger reservation and remap
 the physical memory from the first reservation to this new reservation and free the
 old reservation.
@@ -339,36 +339,36 @@ old reservation.
         // Reserve another 1MB of virtual address space that is contiguous with previous reservation.
         void* newptr = (uint8_t*)ptr + reserveSize;
         void* retptr;
-        ${x}VirtualReserve(hContext, newptr, reserveSize, &retptr);
+        ${x}VirtualMemReserve(hContext, newptr, reserveSize, &retptr);
 
         if (retptr != newptr)
         {
             // Free new reservation as it's not what we want due to incorrect starting address.
-            ${x}VirtualFree(hContext, retptr, reserveSize);
+            ${x}VirtualMemFree(hContext, retptr, reserveSize);
 
             // Make new larger 2MB reservation and remap physical pages to this.
             size_t pageSize;
             size_t largerAllocationSize = 2097152;
-            ${x}VirtualQueryPageSize(hContext, hDevice, largerAllocationSize, &pageSize);
+            ${x}VirtualMemQueryPageSize(hContext, hDevice, largerAllocationSize, &pageSize);
 
             // Reserve 2MB of virtual address space.
             size_t largerReserveSize = align(largerAllocationSize, pageSize);
 
             void* ptr = nullptr;
-            ${x}VirtualReserve(hContext, nullptr, largerReserveSize, &ptr);
+            ${x}VirtualMemReserve(hContext, nullptr, largerReserveSize, &ptr);
 
             // Remap physical pages from original reservation to our new larger reservation.
             ...
 
             // Free original reservation that we were trying to grow.
-            ${x}VirtualFree(hContext, ptr, reserveSize);
+            ${x}VirtualMemFree(hContext, ptr, reserveSize);
         }
 
 Physical Memory
 ~~~~~~~~~~~~~~~
 
 Physical memory is explicitly represented in the API as physical memory objects
-that are reservations of physical pages. The application will use ${x}PhysicalCreate
+that are reservations of physical pages. The application will use ${x}PhysicalMemCreate
 to create a physical memory object.
 
 The following pseudo-code demonstrates a basic sequence for creating a physical memory object:
@@ -376,15 +376,21 @@ The following pseudo-code demonstrates a basic sequence for creating a physical 
 .. parsed-literal::
 
         // Create 1MB physical memory object
-        ${x}_physical_memory_handle_t hPhysicalAlloc;
+        ${x}_physical_mem_handle_t hPhysicalAlloc;
         size_t physicalSize = align(allocationSize, pageSize);
+        ${x}_physical_mem_desc_t pmemDesc = {
+            ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+            nullptr,
+            0, // flags
+            physicalSize // size
+        };
 
-        ${x}PhysicalCreate(hContext, hDevice, physicalSize, &hPhysicalAlloc);
+        ${x}PhysicalMemCreate(hContext, hDevice, &pmemDesc, &hPhysicalAlloc);
 
 Mapping Virtual Memory Pages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Reserved virtual memory pages can be mapped to physical memory using ${x}VirtualMap.
+Reserved virtual memory pages can be mapped to physical memory using ${x}VirtualMemMap.
 An application can map the entire reserved virtual address range or can sparsely map the
 reserved virtual address range using one or more physical memory objects. Once mapped, the
 physical pages for a physical memory object can be faulted in for devices that support
@@ -396,14 +402,14 @@ The following pseudo-code demonstrates mapping a 1MB reservation into physical m
 .. parsed-literal::
 
         // Map entire 1MB reservation and set access to read/write.
-        ${x}VirtualMap(hContext, ptr, reserveSize, hPhysicalAlloc, 0,
+        ${x}VirtualMemMap(hContext, ptr, reserveSize, hPhysicalAlloc, 0,
             ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
 
 
 Access Attributes
 ~~~~~~~~~~~~~~~~~
 Access attributes can be set for a range of pages when mapping virtual memory
-pages with ${x}VirtualMap or with ${x}VirtualSetAccessAttribute.
+pages with ${x}VirtualMemMap or with ${x}VirtualMemSetAccessAttribute.
 In addition, an application can query access attributes for a page aligned
 virtual memory range.
 
@@ -411,7 +417,7 @@ virtual memory range.
 
         size_t accessRangeSize;
         ${x}_memory_access_attribute_t access;
-        ${x}VirtualGetAccessAttribute(hContext, ptr, reserveSize, &access, &accessRangeSize);
+        ${x}VirtualMemGetAccessAttribute(hContext, ptr, reserveSize, &access, &accessRangeSize);
 
         // Expecting entire range to have the same access attribute and it be read/write.
         assert(accessRangeSize == reserveSize);
@@ -435,36 +441,41 @@ The following example makes a 1GB reserved allocation and then makes both 128KB 
         // Reserve 1GB of virtual address space to manage.
         size_t pageSize;
         size_t allocationSize = 1048576000;
-        ${x}VirtualQueryPageSize(hContext, hDevice, allocationSize, &pageSize);
+        ${x}VirtualMemQueryPageSize(hContext, hDevice, allocationSize, &pageSize);
 
         size_t reserveSize = align(allocationSize, pageSize);
 
         void* ptr = nullptr;
-        ${x}VirtualReserve(hContext, nullptr, reserveSize, &ptr);
+        ${x}VirtualMemReserve(hContext, nullptr, reserveSize, &ptr);
 
         ...
 
         // Sub-allocate 128KB of our 1GB allocation.
         size_t subAllocSize = 131072;
-        ${x}VirtualQueryPageSize(hContext, hDevice, subAllocSize, &pageSize);
+        ${x}VirtualMemQueryPageSize(hContext, hDevice, subAllocSize, &pageSize);
         
         // Create physical memory object for our 128KB sub-allocation.
-        ${x}_physical_memory_handle_t hPhysicalAlloc;
         size_t subAllocAlignedSize = align(subAllocSize, pageSize);
-
-        ${x}PhysicalCreate(hContext, hDevice, subAllocAlignedSize, &hPhysicalAlloc);
+        ${x}_physical_mem_desc_t pmemDesc = {
+            ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+            nullptr,
+            0, // flags
+            subAllocAlignedSize // size
+        };
+        ${x}_physical_mem_handle_t hPhysicalAlloc;
+        ${x}PhysicalMemCreate(hContext, hDevice, &pmemDesc, &hPhysicalAlloc);
 
         // Find suitable 128KB sub-allocation that matches page alignments.
         ...
 
-        ${x}VirtualMap(hContext, subAllocPtr, subAllocAlignedSize, hPhysicalAlloc, 0,
+        ${x}VirtualMemMap(hContext, subAllocPtr, subAllocAlignedSize, hPhysicalAlloc, 0,
             ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
 
         ...
 
         // Sub-allocate 8MB of our 1GB allocation.
         size_t subAllocDiffSize = 8388608;
-        ${x}VirtualQueryPageSize(hContext, hDevice, subAllocDiffSize, &pageSize);
+        ${x}VirtualMemQueryPageSize(hContext, hDevice, subAllocDiffSize, &pageSize);
         ...
 
 .. _Images:

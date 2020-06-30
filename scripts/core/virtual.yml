@@ -11,7 +11,7 @@ desc: "Intel $OneApi Level-Zero APIs for Virtual Memory Management"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Virtual memory page access attributes"
-class: $xVirtual
+class: $xVirtualMem
 name: $x_memory_access_attribute_t
 etors:
     - name: NONE
@@ -24,7 +24,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reserves pages in virtual address space."
-class: $xVirtual
+class: $xVirtualMem
 name: Reserve
 decl: static
 ordinal: "0"
@@ -57,7 +57,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Free pages in a reserved virtual address range."
-class: $xVirtual
+class: $xVirtualMem
 name: Free
 decl: static
 ordinal: "0"
@@ -83,7 +83,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries page size to use for aligning virtual memory reservations and physical memory allocations."
-class: $xVirtual
+class: $xVirtualMem
 name: QueryPageSize
 decl: static
 ordinal: "0"
@@ -107,9 +107,33 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
         - "`0 == size`"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported physical memory creation flags"
+class: $xPhysicalMem
+name: $x_physical_mem_flags_t
+etors:
+    - name: TBD
+      desc: "reserved for future use."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Physical memory descriptor"
+class: $xPhysicalMem
+name: $x_physical_mem_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_physical_mem_flags_t
+      name: flags
+      desc: |
+            [in] creation flags.
+            must be 0 (default) or a valid combination of $x_physical_mem_flag_t.
+      init: "0"
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to reserve; must be page aligned."
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a physical memory object on the device."
-class: $xPhysical
+class: $xPhysicalMem
 name: Create
 decl: static
 ordinal: "0"
@@ -126,21 +150,21 @@ params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device object"
-    - type: size_t
-      name: size
-      desc: "[in] size in bytes to reserve; must be page aligned."
-    - type: "$x_physical_memory_handle_t*"
+    - type: $x_physical_mem_desc_t*
+      name: desc
+      desc: "[in] pointer to physical memory descriptor."
+    - type: "$x_physical_mem_handle_t*"
       name: phPhysicalMemory
       desc: "[out] pointer to handle of physical memory object created"
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
-        - "`0 == size`"
+        - "`0 == desc->size`"
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a physical memory object."
-class: $xPhysical
+class: $xPhysicalMem
 name: Destroy
 decl: static
 ordinal: "0"
@@ -152,10 +176,7 @@ params:
     - type: $x_context_handle_t
       name: hContext
       desc: "[in] handle of the context object"
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device object"
-    - type: $x_physical_memory_handle_t
+    - type: $x_physical_mem_handle_t
       name: hPhysicalMemory
       desc: "[in][release] handle of physical memory object to destroy"
 returns:
@@ -163,12 +184,12 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Maps pages in virtual address space to pages from physical memory object."
-class: $xVirtual
+class: $xVirtualMem
 name: Map
 decl: static
 ordinal: "0"
 details:
-    - "The virtual address range must have been reserved using $xVirtualReserve."
+    - "The virtual address range must have been reserved using $xVirtualMemReserve."
     - "The application must only use the mapped memory allocation on the context for which it was created."
     - "The virtual start address and size must be at least aligned to ${x}_device_properties_t.minMemPageSize."
     - "The application should use, for the starting address and size, the same size alignment used for the physical allocation."
@@ -184,7 +205,7 @@ params:
     - type: size_t
       name: size
       desc: "[in] size in bytes of virtual address range to map; must be page aligned."
-    - type: $x_physical_memory_handle_t
+    - type: $x_physical_mem_handle_t
       name: hPhysicalMemory
       desc: "[in] handle to physical memory object."
     - type: size_t
@@ -202,7 +223,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Unmaps pages in virtual address space from pages from a physical memory object."
-class: $xVirtual
+class: $xVirtualMem
 name: Unmap
 decl: static
 ordinal: "0"
@@ -231,7 +252,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set memory access attributes for a virtual address range."
-class: $xVirtual
+class: $xVirtualMem
 name: SetAccessAttribute
 decl: static
 ordinal: "0"
@@ -260,7 +281,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory access attribute for a virtual address range."
-class: $xVirtual
+class: $xVirtualMem
 name: GetAccessAttribute
 decl: static
 ordinal: "0"
@@ -290,3 +311,23 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
         - "`0 == size`"
         - "Size must be page aligned"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for virtual memory allocation"
+name: $xVirtualMem
+owner: $xContext
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for physical memory allocation"
+name: $xPhysicalMem
+owner: $xContext
+members:
+    - type: $x_physical_mem_handle_t
+      name: handle
+      desc: "[in] handle of physical memory object"
+    - type: $xContext*
+      name: pContext
+      desc: "[in] pointer to owner object"
+    - type: $x_physical_mem_desc_t
+      name: desc
+      desc: "[in] descriptor of the physical memory object"
