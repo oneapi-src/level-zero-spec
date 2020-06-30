@@ -18,11 +18,21 @@ etors:
       value: "0"
       desc: "Access information about all engines combined."
     - name: COMPUTE_ALL
-      desc: "Access information about all compute engines combined."
+      desc: "Access information about all compute/render engines combined."
     - name: MEDIA_ALL
       desc: "Access information about all media engines combined."
     - name: COPY_ALL
       desc: "Access information about all copy (blitter) engines combined."
+    - name: COMPUTE_SINGLE
+      desc: "Access information about a single compute engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_COMPUTE_ALL for that."
+    - name: RENDER_SINGLE
+      desc: "Access information about a single render engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_COMPUTE_ALL for that."
+    - name: MEDIA_DECODE_SINGLE
+      desc: "Access information about a single media decode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
+    - name: MEDIA_ENCODE_SINGLE
+      desc: "Access information about a single media encode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
+    - name: COPY_SINGLE
+      desc: "Access information about a single media encode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_COPY_ALL for that."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Engine group properties"

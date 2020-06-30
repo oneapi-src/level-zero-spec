@@ -1124,12 +1124,29 @@ Here is a summary of the available functions:
 Operations on engine groups
 ---------------------------
 
-It is possible to monitor the activity of one or more engines combined into
-an **engine group**. A device can have multiple engine groups and the
-possible types are defined in ${s}_engine_group_t. The current engine
-groups supported are global activity across all engines, activity across
-all compute accelerators, activity across all media accelerators and
-activity across all copy engines.
+Accelerator resources (e.g. arrays of compute units or media decoders) are
+fed work by what are called engines. The API provides the ability to measuring
+the execution time (activity) of these engines. The type of engines is
+defined in the enum ${s}_engine_group_t.
+
+Generally there is a one to one relationship between an engine and an underlying
+accelerator resource. For example, a single media decode engine submits work to a
+single media decoder hardware and no other engine can do so. Measuring the execution
+time (activity) of a single engine is equivalent to measuring the execution time
+of the underlying accelerator hardware.
+
+There are also products where multiple engines submit work to the same underlying
+accelerator hardware. The hardware will execute the work from each engine
+concurrently. In these cases, the execution time of each individual engine
+will add up to more than the execution time of the underlying accelerator
+hardware since each engine is only receiving a portion of the accelerator
+hardware. In this case, the API also provides engine groups which will
+measure the total execution time at the level of the hardware accelerator
+rather than at the level of the individual engines. For example, the API
+may enumerate multiple engine groups of type ${S}_ENGINE_GROUP_COMPUTE_SINGLE
+which will permit measuring the activity of each individual engine. However,
+to measure the overall activity of the shared compute resourses, the API
+will enumerate an engine group of type ${S}_ENGINE_GROUP_COMPUTE_ALL.
 
 By taking two snapshots of the activity counters, it is possible to
 calculate the average utilization of different parts of the device.
