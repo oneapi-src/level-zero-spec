@@ -58,7 +58,7 @@ int main( int argc, char *argv[] )
 
                 bool apiTracingSupported = false;
                 for( auto& extn : extensions )
-                    if( std::strcmp( extn.name, ZET_API_TRACING_EXP_NAME ) )
+                    if( strcmp( extn.name, ZET_API_TRACING_EXP_NAME ) )
                     {
                         apiTracingSupported = true;
                         break;
