@@ -169,6 +169,24 @@ members:
       name: "name[$X_MAX_DEVICE_NAME]"
       desc: "[out] Device name"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Device thread identifier."
+class: $xDevice
+name: $x_device_thread_t
+members:
+    - type: "uint32_t"
+      name: slice
+      desc: "[in,out] the slice number.  Can be UINT32_MAX to mean 'all' or must be less than $x_device_properties_t.numSlices."
+    - type: "uint32_t"
+      name: subslice
+      desc: "[in,out] the sub-slice number within its slice.  Can be UINT32_MAX to mean 'all' or must be less than $x_device_properties_t.numSubslicesPerSlice."
+    - type: "uint32_t"
+      name: eu
+      desc: "[in,out] the eEU number within its sub-slice.  Can be UINT32_MAX to mean 'all' or must be less than $x_device_properties_t.numEUs."
+    - type: "uint32_t"
+      name: thread
+      desc: "[in,out] the thread number within its EU.  Can be UINT32_MAX to mean 'all' or must be less than $x_device_properties_t.numThreadsPerEU."
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves properties of the device."
 class: $xDevice
