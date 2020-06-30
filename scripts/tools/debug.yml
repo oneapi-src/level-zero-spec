@@ -8,6 +8,32 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Debug"
+ordinal: "5"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device debug properties."
+class: $tDevice
+name: $t_device_debug_properties_t
+base: $x_base_properties_t
+members:
+    - type: "bool"
+      name: supports_attach
+      desc: "[out] the device node supports attaching"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get device debug properties."
+class: $tDevice
+name: GetDebugProperties
+params:
+    - type: $t_device_handle_t
+      name: hDevice
+      desc: "[in] device handle"
+    - type: $t_device_debug_properties_t
+      name: properties
+      desc: "[out] the debug properties of this device"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid device handle has been supplied"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Debug configuration"
@@ -56,28 +82,13 @@ returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid debug handle has been supplied"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Query the number of device threads for a debug session."
-class: $tDebug
-name: GetNumThreads
-params:
-    - type: $t_debug_session_handle_t
-      name: hDebug
-      desc: "[in] debug session handle"
-    - type: "uint64_t*"
-      name: pNumThreads
-      desc: "[out] the maximal number of threads"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle has been supplied"
---- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug event flags."
 class: $tDebug
 name: $t_debug_event_flags_t
 etors:
-    - name: STOPPED
-      desc: "The reporting thread stopped"
+    - name: NEED_ACK
+      desc: "The event needs to be acknowledged by calling $tDebugAcknowledgeEvent()."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug event types."
@@ -97,8 +108,10 @@ etors:
       desc: "An in-memory module was loaded onto the device"
     - name: MODULE_UNLOAD
       desc: "An in-memory module is about to get unloaded from the device"
-    - name: EXCEPTION
+    - name: THREAD_STOPPED
       desc: "The thread stopped due to a device exception"
+    - name: THREAD_UNAVAILABLE
+      desc: "The thread is not available to be stopped"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Debug detach reason."
@@ -110,16 +123,6 @@ etors:
       value: "0"
     - name: HOST_EXIT
       desc: "The host process exited"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "No thread on the device."
-name: $T_DEBUG_THREAD_NONE
-value: "0xffffffffffffffffull"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "All threads on the device."
-name: $T_DEBUG_THREAD_ALL
-value: "0xfffffffffffffffeull"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event information for $T_DEBUG_EVENT_DETACHED"
@@ -148,6 +151,15 @@ members:
       name: load
       desc: "[out] the load address of the module on the device"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Event information for $T_DEBUG_EVENT_THREAD_STOPPED/UNAVAILABLE"
+class: $tDebug
+name: $t_debug_event_info_thread_stopped_t
+members:
+    - type: $x_device_thread_t
+      name: thread
+      desc: "[out] the stopped/unavailable thread"
+--- #--------------------------------------------------------------------------
 type: union
 desc: "Event type specific information"
 class: $tDebug
@@ -159,6 +171,9 @@ members:
     - type: $t_debug_event_info_module_t
       name: module
       desc: "[out] type == $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
+    - type: $t_debug_event_info_thread_stopped_t
+      name: thread
+      desc: "[out] type == $T_DEBUG_EVENT_THREAD_STOPPED/UNAVAILABLE"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "A debug event on the device."
@@ -168,9 +183,6 @@ members:
     - type: "uint8_t"
       name: type
       desc: "[out] the event type"
-    - type: "uint64_t"
-      name: thread
-      desc: "[out] the thread reporting the event"
     - type: $t_debug_event_flags_t
       name: flags
       desc: "[out] returns 0 (none) or a combination of $t_debug_event_flag_t"
@@ -189,19 +201,29 @@ params:
     - type: "uint64_t"
       name: timeout
       desc: "[in] timeout in milliseconds (or UINT64_MAX for infinite)"
-    - type: "size_t"
-      name: size
-      desc: "[in] the size of the buffer in bytes"
-    - type: "void*"
-      name: buffer
-      desc: "[in,out] a buffer to hold the event data"
+    - type: "$t_debug_event_t*"
+      name: event
+      desc: "[in,out] a pointer to a $t_debug_event_t."
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or buffer pointer has been supplied"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY:
-        - "the output buffer is too small to hold the event"
+        - "an invalid debug handle or a NULL event pointer has been supplied"
     - $X_RESULT_NOT_READY:
         - "the timeout expired"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Acknowledge a debug event."
+class: $tDebug
+name: AcknowledgeEvent
+params:
+    - type: $t_debug_session_handle_t
+      name: hDebug
+      desc: "[in] debug session handle"
+    - type: "$t_debug_event_t*"
+      name: event
+      desc: "[in] a pointer to a $t_debug_event_t."
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "an invalid debug handle or a NULL event pointer has been supplied"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Interrupt device threads."
@@ -211,9 +233,9 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: threadid
-      desc: "[in] the thread to inerrupt or $T_DEBUG_THREAD_ALL"
+    - type: $x_device_thread_t
+      name: thread
+      desc: "[in] the thread to inerrupt"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid debug handle or thread identifier has been supplied"
@@ -227,9 +249,9 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: threadid
-      desc: "[in] the thread to resume or $T_DEBUG_THREAD_ALL"
+    - type: $x_device_thread_t
+      name: thread
+      desc: "[in] the thread to resume"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid debug handle or thread identifier has been supplied"
@@ -254,9 +276,9 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: threadid
-      desc: "[in] the thread context or $T_DEBUG_THREAD_NONE"
+    - type: $x_device_thread_t
+      name: thread
+      desc: "[in] the thread context.  The special thread 'all' can be used for accessing the default memory space, e.g. for setting breakpoints."
     - type: "int"
       name: memSpace
       desc: "[in] the (device-specific) memory space"
@@ -285,9 +307,9 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: threadid
-      desc: "[in] the thread context or $T_DEBUG_THREAD_NONE"
+    - type: $x_device_thread_t
+      name: thread
+      desc: "[in] the thread context.  The special thread 'all' can be used for accessing the default memory space, e.g. for setting breakpoints."
     - type: "int"
       name: memSpace
       desc: "[in] the (device-specific) memory space"
@@ -370,8 +392,8 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: threadid
+    - type: $x_device_thread_t
+      name: thread
       desc: "[in] the thread context"
     - type: "uint64_t"
       name: offset
@@ -396,8 +418,8 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
-    - type: "uint64_t"
-      name: threadid
+    - type: $x_device_thread_t
+      name: thread
       desc: "[in] the thread context"
     - type: "uint64_t"
       name: offset
