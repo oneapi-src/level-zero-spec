@@ -8,17 +8,17 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Extension APIs for Raytracing"
-version: "1.1"
+version: "1.0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Raytracing Extension Name"
-version: "1.1"
+version: "1.0"
 name: $X_RAYTRACING_EXT_NAME
 value: '"$X_extension_raytracing"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Raytracing Extension Version(s)"
-version: "1.1"
+version: "1.0"
 name: $x_raytracing_ext_version_t
 etors:
     - name: "1_0"
@@ -27,7 +27,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported raytracing memory allocation flags"
-version: "1.1"
+version: "1.0"
 class: $xContext
 name: $x_raytracing_mem_alloc_ext_flags_t
 etors:
@@ -36,7 +36,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Raytracing memory allocation descriptor"
-version: "1.1"
+version: "1.0"
 class: $xContext
 name: $x_raytracing_mem_alloc_ext_desc_t
 base: $x_base_desc_t
@@ -45,7 +45,7 @@ members:
       name: flags
       desc: |
             [in] flags specifying additional allocation controls.
-            must be 0 (default) or a valid combination of $x_device_mem_alloc_ext_flag_t;
+            must be 0 (default) or a valid combination of $x_raytracing_mem_alloc_ext_flag_t;
             default behavior may use implicit driver-based heuristics.
       init: "0"
 details:
