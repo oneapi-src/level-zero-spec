@@ -278,6 +278,8 @@ etors:
       desc: $x_device_image_properties_t
     - name: DEVICE_P2P_PROPERTIES
       desc: $x_device_p2p_properties_t
+    - name: DEVICE_EXTERNAL_MEMORY_PROPERTIES
+      desc: $x_device_external_memory_properties_t
     - name: CONTEXT_DESC
       desc: $x_context_desc_t
     - name: COMMAND_QUEUE_DESC
@@ -300,6 +302,12 @@ etors:
       desc: $x_host_mem_alloc_desc_t
     - name: MEMORY_ALLOCATION_PROPERTIES
       desc: $x_memory_allocation_properties_t
+    - name: EXTERNAL_MEMORY_EXPORT_DESC
+      desc: $x_external_memory_export_desc_t
+    - name: EXTERNAL_MEMORY_IMPORT_FD
+      desc: $x_external_memory_import_fd_t
+    - name: EXTERNAL_MEMORY_EXPORT_FD
+      desc: $x_external_memory_export_fd_t
     - name: MODULE_DESC
       desc: $x_module_desc_t
     - name: MODULE_PROPERTIES
@@ -320,6 +328,15 @@ etors:
       desc: $x_command_graph_exp_desc_t
       value: "0x00020001"
       version: "2.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "External memory type flags"
+name: $x_external_memory_type_flags_t
+etors:
+    - name: OPAQUE_FD
+      desc: "an opaque POSIX file descriptor handle"
+    - name: DMA_BUF
+      desc: "a file descriptor handle for a Linux dma_buf"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

@@ -360,6 +360,61 @@ params:
       name: ptr
       desc: "[in][release] pointer to device allocation in this process"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Additional allocation descriptor for exporting external memory"
+class: $xMem
+name: $x_external_memory_export_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying memory export types for this allocation.
+            must be 0 (default) or a valid combination of $x_external_memory_type_flags_t
+      init: "0"
+details:
+    - "This structure may be passed to $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t, to indicate an exportable memory allocation."
+    - "This structure may be passed to $xImageCreate, via the `pNext` member of $x_image_desc_t, to indicate an exportable image."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Additional allocation descriptor for importing external memory as a file descriptor"
+class: $xMem
+name: $x_external_memory_import_fd_t
+base: $x_base_desc_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying the memory import type for the file descriptor.
+            must be 0 (default) or a valid combination of $x_external_memory_type_flags_t
+      init: "0"
+    - type: int
+      name: fd
+      desc: "[in] the file descriptor handle to import"
+details:
+    - "This structure may be passed to $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t, to import memory from a file descriptor."
+    - "This structure may be passed to $xImageCreate, via the `pNext` member of $x_image_desc_t, to import memory from a file descriptor."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Exports an allocation as a file descriptor"
+class: $xMem
+name: $x_external_memory_export_fd_t
+base: $x_base_desc_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying the memory export type for the file descriptor.
+            must be 0 (default) or a valid combination of $x_external_memory_type_flags_t
+      init: "0"
+    - type: int
+      name: fd
+      desc: "[out] the exported file descriptor handle representing the allocation."
+details:
+    - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t, to export a memory allocation as a file descriptor."
+    - "This structure may be passed to $xImageGetProperties, via the `pNext` member of $x_image_properties_t, to export an image as a file descriptor."
+    - "The requested memory export type must have been specified when the allocation was made."
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for memory allocation"
 name: $xMem
