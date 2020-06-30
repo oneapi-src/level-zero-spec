@@ -66,7 +66,7 @@ namespace driver
         //pfnGetIPCProperties
         
         //////////////////////////////////////////////////////////////////////////
-        zeDdiTable.Context.pfnAllocSharedMem = [](
+        zeDdiTable.Mem.pfnAllocShared = [](
             ze_context_handle_t,
             const ze_device_mem_alloc_desc_t*,
             const ze_host_mem_alloc_desc_t*,
@@ -80,7 +80,7 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        zeDdiTable.Context.pfnAllocDeviceMem = [](
+        zeDdiTable.Mem.pfnAllocDevice = [](
             ze_context_handle_t,
             const ze_device_mem_alloc_desc_t*,
             size_t size,
@@ -93,7 +93,7 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        zeDdiTable.Context.pfnAllocHostMem = [](
+        zeDdiTable.Mem.pfnAllocHost = [](
             ze_context_handle_t,
             const ze_host_mem_alloc_desc_t*,
             size_t size,
@@ -105,7 +105,7 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        zeDdiTable.Context.pfnFreeMem = [](
+        zeDdiTable.Mem.pfnFree = [](
             ze_context_handle_t,
             void* ptr)
         {

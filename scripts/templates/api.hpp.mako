@@ -257,7 +257,7 @@ namespace ${n}
         using ${th.make_baseclass_ctor(n, tags, obj)};
         ~${th.make_class_name(n, tags, obj)}( void ) = default;
 
-        %elif 'members' in obj:
+        %elif len(obj.get('members',[])) > 0:
         %if th.has_ctor_params(obj):
         ${th.make_class_name(n, tags, obj)}( void ) = delete;
         %endif
