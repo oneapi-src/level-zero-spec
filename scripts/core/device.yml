@@ -585,7 +585,7 @@ params:
       desc: "[in,out] query result for cache properties"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device image properties queried using $xDeviceGetComputeProperties"
+desc: "Device image properties queried using $xDeviceGetImageProperties"
 class: $xDevice
 name: $x_device_image_properties_t
 base: $x_base_properties_t
@@ -633,6 +633,41 @@ params:
     - type: "$x_device_image_properties_t*"
       name: pImageProperties
       desc: "[in,out] query result for image properties"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device external memory import and export properties"
+class: $xDevice
+name: $x_device_external_memory_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: memoryAllocationImportTypes
+      desc: "[out] Supported external memory import types for memory allocations."
+    - type: $x_external_memory_type_flags_t
+      name: memoryAllocationExportTypes
+      desc: "[out] Supported external memory export types for memory allocations."
+    - type: $x_external_memory_type_flags_t
+      name: imageImportTypes
+      desc: "[out] Supported external memory import types for images."
+    - type: $x_external_memory_type_flags_t
+      name: imageExportTypes
+      desc: "[out] Supported external memory export types for images."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves external memory import and export of the device"
+class: $xDevice
+name: GetExternalMemoryProperties
+ordinal: "1"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_device_external_memory_properties_t*"
+      name: pExternalMemoryProperties
+      desc: "[in,out] query result for external memory properties"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties queried using $xDeviceGetP2PProperties"

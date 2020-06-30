@@ -578,6 +578,60 @@ configuration:
 
        ...
 
+External Memory Import and Export
+---------------------------------
+
+External memory handles may be imported from other APIs, or exported for use in other APIs.
+Importing and exporting external memory is an optional feature.
+Devices may describe the types of external memory handles they support using ${x}DeviceGetExternalMemoryProperties.
+
+Importing and exporting external memory is supported for device memory allocations and images.
+
+The following pseudo-code demonstrates how to allocate and export an external memory handle for a device memory allocation as a Linux dma_buf:
+
+.. parsed-literal::
+
+        // Set up the request for an exportable allocation
+        ${x}_external_memory_export_desc_t export_desc = {
+            ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESC,
+            nullptr, // pNext
+            ${X}_EXTERNAL_MEMORY_TYPE_FLAG_DMA_BUF
+        };
+
+        // Link the request into the allocation descriptor and allocate
+        alloc_desc.pNext = &export_desc;
+        ${x}MemAllocDevice(hContext, &alloc_desc, size, alignment, hDevice, &ptr);
+
+        ...
+
+        // Set up the request to export the external memory handle
+        ${x}_external_memory_export_fd_t export_fd = {
+            ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FD,
+            nullptr, // pNext
+            ${X}_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+            0 // [out] fd
+        };
+
+        // Link the export request into the query
+        alloc_props.pNext = &export_fd;
+        ${x}MemGetAllocProperties(hContext, ptr, &alloc_props, nullptr);
+
+The following pseudo-code how to import a Linux dma_buf as an external memory handle for a device memory allocation:
+
+.. parsed-literal::
+
+        // Set up the request to import the external memory handle
+        ${x}_external_memory_import_fd_t import_fd = {
+            ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD,
+            nullptr, // pNext
+            ${X}_EXTERNAL_MEMORY_TYPE_FLAG_DMA_BUF,
+            fd
+        };
+
+        // Link the request into the allocation descriptor and allocate
+        alloc_desc.pNext = &import_fd;
+        ${x}MemAllocDevice(hContext, &alloc_desc, size, alignment, hDevice, &ptr);
+
 Command Queues and Command Lists
 ================================
 
