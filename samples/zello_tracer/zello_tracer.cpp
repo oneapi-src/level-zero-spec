@@ -29,9 +29,7 @@ struct my_instance_data_t
 int main( int argc, char *argv[] )
 {
     if( argparse( argc, argv, "-null", "--enable_null_driver" ) )
-    {
         putenv( const_cast<char *>( "ZE_ENABLE_NULL_DRIVER=1" ) );
-    }
 
     putenv( const_cast<char *>( "ZE_ENABLE_API_TRACING=1" ) );
 
@@ -53,7 +51,21 @@ int main( int argc, char *argv[] )
             pDevice = reinterpret_cast<zet::Device*>( findDevice( pDriver, type ) );
             if( pDevice )
             {
-                break;
+                uint32_t extensionCount = 0;
+                pDriver->GetExtensionProperties( &extensionCount );
+                std::vector<ze::Driver::extension_properties_t> extensions( extensionCount );
+                pDriver->GetExtensionProperties( &extensionCount, extensions.data() );
+
+                bool apiTracingSupported = false;
+                for( auto& extn : extensions )
+                    if( std::strcmp( extn.name, ZET_API_TRACING_EXP_NAME ) )
+                    {
+                        apiTracingSupported = true;
+                        break;
+                    }
+
+                if( apiTracingSupported )
+                    break;
             }
         }
     }
@@ -91,14 +103,14 @@ int main( int argc, char *argv[] )
 
         // Create a tracer for the event call
         my_tracer_data_t gbl;
-        zet::Tracer::desc_t tracer_desc;
+        zet::TracerExp::desc_t tracer_desc;
         tracer_desc.pUserData = &gbl;
-        auto pTracer = std::shared_ptr<zet::Tracer>(
-            zet::Tracer::Create( pContext.get(), &tracer_desc ),
-            []( zet::Tracer* p ){ zet::Tracer::Destroy( p ); } );
+        auto pTracer = std::shared_ptr<zet::TracerExp>(
+            zet::TracerExp::Create( pContext.get(), &tracer_desc ),
+            []( zet::TracerExp* p ){ zet::TracerExp::Destroy( p ); } );
 
         // Set the callbacks
-        zet::Tracer::core_callbacks_t prologCbs = {};
+        zet::TracerExp::core_callbacks_t prologCbs = {};
         prologCbs.CommandList.pfnAppendSignalEventCb = [](
             ze_command_list_append_signal_event_params_t*, ze_result_t,
             void* pTracerUserData,
@@ -111,7 +123,7 @@ int main( int argc, char *argv[] )
         };
         pTracer->SetPrologues( &prologCbs );
 
-        zet::Tracer::core_callbacks_t epilogCbs = {};
+        zet::TracerExp::core_callbacks_t epilogCbs = {};
         epilogCbs.CommandList.pfnAppendSignalEventCb = [](
             ze_command_list_append_signal_event_params_t*, ze_result_t,
             void* pTracerUserData,

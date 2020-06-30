@@ -7,20 +7,34 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Tool APIs for API Tracing"
+desc: "Intel $OneApi Level-Zero Tool Experimental Extension APIs for API Tracing"
+ordinal: "99999"
 includes:
     - "$x_callbacks.h"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "API Tracing Experimental Extension Name"
+name: $T_API_TRACING_EXP_NAME
+value: '"$T_experimental_api_tracing"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API Tracing Experimental Extension Version(s)"
+name: $t_api_tracing_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
 type: typedef
 desc: "Alias the existing callbacks definition for 'core' callbacks"
-class: $tTracer
+class: $tTracerExp
 name: $t_core_callbacks_t
 value: $x_callbacks_t
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Tracer descriptor"
-class: $tTracer
-name: $t_tracer_desc_t
+class: $tTracerExp
+name: $t_tracer_exp_desc_t
 base: $t_base_desc_t
 members:
     - type: void*
@@ -29,7 +43,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a tracer on the context."
-class: $tTracer
+class: $tTracerExp
 name: Create
 decl: static
 ordinal: "0"
@@ -42,10 +56,10 @@ params:
     - type: $t_context_handle_t
       name: hContext
       desc: "[in] handle of the context object"
-    - type: "const $t_tracer_desc_t*"
+    - type: "const $t_tracer_exp_desc_t*"
       name: desc
       desc: "[in] pointer to tracer descriptor"
-    - type: $t_tracer_handle_t*
+    - type: $t_tracer_exp_handle_t*
       name: phTracer
       desc: "[out] pointer to handle of tracer object created"
 returns:
@@ -53,7 +67,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a tracer."
-class: $tTracer
+class: $tTracerExp
 name: Destroy
 decl: static
 ordinal: "0"
@@ -62,7 +76,7 @@ details:
     - "The implementation of this function must be thread-safe."
     - "The implementation of this function will stall and wait on any outstanding threads executing callbacks before freeing any Host allocations associated with this tracer."
 params:
-    - type: $t_tracer_handle_t
+    - type: $t_tracer_exp_handle_t
       name: hTracer
       desc: "[in][release] handle of tracer object to destroy"
 returns:
@@ -70,14 +84,14 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the collection of callbacks to be executed **before** driver execution."
-class: $tTracer
+class: $tTracerExp
 name: SetPrologues
 details:
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
     - "The application must **not** call this function from simultaneous threads with the same tracer handle."
 params:
-    - type: "$t_tracer_handle_t"
+    - type: "$t_tracer_exp_handle_t"
       name: hTracer
       desc: "[in] handle of the tracer"
     - type: "$t_core_callbacks_t*"
@@ -86,14 +100,14 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the collection of callbacks to be executed **after** driver execution."
-class: $tTracer
+class: $tTracerExp
 name: SetEpilogues
 details:
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
     - "The application must **not** call this function from simultaneous threads with the same tracer handle."
 params:
-    - type: "$t_tracer_handle_t"
+    - type: "$t_tracer_exp_handle_t"
       name: hTracer
       desc: "[in] handle of the tracer"
     - type: "$t_core_callbacks_t*"
@@ -102,12 +116,12 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Enables (or disables) the tracer"
-class: $tTracer
+class: $tTracerExp
 name: SetEnabled
 details:
     - "The application must **not** call this function from simultaneous threads with the same tracer handle."
 params:
-    - type: "$t_tracer_handle_t"
+    - type: "$t_tracer_exp_handle_t"
       name: hTracer
       desc: "[in] handle of the tracer"
     - type: $x_bool_t
@@ -116,15 +130,15 @@ params:
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for tracer"
-name: $tTracer
+name: $tTracerExp
 owner: $tDriver
 members:
-    - type: $t_tracer_handle_t
+    - type: $t_tracer_exp_handle_t
       name: handle
       desc: "[in] handle of tracer object"
     - type: $tDriver*
       name: pDriver
       desc: "[in] pointer to owner object"
-    - type: $t_tracer_desc_t
+    - type: $t_tracer_exp_desc_t
       name: desc
       desc: "[in] descriptor of the tracer object"
