@@ -8,13 +8,13 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Debug"
-ordinal: "5"
+ordinal: "7"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device debug properties."
 class: $tDevice
 name: $t_device_debug_properties_t
-base: $x_base_properties_t
+base: $t_base_properties_t
 members:
     - type: "bool"
       name: supports_attach
@@ -28,9 +28,9 @@ params:
     - type: $t_device_handle_t
       name: hDevice
       desc: "[in] device handle"
-    - type: $t_device_debug_properties_t
-      name: properties
-      desc: "[out] the debug properties of this device"
+    - type: "$t_device_debug_properties_t*"
+      name: pDebugProperties
+      desc: "[in,out] the debug properties of this device"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid device handle has been supplied"
@@ -57,7 +57,7 @@ params:
       name: config
       desc: "[in] the debug configuration"
     - type: "$t_debug_session_handle_t*"
-      name: hDebug
+      name: phDebug
       desc: "[out] debug session handle"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
@@ -235,7 +235,7 @@ params:
       desc: "[in] debug session handle"
     - type: $x_device_thread_t
       name: thread
-      desc: "[in] the thread to inerrupt"
+      desc: "[in] the thread to interrupt"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "an invalid debug handle or thread identifier has been supplied"

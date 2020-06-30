@@ -8,7 +8,6 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool Experimental Extension APIs for API Tracing"
-ordinal: "99999"
 includes:
     - "$x_callbacks.h"
 --- #--------------------------------------------------------------------------

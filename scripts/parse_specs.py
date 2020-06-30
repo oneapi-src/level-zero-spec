@@ -10,6 +10,7 @@ import re
 import hashlib
 import json
 import yaml
+import copy
 from templates.helper import param_traits, type_traits, value_traits
 
 default_version = "1.0"
@@ -572,6 +573,7 @@ def _inline_base(obj, meta):
         base = obj.get('base')
         if base in meta['struct']:
             for i, m in enumerate(meta['struct'][base]['members']):
+                m = copy.deepcopy(m)
                 if m['name'] == "stype":
                     m['init'] = re.sub(r"(\$[a-z]+)(\w+)_t", r"\1_STRUCTURE_TYPE\2", obj['name']).upper()
 

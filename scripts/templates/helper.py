@@ -152,6 +152,16 @@ class type_traits:
             return False
 
     @staticmethod
+    def is_struct(name, meta):
+        try:
+            name = _remove_const_ptr(name)
+            if name in meta['struct']:
+                return True
+            return False
+        except:
+            return False
+
+    @staticmethod
     def find_class_name(name, meta):
         try:
             name = _remove_const_ptr(name)
@@ -1173,6 +1183,10 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
                 elif type_traits.is_pointer(item['type']) or type_traits.is_handle(item['type']):
                     params.append({
                         'arg': "reinterpret_cast<%s>( %s )"%(c_tname, cpp_name)
+                    })
+                elif type_traits.is_struct(item['type'], meta):
+                    params.append({
+                        'arg': "*reinterpret_cast<%s*>( &%s )"%(c_tname, cpp_name)
                     })
                 else:
                     params.append({

@@ -96,6 +96,8 @@ etors:
       desc: $t_metric_query_pool_desc_t
     - name: PROFILE_PROPERTIES
       desc: $t_profile_properties_t
+    - name: DEVICE_DEBUG_PROPERTIES
+      desc: $t_device_debug_properties_t
     - name: DEBUG_REGSET_DESC
       desc: $t_debug_regset_desc_t
     - name: TRACER_EXP_DESC
