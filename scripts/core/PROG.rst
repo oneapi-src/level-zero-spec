@@ -683,7 +683,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 
     // Find a proper command queue
     for(uint32_t i = 0; i < cmdqueueGroupCount; ++i) {
-        if( cmdqueueGroupProperties.flags & ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE ) {
+        if( cmdqueueGroupProperties.computeSupported ) {
             command_queue_ordinal = i;
             break;
         }
@@ -791,9 +791,10 @@ Submission
   Therefore, a command list may be submitted to any or multiple logical command queues.
 - By definition, a command list cannot be executed concurrently on multiple physical command queues.
 - If a command list is meant to be submitted to a physical copy-only command queue,
-  then it must be created using a command queue group ordinal with
-  ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COPY set and ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE not set,
-  and submitted to a logical command queue created using the same ordinal.  
+  then it must be created using a command queue group ordinal with its
+  ${x}_command_queue_group_properties_t.copySupported equal true (1) and
+  ${x}_command_queue_group_properties_t.computeSupported equal false (0), and submitted to a logical command
+  queue created using the same ordinal.  
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
@@ -1384,9 +1385,9 @@ Use ${x}KernelSetAttribute to get attributes for a Kernel.
     ...
     
     uint32_t strSize = 0; // Size of string + null terminator
-    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTRIBUTE_SOURCE_ATTRIBUTE, &strSize, nullptr );
+    ${x}KernelGetSourceAttributes(hKernel, &strSize, nullptr );
     char* pAttributes = allocate(strSize);
-    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTRIBUTE_SOURCE_ATTRIBUTE, &strSize, pAttributes );
+    ${x}KernelGetSourceAttributes(hKernel, nullptr, pAttributes );
     ...
 
 See ${x}_kernel_attribute_t for more information on the "set" and "get" attributes.
@@ -1509,7 +1510,7 @@ Cooperative Kernels
 Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ${x}CommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
 The command list must be submitted to a logical command queue that was created with an ordinal of a physical command queue
-that has the ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COOPERATIVE_KERNELS flags set .
+that has the property ${x}_command_queue_group_properties_t.cooperativeKernelsSupported equal true (1).
 Finally, there is a ${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that
 the device supports.
 
@@ -1639,7 +1640,7 @@ or sub-device using ${x}DeviceGetProperties.
        ${x}_device_properties_t subdeviceProps;
        ${x}DeviceGetProperties(hSubdevice, &subdeviceProps);
 
-       assert(subdeviceProps.flags & ${X}_DEVICE_PROPERTY_FLAG_SUBDEVICE); // Ensure that we have a handle to a sub-device.
+       assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
        assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
        void* pMemForSubDevice2;
@@ -1649,13 +1650,17 @@ or sub-device using ${x}DeviceGetProperties.
 Device Residency
 ----------------
 
-For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution. 
-This can be determined by checking ${x}_device_properties_t.flags for ${X}_DEVICE_PROPERTY_FLAG_ONDEMANDPAGING.
+For devices that do not support page-faults, the driver must ensure that
+all pages that will be accessed by the kernel are resident before
+program execution. This can be determined by checking
+${x}_device_properties_t.onDemandPageFaultsSupported.
 
-In most cases, the driver implicitly handles residency of allocations for device access.
-This can be done by inspecting API parameters, including kernel arguments.
-However, in cases where the devices does **not** support page-faulting *and* the driver is incapable of determining whether an allocation will be accessed by the device,
-such as multiple levels of indirection, there are two methods available:
+In most cases, the driver implicitly handles residency of allocations
+for device access. This can be done by inspecting API parameters,
+including kernel arguments. However, in cases where the devices does
+**not** support page-faulting *and* the driver is incapable of
+determining whether an allocation will be accessed by the device, such
+as multiple levels of indirection, there are two methods available:
 
 1. The application may set the ${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 

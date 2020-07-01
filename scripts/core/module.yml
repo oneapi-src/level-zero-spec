@@ -512,8 +512,6 @@ etors:
       desc: "Indicates that the kernel accesses device allocations indirectly (default: false, type: bool_t)"
     - name: INDIRECT_SHARED_ACCESS
       desc: "Indicates that the kernel accesses shared allocations indirectly (default: false, type: bool_t)"
-    - name: SOURCE_ATTRIBUTE
-      desc: "Declared kernel attributes (i.e. can be specified with __attribute__ in runtime language). (type: char[]) Returned as a null-terminated string and each attribute is separated by a space. $xKernelSetAttribute is not supported for this."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets a kernel attribute"
@@ -564,6 +562,28 @@ params:
       desc: "[in,out][optional] pointer to attribute value result."
 returns:
     - $X_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets a declared kernel attribute (i.e. can be specified with __attribute__ in runtime language)."
+class: $xKernel
+name: GetSourceAttributes
+details:
+    - "This function may be called from simultaneous threads with the same function handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
+    - type: "uint32_t*"
+      name: pSize
+      desc: |
+            [in,out] pointer to size of string in bytes.
+            if size is zero, then the driver will update string argument.
+            if size is non-zero, then driver will only retrieve string size in bytes.
+            if size is larger than source attributes string, then the driver will update the string.
+    - type: "char**"
+      name: pString
+      desc: "[in,out][optional] pointer to null-terminated string where kernel source attributes are separated by space."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported Cache Config flags"
