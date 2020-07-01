@@ -56,7 +56,11 @@ class ${re.sub(r"(\w+)_t", r"\1_v", th.make_type_name(n, tags, obj))}(IntEnum):
 
 class ${th.make_type_name(n, tags, obj)}(c_int):
     def __str__(self):
-        return str(${re.sub(r"(\w+)_t", r"\1_v", th.make_type_name(n, tags, obj))}(value))
+    %if th.type_traits.is_flags(obj['name']):
+        return hex(self.value)
+    %else:
+        return str(${re.sub(r"(\w+)_t", r"\1_v", th.make_type_name(n, tags, obj))}(self.value))
+    %endif
 
 ## STRUCT/UNION ###############################################################
 %elif re.match(r"struct|union", obj['type']):
@@ -75,21 +79,6 @@ class ${th.make_type_name(n, tags, obj)}(c_void_p):
 %endif # !class && !function
 %endfor # objects
 %endfor # specs
-${"###############################################################################"}
-"""
-class cl_context(c_void_p):
-    pass
-
-class cl_program(c_void_p):
-    pass
-
-class cl_mem(c_void_p):
-    pass
-
-class cl_command_queue(c_void_p):
-    pass
-"""
-
 ${"###############################################################################"}
 __use_win_types = "Windows" == platform.uname()[0]
 <%
