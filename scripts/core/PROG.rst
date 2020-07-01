@@ -1599,15 +1599,15 @@ The following examples demonstrate proper usage for a system configuration of tw
 Sub-Device Support
 ------------------
 
-The API allows support for sub-devices which can enable finer grained
-control of scheduling and memory allocation to a sub-partition of the device.
-There are functions to query and obtain a sub-device, but outside of these
-functions there are no distinctions between sub-devices and devices.
+The API allows support for sub-devices which can enable finer-grained control of scheduling and memory allocation to a sub-partition of the device.
+There are functions to query and obtain sub-devices, but outside of these functions there are no distinctions between sub-devices and devices.
+Sub-devices are not required to represent unique partitions of a device; i.e. multiple sub-devices may share the same physical hardware.
+Furthermore, a sub-device can be partitioned into more sub-devices; e.g. down to a single slice.
 
 Use ${x}DeviceGetSubDevices to confirm sub-devices are supported and to obtain a sub-device handle.
 There are additional device properties in ${x}_device_properties_t for sub-devices.
 These can be used to confirm a device is a sub-device and to query the sub-device id.
-This may be used by libraries to determine if an input device handle reprresents a device or sub-device.
+This may be used by libraries to determine if an input device handle represents a device or sub-device.
 
 A driver is required to make device memory allocations on the parent device visible to its sub-devices.
 However, when using a sub-device handle, the driver will attempt to place any device memory allocations in the local memory that is attached to the sub-device.

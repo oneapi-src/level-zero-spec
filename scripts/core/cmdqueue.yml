@@ -15,8 +15,6 @@ desc: "Supported command queue flags"
 class: $xCommandQueue
 name: $x_command_queue_flags_t
 etors:
-    - name: SINGLE_SLICE_ONLY
-      desc: "command queue reserves and cannot consume more than a single slice."
     - name: EXPLICIT_ONLY
       desc: |
             command queue should be optimized for submission to a single device engine.
