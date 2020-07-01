@@ -1723,7 +1723,7 @@ The following pseudo-code demonstrates interoperability with OpenCL *from* a Ope
 
 .. parsed-literal::
 
-        void *clDeviceBinary;
+        void* clDeviceBinary;
         size_t clDeviceBinarySize;
         clGetProgramInfo(cl_program, CL_PROGRAM_BINARIES, clDeviceBinary, &clDeviceBinarySize);
 
