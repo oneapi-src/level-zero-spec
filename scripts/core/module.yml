@@ -527,7 +527,7 @@ params:
       desc: "[in] kernel indirect access flags"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get kernel indirect access flags."
+desc: "Retrieve kernel indirect access flags."
 class: $xKernel
 name: GetIndirectAccess
 details:
@@ -542,7 +542,7 @@ params:
       desc: "[out] query result for kernel indirect access flags."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Gets a declared kernel attribute (i.e. can be specified with __attribute__ in runtime language)."
+desc: "Retrieve all declared kernel attributes (i.e. can be specified with __attribute__ in runtime language)."
 class: $xKernel
 name: GetSourceAttributes
 details:
