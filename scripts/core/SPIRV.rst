@@ -181,9 +181,9 @@ that declare the following capabilities:
 -  **GenericPointer**
 -  **Groups**
 -  **ImageBasic** (for devices supporting ${x}_device_image_properties_t.supported)
--  **Float16** (for devices supporting ${x}_device_module_properties_t.fp16Supported)
--  **Float64** (for devices supporting ${x}_device_module_properties_t.fp64Supported)
--  **Int64Atomics** (for devices supporting ${x}_device_module_properties_t.int64AtomicsSupported)
+-  **Float16** (for devices supporting ${X}_DEVICE_MODULE_FLAGS_FP16)
+-  **Float64** (for devices supporting ${X}_DEVICE_MODULE_FLAGS_FP64)
+-  **Int64Atomics** (for devices supporting ${X}_DEVICE_MODULE_FLAGS_INT64_ATOMICS)
 
 If the ${OneApi} environment supports the **ImageBasic** capability,
 then the following capabilities must also be supported:
@@ -249,7 +249,7 @@ For all *Atomic Instructions*:
 -  32-bit integer types are supported for the *Result Type* and/or type
    of *Value*. 64-bit integer types are optionally supported for the
    *Result Type* and/or type of *Value* for devices supporting
-   ${x}_device_module_properties_t.int64AtomicsSupported.
+   ${X}_DEVICE_MODULE_FLAGS_INT64_ATOMICS.
 -  The *Pointer* operand must be a pointer to the **Function**,
    **Workgroup**, **CrossWorkGroup**, or **Generic** *Storage Classes*.
 

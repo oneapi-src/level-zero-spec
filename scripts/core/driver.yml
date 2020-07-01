@@ -138,18 +138,25 @@ params:
       name: pDriverProperties
       desc: "[in,out] query result for driver properties"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported IPC property flags"
+class: $xDriver
+name: $x_ipc_property_flags_t
+etors:
+    - name: MEMORY
+      desc: "Supports passing memory allocations between processes. See $xMemGetIpcHandle."
+    - name: EVENT_POOL
+      desc: "Supports passing event pools between processes. See $xEventPoolGetIpcHandle."
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "IPC properties queried using $xDriverGetIpcProperties"
 class: $xDriver
 name: $x_driver_ipc_properties_t
 base: $x_base_properties_t
 members:
-    - type: $x_bool_t
-      name: memsSupported
-      desc: "[out] Supports passing memory allocations between processes. See $xMemGetIpcHandle."
-    - type: $x_bool_t
-      name: eventsSupported
-      desc: "[out] Supports passing events between processes. See $xEventPoolGetIpcHandle."
+    - type: $x_ipc_property_flags_t
+      name: flags
+      desc: "[out] 0 (none) or a valid combination of $x_ipc_property_flag_t"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves IPC attributes of the driver"

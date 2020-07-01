@@ -1639,7 +1639,7 @@ or sub-device using ${x}DeviceGetProperties.
        ${x}_device_properties_t subdeviceProps;
        ${x}DeviceGetProperties(hSubdevice, &subdeviceProps);
 
-       assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
+       assert(subdeviceProps.flags & ${X}_DEVICE_PROPERTY_FLAGS_SUBDEVICE); // Ensure that we have a handle to a sub-device.
        assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
        void* pMemForSubDevice2;
@@ -1649,17 +1649,13 @@ or sub-device using ${x}DeviceGetProperties.
 Device Residency
 ----------------
 
-For devices that do not support page-faults, the driver must ensure that
-all pages that will be accessed by the kernel are resident before
-program execution. This can be determined by checking
-${x}_device_properties_t.onDemandPageFaultsSupported.
+For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution. 
+This can be determined by checking ${x}_device_properties_t.flags for ${X}_DEVICE_PROPERTY_FLAGS_ONDEMANDPAGING.
 
-In most cases, the driver implicitly handles residency of allocations
-for device access. This can be done by inspecting API parameters,
-including kernel arguments. However, in cases where the devices does
-**not** support page-faulting *and* the driver is incapable of
-determining whether an allocation will be accessed by the device, such
-as multiple levels of indirection, there are two methods available:
+In most cases, the driver implicitly handles residency of allocations for device access.
+This can be done by inspecting API parameters, including kernel arguments.
+However, in cases where the devices does **not** support page-faulting *and* the driver is incapable of determining whether an allocation will be accessed by the device,
+such as multiple levels of indirection, there are two methods available:
 
 1. The application may set the ${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 

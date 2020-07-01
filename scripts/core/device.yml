@@ -96,6 +96,20 @@ desc: "Maximum device name string size"
 name: $X_MAX_DEVICE_NAME
 value: "256"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device property flags"
+class: $xDevice
+name: $x_device_property_flags_t
+etors:
+    - name: INTEGRATED
+      desc: "Device is integrated with the Host."
+    - name: SUBDEVICE
+      desc: "Device handle used for query represents a sub-device."
+    - name: ECC
+      desc: "Device supports error correction memory access."
+    - name: ONDEMANDPAGING
+      desc: "Device supports on-demand page-faulting."
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties queried using $xDeviceGetProperties"
 class: $xDevice
@@ -111,24 +125,15 @@ members:
     - type: uint32_t
       name: deviceId
       desc: "[out] device id from PCI configuration" 
-    - type: $x_bool_t
-      name: isIntegrated
-      desc: "[out] Is the device integrated with the Host."
-    - type: $x_bool_t
-      name: isSubdevice
-      desc: "[out] If the device handle used for query represents a sub-device."
+    - type: $x_device_property_flags_t
+      name: flags
+      desc: "[out] 0 (none) or a valid combination of $x_device_property_flag_t"
     - type: uint32_t
       name: subdeviceId
-      desc: "[out] sub-device id. Only valid if isSubdevice is true."
+      desc: "[out] sub-device id. Only valid if $X_DEVICE_PROPERTY_FLAGS_SUBDEVICE is set."
     - type: uint32_t
       name: coreClockRate
       desc: "[out] Clock rate for device core."
-    - type: $x_bool_t
-      name: eccMemorySupported
-      desc: "[out] Supports error correction memory access."
-    - type: $x_bool_t
-      name: onDemandPageFaultsSupported
-      desc: "[out] Supports on-demand page-faulting."
     - type: uint64_t
       name: maxMemAllocSize
       desc: "[out] Maximum memory allocation size."
@@ -288,11 +293,23 @@ members:
       desc: "[out] opaque data representing a native kernel UUID"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Floating-Point capability flags"
+desc: "Supported device module flags"
 class: $xDevice
-name: $x_fp_cap_flags_t
-details:
-    - "floating-point capabilities of the device."
+name: $x_device_module_flags_t
+etors:
+    - name: FP16
+      desc: "Device supports 16-bit floating-point operations"
+    - name: FP64
+      desc: "Device supports 64-bit floating-point operations"
+    - name: INT64_ATOMICS
+      desc: "Device supports 64-bit atomic operations"
+    - name: DP4A
+      desc: "Device supports four component dot product and accumulate operations"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported floating-Point capability flags"
+class: $xDevice
+name: $x_device_fp_flags_t
 etors:
     - name: DENORM
       desc: "Supports denorms"
@@ -323,33 +340,24 @@ members:
             [out] Maximum supported SPIR-V version.
             Returns zero if SPIR-V is not supported.
             Contains major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION.
-    - type: $x_bool_t
-      name: fp16Supported
-      desc: "[out] Supports 16-bit floating-point operations"
-    - type: $x_bool_t
-      name: fp64Supported
-      desc: "[out] Supports 64-bit floating-point operations"
-    - type: $x_bool_t
-      name: int64AtomicsSupported
-      desc: "[out] Supports 64-bit atomic operations"
-    - type: $x_bool_t
-      name: dp4aSupported
-      desc: "[out] Supports four component dot product and accumulate operations"
-    - type: $x_fp_cap_flags_t
-      name: fp16Capabilities
+    - type: $x_device_module_flags_t
+      name: flags
+      desc: "[out] 0 or a valid combination of $x_device_module_flag_t"
+    - type: $x_device_fp_flags_t
+      name: fp16flags
       desc: |
             [out] Capabilities for half-precision floating-point operations.
-            returns 0 (if fp16Supported == false) or a combination of $x_fp_cap_flag_t.
-    - type: $x_fp_cap_flags_t
-      name: fp32Capabilities
+            returns 0 (if $X_DEVICE_MODULE_FLAGS_FP16 is not set) or a combination of $x_device_fp_flag_t.
+    - type: $x_device_fp_flags_t
+      name: fp32flags
       desc: |
             [out] Capabilities for single-precision floating-point operations.
-            returns a combination of $x_fp_cap_flag_t.
-    - type: $x_fp_cap_flags_t
-      name: fp64Capabilities
+            returns a combination of $x_device_fp_flag_t.
+    - type: $x_device_fp_flags_t
+      name: fp64flags
       desc: |
             [out] Capabilities for double-precision floating-point operations.
-            returns 0 (if fp64Supported == false) or a combination of $x_fp_cap_flag_t.
+            returns 0 (if $X_DEVICE_MODULE_FLAGS_FP64 is not set) or a combination of $x_device_fp_flag_t.
     - type: uint32_t
       name: maxArgumentsSize
       desc: "[out] Maximum kernel argument size that is supported."
