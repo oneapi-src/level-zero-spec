@@ -205,7 +205,7 @@ representation of independent device resources that can safely be used
 concurrently.
 
 Sampling Types
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 Sampling types are a software representation of device capabilities in
 terms of reading metric values. Each Metric Group provides information
@@ -407,7 +407,7 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
 .. _Event-based:
 
 Metric Query
-~~~~~~~~~~~
+~~~~~~~~~~~~
 
 Event-based collection uses a simple Begin, End, GetData scheme:
 
@@ -622,7 +622,7 @@ As an example, a tool could use a custom loader layer to inject this build flag 
 In another example, a tool could recompile a Module using the build flag and use a custom loader layer to replace the application's Module handle with it's own.
 
 Instrumentation
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 Once the module has been compiled with instrumentation enabled, a tool may use ${t}ModuleGetDebugInfo and ${t}KernelGetProfileInfo 
 in order to decode the application's instructions and register usage for each function in the module.
