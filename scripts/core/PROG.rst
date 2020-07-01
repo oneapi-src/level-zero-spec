@@ -682,7 +682,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 
     // Find a proper command queue
     for(uint32_t i = 0; i < cmdqueueGroupCount; ++i) {
-        if( cmdqueueGroupProperties.computeSupported ) {
+        if( cmdqueueGroupProperties.flags & ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE ) {
             command_queue_ordinal = i;
             break;
         }
@@ -790,10 +790,9 @@ Submission
   Therefore, a command list may be submitted to any or multiple logical command queues.
 - By definition, a command list cannot be executed concurrently on multiple physical command queues.
 - If a command list is meant to be submitted to a physical copy-only command queue,
-  then it must be created using a command queue group ordinal with its
-  ${x}_command_queue_group_properties_t.copySupported equal true (1) and
-  ${x}_command_queue_group_properties_t.computeSupported equal false (0), and submitted to a logical command
-  queue created using the same ordinal.  
+  then it must be created using a command queue group ordinal with
+  ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COPY set and ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE not set,
+  and submitted to a logical command queue created using the same ordinal.  
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
@@ -1509,7 +1508,7 @@ Cooperative Kernels
 Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ${x}CommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
 The command list must be submitted to a logical command queue that was created with an ordinal of a physical command queue
-that has the property ${x}_command_queue_group_properties_t.cooperativeKernelsSupported equal true (1).
+that has the ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COOPERATIVE_KERNELS flags set .
 Finally, there is a ${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that
 the device supports.
 
@@ -1639,7 +1638,7 @@ or sub-device using ${x}DeviceGetProperties.
        ${x}_device_properties_t subdeviceProps;
        ${x}DeviceGetProperties(hSubdevice, &subdeviceProps);
 
-       assert(subdeviceProps.flags & ${X}_DEVICE_PROPERTY_FLAGS_SUBDEVICE); // Ensure that we have a handle to a sub-device.
+       assert(subdeviceProps.flags & ${X}_DEVICE_PROPERTY_FLAG_SUBDEVICE); // Ensure that we have a handle to a sub-device.
        assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
        void* pMemForSubDevice2;
@@ -1650,7 +1649,7 @@ Device Residency
 ----------------
 
 For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution. 
-This can be determined by checking ${x}_device_properties_t.flags for ${X}_DEVICE_PROPERTY_FLAGS_ONDEMANDPAGING.
+This can be determined by checking ${x}_device_properties_t.flags for ${X}_DEVICE_PROPERTY_FLAG_ONDEMANDPAGING.
 
 In most cases, the driver implicitly handles residency of allocations for device access.
 This can be done by inspecting API parameters, including kernel arguments.

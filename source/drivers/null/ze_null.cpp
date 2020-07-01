@@ -158,8 +158,9 @@ namespace driver
             {
                 ze_command_queue_group_properties_t commandQueueGroupProperties = {};
                 commandQueueGroupProperties.stype = ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES;
-                commandQueueGroupProperties.computeSupported = 1;
-                commandQueueGroupProperties.copySupported = 1;
+                commandQueueGroupProperties.flags =
+                    ZE_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COPY |
+                    ZE_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE;
 
                 *pCommandQueueGroupProperties = commandQueueGroupProperties;
             }
@@ -198,12 +199,18 @@ namespace driver
         //////////////////////////////////////////////////////////////////////////
         zeDdiTable.Device.pfnGetCacheProperties = [](
             ze_device_handle_t,
+            uint32_t* pCount,
             ze_device_cache_properties_t* pCacheProperties )
         {
-            ze_device_cache_properties_t cacheProperties = {};
-            cacheProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIES;
+            if( nullptr != pCacheProperties )
+            {
+                ze_device_cache_properties_t cacheProperties = {};
+                cacheProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIES;
 
-            *pCacheProperties = cacheProperties;
+                *pCacheProperties = cacheProperties;
+            }
+            *pCount = 1;
+
             return ZE_RESULT_SUCCESS;
         };
 

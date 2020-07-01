@@ -95,9 +95,15 @@ inline ze::Device* findDevice(
             pDevice->GetMemoryAccessProperties( &memory_access_properties );
             std::cout << ze::to_string( memory_access_properties ) << "\n";
 
-            ze::Device::cache_properties_t cache_properties;
-            pDevice->GetCacheProperties( &cache_properties );
-            std::cout << ze::to_string( cache_properties ) << "\n";
+            uint32_t cacheCount = 0;
+            pDevice->GetCacheProperties( &cacheCount );
+            auto pCacheProperties = new ze::Device::cache_properties_t[ cacheCount ];
+            pDevice->GetCacheProperties( &cacheCount, pCacheProperties );
+            for( uint32_t cache = 0; cache < cacheCount; ++cache )
+            {
+                std::cout << ze::to_string( pCacheProperties[ cache ] ) << "\n";
+            }
+            delete[] pCacheProperties;
 
             ze::Device::image_properties_t image_properties;
             pDevice->GetImageProperties( &image_properties );
